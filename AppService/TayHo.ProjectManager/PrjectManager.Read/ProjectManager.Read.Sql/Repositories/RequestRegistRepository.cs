@@ -61,8 +61,7 @@ namespace ProjectManager.Read.Sql.Repositories
             requestRegistDetailDTO.ResponseRegistDTOs = rs.Read<ResponseRegistDTO>().ToList();
             List<RequestRegistDetailDTO> list = new List<RequestRegistDetailDTO>();
             list.Add(requestRegistDetailDTO);
-            IEnumerable<RequestRegistDetailDTO> enumerable = list;
-            result.Items = enumerable;
+            result.Items = list;
             return result;
         }
 

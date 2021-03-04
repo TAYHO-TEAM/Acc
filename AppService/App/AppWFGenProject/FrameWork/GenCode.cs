@@ -6,7 +6,7 @@ namespace AppWFGenProject.FrameWork
 {
     public class GenCode
     {
-        public void CreateGenOBCMD(string Server, string User, string Pass, string DB ,string NameTable, GenOB GenOB)
+        public void CreateGenOBCMD(string Server, string User, string Pass, string DB ,string NameTable, GenOB GenOB, int typeCreate)
         {
             Connection connection = new Connection();
             ReadTemplate readTemplate = new ReadTemplate();
@@ -15,7 +15,6 @@ namespace AppWFGenProject.FrameWork
             
 
             /// gen entity 
-            string pathentitytxt = ConstPath.CMDDomain+ ConstFileNameTxt.Entity;
             DataTable dtEntity = ds.Tables[ConstTable.DomainOB];
             //Gen domain entity
             GenCMD genCMD = new GenCMD();
@@ -33,14 +32,32 @@ namespace AppWFGenProject.FrameWork
             {
                 foreach(var i in filesTxt)
                 {
-                    fileHelper.ChangeTxtToCS(i);
+                    fileHelper.ChangeTxtToCS(i, typeCreate);
                 }    
             }    
         }
-        public GenOB CreateGenOBRed(string NameTable)
+        public void CreateGenOBRed(string Server, string User, string Pass, string DB, string NameTable, GenOB GenOB, int typeCreate)
         {
-            GenOB genOB = new GenOB();
-            return genOB;
+            Connection connection = new Connection();
+            ReadTemplate readTemplate = new ReadTemplate();
+            DataSet ds = connection.GetAllCode(Server, User, Pass, DB, NameTable);
+            FileHelper fileHelper = new FileHelper();
+
+            //Gen domain entity
+            GenREAD genREAD = new GenREAD();
+            genREAD.GenEntityDTO(ds.Tables[ConstTable.Command], GenOB);
+            genREAD.GenEntityViewModel(ds.Tables[ConstTable.Command], GenOB);
+            genREAD.GenEntityController( GenOB);
+            genREAD.GenEntityMapping(GenOB);
+
+            IEnumerable<string> filesTxt = fileHelper.getEnumAllFilesTail(GenOB.rootDir, "txt", true);
+            if (1 == 1)
+            {
+                foreach (var i in filesTxt)
+                {
+                    fileHelper.ChangeTxtToCS(i, typeCreate);
+                }
+            }
         }
         public GenOB CreateGenOBHTML(string NameTable)
         {

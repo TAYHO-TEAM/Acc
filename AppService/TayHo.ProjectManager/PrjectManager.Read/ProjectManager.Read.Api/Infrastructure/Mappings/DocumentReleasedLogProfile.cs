@@ -9,6 +9,7 @@ namespace ProjectManager.Read.Api.Infrastructure.Mappings
         public DocumentReleasedLogProfile()
         {
             CreateMap<DocumentReleasedLogDTO, DocumentReleasedLogResponseViewModel>().ForMember(target => target.Id, m => m.MapFrom(source => source.Id));
+            CreateMap<DocumentReleasedLogDetailDTO, DocumentReleasedLogDetailResponseViewModel>().ForMember(target => target.Id, m => m.MapFrom(source => source.Id));
         }
     }
 }

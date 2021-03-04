@@ -42,7 +42,7 @@ namespace Acc.Cmd.Domain.DomainObjects
 
         #region Behaviours
         public void SetDevice(string Device) { _device = string.IsNullOrEmpty(Device) ? _device : Device; if (!IsValid()) throw new DomainException(_errorMessages); }
-        public void SetAccountId(int? AccountId) { _accountId = AccountId.HasValue ? _accountId : AccountId; if (!IsValid()) throw new DomainException(_errorMessages); }
+        public void SetAccountId(int? AccountId) { _accountId = !AccountId.HasValue ? _accountId : AccountId; if (!IsValid()) throw new DomainException(_errorMessages); }
         public void SetDeviceToken(string DeviceToken) { _deviceToken = string.IsNullOrEmpty(DeviceToken) ? _deviceToken : DeviceToken; if (!IsValid()) throw new DomainException(_errorMessages); }
         public void SetBrowser(string Browser) { _browser = string.IsNullOrEmpty(Browser) ? _browser : Browser; if (!IsValid()) throw new DomainException(_errorMessages); }
         public sealed override bool IsValid()

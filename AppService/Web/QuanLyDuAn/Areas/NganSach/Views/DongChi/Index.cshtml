@@ -1,0 +1,493 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Kế hoạch dòng chi 6 tháng";
+}
+<div class="row">
+    <div class="col-12">
+        <div id="container" class="elevation-2"></div>
+        <hr />
+        <div id="container2" class="elevation-2"></div>
+    </div>
+</div>
+
+@section script{
+    <script src="~/Scripts/page/ngansach.js"></script>
+    <script>
+
+        var ds_main = new DevExpress.data.CustomStore({
+            key: "id",
+            load: (values) => {
+                let deferred = $.Deferred();
+                let params = {
+                    'FindId': 'projectId,' + PROJECTID, 
+                    'PageSize': isNullOrEmpty(values.take) ? values.take : 0,
+                    'PageNumber': (isNullOrEmpty(values.take) && isNullOrEmpty(values.skip)) ? ((values.skip / values.take) + 1) : 0,
+                };
+                $.ajax({
+                    headers: header, data: params,
+                    url: URL_API_PM_READ + ACTION_DUCHI,
+                    dataType: "json",
+                    success: function (data) {
+                        var list = data.result.items;
+                        deferred.resolve(list, { totalCount: data.result.pagingInfo.totalItems });
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        console.log(xhr.responseJSON);
+                        deferred.reject("Có lỗi xảy ra trong quá trình lấy danh sách. Mở Console để xem chi tiết.");
+                    },
+                    timeout: 5000
+                });
+                return deferred.promise();
+            },
+            insert: (values) => ajax_insert(URL_API_PM_CMD + ACTION_DUCHI, values),
+            update: (key, values) => ajax_update(URL_API_PM_CMD + ACTION_DUCHI, key, values),
+        });
+        var ds_nhomcv = new DevExpress.data.CustomStore({
+            key: "id",
+            load: (values) => {
+                let deferred = $.Deferred();
+                $.ajax({
+                    data: {
+                        'FindId': 'projectId,' + PROJECTID, 
+                    },
+                    headers: header, dataType: "json",
+                    url: URL_API_PM_READ + ACTION_NHOMCONGVIEC,
+                    success: function (data) {
+                        deferred.resolve(data.result.items, { totalCount: data.result.pagingInfo.totalItems });
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        console.log(xhr.responseJSON);
+                        deferred.reject("Có lỗi xảy ra trong quá trình lấy danh sách 'Hạng mục'. Mở Console để xem chi tiết.");
+                    },
+                    timeout: 10000
+                });
+                return deferred.promise();
+            },
+            byKey: function (key) {
+                var d = new $.Deferred();
+                $.get(URL_API_PM_READ + ACTION_NHOMCONGVIEC, { 'FindId': key }).done((rs) => d.resolve(rs.result.items[0])).fail(() => d.reject());
+                return d.promise();
+            },
+        });
+
+        $(function () {
+           loadData();
+           loadData2();
+        });
+
+        var loadData = () => $("#container").dxDataGrid({
+            dataSource: ds_main, //height: heightScreen,
+            paging: { enabled: true },
+            showBorders: true, showColumnHeaders: true, showColumnLines: true, hoverStateEnabled: true,
+            showRowLines: true, columnAutoWidth: true, wordWrapEnabled: true, rowAlternationEnabled: false,
+            sorting: { mode: "multiple" },
+            searchPanel: {
+                highlightCaseSensitive: true, highlightSearchText: true,
+                searchVisibleColumnsOnly: true, visible: true
+            },
+            columns: [
+                {
+                    allowEditing: false,
+                    dataField: "id", caption: "id", width: 80, alignment: "center",
+                },
+                {
+                    allowEditing: false,
+                    dataField: "nhomCongViecId", caption: "Nhóm công việc", alignment: "center", groupIndex: 0, autoExpandGroup: true,
+                    lookup: {
+                        dataSource: ds_nhomcv,
+                        valueExpr: "id", displayExpr: "tenNhomCongViec",
+                    }, 
+                },
+                {
+                    allowEditing: false,
+                    dataField: "thoiGianBaoCao", dataType: 'date', groupIndex: 1, autoExpandGroup: false,
+                    caption: "Tháng kế hoạch", sortIndex: 0, sortOrder: "desc",
+                    //groupCellTemplate: (c, o) => c.append("Tháng báo cáo: " + moment(o.value).format("MM/YYYY")),
+                    calculateDisplayValue: (o)=> {
+                        return moment(o.thoiGianBaoCao).format("MM/YYYY");
+                    },
+                },
+                {
+                    allowEditing: false,
+                    dataField: "thoiGianDuChi", alignment:"center",
+                    caption: "Tháng dự chi", sortIndex: 1, sortOrder: "asc",
+                    calculateCellValue: (e) => {
+                        return moment(e.thoiGianDuChi).format("MM/YYYY");
+                    },
+                },
+                {
+                    dataField: "giaTri", alignment: "right",
+                    caption: "Giá trị", dataType: 'number',
+                    format: { type: "currency", currency: "VND" },
+                    editorType: "dxNumberBox",
+                    editorOptions: {
+                        placeholder: "Vui lòng nhập...",
+                        showSpinButtons: true, min: 1000, step:100000,
+                        format: "#,##0.## đ",
+                    },
+                    validationRules: [{ type: "required" }]
+                },
+                {
+                    allowEditing: false,
+                    caption: "Người tạo", dataField:"createBy",
+                    alignment: "center", width: 200,
+                    cellTemplate: (c, o) => {
+                        if (o.value != null) {
+                            $("<div />").attr("style","d-flextext-align: center; display: -webkit-inline-box;").append(
+                                $("<img />")
+                                    .attr("src", "data:image/png;base64," + o.data.createBy_Avartar).addClass("img-circle elevation-2 img-size-30")
+                                    .attr("onerror", "this.onerror=null; this.src='/Content/img/AnhDaiDien/avartar.jpg';")
+                                    .attr("alt", o.data.createBy_Name),
+                                $("<div />").addClass("ml-2 text-left").append(
+                                    $("<div />").addClass("font-weight-bold").append(o.data.createBy_Name),
+                                    $("<em />").addClass("small text-muted").append(o.data.createBy_Title)
+                                )
+                            ).appendTo(c);
+                        }
+                    }
+                },
+                {
+                    allowEditing: false,
+                    dataField: "createDate", width: 150, dataType: "date", alignment: "center",
+                    caption: "Thời gian tạo",
+                    cellTemplate: (c, o) => {
+                        if (o.value != null) {
+                            $("<div />").append(
+                                $("<div/>").addClass("font-weight-bold").append(moment(o.value).format("HH:mm DD/MM/YY")),
+                                $("<em />").addClass("small text-muted").append("Cách đây " + moment(o.value).locale("vi").fromNow()),
+                            ).appendTo(c);
+                        }
+                    }
+                },
+            ],
+            onToolbarPreparing: function (e) {
+                var container = e.component;
+                e.toolbarOptions.items.unshift( 
+                    {
+                        location: "before", widget: "dxSelectBox",
+                        options: {
+                            dataSource: customStore_Projects,
+                            valueExpr: "id",
+                            displayExpr: (item) => { return item && item.code + " - " + item.title; },
+                            searchEnabled: true, searchMode: "contains",
+                            width: "auto", stylingMode: "filled",
+                            value: PROJECTID,
+                            onValueChanged: function (data) {
+                                PROJECTID = data.value;
+                                localStorage.setItem('projectIdCurrent', PROJECTID); 
+                                container.refresh()
+                            },
+                        },
+                    },//Project
+                    {
+                        location: "after", widget: "dxButton",
+                        options: {
+                            icon: "refresh", type: "default",
+                            onClick: () => container.refresh()
+                        }
+                    }
+                )
+            },
+            editing: {
+                mode: "cell", useIcons: false, confirmDelete: true,
+                allowUpdating: (e) => (e.row.data.createBy == UserCurrentInfo.accountId) && PermitInAction.update,
+            },
+            onContentReady: (e) => {
+                $("#action-add").dxSpeedDialAction({
+                    index: 1, icon: "fas fa-plus", label: "Thêm mới",
+                    visible: PermitInAction["update"],
+                    onClick: () => createForm()
+                }).dxSpeedDialAction("instance");
+                DevExpress.config({
+                    floatingActionButtonConfig: {
+                        icon: "rowfield",
+                        label: "Tác vụ",
+                        shading: true,
+                        position: {
+                            of: e.element,
+                            my: "right bottom",
+                            at: "right bottom",
+                            offset: e.component.pageCount() > 1 ? "-15 -60" : "-15 -15"
+                        }
+                    }
+                });
+                DevExpress.ui.repaintFloatingActionButton();
+            },
+            summary: {
+                groupItems: [{
+                    column: "giaTri",
+                    summaryType: "sum",
+                    valueFormat: { type: "currency", currency: "VND" },
+                     
+                    displayFormat: "{0}",
+                    showInGroupFooter: false,
+                    alignByColumn: true
+                }]
+            }
+        });
+
+        var loadData2 = () => $("#container2").dxPivotGrid({
+            allowFiltering: true,
+            fieldChooser: {
+                enabled: true,
+                height: 400
+            },
+            dataSource: {
+                fields: [
+                    {
+                        dataField: "thoiGianBaoCao",
+                        width: 150,
+                        area: "row"
+                    },
+                    {
+                        dataField: "thoiGianDuChi",
+                        dataType: "date",
+                        area: "column", expanded: true
+                    },
+                    {
+                        groupName: "date",
+                        groupInterval: "month",
+                        visible: false,
+                        expanded: true
+                    },
+                    {
+                        caption: "giaTri",
+                        dataField: "giaTri",
+                        dataType: "number",
+                        format: { type: "currency", currency: "VND" },
+                        summaryType: "sum",
+                        area: "data"
+                    }
+                ],
+                store: ds_main
+            }
+        });
+
+        var checkThoiGianBaoCao = (data) => {
+            var d = $.Deferred();
+            console.log(data);
+            var nhomcv = $('#txtNhomCongViecId').dxLookup('instance').option('value');
+            if (nhomcv != null) {
+                ds_main.load().then((rs) => {
+                    d.resolve(nhomcv != null && (rs.filter(x => moment(x.thoiGianBaoCao).format("MM/YYYY") == moment(data.value).format("MM/YYYY") && x.nhomCongViecId == nhomcv).length == 0));
+                });
+            }
+            return d.promise();
+        }
+
+        var createForm = () => $("#popup-main").dxPopup({
+            position: { of: "#container" },
+            width: 500, height: "auto",
+            fullScreen: $(window).width() <= 500,
+            dragEnabled: true, resizeEnabled: false,
+            showTitle: true, title: "Tạo kế hoạch dòng chi 6 tháng",
+            showCloseButton: true, closeOnOutsideClick: false,
+            visible: true,
+            contentTemplate: (c) => { 
+                formData =  { 
+                    "nhomCongViecId": null,
+                    "thoiGianBaoCao": moment(),
+                    "giaTri": null, 
+                    "giaTri01": null, 
+                    "giaTri02": null, 
+                    "giaTri03": null, 
+                    "giaTri04": null, 
+                    "giaTri05": null, 
+                };
+                var scrollView = $("<div id='scrollView'></div>");
+                var content = $("<form />").attr("id", "form-container");
+                content.dxForm({
+                    formData: formData,
+                    labelLocation: "top", requiredMark: "(*)",
+                    items: [{
+                        itemType: "group", colCount: 12,
+                        items: [
+                            {
+                                colSpan: 12,
+                                dataField: "nhomCongViecId",
+                                label: { text: "Nhóm công việc" },
+                                editorType: "dxLookup",
+                                editorOptions: { 
+                                    dataSource: ds_nhomcv,
+                                    valueExpr: "id", displayExpr: "tenNhomCongViec",
+                                    placeholder: "Vui lòng chọn...",
+                                    searchEnabled: true, showClearButton: true,
+                                    //itemTemplate: function (data) {
+                                    //    return $("<div>").append($("<b>").append(data.tenGiaiDoan).addClass("mr-1"), $("<em>").append(data.dienGiai));
+                                    //},
+                                    elementAttr: { id: "txtNhomCongViecId" },
+                                },
+                                validationRules: [{ type: "required" }]
+                            },
+                            {
+                                colSpan: 6,
+                                dataField: "thoiGianBaoCao",
+                                label: { text: "Tháng kế hoạch" },
+                                editorType: "dxDateBox",
+                                editorOptions: {
+                                    elementAttr: { id:"dbThoiGianBaoCao"},
+                                    placeholder: "Vui lòng chọn giá trị...",
+                                    calendarOptions: {
+                                        maxZoomLevel: "year",
+                                        minZoomLevel: "decade"
+                                    },
+                                    //value: moment(),
+                                    displayFormat: "'Tháng' MM '/' yyyy",
+                                    type: "date", pickerType: "calendar", 
+                                    useMaskBehavior: true,
+                                    onValueChanged: function (data) {
+                                        content.dxForm("instance").itemOption("giatri-ketiep.giatri-thang01", "label", { text: "Tháng " + moment(data.value).add(1, 'M').format("MM/YYYY"), location: "left" });
+                                        content.dxForm("instance").itemOption("giatri-ketiep.giatri-thang02", "label", { text: "Tháng " + moment(data.value).add(2, 'M').format("MM/YYYY"), location: "left" });
+                                        content.dxForm("instance").itemOption("giatri-ketiep.giatri-thang03", "label", { text: "Tháng " + moment(data.value).add(3, 'M').format("MM/YYYY"), location: "left" });
+                                        content.dxForm("instance").itemOption("giatri-ketiep.giatri-thang04", "label", { text: "Tháng " + moment(data.value).add(4, 'M').format("MM/YYYY"), location: "left" });
+                                        content.dxForm("instance").itemOption("giatri-ketiep.giatri-thang05", "label", { text: "Tháng " + moment(data.value).add(5, 'M').format("MM/YYYY"), location: "left" });
+                                    }
+                                },
+                                validationRules: [
+                                    { type: "required" },
+                                    {
+                                        type: "async",
+                                        message: "Tháng dự chi không hợp lệ",
+                                        validationCallback: function (params) {
+                                            return checkThoiGianBaoCao(params);
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                colSpan: 6,
+                                dataField: "giaTri",
+                                label: { text: "Giá trị" },
+                                editorType: "dxNumberBox",
+                                editorOptions: {
+                                    placeholder: "Vui lòng nhập giá trị...", 
+                                    showSpinButtons: true, min: 1000, step: 100000,
+                                    format: "#,##0.## đ",
+                                },
+                                validationRules: [{ type: "required" }]
+                            },
+                            {
+                                itemType: "group", colSpan: 12,
+                                caption: "KẾ HOẠCH CỦA 5 THÁNG KẾ TIẾP", name:"giatri-ketiep",
+                                items: [
+                                    {
+                                        colSpan: 12,
+                                        dataField: "giaTri01", name: "giatri-thang01",
+                                        label: { text: "Tháng " + moment().add(1, 'M').format("MM/YYYY"), location: "left" },
+                                        editorType: "dxNumberBox",
+                                        editorOptions: {
+                                            placeholder: "Vui lòng nhập giá trị...",
+                                            showSpinButtons: true, min: 1000, step: 100000,
+                                            format: "#,##0.## đ",
+                                        },
+                                        validationRules: [{ type: "required" }]
+                                    },
+                                    {
+                                        colSpan: 12,
+                                        dataField: "giaTri02", name: "giatri-thang02",
+                                        label: { text: "Tháng " + moment().add(2, 'M').format("MM/YYYY"), location: "left" },
+                                        editorType: "dxNumberBox",
+                                        editorOptions: {
+                                            placeholder: "Vui lòng nhập giá trị...",
+                                            showSpinButtons: true, min: 1000, step: 100000,
+                                            format: "#,##0.## đ",
+                                        },
+                                        validationRules: [{ type: "required" }]
+                                    },
+                                    {
+                                        colSpan: 12,
+                                        dataField: "giaTri03", name: "giatri-thang03",
+                                        label: { text: "Tháng " + moment().add(3, 'M').format("MM/YYYY"), location: "left" },
+                                        editorType: "dxNumberBox",
+                                        editorOptions: {
+                                            placeholder: "Vui lòng nhập giá trị...",
+                                            showSpinButtons: true, min: 1000, step: 100000,
+                                            format: "#,##0.## đ",
+                                        },
+                                        validationRules: [{ type: "required" }]
+                                    },
+                                    {
+                                        colSpan: 12,
+                                        dataField: "giaTri04", name: "giatri-thang04",
+                                        label: { text: "Tháng " + moment().add(4, 'M').format("MM/YYYY"), location: "left" },
+                                        editorType: "dxNumberBox",
+                                        editorOptions: {
+                                            placeholder: "Vui lòng nhập giá trị...",
+                                            showSpinButtons: true, min: 1000, step: 100000,
+                                            format: "#,##0.## đ",
+                                        },
+                                        validationRules: [{ type: "required" }]
+                                    },
+                                    {
+                                        colSpan: 12,
+                                        dataField: "giaTri05", name: "giatri-thang05",
+                                        label: { text: "Tháng " + moment().add(5, 'M').format("MM/YYYY"), location: "left" },
+                                        editorType: "dxNumberBox",
+                                        editorOptions: {
+                                            placeholder: "Vui lòng nhập giá trị...",
+                                            showSpinButtons: true, min: 1000, step: 100000,
+                                            format: "#,##0.## đ",
+                                        },
+                                        validationRules: [{ type: "required" }]
+                                    },
+                                ]
+                            },
+                            {
+                                itemType: "button", colSpan: 12,
+                                horizontalAlignment: "center",
+                                buttonOptions: {
+                                    height: 35, width: "100%",
+                                    text: "Xác nhận",
+                                    type: "default",
+                                    useSubmitBehavior: true
+                                }
+                            }
+                        ]
+                    }]
+                }).dxForm("instance");
+
+                scrollView.append(content);
+                scrollView.dxScrollView({ width: '100%', height: '100%' });
+                c.append(scrollView);
+                return c;
+            },
+            onHiding: () => $("#container").dxDataGrid('instance').refresh(),
+        });
+
+        $(document).on('submit', '#form-container', function (e) { 
+            var form = $(this);
+            var data = form.dxForm("instance").option("formData"); 
+            var deferred = $.Deferred();
+            ds_main.insert(
+                {
+                    "projectId": PROJECTID,
+                    "nhomCongViecId": data.nhomCongViecId,
+                    //"groupId": , 
+                    "thoiGianBaoCao": moment(data.thoiGianBaoCao).format("YYYY-MM-01"),
+                    "thoiGianDuChi": moment(data.thoiGianBaoCao).format("YYYY-MM-01"),
+                    "giaTri": data.giaTri,
+                    "isDelete": false,
+                    "isActive": false
+                }
+            ).then(() => {
+                for (var i = 1; i <= 5; i++) {
+                    ds_main.insert(
+                        {
+                            "projectId": PROJECTID,
+                            "nhomCongViecId": data.nhomCongViecId,
+                            //"groupId": ,
+                            "thoiGianBaoCao": moment(data.thoiGianBaoCao).format("YYYY-MM-01"),
+                            "thoiGianDuChi": moment(data.thoiGianBaoCao).add(i, 'M').format("YYYY-MM-01"),
+                            "giaTri": data["giaTri0" + i],
+                            "isDelete": false,
+                            "isActive": false
+                        }
+                    );
+                }
+                $("#popup-main").dxPopup('instance').hide();
+            }, deferred.reject);
+            e.preventDefault();
+            return deferred.promise();
+        });
+    </script>
+}

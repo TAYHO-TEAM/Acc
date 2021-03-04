@@ -1,5 +1,5 @@
 ﻿using {nameproject}.Domain.DomainObjects;
-using {nameproject}.Domain.Repositories;
+using {nameproject}.Domain.IRepositories;
 using AutoMapper;using Microsoft.AspNetCore.Http;
 using MediatR;
 using Services.Common.DomainObjects;
@@ -10,7 +10,7 @@ namespace  {nameproject}.Api.Application.Commands
 {
     public class Create{Entity}CommandHandler : {Entity}CommandHandler, IRequestHandler<Create{Entity}Command, MethodResult<Create{Entity}CommandResponse>>
     {
-        public Create{Entity}CommandHandler(IMapper mapper,IHttpContextAccessor httpContextAccessor,, I{Entity}Repository {entity}Repository) : base(mapper, httpContextAccessor, {entity}Repository)
+        public Create{Entity}CommandHandler(IMapper mapper,IHttpContextAccessor httpContextAccessor,I{Entity}Repository {entity}Repository) : base(mapper, httpContextAccessor, {entity}Repository)
         {
         }
 

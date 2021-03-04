@@ -1,0 +1,7 @@
+2021-02-24 08:40:40.987 +07:00 [INF] Application Starting.
+2021-02-24 08:40:42.283 +07:00 [INF] User profile is available. Using 'C:\Users\USER\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2021-02-24 08:40:42.411 +07:00 [INF] Application is shutting down...
+2021-02-24 08:40:42.651 +07:00 [INF] Now listening on: https://localhost:54321
+2021-02-24 08:40:42.651 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2021-02-24 08:40:42.652 +07:00 [INF] Hosting environment: Development
+2021-02-24 08:40:42.653 +07:00 [INF] Content root path: D:\Github\SystemCore\AppService\TayHo.ProjectManager\PrjectManager.Read\ProjectManager.Read.Api

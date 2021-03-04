@@ -24,6 +24,11 @@ namespace QuanLyDuAn.Areas.ThongTin
                 "ThongTin/{controller}/{action}/{id}",
                 new { controller ="Home",action = "Index", id = UrlParameter.Optional }
             );
+            context.MapRoute(
+                "ThongTin_CustomTable_Detail",
+                "ThongTin/{controller}/{action}/{id}/{code}",
+                new { controller = "CauHinh", action = "_CustomTableDetail", id = UrlParameter.Optional , code = UrlParameter.Optional }
+            );
         }
     }
 }

@@ -19,10 +19,12 @@ namespace ProjectManager.Read.Api.Controllers.v1
     public class DocumentReleasedLogController : APIControllerBase
     {
         private readonly IDOBaseRepository<DocumentReleasedLogDTO> _dOBaseRepository;
-
-        public DocumentReleasedLogController(IMapper mapper, IHttpContextAccessor httpContextAccessor, IDOBaseRepository<DocumentReleasedLogDTO> dOBaseRepository) : base(mapper,httpContextAccessor)
+        private readonly IDocumentReleasedLogRepository<DocumentReleasedLogDetailDTO> _documentReleasedLogRepository;
+        private const string GetListDetail = nameof(GetListDetail);
+        public DocumentReleasedLogController(IMapper mapper, IHttpContextAccessor httpContextAccessor, IDOBaseRepository<DocumentReleasedLogDTO> dOBaseRepository,IDocumentReleasedLogRepository<DocumentReleasedLogDetailDTO> documentReleasedLogRepository) : base(mapper,httpContextAccessor)
         {
             _dOBaseRepository = dOBaseRepository;
+            _documentReleasedLogRepository = documentReleasedLogRepository;
         }
 
         /// <summary>
@@ -43,6 +45,30 @@ namespace ProjectManager.Read.Api.Controllers.v1
             {
                 PagingInfo = queryResult.PagingInfo,
                 Items = _mapper.Map<IEnumerable<DocumentReleasedLogResponseViewModel>>(queryResult.Items)
+            };
+            return Ok(methodResult);
+        }
+
+        /// <summary>
+        /// Get List of DocumentReleasedLog Get list with Detail.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route(GetListDetail)]
+        [ProducesResponseType(typeof(MethodResult<PagingItems<DocumentReleasedLogResponseViewModel>>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(VoidMethodResult), (int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> GetDocumentReleasedLogDetailAsync([FromQuery] BaseRequestViewModel request)
+        {
+            var methodResult = new MethodResult<PagingItems<DocumentReleasedLogDetailResponseViewModel>>();
+            RequestHasAccountIdFilterParam requestFilter = _mapper.Map<RequestHasAccountIdFilterParam>(request);
+            requestFilter.TableName = QuanLyDuAnConstants.DocumentReleasedLog_TABLENAME;
+            requestFilter.AccountId = _user;
+            var queryResult = await _documentReleasedLogRepository.GetWithPaggingDetailAsync(requestFilter).ConfigureAwait(false);
+            methodResult.Result = new PagingItems<DocumentReleasedLogDetailResponseViewModel>
+            {
+                PagingInfo = queryResult.PagingInfo,
+                Items = _mapper.Map<IEnumerable<DocumentReleasedLogDetailResponseViewModel>>(queryResult.Items)
             };
             return Ok(methodResult);
         }

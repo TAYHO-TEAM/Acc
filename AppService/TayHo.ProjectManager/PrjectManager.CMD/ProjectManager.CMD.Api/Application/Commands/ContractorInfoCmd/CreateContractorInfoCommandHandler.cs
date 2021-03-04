@@ -36,6 +36,7 @@ namespace  ProjectManager.CMD.Api.Application.Commands
                                                         request.Address,
                                                         request.Phone,
                                                         request.Email);
+            newContractorInfo.SetCreate(_user);
             newContractorInfo.Status = request.Status.HasValue ? request.Status : newContractorInfo.Status;
             newContractorInfo.IsActive = request.IsActive.HasValue ? request.IsActive : newContractorInfo.IsActive;
             newContractorInfo.IsVisible = request.IsVisible .HasValue ? request.IsVisible : newContractorInfo.IsVisible;

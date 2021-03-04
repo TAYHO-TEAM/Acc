@@ -8,4 +8,8 @@ namespace ProjectManager.Read.Sql.Parameters
     {
         public int? AccountId { get; set; }
     }
+    public class RequestHasAccountPermitFilterParam : RequestHasAccountIdFilterParam
+    {
+        public int? Type { get; set; }
+    }
 }

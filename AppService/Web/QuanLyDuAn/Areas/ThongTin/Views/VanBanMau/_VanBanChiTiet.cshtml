@@ -1,0 +1,244 @@
+﻿@model int
+<form id="form-custom" action="#" method="POST" enctype="application/json">
+    <div id="fileuploader-container">
+        <div id="file-uploader"></div>
+    </div>
+
+</form>
+<script>
+    var customStore_SELECT = (link) => customStore_GET_LINK(link);
+    var customStore_CELLCONTEN = (data) => customStore_DELETE_READDATASOURCE(ACTION_CELLCONTENT,data);
+    $(function () {
+        customStore_CUSTOMFORMCONTENTDETAIL(@Model).load().done((rs) => {
+            console.log(rs);
+            var form = $("#form-custom").dxForm({
+                colCount: 1,
+                formData: rs,
+                height: "90vh",
+                items: [
+                    {
+                        itemType: "group",
+                        name: "Phones",
+                        items: getGroupOptions(rs[0].customFormDetailDTO.customFormBodyDetailDTOs),
+                    },
+                    {
+                        itemType: "button",
+                        horizontalAlignment: "center",
+                        buttonOptions: {
+                            text: "Lưu lại",
+                            icon: "fa fa-save",
+                            type: "success",
+                            useSubmitBehavior: true,
+                            elementAttr: {
+                                id: "submit",
+                            }
+                        }
+                    },
+                ]
+            }).dxForm("instance");
+            function getGroupOptions(customFormBodyDetail) {
+                var groups = [];
+                for (var i = 0; i < customFormBodyDetail.length; i++) {
+                    groups.push({
+                        itemType: "group",
+                        caption: customFormBodyDetail[i].header,
+                        name: customFormBodyDetail[i].header,
+                        items: getInputOptions(customFormBodyDetail[i].customTableDetailDTO.customColumDetailDTOs, customFormBodyDetail[i].customTableDetailDTO.code, customFormBodyDetail[i].id, customFormBodyDetail[i].customTableDetailDTO.noColum, customFormBodyDetail[i].customTableDetailDTO.noRow),
+                    });
+                }
+                return groups;
+            }
+            function getInputOptions(colums,type,customFromBodyId,limtCol, limitRow) {
+                var options = [];
+                for (var i = 0; i < colums.length; i++) {
+                    var opt = generateNewInputOptions(colums[i], i, type, customFromBodyId, limtCol, limitRow);
+                    if (opt !== null) {
+                        options.push(opt);
+                    }
+                }
+                $(function () {
+                });
+                return options;
+            }
+
+            function generateNewInputOptions(object, index, type, customFromBodyId, limtCol, limitRow) {
+                var Id = customFromBodyId + '_' + object.id + '_' + (index+1);
+                if (type === "dxTextBox") {
+                    return {
+                        itemType: "simple",
+                        readOnly: true,
+                        dataField: Id,
+                        label: { text: " " },
+                        editorType: "dxTextBox",
+                        cssClass: "custom-textbox",
+                        editorOptions: {
+                            placeholder: "Vui lòng điền thông tin",
+                            value: (object.customCellContentDTOs.length > 0 && typeof object.customCellContentDTOs[0].contents !== 'undefined') ? object.customCellContentDTOs[0].contents : '',
+                            elementAttr: {
+                                id: Id,
+                                class: "customForm_TextBox",
+                            },
+                        }
+                    }
+                }
+                else if (type === "dxSelectBox")
+                {
+                    return {
+                        //dataField: customFromBodyId+'_'+ object.id + '_' + index,
+                        itemType: "simple",
+                        readOnly: true,
+                        displayExpr: "userName",
+                        valueExpr: "userName",
+                        editorType: "dxTextBox",
+                        cssClass: "custom-textbox",
+                        editorOptions: {
+                            searchEnabled: true,
+                            value: (object.customCellContentDTOs.length > 0 && typeof object.customCellContentDTOs[0].contents !== 'undefined') ? object.customCellContentDTOs[0].contents : '',
+                            elementAttr: {
+                                id: Id,
+                                class: "customForm_SelectBox",
+                            },
+                            dataSource: customStore_SELECT(object.sourceLink),
+                            displayExpr: "userName",
+                            valueExpr: "userName",
+                        }
+                    };
+
+                }
+                else if (type === "dxDateBox") {
+                    return {
+                        //dataField: customFromBodyId + '_' + object.id + '_' + index,
+                        itemType: "simple",
+                        readOnly: true,
+                        editorType: "dxTextBox",
+                        cssClass: "custom-textbox",
+                        editorOptions: {
+                            type: "datetime",
+                            value: (object.customCellContentDTOs.length > 0 && typeof object.customCellContentDTOs[0].contents !== 'undefined') ? object.customCellContentDTOs[0].contents : null,
+                            elementAttr: {
+                                id: Id,
+                                class: "customForm_DateBox",
+                            },
+                        }
+                    };
+                }
+                else if (type === "dxCheckBox") {
+                    return {
+                        //dataField: customFromBodyId + '_' + object.id + '_' + index,
+                        itemType: "simple",
+                        readOnly: true,
+                        editorType: "dxTextBox",
+                        cssClass: "custom-textbox",
+                        editorOptions: {
+                            text: object.sourceValue,
+                            value: (object.customCellContentDTOs.length > 0 && typeof object.customCellContentDTOs[0].contents !== 'undefined') ? object.customCellContentDTOs[0].contents === 'true'?true:false : false,
+                            elementAttr: {
+                                id: Id,
+                                class: "customForm_CheckBox",
+                            },
+                        }
+                    };
+                }
+                else if (type === "dxFileUploader") {
+                    if (object.typeParam == 'image') {
+                        return {
+                            itemType: "group",
+                            name: "listFileUploader",
+                            items: [
+                                {
+                                    name: "order",
+                                    visible: true,
+                                    readOnly: true,
+                                    template: function (data, $itemElement) {
+                                        $("<div id='dataGrid'>")
+                                            .appendTo($itemElement)
+                                            .dxDataGrid({
+                                                dataSource: customStore_CELLCONTEN(object.customCellContentDTOs),
+                                                columns: [
+                                                    {
+                                                        dataField: "noRown",
+                                                        caption: "STT",
+                                                        dataType: "number",
+                                                    },
+                                                    {
+                                                        dataField: "contents",
+                                                        caption: "Đường dẫn",
+                                                        dataType: "string",
+                                                    },
+                                                    {
+                                                        dataField: "createDate",
+                                                        caption: "Ngày tạo file",
+                                                        dataType: "date",
+                                                    },],
+                                            });
+                                    }
+                                },
+                                {
+                                    itemType: "simple",
+                                    readOnly: true,
+                                    name: "Image",
+                                    editorType: 'dxGallery',
+                                    editorOptions: {
+                                        dataSource: object.customCellContentDTOs.map(x=>x.contents),
+                                        height: 300,
+                                        width: 'auto',
+                                        slideshowDelay: 1500,
+                                        onItemClick: function (value) {
+                                            console.log(value);
+                                        }
+                                    },
+
+                                },
+                            ]
+                        };
+                    }
+                    else if (object.typeParam == 'file') {
+                        return {
+                            itemType: "group",
+                            readOnly: true,
+                            name: "listFileUploader",
+                            items: [
+                                {
+                                    name: "order",
+                                    visible: true,
+                                    template: function (data, $itemElement) {
+                                        $("<div id='dataGrid'>")
+                                            .appendTo($itemElement)
+                                            .dxDataGrid({
+                                                dataSource: customStore_CELLCONTEN(object.customCellContentDTOs),
+                                            });
+                                    }
+                                },
+                            ]
+                        };
+                    }
+                    else {
+                        return {
+                            itemType: "group",
+                            readOnly: true,
+                            name: "listFileUploader",
+                            items: [
+                                {
+                                    name: "order",
+                                    visible: true,
+                                    template: function (data, $itemElement) {
+                                        $("<div id='dataGrid'>")
+                                            .appendTo($itemElement)
+                                            .dxDataGrid({
+                                                dataSource: customStore_CELLCONTEN(object.customCellContentDTOs),
+                                            });
+                                    }
+                                },
+                            ]
+                        };
+                    }
+
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        });
+    });
+</script>

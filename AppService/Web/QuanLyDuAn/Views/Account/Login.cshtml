@@ -15,7 +15,9 @@
     @Styles.Render("~/StyleBundleDx?v=" + version)
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
     @Scripts.Render("~/ScriptsBundle?v=" + version)
-    @Scripts.Render("~/ScriptsBundleDx?v="+version)
+    <script src="https://cdn3.devexpress.com/jslib/20.2.4/js/dx.all.js"></script>
+    <script src="https://cdn3.devexpress.com/jslib/20.2.4/js/dx.aspnet.mvc.js"></script>
+    @Scripts.Render("~/ScriptsBundleDx?v=" + version)
 </head>
 <body class="hold-transition login-page">
     <div id="loading-panel"></div>

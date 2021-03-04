@@ -4,20 +4,19 @@
     ViewBag.Title = "Các hạng mục";
 }
 
-@section style{   }
+@section style{    
+}
 
 <div class="row">
-    <div class="col-12">
+    <div class="col-xl-8 col-lg-12">
         <div id="container" class="elevation-2"></div>
     </div>
 </div>
 
 @section script{
+    <script src="~/Scripts/page/ngansach.js"></script>
     <script>
-        const ACTION = "/NS_HangMuc";
-        const ACTION_PROJECT = "/Projects";
-
-        let customStore = new DevExpress.data.CustomStore({
+        var customStore = new DevExpress.data.CustomStore({
             key: "id",
             load: (values) => {
                 let deferred = $.Deferred(), params = { 'FindId': 'projectId,' + PROJECTID };
@@ -29,7 +28,7 @@
 
                 $.ajax({
                     headers: header,
-                    url: URL_API_PM_READ + ACTION,
+                    url: URL_API_PM_READ + ACTION_HANGMUC,
                     dataType: "json",
                     data: params,
                     success: function (data) {
@@ -44,34 +43,10 @@
 
                 return deferred.promise();
             },
-            insert: (values) => ajax_insert(URL_API_PM_CMD + ACTION, values),
-            update: (key, values) => ajax_update(URL_API_PM_CMD + ACTION, key, values),
-            remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION, key),
-        });
-        let customStore_Projects = new DevExpress.data.CustomStore({
-            key: "id", loadMode: "raw",
-            load: (values) => {
-                var deferred = $.Deferred();
-                $.ajax({
-                    headers: header, dataType: "json",
-                    url: URL_API_PM_READ + ACTION_PROJECT,
-                    success: function (data) {
-                        var list = data.result.items.filter(x => x.isActive == true && x.isVisible == true);
-                        if (PROJECTID == 0) {
-                            localStorage.setItem("projectIdCurrent", parseInt(list[0].id));
-                            PROJECTID = parseInt(list[0].id)
-                        }
-                        deferred.resolve(list);
-                    },
-                    error: function (xhr, textStatus, errorThrown) {
-                        console.log(xhr.responseJSON);
-                        deferred.reject("Có lỗi xảy ra trong quá trình lấy danh sách 'Projects'. Mở Console để xem chi tiết.");
-                    },
-                    timeout: 10000
-                });
-                return deferred.promise();
-            },
-        });
+            insert: (values) => ajax_insert(URL_API_PM_CMD + ACTION_HANGMUC, values),
+            update: (key, values) => ajax_update(URL_API_PM_CMD + ACTION_HANGMUC, key, values),
+            remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION_HANGMUC, key),
+        }); 
 
         $(function () {
             loadData(customStore);
@@ -93,7 +68,7 @@
                 showRowLines: true, columnAutoWidth: true, wordWrapEnabled: true, rowAlternationEnabled: false,
                 columns: [
                     {
-                        dataField: "tenHangMuc", caption: "Tên hạng mục",
+                        dataField: "tenHangMuc", caption: "Thông tin / Tiêu đề",
                         dataType: "string",
                         editorOptions: {
                             placeholder: "Vui lòng nhập..."
@@ -118,22 +93,22 @@
                     },
                     {
                         dataField: "id", caption: "ID",
-                        width: 100, alignment: "center",
+                        width: 100, alignment: "center", allowEditing: false,
                     },
                     {
                         dataField: "parentId", caption: "Parent ID",
                         width: 100, alignment: "center",
                     },
                     {
-                        dataField: "isActive",
-                        width: 100, alignment: "center",
-                        editorType: "dxSwitch",
-                    },
-                    {
-                        dataField: "isVisible",
-                        width: 100, alignment: "center",
-                        editorType: "dxSwitch",
-                    },
+                        dataField: "isActive", caption:"Tình trạng",
+                        width: 130, alignment: "center",
+                        //editorType: "dxSwitch",
+                        lookup: {
+                            dataSource: listActiveStatus,
+                            valueExpr: "value", displayExpr: "text",
+                        },
+                        cellTemplate: (c, o) => $("<span />").addClass("badge badge-" + listActiveStatus.find(x => x.value == o.value).color).append($("<i />").addClass("mr-1 " + listActiveStatus.find(x => x.value == o.value).icon), o.text).appendTo(c)
+                    }, 
                     {
                         type: "buttons", caption: "Tác vụ",
                         width: 120, alignment: "center",
@@ -171,26 +146,16 @@
                 //        }, d.reject);
                 //    },
                 //},
-                paging: {
-                    enabled: true,
-                    pageSize: 20
-                },
-                pager: {
-                    showPageSizeSelector: true,
-                    allowedPageSizes: [10, 20, 40],
-                    showInfo: true,
-                },
+                paging: { enabled: false }, 
                 searchPanel: {
-                    highlightCaseSensitive: true,
-                    highlightSearchText: true,
-                    searchVisibleColumnsOnly: true,
-                    visible: true
+                    highlightCaseSensitive: true, highlightSearchText: true,
+                    visible: true, searchVisibleColumnsOnly: true,
                 },
                 editing: {
-                    //allowAdding: PermitInAction["insert"] ? true : null,
+                    allowAdding: PermitInAction["insert"] ? true : null,
                     allowUpdating: PermitInAction["update"] ? true : null,
                     allowDeleting: PermitInAction["delete"] ? true : null,
-                    mode: "row", useIcons: false, confirmDelete: true,
+                    mode: "cell", useIcons: false, confirmDelete: true,
                 },
                 onToolbarPreparing: function (e) {
                     var container = e.component;
@@ -204,21 +169,13 @@
                                 width: "100%",
                                 showClearButton: false,
                                 value: PROJECTID,
-                                onValueChanged: function (data) {
+                                onValueChanged: (data) => {
                                     PROJECTID = data.value;
                                     localStorage.setItem('projectIdCurrent', PROJECTID);
                                     loadData(customStore);
                                 },
                             },
-                        },
-                        {
-                            location: "after", widget: "dxButton",
-                            options: {
-                                visible: PermitInAction["insert"],
-                                text: "Hạng mục", icon: "add", stylingMode: "filled", type: "default",
-                                onClick: () => container.addRow()
-                            }
-                        },
+                        }, 
                         {
                             location: "after", widget: "dxButton",
                             options: {

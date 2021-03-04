@@ -43,10 +43,12 @@ namespace ProjectManager.Read.Sql
             services.AddScoped<IDOBaseRepository<OperationProcessDTO>, DOBaseRepository<OperationProcessDTO>>();
             services.AddScoped<IDOBaseRepository<StepsProcessDTO>, DOBaseRepository<StepsProcessDTO>>();
 
+            #region NGÂN SÁCH
             services.AddScoped<IDOBaseRepository<NS_CongViecDTO>, DOBaseRepository<NS_CongViecDTO>>();
             services.AddScoped<INS_CongViecRepository<NS_CongViec_CongViecDetailDTO>, NS_CongViecRepository<NS_CongViec_CongViecDetailDTO>>();
 
             services.AddScoped<IDOBaseRepository<NS_CongViecDetailDTO>, DOBaseRepository<NS_CongViecDetailDTO>>();
+            services.AddScoped<INS_CongViecDetail_GoiThau_GiaiDoanRepository<NS_CongViecDetail_GoiThau_GiaiDoanDTO>, NS_CongViecDetail_GoiThau_GiaiDoanRepository<NS_CongViecDetail_GoiThau_GiaiDoanDTO>>();
 
             services.AddScoped<IDOBaseRepository<NS_GiaiDoanDTO>, DOBaseRepository<NS_GiaiDoanDTO>>();
             services.AddScoped<IDOBaseRepository<NS_GoiThauDTO>, DOBaseRepository<NS_GoiThauDTO>>();
@@ -72,6 +74,13 @@ namespace ProjectManager.Read.Sql
             services.AddScoped<IDOBaseRepository<NS_TamUngDTO>, DOBaseRepository<NS_TamUngDTO>>();
             services.AddScoped<IDOBaseRepository<NS_TamUng_TheoDoiDTO>, DOBaseRepository<NS_TamUng_TheoDoiDTO>>();
 
+            services.AddScoped<IDOBaseRepository<NS_NghiemThuDTO>, DOBaseRepository<NS_NghiemThuDTO>>(); 
+            services.AddScoped<INS_NghiemThuRepository<NS_NghiemThuDetailDTO>, NS_NghiemThuRepository<NS_NghiemThuDetailDTO>>();
+
+            services.AddScoped<IDOBaseRepository<NS_DuChiDTO>, DOBaseRepository<NS_DuChiDTO>>();
+            services.AddScoped<IDOBaseRepository<NS_ThucChiDTO>, DOBaseRepository<NS_ThucChiDTO>>();
+            #endregion
+
             services.AddScoped<IDOBaseRepository<RequestRegistDTO>, DOBaseRepository<RequestRegistDTO>>();
             services.AddScoped<IDOBaseRepository<ResponseRegistDTO>, DOBaseRepository<ResponseRegistDTO>>();
             services.AddScoped<IDOBaseRepository<ResponseRegistReplyDTO>, DOBaseRepository<ResponseRegistReplyDTO>>();
@@ -80,12 +89,40 @@ namespace ProjectManager.Read.Sql
             services.AddScoped<IDOBaseRepository<DocumentReleasedAccountDTO>, DOBaseRepository<DocumentReleasedAccountDTO>>();
             services.AddScoped<IDOBaseRepository<DocumentReleasedLogDTO>, DOBaseRepository<DocumentReleasedLogDTO>>();
             services.AddScoped<IDOBaseRepository<AccountInfoDTO>, DOBaseRepository<AccountInfoDTO>>();
+            services.AddScoped<IDOBaseRepository<PlanRegisterDTO>, DOBaseRepository<PlanRegisterDTO>>();
 
             services.AddScoped<IRequestRegistRepository<RequestRegistDTO>, RequestRegistRepository<RequestRegistDTO>>();
             services.AddScoped<IRequestRegistRepository<RequestRegistDetailDTO>, RequestRegistRepository<RequestRegistDetailDTO>>();
             services.AddScoped<IResponseRegistRepository<ResponseRegistDTO>, ResponseRegistRepository<ResponseRegistDTO>>();
             services.AddScoped<IFilesAttachmentRepository<FilesAttachmentDTO>, FilesAttachmentRepository<FilesAttachmentDTO>>();
+            services.AddScoped<IPlanRegisterRepository<PlanRegisterDTO>, PlanRegisterRepository<PlanRegisterDTO>>();
+            services.AddScoped<IDocumentReleasedRepository<DocumentReleasedDTO>, DocumentReleasedRepository<DocumentReleasedDTO>>();
+            services.AddScoped<IDocumentReleasedLogRepository<DocumentReleasedLogDetailDTO>, DocumentReleasedLogRepository<DocumentReleasedLogDetailDTO>>();
 
+            services.AddScoped<IDOBaseRepository<CustomCellContentDTO>, DOBaseRepository<CustomCellContentDTO>>();
+            services.AddScoped<IDOBaseRepository<CustomColumDTO>, DOBaseRepository<CustomColumDTO>>();
+            services.AddScoped<IDOBaseRepository<CustomFormBodyDTO>, DOBaseRepository<CustomFormBodyDTO>>();
+            services.AddScoped<IDOBaseRepository<CustomFormContentDTO>, DOBaseRepository<CustomFormContentDTO>>();
+            services.AddScoped<IDOBaseRepository<CustomFormDTO>, DOBaseRepository<CustomFormDTO>>();
+            services.AddScoped<IDOBaseRepository<CustomFormAccountDTO>, DOBaseRepository<CustomFormAccountDTO>>();
+            services.AddScoped<IDOBaseRepository<CustomTableDTO>, DOBaseRepository<CustomTableDTO>>();
+            services.AddScoped<IDOBaseRepository<NotifyDTO>, DOBaseRepository<NotifyDTO>>();
+            services.AddScoped<IDOBaseRepository<NotifyAccountDTO>, DOBaseRepository<NotifyAccountDTO>>();
+            services.AddScoped<IDOBaseRepository<NotifyTemplateDTO>, DOBaseRepository<NotifyTemplateDTO>>();
+
+            services.AddScoped<ICustomTableRepository<CustomTableDetailDTO>, CustomTableRepository<CustomTableDetailDTO>>();
+            services.AddScoped<ICustomFormRepository<CustomFormDetailDTO>, CustomFormRepository<CustomFormDetailDTO>>();
+            services.AddScoped<ICustomFormContentRepository<CustomFormContentDetailDTO>, CustomFormContentRepository<CustomFormContentDetailDTO>>();
+
+            services.AddScoped<IDOBaseRepository<ConversationDTO>, DOBaseRepository<ConversationDTO>>();
+            services.AddScoped<IDOBaseRepository<PlanAccountDTO>, DOBaseRepository<PlanAccountDTO>>();
+            services.AddScoped<IDOBaseRepository<PlanJobDTO>, DOBaseRepository<PlanJobDTO>>();
+            services.AddScoped<IDOBaseRepository<PlanMasterDTO>, DOBaseRepository<PlanMasterDTO>>();
+            services.AddScoped<IDOBaseRepository<PlanProjectDTO>, DOBaseRepository<PlanProjectDTO>>();
+            services.AddScoped<IDOBaseRepository<PlanReportDTO>, DOBaseRepository<PlanReportDTO>>();
+            services.AddScoped<IDOBaseRepository<PlanScheduleDTO>, DOBaseRepository<PlanScheduleDTO>>();
+            services.AddScoped<IPlanMasterRepository<PlanMasterAccountPermitDTO>, PlanMasterRepository<PlanMasterAccountPermitDTO>>();
+            services.AddScoped<IPlanJobRepository<PlanJobAccountPermitDTO>, PlanJobRepository<PlanJobAccountPermitDTO>>();
             return services;
         }
 

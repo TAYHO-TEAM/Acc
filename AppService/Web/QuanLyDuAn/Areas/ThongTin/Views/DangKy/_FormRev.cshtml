@@ -60,12 +60,14 @@
                                 searchMode: "contains",
                                 searchExpr: ['code', 'title'],
                                 showClearButton: true,
+                                readOnly: true,
                                 dataSource: customStore_PLAN(""),
-                                valueExpr: "id", displayExpr: "code",
+                                valueExpr: "id",
+                                displayExpr: "title",
                                 placeholder: "Vui lòng chọn...",
                                 searchEnabled: true, showClearButton: true,
                                 itemTemplate: function (data) {
-                                    return $("<div>").append($("<b>").append(data.code).addClass("mr-1"), $("<em>").append(data.title));
+                                    return $("<div>").append($("<b>").append(data.title).addClass("mr-1"));
                                 },
                                 onValueChanged: function (data) {
                                     /////// loại tài liệu
@@ -119,21 +121,23 @@
                                 valueExpr: "id",
                                 displayExpr: "title",
                             },
+                            editorType: "dxTextBox",
                             editorType: "dxSelectBox",
                             editorOptions: {
                                 value: formData["documentTypeId"],
+                                readOnly:true,
                                 dataSource: customStore_DocumetnType,
                                 valueExpr: "id", displayExpr: "title",
                                 elementAttr: {
                                     id: "elementDocumentTypeId",
                                 }
                             },
-
+                            validationRules: [{ type: "required" }],
                         },
                         {
                             colSpan: 12,
                             dataField: "workItemId",
-                            label: { text: "Loại tài liệu" },
+                            label: { text: "Hạng mục" },
                             lookup: {
                                 dataSource: customStore_HangMuc,
                                 valueExpr: "id",
@@ -141,6 +145,7 @@
                             },
                             editorType: "dxSelectBox",
                             editorOptions: {
+                                readOnly: true,
                                 value: formData["workItemId"],
                                 dataSource: customStore_HangMuc,
                                 valueExpr: "id",
@@ -149,6 +154,7 @@
                                     id: "elementHangMucId",
                                 }
                             },
+                            validationRules: [{ type: "required" }],
                         },
                         {
                             colSpan: 12,
@@ -194,7 +200,7 @@
                     itemType: "button",
                     horizontalAlignment: "center",
                     buttonOptions: {
-                        text: "Lưu lại",
+                        text: "Trình tài liệu",
                         icon: "fa fa-save",
                         type: "success",
                         useSubmitBehavior: true,
@@ -221,10 +227,11 @@
             showFileList: true,
             multiple: true,
             uploadMode: "useForm",
-            allowedFileExtensions: [".jpg", ".jpeg", ".png", ".pdf", ".doc", ".docx", ".xls", ".xlsx", ".xlsm"],
+            allowedFileExtensions: [".jpg", ".jpeg", ".png", ".pdf"],
             maxFileSize: 10000000,
         });
         $("#form-regist").on("submit", function (e) {
+            loadingPanel.show();
             var fdata = new FormData();
             var i = 10;
             $.each(formData, function (key, value) {
@@ -234,9 +241,6 @@
             fdata.append('projectId', PROJECTID);
             fdata.append('parentId', @Model);
             fdata.append('token', UserCurrentInfo.accessToken);
-            for (var pair of fdata.entries()) {
-                console.log(pair[0] + ', ' + pair[1]);
-            }
             var files = $(".file-uploader").dxFileUploader("instance").option("value");
             if (files.length > 0) {
                 $.each(files, function (key, value) {
@@ -275,6 +279,4 @@
         });
 
     });
-
-
 </script>

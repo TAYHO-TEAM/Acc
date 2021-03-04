@@ -26,7 +26,7 @@ namespace  ProjectManager.CMD.Api.Application.Commands
         public async Task<MethodResult<UpdateDocumentReleasedCommandResponse>> Handle(UpdateDocumentReleasedCommand request, CancellationToken cancellationToken)
         {
             var methodResult = new MethodResult<UpdateDocumentReleasedCommandResponse>();
-            var existingDocumentReleased = await _DocumentReleasedRepository.SingleOrDefaultAsync(x => x.Id == request.Id && x.IsDelete == false).ConfigureAwait(false);
+            var existingDocumentReleased = await _documentReleasedRepository.SingleOrDefaultAsync(x => x.Id == request.Id && x.IsDelete == false).ConfigureAwait(false);
             if (existingDocumentReleased == null)
             {
                 methodResult.AddAPIErrorMessage(nameof(ErrorCodeUpdate.UErr01), new[]
@@ -44,11 +44,13 @@ namespace  ProjectManager.CMD.Api.Application.Commands
             existingDocumentReleased.SetProjectId(request.ProjectId);
             existingDocumentReleased.SetWorkItemId(request.WorkItemId);
             existingDocumentReleased.SetTagWorkItem(request.TagWorkItem);
+            existingDocumentReleased.SetLocation(request.Location);
+            existingDocumentReleased.SetCalendar(request.Calendar);
             existingDocumentReleased.SetNoAttachment(request.NoAttachment);
 
             existingDocumentReleased.SetUpdate(_user,0);
-            _DocumentReleasedRepository.Update(existingDocumentReleased);
-            await _DocumentReleasedRepository.UnitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+            _documentReleasedRepository.Update(existingDocumentReleased);
+            await _documentReleasedRepository.UnitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
             methodResult.Result = _mapper.Map<UpdateDocumentReleasedCommandResponse>(existingDocumentReleased);
             return methodResult;
         }

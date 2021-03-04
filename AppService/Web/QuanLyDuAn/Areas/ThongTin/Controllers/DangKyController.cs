@@ -1,6 +1,6 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using QuanLyDuAn.Utilities;
 using System;
+using System.Configuration;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -8,12 +8,12 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.Script.Serialization;
 
 namespace QuanLyDuAn.Areas.ThongTin.Controllers
 {
     public class DangKyController : Controller
     {
+        public const int ActionId = 27;
         // GET: ThongTin/DangKy
         public ActionResult Index()
         {
@@ -69,19 +69,10 @@ namespace QuanLyDuAn.Areas.ThongTin.Controllers
                 }
 
             }
-            PostRegist(mFormData, token);
-            return Json(new { status = "success", result = "Đã lưu thông tin yêu cầu thành công" });
-        }
-        public async Task PostRegist(MultipartFormDataContent mFormData, string token)
-        {
             using (var client = new HttpClient())
             {
-                client.BaseAddress = new Uri("https://api-pm-cmd.tayho.com.vn/");//http://localhost:50999/,https://api-pm-cmd.tayho.com.vn/
+                client.BaseAddress = new Uri(ConfigurationSettings.AppSettings["pmCMD"].ToString());//http://localhost:50999/,https://api-pm-cmd.tayho.com.vn/
                 client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
-                //client.DefaultRequestHeaders.Accept.Clear();
-                //client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                //client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "multipart/form-data");
-                //client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("text/plain"));
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
                 using (HttpResponseMessage response = client.PostAsync("api/cmd/v1/RequestRegist", mFormData).Result)
@@ -89,29 +80,28 @@ namespace QuanLyDuAn.Areas.ThongTin.Controllers
                     if (response.StatusCode != HttpStatusCode.OK)
                     {
                         var err = response.Content.ReadAsStringAsync().Result;
+                        return Json(new { status = "error", result = err });
                     }
                 }
             }
+            return Json(new { status = "success", result = "Đã lưu thông tin yêu cầu thành công" });
         }
-        public class RequestOBJ
-        {
-            public int? Id { get; set; }
-            public int? PlanRegisterId { get; set; }
-            public string Code { get; set; }
-            public string BarCode { get; set; }
-            public string Title { get; set; }
-            public string Descriptions { get; set; }
-            public string Note { get; set; }
-            public int? ParentId { get; set; }
-            public int? Level { get; set; }
-            public byte? NoAttachment { get; set; }
-            public int? ProjectId { get; set; }
-            public int? WorkItemId { get; set; }
-            public int? DocumentTypeId { get; set; }
-            public int? Rev { get; set; }
-            public string token { get; set; }
+        //public async Task PostRegist(MultipartFormDataContent mFormData, string token)
+        //{
+        //    using (var client = new HttpClient())
+        //    {
+        //        client.BaseAddress = new Uri("https://api-pm-cmd.tayho.com.vn/");//http://localhost:50999/,https://api-pm-cmd.tayho.com.vn/
+        //        client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
+        //        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-        }
-
+        //        using (HttpResponseMessage response = client.PostAsync("api/cmd/v1/RequestRegist", mFormData).Result)
+        //        {
+        //            if (response.StatusCode != HttpStatusCode.OK)
+        //            {
+        //                var err = response.Content.ReadAsStringAsync().Result;
+        //            }
+        //        }
+        //    }
+        //}
     }
 }

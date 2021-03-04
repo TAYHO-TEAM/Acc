@@ -29,7 +29,7 @@ namespace  ProjectManager.CMD.Api.Application.Commands
         public async Task<MethodResult<DeleteDocumentReleasedCommandResponse>> Handle(DeleteDocumentReleasedCommand request, CancellationToken cancellationToken)
         {
             var methodResult = new MethodResult<DeleteDocumentReleasedCommandResponse>();
-            var existingDocumentReleased = await _DocumentReleasedRepository.GetAllListAsync(x => request.Ids.Contains(x.Id) && x.IsDelete == false).ConfigureAwait(false);
+            var existingDocumentReleased = await _documentReleasedRepository.GetAllListAsync(x => request.Ids.Contains(x.Id) && x.IsDelete == false).ConfigureAwait(false);
             if (existingDocumentReleased == null || !existingDocumentReleased.Any())
             {
                 methodResult.AddAPIErrorMessage(nameof(ErrorCodeDelete.DErr001), new[]
@@ -50,8 +50,8 @@ namespace  ProjectManager.CMD.Api.Application.Commands
                 existingStage.SetUpdate(_user,0);
                 
             }
-            _DocumentReleasedRepository.UpdateRange(existingDocumentReleased);
-            await _DocumentReleasedRepository.UnitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+            _documentReleasedRepository.UpdateRange(existingDocumentReleased);
+            await _documentReleasedRepository.UnitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
             var DocumentReleasedResponseDTOs = _mapper.Map<List<DocumentReleasedCommandResponseDTO>>(existingDocumentReleased);
             methodResult.Result = new DeleteDocumentReleasedCommandResponse(DocumentReleasedResponseDTOs);
             return methodResult;

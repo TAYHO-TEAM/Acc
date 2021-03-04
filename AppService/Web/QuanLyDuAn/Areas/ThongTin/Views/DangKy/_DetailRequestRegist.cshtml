@@ -77,8 +77,10 @@
                     cellTemplate: (c, o) => $("<div />").append(o.rowIndex + 1).appendTo(c),
                 },//STT
                 {
-                    dataField: "code", caption: "Mã",
-                    dataType: "string", alignment: "left",
+                    dataField: "barCode",
+                    caption: "Mã",
+                    dataType: "string",
+                    alignment: "left",
                     validationRules: [{ type: "required" }]
                 },//code
                 {
@@ -90,7 +92,10 @@
                     },
                 },//dienGiai
                 {
-                    dataField: "donGia", caption: "Đơn giá", dataType: "number", alignment: "center",
+                    dataField: "donGia",
+                    caption: "Đơn giá",
+                    dataType: "number",
+                    alignment: "center",
                     format: { type: "currency", currency: "VND" },
                     editorType: "dxNumberBox",
                     editorOptions: {
@@ -130,9 +135,9 @@
             onInitNewRow: (e) => {
                 e.data.isActive = true;
                 e.data.isVisible = true;
-                e.data.nhomCongViecId = $('#container_detail').data('id');
-                e.data.giaiDoanId = 1;
-                e.data.isLock = false;
+                //e.data.nhomCongViecId = $('#container_detail').data('id');
+                //e.data.giaiDoanId = 1;
+                //e.data.isLock = false;
             },
             onToolbarPreparing: (e) => {
                 e.toolbarOptions.items.unshift(

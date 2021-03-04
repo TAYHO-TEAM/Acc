@@ -19,10 +19,18 @@ namespace ProjectManager.Read.Api.Controllers.v1
     public class NS_CongViecDetailController : APIControllerBase
     {
         private readonly IDOBaseRepository<NS_CongViecDetailDTO> _dOBaseRepository;
+        private readonly INS_CongViecDetail_GoiThau_GiaiDoanRepository<NS_CongViecDetail_GoiThau_GiaiDoanDTO> _nS_CongViecDetail_GoiThau_GiaiDoanRepository;
+        private const string Detail = nameof(Detail);
 
-        public NS_CongViecDetailController(IMapper mapper, IHttpContextAccessor httpContextAccessor, IDOBaseRepository<NS_CongViecDetailDTO> dOBaseRepository) : base(mapper,httpContextAccessor)
+        public NS_CongViecDetailController(
+            IMapper mapper, 
+            IHttpContextAccessor httpContextAccessor, 
+            IDOBaseRepository<NS_CongViecDetailDTO> dOBaseRepository,
+            INS_CongViecDetail_GoiThau_GiaiDoanRepository<NS_CongViecDetail_GoiThau_GiaiDoanDTO> nS_CongViecDetail_GoiThau_GiaiDoanRepository
+        ) : base(mapper,httpContextAccessor)
         {
             _dOBaseRepository = dOBaseRepository;
+            _nS_CongViecDetail_GoiThau_GiaiDoanRepository = nS_CongViecDetail_GoiThau_GiaiDoanRepository;
         }
 
         /// <summary>
@@ -43,6 +51,29 @@ namespace ProjectManager.Read.Api.Controllers.v1
             {
                 PagingInfo = queryResult.PagingInfo,
                 Items = _mapper.Map<IEnumerable<NS_CongViecDetailResponseViewModel>>(queryResult.Items)
+            };
+            return Ok(methodResult);
+        }
+
+        /// <summary>
+        /// Get List of NS_CongViecDetail.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route(Detail)]
+        [ProducesResponseType(typeof(MethodResult<PagingItems<NS_CongViecDetail_GoiThau_GiaiDoanResponseViewModel>>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(VoidMethodResult), (int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> GetNS_CongViecDetail_GoiThau_GiaiDoanAsync([FromQuery] BaseRequestViewModel request)
+        {
+            var methodResult = new MethodResult<PagingItems<NS_CongViecDetail_GoiThau_GiaiDoanResponseViewModel>>();
+            RequestBaseFilterParam requestFilter = _mapper.Map<RequestBaseFilterParam>(request);
+            requestFilter.TableName = QuanLyDuAnConstants.NS_CongViecDetail_GoiThau_GiaiDoan_TABLENAME;
+            var queryResult = await _nS_CongViecDetail_GoiThau_GiaiDoanRepository.GetCongViecDetail_GoiThau_GiaiDoanAsync(requestFilter).ConfigureAwait(false);
+            methodResult.Result = new PagingItems<NS_CongViecDetail_GoiThau_GiaiDoanResponseViewModel>
+            {
+                PagingInfo = queryResult.PagingInfo,
+                Items = _mapper.Map<IEnumerable<NS_CongViecDetail_GoiThau_GiaiDoanResponseViewModel>>(queryResult.Items)
             };
             return Ok(methodResult);
         }

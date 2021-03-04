@@ -9079,7 +9079,7 @@
 .dx-datagrid-rowsview .dx-selection.dx-row:not(.dx-row-focused) > tr > td,
 .dx-datagrid-rowsview .dx-selection.dx-row:not(.dx-row-focused):hover > td,
 .dx-datagrid-rowsview .dx-selection.dx-row:not(.dx-row-focused):hover > tr > td {
-  background-color: rgba(255,87,34,.04);
+  background-color: rgba(248,141,43,.3);
   color: rgba(0,0,0,.87);
 }
 .dx-datagrid-rowsview .dx-selection.dx-row:not(.dx-row-focused) > td.dx-datagrid-group-space,
@@ -11017,7 +11017,8 @@
   right: 1px;
 }
 .dx-data-row.dx-state-hover:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row):not(.dx-row-focused) {
-  background-color: rgba(0,0,0,.04);
+/*  background-color: rgba(0,0,0,.04);*/
+  background-color: rgba(248,141,43,.1);
 }
 .dx-data-row.dx-state-hover:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row):not(.dx-row-focused) > td {
   color: rgba(0,0,0,.87);
@@ -11409,7 +11410,7 @@
 .dx-treelist-rowsview .dx-selection.dx-row:not(.dx-row-focused) > tr > td,
 .dx-treelist-rowsview .dx-selection.dx-row:not(.dx-row-focused):hover > td,
 .dx-treelist-rowsview .dx-selection.dx-row:not(.dx-row-focused):hover > tr > td {
-    background-color: rgba(248, 141, 43,0.35);
+    background-color: rgba(248, 141, 43,0.3);
     color: rgba(0,0,0,.87);
     font-weight: bold;
 }
@@ -15960,14 +15961,14 @@
   background-color: rgba(0,0,0,.32);
 }
 .dx-fa-button.dx-fa-button-main .dx-overlay-content {
-  min-width: 56px;
-  max-height: 56px;
-  background-color: rgb(248,141,43);
-  color: #fff;
-  overflow: visible;
-  border-radius: 28px;
-  -webkit-box-shadow: 0 3px 5px -1px rgba(0,0,0,.2),0 6px 10px 0 rgba(0,0,0,.14),0 1px 18px 0 rgba(0,0,0,.12);
-  box-shadow: 0 3px 5px -1px rgba(0,0,0,.2),0 6px 10px 0 rgba(0,0,0,.14),0 1px 18px 0 rgba(0,0,0,.12);
+    min-width: 40px;
+    max-height: 40px;
+    background-color: rgb(248,141,43);
+    color: #fff;
+    overflow: visible;
+    border-radius: 28px;
+    -webkit-box-shadow: 0 3px 5px -1px rgba(0,0,0,.2),0 6px 10px 0 rgba(0,0,0,.14),0 1px 18px 0 rgba(0,0,0,.12);
+    box-shadow: 0 3px 5px -1px rgba(0,0,0,.2),0 6px 10px 0 rgba(0,0,0,.14),0 1px 18px 0 rgba(0,0,0,.12);
 }
 .dx-fa-button.dx-fa-button-main .dx-overlay-content.dx-state-hover {
   background-color: #ee3900;

@@ -16,4 +16,8 @@ namespace ProjectManager.Read.Api.ViewModels.BaseClasses
     {
         public byte? TypeStore { get; set; }
     }
+    public class BasePermitRequestViewModel : BaseRequestViewModel
+    {
+        public int? Type { get; set; }
+    }
 }

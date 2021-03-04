@@ -118,20 +118,49 @@ namespace AppWFGenProject.FrameWork
                 return false;
             }
         }
-        public bool ChangeTxtToCS(string txtFile)
+        public bool ChangeTxtToCS(string txtFile, int typeCreate)
         {
             if (File.Exists(txtFile))
             {
                 try
                 {
+                    Guid g = Guid.NewGuid();
                     // Create a FileInfo  
                     FileInfo fi = new FileInfo(txtFile);
                     // Check if file is there  
                     if (fi.Exists)
                     {
+                        if(typeCreate == 1)
+                        {
+                            // Move file with a new name. Hence renamed.  
+                            fi.MoveTo(fi.FullName.Replace(".txt", ".cs"));
+                        } 
+                        else if(typeCreate == 2)
+                        {
+                            if (File.Exists(txtFile.Replace(".txt", ".cs")))
+                            {
+                                string fileNameCS = fi.FullName.Replace(".txt", "_" + g.ToString() + ".cs");
+                                // Move file with a new name. Hence renamed.  
+                                fi.MoveTo(fileNameCS);
+                            }
+                            else
+                            {
+                                // Move file with a new name. Hence renamed.  
+                                fi.MoveTo(fi.FullName.Replace(".txt", ".cs"));
+                            }
+                        }
+                        else if (typeCreate == 3)
+                        {
+                            if (File.Exists(txtFile.Replace(".txt", ".cs")))
+                            {
+                                FileInfo fiCSExists = new FileInfo(txtFile.Replace(".txt", ".cs"));
+                                string fileNameCS = fiCSExists.FullName.Replace("cs", "_bak_" + g.ToString()+".cs");
 
-                        // Move file with a new name. Hence renamed.  
-                        fi.MoveTo(fi.FullName.Replace(".txt", ".cs"));
+                                // Move file with a new name. Hence renamed.  
+                                fiCSExists.MoveTo(fileNameCS);
+                                fi.MoveTo(fi.FullName.Replace(".txt", ".cs"));
+                            }
+                        }
                     }
                     return true;
                 }

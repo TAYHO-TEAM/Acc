@@ -1,5 +1,5 @@
 ﻿using {nameproject}.Api.Application.Behaviors;
-using {nameproject}.Domain.Repositories;
+using {nameproject}.Domain.IRepositories;
 using {nameproject}.Domain.Services;
 using {nameproject}.Infrastructure.Repositories;
 using {nameproject}.Infrastructure.Services;

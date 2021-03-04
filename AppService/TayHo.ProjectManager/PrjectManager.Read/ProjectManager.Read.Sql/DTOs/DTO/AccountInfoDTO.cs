@@ -10,5 +10,6 @@ namespace ProjectManager.Read.Sql.DTOs.DTO
         public byte[]? AvatarImg { get; set; }
         public string Title { get; set; }
         public string Department { get; set; }
+        public int Type { get; set; }
     }
 }

@@ -8,4 +8,5 @@ namespace ProjectManager.Read.Api.ViewModels
         public int? DocumentReleasedId { get; set; }
         public int? GroupId { get; set; }
     }
+    
 }

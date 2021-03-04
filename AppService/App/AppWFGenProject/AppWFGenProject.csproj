@@ -31,13 +31,16 @@
 
   <ItemGroup>
     <Folder Include="BaseClasses\" />
-	<Folder Include="Content\" />
     <Folder Include="Properties\App_Data\Content\TemPlate\CMD\Api\ViewModels\" />
     <Folder Include="Properties\App_Data\Content\TemPlate\VIEW\" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="EPPlus" Version="5.4.2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="5.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
   </ItemGroup>
@@ -46,6 +49,14 @@
 	<Content Include="Content\**"> 
 		<CopyToOutputDirectory>Content</CopyToOutputDirectory> 
 	</Content> 
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Content\Config\appconfig.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Content\Config\appconfig.json" />
   </ItemGroup>
 
   <ItemGroup>

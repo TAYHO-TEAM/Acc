@@ -19,8 +19,7 @@ namespace ProjectManager.Read.Api.Controllers.v1
 {
     public class AccountInfoController : APIControllerBase
     {
-        private readonly IDOBaseRepository<AccountInfoDTO> _dOBaseRepository;
-
+        private readonly IDOBaseRepository<AccountInfoDTO> _dOBaseRepository;     
 
         public AccountInfoController(IMapper mapper, IHttpContextAccessor httpContextAccessor, IDOBaseRepository<AccountInfoDTO> dOBaseRepository) : base(mapper,httpContextAccessor)
         {

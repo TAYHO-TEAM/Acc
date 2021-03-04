@@ -74,6 +74,23 @@ namespace ProjectManager.Read.Sql.Repositories
 
             return result;
         }
+        public async Task<PagingItems<T>> GetWithPaggingAccountPermitAsync(RequestHasAccountPermitFilterParam requestHasAccountPermitFilterParam)
+        {
+            requestHasAccountPermitFilterParam.ColumName = requestHasAccountPermitFilterParam.ColumName ?? "*";//GetColumnTableName();
+            var result = new PagingItems<T>
+            {
+                PagingInfo = new PagingInfo
+                {
+                    PageNumber = requestHasAccountPermitFilterParam.PageNumber,
+                    PageSize = requestHasAccountPermitFilterParam.PageSize
+                }
+            };
+            using var conn = await _connectionFactory.CreateConnectionAsync();
+            using var rs = conn.QueryMultipleAsync("sp_GetDataTableSS_WithPage_Acc_Permit", requestHasAccountPermitFilterParam, commandType: CommandType.StoredProcedure).Result;
+            result.PagingInfo.TotalItems = await rs.ReadSingleAsync<int>().ConfigureAwait(false);
+            result.Items = await rs.ReadAsync<T>().ConfigureAwait(false);
+            return result;
+        }
         public async Task<PagingItems<T>> GetWithPaggingAccountFKAsync(RequestHasAccountIdFilterParam requestHasAccountIdFilterParam)
         {
             requestHasAccountIdFilterParam.ColumName = requestHasAccountIdFilterParam.ColumName ?? "*";//GetColumnTableName();

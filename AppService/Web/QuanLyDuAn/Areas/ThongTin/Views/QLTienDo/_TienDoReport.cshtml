@@ -1,0 +1,141 @@
+﻿@model int
+<form id="form-regist" action="#" method="POST" enctype="application/json">
+</form>
+
+<script>
+    var formData = {
+        "planMasterId": "",
+        "planJobId": @Model,
+        "content": "",
+        "unit": "",
+        "amount": ""
+    };
+    $(document).ready(function () {
+        var formInstance = $("#form-regist").dxForm({
+            formData: formData,
+            labelLocation: "top",
+            items: [
+                {
+                    itemType: "group",
+                    colCount: 2,
+                    items: [
+                        {
+                            colSpan: 2,
+                            dataField: "content",
+                            label: { text: "Nội dung" },
+                            editorType: "dxTextArea",
+                        },
+                        {
+                            colSpan: 1,
+                            dataField: "amount",
+                            label: { text: "Khối lượng" },
+                            editorType: "dxNumberBox",
+                        },
+                        {
+                            colSpan: 1,
+                            dataField: "unit",
+                            label: { text: "Đơn vị" },
+                            lookup: {
+                                dataSource: unit,
+                                valueExpr: "ID",
+                                displayExpr: "Name",
+                            },
+                            editorOptions: {
+                                value:'%',
+                                readOnly: true,
+                            },
+                        },
+
+                    ]
+                },
+                {
+                    itemType: "button",
+                    horizontalAlignment: "center",
+                    buttonOptions: {
+                        text: "Lưu lại",
+                        icon: "fa fa-save",
+                        type: "success",
+                        useSubmitBehavior: true,
+                        elementAttr: {
+                            id: "submit",
+                        }
+                    }
+                },
+
+            ],
+            onFieldDataChanged: function (e) {
+                var newFormData = e.component.option("formData");
+            }
+        }).dxForm("instance");
+
+        //$(".file-uploader").dxFileUploader({
+        //    selectButtonText: "Chọn tập tin...",
+        //    labelText: "Hoặc kéo thả vào đây",
+        //    showFileList: true,
+        //    multiple: true,
+        //    uploadMode: "useForm",
+        //    allowedFileExtensions: [".jpg", ".jpeg", ".png", ".pdf"],
+        //    maxFileSize: 10000000,
+        //});
+        $("#form-regist").on("submit", function (e) {
+            loadingPanel.show();
+            var fdata = new FormData();
+            $.each(formData, function (key, value) {
+                fdata.append(key, value);
+            });
+            fdata.append('token', UserCurrentInfo.accessToken);
+            var object = {};
+            for (var pair of fdata.entries()) {
+                if (pair[1] !== "" && pair[1] !== null) {
+                    if (pair[0] === 'planJobId' || pair[0] === 'amount' )
+                        object[pair[0]] = pair[1] * 1;
+                    else
+                            object[pair[0]] = pair[1];
+                }
+                console.log(pair[0] + ', ' + pair[1]);
+            }
+            //var files = $(".file-uploader").dxFileUploader("instance").option("value");
+            //if (files.length > 0) {
+            //    $.each(files, function (key, value) {
+            //        fdata.append(files[key].name, files[key]);
+            //    });
+            //}
+            //else {
+            //    DevExpress.ui.notify("Vui lòng chọn file đính kèm", "error", 3000);
+            //    e.preventDefault();
+            //    return false;
+            //};
+            e.preventDefault();
+            console.log(JSON.stringify(object));
+            $.ajax({
+                type: "POST",
+                headers: header,
+                url: URL_API_PM_CMD + ACTION_CMD_PLAN_REPORT,
+                dataType: "json",
+                data: JSON.stringify(object),
+                processData: false,
+                contentType: false,
+                cache: false,
+                timeout: 600000,
+                success: function (rs) {
+                    loadingPanel.hide();
+                    DevExpress.ui.notify("Báo cáo thành công", "success", 3000);
+                    $("#popup-main").dxPopup('instance').hide();
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    loadingPanel.hide();
+                    console.log(textStatus);
+                    console.log(errorThrown);
+                    console.log(xhr);
+                    deferred.reject("Có lỗi xảy ra trong quá trình cập nhật dữ liệu. Mở Console để xem chi tiết.");
+                }
+            });
+
+            e.preventDefault();
+            //return deferred.promise();
+        });
+
+    });
+
+
+</script>

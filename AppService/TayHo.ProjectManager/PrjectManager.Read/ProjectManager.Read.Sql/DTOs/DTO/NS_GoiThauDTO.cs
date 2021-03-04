@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ProjectManager.Read.Sql.DTOs.DTO
 {
-    public class NS_GoiThauDTO: DTOChilCountBase
+    public class NS_GoiThauDTO: DTOAccountInfoBase
     {
         public int? ParentId { get; set; } 
         public int? ProjectId { get; set; }

@@ -9,8 +9,6 @@
         closeOnOutsideClick: false,
     }).dxLoadPanel("instance");
 
-
-
     var form = $("#loginForm").dxForm({
         formData: {
             "userName": "",
@@ -139,17 +137,17 @@
     const messaging = firebase.messaging();
     messaging.getToken().then((currentToken) => {
         if (currentToken) {
+            console.log(currentToken)
             form.updateData(
                 {
-                    token: currentToken,
+                    deviceToken: currentToken,
                     device: "Website"
                 }
             );
-            console.log("Firebase token: "+currentToken);
         } else {
             form.updateData(
                 {
-                    token: null,
+                    deviceToken: null,
                     device: null
                 }
             );

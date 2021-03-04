@@ -8,13 +8,13 @@ namespace ProjectManager.CMD.Api.Application.Commands
     {
         protected readonly IMapper _mapper;
         protected readonly IHttpContextAccessor _httpContextAccessor;
-        protected readonly IDocumentReleasedAccountRepository _DocumentReleasedAccountRepository;
+        protected readonly IDocumentReleasedAccountRepository _documentReleasedAccountRepository;
 
         public DocumentReleasedAccountCommandHandler(IMapper mapper, IDocumentReleasedAccountRepository DocumentReleasedAccountRepository,  IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
         {
             _mapper = mapper;
             _httpContextAccessor = httpContextAccessor;
-            _DocumentReleasedAccountRepository = DocumentReleasedAccountRepository;
+            _documentReleasedAccountRepository = DocumentReleasedAccountRepository;
         }
     }
 }

@@ -23,7 +23,7 @@ namespace ProjectManager.Read.Sql.Repositories
         }
         public async Task<PagingItems<T>> GetFilesAttachmentByAsync(RequestHasAccountIdFilterParam requestBaseFilterParam)
         {
-            requestBaseFilterParam.ColumName = requestBaseFilterParam.ColumName?? "*" ;//GetColumnTableName();
+            requestBaseFilterParam.ColumName = requestBaseFilterParam.ColumName ?? "*";//GetColumnTableName();
             var result = new PagingItems<T>
             {
                 PagingInfo = new PagingInfo
@@ -36,7 +36,17 @@ namespace ProjectManager.Read.Sql.Repositories
             using var rs = conn.QueryMultipleAsync("sp_FileAttachment_Get", requestBaseFilterParam, commandType: CommandType.StoredProcedure).Result;
             result.PagingInfo.TotalItems = await rs.ReadSingleAsync<int>().ConfigureAwait(false);
             result.Items = await rs.ReadAsync<T>().ConfigureAwait(false);
+            ////--------------- Log History get -----------------
+            if(requestBaseFilterParam.TableName == "DocumentReleased")
+            {
+               await LogGetFileByAsync(requestBaseFilterParam.AccountId??0 , requestBaseFilterParam.FindId, requestBaseFilterParam.TableName);
+            }    
             return result;
+        }
+        public async Task LogGetFileByAsync(int AccountId, string DocumentReleasedId, string TableName)
+        {
+            using var conn = await _connectionFactory.CreateConnectionAsync();
+            using var rs = conn.QueryMultipleAsync("sp_FileAttachment_Get", new { AccountId, DocumentReleasedId, TableName }, commandType: CommandType.StoredProcedure).Result;
         }
 
     }

@@ -7,10 +7,10 @@ namespace ProjectManager.Read.Sql.DTOs.DTO
 {
     public class NS_KhauTru_TheoDoiDTO : DTOAccountInfoBase
     {
-        private int? _khauTruId;
-        private string _noiDung;
-        private string _dienGiai;
-        private decimal? _giaTri;
-        private int? _dot;
+        public int? KhauTruId { get; set; }
+        public string NoiDung { get; set; }
+        public string DienGiai { get; set; }
+        public decimal? GiaTri { get; set; }
+        public int? Dot { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -56,7 +57,7 @@ namespace AppWFGenProject.Extensions
         {
             DataTable dt = new DataTable();
             List<string> listTable = new List<string>();
-            string queryString = @"SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_NAME NOT LIKE 'sysdiagrams'  AND TABLE_CATALOG = '" + db + "'";
+            string queryString = @"SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_NAME NOT LIKE 'sysdiagrams'  AND TABLE_CATALOG = '" + db + "' ORDER BY TABLE_NAME ASC";
             using (SqlConnection cnn = new SqlConnection(Connect(server, user, pass, db).ConnectionString))
             {
                 try
@@ -90,6 +91,7 @@ namespace AppWFGenProject.Extensions
             }
             return listTable;
         }
+        public IConfiguration _configuration;
         public DataTable GetAllEntry(string db, string selectkey, string colname)
         {
             DataTable dt = new DataTable();
@@ -97,8 +99,10 @@ namespace AppWFGenProject.Extensions
             {
                 try
                 {
+                    
                     SqlCommand cmd = new SqlCommand();
                     SqlDataAdapter da = new SqlDataAdapter();
+                    
                     string _storeproce = ConfigurationSettings.AppSettings["SPGetALLEntry"].ToString();
                     try
                     {

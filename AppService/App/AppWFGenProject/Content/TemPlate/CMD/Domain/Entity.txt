@@ -8,7 +8,9 @@ namespace {nameproject}.Domain.DomainObjects
     public class {Entity} : DOBase
     {
         #region Fields
+
         {builderFields}
+
         #endregion Fields
         #region Constructors
 
@@ -20,11 +22,15 @@ namespace {nameproject}.Domain.DomainObjects
         {
            {functionCreate}
         }
+
         #endregion Constructors
         #region Properties
+
         {builderProperties}
 
+        #endregion Properties
         #region Behaviours
+
         {builderBehaviours}
        
         public sealed override bool IsValid()

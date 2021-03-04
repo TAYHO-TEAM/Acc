@@ -26,7 +26,7 @@ namespace ProjectManager.CMD.Infrastructure.Repositories
             await cmd.Connection.CloseAsync();
             return (bool)(result == 0 ? false : true);
         }
-        public async Task<string> IsGetTitleRequestRegistAsync(int ProjectId, int WorkItemId, int AccountId, int DocumentTypeId)
+        public async Task<string> IsGetTitleRequestRegistAsync(int ProjectId , int WorkItemId, int AccountId, int DocumentTypeId)
         {
             await using (var cmd = _dbContext.Database.GetDbConnection().CreateCommand())
             {

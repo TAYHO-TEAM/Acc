@@ -1,5 +1,5 @@
 ﻿using {nameproject}.Domain.DomainObjects;
-using {nameproject}.Domain.Repositories;
+using {nameproject}.Domain.IRepositories;
 using Services.Common.APIs.Cmd.EF;
 
 

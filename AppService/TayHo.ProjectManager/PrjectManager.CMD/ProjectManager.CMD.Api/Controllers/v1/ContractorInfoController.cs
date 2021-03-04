@@ -23,7 +23,7 @@ namespace ProjectManager.CMD.Api.Controllers.v1
         /// <param name="command"></param>
         /// <returns></returns>
         [HttpPost]
-        [ProducesResponseType(typeof(Services.Common.DomainObjects.MethodResult<CreateContractorInfoCommandResponse>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(MethodResult<CreateContractorInfoCommandResponse>), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(VoidMethodResult), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> CreateContractorInfoAsync([FromBody] CreateContractorInfoCommand command)
         {

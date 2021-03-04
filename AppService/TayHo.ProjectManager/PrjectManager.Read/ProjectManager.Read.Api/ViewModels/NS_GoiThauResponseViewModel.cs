@@ -3,7 +3,7 @@ using System;
 
 namespace ProjectManager.Read.Api.ViewModels
 {
-    public class NS_GoiThauResponseViewModel : BaseResponseChilCountViewModel
+    public class NS_GoiThauResponseViewModel : BaseResponseAccountInfoViewModel
     {
         public int? ParentId { get; set; }
         public int? ProjectId { get; set; }

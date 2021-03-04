@@ -21,4 +21,8 @@ namespace ProjectManager.Read.Sql.DTOs.BaseClasses
         public string ModifyBy_Title { get; set; }
         public string ModifyBy_Department { get; set; }
     }
+    public class DTOAccountInfoPermitBase : DTOAccountInfoBase
+    {
+        public int PermistionId { get; set; }
+    }
 }

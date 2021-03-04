@@ -22,7 +22,12 @@ namespace ProjectManager.Read.Api.Controllers.v1
         private readonly INS_CongViecRepository<NS_CongViec_CongViecDetailDTO> _nS_CongViecRepository;
         private const string Detail = nameof(Detail);
 
-        public NS_CongViecController(IMapper mapper, IHttpContextAccessor httpContextAccessor, IDOBaseRepository<NS_CongViecDTO> dOBaseRepository, INS_CongViecRepository<NS_CongViec_CongViecDetailDTO> nS_CongViecRepository) : base(mapper,httpContextAccessor)
+        public NS_CongViecController(
+            IMapper mapper, 
+            IHttpContextAccessor httpContextAccessor, 
+            IDOBaseRepository<NS_CongViecDTO> dOBaseRepository, 
+            INS_CongViecRepository<NS_CongViec_CongViecDetailDTO> nS_CongViecRepository
+        ) : base(mapper,httpContextAccessor)
         {
             _dOBaseRepository = dOBaseRepository;
             _nS_CongViecRepository = nS_CongViecRepository;

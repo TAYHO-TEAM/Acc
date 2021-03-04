@@ -37,7 +37,7 @@ namespace  ProjectManager.CMD.Api.Application.Commands
             if (!methodResult.IsOk) throw new CommandHandlerException(methodResult.ErrorMessages);
             existingDocumentReleasedLog.IsActive = request.IsActive.HasValue ? request.IsActive : existingDocumentReleasedLog.IsActive;
             existingDocumentReleasedLog.IsVisible = request.IsVisible .HasValue ? request.IsVisible : existingDocumentReleasedLog.IsVisible;
-            existingDocumentReleasedLog.Status = request.Status.HasValue ? request.Status : existingDocumentReleasedLog.Status;
+            existingDocumentReleasedLog.Status = request.Status.HasValue ? (request.Status >2 ? request.Status :3 ): 3;
             existingDocumentReleasedLog.SetAccountId(request.AccountId);
             existingDocumentReleasedLog.SetDocumentReleasedId(request.DocumentReleasedId);
             existingDocumentReleasedLog.SetNote(request.Note);

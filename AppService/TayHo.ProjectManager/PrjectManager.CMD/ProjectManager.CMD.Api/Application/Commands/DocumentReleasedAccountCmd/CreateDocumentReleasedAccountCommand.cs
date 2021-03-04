@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Services.Common.DomainObjects;
 using System;
+using System.Collections.Generic;
 
 namespace  ProjectManager.CMD.Api.Application.Commands
 {
@@ -8,6 +9,14 @@ namespace  ProjectManager.CMD.Api.Application.Commands
     {
         
     }
+    public class CreateDocumentReleasedAccountCommandResponse
+    {
+        public CreateDocumentReleasedAccountCommandResponse(List<DocumentReleasedAccountCommandResponseDTO> DocumentReleasedAccount)
+        {
+            _documentReleasedAccount = DocumentReleasedAccount;
+        }
 
-    public class CreateDocumentReleasedAccountCommandResponse : DocumentReleasedAccountCommandResponseDTO { }
+        public List<DocumentReleasedAccountCommandResponseDTO> _documentReleasedAccount { get; }
+    }
+    //public class CreateDocumentReleasedAccountCommandResponse : DocumentReleasedAccountCommandResponseDTO { }
 }

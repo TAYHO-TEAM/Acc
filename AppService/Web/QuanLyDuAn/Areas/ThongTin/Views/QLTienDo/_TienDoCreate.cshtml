@@ -1,0 +1,273 @@
+﻿<form id="form-regist" action="#" method="POST" enctype="application/json">
+</form>
+<script>
+
+    var formData = {
+        "code": ""
+        , "parentId": ""
+            , "planProjectId": 1
+                , "title": ""
+                    , "timeLine": ""
+                        , "description": ""
+                            , "note": ""
+                                , "startDate": ""
+                                    , "endDate": ""
+                                        , "unit": ""
+                                            , "amount": ""
+                                                , "reportPeriodicalType": ""
+                                                    , "reportPeriodical": ""
+                                                        , "reportFrequency": ""
+                                                            , "priority": ""
+                                                                , "importantLevel": ""
+                                                                    , "noAttachment": ""
+                                                                        , "isDelete": ""
+                                                                            , "isActive": ""
+                                                                                , "isVisible": ""
+                                                                                    , "isModify": ""
+                                                                                        , "createBy": ""
+                                                                                            , "createDateUTC": ""
+                                                                                                , "createDate": ""
+                                                                                                    , "modifyBy": ""
+                                                                                                        , "updateDateUTC": ""
+                                                                                                            , "updateDate": ""
+                                                                                                                , "status": ""};
+
+    $(document).ready(function () {
+        var formInstance = $("#form-regist").dxForm({
+            formData: formData,
+            colCount: 4,
+            labelLocation: "top",
+            items: [
+                {
+                    dataField: "code",
+                    label: { text: "Mã CV" },
+                },
+                {
+                    colSpan: 2,
+                    dataField: "title",
+                    label: { text: "Kế hoạch CV" },
+                    validationRules: [{ type: "required" }],
+                },
+                //{
+                //    dataField: "reportPeriodicalType",
+                //    label: { text: "Báo cáo định kỳ" },
+                //    //lookup: {
+                //    //    dataSource: reportPeriodicalType,
+                //    //    valueExpr: "Name",
+                //    //    displayExpr: "Name",
+                //    //},
+                //    editorType: "dxSelectBox",
+                //    editorOptions: {
+                //        value: "reportPeriodicalType",
+                //        dataSource: reportPeriodicalType,
+                //        //searchEnabled: true,
+                //        //showClearButton: true,
+                //        valueExpr: "Name",
+                //        displayExpr: "Name",
+                //        elementAttr: {
+                //            id: "reportPeriodicalTypeSelect",
+                //        },
+                //    },
+                //    //validationRules: [{
+                //    //    type: "async",
+                //    //    message: "Đã có thông tin tần suất",
+                //    //    validationCallback: function (params) {
+                //    //        var d = $.Deferred();
+                //    //        d.resolve(!(typeof $('#reportFrequencySelect').dxSelectBox('instance').option('value') === 'number'));
+                //    //        return  d.promise();
+                //    //    }
+                //    //}]
+                //},
+                {
+                    dataField: "reportFrequency",
+                    label: { text: "Tần suất báo cáo" },
+                    editorType: "dxNumberBox",
+                    editorOptions: {
+                        elementAttr: {
+                            id: "reportFrequencySelect",
+                        },
+                    },
+                    validationRules: [{ type: "required" }],
+                    //validationRules: [{
+                    //    type: "async",
+                    //    message: "Đã có thông tin báo cáo định kỳ",
+                    //    validationCallback: function (params) {
+                    //        var d = $.Deferred();
+                    //        d.resolve(!(typeof $('#reportPeriodicalTypeSelect').dxSelectBox('instance').option('value') === 'number'));
+                    //        return d.promise();
+                    //    }
+                    //}]
+                },
+                //{
+                //    dataField: "priority",
+                //    label: { text: "Độ ưu tiên" },
+                //    editorType: "dxNumberBox",
+                //},
+                //{
+                //    dataField: "importantLevel",
+                //    caption: "Mức độ quan trọng",
+                //    dataType: "number",
+                //    lookup: {
+                //        dataSource: important,
+                //        valueExpr: "ID",
+                //        displayExpr: "Name",
+                //    },
+                //    editorType: "dxSelectBox",
+                //    editorOptions: {
+                //        value: "importantLevel",
+                //        dataSource: important,
+                //        valueExpr: "ID", displayExpr: "Name",
+                //    },
+                //},
+                {
+                    colSpan: 4,
+                    dataField: "description",
+                    label: { text: "Mô tả CV" },
+                    editorType: "dxTextArea",
+                },
+                {
+                    colSpan: 4,
+                    dataField: "note",
+                    label: { text: "Lưu ý" },
+                    editorType: "dxTextArea",
+                },
+                {
+                    dataField: "startDate",
+                    label: { text: "Ngày bắt đầu" },
+                    editorType: "dxDateBox",
+                    editorOptions: {
+                        pickerType: "rollers",
+                        type: "datetime",
+                    },
+                    validationRules: [{ type: "required" }],
+                },
+                {
+                    dataField: "endDate",
+                    label: { text: "Ngày hoàn thành" },
+                    editorType: "dxDateBox",
+                    editorOptions: {
+                        pickerType: "rollers",
+                        type: "datetime",
+                    },
+                    validationRules: [{ type: "required" }],
+                },
+                {
+                    dataField: "amount",
+                    label: { text: "Khối lượng" },
+                    editorType: "dxNumberBox",
+                    validationRules: [{ type: "required" }],
+                },
+                {
+                    dataField: "unit",
+                    label: { text: "Đơn vị" },
+                    lookup: {
+                        dataSource: unit,
+                        valueExpr: "ID",
+                        displayExpr: "Name",
+                    },
+                    editorType: "dxSelectBox",
+                    editorOptions: {
+                        value: "unit",
+                        dataSource: unit,
+                        valueExpr: "ID", displayExpr: "Name",
+                    },
+                    validationRules: [{ type: "required" }],
+                },
+                {
+                    colSpan: 4,
+                    template: '<span class="dx-field-item-label-text font-bold">Các tập tin đính kèm</span><div class="file-uploader"></div>',
+                },
+                {
+                    itemType: "button",
+                    horizontalAlignment: "center",
+                    buttonOptions: {
+                        text: "Lưu lại",
+                        icon: "fa fa-save",
+                        type: "success",
+                        useSubmitBehavior: true,
+                        elementAttr: {
+                            id: "submit",
+                        }
+                    }
+                },
+            ],
+            onFieldDataChanged: function (e) {
+                var newFormData = e.component.option("formData");
+            }
+        }).dxForm("instance");
+
+        $(".file-uploader").dxFileUploader({
+            selectButtonText: "Chọn tập tin...",
+            labelText: "Hoặc kéo thả vào đây",
+            showFileList: true,
+            multiple: true,
+            uploadMode: "useForm",
+            allowedFileExtensions: [".jpg", ".jpeg", ".png", ".pdf", ".doc", ".docx", ".xls", ".xlsx", ".xlsm"],
+            maxFileSize: 10000000,
+        });
+        $("#form-regist").on("submit", function (e) {
+            loadingPanel.show();
+            $(this).prop("disabled", true);
+            var fdata = new FormData();
+            var i = 10;
+            $.each(formData, function (key, value) {
+                if (key === 'startDate' || key === 'endDate') {
+                    fdata.append(key, moment(value).format('YYYY-MM-DD HH:mm:ss'));
+                }
+                else if (key === 'planProjectId')
+                {
+                    fdata.append(key, PROJECTID);
+                }
+                else {
+                    fdata.append(key, value);
+                }
+
+            });
+
+            fdata.append('token', UserCurrentInfo.accessToken);
+            //for (var pair of fdata.entries()) {
+            //    console.log(pair[0] + ', ' + pair[1]);
+            //}
+            var files = $(".file-uploader").dxFileUploader("instance").option("value");
+            if (files.length > 0) {
+                $.each(files, function (key, value) {
+                    fdata.append(files[key].name, files[key]);
+                });
+            }
+            //else {
+            //    DevExpress.ui.notify("Vui lòng chọn file đính kèm", "error", 3000);
+            //    e.preventDefault();
+            //    return false;
+            //};
+            e.preventDefault();
+
+            $.ajax({
+                type: "POST",
+                enctype: 'multipart/form-data',
+                url: "/ThongTin/QLTienDo/Create",
+                data: fdata,
+                processData: false,
+                contentType: false,
+                cache: false,
+                timeout: 600000,
+                success: function (rs) {
+                    loadingPanel.hide();
+                    DevExpress.ui.notify(rs.result, rs.status, 3000);
+                    if (rs.status == "success") {
+                        $("#popup-main").dxPopup('instance').hide();
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    loadingPanel.hide();
+                    DevExpress.ui.notify("Có lỗi xảy ra: " + errorThrown, "error", 3000);
+                }
+            });
+            e.preventDefault();
+            //return deferred.promise();
+        });
+
+    });
+
+
+</script>
+

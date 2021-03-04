@@ -1,0 +1,208 @@
+﻿<div class="row">
+    <div class="col-12" id="div_container_popup">
+        <div id="container_popup" class="elevation-2"></div>
+        <div id="bottom_submit" class="col-12">
+            <div id="insertButton" class="dx-fa-button-label"></div>
+        </div>
+
+    </div>
+</div>
+<style>
+    #container_popup {
+        padding-bottom: 55px;
+    }
+
+    #insertButton {
+        position: absolute;
+        z-index: 1;
+        right: 5px;
+        margin: auto;
+        bottom: 2px;
+        padding-bottom: 2px;
+        background-color: rgba(248,141,43,1) !important;
+        color: #ffffff;
+    }
+</style>
+
+<script>
+    var customFormId = 0;
+    var WORKITEMCODE = "";
+    var PROJECTCODE = "";
+    function convertCode() {
+        var d = $.Deferred();
+        customStore_HANGMUC.load().then((rs) => {
+            WORKITEMCODE = rs.filter(x => x.id == WORKITEMS)[0].code;
+        });
+        customStore_PROJECT.load().then((rs) => {
+            PROJECTCODE = rs.filter(x => x.id == PROJECTID)[0].code;
+        });
+
+        return d.promise();
+    };
+    $(function () {
+        convertCode();
+        loadData_List();
+    });
+    var insertButton = $("#insertButton").dxButton({
+        text: "Tạo văn bản",
+        width: 150,
+        height: 34,
+        disabled: true,
+        alignment: "center",
+        onClick: function (e) {
+            var containerE = e.component;
+            var code = PROJECTCODE + "-" + WORKITEMCODE + "-";
+            var d = $.Deferred();
+            customStore_CUSTOMFORM.insert({ customFormId: customFormId[0], isActive: true, isVisible: true , code : code }).then((rs) => {
+                CALLPOPUPMULTI(
+                    "Tạo văn bản theo mẫu ",
+                    "/ThongTin/VanBanMau/_DienVanBan/" + rs.id,
+                    ($(window).width() > 767 ? "50%" : "80%"),
+                    $("#container").dxDataGrid('instance'),
+                    'popup-sub'
+                );
+                $("#popup-main").dxPopup('instance').hide();
+            }, d.reject);
+            return d.promise();
+        }
+    }).dxButton("instance");
+    var loadData_List = () => {
+        $("#container_popup").dxDataGrid({
+            height: heightScreen,
+            dataSource: customStore_CUSTOMFORMLIST,
+            repaintChangesOnly: true,
+            remoteOperations: {
+                filtering: true,
+                sorting: true,
+                grouping: false
+            },
+            scrolling: { mode: "standard" },
+            showBorders: false,
+            showColumnHeaders: true,
+            showColumnLines: false,
+            hoverStateEnabled: true,
+            showRowLines: true,
+            columnAutoWidth: true,
+            wordWrapEnabled: true,
+            rowAlternationEnabled: false,
+            columnHidingEnabled: true,
+            columns: [
+                {
+                    dataField: "code",
+                    caption: "Mã văn bản",
+                    dataType: "string",
+                    alignment: "left",
+                },
+                {
+                    dataField: "title",
+                    caption: "Tên mẫu văn bản",
+                    dataType: "string",
+                    alignment: "left",
+                },
+                {
+                    dataField: "createBy",
+                    caption: "Người phát hành",
+                    dataType: "number",
+                    alignment: "left",
+                },
+                {
+                    dataField: "createDate",
+                    caption: "Ngày phát hành",
+                    dataType: "date",
+                    alignment: "center",
+                    //hidingPriority: 0,
+                },
+
+            ],
+            paging: {
+                enabled: true,
+                pageSize: 20
+            },
+            pager: {
+                showPageSizeSelector: true,
+                allowedPageSizes: [10, 20, 40],
+                showInfo: true,
+            },
+            searchPanel: {
+                highlightCaseSensitive: true,
+                highlightSearchText: true,
+                searchVisibleColumnsOnly: true,
+                visible: WIDTH_CONTAINER > 350
+            },
+            onToolbarPreparing: function (e) {
+                var container = e.component;
+                e.toolbarOptions.items.unshift(
+                    {
+                        location: "before",
+                        widget: "dxSelectBox",
+                        options: {
+                            dataSource: customStore_PROJECT,
+                            valueExpr: "id",
+                            displayExpr: "title",
+                            searchEnabled: true,
+                            searchMode: "contains",
+                            width: "100%",
+                            stylingMode: "filled",
+                            showClearButton: false,
+                            value: PROJECTID,
+                            onValueChanged: function (data) {
+                                PROJECTID = data.value;
+                                convertCode();
+                            },
+                        },
+                    },
+                    {
+                        location: "before",
+                        widget: "dxSelectBox",
+                        options: {
+                            dataSource: customStore_HANGMUC,
+                            valueExpr: "id",
+                            displayExpr: "title",
+                            searchEnabled: true,
+                            searchMode: "contains",
+                            width: "100%",
+                            stylingMode: "filled",
+                            showClearButton: false,
+                            value: WORKITEMS,
+                            onValueChanged: function (data) {
+                                WORKITEMS = data.value;
+                                convertCode();
+                            },
+                        },
+                    },
+                    {
+                        location: "after",
+                        widget: "dxButton",
+                        options: {
+                            icon: "refresh", tylingMode: "filled", type: "default",
+                            onClick: () => container.refresh()
+                        },
+
+                    },
+
+                )
+            },
+            onInitNewRow: (e) => {
+                e.data.isActive = true;
+                e.data.isVisible = true;
+                e.data.ProjectId = PROJECTID;
+            },
+            onCellPrepared: (e) => {
+                if (e.rowType == "data" && e.columnIndex == 1)
+                    e.cellElement.find('.dx-treelist-empty-space').toggleClass("dx-treelist-collapsed", e.data.chilCount > 0)
+            },
+            onRowDblClick: function (e) {
+                var container = e.component;
+            },
+            selection: {
+                mode: "single"
+            },
+            onSelectionChanged: function (data) {
+                customFormId = data.selectedRowKeys;
+                if (PROJECTCODE !== "" && WORKITEMCODE !== "" && customFormId > 0) {
+                    insertButton.option("disabled", !data.selectedRowsData.length);
+                }
+            },
+        });
+    }
+</script>

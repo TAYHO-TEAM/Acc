@@ -9,7 +9,7 @@ namespace ProjectManager.CMD.Api.Infrastructure.Mappings
     {
         public DocumentReleasedAccountProfile()
         {
-            CreateMap<DocumentReleasedAccount, CreateDocumentReleasedAccountCommandResponse>().ForMember(x => x.Id, opt => opt.MapFrom(t => t.Id));
+            //CreateMap<DocumentReleasedAccount, CreateDocumentReleasedAccountCommandResponse>().ForMember(x => x.Id, opt => opt.MapFrom(t => t.Id));
             CreateMap<DocumentReleasedAccount, UpdateDocumentReleasedAccountCommandResponse>().ForMember(x => x.Id, opt => opt.MapFrom(t => t.Id));
             CreateMap<DocumentReleasedAccount, DocumentReleasedAccountCommandResponseDTO>().ForMember(x => x.Id, opt => opt.MapFrom(t => t.Id));
         }

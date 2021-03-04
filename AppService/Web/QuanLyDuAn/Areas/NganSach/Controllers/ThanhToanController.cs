@@ -7,7 +7,7 @@ using System.Web.Mvc;
 namespace QuanLyDuAn.Areas.NganSach.Controllers
 {
     public class ThanhToanController : Controller
-    { 
+    {  
         public ActionResult Phat()
         {
             return View();

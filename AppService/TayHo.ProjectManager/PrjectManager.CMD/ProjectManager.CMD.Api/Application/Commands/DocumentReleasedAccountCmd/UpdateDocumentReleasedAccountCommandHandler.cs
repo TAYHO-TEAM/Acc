@@ -30,8 +30,8 @@ namespace ProjectManager.CMD.Api.Application.Commands
             ///// kiểm tra account có tồn tại trong group nếu có truyền group id
             var existingGroupAccount = await _groupAccount.AnyAsync(x => x.GroupId == request.GroupId && x.AccountId == request.AccountId && (x.IsDelete == false || !x.IsDelete.HasValue)).ConfigureAwait(false);
             var methodResult = new MethodResult<UpdateDocumentReleasedAccountCommandResponse>();
-            var existingDocumentReleasedAccount = await _DocumentReleasedAccountRepository.SingleOrDefaultAsync(x => x.Id == request.Id && (x.IsDelete == false || !x.IsDelete.HasValue)).ConfigureAwait(false);
-            var duplicateDocumentReleasedAccount = await _DocumentReleasedAccountRepository.AnyAsync(x => x.Id != request.Id && (x.IsDelete == false || !x.IsDelete.HasValue) && x.AccountId == request.AccountId && x.DocumentReleasedId == request.DocumentReleasedId).ConfigureAwait(false);
+            var existingDocumentReleasedAccount = await _documentReleasedAccountRepository.SingleOrDefaultAsync(x => x.Id == request.Id && (x.IsDelete == false || !x.IsDelete.HasValue)).ConfigureAwait(false);
+            var duplicateDocumentReleasedAccount = await _documentReleasedAccountRepository.AnyAsync(x => x.Id != request.Id && (x.IsDelete == false || !x.IsDelete.HasValue) && x.AccountId == request.AccountId && x.DocumentReleasedId == request.DocumentReleasedId).ConfigureAwait(false);
             if (duplicateDocumentReleasedAccount)
             {
                 methodResult.AddAPIErrorMessage(nameof(ErrorCodeUpdate.UErr03), new[]
@@ -55,8 +55,8 @@ namespace ProjectManager.CMD.Api.Application.Commands
             existingDocumentReleasedAccount.SetGroupId(request.GroupId);
 
             existingDocumentReleasedAccount.SetUpdate(_user, 0);
-            _DocumentReleasedAccountRepository.Update(existingDocumentReleasedAccount);
-            await _DocumentReleasedAccountRepository.UnitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+            _documentReleasedAccountRepository.Update(existingDocumentReleasedAccount);
+            await _documentReleasedAccountRepository.UnitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
             methodResult.Result = _mapper.Map<UpdateDocumentReleasedAccountCommandResponse>(existingDocumentReleasedAccount);
             return methodResult;
         }

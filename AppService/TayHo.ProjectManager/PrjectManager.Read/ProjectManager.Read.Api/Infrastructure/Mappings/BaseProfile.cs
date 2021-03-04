@@ -12,6 +12,7 @@ namespace ProjectManager.Read.Api.Infrastructure.Mappings
             CreateMap<BaseRequestViewModel, RequestBaseFilterParam>();
             CreateMap<BaseRequestViewModel, RequestHasAccountIdFilterParam>();
             CreateMap<BaseTreeRequestViewModel, RequestTreeListBaseFilterParam>();
+            CreateMap<BasePermitRequestViewModel, RequestHasAccountPermitFilterParam>();
         }
     }
 }

@@ -1,4 +1,7 @@
-﻿namespace AppWFGenProject.Extensions
+﻿using System.IO;
+using System.Reflection;
+
+namespace AppWFGenProject.Extensions
 {
     public static class EnumClass
     {
@@ -32,13 +35,14 @@
         private string _iRepositories = @"\IRepositories\";
         private string _repositories = @"\Repositories\";
         private string _viewModels = @"\ViewModels\";
+        private string _dTOs = @"\DTOs\DTO\";
         // CMD
         ////Controller
         public string Command { get; }
         public string CommandBaseClasses { get; }
         public string Controllers { get; }
-        //// Domain
         public string Mappings { get; }
+        //// Domain
         public string DomainObjects { get; }
         public string IRepositories { get; }
         //// Infrastructure
@@ -51,19 +55,22 @@
         public string ReadMappings { get; }
         //// ViewModels
         public string ViewModels { get; }
+        //// DTO
+        public string DTOs { get; }
         public ConstDirect(string nameproject, string rootDir)
         {
-            Command = rootDir + @"\" + nameproject + ".CMD.Api" + _command;
-            CommandBaseClasses = rootDir + @"\" + nameproject + ".CMD.Api" + _commandBaseClasses;
-            Controllers = rootDir + @"\" + nameproject + ".CMD.Api" + _controllers;
-            Mappings = rootDir + @"\" + nameproject + ".CMD.Domain" + _mappings;
-            DomainObjects = rootDir + @"\" + nameproject + ".CMD.Domain" + _domainObjects;
-            IRepositories = rootDir + @"\" + nameproject + ".CMD.Domain" + _iRepositories;
-            EFConfig = rootDir + @"\" + nameproject + ".CMD.Infrastructure" + _eFConfig;
-            Repositories = rootDir + @"\" + nameproject + ".CMD.Infrastructure" + _repositories;
-            ReadControllers = rootDir + @"\" + nameproject + "Read.Api" + _controllers;
-            ReadMappings = rootDir + @"\" + nameproject + "Read.Api" + _mappings;
-            ViewModels = rootDir + @"\" + nameproject + "Read.Api" + _viewModels;
+            Command = rootDir + @"\" + nameproject + ".Api" + _command;
+            CommandBaseClasses = rootDir + @"\" + nameproject + ".Api" + _commandBaseClasses;
+            Controllers = rootDir + @"\" + nameproject + ".Api" + _controllers;
+            Mappings = rootDir + @"\" + nameproject + ".Api" + _mappings;
+            DomainObjects = rootDir + @"\" + nameproject + ".Domain" + _domainObjects;
+            IRepositories = rootDir + @"\" + nameproject + ".Domain" + _iRepositories;
+            EFConfig = rootDir + @"\" + nameproject + ".Infrastructure" + _eFConfig;
+            Repositories = rootDir + @"\" + nameproject + ".Infrastructure" + _repositories;
+            ReadControllers = rootDir + @"\" + nameproject + ".Api" + _controllers;
+            ReadMappings = rootDir + @"\" + nameproject + ".Api" + _mappings;
+            ViewModels = rootDir + @"\" + nameproject + ".Api" + _viewModels;
+            DTOs = rootDir + @"\" + nameproject + ".Sql" + _dTOs;
         }
     }
     public static class ConstTable
@@ -80,7 +87,7 @@
     }
     public static class ConstPath
     {
-        public static string localDisk = @"D:\Github\SystemCore\AppService\App\AppWFGenProject\Content\TemPlate";//@"D:\TayHo_project\TayHo.SystemCore\AppService\App\AppWFGenProject\Content\TemPlate\";//D:\Github\SystemCore\AppService\App\AppWFGenProject\Content\TemPlate
+        public static string localDisk = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)+@"\Content\TemPlate\";///@"D:\TayHo_project\TayHo.SystemCore\AppService\App\AppWFGenProject\Content\TemPlate";//@"D:\Github\SystemCore\AppService\App\AppWFGenProject\Content\TemPlate";//@"D:\TayHo_project\TayHo.SystemCore\AppService\App\AppWFGenProject\Content\TemPlate\";//D:\Github\SystemCore\AppService\App\AppWFGenProject\Content\TemPlate
         public static string CMDCommandBase = localDisk + @"CMD\Api\Application\Command\BaseClasses\";
         public static string CMDCommand = localDisk + @"CMD\Api\Application\Command\";
         public static string CMDControllers = localDisk + @"CMD\Api\Controllers\";

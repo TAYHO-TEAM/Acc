@@ -30,18 +30,19 @@ namespace AppWFGenProject
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.clbFunction = new System.Windows.Forms.CheckedListBox();
             this.btnBrowser = new System.Windows.Forms.Button();
             this.txtDir = new System.Windows.Forms.TextBox();
             this.lblDir = new System.Windows.Forms.Label();
             this.btnGen = new System.Windows.Forms.Button();
             this.tbcConfigGen = new System.Windows.Forms.TabControl();
             this.tbpCUDR = new System.Windows.Forms.TabPage();
+            this.cbkBackUp = new System.Windows.Forms.CheckBox();
+            this.cbkCreateNew = new System.Windows.Forms.CheckBox();
+            this.cbkOverWrite = new System.Windows.Forms.CheckBox();
             this.lblNameProject = new System.Windows.Forms.Label();
             this.txtNameProject = new System.Windows.Forms.TextBox();
             this.tbpHtml = new System.Windows.Forms.TabPage();
-            this.rbtHtml = new System.Windows.Forms.RadioButton();
-            this.rbtRead = new System.Windows.Forms.RadioButton();
-            this.rbtCMD = new System.Windows.Forms.RadioButton();
             this.chlTable = new System.Windows.Forms.CheckedListBox();
             this.lbl7 = new System.Windows.Forms.Label();
             this.txtDB = new System.Windows.Forms.TextBox();
@@ -56,9 +57,6 @@ namespace AppWFGenProject
             this.lbl4 = new System.Windows.Forms.Label();
             this.lbl1 = new System.Windows.Forms.Label();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.cbkOverWrite = new System.Windows.Forms.CheckBox();
-            this.cbkCreateNew = new System.Windows.Forms.CheckBox();
-            this.cbkBackUp = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.tbcConfigGen.SuspendLayout();
             this.tbpCUDR.SuspendLayout();
@@ -67,14 +65,12 @@ namespace AppWFGenProject
             // groupBox1
             // 
             this.groupBox1.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.groupBox1.Controls.Add(this.clbFunction);
             this.groupBox1.Controls.Add(this.btnBrowser);
             this.groupBox1.Controls.Add(this.txtDir);
             this.groupBox1.Controls.Add(this.lblDir);
             this.groupBox1.Controls.Add(this.btnGen);
             this.groupBox1.Controls.Add(this.tbcConfigGen);
-            this.groupBox1.Controls.Add(this.rbtHtml);
-            this.groupBox1.Controls.Add(this.rbtRead);
-            this.groupBox1.Controls.Add(this.rbtCMD);
             this.groupBox1.Controls.Add(this.chlTable);
             this.groupBox1.Controls.Add(this.lbl7);
             this.groupBox1.Controls.Add(this.txtDB);
@@ -94,6 +90,17 @@ namespace AppWFGenProject
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "GenCode";
+            // 
+            // clbFunction
+            // 
+            this.clbFunction.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.clbFunction.CheckOnClick = true;
+            this.clbFunction.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.clbFunction.FormattingEnabled = true;
+            this.clbFunction.Location = new System.Drawing.Point(190, 199);
+            this.clbFunction.Name = "clbFunction";
+            this.clbFunction.Size = new System.Drawing.Size(94, 76);
+            this.clbFunction.TabIndex = 23;
             // 
             // btnBrowser
             // 
@@ -158,6 +165,39 @@ namespace AppWFGenProject
             this.tbpCUDR.Text = "CUDR";
             this.tbpCUDR.UseVisualStyleBackColor = true;
             // 
+            // cbkBackUp
+            // 
+            this.cbkBackUp.AutoSize = true;
+            this.cbkBackUp.Location = new System.Drawing.Point(383, 13);
+            this.cbkBackUp.Name = "cbkBackUp";
+            this.cbkBackUp.Size = new System.Drawing.Size(100, 19);
+            this.cbkBackUp.TabIndex = 29;
+            this.cbkBackUp.Text = "Backup file cũ";
+            this.cbkBackUp.UseVisualStyleBackColor = true;
+            this.cbkBackUp.CheckedChanged += new System.EventHandler(this.cbkBackUp_CheckedChanged);
+            // 
+            // cbkCreateNew
+            // 
+            this.cbkCreateNew.AutoSize = true;
+            this.cbkCreateNew.Location = new System.Drawing.Point(289, 13);
+            this.cbkCreateNew.Name = "cbkCreateNew";
+            this.cbkCreateNew.Size = new System.Drawing.Size(88, 19);
+            this.cbkCreateNew.TabIndex = 28;
+            this.cbkCreateNew.Text = "Tạo file mới";
+            this.cbkCreateNew.UseVisualStyleBackColor = true;
+            this.cbkCreateNew.CheckedChanged += new System.EventHandler(this.cbkCreateNew_CheckedChanged);
+            // 
+            // cbkOverWrite
+            // 
+            this.cbkOverWrite.AutoSize = true;
+            this.cbkOverWrite.Location = new System.Drawing.Point(223, 13);
+            this.cbkOverWrite.Name = "cbkOverWrite";
+            this.cbkOverWrite.Size = new System.Drawing.Size(60, 19);
+            this.cbkOverWrite.TabIndex = 27;
+            this.cbkOverWrite.Text = "Ghi đè";
+            this.cbkOverWrite.UseVisualStyleBackColor = true;
+            this.cbkOverWrite.CheckedChanged += new System.EventHandler(this.cbkOverWrite_CheckedChanged);
+            // 
             // lblNameProject
             // 
             this.lblNameProject.AutoSize = true;
@@ -184,39 +224,6 @@ namespace AppWFGenProject
             this.tbpHtml.TabIndex = 1;
             this.tbpHtml.Text = "HTML";
             this.tbpHtml.UseVisualStyleBackColor = true;
-            // 
-            // rbtHtml
-            // 
-            this.rbtHtml.AutoSize = true;
-            this.rbtHtml.Location = new System.Drawing.Point(208, 196);
-            this.rbtHtml.Name = "rbtHtml";
-            this.rbtHtml.Size = new System.Drawing.Size(57, 19);
-            this.rbtHtml.TabIndex = 17;
-            this.rbtHtml.TabStop = true;
-            this.rbtHtml.Text = "HTML";
-            this.rbtHtml.UseVisualStyleBackColor = true;
-            // 
-            // rbtRead
-            // 
-            this.rbtRead.AutoSize = true;
-            this.rbtRead.Location = new System.Drawing.Point(208, 156);
-            this.rbtRead.Name = "rbtRead";
-            this.rbtRead.Size = new System.Drawing.Size(51, 19);
-            this.rbtRead.TabIndex = 16;
-            this.rbtRead.TabStop = true;
-            this.rbtRead.Text = "Read";
-            this.rbtRead.UseVisualStyleBackColor = true;
-            // 
-            // rbtCMD
-            // 
-            this.rbtCMD.AutoSize = true;
-            this.rbtCMD.Location = new System.Drawing.Point(208, 122);
-            this.rbtCMD.Name = "rbtCMD";
-            this.rbtCMD.Size = new System.Drawing.Size(52, 19);
-            this.rbtCMD.TabIndex = 15;
-            this.rbtCMD.TabStop = true;
-            this.rbtCMD.Text = "CMD";
-            this.rbtCMD.UseVisualStyleBackColor = true;
             // 
             // chlTable
             // 
@@ -330,39 +337,6 @@ namespace AppWFGenProject
             this.lbl1.TabIndex = 0;
             this.lbl1.Text = "Server:";
             // 
-            // cbkOverWrite
-            // 
-            this.cbkOverWrite.AutoSize = true;
-            this.cbkOverWrite.Location = new System.Drawing.Point(223, 13);
-            this.cbkOverWrite.Name = "cbkOverWrite";
-            this.cbkOverWrite.Size = new System.Drawing.Size(60, 19);
-            this.cbkOverWrite.TabIndex = 27;
-            this.cbkOverWrite.Text = "Ghi đè";
-            this.cbkOverWrite.UseVisualStyleBackColor = true;
-            this.cbkOverWrite.CheckedChanged += new System.EventHandler(this.cbkOverWrite_CheckedChanged);
-            // 
-            // cbkCreateNew
-            // 
-            this.cbkCreateNew.AutoSize = true;
-            this.cbkCreateNew.Location = new System.Drawing.Point(289, 13);
-            this.cbkCreateNew.Name = "cbkCreateNew";
-            this.cbkCreateNew.Size = new System.Drawing.Size(88, 19);
-            this.cbkCreateNew.TabIndex = 28;
-            this.cbkCreateNew.Text = "Tạo file mới";
-            this.cbkCreateNew.UseVisualStyleBackColor = true;
-            this.cbkCreateNew.CheckedChanged += new System.EventHandler(this.cbkCreateNew_CheckedChanged);
-            // 
-            // cbkBackUp
-            // 
-            this.cbkBackUp.AutoSize = true;
-            this.cbkBackUp.Location = new System.Drawing.Point(383, 13);
-            this.cbkBackUp.Name = "cbkBackUp";
-            this.cbkBackUp.Size = new System.Drawing.Size(100, 19);
-            this.cbkBackUp.TabIndex = 29;
-            this.cbkBackUp.Text = "Backup file cũ";
-            this.cbkBackUp.UseVisualStyleBackColor = true;
-            this.cbkBackUp.CheckedChanged += new System.EventHandler(this.cbkBackUp_CheckedChanged);
-            // 
             // GenProject
             // 
             this.ClientSize = new System.Drawing.Size(932, 429);
@@ -398,9 +372,6 @@ namespace AppWFGenProject
         private System.Windows.Forms.TabControl tbcConfigGen;
         private System.Windows.Forms.TabPage tbpCUDR;
         private System.Windows.Forms.TabPage tbpHtml;
-        private System.Windows.Forms.RadioButton rbtHtml;
-        private System.Windows.Forms.RadioButton rbtRead;
-        private System.Windows.Forms.RadioButton rbtCMD;
         private System.Windows.Forms.Button btnGen;
         private System.Windows.Forms.Label lblDir;
         private System.Windows.Forms.TextBox txtDir;
@@ -413,6 +384,7 @@ namespace AppWFGenProject
         private System.Windows.Forms.CheckBox cbkBackUp;
         private System.Windows.Forms.CheckBox cbkCreateNew;
         private System.Windows.Forms.CheckBox cbkOverWrite;
+        private System.Windows.Forms.CheckedListBox clbFunction;
     }
 }
 

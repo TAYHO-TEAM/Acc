@@ -3,20 +3,17 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Thông tin nhà thầu";
 }
-
-@section style{   }
+ 
 
 <div class="row">
     <div class="col-12">
         <div id="container" class="elevation-2"></div>
     </div>
 </div>
-
+<input type="file" id="inputImport" style="display:none;" accept=".xls,.xlsx" />
 @section script{
     <script>
-        const ACTION = "/ContractorInfo";
-        var WIDTH_CONTAINER = $("#container").width();
-
+        const ACTION = "/ContractorInfo"; 
         let customStore = new DevExpress.data.CustomStore({
             key: "id",
             load: (values) => {
@@ -56,11 +53,9 @@
             update: (key, values) => ajax_update(URL_API_PM_CMD + ACTION, key, values),
             remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION, key),
         });
-
         $(function () {
             loadData(customStore);
         });
-
         let loadData = (dataSource) => {
             $("#container").dxDataGrid({
                 height: heightScreen,
@@ -70,14 +65,12 @@
                     sorting: true,
                 },
                 repaintChangesOnly: true, 
-                showBorders: false, showColumnHeaders: true, showColumnLines: false, hoverStateEnabled: true,
+                showBorders: false, showColumnHeaders: true, showColumnLines: true, hoverStateEnabled: true,
                 showRowLines: true, columnAutoWidth: true, wordWrapEnabled: true, rowAlternationEnabled: true,
                 columns: [
                     {
-                        caption: "STT",
-                        width: 80, alignment: "center",
-                        allowEditting: false,
-                        cellTemplate: (container, options) => container.append(options.rowIndex + 1),
+                        caption: "STT", dataField: "status",
+                        width: 80, alignment: "center", sortOrder:"desc"
                     },
                     {
                         dataField: "name", caption: "Tên nhà thầu",
@@ -85,7 +78,7 @@
                         validationRules: [{ type: "required" }]
                     },
                     {
-                        dataField: "code", dataType: "string",
+                        dataField: "code", dataType: "string", alignment:"center",
                         validationRules: [{ type: "required" }]
                     },
                     {
@@ -95,13 +88,9 @@
                     "businessAreas", "country", "city", "district", "address", "phone", "email",
                     {
                         dataField: "isActive", width: 100,
-                        editorType: "dxSwitch", dataType: "boolean"
-                    },
-
-                    {
-                        dataField: "isVisible", width: 100,
-                        editorType: "dxSwitch", dataType:"boolean"
-                    },
+                        editorType: "dxSwitch", dataType: "boolean",
+                        allowExporting: false,
+                    }, 
 
                 ],
                 paging: {
@@ -117,32 +106,95 @@
                     highlightCaseSensitive: true,
                     highlightSearchText: true, 
                     searchVisibleColumnsOnly: true,
-                    visible: WIDTH_CONTAINER > 350
+                    visible: true
                 },
-                editing: {
-                    allowAdding: true,
-                    allowUpdating: true,
-                    allowDeleting: true,
+                editing: { 
+                    allowUpdating: PermitInAction.update,
+                    allowDeleting: PermitInAction.delete,
                     mode: "cell",
                     useIcons: false,
                     confirmDelete: true 
-                },
+                }, 
                 onToolbarPreparing: function (e) {
                     var container = e.component;
                     e.toolbarOptions.items.unshift( 
                         {
+                            location: "before",
+                            widget: "dxButton",
+                            options: {
+                                icon: "add", text: "Thêm",
+                                stylingMode: "filled", type: "default",
+                                visible: PermitInAction.insert,
+                                onClick: () => container.addRow()
+                            }
+                        }, 
+                        {
+                            location: "before", widget: "dxButton",
+                            options: {
+                                icon: "upload",text: "Import",
+                                stylingMode: "filled", type: "default",
+                                onClick: () => {
+                                    $("#inputImport").trigger("click");
+                                }
+                            }
+                        },
+                        {
+                            location: "before", widget: "dxButton",
+                            options: {
+                                icon: "download",text: "Export",
+                                stylingMode: "filled", type: "default",
+                                onClick: () => container.exportToExcel(false)
+                            }
+                        },
+                        {
                             location: "after", widget: "dxButton",
                             options: {
-                                icon: "refresh", tylingMode: "filled", type: "default",
+                                icon: "refresh",
                                 onClick: () => container.refresh()
                             }
-                        })
+                        }
+                    )
                 },
                 onInitNewRow: (e) => {
-                    e.data.isActive = true;
-                    e.data.isVisible = true;
-                }
+                    e.data.isActive = true; 
+                    e.data.status = 1; 
+                },
+                rowDragging: {
+                    allowReordering: PermitInAction.update,
+                    showDragIcons: true,
+                    dropFeedbackMode: "push",
+                    dragDirection: "vertical",
+                    onDragEnd: function (e) {
+                        var source = e.itemData,
+                            target = e.component.getVisibleRows()[e.toIndex].data,
+                            d = $.Deferred();
+                        if (source.id != target.id) {
+                            customStore.update(source.id, { status: target.status }).then(() => {
+                                e.component.refresh().then(d.resolve, d.reject);
+                            }, d.reject);
+                        }
+                    },
+                },
+                onExporting: function (e) {
+                    var workbook = new ExcelJS.Workbook();
+                    var worksheet = workbook.addWorksheet('Employees');
+
+                    DevExpress.excelExporter.exportDataGrid({
+                        component: e.component,
+                        worksheet: worksheet,
+                        autoFilterEnabled: true
+                    }).then(function () {
+                        workbook.xlsx.writeBuffer().then(function (buffer) {
+                            saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Employees.xlsx');
+                        });
+                    });
+                    e.cancel = true;
+                },
             });
+        }
+
+        let callPopupImport = () => {
+
         }
     </script>
 }

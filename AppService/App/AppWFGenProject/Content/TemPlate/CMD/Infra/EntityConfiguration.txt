@@ -2,6 +2,7 @@
 using {common};
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using ProjectManager.Common;
 
 namespace {nameproject}.Infrastructure.EFConfig
 {

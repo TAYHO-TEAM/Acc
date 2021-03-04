@@ -27,6 +27,7 @@ namespace Acc.Cmd.Infrastructure.Services
 
         private readonly JwtOptions _jwtOptions;
         private readonly ITokenManager _tokenManager;
+        private readonly IDeviceAccountRepository _deviceAccountRepository;
         private readonly IAccountsRepository _accountRepository;
         private readonly IStaffTayHoRepository _staffTayHoRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -35,7 +36,7 @@ namespace Acc.Cmd.Infrastructure.Services
         #endregion fields
 
         #region constructors
-        public AccountService(IAccountsRepository accountRepository , IStaffTayHoRepository staffTayHoRepository, ITokenManager tokenManager, IOptionsSnapshot<JwtOptions> jwtOptionsSnapshot, IHttpContextAccessor httpContextAccessor)//, IUserBlackListCacheManager userBlackListCacheManager)
+        public AccountService(IAccountsRepository accountRepository , IStaffTayHoRepository staffTayHoRepository, ITokenManager tokenManager, IOptionsSnapshot<JwtOptions> jwtOptionsSnapshot, IHttpContextAccessor httpContextAccessor, IDeviceAccountRepository deviceAccountRepository)//, IUserBlackListCacheManager userBlackListCacheManager)
         {
             _accountRepository = accountRepository;
             _staffTayHoRepository = staffTayHoRepository;
@@ -43,6 +44,7 @@ namespace Acc.Cmd.Infrastructure.Services
             _httpContextAccessor = httpContextAccessor;
             //_userBlackListCacheManager = userBlackListCacheManager;
             _jwtOptions = jwtOptionsSnapshot.Value;
+            _deviceAccountRepository = deviceAccountRepository;
         }
 
         #endregion constructors
@@ -53,6 +55,7 @@ namespace Acc.Cmd.Infrastructure.Services
         {
             if (_httpContextAccessor.HttpContext.Items.Any(x => (string)x.Key == ClaimsTypeName.ACCOUNT_ID))
             {
+               
                 int? userId = (int)_httpContextAccessor.HttpContext.Items[ClaimsTypeName.ACCOUNT_ID];
                 Accounts existingAccount = await _accountRepository.SingleOrDefaultAsync(x => x.Id == userId).ConfigureAwait(false);
         
@@ -64,15 +67,16 @@ namespace Acc.Cmd.Infrastructure.Services
                     _accountRepository.Update(existingAccount, x => x.ExpiryTime, x => x.ExpiryTimeUTC, x => x.RefreshToken);
                     await _accountRepository.UnitOfWork.SaveChangesAsync(CancellationToken.None).ConfigureAwait(false);
                     //await _userBlackListCacheManager.AddUserToBlackListAsync(existingAccount.Id);
+                   
                 }
             }
         }
-        public async Task<TokenAccountResult> LoginAsync(string userName, string password)
+        public async Task<TokenAccountResult> LoginAsync(string userName, string password,string device, string deviceToken,string browser )
         {
             // Validation
 
             string status = "OK";
-
+           
             try
             {
                 DirectoryEntry entry = new DirectoryEntry("LDAP://192.168.1.20", userName, password);
@@ -86,6 +90,7 @@ namespace Acc.Cmd.Infrastructure.Services
                     currentAcc.UpdateDateUTC = null;
                     await _accountRepository.AddAsync(currentAcc).ConfigureAwait(false);
                     await _accountRepository.UnitOfWork.SaveChangesAsync(CancellationToken.None).ConfigureAwait(false);
+                  
                 }
             }
             catch (DirectoryServicesCOMException cex)
@@ -103,7 +108,6 @@ namespace Acc.Cmd.Infrastructure.Services
                 errorResults.Add(new ErrorResult
                 {
                     ErrorCode = nameof(ErrorCodeLogin.LErr001),
-                   
                     ErrorMessage = AccExtensions.GetErrorMessage( nameof(ErrorCodeLogin.LErr001)),
                     ErrorValues = new List<string> { ErrorHelpers.GenerateErrorResult(nameof(userName), userName) }
                 });
@@ -129,8 +133,48 @@ namespace Acc.Cmd.Infrastructure.Services
                     tokenResult.UserName = existingStaffTaHo.UserName;
                     tokenResult.AccountId = existingAccount.Id;
                 }     
+            }
+            DeviceAccount existDeviceAccount = await _deviceAccountRepository.SingleOrDefaultAsync(x => x.DeviceToken == deviceToken && (x.IsDelete == false || !x.IsDelete.HasValue)) ;// new DeviceAccount(device, existingAccount.Id, deviceToken, browser);
+            if (existDeviceAccount != null )
+            {
+                if(existDeviceAccount.Status == null)
+                {
+                    existDeviceAccount.SetUpdate(0, 1);
+                    existDeviceAccount.Status = 1;
+                }    
+                else
+                {
+                    try
+                    {
+                        byte intValue = (byte)(existDeviceAccount.Status + 1);
+                        existDeviceAccount.SetUpdate(0, intValue);
+                        existDeviceAccount.Status=intValue;
+                    }
+                    catch
+                    {
+                        existDeviceAccount.SetUpdate(0, 255);
+                        existDeviceAccount.Status = 255;
+                    }
+                }
+                if(existDeviceAccount.AccountId != existingAccount.Id )
+                {
+                    existDeviceAccount.SetAccountId(existingAccount.Id);
+                    existDeviceAccount.SetBrowser(browser);
+                    _deviceAccountRepository.Update(existDeviceAccount);
+                    await _deviceAccountRepository.UnitOfWork.SaveChangesAsync(CancellationToken.None).ConfigureAwait(false);
+                }    
+              
+            }
+            else
+            {
+                DeviceAccount newDeviceAccount = new DeviceAccount(device, existingAccount.Id, deviceToken, browser);
+                newDeviceAccount.IsActive = true;
+                newDeviceAccount.IsVisible = true;
+                newDeviceAccount.IsDelete = false;
+                newDeviceAccount.Status = 1;
+                await _deviceAccountRepository.AddAsync(newDeviceAccount);
+                await _deviceAccountRepository.UnitOfWork.SaveChangesAsync(CancellationToken.None).ConfigureAwait(false);
             }    
-           
             return tokenResult;
         }
         public async Task<TokenAccountResult> RefreshTokenAsync(string refreshToken)

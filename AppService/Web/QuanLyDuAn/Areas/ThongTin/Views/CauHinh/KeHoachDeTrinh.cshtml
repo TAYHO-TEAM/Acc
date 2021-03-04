@@ -6,7 +6,7 @@
 
 
 @section style{   }
-
+<div id="popup-register"></div>
 <div class="row">
     <div class="col-12">
         <div id="container" class="elevation-2"></div>
@@ -20,21 +20,21 @@
         const ACTION_CONTRACTORINFO = "/ContractorInfo";
         const ACTION_HANGMUC = "/WorkItems";
         const ACTION_DOCUMENTTYPE = "/DocumentType";
-        var PROJECTID = isNullOrEmpty(localStorage.getItem("projectIdCurrent")) ? parseInt(localStorage.getItem("projectIdCurrent")) : 0;
+        var PROJECTID = isNullOrEmpty(localStorage.getItem("projectIdCurrent")) ? parseInt(localStorage.getItem("projectIdCurrent")) : 1;
 
         var WIDTH_CONTAINER = $("#container").width();
 
         let customStore = new DevExpress.data.CustomStore({
             key: "id",
             load: (values) => {
-                console.log(values)
+
                 let deferred = $.Deferred(), params = { 'FindId': 'projectId,' + PROJECTID };
                 //if (values.filter && values.filter[0] == "parentId") params['FindParentId'] = values.filter[2];
                 if (values.sort) {
                     params['SortCol'] = values.sort[0].selector;
                     params['SortADSC'] = values.sort[0].desc;
                 }
-                //params = { 'FindId': 'ProjectId,' + PROJECTID },
+                params = { 'FindId': 'ProjectId,' + PROJECTID },
                 $.ajax({
                     headers: header,
                     url: URL_API_PM_READ + ACTION,
@@ -53,7 +53,7 @@
 
                 return deferred.promise();
             },
-            insert: (values) => ajax_insert(URL_API_PM_CMD + ACTION, values),
+            insert: (values) => ajax_insert(URL_API_PM_CMD + ACTION, { 'planRegisters':[values]}),
             update: (key, values) => ajax_update(URL_API_PM_CMD + ACTION, key, values),
             remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION, key),
         });
@@ -148,6 +148,7 @@
 
         let loadData = (dataSource) => {
             $("#container").dxTreeList({
+
                 height: heightScreen,
                 dataSource: dataSource,
                 repaintChangesOnly: true,
@@ -161,11 +162,11 @@
                 showBorders: false, showColumnHeaders: true, showColumnLines: false, hoverStateEnabled: true,
                 showRowLines: true, columnAutoWidth: true, wordWrapEnabled: true, rowAlternationEnabled: false,
                 columns: [
-                    {
-                        dataField: "code",
-                        caption: "Mã",
-                        dataType: "string",
-                    },
+                    //{
+                    //    dataField: "code",
+                    //    caption: "Mã",
+                    //    dataType: "string",
+                    //},
                     {
                         dataField: "workItemId",
                         caption: "Hạng mục",
@@ -332,6 +333,7 @@
                                 width: "100%",
                                 showClearButton: false,
                                 value: PROJECTID,
+                                stylingMode: "filled",
                                 onValueChanged: function (data) {
                                     PROJECTID = data.value;
                                     localStorage.setItem('projectIdCurrent', PROJECTID);
@@ -340,12 +342,34 @@
                             },
                         },
                         {
-                            location: "after", widget: "dxButton",
+                            location: "after",
+                            widget: "dxButton",
                             options: {
-                                icon: "refresh", tylingMode: "filled", type: "default",
+                                icon: "refresh",
+                                tylingMode: "filled",
+                                type: "default",
                                 onClick: () => container.refresh()
                             }
-                        })
+                        },
+                        {
+                            location: "after",
+                            widget: "dxButton",
+                            options: {
+                                //text: "Thêm mới",
+                                icon: "export",
+                                tylingMode: "filled",
+                                type: "default",
+                                onClick: function () {
+                                    callPopup(
+                                        "THÊM MỚI KẾ HOẠCH ĐỆ TRÌNH",
+                                        "/ThongTin/CauHinh/_KeHoachShow/",
+                                        ($(window).width() > 767 ? "90%" : "80%"),
+                                        container
+                                    );
+                                }
+                            }
+                        },
+                    )
                 },
                 onInitNewRow: (e) => {
                     e.data.isActive = true;
@@ -355,6 +379,41 @@
                 onCellPrepared: (e) => {
                     if (e.rowType == "data" && e.columnIndex == 1)
                         e.cellElement.find('.dx-treelist-empty-space').toggleClass("dx-treelist-collapsed", e.data.chilCount > 0)
+                }
+            });
+        }
+        function callPopup(title, url, width, container) {
+
+            var isFullscreen = false;
+            if (width == "100%") isFullscreen = true;
+
+            $("#popup-register").dxPopup({
+                width: "95%", height: "95%",
+                fullScreen: isFullscreen,
+                //position: { my: 'top', at: 'top', of: window },
+                dragEnabled: true,
+                resizeEnabled: true,
+                visible: true,
+                showTitle: true,
+                closeOnOutsideClick: false,
+                showCloseButton: true,
+                title: title,
+                contentTemplate: function (container) {
+                    var scrollView = $("<div id='scrollView'></div>");
+                    var content = $("<div/>");
+                    content.load(url);
+                    scrollView.append(content);
+                    scrollView.dxScrollView({
+                        width: '100%',
+                        height: '100%'
+                    });
+                    container.append(scrollView);
+                    return container;
+                },
+                onHiding: function () {
+                    container.refresh();
+                },
+                onHidden: function () {
                 }
             });
         }

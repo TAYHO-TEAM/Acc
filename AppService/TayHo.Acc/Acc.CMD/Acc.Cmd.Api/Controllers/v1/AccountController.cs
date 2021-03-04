@@ -53,7 +53,7 @@ namespace Acc.Cmd.Api.Controllers.V1
         public async Task<IActionResult> LoginAsync([FromBody] LoginRequestViewModel command)
         {
             var methodResult = new MethodResult<TokenAccountResult>();
-            methodResult.Result = await _accountService.LoginAsync(command.UserName, command.Password).ConfigureAwait(false);
+            methodResult.Result = await _accountService.LoginAsync(command.UserName, command.Password,command.Device,command.DeviceToken,command.Browser).ConfigureAwait(false);
             return Ok(methodResult);
         }
 

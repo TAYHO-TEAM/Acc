@@ -10,5 +10,6 @@ namespace ProjectManager.Read.Api.ViewModels
         public byte[]? AvatarImg { get; set; }
         public string Title { get; set; }
         public string Department { get; set; }
+        public string Type { get; set; }
     }
 }

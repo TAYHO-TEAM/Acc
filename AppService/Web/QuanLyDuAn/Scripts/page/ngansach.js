@@ -1,20 +1,33 @@
-﻿const ACTION_PROJECT = "/Projects";
-const ACTION_NHOMCONGVIEC = "/NS_NhomCongViec";
-const ACTION_CONGVIEC = "/NS_CongViec";
+﻿const ACTION_PROJECT            = "/Projects";
+const ACTION_NHOMCONGVIEC       = "/NS_NhomCongViec";
+const ACTION_CONGVIEC           = "/NS_CongViec";
 const ACTION_NHOMCONGVIECDETAIL = "/NS_NhomCongViecDetail";
-const ACTION_HANGMUC = "/NS_HangMuc";
-const ACTION_LOAICONGVIEC = "/NS_LoaiCongViec";
-const ACTION_GIAIDOAN = "/NS_GiaiDoan";
-const ACTION_HANGMUCDETAIL = "/NS_HangMucDetail";
-const ACTION_CONGVIECDETAIL = "/NS_CongViecDetail";
+const ACTION_HANGMUC            = "/NS_HangMuc";
+const ACTION_LOAICONGVIEC       = "/NS_LoaiCongViec";
+const ACTION_GIAIDOAN           = "/NS_GiaiDoan";
+const ACTION_HANGMUCDETAIL      = "/NS_HangMucDetail";
+const ACTION_CONGVIECDETAIL     = "/NS_CongViecDetail";
+const ACTION_GOITHAU            = "/NS_GoiThau";
+const ACTION_NHOMCHIPHI         = "/NS_NhomChiPhi";
+const ACTION_REASON             = "/NS_Reason";
+const ACTION_CONTRACTORINFO     = "/ContractorInfo ";
+const ACTION_NGHIEMTHU          = "/NS_NghiemThu";
 
-const ACTION_PHAT = "/NS_Phat";
-const ACTION_PHAT_THEODOI = "/NS_Phat_TheoDoi";
-const ACTION_PHAT_NHOM = "/NS_Phat_Nhom";
-const ACTION_TAMUNG = "/NS_TamUng";
-const ACTION_TAMUNG_THEODOI = "/NS_TamUng_TheoDoi";
-const ACTION_KHAUTRU = "/NS_KhauTru";
-const ACTION_KHAUTRU_THEODOI = "/NS_KhauTru_TheoDoi";
+const ACTION_PHAT               = "/NS_Phat";
+const ACTION_PHAT_THEODOI       = "/NS_Phat_TheoDoi";
+const ACTION_PHAT_NHOM          = "/NS_Phat_Nhom";
+const ACTION_TAMUNG             = "/NS_TamUng";
+const ACTION_TAMUNG_THEODOI     = "/NS_TamUng_TheoDoi";
+const ACTION_KHAUTRU            = "/NS_KhauTru";
+const ACTION_KHAUTRU_THEODOI    = "/NS_KhauTru_TheoDoi";
+
+const ACTION_DUCHI              = "/NS_DuChi";
+const ACTION_THUCCHI = "/NS_ThucChi";
+
+var listActiveStatus = [
+    { value: true, text: "Hoạt động", color: "success", icon: 'fa fa-check-circle' },
+    { value: false, text: "Tạm dừng", color: "danger", icon: 'fa fa-minus-circle' },
+]
 
 var customStore_Projects = new DevExpress.data.CustomStore({
     key: "id", loadMode: "raw",
@@ -60,20 +73,4 @@ var customStore_Phat_Nhom = new DevExpress.data.CustomStore({
         return deferred.promise();
     },
 });
-
-var dataGridOptions = {
-    height: heightScreen,
-    paging: {
-        enabled: true, pageSize: 20
-    },
-    pager: {
-        showPageSizeSelector: true, showInfo: true,
-        allowedPageSizes: [10, 20, 40, 80],       
-    },
-    searchPanel: {
-        highlightCaseSensitive: true, highlightSearchText: true,
-        searchVisibleColumnsOnly: true, visible: true
-    },
-    showBorders: false, showColumnHeaders: true, showColumnLines: false, hoverStateEnabled: true,
-    showRowLines: true, columnAutoWidth: true, wordWrapEnabled: true, rowAlternationEnabled: true, 
-};
+ 

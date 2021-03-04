@@ -20,12 +20,16 @@ namespace ProjectManager.Read.Sql.DTOs.DTO
         public int? Rev { get; set; }
         public bool? Insert { get; set; }
         public bool? Update { get; set; }
-        public bool? Delate { get; set; }
+        public bool? Delete { get; set; }
         public bool? View { get; set; }
         public string AccountName { get; set; }
     }
     public class RequestRegistDetailDTO : RequestRegistDTO
     {
+        public RequestRegistDetailDTO()
+        {
+            ResponseRegistDTOs = new List<ResponseRegistDTO>();
+        }
         public DateTime? RequestDate { get; set; }
         public DateTime? ResponseDate { get; set; }
         public DateTime? ExpectRequestDate { get; set; }

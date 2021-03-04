@@ -154,7 +154,8 @@
                             itemTemplate: function (data) {
                                 return $("<div>").append($("<b>").append(data.title).addClass("mr-1"), $("<em>").append(data.descriptions));
                             },
-                        }
+                        },
+                        validationRules: [{ type: "required" }],
                     },
                     {
                         dataField: "actionId",
@@ -175,7 +176,8 @@
                             itemTemplate: function (data) {
                                 return $("<div>").append($("<b>").append(data.title).addClass("mr-1"), $("<em>").append(data.descriptions));
                             },
-                        }
+                        },
+                        validationRules: [{ type: "required" }],
                     },
                     {
                         dataField: "permistionId",
@@ -195,7 +197,8 @@
                             itemTemplate: function (data) {
                                 return $("<div>").append($("<b>").append(data.title).addClass("mr-1"), $("<em>").append(data.descriptions));
                             },
-                        }
+                        },
+                        validationRules: [{ type: "required" }],
                     },
                     {
                         dataField: "isActive", width: 100,

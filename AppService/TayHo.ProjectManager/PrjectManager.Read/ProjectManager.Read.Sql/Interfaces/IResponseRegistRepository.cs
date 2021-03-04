@@ -7,7 +7,7 @@ namespace ProjectManager.Read.Sql.Interfaces
 {
     public interface IResponseRegistRepository<T> where T : class
     {
-        //Task<PagingItems<T>> GetWithPaggingAsync(RequestBaseFilterParam requetsBaseFilterParam);GetWithDetailAsync
+        //Task<PagingItems<T>> GetWithPaggingAsync(RequestBaseFilterParam requetsBaseFilterParam);
         Task<PagingItems<T>> GetAllWithAccountAsync(RequestHasAccountIdFilterParam requetsBaseFilterParam);
     }
 }

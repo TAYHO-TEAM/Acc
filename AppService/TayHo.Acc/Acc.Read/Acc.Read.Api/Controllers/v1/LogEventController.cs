@@ -34,12 +34,12 @@ namespace Acc.Read.Api.Controllers.v1
         [HttpGet]
         [ProducesResponseType(typeof(MethodResult<PagingItems<LogEventResponseViewModel>>), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(VoidMethodResult), (int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> GetLogEventAsync([FromQuery] BaseRequestViewModel request)
+        public async Task<IActionResult> GetLogEventAsync([FromQuery] BaseRequestParentViewModel request)
         {
             var methodResult = new MethodResult<PagingItems<LogEventResponseViewModel>>();
-            RequestBaseFilterParam requestFilter = _mapper.Map<RequestBaseFilterParam>(request);
+            RequestParentBaseFilterParam requestFilter = _mapper.Map<RequestParentBaseFilterParam>(request);
             requestFilter.TableName = QuanLyDuAnConstants.LogEvent_TABLENAME;
-            var queryResult = await _dOBaseRepository.GetWithPaggingAsync(requestFilter).ConfigureAwait(false);
+            var queryResult = await _dOBaseRepository.GetWithPaggingFKAsync(requestFilter).ConfigureAwait(false);
             methodResult.Result = new PagingItems<LogEventResponseViewModel>
             {
                 PagingInfo = queryResult.PagingInfo,

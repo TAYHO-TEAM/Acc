@@ -10,10 +10,11 @@ namespace Acc.Cmd.Api.Controllers.v1
 {
     public class GroupAccountController : APIControllerBase
     {
+        private const string GroupAccounts = nameof(GroupAccounts);
         public GroupAccountController(IMediator mediator) : base(mediator)
         {
         }
-
+        
 
         #region GroupAccount
 
@@ -23,13 +24,29 @@ namespace Acc.Cmd.Api.Controllers.v1
         /// <param name="command"></param>
         /// <returns></returns>
         [HttpPost]
-        [ProducesResponseType(typeof(Services.Common.DomainObjects.MethodResult<CreateGroupAccountCommandResponse>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(MethodResult<CreateGroupAccountCommandResponse>), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(VoidMethodResult), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> CreateGroupAccountAsync([FromBody] CreateGroupAccountCommand command)
         {
             var result = await _mediator.Send(command).ConfigureAwait(false);
             return Ok(result);
         }
+
+        /// <summary>
+        /// Create a new GroupAccounts.
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route(GroupAccounts)]
+        [ProducesResponseType(typeof(MethodResult<CreateGroupAccountsCommandResponse>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(VoidMethodResult), (int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> CreateGroupAccountsAsync([FromBody] CreateGroupAccountsCommand command)
+        {
+            var result = await _mediator.Send(command).ConfigureAwait(false);
+            return Ok(result);
+        }
+
 
         /// <summary>
         /// Update a existing GroupAccount.

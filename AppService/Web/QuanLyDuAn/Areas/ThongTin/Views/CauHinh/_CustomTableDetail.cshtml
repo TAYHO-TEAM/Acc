@@ -1,0 +1,137 @@
+﻿@model QuanLyDuAn.Utilities.modelPVCustomTable
+<div id="container_detail" data-id="@Model"></div>
+<script>
+
+    //--------------------READ------------------------------
+    var ACTION_CUSTOMCOLUM = "/CustomColum";
+
+    //--------------------CMD------------------------------
+    var ACTION_CMD_CUSTOMCOLUM = "/CustomColum";
+    var customStore_CUSTOMCOLUM = customStore_CMD_READ_FILTER_ID(ACTION_CMD_CUSTOMCOLUM, ACTION_CUSTOMCOLUM, 'CustomTableId,' + @Model.id);
+
+
+    $(function () {
+        loadMain();
+    });
+
+    var loadMain = () => {
+        $('#container_detail').dxDataGrid({
+            dataSource: customStore_CUSTOMCOLUM,
+            remoteOperations: {
+                paging: true,
+                sorting: true,
+            },
+            repaintChangesOnly: true,
+            showBorders: true, showColumnHeaders: true, showColumnLines: true, hoverStateEnabled: true,
+            showRowLines: true, columnAutoWidth: true, wordWrapEnabled: true, rowAlternationEnabled: true,
+            paging: {
+                enabled: true,
+                pageSize: 20
+            },
+            pager: {
+                showPageSizeSelector: true,
+                allowedPageSizes: [10, 20, 40],
+                showInfo: true,
+            },
+            editing: {
+                mode: "cell",
+                allowEditing: true,
+                allowUpdating: true,
+                allowDeleting: true,
+            },
+            columns: [
+                //{
+                //    dataField: "customTableId",
+                //    //groupIndex: 0,
+                //    caption: "Mã dữ liệu",
+                //    dataType: "number",
+                //    calculateCellValue: function () {
+                //        return CustomTableId;
+                //    },
+                //    editorOptions: {
+                //        readOnly: true,
+                //    },
+                //    validationRules: [{ type: "required" }],
+                //},
+                {
+                    dataField: "colIndex",
+                    caption: "Vị trí",
+                    dataType: "number",
+                },
+                {
+                    dataField: "header",
+                    caption: "Tên cột",
+                    dataType: "string",
+                },
+                {
+                    dataField: "typeParam",
+                    caption: "Kiểu dữ liệu",
+                    dataType: "string",
+                    lookup: {
+                        dataSource: Type,
+                        valueExpr: "ID",
+                        displayExpr: "Name",
+                    },
+                    editorType: "dxSelectBox",
+                    editorOptions: {
+                        dataSource: Type,
+                        valueExpr: "ID", displayExpr: "Name",
+                    },
+                    validationRules: [{ type: "required" }],
+                },
+                {
+                    dataField: "sourceValue",
+                    caption: "Giá trị mặc định",
+                    dataType: "string",
+                },
+                {
+                    dataField: "sourceLink",
+                    caption: "Đường dẫn",
+                    dataType: "string",
+                },
+                {
+                    dataField: "isActive",
+                    width: 100,
+                    alignment: "center",
+                    editorType: "dxSwitch",
+                },
+                //{
+                //    dataField: "isVisible",
+                //    width: 100,
+                //    alignment: "center",
+                //    editorType: "dxSwitch",
+                //},
+                {
+                    type: "buttons", caption: "Tác vụ",
+                    width: 120, alignment: "center",
+                    buttons: ["add", "edit", "delete"]
+                }
+            ],
+            onInitNewRow: (e) => {
+                e.data.isActive = true;
+                e.data.isVisible = true;
+                e.data.customTableId = @Model.id;
+            },
+            onToolbarPreparing: (e) => {
+                e.toolbarOptions.items.unshift(
+                    {
+                        location: "before",
+                        widget: "dxButton",
+                        //visible:(@Html.Raw(Json.Encode(@Model.code))  == "dxCheckBox"? true : false),
+                        options: {
+                            icon: "add", text: "Thêm dữ liệu", stylingMode: "contained", type: "default",
+                            onClick: () => e.component.addRow()
+                        }
+                    },
+                    {
+                        location: "after",
+                        widget: "dxButton",
+                        options: {
+                            icon: "refresh", type: "default",
+                            onClick: () => e.component.refresh()
+                        }
+                    })
+            },
+        })
+    }
+</script>

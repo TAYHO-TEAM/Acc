@@ -1,7 +1,7 @@
 ﻿using {nameproject}.Domain.DomainObjects;
 using Services.Common.DomainObjects.Interfaces;
 
-namespace {nameproject}.Domain.Repositories
+namespace {nameproject}.Domain.IRepositories
 {
     public interface I{Entity}Repository :  ICmdRepository<{Entity}>
     {

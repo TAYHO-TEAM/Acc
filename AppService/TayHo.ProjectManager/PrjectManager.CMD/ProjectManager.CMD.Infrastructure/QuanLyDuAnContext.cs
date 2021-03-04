@@ -11,6 +11,7 @@ namespace ProjectManager.CMD.Infrastructure
         public QuanLyDuAnContext(DbContextOptions<QuanLyDuAnContext> options, IMediator mediator) : base(options, mediator)
         {
         }
+        public DbSet<AccountInfo> AccountInfo { get; set; }
         public DbSet<Assignments> Assignments { get; set; }
         public DbSet<ContractorInfo> ContractorInfo { get; set; }
         public DbSet<DocumentReleased> DocumentReleased { get; set; }
@@ -21,6 +22,7 @@ namespace ProjectManager.CMD.Infrastructure
         public DbSet<GroupAccount> GroupAccount { get; set; }
         public DbSet<Groups> Groups { get; set; }
         public DbSet<GroupStages> GroupStages { get; set; }
+        #region Ngân sách
         public DbSet<NS_CongViec> NS_CongViec { get; set; }
         public DbSet<NS_CongViecDetail> NS_CongViecDetail { get; set; }
         public DbSet<NS_GiaiDoan> NS_GiaiDoan { get; set; }
@@ -39,6 +41,9 @@ namespace ProjectManager.CMD.Infrastructure
         public DbSet<NS_Reason> NS_Reason { get; set; }
         public DbSet<NS_TamUng> NS_TamUng { get; set; }
         public DbSet<NS_TamUng_TheoDoi> NS_TamUng_TheoDoi { get; set; }
+        public DbSet<NS_DuChi> NS_DuChi { get; set; }
+        public DbSet<NS_ThucChi> NS_ThucChi { get; set; }
+        #endregion
         public DbSet<OperationProcess> OperationProcess { get; set; }
         public DbSet<PlanRegister> PlanRegister { get; set; }
         public DbSet<ProblemCategory> ProblemCategory { get; set; }
@@ -49,7 +54,24 @@ namespace ProjectManager.CMD.Infrastructure
         public DbSet<ResponseRegist> ResponseRegist { get; set; }
         public DbSet<ResponseRegistReply> ResponseRegistReply { get; set; }
         public DbSet<Stages> Stages { get; set; }
-        public DbSet<StepsProcess> StepsProcess { get; set; } 
+        public DbSet<StepsProcess> StepsProcess { get; set; }
+        public DbSet<CustomCellContent> CustomCellContent { get; set; }
+        public DbSet<CustomColum> CustomColum { get; set; }
+        public DbSet<CustomForm> CustomForm { get; set; }
+        public DbSet<CustomFormBody> CustomFormBody { get; set; }
+        public DbSet<CustomFormContent> CustomFormContent { get; set; }
+        public DbSet<CustomTable> CustomTable { get; set; }
+        public DbSet<PlanAccount> PlanAccount { get; set; }
+        public DbSet<PlanJob> PlanJob { get; set; }
+        public DbSet<PlanMaster> PlanMaster { get; set; }
+        public DbSet<PlanProject> PlanProject { get; set; }
+        public DbSet<PlanReport> PlanReport { get; set; }
+        public DbSet<PlanSchedule> PlanSchedule { get; set; }
+        public DbSet<CustomFormAccount> CustomFormAccount { get; set; }
+        public DbSet<Conversation> Conversation { get; set; }
+        public DbSet<Notify> Notify { get; set; }
+        public DbSet<NotifyAccount> NotifyAccount { get; set; }
+        public DbSet<NotifyTemplate> NotifyTemplate { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

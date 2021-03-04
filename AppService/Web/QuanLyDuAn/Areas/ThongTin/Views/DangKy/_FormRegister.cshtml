@@ -23,8 +23,6 @@
 
 
     $(document).ready(function () {
-
-
         var formInstance = $("#form-regist").dxForm({
             formData: formData,
             labelLocation: "top",
@@ -48,11 +46,13 @@
                                 searchExpr: ['code', 'title'],
                                 showClearButton: true,
                                 dataSource: customStore_PLAN(""),
-                                valueExpr: "id", displayExpr: "code",
+                                valueExpr: "id",
+                                displayExpr: "title",
                                 placeholder: "Vui lòng chọn...",
-                                searchEnabled: true, showClearButton: true,
+                                searchEnabled: true,
+                                showClearButton: true,
                                 itemTemplate: function (data) {
-                                    return $("<div>").append($("<b>").append(data.code).addClass("mr-1"), $("<em>").append(data.title));
+                                    return $("<div>").append($("<b>").append(data.title).addClass("mr-1"));
                                 },
                                 onValueChanged: function (data) {
                                     /////// loại tài liệu
@@ -115,12 +115,12 @@
                                     id: "elementDocumentTypeId",
                                 }
                             },
-
+                            validationRules: [{ type: "required" }],
                         },
                         {
                             colSpan: 12,
                             dataField: "workItemId",
-                            label: { text: "Loại tài liệu" },
+                            label: { text: "Hạng mục" },
                             lookup: {
                                 dataSource: customStore_HangMuc,
                                 valueExpr: "id",
@@ -136,6 +136,7 @@
                                     id: "elementHangMucId",
                                 }
                             },
+                            validationRules: [{ type: "required" }],
                         },
                         {
                             colSpan: 12,
@@ -151,6 +152,7 @@
                                     id: "elementTitle",
                                 }
                             },
+                           
                         },
                         {
                             colSpan: 12,
@@ -160,6 +162,7 @@
                             editorOptions: {
                                 value: formData["descriptions"],
                             },
+
                         },
                         {
                             colSpan: 12,
@@ -170,10 +173,8 @@
                             },
                         },
                         {
-
                             colSpan: 12,
                             template: '<span class="dx-field-item-label-text font-bold">Các tập tin đính kèm</span><div class="file-uploader"></div>',
-                           
                         },
                     ]
                 },
@@ -181,7 +182,7 @@
                     itemType: "button",
                     horizontalAlignment: "center",
                     buttonOptions: {
-                        text: "Lưu lại",
+                        text: "Trình tài liệu",
                         icon: "fa fa-save",
                         type: "success",
                         useSubmitBehavior: true,
@@ -203,14 +204,13 @@
             showFileList: true,
             multiple: true,
             uploadMode: "useForm",
-            allowedFileExtensions: [".jpg", ".jpeg", ".png", ".pdf", ".doc", ".docx", ".xls", ".xlsx", ".xlsm"],
-            maxFileSize: 10000000,
+            allowedFileExtensions: [".jpg", ".jpeg", ".png", ".pdf"],
+            maxFileSize: 52428800,
         });
         $("#form-regist").on("submit", function (e) {
             //test(fdatatest);
-
+            loadingPanel.show();
             var fdata = new FormData();
-            var i = 10;
             $.each(formData, function (key, value) {
                 fdata.append(key, value);
             });
@@ -257,40 +257,7 @@
                     DevExpress.ui.notify("Có lỗi xảy ra: " + errorThrown, "error", 3000);
                 }
             });
-            //var files = $(".file-uploader").dxFileUploader("instance").option("value");
-            //if (files.length > 0) {
-            //    $.each(files, function (key, value) {
-            //        FORMDATA.append(files[key].name, files[key]);
-            //    });
-            //}
-
-            //e.preventDefault();
-            //$.ajax({
-            //    url: 'https://api-pm-cmd.tayho.com.vn/api/cmd/v1/Assignments',
-            //    type: "POST",
-            //    enctype: 'multipart/form-data',
-            //    data: fdata,
-            //    processData: false,  // Important!
-            //    contentType: false,
-            //    cache: false,
-            //    beforeSend: function () {
-
-            //    },
-            //    success:function(data) {
-
-            //        $("#result").text(data);
-            //        console.log("SUCCESS : ", data);
-            //        $("#btnSubmit").prop("disabled", false);
-
-            //    },
-            //    error: function (e) {
-
-            //        $("#result").text(e.responseText);
-            //        console.log("ERROR : ", e);
-            //        $("#btnSubmit").prop("disabled", false);
-
-            //    }
-            //});
+         
             e.preventDefault();
             //return deferred.promise();
         });

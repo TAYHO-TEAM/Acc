@@ -1,0 +1,383 @@
+2021-02-22 10:06:02.888 +07:00 [INF] Application Starting.
+2021-02-22 10:06:05.127 +07:00 [INF] User profile is available. Using 'C:\Users\USER\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2021-02-22 10:06:05.521 +07:00 [INF] Now listening on: http://localhost:50999
+2021-02-22 10:06:05.522 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2021-02-22 10:06:05.524 +07:00 [INF] Hosting environment: Development
+2021-02-22 10:06:05.524 +07:00 [INF] Content root path: D:\Github\SystemCore\AppService\TayHo.ProjectManager\PrjectManager.CMD\ProjectManager.CMD.Api
+2021-02-22 10:06:06.106 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:50999/swagger  
+2021-02-22 10:06:06.355 +07:00 [INF] Request finished in 251.8603ms 301 
+2021-02-22 10:06:06.383 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:50999/swagger/index.html  
+2021-02-22 10:06:06.410 +07:00 [INF] Request finished in 26.5146ms 200 text/html;charset=utf-8
+2021-02-22 10:06:06.458 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:50999/swagger/swagger-ui.css  
+2021-02-22 10:06:06.459 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:50999/swagger/swagger-ui-bundle.js  
+2021-02-22 10:06:06.459 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:50999/swagger/swagger-ui-standalone-preset.js  
+2021-02-22 10:06:06.496 +07:00 [INF] Sending file. Request path: '/swagger-ui.css'. Physical path: 'N/A'
+2021-02-22 10:06:06.500 +07:00 [INF] Request finished in 42.1621ms 200 text/css
+2021-02-22 10:06:06.506 +07:00 [INF] Sending file. Request path: '/swagger-ui-standalone-preset.js'. Physical path: 'N/A'
+2021-02-22 10:06:06.508 +07:00 [INF] Request finished in 48.7533ms 200 application/javascript
+2021-02-22 10:06:06.562 +07:00 [INF] Sending file. Request path: '/swagger-ui-bundle.js'. Physical path: 'N/A'
+2021-02-22 10:06:06.563 +07:00 [INF] Request finished in 103.896ms 200 application/javascript
+2021-02-22 10:06:06.684 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:50999/swagger/v1/swagger.json  
+2021-02-22 10:06:06.724 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:50999/swagger/favicon-32x32.png  
+2021-02-22 10:06:06.726 +07:00 [INF] Sending file. Request path: '/favicon-32x32.png'. Physical path: 'N/A'
+2021-02-22 10:06:06.727 +07:00 [INF] Request finished in 3.8134ms 200 image/png
+2021-02-22 10:06:07.426 +07:00 [INF] Request finished in 741.9402ms 200 application/json;charset=utf-8
+2021-02-22 10:06:19.216 +07:00 [INF] Request starting HTTP/1.1 POST http://localhost:50999/api/cmd/v1/NS_DuChi application/json 141
+2021-02-22 10:06:19.229 +07:00 [INF] CORS policy execution successful.
+2021-02-22 10:06:19.240 +07:00 [INF] Executing endpoint 'ProjectManager.CMD.Api.Controllers.v1.NS_DuChiController.CreateNS_DuChiAsync (ProjectManager.CMD.Api)'
+2021-02-22 10:06:19.281 +07:00 [INF] Route matched with {action = "CreateNS_DuChi", controller = "NS_DuChi"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] CreateNS_DuChiAsync(ProjectManager.CMD.Api.Application.Commands.CreateNS_DuChiCommand) on controller ProjectManager.CMD.Api.Controllers.v1.NS_DuChiController (ProjectManager.CMD.Api).
+2021-02-22 10:06:19.332 +07:00 [INF] ----- Handling command CreateNS_DuChiCommand ({"NhomCongViecId":0,"GoiThauId":0,"ThangBaoCao":"string","ThangDuChi":"string","GiaTri":0,"Id":0,"IsActive":true,"IsVisible":true,"Status":0,"$type":"CreateNS_DuChiCommand"})
+2021-02-22 10:06:20.528 +07:00 [WRN] No type was specified for the decimal column 'DonGia' on entity type 'NS_CongViecDetail'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2021-02-22 10:06:20.530 +07:00 [WRN] No type was specified for the decimal column 'GiaTri' on entity type 'NS_DuChi'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2021-02-22 10:06:20.531 +07:00 [WRN] No type was specified for the decimal column 'GiaTri' on entity type 'NS_GoiThau'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2021-02-22 10:06:20.532 +07:00 [WRN] No type was specified for the decimal column 'GiaTri' on entity type 'NS_HangMucDetail'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2021-02-22 10:06:20.533 +07:00 [WRN] No type was specified for the decimal column 'GiaTri' on entity type 'NS_KhauTru'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2021-02-22 10:06:20.535 +07:00 [WRN] No type was specified for the decimal column 'GiaTriCon' on entity type 'NS_KhauTru'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2021-02-22 10:06:20.536 +07:00 [WRN] No type was specified for the decimal column 'GiaTri' on entity type 'NS_KhauTru_TheoDoi'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2021-02-22 10:06:20.539 +07:00 [WRN] No type was specified for the decimal column 'GiaTri' on entity type 'NS_NhomCongViecDetail'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2021-02-22 10:06:20.540 +07:00 [WRN] No type was specified for the decimal column 'GiaTri' on entity type 'NS_Phat'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2021-02-22 10:06:20.542 +07:00 [WRN] No type was specified for the decimal column 'GiaTriCon' on entity type 'NS_Phat'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2021-02-22 10:06:20.543 +07:00 [WRN] No type was specified for the decimal column 'GiaTri' on entity type 'NS_Phat_TheoDoi'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2021-02-22 10:06:20.544 +07:00 [WRN] No type was specified for the decimal column 'GiaTri' on entity type 'NS_TamUng'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2021-02-22 10:06:20.545 +07:00 [WRN] No type was specified for the decimal column 'GiaTriCon' on entity type 'NS_TamUng'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2021-02-22 10:06:20.547 +07:00 [WRN] No type was specified for the decimal column 'GiaTri' on entity type 'NS_TamUng_TheoDoi'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2021-02-22 10:06:20.549 +07:00 [WRN] No type was specified for the decimal column 'GiaTri' on entity type 'NS_ThucChi'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2021-02-22 10:06:20.584 +07:00 [INF] Entity Framework Core 3.1.8 initialized 'QuanLyDuAnContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2021-02-22 10:06:22.721 +07:00 [INF] Executed DbCommand (56ms) [Parameters=[@p0='?' (DbType = Int32), @p1='?' (DbType = DateTime2), @p2='?' (DbType = DateTime2), @p3='?' (DbType = Decimal), @p4='?' (DbType = Int32), @p5='?' (DbType = Boolean), @p6='?' (DbType = Boolean), @p7='?', @p8='?' (DbType = Boolean), @p9='?' (DbType = Int32), @p10='?' (DbType = Int32), @p11='?' (Size = 1) (DbType = Byte), @p12='?' (Size = 100), @p13='?' (Size = 100), @p14='?' (DbType = DateTime2), @p15='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [NS_DuChi] ([CreateBy], [CreateDate], [CreateDateUTC], [GiaTri], [GoiThauId], [IsActive], [IsDelete], [IsModify], [IsVisible], [ModifyBy], [NhomCongViecId], [Status], [ThangBaoCao], [ThangDuChi], [UpdateDate], [UpdateDateUTC])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15);
+SELECT [Id]
+FROM [NS_DuChi]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2021-02-22 10:06:22.809 +07:00 [WRN] Request: CreateNS_DuChiCommand (3467 milliseconds)  {"NhomCongViecId":0,"GoiThauId":0,"ThangBaoCao":"string","ThangDuChi":"string","GiaTri":0,"Id":0,"IsActive":true,"IsVisible":true,"Status":0,"$type":"CreateNS_DuChiCommand"}
+2021-02-22 10:06:22.816 +07:00 [INF] ----- Command CreateNS_DuChiCommand handled - response: {"Result":{"NhomCongViecId":0,"GoiThauId":0,"ThangBaoCao":"string","ThangDuChi":"string","GiaTri":0,"Id":2,"IsActive":true,"IsVisible":true,"Status":0,"$type":"CreateNS_DuChiCommandResponse"},"ErrorMessages":[],"IsOk":true,"$type":"MethodResult`1"}
+2021-02-22 10:06:22.834 +07:00 [INF] Executing ObjectResult, writing value of type 'Services.Common.DomainObjects.MethodResult`1[[ProjectManager.CMD.Api.Application.Commands.CreateNS_DuChiCommandResponse, ProjectManager.CMD.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2021-02-22 10:06:22.850 +07:00 [INF] Executed action ProjectManager.CMD.Api.Controllers.v1.NS_DuChiController.CreateNS_DuChiAsync (ProjectManager.CMD.Api) in 3562.6613ms
+2021-02-22 10:06:22.852 +07:00 [INF] Executed endpoint 'ProjectManager.CMD.Api.Controllers.v1.NS_DuChiController.CreateNS_DuChiAsync (ProjectManager.CMD.Api)'
+2021-02-22 10:06:22.857 +07:00 [INF] Request finished in 3641.1712ms 200 application/json; charset=utf-8
+2021-02-22 10:07:03.674 +07:00 [INF] Request starting HTTP/1.1 PUT http://localhost:50999/api/cmd/v1/NS_DuChi application/json 189
+2021-02-22 10:07:03.695 +07:00 [INF] CORS policy execution successful.
+2021-02-22 10:07:03.697 +07:00 [INF] Executing endpoint 'ProjectManager.CMD.Api.Controllers.v1.NS_DuChiController.UpdateNS_DuChiAsync (ProjectManager.CMD.Api)'
+2021-02-22 10:07:03.703 +07:00 [INF] Route matched with {action = "UpdateNS_DuChi", controller = "NS_DuChi"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] UpdateNS_DuChiAsync(ProjectManager.CMD.Api.Application.Commands.UpdateNS_DuChiCommand) on controller ProjectManager.CMD.Api.Controllers.v1.NS_DuChiController (ProjectManager.CMD.Api).
+2021-02-22 10:07:03.719 +07:00 [INF] Executing ObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ValidationProblemDetails'.
+2021-02-22 10:07:03.723 +07:00 [INF] Executed action ProjectManager.CMD.Api.Controllers.v1.NS_DuChiController.UpdateNS_DuChiAsync (ProjectManager.CMD.Api) in 14.3854ms
+2021-02-22 10:07:03.733 +07:00 [INF] Executed endpoint 'ProjectManager.CMD.Api.Controllers.v1.NS_DuChiController.UpdateNS_DuChiAsync (ProjectManager.CMD.Api)'
+2021-02-22 10:07:03.735 +07:00 [INF] Request finished in 60.6772ms 400 application/problem+json; charset=utf-8
+2021-02-22 10:07:13.034 +07:00 [INF] Request starting HTTP/1.1 PUT http://localhost:50999/api/cmd/v1/NS_DuChi application/json 124
+2021-02-22 10:07:13.037 +07:00 [INF] CORS policy execution successful.
+2021-02-22 10:07:13.040 +07:00 [INF] Executing endpoint 'ProjectManager.CMD.Api.Controllers.v1.NS_DuChiController.UpdateNS_DuChiAsync (ProjectManager.CMD.Api)'
+2021-02-22 10:07:13.042 +07:00 [INF] Route matched with {action = "UpdateNS_DuChi", controller = "NS_DuChi"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] UpdateNS_DuChiAsync(ProjectManager.CMD.Api.Application.Commands.UpdateNS_DuChiCommand) on controller ProjectManager.CMD.Api.Controllers.v1.NS_DuChiController (ProjectManager.CMD.Api).
+2021-02-22 10:07:13.047 +07:00 [INF] Executing ObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ValidationProblemDetails'.
+2021-02-22 10:07:13.048 +07:00 [INF] Executed action ProjectManager.CMD.Api.Controllers.v1.NS_DuChiController.UpdateNS_DuChiAsync (ProjectManager.CMD.Api) in 2.4856ms
+2021-02-22 10:07:13.049 +07:00 [INF] Executed endpoint 'ProjectManager.CMD.Api.Controllers.v1.NS_DuChiController.UpdateNS_DuChiAsync (ProjectManager.CMD.Api)'
+2021-02-22 10:07:13.050 +07:00 [INF] Request finished in 16.5859ms 400 application/problem+json; charset=utf-8
+2021-02-22 10:07:22.171 +07:00 [INF] Request starting HTTP/1.1 PUT http://localhost:50999/api/cmd/v1/NS_DuChi application/json 125
+2021-02-22 10:07:22.173 +07:00 [INF] CORS policy execution successful.
+2021-02-22 10:07:22.175 +07:00 [INF] Executing endpoint 'ProjectManager.CMD.Api.Controllers.v1.NS_DuChiController.UpdateNS_DuChiAsync (ProjectManager.CMD.Api)'
+2021-02-22 10:07:22.178 +07:00 [INF] Route matched with {action = "UpdateNS_DuChi", controller = "NS_DuChi"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] UpdateNS_DuChiAsync(ProjectManager.CMD.Api.Application.Commands.UpdateNS_DuChiCommand) on controller ProjectManager.CMD.Api.Controllers.v1.NS_DuChiController (ProjectManager.CMD.Api).
+2021-02-22 10:07:22.185 +07:00 [INF] Executing ObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ValidationProblemDetails'.
+2021-02-22 10:07:22.187 +07:00 [INF] Executed action ProjectManager.CMD.Api.Controllers.v1.NS_DuChiController.UpdateNS_DuChiAsync (ProjectManager.CMD.Api) in 4.0902ms
+2021-02-22 10:07:22.188 +07:00 [INF] Executed endpoint 'ProjectManager.CMD.Api.Controllers.v1.NS_DuChiController.UpdateNS_DuChiAsync (ProjectManager.CMD.Api)'
+2021-02-22 10:07:22.190 +07:00 [INF] Request finished in 19.3214ms 400 application/problem+json; charset=utf-8
+2021-02-22 10:07:35.087 +07:00 [INF] Request starting HTTP/1.1 PUT http://localhost:50999/api/cmd/v1/NS_DuChi application/json 123
+2021-02-22 10:07:35.089 +07:00 [INF] CORS policy execution successful.
+2021-02-22 10:07:35.090 +07:00 [INF] Executing endpoint 'ProjectManager.CMD.Api.Controllers.v1.NS_DuChiController.UpdateNS_DuChiAsync (ProjectManager.CMD.Api)'
+2021-02-22 10:07:35.093 +07:00 [INF] Route matched with {action = "UpdateNS_DuChi", controller = "NS_DuChi"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] UpdateNS_DuChiAsync(ProjectManager.CMD.Api.Application.Commands.UpdateNS_DuChiCommand) on controller ProjectManager.CMD.Api.Controllers.v1.NS_DuChiController (ProjectManager.CMD.Api).
+2021-02-22 10:07:35.100 +07:00 [INF] Executing ObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ValidationProblemDetails'.
+2021-02-22 10:07:35.102 +07:00 [INF] Executed action ProjectManager.CMD.Api.Controllers.v1.NS_DuChiController.UpdateNS_DuChiAsync (ProjectManager.CMD.Api) in 4.3687ms
+2021-02-22 10:07:35.103 +07:00 [INF] Executed endpoint 'ProjectManager.CMD.Api.Controllers.v1.NS_DuChiController.UpdateNS_DuChiAsync (ProjectManager.CMD.Api)'
+2021-02-22 10:07:35.105 +07:00 [INF] Request finished in 17.7298ms 400 application/problem+json; charset=utf-8
+2021-02-22 10:07:43.965 +07:00 [INF] Request starting HTTP/1.1 PUT http://localhost:50999/api/cmd/v1/NS_DuChi application/json 125
+2021-02-22 10:07:43.966 +07:00 [INF] CORS policy execution successful.
+2021-02-22 10:07:43.968 +07:00 [INF] Executing endpoint 'ProjectManager.CMD.Api.Controllers.v1.NS_DuChiController.UpdateNS_DuChiAsync (ProjectManager.CMD.Api)'
+2021-02-22 10:07:43.970 +07:00 [INF] Route matched with {action = "UpdateNS_DuChi", controller = "NS_DuChi"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] UpdateNS_DuChiAsync(ProjectManager.CMD.Api.Application.Commands.UpdateNS_DuChiCommand) on controller ProjectManager.CMD.Api.Controllers.v1.NS_DuChiController (ProjectManager.CMD.Api).
+2021-02-22 10:07:43.975 +07:00 [INF] Executing ObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ValidationProblemDetails'.
+2021-02-22 10:07:43.977 +07:00 [INF] Executed action ProjectManager.CMD.Api.Controllers.v1.NS_DuChiController.UpdateNS_DuChiAsync (ProjectManager.CMD.Api) in 3.6064ms
+2021-02-22 10:07:43.979 +07:00 [INF] Executed endpoint 'ProjectManager.CMD.Api.Controllers.v1.NS_DuChiController.UpdateNS_DuChiAsync (ProjectManager.CMD.Api)'
+2021-02-22 10:07:43.980 +07:00 [INF] Request finished in 15.4948ms 400 application/problem+json; charset=utf-8
+2021-02-22 10:08:01.143 +07:00 [INF] Request starting HTTP/1.1 PUT http://localhost:50999/api/cmd/v1/NS_DuChi application/json 101
+2021-02-22 10:08:01.145 +07:00 [INF] CORS policy execution successful.
+2021-02-22 10:08:01.146 +07:00 [INF] Executing endpoint 'ProjectManager.CMD.Api.Controllers.v1.NS_DuChiController.UpdateNS_DuChiAsync (ProjectManager.CMD.Api)'
+2021-02-22 10:08:01.147 +07:00 [INF] Route matched with {action = "UpdateNS_DuChi", controller = "NS_DuChi"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] UpdateNS_DuChiAsync(ProjectManager.CMD.Api.Application.Commands.UpdateNS_DuChiCommand) on controller ProjectManager.CMD.Api.Controllers.v1.NS_DuChiController (ProjectManager.CMD.Api).
+2021-02-22 10:08:01.167 +07:00 [INF] ----- Handling command UpdateNS_DuChiCommand ({"NhomCongViecId":20,"GoiThauId":30,"ThangBaoCao":"string","ThangDuChi":"string","GiaTri":430,"Id":2,"IsActive":null,"IsVisible":null,"Status":null,"$type":"UpdateNS_DuChiCommand"})
+2021-02-22 10:08:01.201 +07:00 [INF] Entity Framework Core 3.1.8 initialized 'QuanLyDuAnContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2021-02-22 10:08:03.407 +07:00 [INF] Executed DbCommand (8ms) [Parameters=[@__request_Id_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(2) [n].[Id], [n].[CreateBy], [n].[CreateDate], [n].[CreateDateUTC], [n].[GiaTri], [n].[GoiThauId], [n].[IsActive], [n].[IsDelete], [n].[IsModify], [n].[IsVisible], [n].[ModifyBy], [n].[NhomCongViecId], [n].[Status], [n].[ThangBaoCao], [n].[ThangDuChi], [n].[UpdateDate], [n].[UpdateDateUTC]
+FROM [NS_DuChi] AS [n]
+WHERE ([n].[Id] = @__request_Id_0) AND ([n].[IsDelete] = CAST(0 AS bit))
+2021-02-22 10:08:03.440 +07:00 [INF] Executed DbCommand (7ms) [Parameters=[@p16='?' (DbType = Int32), @p0='?' (DbType = Int32), @p1='?' (DbType = DateTime2), @p2='?' (DbType = DateTime2), @p3='?' (DbType = Decimal), @p4='?' (DbType = Int32), @p5='?' (DbType = Boolean), @p6='?' (DbType = Boolean), @p7='?' (DbType = Boolean), @p8='?' (DbType = Boolean), @p9='?' (DbType = Int32), @p10='?' (DbType = Int32), @p11='?' (Size = 1) (DbType = Byte), @p12='?' (Size = 100), @p13='?' (Size = 100), @p14='?' (DbType = DateTime2), @p15='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SET NOCOUNT ON;
+UPDATE [NS_DuChi] SET [CreateBy] = @p0, [CreateDate] = @p1, [CreateDateUTC] = @p2, [GiaTri] = @p3, [GoiThauId] = @p4, [IsActive] = @p5, [IsDelete] = @p6, [IsModify] = @p7, [IsVisible] = @p8, [ModifyBy] = @p9, [NhomCongViecId] = @p10, [Status] = @p11, [ThangBaoCao] = @p12, [ThangDuChi] = @p13, [UpdateDate] = @p14, [UpdateDateUTC] = @p15
+WHERE [Id] = @p16;
+SELECT @@ROWCOUNT;
+2021-02-22 10:08:03.453 +07:00 [WRN] Request: UpdateNS_DuChiCommand (2275 milliseconds)  {"NhomCongViecId":20,"GoiThauId":30,"ThangBaoCao":"string","ThangDuChi":"string","GiaTri":430,"Id":2,"IsActive":null,"IsVisible":null,"Status":null,"$type":"UpdateNS_DuChiCommand"}
+2021-02-22 10:08:03.459 +07:00 [INF] ----- Command UpdateNS_DuChiCommand handled - response: {"Result":{"NhomCongViecId":20,"GoiThauId":30,"ThangBaoCao":"string","ThangDuChi":"string","GiaTri":430,"Id":2,"IsActive":true,"IsVisible":true,"Status":0,"$type":"UpdateNS_DuChiCommandResponse"},"ErrorMessages":[],"IsOk":true,"$type":"MethodResult`1"}
+2021-02-22 10:08:03.466 +07:00 [INF] Executing ObjectResult, writing value of type 'Services.Common.DomainObjects.MethodResult`1[[ProjectManager.CMD.Api.Application.Commands.UpdateNS_DuChiCommandResponse, ProjectManager.CMD.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2021-02-22 10:08:03.470 +07:00 [INF] Executed action ProjectManager.CMD.Api.Controllers.v1.NS_DuChiController.UpdateNS_DuChiAsync (ProjectManager.CMD.Api) in 2311.1651ms
+2021-02-22 10:08:03.471 +07:00 [INF] Executed endpoint 'ProjectManager.CMD.Api.Controllers.v1.NS_DuChiController.UpdateNS_DuChiAsync (ProjectManager.CMD.Api)'
+2021-02-22 10:08:03.473 +07:00 [INF] Request finished in 2329.8107ms 200 application/json; charset=utf-8
+2021-02-22 10:08:23.116 +07:00 [INF] Request starting HTTP/1.1 DELETE http://localhost:50999/api/cmd/v1/NS_DuChi application/json 11
+2021-02-22 10:08:23.117 +07:00 [INF] CORS policy execution successful.
+2021-02-22 10:08:23.120 +07:00 [INF] Executing endpoint 'ProjectManager.CMD.Api.Controllers.v1.NS_DuChiController.DeleteNS_DuChiAsync (ProjectManager.CMD.Api)'
+2021-02-22 10:08:23.127 +07:00 [INF] Route matched with {action = "DeleteNS_DuChi", controller = "NS_DuChi"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] DeleteNS_DuChiAsync(ProjectManager.CMD.Api.Application.Commands.DeleteNS_DuChiCommand) on controller ProjectManager.CMD.Api.Controllers.v1.NS_DuChiController (ProjectManager.CMD.Api).
+2021-02-22 10:08:23.138 +07:00 [INF] ----- Handling command DeleteNS_DuChiCommand ({"Ids":[2],"$type":"DeleteNS_DuChiCommand"})
+2021-02-22 10:08:23.146 +07:00 [INF] Entity Framework Core 3.1.8 initialized 'QuanLyDuAnContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2021-02-22 10:08:24.495 +07:00 [INF] Executed DbCommand (16ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [n].[Id], [n].[CreateBy], [n].[CreateDate], [n].[CreateDateUTC], [n].[GiaTri], [n].[GoiThauId], [n].[IsActive], [n].[IsDelete], [n].[IsModify], [n].[IsVisible], [n].[ModifyBy], [n].[NhomCongViecId], [n].[Status], [n].[ThangBaoCao], [n].[ThangDuChi], [n].[UpdateDate], [n].[UpdateDateUTC]
+FROM [NS_DuChi] AS [n]
+WHERE [n].[Id] IN (2) AND ([n].[IsDelete] = CAST(0 AS bit))
+2021-02-22 10:08:24.515 +07:00 [INF] Executed DbCommand (10ms) [Parameters=[@p16='?' (DbType = Int32), @p0='?' (DbType = Int32), @p1='?' (DbType = DateTime2), @p2='?' (DbType = DateTime2), @p3='?' (DbType = Decimal), @p4='?' (DbType = Int32), @p5='?' (DbType = Boolean), @p6='?' (DbType = Boolean), @p7='?' (DbType = Boolean), @p8='?' (DbType = Boolean), @p9='?' (DbType = Int32), @p10='?' (DbType = Int32), @p11='?' (Size = 1) (DbType = Byte), @p12='?' (Size = 100), @p13='?' (Size = 100), @p14='?' (DbType = DateTime2), @p15='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SET NOCOUNT ON;
+UPDATE [NS_DuChi] SET [CreateBy] = @p0, [CreateDate] = @p1, [CreateDateUTC] = @p2, [GiaTri] = @p3, [GoiThauId] = @p4, [IsActive] = @p5, [IsDelete] = @p6, [IsModify] = @p7, [IsVisible] = @p8, [ModifyBy] = @p9, [NhomCongViecId] = @p10, [Status] = @p11, [ThangBaoCao] = @p12, [ThangDuChi] = @p13, [UpdateDate] = @p14, [UpdateDateUTC] = @p15
+WHERE [Id] = @p16;
+SELECT @@ROWCOUNT;
+2021-02-22 10:08:24.538 +07:00 [WRN] Request: DeleteNS_DuChiCommand (1396 milliseconds)  {"Ids":[2],"$type":"DeleteNS_DuChiCommand"}
+2021-02-22 10:08:24.541 +07:00 [INF] ----- Command DeleteNS_DuChiCommand handled - response: {"Result":{"_NS_DuChi":[{"NhomCongViecId":20,"GoiThauId":30,"ThangBaoCao":"string","ThangDuChi":"string","GiaTri":430.000,"Id":2,"IsActive":true,"IsVisible":true,"Status":0,"$type":"NS_DuChiCommandResponseDTO"}],"$type":"DeleteNS_DuChiCommandResponse"},"ErrorMessages":[],"IsOk":true,"$type":"MethodResult`1"}
+2021-02-22 10:08:24.549 +07:00 [INF] Executing ObjectResult, writing value of type 'Services.Common.DomainObjects.MethodResult`1[[ProjectManager.CMD.Api.Application.Commands.DeleteNS_DuChiCommandResponse, ProjectManager.CMD.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2021-02-22 10:08:24.553 +07:00 [INF] Executed action ProjectManager.CMD.Api.Controllers.v1.NS_DuChiController.DeleteNS_DuChiAsync (ProjectManager.CMD.Api) in 1421.6745ms
+2021-02-22 10:08:24.554 +07:00 [INF] Executed endpoint 'ProjectManager.CMD.Api.Controllers.v1.NS_DuChiController.DeleteNS_DuChiAsync (ProjectManager.CMD.Api)'
+2021-02-22 10:08:24.556 +07:00 [INF] Request finished in 1440.0257ms 200 application/json; charset=utf-8
+2021-02-22 10:09:06.707 +07:00 [INF] Request starting HTTP/1.1 POST http://localhost:50999/api/cmd/v1/NS_ThucChi application/json 95
+2021-02-22 10:09:06.708 +07:00 [INF] CORS policy execution successful.
+2021-02-22 10:09:06.710 +07:00 [INF] Executing endpoint 'ProjectManager.CMD.Api.Controllers.v1.NS_ThucChiController.CreateNS_ThucChiAsync (ProjectManager.CMD.Api)'
+2021-02-22 10:09:06.715 +07:00 [INF] Route matched with {action = "CreateNS_ThucChi", controller = "NS_ThucChi"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] CreateNS_ThucChiAsync(ProjectManager.CMD.Api.Application.Commands.CreateNS_ThucChiCommand) on controller ProjectManager.CMD.Api.Controllers.v1.NS_ThucChiController (ProjectManager.CMD.Api).
+2021-02-22 10:09:06.730 +07:00 [INF] ----- Handling command CreateNS_ThucChiCommand ({"NhomCongViecId":20,"GoiThauId":30,"ThangBaoCao":"string3","ThangThucChi":"string","GiaTri":0,"Id":null,"IsActive":null,"IsVisible":null,"Status":null,"$type":"CreateNS_ThucChiCommand"})
+2021-02-22 10:09:06.742 +07:00 [INF] Entity Framework Core 3.1.8 initialized 'QuanLyDuAnContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2021-02-22 10:09:07.988 +07:00 [ERR] Failed executing DbCommand (32ms) [Parameters=[@p0='?' (DbType = Int32), @p1='?' (DbType = DateTime2), @p2='?' (DbType = DateTime2), @p3='?' (DbType = Decimal), @p4='?' (DbType = Int32), @p5='?' (DbType = Boolean), @p6='?' (DbType = Boolean), @p7='?', @p8='?' (DbType = Boolean), @p9='?' (DbType = Int32), @p10='?' (DbType = Int32), @p11='?' (DbType = Byte), @p12='?' (Size = 100), @p13='?' (Size = 100), @p14='?' (DbType = DateTime2), @p15='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [NS_ThucChi] ([CreateBy], [CreateDate], [CreateDateUTC], [GiaTri], [GoiThauId], [IsActive], [IsDelete], [IsModify], [IsVisible], [ModifyBy], [NhomCongViecId], [Status], [ThangBaoCao], [ThangDuChi], [UpdateDate], [UpdateDateUTC])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15);
+SELECT [Id]
+FROM [NS_ThucChi]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2021-02-22 10:09:08.102 +07:00 [ERR] An exception occurred in the database while saving changes for context type 'ProjectManager.CMD.Infrastructure.QuanLyDuAnContext'.
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while updating the entries. See the inner exception for details.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'ThangDuChi'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__169_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.Tasks.Task.<>c.<.cctor>b__274_0(Object obj)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+ClientConnectionId:345c46be-39a6-4836-9cef-505c6310c3ad
+Error Number:207,State:1,Class:16
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(DbContext _, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while updating the entries. See the inner exception for details.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'ThangDuChi'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__169_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.Tasks.Task.<>c.<.cctor>b__274_0(Object obj)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+ClientConnectionId:345c46be-39a6-4836-9cef-505c6310c3ad
+Error Number:207,State:1,Class:16
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(DbContext _, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+2021-02-22 10:09:08.375 +07:00 [INF] Executed action ProjectManager.CMD.Api.Controllers.v1.NS_ThucChiController.CreateNS_ThucChiAsync (ProjectManager.CMD.Api) in 1654.6901ms
+2021-02-22 10:09:08.377 +07:00 [INF] Executed endpoint 'ProjectManager.CMD.Api.Controllers.v1.NS_ThucChiController.CreateNS_ThucChiAsync (ProjectManager.CMD.Api)'
+2021-02-22 10:09:08.579 +07:00 [ERR] An error occurred while updating the entries. See the inner exception for details.
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while updating the entries. See the inner exception for details.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'ThangDuChi'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__169_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.Tasks.Task.<>c.<.cctor>b__274_0(Object obj)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+ClientConnectionId:345c46be-39a6-4836-9cef-505c6310c3ad
+Error Number:207,State:1,Class:16
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(DbContext _, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Services.Common.APIs.Cmd.EF.BaseDbContext.SaveChangesAndDispatchEventsAsync(CancellationToken cancellationToken) in D:\Github\SystemCore\CoreService\01.Services.Common\Services.Common.APIs.Cmd.EF\BaseDbContext.cs:line 47
+   at ProjectManager.CMD.Api.Application.Commands.CreateNS_ThucChiCommandHandler.Handle(CreateNS_ThucChiCommand request, CancellationToken cancellationToken) in D:\Github\SystemCore\AppService\TayHo.ProjectManager\PrjectManager.CMD\ProjectManager.CMD.Api\Application\Commands\NS_ThucChiCmd\CreateNS_ThucChiCommandHandler.cs:line 37
+   at ProjectManager.CMD.Api.Application.Behaviors.RequestPerformanceBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in D:\Github\SystemCore\AppService\TayHo.ProjectManager\PrjectManager.CMD\ProjectManager.CMD.Api\Application\Behaviors\RequestPerformanceBehaviour.cs:line 23
+   at ProjectManager.CMD.Api.Application.Behaviors.LoggingBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in D:\Github\SystemCore\AppService\TayHo.ProjectManager\PrjectManager.CMD\ProjectManager.CMD.Api\Application\Behaviors\LoggingBehaviour.cs:line 21
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPostProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPreProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at ProjectManager.CMD.Api.Controllers.v1.NS_ThucChiController.CreateNS_ThucChiAsync(CreateNS_ThucChiCommand command) in D:\Github\SystemCore\AppService\TayHo.ProjectManager\PrjectManager.CMD\ProjectManager.CMD.Api\Controllers\v1\NS_ThucChiController.cs:line 29
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Services.Common.APIs.Infrastructure.CustomJwtMiddleware.Invoke(HttpContext context) in D:\Github\SystemCore\CoreService\01.Services.Common\Services.Common.APIs\Infrastructure\Middlewares\CustomJwtMiddleware.cs:line 27
+   at Microsoft.AspNetCore.Localization.RequestLocalizationMiddleware.Invoke(HttpContext context)
+   at Services.Common.APIs.Infrastructure.CustomExceptionHandler.InvokeAsync(HttpContext httpContext) in D:\Github\SystemCore\CoreService\01.Services.Common\Services.Common.APIs\Infrastructure\Middlewares\CustomExceptionHandlerMiddleware.cs:line 36
+2021-02-22 10:09:08.673 +07:00 [ERR] An error occurred while updating the entries. See the inner exception for details.
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while updating the entries. See the inner exception for details.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'ThangDuChi'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__169_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.Tasks.Task.<>c.<.cctor>b__274_0(Object obj)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+ClientConnectionId:345c46be-39a6-4836-9cef-505c6310c3ad
+Error Number:207,State:1,Class:16
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(DbContext _, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Services.Common.APIs.Cmd.EF.BaseDbContext.SaveChangesAndDispatchEventsAsync(CancellationToken cancellationToken) in D:\Github\SystemCore\CoreService\01.Services.Common\Services.Common.APIs.Cmd.EF\BaseDbContext.cs:line 47
+   at ProjectManager.CMD.Api.Application.Commands.CreateNS_ThucChiCommandHandler.Handle(CreateNS_ThucChiCommand request, CancellationToken cancellationToken) in D:\Github\SystemCore\AppService\TayHo.ProjectManager\PrjectManager.CMD\ProjectManager.CMD.Api\Application\Commands\NS_ThucChiCmd\CreateNS_ThucChiCommandHandler.cs:line 37
+   at ProjectManager.CMD.Api.Application.Behaviors.RequestPerformanceBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in D:\Github\SystemCore\AppService\TayHo.ProjectManager\PrjectManager.CMD\ProjectManager.CMD.Api\Application\Behaviors\RequestPerformanceBehaviour.cs:line 23
+   at ProjectManager.CMD.Api.Application.Behaviors.LoggingBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in D:\Github\SystemCore\AppService\TayHo.ProjectManager\PrjectManager.CMD\ProjectManager.CMD.Api\Application\Behaviors\LoggingBehaviour.cs:line 21
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPostProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPreProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at ProjectManager.CMD.Api.Controllers.v1.NS_ThucChiController.CreateNS_ThucChiAsync(CreateNS_ThucChiCommand command) in D:\Github\SystemCore\AppService\TayHo.ProjectManager\PrjectManager.CMD\ProjectManager.CMD.Api\Controllers\v1\NS_ThucChiController.cs:line 29
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Services.Common.APIs.Infrastructure.CustomJwtMiddleware.Invoke(HttpContext context) in D:\Github\SystemCore\CoreService\01.Services.Common\Services.Common.APIs\Infrastructure\Middlewares\CustomJwtMiddleware.cs:line 27
+   at Microsoft.AspNetCore.Localization.RequestLocalizationMiddleware.Invoke(HttpContext context)
+   at Services.Common.APIs.Infrastructure.CustomExceptionHandler.InvokeAsync(HttpContext httpContext) in D:\Github\SystemCore\CoreService\01.Services.Common\Services.Common.APIs\Infrastructure\Middlewares\CustomExceptionHandlerMiddleware.cs:line 36
+2021-02-22 10:09:08.701 +07:00 [INF] Request finished in 1994.3966ms 500 application/json
+2021-02-22 10:13:32.161 +07:00 [INF] Application Starting.
+2021-02-22 10:13:33.455 +07:00 [INF] User profile is available. Using 'C:\Users\USER\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2021-02-22 10:13:33.747 +07:00 [INF] Now listening on: http://localhost:50999
+2021-02-22 10:13:33.749 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2021-02-22 10:13:33.749 +07:00 [INF] Hosting environment: Development
+2021-02-22 10:13:33.750 +07:00 [INF] Content root path: D:\Github\SystemCore\AppService\TayHo.ProjectManager\PrjectManager.CMD\ProjectManager.CMD.Api
+2021-02-22 10:13:34.220 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:50999/swagger/index.html  
+2021-02-22 10:13:34.372 +07:00 [INF] Request finished in 154.1974ms 200 text/html;charset=utf-8
+2021-02-22 10:13:34.709 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:50999/swagger/v1/swagger.json  
+2021-02-22 10:13:35.485 +07:00 [INF] Request finished in 775.6673ms 200 application/json;charset=utf-8
+2021-02-22 10:13:53.082 +07:00 [INF] Request starting HTTP/1.1 POST http://localhost:50999/api/cmd/v1/NS_ThucChi application/json 96
+2021-02-22 10:13:53.094 +07:00 [INF] CORS policy execution successful.
+2021-02-22 10:13:53.112 +07:00 [INF] Executing endpoint 'ProjectManager.CMD.Api.Controllers.v1.NS_ThucChiController.CreateNS_ThucChiAsync (ProjectManager.CMD.Api)'
+2021-02-22 10:13:53.146 +07:00 [INF] Route matched with {action = "CreateNS_ThucChi", controller = "NS_ThucChi"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] CreateNS_ThucChiAsync(ProjectManager.CMD.Api.Application.Commands.CreateNS_ThucChiCommand) on controller ProjectManager.CMD.Api.Controllers.v1.NS_ThucChiController (ProjectManager.CMD.Api).
+2021-02-22 10:13:53.193 +07:00 [INF] ----- Handling command CreateNS_ThucChiCommand ({"NhomCongViecId":20,"GoiThauId":30,"ThangBaoCao":"string","ThangThucChi":"string","GiaTri":230,"Id":null,"IsActive":null,"IsVisible":null,"Status":null,"$type":"CreateNS_ThucChiCommand"})
+2021-02-22 10:13:54.235 +07:00 [WRN] No type was specified for the decimal column 'DonGia' on entity type 'NS_CongViecDetail'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2021-02-22 10:13:54.239 +07:00 [WRN] No type was specified for the decimal column 'GiaTri' on entity type 'NS_DuChi'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2021-02-22 10:13:54.241 +07:00 [WRN] No type was specified for the decimal column 'GiaTri' on entity type 'NS_GoiThau'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2021-02-22 10:13:54.242 +07:00 [WRN] No type was specified for the decimal column 'GiaTri' on entity type 'NS_HangMucDetail'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2021-02-22 10:13:54.245 +07:00 [WRN] No type was specified for the decimal column 'GiaTri' on entity type 'NS_KhauTru'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2021-02-22 10:13:54.247 +07:00 [WRN] No type was specified for the decimal column 'GiaTriCon' on entity type 'NS_KhauTru'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2021-02-22 10:13:54.249 +07:00 [WRN] No type was specified for the decimal column 'GiaTri' on entity type 'NS_KhauTru_TheoDoi'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2021-02-22 10:13:54.251 +07:00 [WRN] No type was specified for the decimal column 'GiaTri' on entity type 'NS_NhomCongViecDetail'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2021-02-22 10:13:54.257 +07:00 [WRN] No type was specified for the decimal column 'GiaTri' on entity type 'NS_Phat'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2021-02-22 10:13:54.258 +07:00 [WRN] No type was specified for the decimal column 'GiaTriCon' on entity type 'NS_Phat'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2021-02-22 10:13:54.260 +07:00 [WRN] No type was specified for the decimal column 'GiaTri' on entity type 'NS_Phat_TheoDoi'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2021-02-22 10:13:54.261 +07:00 [WRN] No type was specified for the decimal column 'GiaTri' on entity type 'NS_TamUng'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2021-02-22 10:13:54.262 +07:00 [WRN] No type was specified for the decimal column 'GiaTriCon' on entity type 'NS_TamUng'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2021-02-22 10:13:54.263 +07:00 [WRN] No type was specified for the decimal column 'GiaTri' on entity type 'NS_TamUng_TheoDoi'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2021-02-22 10:13:54.266 +07:00 [WRN] No type was specified for the decimal column 'GiaTri' on entity type 'NS_ThucChi'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2021-02-22 10:13:54.302 +07:00 [INF] Entity Framework Core 3.1.8 initialized 'QuanLyDuAnContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2021-02-22 10:14:00.046 +07:00 [INF] Executed DbCommand (63ms) [Parameters=[@p0='?' (DbType = Int32), @p1='?' (DbType = DateTime2), @p2='?' (DbType = DateTime2), @p3='?' (DbType = Decimal), @p4='?' (DbType = Int32), @p5='?' (DbType = Boolean), @p6='?' (DbType = Boolean), @p7='?', @p8='?' (DbType = Boolean), @p9='?' (DbType = Int32), @p10='?' (DbType = Int32), @p11='?' (DbType = Byte), @p12='?' (Size = 100), @p13='?' (Size = 100), @p14='?' (DbType = DateTime2), @p15='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SET NOCOUNT ON;
+INSERT INTO [NS_ThucChi] ([CreateBy], [CreateDate], [CreateDateUTC], [GiaTri], [GoiThauId], [IsActive], [IsDelete], [IsModify], [IsVisible], [ModifyBy], [NhomCongViecId], [Status], [ThangBaoCao], [ThangThucChi], [UpdateDate], [UpdateDateUTC])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15);
+SELECT [Id]
+FROM [NS_ThucChi]
+WHERE @@ROWCOUNT = 1 AND [Id] = scope_identity();
+2021-02-22 10:14:00.119 +07:00 [WRN] Request: CreateNS_ThucChiCommand (6916 milliseconds)  {"NhomCongViecId":20,"GoiThauId":30,"ThangBaoCao":"string","ThangThucChi":"string","GiaTri":230,"Id":null,"IsActive":null,"IsVisible":null,"Status":null,"$type":"CreateNS_ThucChiCommand"}
+2021-02-22 10:14:00.126 +07:00 [INF] ----- Command CreateNS_ThucChiCommand handled - response: {"Result":{"NhomCongViecId":20,"GoiThauId":30,"ThangBaoCao":"string","ThangThucChi":"string","GiaTri":230,"Id":1,"IsActive":true,"IsVisible":true,"Status":null,"$type":"CreateNS_ThucChiCommandResponse"},"ErrorMessages":[],"IsOk":true,"$type":"MethodResult`1"}
+2021-02-22 10:14:00.142 +07:00 [INF] Executing ObjectResult, writing value of type 'Services.Common.DomainObjects.MethodResult`1[[ProjectManager.CMD.Api.Application.Commands.CreateNS_ThucChiCommandResponse, ProjectManager.CMD.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2021-02-22 10:14:00.157 +07:00 [INF] Executed action ProjectManager.CMD.Api.Controllers.v1.NS_ThucChiController.CreateNS_ThucChiAsync (ProjectManager.CMD.Api) in 7004.8165ms
+2021-02-22 10:14:00.159 +07:00 [INF] Executed endpoint 'ProjectManager.CMD.Api.Controllers.v1.NS_ThucChiController.CreateNS_ThucChiAsync (ProjectManager.CMD.Api)'
+2021-02-22 10:14:00.164 +07:00 [INF] Request finished in 7081.8569ms 200 application/json; charset=utf-8
+2021-02-22 10:14:36.356 +07:00 [INF] Request starting HTTP/1.1 PUT http://localhost:50999/api/cmd/v1/NS_ThucChi application/json 105
+2021-02-22 10:14:36.367 +07:00 [INF] CORS policy execution successful.
+2021-02-22 10:14:36.368 +07:00 [INF] Executing endpoint 'ProjectManager.CMD.Api.Controllers.v1.NS_ThucChiController.UpdateNS_ThucChiAsync (ProjectManager.CMD.Api)'
+2021-02-22 10:14:36.373 +07:00 [INF] Route matched with {action = "UpdateNS_ThucChi", controller = "NS_ThucChi"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] UpdateNS_ThucChiAsync(ProjectManager.CMD.Api.Application.Commands.UpdateNS_ThucChiCommand) on controller ProjectManager.CMD.Api.Controllers.v1.NS_ThucChiController (ProjectManager.CMD.Api).
+2021-02-22 10:14:36.384 +07:00 [INF] ----- Handling command UpdateNS_ThucChiCommand ({"NhomCongViecId":0,"GoiThauId":0,"ThangBaoCao":"string","ThangThucChi":"string","GiaTri":3432340,"Id":1,"IsActive":null,"IsVisible":null,"Status":null,"$type":"UpdateNS_ThucChiCommand"})
+2021-02-22 10:14:36.412 +07:00 [INF] Entity Framework Core 3.1.8 initialized 'QuanLyDuAnContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2021-02-22 10:14:37.475 +07:00 [INF] Executed DbCommand (9ms) [Parameters=[@__request_Id_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(2) [n].[Id], [n].[CreateBy], [n].[CreateDate], [n].[CreateDateUTC], [n].[GiaTri], [n].[GoiThauId], [n].[IsActive], [n].[IsDelete], [n].[IsModify], [n].[IsVisible], [n].[ModifyBy], [n].[NhomCongViecId], [n].[Status], [n].[ThangBaoCao], [n].[ThangThucChi], [n].[UpdateDate], [n].[UpdateDateUTC]
+FROM [NS_ThucChi] AS [n]
+WHERE ([n].[Id] = @__request_Id_0) AND ([n].[IsDelete] = CAST(0 AS bit))
+2021-02-22 10:14:37.512 +07:00 [INF] Executed DbCommand (10ms) [Parameters=[@p16='?' (DbType = Int32), @p0='?' (DbType = Int32), @p1='?' (DbType = DateTime2), @p2='?' (DbType = DateTime2), @p3='?' (DbType = Decimal), @p4='?' (DbType = Int32), @p5='?' (DbType = Boolean), @p6='?' (DbType = Boolean), @p7='?' (DbType = Boolean), @p8='?' (DbType = Boolean), @p9='?' (DbType = Int32), @p10='?' (DbType = Int32), @p11='?' (DbType = Byte), @p12='?' (Size = 100), @p13='?' (Size = 100), @p14='?' (DbType = DateTime2), @p15='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SET NOCOUNT ON;
+UPDATE [NS_ThucChi] SET [CreateBy] = @p0, [CreateDate] = @p1, [CreateDateUTC] = @p2, [GiaTri] = @p3, [GoiThauId] = @p4, [IsActive] = @p5, [IsDelete] = @p6, [IsModify] = @p7, [IsVisible] = @p8, [ModifyBy] = @p9, [NhomCongViecId] = @p10, [Status] = @p11, [ThangBaoCao] = @p12, [ThangThucChi] = @p13, [UpdateDate] = @p14, [UpdateDateUTC] = @p15
+WHERE [Id] = @p16;
+SELECT @@ROWCOUNT;
+2021-02-22 10:14:37.525 +07:00 [WRN] Request: UpdateNS_ThucChiCommand (1134 milliseconds)  {"NhomCongViecId":0,"GoiThauId":0,"ThangBaoCao":"string","ThangThucChi":"string","GiaTri":3432340,"Id":1,"IsActive":null,"IsVisible":null,"Status":null,"$type":"UpdateNS_ThucChiCommand"}
+2021-02-22 10:14:37.532 +07:00 [INF] ----- Command UpdateNS_ThucChiCommand handled - response: {"Result":{"NhomCongViecId":0,"GoiThauId":0,"ThangBaoCao":"string","ThangThucChi":"string","GiaTri":3432340,"Id":1,"IsActive":true,"IsVisible":true,"Status":null,"$type":"UpdateNS_ThucChiCommandResponse"},"ErrorMessages":[],"IsOk":true,"$type":"MethodResult`1"}
+2021-02-22 10:14:37.540 +07:00 [INF] Executing ObjectResult, writing value of type 'Services.Common.DomainObjects.MethodResult`1[[ProjectManager.CMD.Api.Application.Commands.UpdateNS_ThucChiCommandResponse, ProjectManager.CMD.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2021-02-22 10:14:37.545 +07:00 [INF] Executed action ProjectManager.CMD.Api.Controllers.v1.NS_ThucChiController.UpdateNS_ThucChiAsync (ProjectManager.CMD.Api) in 1168.5688ms
+2021-02-22 10:14:37.547 +07:00 [INF] Executed endpoint 'ProjectManager.CMD.Api.Controllers.v1.NS_ThucChiController.UpdateNS_ThucChiAsync (ProjectManager.CMD.Api)'
+2021-02-22 10:14:37.548 +07:00 [INF] Request finished in 1192.1683ms 200 application/json; charset=utf-8
+2021-02-22 10:14:50.018 +07:00 [INF] Request starting HTTP/1.1 DELETE http://localhost:50999/api/cmd/v1/NS_ThucChi application/json 11
+2021-02-22 10:14:50.020 +07:00 [INF] CORS policy execution successful.
+2021-02-22 10:14:50.023 +07:00 [INF] Executing endpoint 'ProjectManager.CMD.Api.Controllers.v1.NS_ThucChiController.DeleteNS_ThucChiAsync (ProjectManager.CMD.Api)'
+2021-02-22 10:14:50.030 +07:00 [INF] Route matched with {action = "DeleteNS_ThucChi", controller = "NS_ThucChi"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] DeleteNS_ThucChiAsync(ProjectManager.CMD.Api.Application.Commands.DeleteNS_ThucChiCommand) on controller ProjectManager.CMD.Api.Controllers.v1.NS_ThucChiController (ProjectManager.CMD.Api).
+2021-02-22 10:14:50.042 +07:00 [INF] ----- Handling command DeleteNS_ThucChiCommand ({"Ids":[1],"$type":"DeleteNS_ThucChiCommand"})
+2021-02-22 10:14:50.050 +07:00 [INF] Entity Framework Core 3.1.8 initialized 'QuanLyDuAnContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2021-02-22 10:14:51.882 +07:00 [INF] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [n].[Id], [n].[CreateBy], [n].[CreateDate], [n].[CreateDateUTC], [n].[GiaTri], [n].[GoiThauId], [n].[IsActive], [n].[IsDelete], [n].[IsModify], [n].[IsVisible], [n].[ModifyBy], [n].[NhomCongViecId], [n].[Status], [n].[ThangBaoCao], [n].[ThangThucChi], [n].[UpdateDate], [n].[UpdateDateUTC]
+FROM [NS_ThucChi] AS [n]
+WHERE [n].[Id] IN (1) AND ([n].[IsDelete] = CAST(0 AS bit))
+2021-02-22 10:14:51.897 +07:00 [INF] Executed DbCommand (7ms) [Parameters=[@p16='?' (DbType = Int32), @p0='?' (DbType = Int32), @p1='?' (DbType = DateTime2), @p2='?' (DbType = DateTime2), @p3='?' (DbType = Decimal), @p4='?' (DbType = Int32), @p5='?' (DbType = Boolean), @p6='?' (DbType = Boolean), @p7='?' (DbType = Boolean), @p8='?' (DbType = Boolean), @p9='?' (DbType = Int32), @p10='?' (DbType = Int32), @p11='?' (DbType = Byte), @p12='?' (Size = 100), @p13='?' (Size = 100), @p14='?' (DbType = DateTime2), @p15='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SET NOCOUNT ON;
+UPDATE [NS_ThucChi] SET [CreateBy] = @p0, [CreateDate] = @p1, [CreateDateUTC] = @p2, [GiaTri] = @p3, [GoiThauId] = @p4, [IsActive] = @p5, [IsDelete] = @p6, [IsModify] = @p7, [IsVisible] = @p8, [ModifyBy] = @p9, [NhomCongViecId] = @p10, [Status] = @p11, [ThangBaoCao] = @p12, [ThangThucChi] = @p13, [UpdateDate] = @p14, [UpdateDateUTC] = @p15
+WHERE [Id] = @p16;
+SELECT @@ROWCOUNT;
+2021-02-22 10:14:51.920 +07:00 [WRN] Request: DeleteNS_ThucChiCommand (1875 milliseconds)  {"Ids":[1],"$type":"DeleteNS_ThucChiCommand"}
+2021-02-22 10:14:51.923 +07:00 [INF] ----- Command DeleteNS_ThucChiCommand handled - response: {"Result":{"_NS_ThucChi":[{"NhomCongViecId":0,"GoiThauId":0,"ThangBaoCao":"string","ThangThucChi":"string","GiaTri":3432340.000,"Id":1,"IsActive":true,"IsVisible":true,"Status":null,"$type":"NS_ThucChiCommandResponseDTO"}],"$type":"DeleteNS_ThucChiCommandResponse"},"ErrorMessages":[],"IsOk":true,"$type":"MethodResult`1"}
+2021-02-22 10:14:51.933 +07:00 [INF] Executing ObjectResult, writing value of type 'Services.Common.DomainObjects.MethodResult`1[[ProjectManager.CMD.Api.Application.Commands.DeleteNS_ThucChiCommandResponse, ProjectManager.CMD.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2021-02-22 10:14:51.936 +07:00 [INF] Executed action ProjectManager.CMD.Api.Controllers.v1.NS_ThucChiController.DeleteNS_ThucChiAsync (ProjectManager.CMD.Api) in 1902.0162ms
+2021-02-22 10:14:51.938 +07:00 [INF] Executed endpoint 'ProjectManager.CMD.Api.Controllers.v1.NS_ThucChiController.DeleteNS_ThucChiAsync (ProjectManager.CMD.Api)'
+2021-02-22 10:14:51.940 +07:00 [INF] Request finished in 1922.6405ms 200 application/json; charset=utf-8

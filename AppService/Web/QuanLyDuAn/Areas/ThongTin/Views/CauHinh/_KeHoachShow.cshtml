@@ -1,0 +1,269 @@
+﻿<div id="container-import"></div>
+<input type="file" id="file-upload" style="display:none" />
+<script src="https://unpkg.com/read-excel-file@4.x/bundle/read-excel-file.min.js"></script>
+
+@*<div class="demo-container">
+        <div id="grid">
+            <div id="select-prefix"></div>
+            <div id="gridClearSelection"></div>
+            <div id="grid-container"></div>
+            <div class="selected-data">
+                <span class="caption">Selected Records:</span>
+                <span id="selected-items-container">Nobody has been selected</span>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.15.3/xlsx.full.min.js"></script>*@
+<script>
+    $(function () {
+        //var formData = {
+        //    "code": ""
+        //    , "workItemId": ""
+        //    , "contractorInfoId": ""
+        //    , "documentTypeId": ""
+        //    , "title": ""
+        //    , "requestDate": ""
+        //    , "responseDate": ""
+        //    , "expectRequestDate": ""
+        //    , "expectResponseDate": ""
+        //};
+        //let jsonObject = "";
+        var urlFileTemplate = "https://duan.tayho.com.vn/Content/Template/PlanRegister/Temp_PlanRegister_001.xlsm",
+            columnConfig = [
+                //{
+                //    dataField: "code",
+                //    caption: "Mã",
+                //    width: '10%',
+                   
+                //},
+                {
+                    dataField: "workItemId",
+                    caption: "Hạng Mục",
+                    width: '10%',
+                    lookup: {
+                        dataSource: customStore_HangMuc,
+                        valueExpr: "id",
+                        displayExpr: "title",
+                    },
+                    editorType: "dxSelectBox",
+                    editorOptions: {
+                        dataSource: customStore_HangMuc,
+                        valueExpr: "id",
+                        displayExpr: "title",
+                        placeholder: "Vui lòng chọn...",
+                        searchEnabled: true,
+                        showClearButton: true,
+                        itemTemplate: function (data) {
+                            return $("<div>").append($("<b>").append(data.code).addClass("mr-1"), $("<em>").append(data.title));
+                        },
+                    },
+                    validationRules: [{ type: "required" }],
+                },
+                {
+                    dataField: "contractorInfoId",
+                    caption: "Nhà thầu",
+                    width: '10%',
+                    lookup: {
+                        dataSource: customStore_ContractorInfo,
+                        valueExpr: "id",
+                        displayExpr: "name",
+                    },
+                    editorType: "dxSelectBox",
+                    editorOptions: {
+                        dataSource: customStore_ContractorInfo,
+                        valueExpr: "id",
+                        displayExpr: "name",
+                        noDataText: "Không tìm thấy dữ liệu",
+                        placeholder: "Vui lòng chọn...",
+                        searchEnabled: true,
+                        itemTemplate: function (data) {
+                            return $("<div>").append($("<b>").append(data.code).addClass("mr-1"), $("<b>").append(data.name).addClass("mr-1"), $("<em>").append(data.Descriptions));
+                        },
+                    },
+                    validationRules: [{ type: "required" }],
+                },
+                {
+                    dataField: "documentTypeId",
+                    caption: "Loại tài liệu",
+                    width: '10%',
+                    lookup: {
+                        dataSource: customStore_DocumetnType,
+                        valueExpr: "id",
+                        displayExpr: "title",
+                    },
+                    editorType: "dxLookup",
+                    editorOptions: {
+                        dataSource: customStore_DocumetnType,
+                        valueExpr: "id", displayExpr: "title",
+                        placeholder: "Vui lòng chọn...",
+                        searchEnabled: true, showClearButton: true,
+                        itemTemplate: function (data) {
+                            return $("<div>").append($("<b>").append(data.code).addClass("mr-1"), $("<em>").append(data.title));
+                        },
+                    },
+                    validationRules: [{ type: "required" }],
+                },
+                {
+                    dataField: "title",
+                    caption: "Tiêu đề",
+                    width: '10%',
+                },
+                {
+                    dataField: "requestDate",
+                    caption: "Ngày gửi",
+                    width: '10%',
+                },
+                {
+                    dataField: "responseDate",
+                    caption: "Ngày duyệt",
+                    width: '10%',
+                },
+                {
+                    dataField: "expectRequestDate",
+                    caption: "Ngày gửi dự kiến",
+                    width: '10%',
+                },
+                {
+                    dataField: "expectResponseDate",
+                    caption: "Ngày duyệt dự kiến",
+                    width: '10%',
+                },
+            ],
+            dataTemp = [],
+            containerImport = $("#container-import");
+
+        containerImport.dxDataGrid({
+            dataSource: dataTemp,
+            repaintChangesOnly: true,
+            height: heightScreen,
+            showBorders: true,
+            showColumnHeaders: true,
+            showColumnLines: true,
+            rowAlternationEnabled: false,
+            showRowLines: true,
+            columnAutoWidth: true,
+            wordWrapEnabled: true,
+            hoverStateEnabled: true,
+          
+            columns: columnConfig,
+            onToolbarPreparing: (e) => {
+                var container = e.component;
+                e.toolbarOptions.items.unshift(
+                    {
+                        location: "before",
+                        widget: "dxButton",
+                        options: {
+                            stylingMode: "filled",
+                            icon: "upload", text: "Import file",
+                            onClick: function () {
+                                $("#file-upload").trigger("click");
+                            }
+                        }
+                    },
+                    {
+                        location: "before",
+                        widget: "dxButton",
+                        options: {
+                            stylingMode: "filled",
+                            icon: "download",
+                            text: "Tải file mẫu",
+                            onClick: function () {
+                                window.location = urlFileTemplate;
+                            }
+                        }
+                    },
+                    {
+                        location: "after",
+                        widget: "dxButton",
+                        options: {
+                            stylingMode: "filled", type: "default",
+                            icon: "save", text: "Lưu dữ liệu",
+                            onClick: function () {
+                                var list = container.getSelectedRowsData();
+                                console.log(list);
+                                if (list.length > 0) {
+                                    DevExpress.ui.dialog.confirm("Bạn đã chọn có " + (list.length) + " dòng dữ liệu? Bạn có muốn cập nhật không?", "IMPORT DỮ LIỆU").done(function (dialogResult) {
+                                        if (dialogResult) {
+                                            var deferred = $.Deferred();
+                                            $.ajax({
+                                                url: '/ThongTin/CauHinh/postPlanRegist',
+                                                dataType: "json",
+                                                type: "POST",
+                                                data: { requestOBJ: JSON.stringify({ 'planRegisters': list }), 'token': UserCurrentInfo.accessToken},
+                                                success: function (rs) {
+                                                    console.log(rs);
+                                                    if (rs.status == "success") {
+                                                        DevExpress.ui.notify(rs.result, rs.status, 3000);
+                                                        $("#popup-register").dxPopup('instance').hide();
+                                                    }
+                                                    else {
+                                                        deferred.reject("Có lỗi xảy ra trong quá trình thêm dữ liệu.");
+                                                    }
+                                                   
+                                                    deferred.resolve();
+                                                },
+                                                error: function (xhr, textStatus, errorThrown) {
+                                                    console.log(xhr);
+                                                    deferred.reject("Có lỗi xảy ra trong quá trình thêm dữ liệu. Mở Console để xem chi tiết.");
+                                                },
+                                           
+                                            });
+                                            //return deferred.promise();
+                                        }
+                                    });
+                                } else DevExpress.ui.notify("Không tìm thấy dữ liệu cần import, Vui lòng chọn!", "error", 3000);
+                            }
+                        }
+                    },
+                );
+            },
+            editing: {
+                mode: "cell",
+                allowAdding: false,
+                allowUpdating: true,
+                allowDeleting: true,
+                useIcons: false,
+                confirmDelete: false,
+            },
+            selection: {
+                mode: "multiple",
+                showCheckBoxesMode: "always",
+                selectAllMode: "allPages"
+            },
+        });
+        $(document).on('change', '#file-upload', function () {
+            readXlsxFile(this.files[0]).then((rows) => {
+                if (rows.length > 1) {
+                    //if (rows[0].join(' | ').toUpperCase().trim().includes(header)) {
+                    $.each(rows, (index, item) => {
+                            if (typeof item[0] === 'number' && index > 0) {
+                                dataTemp.push(
+                                    {
+                                        //id: item[0],
+                                        projectId: PROJECTID,
+                                        //code: item[1],
+                                        workItemId: item[1],
+                                        contractorInfoId: item[2],
+                                        documentTypeId: item[3],
+                                        title: item[4],
+                                        requestDate: item[5],
+                                        responseDate: item[6],
+                                        expectRequestDate: item[7],
+                                        expectResponseDate: item[8],
+                                        isActive : true,
+                                        isVisible : true,
+                                        isDelete : false,
+                                    }
+                                );
+                            }
+                    });
+                    $("#container-import").dxDataGrid('instance').refresh().then(function () { $("#container-import").dxDataGrid('instance').selectAll();});
+                    //} 
+                    //else DevExpress.ui.notify("Vui lòng chọn đúng file theo template sẵn có", "error", 3000);
+                } else DevExpress.ui.notify("Không tìm thấy dữ liệu cần import, Vui lòng thử lại", "error", 3000);
+            });
+        });
+    });
+
+</script>

@@ -96,8 +96,10 @@
             },
             columns: [
                 {
-                    dataField: "status", caption: "STT", alignment: "center", width: 80,
-                    sortOrder: "desc", allowEditing: false,
+                    dataField: "id", caption: "ID", alignment: "center", width: 80, allowEditing: false,
+                },
+                {
+                    dataField: "status",  sortOrder: "desc", visible: false,
                 },
                 {
                     dataField: "tenNhomPhat", caption: "Tên nhóm", dataType: "string", cssClass:"font-weight-bold",
@@ -140,14 +142,24 @@
                                 }
                             });
                         }
-                    }
-                }, 
+                    },
+                    allowEditing: false,
+                },//nguoiTao
+                {
+                    dataField: "createDate", width: 150, dataType: "date", alignment: "center",
+                    caption: "Thời gian tạo",
+                    cellTemplate: (c, o) => {
+                        if (o.value != null) {
+                            $("<div />").append(
+                                $("<em />").addClass("small").append("Cách đây " + moment(o.value).locale("vi").fromNow()),
+                                $("<div/>").addClass("font-weight-bold").append(moment(o.value).format("HH:mm DD/MM/YY"))
+                            ).appendTo(c);
+                        }
+                    },
+                    allowEditing: false,
+                },//createDate
                 {
                     dataField: "isActive", width: 100,
-                    editorType: "dxSwitch",
-                },
-                {
-                    dataField: "isVisible", width: 100,
                     editorType: "dxSwitch",
                 }, 
             ], 
@@ -162,22 +174,18 @@
             },
             rowDragging: {
                 allowReordering: PermitInAction["update"],
-                showDragIcons: true,
+                showDragIcons: false,
                 dropFeedbackMode: "push",
                 dragDirection: "vertical",
                 onDragEnd: function (e) {
                     var source = e.itemData,
                         target = e.component.getVisibleRows()[e.toIndex].data,
                         d = $.Deferred(); 
-                    DevExpress.ui.dialog.confirm("Bạn có chắc là muốn cập nhật danh sách theo thứ tự này?", "XÁC NHẬN THÔNG TIN").done(function (dialogResult) {
-                        if (dialogResult) {
-                            if (source.id != target.id) {
-                                customStore.update(source.id, { status: target.status }).then(() => {
-                                    e.component.refresh().then(d.resolve, d.reject);
-                                }, d.reject);
-                            }
-                        }
-                    });
+                    if (source.id != target.id) {
+                        customStore.update(source.id, { status: target.status }).then(() => {
+                            e.component.refresh().then(d.resolve, d.reject);
+                        }, d.reject);
+                    }
                 },
             },
         });

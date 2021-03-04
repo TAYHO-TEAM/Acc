@@ -13,11 +13,9 @@
 </div>
 
 @section script{
+    <script src="~/Scripts/page/ngansach.js"></script>
     <script>
-        const ACTION = "/NS_NhomChiPhi";
-        var WIDTH_CONTAINER = $("#container").width();
-
-        let customStore = new DevExpress.data.CustomStore({
+        var customStore = new DevExpress.data.CustomStore({
             key: "id",
             load: (values) => {
                 let deferred = $.Deferred(), params = {};
@@ -33,7 +31,7 @@
 
                 $.ajax({
                     headers: header,
-                    url: URL_API_PM_READ + ACTION,
+                    url: URL_API_PM_READ + ACTION_NHOMCHIPHI,
                     dataType: "json",
                     data: params,
                     success: function (data) {
@@ -52,122 +50,113 @@
                 });
                 return deferred.promise();
             },
-            insert: (values) => ajax_insert(URL_API_PM_CMD + ACTION, values),
-            update: (key, values) => ajax_update(URL_API_PM_CMD + ACTION, key, values),
-            remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION, key),
+            insert: (values) => ajax_insert(URL_API_PM_CMD + ACTION_NHOMCHIPHI, values),
+            update: (key, values) => ajax_update(URL_API_PM_CMD + ACTION_NHOMCHIPHI, key, values),
+            remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION_NHOMCHIPHI, key),
         });
 
         $(function () {
             loadData(customStore);
         });
 
-        let loadData = (dataSource) => {
-            $("#container").dxDataGrid({
-                height: heightScreen,
-                dataSource: dataSource,
-                remoteOperations: {
-                    paging: true,
-                    sorting: true,
+        let loadData = (dataSource) => $("#container").dxDataGrid({
+            height: heightScreen,
+            dataSource: dataSource,
+            remoteOperations: {
+                paging: true,
+                sorting: true,
+            },
+            showBorders: false, showColumnHeaders: true, showColumnLines: false, hoverStateEnabled: true,
+            showRowLines: true, columnAutoWidth: true, wordWrapEnabled: true, rowAlternationEnabled: true,
+            columns: [
+                {
+                    dataField: "status", caption: "STT",
+                    dataType: "number", width: 100, alignment: "center",
+                    editorType: "dxNumberBox",
+                    editorOptions: {
+                        min: 1, step: 1, showSpinButtons: true,
+                    }, sortOrder: "desc",
+                    cellTemplate: (c, o) => c.append(o.rowIndex + 1)
                 },
-                showBorders: false, showColumnHeaders: true, showColumnLines: false, hoverStateEnabled: true,
-                showRowLines: true, columnAutoWidth: true, wordWrapEnabled: true, rowAlternationEnabled: true, 
-                columns: [
-                    {
-                        dataField: "status", caption: "STT",
-                        dataType: "number", width: 100, alignment: "center",
-                        editorType: "dxNumberBox",
-                        editorOptions: {
-                            min: 1, step: 1, showSpinButtons: true,
-                        }, sortOrder: "desc",
-                        cellTemplate: (c, o) => c.append(o.rowIndex + 1)
+                {
+                    dataField: "tenNhomChiPhi", caption: "Tên nhóm",
+                    dataType: "string", cssClass: "font-weight-bold",
+                    editorOptions: {
+                        placeholder: "Nhập tên giai đoạn...",
+                        showClearButton: true
                     },
-                    {
-                        dataField: "tenNhomChiPhi", caption: "Tên nhóm",
-                        dataType: "string", cssClass:"font-weight-bold",
-                        editorOptions: {
-                            placeholder: "Nhập tên giai đoạn...",
-                            showClearButton: true
-                        },
-                        validationRules: [
-                            {
-                                type: "required",
-                                message: "Bắt buộc nhập thông tin"
-                            }
-                        ]
-                    },
-                    {
-                        dataField: "dienGiai", caption: "Diễn giải", dataType: "string",
-                        editorOptions: {
-                            placeholder: "Nhập nội dung diễn giải...",
-                            showClearButton: true
-                        },
-                    },
-                    {
-                        dataField: "isActive", width: 100,
-                        editorType: "dxSwitch",
-                    },
-
-                    {
-                        dataField: "isVisible", width: 100,
-                        editorType: "dxSwitch",
-                    },
-                ],
-                paging: { enabled: true, pageSize: 20 },
-                pager: {
-                    showPageSizeSelector: true,
-                    allowedPageSizes: [10, 20, 40],
-                    showInfo: true,
-                },
-                searchPanel: {
-                    highlightCaseSensitive: true,
-                    highlightSearchText: true,
-                    searchVisibleColumnsOnly: true,
-                    visible: WIDTH_CONTAINER > 350
-                },
-                editing: {
-                    allowUpdating: PermitInAction["update"] ?true: null,
-                    allowDeleting: PermitInAction["delete"] ?true: null,
-                    mode: "cell",
-                    useIcons: false, confirmDelete: true,
-                },
-                onToolbarPreparing: function (e) {
-                    var container = e.component;
-                    e.toolbarOptions.items.unshift(
+                    validationRules: [
                         {
-                            location: "after", widget: "dxButton",
-                            options: {
-                                visible: PermitInAction["insert"],
-                                text: "Nhóm chi phí", icon: "add", stylingMode: "filled", type: "default",
-                                onClick: () => container.addRow()
-                            }
-                        },
-                        {
-                            location: "after", widget: "dxButton",
-                            options: {
-                                icon: "refresh", tylingMode: "filled", type: "default",
-                                onClick: () => container.refresh()
-                            }
-                        })
-                },
-                onInitNewRow: (e) => {
-                    e.data.isActive = true;
-                    e.data.isVisible = true;
-                },
-                rowDragging: {
-                    allowReordering: PermitInAction["update"],
-                    showDragIcons: true,
-                    dropFeedbackMode: "push",
-                    dragDirection: "vertical",
-                    onDragEnd: function (e) {
-                        var source = e.itemData;
-                        var target = e.component.getVisibleRows()[e.toIndex].data;
-                        if (source.id != target.id) {
-                            console.log(ajax_update(URL_API_PM_CMD + ACTION, source.id, { status: target.status }));
-                            e.component.refresh();
+                            type: "required",
+                            message: "Bắt buộc nhập thông tin"
                         }
+                    ]
+                },
+                {
+                    dataField: "dienGiai", caption: "Diễn giải", dataType: "string",
+                    editorOptions: {
+                        placeholder: "Nhập nội dung diễn giải...",
+                        showClearButton: true
                     },
                 },
-            });
-        }
+                {
+                    dataField: "isActive", caption: "Tình trạng",
+                    width: 130, alignment: "center",
+                    //editorType: "dxSwitch",
+                    lookup: {
+                        dataSource: listActiveStatus,
+                        valueExpr: "value", displayExpr: "text",
+                    },
+                    cellTemplate: (c, o) => $("<span />").addClass("badge badge-" + listActiveStatus.find(x => x.value == o.value).color).append($("<i />").addClass("mr-1 " + listActiveStatus.find(x => x.value == o.value).icon), o.text).appendTo(c)
+                }, 
+            ],
+            paging: { enabled: true, pageSize: 20 },
+            pager: {
+                showPageSizeSelector: true,
+                allowedPageSizes: [10, 20, 40],
+                showInfo: true,
+            },
+            searchPanel: {
+                highlightCaseSensitive: true,
+                highlightSearchText: true,
+                searchVisibleColumnsOnly: true,
+                visible: true
+            },
+            editing: {
+                allowAdding: PermitInAction["insert"] ? true : null,
+                allowUpdating: PermitInAction["update"] ? true : null,
+                allowDeleting: PermitInAction["delete"] ? true : null,
+                mode: "cell", useIcons: false, confirmDelete: true,                
+            },
+            onToolbarPreparing: function (e) {
+                var container = e.component;
+                e.toolbarOptions.items.unshift( 
+                    {
+                        location: "after", widget: "dxButton",
+                        options: {
+                            icon: "refresh", tylingMode: "filled", type: "default",
+                            onClick: () => container.refresh()
+                        }
+                    })
+            },
+            onInitNewRow: (e) => {
+                e.data.isActive = true;
+                e.data.isVisible = true;
+            },
+            rowDragging: {
+                allowReordering: PermitInAction["update"],
+                showDragIcons: true,
+                dropFeedbackMode: "push",
+                dragDirection: "vertical",
+                onDragEnd: function (e) {
+                    var source = e.itemData;
+                    var target = e.component.getVisibleRows()[e.toIndex].data;
+                    if (source.id != target.id) {
+                        console.log(ajax_update(URL_API_PM_CMD + ACTION, source.id, { status: target.status }));
+                        e.component.refresh();
+                    }
+                },
+            },
+        });
     </script>
 }

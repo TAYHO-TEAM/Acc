@@ -1,0 +1,196 @@
+﻿<form id="form-regist" action="#" method="POST" enctype="application/json">
+</form>
+<script>
+    var formData = {
+        "title": ""
+        , "documentTypeId": ""
+        , "tagWorkItem": ""
+        , "description": ""
+        , "location": ""
+        , "calender": ""
+    };
+    var fdata = new FormData();
+
+
+    $(document).ready(function () {
+        var formInstance = $("#form-regist").dxForm({
+            formData: formData,
+            labelLocation: "top",
+            items: [
+                {
+                    itemType: "group",
+                    colCount: 12,
+                    items: [
+                        {
+                            colSpan: 12,
+                            dataField: "documentTypeId",
+                            label: { text: "Loại tài liệu" },
+                            lookup: {
+                                dataSource: customStore_DocumetnType,
+                                valueExpr: "id",
+                                displayExpr: "title",
+                            },
+                            editorType: "dxSelectBox",
+                            editorOptions: {
+                                value: formData["documentTypeId"],
+                                dataSource: customStore_DocumetnType,
+                                valueExpr: "id", displayExpr: "title",
+                                elementAttr: {
+                                    id: "elementDocumentTypeId",
+                                }
+                            },
+                            validationRules: [{ type: "required" }],
+                        },
+                        {
+                            colSpan: 12,
+                            dataField: "title",
+                            label: { text: "Tiêu đề" },
+                            editorType: "dxTextBox",
+                            editorOptions: {
+                                value: formData["title"],
+                                dataSource: customStore_HangMuc,
+                                valueExpr: "id",
+                                displayExpr: "title",
+                                elementAttr: {
+                                    id: "elementTitle",
+                                }
+                            },
+                        },
+                        {
+                            colSpan: 12,
+                            dataField: "description",
+                            label: { text: "Mô tả" },
+                            editorType: "dxTextArea",
+                            editorOptions: {
+                                value: formData["description"],
+                            },
+                        },
+                        {
+                            colSpan: 12,
+                            dataField: "tagWorkItem",
+                            label: { text: "Nhóm hạng mục" },
+                            editorType: "dxTagBox",
+                            editorOptions: {
+                                dataSource: customStore_HangMuc,
+                                displayExpr: "title",
+                                valueExpr: "title",
+                                maxDisplayedTags: 3,
+                                showSelectionControls: true,
+                                itemTemplate: function (data) {
+                                    return "<div>" + data.title + "</div>";
+                                }
+                            },
+                        },
+                        {
+                            colSpan: 12,
+                            dataField: "location",
+                            label: { text: "Địa điểm" },
+                        },
+                        {
+                            colSpan: 12,
+                            dataField: "calendar",
+                            label: { text: "Lịch dự kiến" },
+                            editorType: "dxDateBox",
+                            editorOptions: {
+                                pickerType: "rollers",
+                                type: "datetime",
+                                invalidDateMessage: "Sai định dạng ngày tháng"
+                            },
+
+                        },
+                        {
+                            colSpan: 12,
+                            template: '<span class="dx-field-item-label-text font-bold">Các tập tin đính kèm</span><div class="file-uploader"></div>',
+                        },
+                    ]
+                },
+                {
+                    itemType: "button",
+                    horizontalAlignment: "center",
+                    buttonOptions: {
+                        text: "Lưu lại",
+                        icon: "fa fa-save",
+                        type: "success",
+                        useSubmitBehavior: true,
+                        elementAttr: {
+                            id: "submit",
+                        }
+                    }
+                },
+
+            ],
+            onFieldDataChanged: function (e) {
+                var newFormData = e.component.option("formData");
+            }
+        }).dxForm("instance");
+
+        $(".file-uploader").dxFileUploader({
+            selectButtonText: "Chọn tập tin...",
+            labelText: "Hoặc kéo thả vào đây",
+            showFileList: true,
+            multiple: true,
+            uploadMode: "useForm",
+            allowedFileExtensions: [".jpg", ".jpeg", ".png", ".pdf"],
+            maxFileSize: 10000000,
+        });
+        $("#form-regist").on("submit", function (e) {
+            //$(this).prop("disabled", true);
+            loadingPanel.show();
+            var result = formInstance.validate();
+            var fdata = new FormData();
+            var i = 10;
+            $.each(formData, function (key, value) {
+                if (key === 'calendar') {
+                    fdata.append(key, moment(value).format('YYYY-MM-DD HH:mm:ss'));
+                }
+                else {
+                    fdata.append(key, value);
+                }
+
+            });
+            fdata.append('projectId', PROJECTID);
+            fdata.append('token', UserCurrentInfo.accessToken);
+            for (var pair of fdata.entries()) {
+                console.log(pair[0] + ', ' + pair[1]);
+            }
+            var files = $(".file-uploader").dxFileUploader("instance").option("value");
+            if (files.length > 0) {
+                $.each(files, function (key, value) {
+                    fdata.append(files[key].name, files[key]);
+                });
+            }
+            //else {
+            //    DevExpress.ui.notify("Vui lòng chọn file đính kèm", "error", 3000);
+            //    e.preventDefault();
+            //    return false;
+            //};
+
+            $.ajax({
+                type: "POST",
+                enctype: 'multipart/form-data',
+                url: "/ThongTin/PhatHanh/Create",
+                data: fdata,
+                processData: false,
+                contentType: false,
+                cache: false,
+                timeout: 600000,
+                success: function (rs) {
+                    loadingPanel.hide();
+                    DevExpress.ui.notify(rs.result, rs.status, 3000);
+                    if (rs.status == "success") {
+                        $("#popup-register").dxPopup('instance').hide();
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    loadingPanel.hide();
+                    DevExpress.ui.notify("Có lỗi xảy ra: " + errorThrown, "error", 3000);
+                }
+            });
+            e.preventDefault();
+            //return deferred.promise();
+        });
+
+    });
+
+
+</script>

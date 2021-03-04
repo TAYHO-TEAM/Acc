@@ -2,7 +2,7 @@
 
 namespace Acc.Read.Api.ViewModels.BaseClasses
 {
-    public class BaseResponseViewModel : SysDTOBase
+    public class BaseResponseViewModel : DTOAccountInfoBase
     {
     }
 }

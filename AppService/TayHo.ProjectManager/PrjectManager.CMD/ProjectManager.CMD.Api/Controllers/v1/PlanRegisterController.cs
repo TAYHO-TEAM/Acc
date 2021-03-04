@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using ProjectManager.CMD.Api.Application.Commands;
 using ProjectManager.CMD.Api.Controllers.v1.BaseClasses;
 using Services.Common.DomainObjects;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -13,7 +14,7 @@ namespace ProjectManager.CMD.Api.Controllers.v1
         public PlanRegisterController(IMediator mediator) : base(mediator)
         {
         }
-
+        private const string CreateList = nameof(CreateList);
 
         #region PlanRegister
 
@@ -30,7 +31,6 @@ namespace ProjectManager.CMD.Api.Controllers.v1
             var result = await _mediator.Send(command).ConfigureAwait(false);
             return Ok(result);
         }
-
         /// <summary>
         /// Update a existing PlanRegister.
         /// </summary>

@@ -25,8 +25,13 @@ namespace ProjectManager.CMD.Api.Controllers.v1
         [HttpPost]
         [ProducesResponseType(typeof(Services.Common.DomainObjects.MethodResult<CreateDocumentReleasedCommandResponse>), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(VoidMethodResult), (int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> CreateDocumentReleasedAsync([FromBody] CreateDocumentReleasedCommand command)
+        public async Task<IActionResult> CreateDocumentReleasedAsync([FromForm] CreateDocumentReleasedCommand command)
         {
+            var files = Request.Form.Files;
+            if (files != null)
+            {
+                command.setFile(files);
+            }
             var result = await _mediator.Send(command).ConfigureAwait(false);
             return Ok(result);
         }

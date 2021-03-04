@@ -1,23 +1,17 @@
 ﻿using AppWFGenProject.Extensions;
 using AppWFGenProject.FrameWork;
-using Newtonsoft.Json.Linq;
+using Microsoft.Extensions.Configuration;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace AppWFGenProject
 {
     public partial class GenProject : Form
     {
-        public GenProject()
+        public IConfiguration _configuration;
+        public GenProject(IConfiguration configuration)
         {
+            _configuration = configuration;
             InitializeComponent();
             Environment.GetEnvironmentVariable("Content");
             txtPass.PasswordChar = '*';
@@ -29,6 +23,9 @@ namespace AppWFGenProject
 
         private void GenProject_Load(object sender, EventArgs e)
         {
+            clbFunction.Items.Add("CMD", false);
+            clbFunction.Items.Add("READ", false);
+            clbFunction.Items.Add("HTML", false);
 
         }
 
@@ -58,42 +55,66 @@ namespace AppWFGenProject
 
         private void btnGen_Click(object sender, EventArgs e)
         {
-            GenOB genOB = new GenOB();
-            GenCode genCode = new GenCode();
-            string directory = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName;
-            List<string> listTable = new List<string>();
-            ReadTemplate readTemplate = new ReadTemplate();
-            // Set nameproject
-            genOB.nameproject = txtNameProject.Text == "" ? "Test" : txtNameProject.Text;
-            // Set rootDir
-            genOB.rootDir = txtDir.Text==""?@"F:\Test\" : txtDir.Text;
-            // Set common
-            genOB.common = "Services.Common.APIs.Cmd.EF;"; // config setting tạo sau
-            // Set db
-            genOB.db = "QuanLyDuAnContext"; // config setting tạo sau
-            // Set version 
-            genOB.version = "1"; // config setting tạo sau
+            
 
-
-            int typeCreate = cbkOverWrite.Checked ? 1 : cbkOverWrite.Checked ? 2 : cbkBackUp.Checked ? 3 : -1;
+            int typeCreate = cbkOverWrite.Checked ? 1 : cbkCreateNew.Checked ? 2 : cbkBackUp.Checked ? 3 : -1;
             if (typeCreate <= 0)
-                MessageBox.Show("Bạn chưa chọn cách tạo file. Vui lòng chọn cách tạo file", "Thông báo!");
-
-            for (int i = 0; i < chlTable.Items.Count; i++)
             {
-                if (chlTable.GetItemChecked(i))
+                MessageBox.Show("Bạn chưa chọn cách tạo file. Vui lòng chọn cách tạo file", "Thông báo!");
+            }
+            else
+            {
+                for (int i = 0; i < chlTable.Items.Count; i++)
                 {
-                    listTable.Add((string)chlTable.Items[i]);
-                    genOB.Entity = (string)chlTable.Items[i];
-                    // sert _entity
-                    if (genOB.Entity != string.Empty && char.IsUpper(genOB.Entity[0]))
+                    GenOB genOB = new GenOB();
+                    GenCode genCode = new GenCode();
+
+                    //ReadTemplate readTemplate = new ReadTemplate();
+
+                    // Set rootDir
+                    genOB.rootDir = txtDir.Text == "" ? @"F:\Test\" : txtDir.Text;
+                    // Set common
+                    genOB.common = _configuration.GetValue<string>("Common", "CmdEF").ToString();// "Services.Common.APIs.Cmd.EF;"; // config setting tạo sau
+                                                                                                 // Set db
+                    genOB.db = "QuanLyDuAn"; // config setting tạo sau
+                                             // Set version 
+                    genOB.version = _configuration.GetValue<string>("Common", "Version").ToString();//"v1"; // config setting tạo sau
+
+                    if (chlTable.GetItemChecked(i))
                     {
-                        genOB._entity = "_"+(char.ToLower(genOB.Entity[0]) + genOB.Entity.Substring(1));
+                        genOB.Entity = (string)chlTable.Items[i];
+                        //var function = clbFunction.CheckedItems.Contains("READ") ;
+                        // sert _entity
+                        if (genOB.Entity != string.Empty && char.IsUpper(genOB.Entity[0]))
+                        {
+                            genOB._entity = "_" + (char.ToLower(genOB.Entity[0]) + genOB.Entity.Substring(1));
+                        }
+                        // sert entity
+                        if (genOB.Entity != string.Empty && char.IsUpper(genOB.Entity[0]))
+                        {
+                            genOB.entity = (char.ToLower(genOB.Entity[0]) + genOB.Entity.Substring(1));
+                        }
+                        if (clbFunction.CheckedItems.Contains("CMD"))
+                        {
+                            // Set nameproject
+                            genOB.nameproject = (txtNameProject.Text == "" ? "Test" : txtNameProject.Text) + ".CMD";
+                            genCode.CreateGenOBCMD(txtServer.Text, txtUser.Text, txtPass.Text, txtDB.Text, (string)chlTable.Items[i], genOB, typeCreate);
+                        }
+                        if (clbFunction.CheckedItems.Contains("READ"))
+                        {
+                            // Set nameproject
+                            genOB.nameproject = (txtNameProject.Text == "" ? "Test" : txtNameProject.Text) + ".READ";
+                            genCode.CreateGenOBRed(txtServer.Text, txtUser.Text, txtPass.Text, txtDB.Text, (string)chlTable.Items[i], genOB, typeCreate);
+                        }
+                        if (clbFunction.CheckedItems.Contains("HTML"))
+                        {
+
+                        }
+
                     }
-                    genCode.CreateGenOBCMD(txtServer.Text, txtUser.Text, txtPass.Text, txtDB.Text, listTable[0], genOB);
                 }
             }
-           
+
             //FileHelper fileHelper = new FileHelper();
             //fileHelper.ChangeTxtToCS(@"C:\Users\poka\Desktop\testChange.txt");
         }

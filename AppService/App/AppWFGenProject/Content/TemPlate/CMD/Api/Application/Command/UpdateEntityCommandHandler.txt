@@ -1,5 +1,5 @@
 ﻿using {nameproject}.Domain;
-using {nameproject}.Domain.Repositories;
+using {nameproject}.Domain.IRepositories;
 using AutoMapper;
 using MediatR;
 using Services.Common.DomainObjects;
@@ -13,7 +13,7 @@ namespace  {nameproject}.Api.Application.Commands
 {
     public class Update{Entity}CommandHandler : {Entity}CommandHandler,IRequestHandler<Update{Entity}Command, MethodResult<Update{Entity}CommandResponse>>
     {
-        public Update{Entity}CommandHandler(IMapper mapper,IHttpContextAccessor httpContextAccessor, I{Entity}Repository {entity}Repository) : base(mapper, httpContextAccessor, {entity}Repository)
+        public Update{Entity}CommandHandler(IMapper mapper,IHttpContextAccessor httpContextAccessor, I{Entity}Repository {entity}Repository) : base(mapper,httpContextAccessor,{entity}Repository)
         {
         }
 

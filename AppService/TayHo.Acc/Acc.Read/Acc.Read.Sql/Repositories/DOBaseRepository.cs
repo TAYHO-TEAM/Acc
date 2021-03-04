@@ -39,7 +39,7 @@ namespace Acc.Read.Sql.Repositories
             result.Items = await rs.ReadAsync<T>().ConfigureAwait(false);
             return result;
         }
-        public async Task<PagingItems<T>> GetWithPaggingFKAsync(RequestBaseFilterParam requestBaseFilterParam)
+        public async Task<PagingItems<T>> GetWithPaggingFKAsync(RequestParentBaseFilterParam requestBaseFilterParam)
         {
             requestBaseFilterParam.ColumName = requestBaseFilterParam.ColumName ?? "*";//GetColumnTableName();
             var result = new PagingItems<T>

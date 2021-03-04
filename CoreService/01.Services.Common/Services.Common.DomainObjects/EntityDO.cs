@@ -18,9 +18,9 @@ namespace Services.Common.DomainObjects
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public virtual int Id { get; set; }
 
-        public virtual bool? IsDelete { get; set; }
-        public virtual bool? IsActive { get; set; }
-        public virtual bool? IsVisible { get; set; }
+        public virtual bool? IsDelete { get; set; } = false;
+        public virtual bool? IsActive { get; set; } = true;
+        public virtual bool? IsVisible { get; set; } = true;
         public virtual int? CreateBy { get; set; }
         public virtual DateTime? CreateDateUTC { get; set; }
         public virtual DateTime? CreateDate { get; set; }

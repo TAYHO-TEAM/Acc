@@ -13,9 +13,8 @@
 </div>
 
 @section script{
+    <script src="~/Scripts/page/ngansach.js"></script>
     <script>
-        const ACTION = "/NS_LoaiCongViec";
-        const ACTION_PROJECT = "/Projects";
         var customStore = new DevExpress.data.CustomStore({
             key: "id",
             load: (values) => {
@@ -32,7 +31,7 @@
 
                 $.ajax({
                     headers: header,
-                    url: URL_API_PM_READ + ACTION,
+                    url: URL_API_PM_READ + ACTION_LOAICONGVIEC,
                     dataType: "json",
                     data: params,
                     success: function (data) {
@@ -46,34 +45,10 @@
                 });
                 return deferred.promise();
             },
-            insert: (values) => ajax_insert(URL_API_PM_CMD + ACTION, values),
-            update: (key, values) => ajax_update(URL_API_PM_CMD + ACTION, key, values),
-            remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION, key),
-        });
-        let customStore_Projects = new DevExpress.data.CustomStore({
-            key: "id", loadMode: "raw",
-            load: (values) => {
-                var deferred = $.Deferred();
-                $.ajax({
-                    headers: header, dataType: "json",
-                    url: URL_API_PM_READ + ACTION_PROJECT,
-                    success: function (data) {
-                        var list = data.result.items.filter(x => x.isActive == true && x.isVisible == true);
-                        if (PROJECTID == 0) {
-                            localStorage.setItem("projectIdCurrent", parseInt(list[0].id));
-                            PROJECTID = parseInt(list[0].id)
-                        }
-                        deferred.resolve(list);
-                    },
-                    error: function (xhr, textStatus, errorThrown) {
-                        console.log(xhr.responseJSON);
-                        deferred.reject("Có lỗi xảy ra trong quá trình lấy danh sách 'Projects'. Mở Console để xem chi tiết.");
-                    },
-                    timeout: 10000
-                });
-                return deferred.promise();
-            },
-        });
+            insert: (values) => ajax_insert(URL_API_PM_CMD + ACTION_LOAICONGVIEC, values),
+            update: (key, values) => ajax_update(URL_API_PM_CMD + ACTION_LOAICONGVIEC, key, values),
+            remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION_LOAICONGVIEC, key),
+        }); 
 
         $(function () {
             loadData(customStore);
@@ -109,7 +84,7 @@
                 {
                     dataField: "kyHieu", caption: "Ký Hiệu",
                     dataType: "string", customizeText: (e) => (e.value != null ? e.value : '--'),
-                }, 
+                },
                 {
                     dataField: "dienGiai", caption: "Diễn giải",
                     dataType: "string", alignment: "left",
@@ -121,12 +96,12 @@
                 },
                 {
                     dataField: "isActive", width: 100, alignment: "center",
-                    editorType: "dxSwitch",
-                },
-                {
-                    dataField: "isVisible", width: 100, alignment: "center",
-                    editorType: "dxSwitch",
-                }
+                    lookup: {
+                        dataSource: listActiveStatus,
+                        valueExpr: "value", displayExpr: "text",
+                    },
+                    cellTemplate: (c, o) => $("<span />").addClass("badge badge-" + listActiveStatus.find(x => x.value == o.value).color).append($("<i />").addClass("mr-1 " + listActiveStatus.find(x => x.value == o.value).icon), o.text).appendTo(c)
+                } 
             ],
             paging: {
                 enabled: true,
@@ -144,6 +119,7 @@
                 visible: true
             },
             editing: {
+                allowAdding: PermitInAction["insert"] ? true : null,
                 allowUpdating: PermitInAction["update"] ? true : null,
                 allowDeleting: PermitInAction["delete"] ? true : null,
                 mode: "cell", useIcons: false, confirmDelete: true,
@@ -167,14 +143,6 @@
                                 loadData(customStore);
                             },
                         },
-                    },
-                    {
-                        location: "after", widget: "dxButton",
-                        options: {
-                            visible: PermitInAction["insert"],
-                            text: "Loại công việc", icon: "add", stylingMode: "filled", type: "default",
-                            onClick: () => container.addRow()
-                        }
                     },
                     {
                         location: "after", widget: "dxButton",

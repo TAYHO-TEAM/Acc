@@ -13,6 +13,7 @@
   "IErr512": "Chiều dài kỹ tự vượt quá 512!",
   "IErr1000": "Chiều dài kỹ tự vượt quá 1000!",
   "IErr1024": "Chiều dài kỹ tự vượt quá 1024!",
+  "IErr1028": "Chiều dài kỹ tự vượt quá 1028!",
   "IErr2048": "Chiều dài kỹ tự vượt quá 2048!",
   "IErr4000": "Chiều dài kỹ tự vượt quá 4000!",
   "IErrN0": "Dự liệu không phải kiểu số!",
@@ -20,6 +21,7 @@
   "IErrN2": "Dự liệu không được chứa ký tự đặc biệt!",
   "IErrN3": "Dự liệu không tồn tại dữ liệu cha!",
   "IErrN4": "Dự liệu không thêm được do thiếu dữ liệu liên kết!",
+  "IErrN5": "Không có file đính kèm!",
   // Update Error 
   "UErr01": "Dữ liệu không tông tại!",
   "UErr02": "Không được phép cập nhật dòng dữ liệu này!",

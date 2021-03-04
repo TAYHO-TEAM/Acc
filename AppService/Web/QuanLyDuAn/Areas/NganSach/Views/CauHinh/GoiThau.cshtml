@@ -1,7 +1,6 @@
 ﻿
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewBag.Title = "Gói thầu";
 }
 
 @section style{   }
@@ -10,28 +9,25 @@
     <div class="col-12">
         <div id="container" class="elevation-2"></div>
     </div>
-</div>
-
+</div> 
 @section script{
+    <script src="~/Scripts/page/ngansach.js"></script>
     <script>
-        const ACTION = "/NS_GoiThau";
-        const ACTION_CONTRACTORINFO = "/ContractorInfo";
-
         let customStore = new DevExpress.data.CustomStore({
             key: "id",
             load: (values) => {
-                let deferred = $.Deferred(), params = {};
-                if (values.filter && values.filter[0] == "parentId") params['FindParentId'] = values.filter[2];
+                let deferred = $.Deferred(), params = {
+                    'FindId': 'projectId,' + PROJECTID
+                };
+                if (values.filter && values.filter[0] == "parentId") params['FindParentId'] = values.filter[2]; 
                 if (values.sort) {
                     params['SortCol'] = values.sort[0].selector;
                     params['SortADSC'] = values.sort[0].desc;
                 }
 
                 $.ajax({
-                    headers: header,
-                    url: URL_API_PM_READ + ACTION,
-                    dataType: "json",
-                    data: params,
+                    headers: header, dataType: "json", data: params,
+                    url: URL_API_PM_READ + ACTION_GOITHAU,
                     success: function (data) {
                         deferred.resolve(data.result.items);
                     },
@@ -44,9 +40,12 @@
 
                 return deferred.promise();
             },
-            insert: (values) => ajax_insert(URL_API_PM_CMD + ACTION, values),
-            update: (key, values) => ajax_update(URL_API_PM_CMD + ACTION, key, values),
-            remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION, key),
+            insert: (values) => ajax_insert(URL_API_PM_CMD + ACTION_GOITHAU, values),
+            update: (key, values) => ajax_update(URL_API_PM_CMD + ACTION_GOITHAU, key, values),
+            remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION_GOITHAU, key),
+            onInserted: (key, values) => ajax_log_insert("Insert", ACTION_GOITHAU, values, key),
+            onUpdated: (key, values) => ajax_log_insert("Update", ACTION_GOITHAU, key, values),
+            onRemoved: (key) => ajax_log_insert("Delete", ACTION_GOITHAU, key, null),
         });
         var customStore_ContractorInfo = new DevExpress.data.CustomStore({
             key: "id", loadMode: "raw",
@@ -64,276 +63,413 @@
                 });
                 return deferred.promise();
             },
+            insert: (values) => ajax_insert(URL_API_PM_CMD + ACTION_CONTRACTORINFO, values),
+            update: (key, values) => ajax_update(URL_API_PM_CMD + ACTION_CONTRACTORINFO, key, values),
+            remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION_CONTRACTORINFO, key),
         });
 
         $(function () {
             loadData(customStore);
         });
 
-        let loadData = (dataSource) => {
-            $("#container").dxTreeList({
-                height: heightScreen,
-                dataSource: dataSource,
-                repaintChangesOnly: true,
-                remoteOperations: {
-                    filtering: true,
-                    sorting: true,
-                    grouping: false
-                },
-                scrolling: { mode: "standard" },
-                rootValue: 0, parentIdExpr: "parentId", keyExpr: "id",
-                showBorders: false, showColumnHeaders: true, showColumnLines: false, hoverStateEnabled: true,
-                showRowLines: true, columnAutoWidth: true, wordWrapEnabled: true, rowAlternationEnabled: true,
-                columns: [
-                    {
-                        dataField: "soHopDong", caption: "Số HĐ/PLHĐ", dataType: "string", width: 200,
-                        cellTemplate: (c, o) => $("<div>").addClass("font-weight-bold").append(o.value).appendTo(c),
-                        editorOptions: {
-                            placeholder: "Vui lòng nhập..."
+        let loadData = (dataSource) => $("#container").dxTreeList({
+            height: heightScreen,
+            dataSource: dataSource,
+            repaintChangesOnly: true,
+            remoteOperations: {
+                filtering: true,
+                sorting: true,
+                grouping: false
+            },
+            scrolling: { mode: "standard" },
+            rootValue: 0, parentIdExpr: "parentId", keyExpr: "id",
+            showBorders: false, showColumnHeaders: true, showColumnLines: false, hoverStateEnabled: true,
+            showRowLines: true, columnAutoWidth: true, wordWrapEnabled: true, rowAlternationEnabled: true,
+            columns: [
+                {
+                    dataField: "soHopDong", caption: "Số HĐ/PLHĐ", dataType: "string", width: 200,
+                    // cellTemplate: (c, o) => $("<div>").addClass("font-weight-bold").append(o.value).appendTo(c),
+                    cellTemplate: (c, o) => {
+                        $("<div/>").addClass("font-weight-bold").append(o.value).appendTo(c);
+                        if (o.data.dienGiai != null && o.data.dienGiai.length > 0)
+                            $("<em>").append(o.data.dienGiai).appendTo(c);
+                    },
+                    editorOptions: {
+                        placeholder: "Vui lòng nhập..."
+                    },
+                    validationRules: [{ type: "required" }],
+                },//soHopDong
+                {
+                    dataField: "projectId", caption: "Dự án", visible: false,
+                    lookup: {
+                        dataSource: customStore_Projects,
+                        valueExpr: "id", displayExpr: "name",
+                    },
+                    editorType: "dxSelectBox",
+                    editorOptions: {
+                        disabled: true,
+                        dataSource: customStore_Projects,
+                        valueExpr: "id", displayExpr: "title",
+                        placeholder: "Vui lòng chọn...",
+                        searchEnabled: true,
+                        itemTemplate: function (data) {
+                            return $("<div>").append($("<b>").append(data.title).addClass("mr-1"), $("<em>").append(data.descriptions));
                         },
-                        validationRules: [{ type: "required" }],
-                    },//soHopDong
+                    },
+                    validationRules: [{ type: "required" }]
+                },//contractorInfoId
+                {
+                    dataField: "contractorInfoId", caption: "Nhà thầu", alignment: "left", width: $("#container").width() < 1450 ? 250 : null,
+                    lookup: {
+                        dataSource: customStore_ContractorInfo,
+                        valueExpr: "id", displayExpr: "name",
+                    },
+                    editorType: "dxSelectBox",
+                    editorOptions: {
+                        dataSource: customStore_ContractorInfo,
+                        valueExpr: "id", displayExpr: "name",
+                        placeholder: "Vui lòng chọn...",
+                        searchEnabled: true,
+                        itemTemplate: function (data) {
+                            return $("<div>").append($("<b>").append(data.name).addClass("mr-1"), $("<em>").append(data.descriptions));
+                        },
+                        buttons: [
+                            'dropDown',
+                            {
+                                name: 'buttonOpenCreateNhaThau',
+                                location: 'after',
+                                options: {
+                                    icon: "preferences", stylingMode: "contained",
+                                    onClick: () => $("#popup-main").dxPopup({
+                                        fullScreen: true,
+                                        position: { of: window },
+                                        dragEnabled: true, resizeEnabled: false, showCloseButton: true, closeOnOutsideClick: false,
+                                        showTitle: true, title: "Quản lý danh sách nhà thầu", visible: true,
+                                        contentTemplate: (c) => {
+                                            var scrollView = $("<div id='scrollView'></div>");
+                                            var content = $("<div/>");
+                                            content.dxDataGrid({
+                                                dataSource: customStore_ContractorInfo,
+                                                showBorders: true, showColumnHeaders: true, showColumnLines: true, hoverStateEnabled: true,
+                                                showRowLines: true, columnAutoWidth: true, wordWrapEnabled: true, rowAlternationEnabled: false,
+                                                columns: [ 
+                                                    {
+                                                        dataField: "name", caption: "Tên nhà thầu",
+                                                        dataType: "string", cssClass:"font-weight-bold",
+                                                        validationRules: [{ type: "required" }]
+                                                    },
+                                                    {
+                                                        dataField: "code", dataType: "string", alignment: "center",
+                                                        validationRules: [{ type: "required" }]
+                                                    },
+                                                    {
+                                                        dataField: "descriptions", caption: "Thông tin khác",
+                                                        dataType: "string",
+                                                    },
+                                                    "businessAreas", "country", "city", "district", "address", "phone", "email",
+                                                    {
+                                                        dataField: "isActive", width: 100,
+                                                        editorType: "dxSwitch", dataType: "boolean",
+                                                        allowExporting: false,
+                                                    },
 
-                    //{
-                    //    type: "buttons", caption: "Tác vụ",
-                    //    width: 100, alignment: "center",
-                    //    buttons: [{
-                    //        text: "Thêm phụ lục",
-                    //        visible: PermitInAction["insert"],
-                    //        onClick: (e) => e.component.addRow(e.row.data.id)
-                    //    }, "edit", "delete"]
-                    //},
-                    {
-                        dataField: "contractorInfoId", caption: "Nhà thầu", width: 250, alignment: "left",
-                        lookup: {
-                            dataSource: customStore_ContractorInfo,
-                            valueExpr: "id", displayExpr: "name",
-                        },
-                        editorType: "dxSelectBox",
-                        editorOptions: {
-                            dataSource: customStore_ContractorInfo,
-                            valueExpr: "id", displayExpr: "name",
-                            placeholder: "Vui lòng chọn...",
-                            searchEnabled: true,
-                            itemTemplate: function (data) {
-                                return $("<div>").append($("<b>").append(data.name).addClass("mr-1"), $("<em>").append(data.Descriptions));
-                            },
-                        },
-                        validationRules: [{ type: "required" }]
-                    },//contractorInfoId
-                    {
-                        dataField: "giaTri", caption: "Giá trị hợp đồng", dataType: "number", alignment: "center", format: "###,### đ", width: 150,
-                        editorType: "dxNumberBox",
-                        editorOptions: {
-                            format: "###,### đ",
-                            placeholder: "Vui lòng chọn...",
-                        },
-                        validationRules: [{ type: "required" }]
-                    },//giaTri
-                    {
-                        dataField: "ngayKy", caption: "Ngày ký", dataType: "date", alignment: "center", format: "dd/MM/yyyy", width: 150,
-                        editorType: "dxDateBox",
-                        editorOptions: {
-                            placeholder: "Vui lòng chọn...",
-                        },
-                        validationRules: [{ type: "required" }]
-                    },//ngayKy
-                    {
-                        dataField: "dienGiai", caption: "Diễn giải", dataType: "string", alignment: "left", width: 250,
-                        cellTemplate: (c, o) => $("<span>").append((o.value != null && o.value.trim().length > 0) ? o.value : '- -').appendTo(c),
-                        editorOptions: {
-                            placeholder: "Vui lòng nhâp (nếu có)...",
-                        },
-                    },//dienGiai
-                    {
-                        caption: "Tỷ lệ (%)", alignment: "center",
-                        columns: [
-                            {
-                                dataField: "tyLeTamUng", caption: "Tạm ứng", dataType: "number",
-                                alignment: "center", width: 100,
-                                editorType: "dxNumberBox",
-                                editorOptions: {
-                                    placeholder: "Vui lòng nhập...",
-                                    min: 0, max: 100
-                                }, validationRules: [{ type: "required" }]
-                            },//tyLeTamUng
-                            {
-                                dataField: "tyLeGiuLai", caption: "Giữ lại", dataType: "number",
-                                alignment: "center", width: 100,
-                                editorType: "dxNumberBox",
-                                editorOptions: {
-                                    placeholder: "Vui lòng nhập...",
-                                    min: 0, max: 100
-                                }, validationRules: [{ type: "required" }]
-                            },//tyLeGiuLai
-                            {
-                                dataField: "tyLeThanhToanToiDa", caption: "TT tối da", dataType: "number",
-                                alignment: "center", width: 100,
-                                editorType: "dxNumberBox",
-                                editorOptions: {
-                                    placeholder: "Vui lòng nhập...",
-                                    min: 0, max: 100
-                                }, validationRules: [{ type: "required" }]
-                            },//tyLeThanhToanToiDa
-                        ]
-                    },
-                    {
-                        caption: "Thời gian (Tháng)", alignment: "center",
-                        columns: [
-                            {
-                                dataField: "thoiGianBaoHanh", caption: "Bảo hành", dataType: "number",
-                                alignment: "center", width: 100,
-                                editorOptions: {
-                                    format: "#0 tháng",
-                                    placeholder: "Vui lòng nhập...",
-                                    min: 0, max: 120
+                                                ],
+                                                editing: {
+                                                    allowAdding: PermitInAction.insert,
+                                                    allowUpdating: PermitInAction.update,
+                                                    allowDeleting: PermitInAction.delete,
+                                                    mode: "row", useIcons: false, confirmDelete: true
+                                                },
+                                                onInitNewRow: (e) => {
+                                                    e.data.isActive = true;
+                                                    e.data.status = 1;
+                                                },
+                                            });
+                                            scrollView.append(content);
+                                            scrollView.dxScrollView({
+                                                width: '100%',
+                                                height: '100%'
+                                            });
+                                            c.append(scrollView);
+                                            return c;
+                                        }
+                                    }).dxPopup("instance")
                                 }
-                            },//thoiGianBaoHanh
-                            {
-                                dataField: "thoiGianGiuBaoHanh", caption: "Giữ bảo hành", dataType: "number",
-                                alignment: "center", width: 120,
-                                editorOptions: {
-                                    format: "#0 tháng",
-                                    placeholder: "Vui lòng nhập...",
-                                    min: 0, max: 120
-                                }
-                            },//thoiGianGiuBaoHanh
-                        ]
+                            }
+                        ],
                     },
+                    onOpened: function (e) {
+                        e.element.dxSelectBox("getDataSource").reload();
+                    },
+                    validationRules: [{ type: "required" }]
+                },//contractorInfoId
+                {
+                    dataField: "giaTri", caption: "Giá trị hợp đồng", dataType: "number", alignment: "center", format: "###,### đ", width: 150,
+                    editorType: "dxNumberBox",
+                    editorOptions: {
+                        format: "###,### đ",
+                        placeholder: "Vui lòng chọn...",
+                    },
+                    validationRules: [{ type: "required" }]
+                },//giaTri
+                {
+                    dataField: "ngayKy", caption: "Ngày ký", dataType: "date", alignment: "center", format: "dd/MM/yyyy", width: 150,
+                    editorType: "dxDateBox",
+                    editorOptions: {
+                        placeholder: "Vui lòng chọn...",
+                    },
+                    validationRules: [{ type: "required" }]
+                },//ngayKy
+                {
+                    dataField: "dienGiai", visible: false, caption:"Diễn giải",
+                    editorOptions: {
+                        placeholder: "Vui lòng nhâp (nếu có)...",
+                    },
+                },//dienGiai
+                {
+                    dataField: "tyLeTamUng", caption: "Tỷ lệ tạm ứng", dataType: "number",
+                    alignment: "center", width: 100,
+                    editorType: "dxNumberBox",
+                    editorOptions: {
+                        placeholder: "Vui lòng nhập...",
+                        min: 0, max: 100
+                    }, validationRules: [{ type: "required" }]
+                },//tyLeTamUng
+                //{
+                //    dataField: "tyLeGiuLai", caption: "Giữ lại", dataType: "number",
+                //    alignment: "center", width: 100,
+                //    editorType: "dxNumberBox",
+                //    editorOptions: {
+                //        placeholder: "Vui lòng nhập...",
+                //        min: 0, max: 100
+                //    }, validationRules: [{ type: "required" }]
+                //},//tyLeGiuLai
+                {
+                    dataField: "tyLeThanhToanToiDa", caption: "Tỷ lệ TTTĐ", dataType: "number",
+                    alignment: "center", width: 100,
+                    editorType: "dxNumberBox",
+                    editorOptions: {
+                        placeholder: "Vui lòng nhập...",
+                        min: 0, max: 100
+                    }, validationRules: [{ type: "required" }]
+                },//tyLeThanhToanToiDa
+                {
+                    dataField: "thoiGianGiuBaoHanh", caption: "Tỷ lệ giữ bảo hành", dataType: "number",
+                    alignment: "center", width: 120,
+                    editorOptions: {
+                        placeholder: "Vui lòng nhập...",
+                        min: 0, max: 100
+                    }
+                },//thoiGianGiuBaoHanh
 
-                    {
-                        dataField: "isActive", width: 100, alignment: "center",
-                        editorType: "dxSwitch",
-                    },
-                    {
-                        dataField: "isVisible", width: 100, alignment: "center",
-                        editorType: "dxSwitch",
-                    },
-                ],
-                paging: {
-                    enabled: true,
-                    pageSize: 20
-                },
-                pager: {
-                    showPageSizeSelector: true,
-                    allowedPageSizes: [10, 20, 40],
-                    showInfo: true,
-                },
-                searchPanel: {
-                    highlightCaseSensitive: true,
-                    highlightSearchText: true,
-                    searchVisibleColumnsOnly: true,
-                    visible: true
-                },
-                editing: {
-                    allowUpdating: PermitInAction["update"] ? true : null,
-                    allowDeleting: PermitInAction["delete"] ? true : null,
-                    mode: "popup", useIcons: false, confirmDelete: true,
-                    popup: {
-                        width: 700, height: "auto",
-                        showTitle: false, fullScreen: $(document).width() <= 700, closeOnOutsideClick: true,
-                    },
-                    form: {
-                        labelLocation: "top", itemType: "group", colCount: 12,
-                        showRequiredMark: true, requiredMark: "(*)",
-                        items: [
-                            {
-                                colSpan: 6, dataField: "contractorInfoId",
-                            },
-                            {
-                                colSpan: 6, dataField: "dienGiai",
-                            },
-                            {
-                                colSpan: 4, dataField: "soHopDong",
-                            },
-                            {
-                                colSpan: 4, dataField: "giaTri",
-                            },
-                            {
-                                colSpan: 4, dataField: "ngayKy",
-                            },
-                            {
-                                colSpan: 4, dataField: "tyLeTamUng", label: { text: "Tỷ lệ tạm ứng", },
-                            },
-                            {
-                                colSpan: 4, dataField: "tyLeGiuLai", label: { text: "Tỷ lệ giữ lại" },
-                            },
-                            {
-                                colSpan: 4, dataField: "tyLeThanhToanToiDa", label: { text: "Tỷ lệ thanh toán tối đa" },
-                            },
-                            {
-                                colSpan: 6, dataField: "thoiGianBaoHanh",
-                            },
-                            {
-                                colSpan: 6, dataField: "thoiGianGiuBaoHanh",
-                            },
-                            {
-                                colSpan: 6, dataField: "isActive",
-                            },
-                            {
-                                colSpan: 6, dataField: "isVisible",
-                            },
-                        ]
+                {
+                    dataField: "thoiGianBaoHanh", caption: "Thời gian bảo hành", dataType: "number", alignment: "center", width: 100,
+                    editorOptions: {
+                        format: "#0 tháng",
+                        placeholder: "Vui lòng nhập...",
+                        min: 0, max: 12
+                    }
+                },//thoiGianBaoHanh
+                {
+                    dataField: "isActive", width: 100, alignment: "center", caption: "Tình trạng",
+                    editorType: "dxSwitch", 
+                    cellTemplate: (c, o) => {
+                        $('<span/>').append(o.value ? "Hoạt động" : "Tạm dừng").addClass(o.value ? "badge bg-success" : "badge bg-danger").appendTo(c);
                     }
                 },
-                onToolbarPreparing: function (e) {
-                    var container = e.component;
-                    e.toolbarOptions.items.unshift(
-                        {
-                            location: "after", widget: "dxButton",
-                            options: {
-                                visible: PermitInAction["insert"],
-                                text: "Gói thầu", icon: "add", stylingMode: "filled", type: "default",
-                                onClick: () => container.addRow()
-                            }
-                        },
-                        {
-                            location: "after", widget: "dxButton",
-                            options: {
-                                icon: "refresh", type: "default",
-                                onClick: () => container.refresh()
-                            }
-                        }
-                    );
-                },
-                onContextMenuPreparing: function (e) {
-                    if (e.target == "content" && e.row.rowType == "data") {
-                        var dataGrid = e.component;
-                        if (!e.items) e.items = [];
-                        if (PermitInAction["insert"] && e.row.data.parentId == 0) {
-                            e.items.push({
-                                icon: "add", text: "Thêm phụ lục",
-                                onItemClick: () => dataGrid.addRow(e.row.data.id)
-                            });
-                        }
-                        if (PermitInAction["update"]) {
-                            e.items.push({
-                                icon: "edit", text: "Cập nhật thông tin",
-                                onItemClick: () => dataGrid.editRow(e.row.rowIndex)
-                            });
-                        }
-                        if (PermitInAction["delete"]) {
-                            e.items.push({
-                                icon: "remove", text: "Xóa bỏ",
-                                onItemClick: () => dataGrid.deleteRow(e.row.rowIndex)
+                {
+                    caption: "Tương tác", alignment: "center", width: 100,
+                    cellTemplate: (c, o) => {
+                        if (o.data.createBy_Name != null) {
+                            $("<div />").attr('id', "popover-target-" + o.key).append(
+                                $("<img />").attr("src", "data:image/png;base64," + o.data.createBy_Avartar).addClass("img-circle elevation-2 img-size-30"),
+                                (o.data.modifyBy_Name != null && o.data.modifyBy_Name != o.data.createBy_Name) ? $("<img />").attr("src", "data:image/png;base64," + o.data.modifyBy_Avartar).addClass("img-circle elevation-2 img-size-30").attr("style", "margin-left: -15px !important") : null
+                            ).appendTo(c);
+                            $("<div />").attr('id', "popover-detail-" + o.key).append(
+                                "<div><b>" + o.data.createBy_Name + "</b></div><em>" + o.data.createBy_Title + ' - ' + o.data.createBy_Department + "</em><div>" + "(Đã tạo cách đây " + moment(o.data.createDate).locale("vi").fromNow() + ")" + "</div>",
+                                (o.data.modifyBy_Name != null) ? "<br/><div><b>" + o.data.modifyBy_Name + "</b></div><em>" + o.data.modifyBy_Title + ' - ' + o.data.modifyBy_Department + "</em><div>" + "(Đã cập nhật cách đây " + moment(o.data.updateDate).locale("vi").fromNow() + ")" + "</div>" : null
+                            ).appendTo(c);
+                            $("#popover-detail-" + o.key).dxPopover({
+                                target: "#popover-target-" + o.key,
+                                showEvent: "mouseenter", hideEvent: "mouseleave",
+                                position: "bottom",
+                                animation: {
+                                    show: { type: "pop", from: { scale: 0 }, to: { scale: 1 } },
+                                    hide: { type: "fade", from: 1, to: 0 }
+                                }
                             });
                         }
                     }
+                },//nguoiTao
+                {
+                    dataField: "createDate", width: 150, dataType: "date", alignment: "center", caption: "Thời gian tạo",
+                    cellTemplate: (c, o) => {
+                        if (o.value != null) {
+                            $("<div />").append(
+                                $("<em />").addClass("small").append("Cách đây " + moment(o.value).locale("vi").fromNow()),
+                                $("<div/>").addClass("font-weight-bold").append(moment(o.value).format("HH:mm DD/MM/YY"))
+                            ).appendTo(c);
+                        }
+                    }
+                },//createDate
+            ],
+            paging: { enabled: true, pageSize: 20 },
+            pager: {
+                showPageSizeSelector: true,
+                allowedPageSizes: [10, 20, 40],
+                showInfo: true,
+            },
+            searchPanel: {
+                highlightCaseSensitive: true, highlightSearchText: true,
+                visible: true, searchVisibleColumnsOnly: true,
+            },
+            editing: {
+                mode: "popup", useIcons: false, confirmDelete: true,
+                popup: {
+                    width: 700, height: "auto",
+                    showTitle: false, fullScreen: $(document).width() <= 700, closeOnOutsideClick: true,
                 },
-                onInitNewRow: (e) => {
-                    e.data.thoiGianBaoHanh = 0;
-                    e.data.thoiGianGiuBaoHanh = 0;
-                    e.data.tyLeTamUng = 0;
-                    e.data.tyLeGiuLai = 0;
-                    e.data.tyLeThanhToanToiDa = 0;
-                    e.data.isActive = true;
-                    e.data.isVisible = true;
-                },
-                onCellPrepared: (e) => {
-                    if (e.rowType == "data" && e.column.dataField == "soHopDong")
-                        e.cellElement.find('.dx-treelist-empty-space').toggleClass("dx-treelist-collapsed", e.data.chilCount > 0);
+                form: {
+                    labelLocation: "top", itemType: "group", colCount: 12,
+                    showRequiredMark: true, requiredMark: "(*)",
+                    items: [
+                        {
+                            colSpan: 12, dataField: "projectId", label: { location: "left" },
+                        },
+                        {
+                            colSpan: 12, dataField: "contractorInfoId", label: { location: "left" },
+                        },
+                        {
+                            colSpan: 12, dataField: "dienGiai", label: { location: "left" },
+                        },
+                        {
+                            colSpan: 4, dataField: "soHopDong",
+                        },
+                        {
+                            colSpan: 4, dataField: "giaTri",
+                        },
+                        {
+                            colSpan: 4, dataField: "ngayKy",
+                        },
+                        {
+                            colSpan: 4, dataField: "tyLeTamUng", label: { text: "Tỷ lệ tạm ứng", },
+                        },
+
+                        {
+                            colSpan: 4, dataField: "thoiGianGiuBaoHanh",
+                        },
+                        //{
+                        //    colSpan: 4, dataField: "tyLeGiuLai", label: { text: "Tỷ lệ giữ lại" },
+                        //},
+                        {
+                            colSpan: 4, dataField: "tyLeThanhToanToiDa", label: { text: "Tỷ lệ thanh toán tối đa" },
+                        },
+                        {
+                            colSpan: 4, dataField: "thoiGianBaoHanh",
+                        },
+                        {
+                            colSpan: 4, dataField: "isActive",
+                        },
+                    ]
                 }
-            });
-        }
+            },
+            onToolbarPreparing: function (e) {
+                var container = e.component;
+                e.toolbarOptions.items.unshift(
+                    {
+                        location: "before", widget: "dxSelectBox",
+                        options: {
+                            dataSource: customStore_Projects,
+                            valueExpr: "id", displayExpr: "title",
+                            searchEnabled: true,
+                            searchMode: "contains",
+                            width: "100%",
+                            showClearButton: false,
+                            value: PROJECTID,
+                            onValueChanged: function (data) {
+                                PROJECTID = data.value;
+                                localStorage.setItem('projectIdCurrent', PROJECTID);
+                                loadData(customStore);
+                            },
+                        },
+                    }, 
+                    {
+                        location: "after", widget: "dxButton",
+                        options: {
+                            icon: "refresh", type: "default",
+                            onClick: () => container.refresh()
+                        }
+                    }
+                );
+            },             
+            onInitNewRow: (e) => {
+                e.data.thoiGianBaoHanh = 0;
+                e.data.thoiGianGiuBaoHanh = 0;
+                e.data.tyLeTamUng = 0;
+                e.data.tyLeGiuLai = 0;
+                e.data.tyLeThanhToanToiDa = 0;
+                e.data.projectId = PROJECTID;
+                e.data.isActive = true;
+                e.data.isVisible = true;
+            },
+            onCellPrepared: (e) => {
+                if (e.rowType == "data" && e.column.dataField == "soHopDong")
+                    e.cellElement.find('.dx-treelist-empty-space').toggleClass("dx-treelist-collapsed", e.data.chilCount > 0);
+            },
+            onContentReady: (e) => {
+
+                $("#action-add").dxSpeedDialAction({
+                    index: 1, icon: "fas fa-plus", label: "Thêm hợp đồng",
+                    visible: PermitInAction["insert"],
+                    onClick: () => e.component.addRow()
+                }).dxSpeedDialAction("instance");
+
+                DevExpress.config({
+                    floatingActionButtonConfig: {
+                        icon: "rowfield",
+                        label: "Tác vụ",
+                        shading: true,
+                        position: {
+                            of: e.element,
+                            my: "right bottom",
+                            at: "right bottom",
+                            offset: e.component.pageCount() > 1 ? "-15 -60" : "-15 -15"
+                        }
+                    }
+                });
+                DevExpress.ui.repaintFloatingActionButton();
+            },
+            selection: { mode: "single" },
+            onSelectionChanged: (e) => {
+                var selectedRowData = e.selectedRowsData[0];
+                var selectedRowKey = e.selectedRowKeys[0]; 
+                if (selectedRowData != null && selectedRowKey != null) {
+                    var data = e.component.getRowIndexByKey(selectedRowKey);
+
+                    $("#action-add").dxSpeedDialAction({
+                        index: 2, icon: "fas fa-plus", label: "Thêm phụ lục hợp đồng",
+                        visible: (PermitInAction["insert"] && selectedRowData.parentId==0),
+                        onClick: () => e.component.addRow(data)
+                    }).dxSpeedDialAction("instance");
+
+                    $("#action-update").dxSpeedDialAction({
+                        index: 3, icon: "fas fa-edit", label: "Cập nhật thông tin",
+                        visible: PermitInAction["update"],
+                        onClick: () => e.component.editRow(data)
+                    }).dxSpeedDialAction("instance");
+
+                    $("#action-delete").dxSpeedDialAction({
+                        index: 4, icon: "fas fa-trash", label: "Xóa bỏ thông tin",
+                        visible: PermitInAction["delete"],
+                        onClick: () => e.component.deleteRow(data)
+                    }).dxSpeedDialAction("instance");
+
+                    $("#action-log").dxSpeedDialAction({
+                        index: 5, icon: "fas fa-history", label: "Nhật ký cập nhật",
+                        onClick: () => callLogEvent(selectedRowData.id, ACTION_GOITHAU)
+                    }).dxSpeedDialAction("instance");
+                }
+            },
+        });
     </script>
 }

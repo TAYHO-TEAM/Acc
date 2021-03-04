@@ -17,6 +17,7 @@ namespace ProjectManager.Common
 
         public const string NS_CongViec_TABLENAME = "NS_CongViec";
         public const string NS_CongViecDetail_TABLENAME = "NS_CongViecDetail";
+        public const string NS_CongViecDetail_GoiThau_GiaiDoan_TABLENAME = "NS_CongViecDetail_GoiThau";
         public const string NS_GiaiDoan_TABLENAME = "NS_GiaiDoan";
         public const string NS_NhomCongViec_TABLENAME = "NS_NhomCongViec";
         public const string NS_NhomCongViecDetail_TABLENAME = "NS_NhomCongViecDetail";
@@ -33,6 +34,9 @@ namespace ProjectManager.Common
         public const string NS_TamUng_TheoDoi_TABLENAME = "NS_TamUng_TheoDoi";
         public const string NS_KhauTru_TABLENAME = "NS_KhauTru";
         public const string NS_KhauTru_TheoDoi_TABLENAME = "NS_KhauTru_TheoDoi";
+        public const string NS_NghiemThu_TABLENAME = "NS_NghiemThu";
+        public const string NS_DuChi_TABLENAME = "NS_DuChi";
+        public const string NS_ThucChi_TABLENAME = "NS_ThucChi";
 
         public const string Stages_TABLENAME = "Stages";
         public const string Requests_TABLENAME = "Requests";
@@ -55,5 +59,23 @@ namespace ProjectManager.Common
         public const string DocumentReleased_TABLENAME = "DocumentReleased";
         public const string DocumentReleasedAccount_TABLENAME = "DocumentReleasedAccount";
         public const string AccountInfo_TABLENAME = "AccountInfo";
+        public const string CustomForm_TABLENAME = "CustomForm";
+        public const string CustomFormBody_TABLENAME = "CustomFormBody";
+        public const string CustomFormContent_TABLENAME = "CustomFormContent";
+        public const string CustomTable_TABLENAME = "CustomTable";
+        public const string CustomCellContent_TABLENAME = "CustomCellContent";
+        public const string CustomColum_TABLENAME = "CustomColum";
+        public const string CustomFormAccount_TABLENAME = "CustomFormAccount";
+        public const string NotifyAccount_TABLENAME = "NotifyAccount";
+        public const string Notify_TABLENAME = "Notify";
+        public const string NotifyTemplate_TABLENAME = "NotifyTemplate";
+
+        public const string Conversation_TABLENAME = "Conversation";
+        public const string PlanAccount_TABLENAME = "PlanAccount";
+        public const string PlanJob_TABLENAME = "PlanJob";
+        public const string PlanMaster_TABLENAME = "PlanMaster";
+        public const string PlanProject_TABLENAME = "PlanProject";
+        public const string PlanReport_TABLENAME = "PlanReport";
+        public const string PlanSchedule_TABLENAME = "PlanSchedule";
     }
 }

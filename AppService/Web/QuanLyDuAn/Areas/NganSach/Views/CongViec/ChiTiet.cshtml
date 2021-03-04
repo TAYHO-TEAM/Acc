@@ -5,17 +5,25 @@
     ViewBag.Title = "Cập nhật giá trị các công việc";
 }
 
+@section style{
+    <style>
+        .dx-datagrid-rowsview .dx-row.dx-group-row:not(.dx-row-focused) {
+            color: rgba(0,0,0,.54);
+            background-color: rgba(150, 150, 150, 0.2);
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.4.0/polyfill.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.1.1/exceljs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>
+}
 <div class="row">
     <div class="col-12">
-        <div id="container_congviec" data-id="@Model" class="elevation-2"></div>
+        <div id="container" data-id="@Model" class="elevation-2"></div>
     </div>
 </div>
-
 @section script{
     <script src="~/Scripts/page/ngansach.js"></script>
-    <script> 
-        let container_congviec = $("#container_congviec");
-
+    <script>
         var customStore_GiaiDoan = (id) => new DevExpress.data.CustomStore({
             key: "id", loadMode: "raw",
             load: (values) => {
@@ -51,7 +59,7 @@
             load: (values) => {
                 let deferred = $.Deferred();
                 let params = {
-                    'FindId': 'nhomCongViecId,' + container_congviec.data("id") + ';isActive,1;isVisible,1',
+                    'FindId': 'nhomCongViecId,' + $("#container").data("id") + ';isActive,1;isVisible,1',
                     'TypeStore': GIAIDOANID,
                 };
                 if (values.sort) {
@@ -81,8 +89,11 @@
             insert: (values) => ajax_insert(URL_API_PM_CMD + ACTION_CONGVIECDETAIL, values),
             update: (key, values) => ajax_update(URL_API_PM_CMD + ACTION_CONGVIECDETAIL, key, values),
             remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION_CONGVIECDETAIL, key),
+            onInserted: (key, values) => ajax_log_insert("Insert", ACTION_CONGVIECDETAIL, values, key),
+            onUpdated: (key, values) => ajax_log_insert("Update", ACTION_CONGVIECDETAIL, key, values),
+            onRemoved: (key) => ajax_log_insert("Delete", ACTION_CONGVIECDETAIL, key, null),
             reshapeOnPush: true,
-        }); 
+        });
         var customStore_NhomCongViecDetail = new DevExpress.data.CustomStore({
             key: "id",
             insert: (values) => ajax_insert(URL_API_PM_CMD + ACTION_NHOMCONGVIECDETAIL, values),
@@ -90,12 +101,37 @@
             remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION_NHOMCONGVIECDETAIL, key),
             reshapeOnPush: true,
         });
+        var customStore_Reason = new DevExpress.data.CustomStore({
+            key: "id", loadMode: "raw",
+            load: (values) => {
+                let deferred = $.Deferred();
+                let params = {
+                    'SortCol': 'status',
+                    'SortADSC': '1',
+                    'FindId': 'isActive,1;isVisible,1'
+                };
+                $.ajax({
+                    headers: header, dataType: "json",
+                    data: params,
+                    url: URL_API_PM_READ + ACTION_REASON,
+                    success: function (rs) {
+                        deferred.resolve(rs.result.items);
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        console.log(xhr.responseJSON);
+                        deferred.reject("Có lỗi xảy ra trong quá trình lấy danh sách 'Giai đoạn'. Mở Console để xem chi tiết.");
+                    },
+                    timeout: 10000
+                });
+                return deferred.promise();
+            },
+        });
 
         $(function () {
             loadCongViec();
         });
 
-        var loadCongViec = () => container_congviec.dxDataGrid({
+        var loadCongViec = () => $("#container").dxDataGrid({
             height: heightScreen,
             dataSource: customStore_CongViec,
             remoteOperations: {
@@ -112,10 +148,13 @@
             showRowLines: true, columnAutoWidth: true, wordWrapEnabled: true, rowAlternationEnabled: false,
             columns: [
                 {
-                    dataField: "status", caption: "STT", width: 80, alignment: "center", sortOrder: "desc",
-                }, 
+                    dataField: "status", caption: "STT", width: 80, alignment: "center", sortOrder: "desc", visible: false,
+                },
                 {
-                    dataField: "nhom", groupIndex: 0, caption:"Nhóm",
+                    dataField: "id", caption: "ID", width: 80, alignment: "center",
+                },
+                {
+                    dataField: "nhom", groupIndex: 0, caption: "Nhóm", 
                 },
                 {
                     dataField: "tenCongViec", caption: "Thông tin / Nội dung công việc", dataType: "string",
@@ -123,20 +162,33 @@
                         $("<b>").addClass("font-weight-bold").append(o.value),
                         (o.data.dienGiai != null && o.data.dienGiai.length > 0) ? $("<em />").addClass("mt-1 ml-1").append("- " + o.data.dienGiai) : null
                     )
-                }, 
+                },
                 {
-                    dataField: "giaiDoanId", caption: "Giai đoạn", alignment: "center",
+                    dataField: "reasonId", caption: "Lý do",
+                    width: 200, alignment: "left",
+                    lookup: {
+                        dataSource: customStore_Reason,
+                        valueExpr: "id", displayExpr: "ten",
+                    },
+                    cellTemplate: (c, o) => {
+                        c.append(o.value != null ? $("<div>").append(o.text) : $("<em>").append("Không có"))
+                    }
+                },
+                {
+                    dataField: "giaiDoanId", caption: "Giai đoạn",
+                    width: 120, alignment: "center",
                     lookup: {
                         dataSource: customStore_GiaiDoan(0),
                         valueExpr: "id", displayExpr: "tenGiaiDoan",
                     },
                 },
                 {
-                    dataField: "donViTinh", caption: "ĐVT", width: 120, alignment: "center",
+                    dataField: "donViTinh", caption: "ĐVT",
+                    width: 120, alignment: "center"
                 },
                 {
-                    dataField: "khoiLuong", caption: "Khối lượng", dataType: "number", alignment: "center", 
-
+                    dataField: "khoiLuong", caption: "Khối lượng", dataType: "number",
+                    width: 80, alignment: "center",
                 },
                 {
                     dataField: "donGia", caption: "Đơn giá", dataType: "number", alignment: "center",
@@ -144,10 +196,10 @@
 
                 },
                 {
-                    dataField: "thanhTien",caption: "Thành tiền", dataType: "number", alignment: "center",
+                    dataField: "thanhTien", caption: "Thành tiền", dataType: "number", alignment: "center",
                     format: { type: "currency", currency: "VND" },
                     calculateCellValue: function (data) {
-                        return (data.donGia > 0 && data.khoiLuong > 0)? data.donGia * data.khoiLuong:null;
+                        return (data.donGia > 0 && data.khoiLuong > 0) ? data.donGia * data.khoiLuong : null;
                     }
                 },
                 {
@@ -176,47 +228,54 @@
                     }
                 },
                 {
-                    dataField: "congViecDetailId", dataType: "number", visible: false,
-                }, 
-                {
-                    type: "buttons", caption: "Tác vụ", alignment: "center",
-                    buttons: [ 
-                        {
-                            hint: "Thêm giá trị theo giai đoạn", icon: "fas fa-plus-circle",
-                            visible: (e) => PermitInAction["insert"],
-                            onClick: (e) => genUpdateForm(e.row.data, true)
-                        },
-                        {
-                            hint: "Cập nhật giá trị theo giai đoạn", icon: "fas fa-edit",
-                            visible: (e) => (e.row.data.congViecDetailId != null && PermitInAction["update"]),
-                            onClick: (e) => genUpdateForm(e.row.data, false)
-                        },
-                        {
-                            hint: "Hủy bỏ giá trị theo giai đoạn", icon: "fas fa-trash",
-                            visible: (e) => (e.row.data.congViecDetailId != null && PermitInAction["delete"]),
-                            onClick: (e) => {
-                                DevExpress.ui.dialog.confirm("Bạn có chắc là muốn hủy bỏ giá trị của nhóm công việc?", "XÁC NHẬN THÔNG TIN").done(function (dialogResult) {
-                                    if (dialogResult) {
-                                        var deferred = $.Deferred();
-                                        customStore_CongViecDetail.remove(e.row.data.congViecDetailId).then(() => {
-                                            DevExpress.ui.notify("Hủy bỏ giá trị nhóm công việc thành công", "success", 3000);
-                                            container_congviec.dxDataGrid('instance').refresh();
-                                        }, deferred.reject);
-                                        return deferred.promise();
-                                    }
-                                });
-                            }
+                    dataField: "createDate", width: 150, dataType: "date", alignment: "center",
+                    caption: "Thời gian tạo",
+                    cellTemplate: (c, o) => {
+                        if (o.value != null) {
+                            $("<div />").append(
+                                $("<em />").addClass("small").append("Cách đây " + moment(o.value).locale("vi").fromNow()),
+                                $("<div/>").addClass("font-weight-bold").append(moment(o.value).format("HH:mm DD/MM/YY"))
+                            ).appendTo(c);
                         }
-                    ]
-                }
-            ], 
+                    }
+                },
+                {
+                    dataField: "congViecDetailId", dataType: "number", visible: false,
+                },
+                //{
+                //    type: "buttons", caption: "Tác vụ", alignment: "center",
+                //    buttons: [
+                //        {
+                //            hint: "Thêm giá trị theo giai đoạn", icon: "fas fa-plus-circle",
+                //            visible: (e) => PermitInAction["insert"],
+                //            onClick: (e) => genUpdateForm(e.row.data, true)
+                //        },
+                //        {
+                //            hint: "Cập nhật giá trị theo giai đoạn", icon: "fas fa-edit",
+                //            visible: (e) => (e.row.data.congViecDetailId != null && PermitInAction["update"]),
+                //            onClick: (e) => genUpdateForm(e.row.data, false)
+                //        },
+                //        {
+                //            hint: "Hủy bỏ giá trị theo giai đoạn", icon: "fas fa-trash",
+                //            visible: (e) => (e.row.data.congViecDetailId != null && PermitInAction["delete"]),
+                //            onClick: (e) => {
+                //                DevExpress.ui.dialog.confirm("Bạn có chắc là muốn hủy bỏ giá trị của nhóm công việc?", "XÁC NHẬN THÔNG TIN").done(function (dialogResult) {
+                //                    if (dialogResult) {
+                //                        var deferred = $.Deferred();
+                //                        customStore_CongViecDetail.remove(e.row.data.congViecDetailId).then(() => {
+                //                            DevExpress.ui.notify("Hủy bỏ giá trị nhóm công việc thành công", "success", 3000);
+                //                            container_congviec.dxDataGrid('instance').refresh();
+                //                        }, deferred.reject);
+                //                        return deferred.promise();
+                //                    }
+                //                });
+                //            }
+                //        }
+                //    ]
+                //}
+            ],
             summary: {
                 totalItems: [
-                    {
-                        column: "donGia",
-                        summaryType: "sum",
-                        valueFormat: { type: "currency", currency: "VND" },
-                    },
                     {
                         column: "thanhTien",
                         summaryType: "sum",
@@ -225,11 +284,58 @@
                 ],
                 groupItems: [
                     {
+                        column: "thanhTien",
+                        summaryType: "sum", alignByColumn: true,
+                        valueFormat: { type: "currency", currency: "VND" },
+                    },
+                    {
                         column: "tenCongViec",
                         summaryType: "count",
                         displayFormat: "{0} công việc",
                     }
                 ]
+            },
+            selection: {
+                mode: "single"
+            },
+            onSelectionChanged: function (e) {
+                var data = e.selectedRowsData[0];
+                if (data != null) {
+                    $("#action-add").dxSpeedDialAction({
+                        index: 1, icon: "fas fa-plus", label: "Thêm giá trị",
+                        visible: PermitInAction["insert"],
+                        onClick: () => genUpdateForm(data, true)
+                    }).dxSpeedDialAction("instance");
+
+                    $("#action-update").dxSpeedDialAction({
+                        index: 2, icon: "fas fa-edit", label: "Cập nhật giá trị mới",
+                        visible: (data.congViecDetailId != null && PermitInAction["update"]),
+                        onClick: () => genUpdateForm(data, false)
+                    }).dxSpeedDialAction("instance");
+
+                    $("#action-delete").dxSpeedDialAction({
+                        index: 3, icon: "fas fa-trash", label: "Hủy bỏ giá trị cũ",
+                        visible: (data.congViecDetailId != null && PermitInAction["delete"]),
+                        onClick: (e) => {
+                            DevExpress.ui.dialog.confirm("Bạn có chắc là muốn hủy bỏ giá trị của hạng mục?", "XÁC NHẬN THÔNG TIN").done(function (dialogResult) {
+                                if (dialogResult) {
+                                    var deferred = $.Deferred();
+                                    customStore_CongViecDetail.remove(data.congViecDetailId).then(() => {
+                                        DevExpress.ui.notify("Hủy bỏ giá trị nhóm công việc thành công", "success", 3000);
+                                        e.component.refresh();
+                                    }, deferred.reject);
+                                    return deferred.promise();
+                                }
+                            });
+                        }
+                    }).dxSpeedDialAction("instance");
+
+                    $("#action-log").dxSpeedDialAction({
+                        index: 4, icon: "fas fa-history", label: "Nhật ký cập nhật",
+                        visible: (data.congViecDetailId != null),
+                        onClick: () => callLogEvent(data.congViecDetailId, ACTION_CONGVIECDETAIL)
+                    }).dxSpeedDialAction("instance");
+                }
             },
             onToolbarPreparing: function (e) {
                 var container = e.component;
@@ -253,29 +359,85 @@
                     {
                         location: "after", widget: "dxButton",
                         options: {
+                            icon: "export", tylingMode: "filled", type: "default",
+                            onClick: () => container.exportToExcel(false)
+                        }
+                    },
+                    {
+                        location: "after", widget: "dxButton",
+                        options: {
                             icon: "refresh", tylingMode: "filled", type: "default",
                             onClick: () => container.refresh()
                         }
                     }
                 )
             },
+            onContentReady: (e) => {
+                DevExpress.config({
+                    floatingActionButtonConfig: {
+                        icon: "rowfield",
+                        label: "Tác vụ",
+                        shading: true,
+                        position: {
+                            of: e.element,
+                            my: "right bottom",
+                            at: "right bottom",
+                            offset: e.component.pageCount() > 1 ? "-15 -60" : "-15 -15"
+                        }
+                    }
+                });
+                DevExpress.ui.repaintFloatingActionButton();
+            },
+            //onExporting: e => {
+            //    var workbook = new ExcelJS.Workbook();
+            //    var worksheet = workbook.addWorksheet('Main sheet');
+            //    DevExpress.excelExporter
+            //        .exportDataGrid({
+            //            worksheet: worksheet,
+            //            component: e.component,
+            //            keepColumnWidths: false,
+            //            topLeftCell: { row: 2, column: 2 },
+            //            customizeCell: function (options) { 
+            //                var gridCell = options.gridCell;
+            //                var excelCell = options.excelCell;
+            //                if (gridCell.rowType === "data") {
+            //                    if (gridCell.column.dataField === 'thanhTien') { 
+            //                        excelCell.value = {
+            //                            text: gridCell.value,
+            //                            formula: 'G' + excelCell.row + '*H' + excelCell.row
+            //                        };
+            //                        excelCell.alignment = {
+            //                            horizontal: 'center'
+            //                        };
+            //                    }
+            //                }  
+            //            }
+            //        })
+            //        .then(function () {
+            //            workbook.xlsx.writeBuffer().then(function (buffer) {
+            //                saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'CapNhatGiaTriCacCongViec_Export.xlsx');
+            //            });
+            //        });
+            //    e.cancel = true;
+            //}
         });
 
         var formData = {};
         var genUpdateForm = (data, type) => $("#popup-main").dxPopup({
+            position: { of: "#container" },
             width: 500, height: "auto",
             fullScreen: $(window).width() <= 500,
             dragEnabled: true, resizeEnabled: false,
             showTitle: true, title: type ? "Thêm giá trị công việc theo giai đoạn" : "Cập nhật giá trị công việc",
             showCloseButton: true, closeOnOutsideClick: false,
             visible: true,
-            contentTemplate: (c) => { 
+            contentTemplate: (c) => {
                 formData = type ? {
                     "congViecId": data.id,
-                    "giaiDoanId": "", 
+                    "giaiDoanId": "",
                     "reasonId": 0,
                     "donGia": 1000000000,
-                    "khoiLuong":1,
+                    "khoiLuong": 1,
                     "isActive": true,
                     "isVisible": true
                 } : {
@@ -297,7 +459,7 @@
                                 colSpan: 12,
                                 dataField: "giaiDoanId",
                                 label: { text: "Giai đoạn" },
-                                editorType: "dxLookup",
+                                editorType: "dxSelectBox",
                                 editorOptions: {
                                     disabled: !type,
                                     dataSource: customStore_GiaiDoan(type ? (data.giaiDoanId == null ? 0 : data.giaiDoanId) : 0),
@@ -311,22 +473,37 @@
                                 validationRules: [{ type: "required" }]
                             },
                             {
+                                colSpan: 12,
+                                dataField: "reasonId",
+                                label: { text: "Lý do" },
+                                editorType: "dxSelectBox",
+                                editorOptions: {
+                                    dataSource: customStore_Reason,
+                                    valueExpr: "id", displayExpr: "ten",
+                                    placeholder: "Vui lòng chọn...",
+                                    searchEnabled: true, showClearButton: true,
+                                    itemTemplate: function (data) {
+                                        return $("<div>").append($("<b>").append(data.ten).addClass("mr-1"), $("<em>").append(data.dienGiai));
+                                    },
+                                },
+                            },
+                            {
                                 colSpan: 6,
                                 dataField: "donGia",
-                                label: { text: "Đơn giá", location:"top" },
+                                label: { text: "Đơn giá", location: "top" },
                                 editorType: "dxNumberBox",
                                 editorOptions: {
                                     placeholder: "Vui lòng nhập giá trị...",
                                     showClearButton: true, showSpinButtons: true,
                                     format: "#,##0 đ",
-                                    min: 1000000, step: 1000000000, 
+                                    min: 1000000, step: 1000000000,
                                 },
                                 validationRules: [{ type: "required" }]
                             },
                             {
                                 colSpan: 6,
                                 dataField: "khoiLuong",
-                                label: { text: "Khối lượng", location:"top" },
+                                label: { text: "Khối lượng", location: "top" },
                                 editorType: "dxNumberBox",
                                 editorOptions: {
                                     placeholder: "Vui lòng nhập giá trị...",
@@ -354,9 +531,9 @@
                 c.append(scrollView);
                 return c;
             },
-            onHiding: () => container_congviec.dxDataGrid('instance').refresh(),
+            onHiding: () => $("#container").dxDataGrid('instance').refresh(),
         });
-        $(document).on('submit', '#form-container', function (e) { 
+        $(document).on('submit', '#form-container', function (e) {
             var form = $(this);
             var deferred = $.Deferred();
             if (form.data("type") == true) {
@@ -372,6 +549,6 @@
             }
             e.preventDefault();
             return deferred.promise();
-        }); 
+        });
     </script>
 }

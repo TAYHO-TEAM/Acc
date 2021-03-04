@@ -1,5 +1,5 @@
 ﻿using {nameproject}.Domain;
-using {nameproject}.Domain.Repositories;
+using {nameproject}.Domain.IRepositories;
 using AutoMapper;
 using MediatR;
 using Services.Common.DomainObjects;
