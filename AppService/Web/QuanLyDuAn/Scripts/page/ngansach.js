@@ -32,37 +32,9 @@ var listActiveStatus = [
 ]
 
 var customStore_Projects = new DevExpress.data.CustomStore({
-    key: "id", loadMode: "raw",
-    load: (values) => {
-        var deferred = $.Deferred();
-        $.ajax({
-            headers: header, dataType: "json",
-            url: URL_API_PM_READ + ACTION_PROJECT,
-            success: function (data) {
-                var list = data.result.items.filter(x => x.isActive == true && x.isVisible == true);
-                if (PROJECTID == 0) {
-                    localStorage.setItem("projectIdCurrent", parseInt(list[0].id));
-                    PROJECTID = parseInt(list[0].id)
-                }
-                deferred.resolve(list);
-            },
-            error: function (xhr, textStatus, errorThrown) {
-                console.log(xhr.responseJSON);
-                deferred.reject("Có lỗi xảy ra trong quá trình lấy danh sách 'Projects'. Mở Console để xem chi tiết.");
-            },
-            timeout: 10000
-        });
-        return deferred.promise();
-    },
-    byKey: function (key) {
-        var d = new $.Deferred();
-        $.get(URL_API_PM_READ + ACTION_PROJECT, { 'FindId': key })
-            .done((rs) => { 
-                d.resolve(rs.result.items[0]);
-            })
-            .fail(() => d.reject());
-        return d.promise();
-    },
+    key: "id", loadMode:"raw",
+    load: (values) => ajax_read(ACTION_PROJECT, values),
+    //byKey: (key) => ajax_getby(ACTION_PROJECT, key),
 });
 
 var customStore_Phat_Nhom = new DevExpress.data.CustomStore({

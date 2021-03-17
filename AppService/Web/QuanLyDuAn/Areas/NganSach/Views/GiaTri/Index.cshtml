@@ -31,39 +31,47 @@
         var giaidoan;
         var quyen;
 
-        var ds_giaidoan = new DevExpress.data.CustomStore({
+        var ds_giaidoan2 = new DevExpress.data.CustomStore({
             key: "id",
-            load: (values) => {
-                let deferred = $.Deferred();
-                let params = {
-                    'SortCol': 'status',
-                    'SortADSC': '1',
-                    'FindId': 'projectId,' + PROJECTID + ';isActive,1;isVisible,1'
-                };
-                $.ajax({
-                    headers: header, dataType: "json",
-                    data: params,
-                    url: URL_API_PM_READ + ACTION_GIAIDOAN,
-                    success: function (rs) {
-                        deferred.resolve(rs.result.items);
-                    },
-                    error: function (xhr) {
-                        console.log(xhr.responseJSON ? xhr.responseJSON.Message : xhr.statusText);
-                        deferred.reject("Đã có lỗi xảy ra trong quá trình này. Mở Console để xem chi tiết hoặc liên hệ Quản trị viên.");
-                    },
-                });
-                return deferred.promise();
-            },
+            //load: (values) => {
+            //    let deferred = $.Deferred();
+            //    let params = {
+            //        'SortCol': 'status',
+            //        'SortADSC': '1',
+            //        'FindId': 'projectId,' + PROJECTID + ';isActive,1;isVisible,1'
+            //    };
+            //    $.ajax({
+            //        headers: header, dataType: "json",
+            //        data: params,
+            //        url: URL_API_PM_READ + ACTION_GIAIDOAN,
+            //        success: function (rs) {
+            //            deferred.resolve(rs.result.items);
+            //        },
+            //        error: function (xhr) {
+            //            console.log(xhr.responseJSON ? xhr.responseJSON.Message : xhr.statusText);
+            //            deferred.reject("Đã có lỗi xảy ra trong quá trình này. Mở Console để xem chi tiết hoặc liên hệ Quản trị viên.");
+            //        },
+            //    });
+            //    return deferred.promise();
+            //},
+            load: (values) => ajax_read(ACTION_GIAIDOAN, values),
             byKey: function (key) {
                 var d = new $.Deferred();
                 $.get(URL_API_PM_READ + ACTION_GIAIDOAN, { 'FindId': key })
                     .done((rs) => {
-                        //capDoGiaiDoan = rs.result.items.find(x => x.id == GIAIDOANID).capDo;
                         d.resolve(rs.result.items.find(x => x.id == GIAIDOANID));
                     })
                     .fail(() => d.reject());
                 return d.promise();
             },
+        });
+        var ds_giaidoan = new DevExpress.data.DataSource({
+            store: new DevExpress.data.CustomStore({
+                key: "id",
+                load: (values) => ajax_read(ACTION_GIAIDOAN, values),
+                byKey: (key) => ajax_getby(ACTION_GIAIDOAN, key),
+            }),
+            filter: ["projectId", "=", PROJECTID]
         });
         var ds_hangmuc = new DevExpress.data.CustomStore({
             key: "id",
@@ -360,6 +368,7 @@
                                 value: PROJECTID,
                                 onValueChanged: (data) => {
                                     localStorage.setItem('projectIdCurrent', data.value);
+                                    localStorage.setItem('giaiDoanIdCurrent', null); 
                                     location.reload();
                                 },
                             },

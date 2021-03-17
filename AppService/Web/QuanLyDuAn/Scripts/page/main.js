@@ -149,9 +149,9 @@ function getParamInUrl(name, url) {
     return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 var ajax_read = (name, loadOptions) => {
-    loadingPanel.show();
+    //loadingPanel.show();
     var data = {
-        'nameEF': name,
+        'nameEF': (name.indexOf('/') == 0 ? name.split('/')[name.split('/').length - 1] : url),
         'devRequestLoadOptionsViewModel': loadOptions
     };
     var deferred = $.Deferred();
@@ -159,21 +159,35 @@ var ajax_read = (name, loadOptions) => {
         headers: header, url: URL_API_PM_READ_All, dataType: "json", type: "POST",
         data: JSON.stringify(data),
         success: function (result) {
-            loadingPanel.hide();
             deferred.resolve(result.data, {
                 totalCount: result.totalCount,
                 summary: result.summary,
                 groupCount: result.groupCount
             });
         },
-        error: function (xhr, textStatus, errorThrown) {
-            loadingPanel.hide();
-            console.log(textStatus);
-            console.log(errorThrown);
-            console.log(xhr);
-            deferred.reject("Có lỗi xảy ra trong quá trình lấy dữ liệu. Mở Console để xem chi tiết.");
+        error: function (xhr) {
+            console.log(xhr.responseJSON ? xhr.responseJSON.Message : xhr.statusText);
+            deferred.reject("Đã có lỗi xảy ra trong quá trình này. Mở Console để xem chi tiết hoặc liên hệ Quản trị viên.");
         },
-        timeout: 10000
+    });
+    return deferred.promise();
+}
+var ajax_getby = (name, key) => { 
+    var data = {
+        'nameEF': (name.indexOf('/') == 0 ? name.split('/')[name.split('/').length - 1] : url),
+        'devRequestLoadOptionsViewModel': {take:10, skip:0}
+    };
+    var deferred = $.Deferred();
+    $.ajax({
+        headers: header, url: URL_API_PM_READ_All, dataType: "json", type: "POST",
+        data: JSON.stringify(data),
+        success: function (result) { 
+            deferred.resolve(result.data ? result.data.find(x => x.id == key) : null);
+        },
+        error: function (xhr) {
+            console.log(xhr.responseJSON ? xhr.responseJSON.Message : xhr.statusText);
+            deferred.reject("Đã có lỗi xảy ra trong quá trình này. Mở Console để xem chi tiết hoặc liên hệ Quản trị viên.");
+        },
     });
     return deferred.promise();
 }
