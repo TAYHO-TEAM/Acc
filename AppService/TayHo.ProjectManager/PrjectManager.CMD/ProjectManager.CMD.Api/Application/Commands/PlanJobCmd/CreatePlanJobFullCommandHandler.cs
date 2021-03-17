@@ -34,6 +34,7 @@ namespace  ProjectManager.CMD.Api.Application.Commands
             await _planJobRepository.AddAsync(newPlanJob).ConfigureAwait(false);
             await _planJobRepository.UnitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
             var newPlanSchedule = new PlanSchedule(request.PlanMasterId, newPlanJob.Id, request.planScheduleCommandSet.Title, request.planScheduleCommandSet.Note, request.planScheduleCommandSet.Remind, request.planScheduleCommandSet.Repead, request.planScheduleCommandSet.RepeadType, request.planScheduleCommandSet.StartDate, request.planScheduleCommandSet.EndDate, request.planScheduleCommandSet.ModifyTimes);
+            newPlanSchedule.SetCreate(_user);
             await _planScheduleRepository.AddAsync(newPlanSchedule).ConfigureAwait(false);
             await _planScheduleRepository.UnitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
             methodResult.Result = _mapper.Map<CreatePlanJobCommandResponse>(newPlanJob);

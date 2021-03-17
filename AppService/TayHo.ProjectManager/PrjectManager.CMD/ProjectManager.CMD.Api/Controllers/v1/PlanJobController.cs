@@ -10,6 +10,7 @@ namespace ProjectManager.CMD.Api.Controllers.v1
 {
     public class PlanJobController : APIControllerBase
     {
+        private const string PlanJobFull = nameof(PlanJobFull);
         public PlanJobController(IMediator mediator) : base(mediator)
         {
         }
@@ -23,7 +24,7 @@ namespace ProjectManager.CMD.Api.Controllers.v1
         /// <param name="command"></param>
         /// <returns></returns>
         [HttpPost]
-        [ProducesResponseType(typeof(Services.Common.DomainObjects.MethodResult<CreatePlanJobCommandResponse>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(MethodResult<CreatePlanJobCommandResponse>), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(VoidMethodResult), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> CreatePlanJobAsync([FromBody] CreatePlanJobCommand command)
         {
@@ -31,6 +32,20 @@ namespace ProjectManager.CMD.Api.Controllers.v1
             return Ok(result);
         }
 
+        /// <summary>
+        /// Create a new PlanJobFull.
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route(PlanJobFull)]
+        [ProducesResponseType(typeof(MethodResult<CreatePlanJobCommandResponse>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(VoidMethodResult), (int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> CreatePlanJobFullAsync([FromBody] CreatePlanJobFullCommand command)
+        {
+            var result = await _mediator.Send(command).ConfigureAwait(false);
+            return Ok(result);
+        }
         /// <summary>
         /// Update a existing PlanJob.
         /// </summary>

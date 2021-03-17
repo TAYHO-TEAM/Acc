@@ -9,11 +9,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 
-namespace  ProjectManager.CMD.Api.Application.Commands
+namespace ProjectManager.CMD.Api.Application.Commands
 {
-    public class UpdatePlanJobCommandHandler : PlanJobCommandHandler,IRequestHandler<UpdatePlanJobCommand, MethodResult<UpdatePlanJobCommandResponse>>
+    public class UpdatePlanJobCommandHandler : PlanJobCommandHandler, IRequestHandler<UpdatePlanJobCommand, MethodResult<UpdatePlanJobCommandResponse>>
     {
-        public UpdatePlanJobCommandHandler(IMapper mapper,IHttpContextAccessor httpContextAccessor, IPlanJobRepository planJobRepository) : base(mapper,httpContextAccessor,planJobRepository)
+        public UpdatePlanJobCommandHandler(IMapper mapper, IHttpContextAccessor httpContextAccessor, IPlanJobRepository planJobRepository) : base(mapper, httpContextAccessor, planJobRepository)
         {
         }
 
@@ -40,20 +40,20 @@ namespace  ProjectManager.CMD.Api.Application.Commands
             existingPlanJob.Status = request.Status.HasValue ? request.Status : existingPlanJob.Status;
 
             existingPlanJob.SetPlanMasterId(request.PlanMasterId);
-	existingPlanJob.SetParentId(request.ParentId);
-			existingPlanJob.SetTitle(request.Title);
-			existingPlanJob.SetDescription(request.Description);
-			existingPlanJob.SetUnit(request.Unit);
-			existingPlanJob.SetAmount(request.Amount);
-			existingPlanJob.SetStartDate(request.StartDate);
-			existingPlanJob.SetEndDate(request.EndDate);
-			existingPlanJob.SetModifyTimes(request.ModifyTimes);
-			existingPlanJob.SetPriority(request.Priority);
-			existingPlanJob.SetImportantLevel(request.ImportantLevel);
-			existingPlanJob.SetIsDone(request.IsDone);
-			
+            existingPlanJob.SetParentId(request.ParentId);
+            existingPlanJob.SetTitle(request.Title);
+            existingPlanJob.SetDescription(request.Description);
+            existingPlanJob.SetUnit(request.Unit);
+            existingPlanJob.SetAmount(request.Amount);
+            existingPlanJob.SetStartDate(request.StartDate);
+            existingPlanJob.SetEndDate(request.EndDate);
+            existingPlanJob.SetModifyTimes(request.ModifyTimes);
+            existingPlanJob.SetPriority(request.Priority);
+            existingPlanJob.SetImportantLevel(request.ImportantLevel);
+            existingPlanJob.SetIsDone(request.IsDone);
 
-            existingPlanJob.SetUpdate(_user,null);
+
+            existingPlanJob.SetUpdate(_user, null);
             _planJobRepository.Update(existingPlanJob);
             await _planJobRepository.UnitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
             methodResult.Result = _mapper.Map<UpdatePlanJobCommandResponse>(existingPlanJob);

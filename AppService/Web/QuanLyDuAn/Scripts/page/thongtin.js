@@ -670,27 +670,27 @@ const unit = [
 ];
 const important = [
     {
-        ID: '0',
+        ID: 0,
         Name: 'Không quan tâm'
     },
     {
-        ID: '1',
+        ID: 1,
         Name: 'Có thể đợi'
     },
     {
-        ID: '2',
+        ID: 2,
         Name: 'Trung bình'
     },
     {
-        ID: '3',
+        ID: 3,
         Name: 'Cần thiết'
     },
     {
-        ID: '4',
+        ID: 4,
         Name: 'Cần gấp'
     },
     {
-        ID: '5',
+        ID: 5,
         Name: 'Cấp bách'
     }
 ];
