@@ -14,57 +14,33 @@
 
 @section script{
     <script src="~/Scripts/page/ngansach.js"></script>
-    <script>
-        var customStore = new DevExpress.data.CustomStore({
-            key: "id",
-            load: (values) => {
-                let deferred = $.Deferred(), params = {};
-
-                params = {
-                    'PageSize': isNullOrEmpty(values.take) ? values.take : 0,
-                    'PageNumber': (isNullOrEmpty(values.take) && isNullOrEmpty(values.skip)) ? ((values.skip / values.take) + 1) : 0,
-                };
-                if (values.sort) {
-                    params['SortCol'] = values.sort[0].selector;
-                    params['SortADSC'] = values.sort[0].desc;
-                }
-
-                $.ajax({
-                    headers: header,
-                    url: URL_API_PM_READ + ACTION_NHOMCHIPHI,
-                    dataType: "json",
-                    data: params,
-                    success: function (data) {
-                        deferred.resolve(
-                            data.result.items,
-                            {
-                                totalCount: data.result.pagingInfo.totalItems,
-                            }
-                        );
-                    },
-                    error: function (xhr) {
-                        console.log(xhr.responseJSON ? xhr.responseJSON.Message : xhr.statusText);
-                        deferred.reject("Đã có lỗi xảy ra trong quá trình này. Mở Console để xem chi tiết hoặc liên hệ Quản trị viên.");
-                    },
-                });
-                return deferred.promise();
-            },
-            insert: (values) => ajax_insert(URL_API_PM_CMD + ACTION_NHOMCHIPHI, values),
-            update: (key, values) => ajax_update(URL_API_PM_CMD + ACTION_NHOMCHIPHI, key, values),
-            remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION_NHOMCHIPHI, key),
+    <script> 
+        var ds_main = new DevExpress.data.DataSource({
+            store: new DevExpress.data.CustomStore({
+                key: "id",
+                load: (values) => ajax_read(ACTION_NHOMCHIPHI, values),
+                insert: (values) => ajax_insert(URL_API_PM_CMD + ACTION_NHOMCHIPHI, values),
+                update: (key, values) => ajax_update(URL_API_PM_CMD + ACTION_NHOMCHIPHI, key, values),
+                remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION_NHOMCHIPHI, key),
+                byKey: (key) => {
+                    var deferred = $.Deferred();
+                    ds_main.store().load().done((rs) => {
+                        deferred.resolve(rs.find(x => x.id == key));
+                    });
+                    return deferred.promise();
+                },
+            }), 
+            sort: [{ selector: "status", desc: false }]
         });
 
         $(function () {
-            loadData(customStore);
+            loadData();
         });
 
-        let loadData = (dataSource) => $("#container").dxDataGrid({
+        let loadData = () => $("#container").dxDataGrid({
             height: heightScreen,
-            dataSource: dataSource,
-            remoteOperations: {
-                paging: true,
-                sorting: true,
-            },
+            dataSource: ds_main,
+            remoteOperations: true,
             showBorders: false, showColumnHeaders: true, showColumnLines: false, hoverStateEnabled: true,
             showRowLines: true, columnAutoWidth: true, wordWrapEnabled: true, rowAlternationEnabled: true,
             columns: [
@@ -74,7 +50,7 @@
                     editorType: "dxNumberBox",
                     editorOptions: {
                         min: 1, step: 1, showSpinButtons: true,
-                    }, sortOrder: "desc",
+                    }, 
                     cellTemplate: (c, o) => c.append(o.rowIndex + 1)
                 },
                 {
@@ -122,9 +98,9 @@
                 visible: true
             },
             editing: {
-                allowAdding: PermitInAction["insert"] ? true : null,
-                allowUpdating: PermitInAction["update"] ? true : null,
-                allowDeleting: PermitInAction["delete"] ? true : null,
+                allowAdding: PermitInAction.insert,
+                allowUpdating: PermitInAction.update,
+                allowDeleting: PermitInAction.delete,
                 mode: "cell", useIcons: false, confirmDelete: true,                
             },
             onToolbarPreparing: function (e) {
@@ -133,7 +109,7 @@
                     {
                         location: "after", widget: "dxButton",
                         options: {
-                            icon: "refresh", tylingMode: "filled", type: "default",
+                            icon: "refresh", type: "default",
                             onClick: () => container.refresh()
                         }
                     })
@@ -143,16 +119,18 @@
                 e.data.isVisible = true;
             },
             rowDragging: {
-                allowReordering: PermitInAction["update"],
+                allowReordering: PermitInAction.update,
                 showDragIcons: true,
                 dropFeedbackMode: "push",
                 dragDirection: "vertical",
                 onDragEnd: function (e) {
                     var source = e.itemData;
                     var target = e.component.getVisibleRows()[e.toIndex].data;
+                    var deferred = $.Deferred();
                     if (source.id != target.id) {
-                        console.log(ajax_update(URL_API_PM_CMD + ACTION, source.id, { status: target.status }));
-                        e.component.refresh();
+                        ds_main.store().update(source.id, { status: target.status }).then(() => {
+                            e.component.refresh().then(deferred.resolve, deferred.reject);
+                        }, deferred.reject);
                     }
                 },
             },

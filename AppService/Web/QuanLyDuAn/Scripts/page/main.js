@@ -2,7 +2,6 @@
 var UserCurrent = localStorage.getItem("userCurrent");
 var UserCurrentInfo = JSON.parse(localStorage.getItem("userCurrentInfo"));
 var PROJECTID = isNullOrEmpty(localStorage.getItem("projectIdCurrent")) ? parseInt(localStorage.getItem("projectIdCurrent")) : 1;
-var GIAIDOANID = isNullOrEmpty(localStorage.getItem("giaiDoanIdCurrent")) ? parseInt(localStorage.getItem("giaiDoanIdCurrent")) : 0;
 var header = {};
 var PermitInAction = { id: 0, view: false, insert: false, update: false, delete: false, readonly: false, assign: false, approve:false };
 
@@ -149,9 +148,10 @@ function getParamInUrl(name, url) {
     return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 var ajax_read = (name, loadOptions) => {
-    //loadingPanel.show();
+    //loadingPanel.show();  
+
     var data = {
-        'nameEF': (name.indexOf('/') == 0 ? name.split('/')[name.split('/').length - 1] : url),
+        'nameEF': (name.indexOf('/') == 0 ? name.split('/')[name.split('/').length - 1] : name),
         'devRequestLoadOptionsViewModel': loadOptions
     };
     var deferred = $.Deferred();
@@ -159,6 +159,7 @@ var ajax_read = (name, loadOptions) => {
         headers: header, url: URL_API_PM_READ_All, dataType: "json", type: "POST",
         data: JSON.stringify(data),
         success: function (result) {
+            console.log(result);
             deferred.resolve(result.data, {
                 totalCount: result.totalCount,
                 summary: result.summary,
@@ -172,40 +173,21 @@ var ajax_read = (name, loadOptions) => {
     });
     return deferred.promise();
 }
-var ajax_getby = (name, key) => { 
-    var data = {
-        'nameEF': (name.indexOf('/') == 0 ? name.split('/')[name.split('/').length - 1] : url),
-        'devRequestLoadOptionsViewModel': {take:10, skip:0}
-    };
-    var deferred = $.Deferred();
-    $.ajax({
-        headers: header, url: URL_API_PM_READ_All, dataType: "json", type: "POST",
-        data: JSON.stringify(data),
-        success: function (result) { 
-            deferred.resolve(result.data ? result.data.find(x => x.id == key) : null);
-        },
-        error: function (xhr) {
-            console.log(xhr.responseJSON ? xhr.responseJSON.Message : xhr.statusText);
-            deferred.reject("Đã có lỗi xảy ra trong quá trình này. Mở Console để xem chi tiết hoặc liên hệ Quản trị viên.");
-        },
-    });
-    return deferred.promise();
-}
 var ajax_insert = (url, values) => {
-    loadingPanel.show();
+    //loadingPanel.show();
     var deferred = $.Deferred();
     $.ajax({
         headers: header, url: url, dataType: "json", type: "POST",
         data: JSON.stringify(values),
         success: function (data) {
-            loadingPanel.hide();
+            //loadingPanel.hide();
             if (data != null && data.isOk && data.result != null)
                 deferred.resolve(data.result);
             else
                 deferred.reject("Có lỗi xảy ra trong quá trình thêm dữ liệu.");
         },
         error: function (xhr) {
-            loadingPanel.hide();
+            //loadingPanel.hide();
             console.log(xhr.responseJSON ? xhr.responseJSON.Message : xhr.statusText);
             deferred.reject("Đã có lỗi xảy ra trong quá trình này. Mở Console để xem chi tiết hoặc liên hệ Quản trị viên.");
         },
@@ -213,18 +195,18 @@ var ajax_insert = (url, values) => {
     return deferred.promise();
 }
 var ajax_update = (url, key, values) => {
-    loadingPanel.show();
+    //loadingPanel.show();
     var keyObj = JSON.parse('{"id":' + key + '}');
     var deferred = $.Deferred();
     $.ajax({
         headers: header, url: url, dataType: "json", type: "PUT",
         data: JSON.stringify($.extend(keyObj, values)),
         success: function (data) {
-            loadingPanel.hide();
+            //loadingPanel.hide();
             deferred.resolve();
         },
         error: function (xhr) {
-            loadingPanel.hide();
+            //loadingPanel.hide();
             console.log(xhr.responseJSON ? xhr.responseJSON.Message : xhr.statusText);
             deferred.reject("Đã có lỗi xảy ra trong quá trình này. Mở Console để xem chi tiết hoặc liên hệ Quản trị viên.");
         },
@@ -232,18 +214,18 @@ var ajax_update = (url, key, values) => {
     return deferred.promise();
 }
 var ajax_delete = (url, key) => {
-    loadingPanel.show();
+    //loadingPanel.show();
     var deferred = $.Deferred();
     var keys = typeof (key) == 'number' ? [key] : key;
     $.ajax({
         headers: header, url: url, dataType: "json", type: "DELETE",
         data: JSON.stringify({ "ids": keys }),
         success: function (data) {
-            loadingPanel.hide();
+            //loadingPanel.hide();
             deferred.resolve();
         },
         error: function (xhr) {
-            loadingPanel.hide();
+            //loadingPanel.hide();
             console.log(xhr.responseJSON ? xhr.responseJSON.Message : xhr.statusText);
             deferred.reject("Đã có lỗi xảy ra trong quá trình này. Mở Console để xem chi tiết hoặc liên hệ Quản trị viên.");
         },

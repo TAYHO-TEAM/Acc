@@ -29,50 +29,60 @@
     <script src="~/Scripts/page/ngansach.js"></script>
     <script>
         var giaidoan;
-        var quyen;
+        var quyen; 
 
-        var ds_giaidoan2 = new DevExpress.data.CustomStore({
+        var ds_giaidoan = new DevExpress.data.CustomStore({
             key: "id",
-            //load: (values) => {
-            //    let deferred = $.Deferred();
-            //    let params = {
-            //        'SortCol': 'status',
-            //        'SortADSC': '1',
-            //        'FindId': 'projectId,' + PROJECTID + ';isActive,1;isVisible,1'
-            //    };
-            //    $.ajax({
-            //        headers: header, dataType: "json",
-            //        data: params,
-            //        url: URL_API_PM_READ + ACTION_GIAIDOAN,
-            //        success: function (rs) {
-            //            deferred.resolve(rs.result.items);
-            //        },
-            //        error: function (xhr) {
-            //            console.log(xhr.responseJSON ? xhr.responseJSON.Message : xhr.statusText);
-            //            deferred.reject("Đã có lỗi xảy ra trong quá trình này. Mở Console để xem chi tiết hoặc liên hệ Quản trị viên.");
-            //        },
-            //    });
-            //    return deferred.promise();
-            //},
-            load: (values) => ajax_read(ACTION_GIAIDOAN, values),
-            byKey: function (key) {
-                var d = new $.Deferred();
-                $.get(URL_API_PM_READ + ACTION_GIAIDOAN, { 'FindId': key })
-                    .done((rs) => {
-                        d.resolve(rs.result.items.find(x => x.id == GIAIDOANID));
-                    })
-                    .fail(() => d.reject());
-                return d.promise();
+            load: (values) => {
+                values['filter'] = [["projectId", "=", PROJECTID], 'and', ["isActive", "=", 1]];
+                values['sort'] = [{ selector: "status", desc: false }];
+                return ajax_read(ACTION_GIAIDOAN, values);
+            }, 
+            byKey: (key) => {
+                var deferred = $.Deferred();
+                ds_giaidoan.load().done((rs) => {
+                    deferred.resolve(rs.find(x => x.id == key));
+                });
+                return deferred.promise();
             },
         });
-        var ds_giaidoan = new DevExpress.data.DataSource({
-            store: new DevExpress.data.CustomStore({
-                key: "id",
-                load: (values) => ajax_read(ACTION_GIAIDOAN, values),
-                byKey: (key) => ajax_getby(ACTION_GIAIDOAN, key),
-            }),
-            filter: ["projectId", "=", PROJECTID]
+        var ds_loaicongviec = (projectId) => new DevExpress.data.CustomStore({
+            key: "id",
+            load: (values) => {
+                values['filter'] = [["projectId", "=", PROJECTID], 'and', ["isActive", "=", 1]];
+                return ajax_read(ACTION_LOAICONGVIEC, values);
+            },
+            byKey: (key) => {
+                var deferred = $.Deferred();
+                ds_loaicongviec.load().done((rs) => {
+                    deferred.resolve(rs.find(x => x.id == key));
+                });
+                return deferred.promise();
+            },
         });
+        var ds_group_account = new DevExpress.data.CustomStore({
+            key: "id",
+            load: (values) => {
+                let deferred = $.Deferred();
+                let params = {
+                    'FindId': 'accountId,' + UserCurrentInfo.accountId + ';isActive,1;isVisible,1'
+                };
+                $.ajax({
+                    headers: header, dataType: "json",
+                    data: params,
+                    url: URL_API_ACC_READ + "/GroupAccount",
+                    success: function (rs) {
+                        deferred.resolve(rs.result.items);
+                    },
+                    error: function (xhr) {
+                        console.log(xhr.responseJSON ? xhr.responseJSON.Message : xhr.statusText);
+                        deferred.reject("Đã có lỗi xảy ra trong quá trình này. Mở Console để xem chi tiết hoặc liên hệ Quản trị viên.");
+                    },
+                });
+                return deferred.promise();
+            },
+        });
+
         var ds_hangmuc = new DevExpress.data.CustomStore({
             key: "id",
             load: (values) => {
@@ -212,41 +222,7 @@
             onUpdated: (key, values) => ajax_log_insert("Update", ACTION_NHOMCONGVIECDETAIL, key, values),
             onRemoved: (key) => ajax_log_insert("Delete", ACTION_NHOMCONGVIECDETAIL, key, null),
             reshapeOnPush: true,
-        });
-        var ds_loaicongviec = (projectId) => new DevExpress.data.CustomStore({
-            key: "id",
-            load: (values) => {
-                let deferred = $.Deferred();
-                let params = {
-                    'SortCol': 'status',
-                    'SortADSC': '1',
-                    'FindId': 'projectId,' + projectId + ';isActive,1;isVisible,1'
-                };
-                $.ajax({
-                    headers: header, dataType: "json",
-                    data: params,
-                    url: URL_API_PM_READ + ACTION_LOAICONGVIEC,
-                    success: function (rs) {
-                        var data = rs.result.items;
-                        deferred.resolve(data);
-                    },
-                    error: function (xhr) {
-                        console.log(xhr.responseJSON ? xhr.responseJSON.Message : xhr.statusText);
-                        deferred.reject("Đã có lỗi xảy ra trong quá trình này. Mở Console để xem chi tiết hoặc liên hệ Quản trị viên.");
-                    },
-                });
-                return deferred.promise();
-            },
-            byKey: function (key) {
-                var d = new $.Deferred();
-                $.get(URL_API_PM_READ + ACTION_LOAICONGVIEC, { 'FindId': key })
-                    .done((rs) => {
-                        d.resolve(rs.result.items[0]);
-                    })
-                    .fail(() => d.reject());
-                return d.promise();
-            },
-        });
+        });        
         var ds_congviec = (nhomCongViecId) => new DevExpress.data.CustomStore({
             key: "id",
             load: (values) => {
@@ -319,30 +295,7 @@
             reshapeOnPush: true,
         });
 
-        var ds_group_account = new DevExpress.data.CustomStore({
-            key: "id",
-            load: (values) => {
-                let deferred = $.Deferred();
-                let params = {
-                    'FindId': 'accountId,' + UserCurrentInfo.accountId + ';isActive,1;isVisible,1'
-                };
-                $.ajax({
-                    headers: header, dataType: "json",
-                    data: params,
-                    url: URL_API_ACC_READ + "/GroupAccount",
-                    success: function (rs) {
-                        deferred.resolve(rs.result.items);
-                    },
-                    error: function (xhr) {
-                        console.log(xhr.responseJSON ? xhr.responseJSON.Message : xhr.statusText);
-                        deferred.reject("Đã có lỗi xảy ra trong quá trình này. Mở Console để xem chi tiết hoặc liên hệ Quản trị viên.");
-                    },
-                });
-                return deferred.promise();
-            },
-        });
-
-        $(function () {
+        $(function () { 
             loadFilter();
         });
 
@@ -359,8 +312,8 @@
                             editorType: "dxLookup",
                             editorOptions: {
                                 dataSource: customStore_Projects,
-                                valueExpr: "id", displayExpr: (item) => { return item && item.title + ' - ' + item.code },
-                                searchEnabled: true, searchMode: "contains",
+                                searchEnabled: true, searchMode: "contains", searchExpr: ["title","code", "descriptions"],
+                                valueExpr: "id", displayExpr: "title",
                                 placeholder: "Vui lòng chọn...",
                                 itemTemplate: (data, index) => {
                                     return $("<div>").html("<b>" + data.title + "</b> - " + data.code + ' - <em>' + data.descriptions + "</em>");
@@ -368,7 +321,7 @@
                                 value: PROJECTID,
                                 onValueChanged: (data) => {
                                     localStorage.setItem('projectIdCurrent', data.value);
-                                    localStorage.setItem('giaiDoanIdCurrent', null); 
+                                    localStorage.setItem('giaiDoanIdCurrent', 0); 
                                     location.reload();
                                 },
                             },
@@ -380,29 +333,21 @@
                             editorType: "dxLookup",
                             editorOptions: {
                                 dataSource: ds_giaidoan,
+                                searchEnabled: true, searchMode: "contains", searchExpr: ["tenGiaiDoan", "dienGiai"],
                                 valueExpr: "id", displayExpr: "tenGiaiDoan",
-                                placeholder: "Vui lòng chọn...",
-                                searchEnabled: true, searchMode: "contains",
+                                placeholder: "Vui lòng chọn...", 
                                 value: GIAIDOANID,
-                                itemTemplate: function (data) {
+                                itemTemplate: (data) => {
                                     return $("<div>").append($("<b>").append(data.tenGiaiDoan).addClass("mr-1"), $("<em>").append(data.dienGiai));
                                 },
                                 onValueChanged: (data) => {
-                                    localStorage.setItem('giaiDoanIdCurrent', data.value); 
+                                    $("#container-sub").fadeOut();
+                                    GIAIDOANID = data.value;
+                                    localStorage.setItem('giaiDoanIdCurrent', GIAIDOANID); 
                                 },
                             },
                             validationRules: [{ type: "required" }]
                         },
-                        //{
-                        //    itemType: "button", colSpan: 3,
-                        //    horizontalAlignment: "left",
-                        //    buttonOptions: {
-                        //        //height: 35, width: "100%",
-                        //        text: "Load Data",
-                        //        type: "success", icon: "refresh",
-                        //        useSubmitBehavior: true
-                        //    }
-                        //}
                     ]
                 }
             ],
@@ -501,7 +446,7 @@
                 mode: giaidoan.capDo.toUpperCase() == "HM" ? "none" : "single"
             },
             onSelectionChanged: (e) => {
-                var data = e.selectedRowsData[0];
+                var data = e.selectedRowsData[0]; 
                 if (data != null && data.chilCount == 0 && GIAIDOANID != 0) {
                     loadSubData(data);
                 }
@@ -509,7 +454,6 @@
         });
         var loadSubData = (item) => $("#container-sub").dxDataGrid({
             dataSource: ds_nhomcongviec(item.id),
-
             height: heightScreen - $("#container-filter").parent().parent().parent().parent().height(),
             showBorders: true, showColumnHeaders: true, showColumnLines: false, hoverStateEnabled: true,
             showRowLines: true, columnAutoWidth: true, wordWrapEnabled: true, rowAlternationEnabled: false,
@@ -759,8 +703,13 @@
                         },
                     }).appendTo(container);
                 }
-            }
+            },
+            onContentReady: () => {
+                $("#container-sub").fadeIn();
+            },
+            export: { enabled: true },
         });
+
         var genFormNCV = (data, type) => $("#popup-main").dxPopup({
             position: { of: $(document) },
             width: 500, height: "auto",
@@ -847,7 +796,6 @@
                 return c;
             }
         }).dxPopup('instance');
-
         var genFormCV = (data, type) => $("#popup-main").dxPopup({
             position: { of: $(document) },
             width: 500, height: "auto",

@@ -19,39 +19,39 @@
             { value: "NCV", text: "Nhóm công việc" },
             { value: "CV", text: "Công việc" }]
 
-        var customStore = new DevExpress.data.CustomStore({
-            key: "id",
-            load: (values) => {
-                let deferred = $.Deferred();
-                var params = {
-                    'FindId': 'projectId,' + PROJECTID,
-                    'PageSize': isNullOrEmpty(values.take) ? values.take : 0,
-                    'PageNumber': (isNullOrEmpty(values.take) && isNullOrEmpty(values.skip)) ? ((values.skip / values.take) + 1) : 0,
-                };
-                if (values.sort) {
-                    params['SortCol'] = values.sort[0].selector;
-                    params['SortADSC'] = values.sort[0].desc;
-                }
+        //var customStore = new DevExpress.data.CustomStore({
+        //    key: "id",
+        //    load: (values) => {
+        //        let deferred = $.Deferred();
+        //        var params = {
+        //            'FindId': 'projectId,' + PROJECTID,
+        //            'PageSize': isNullOrEmpty(values.take) ? values.take : 0,
+        //            'PageNumber': (isNullOrEmpty(values.take) && isNullOrEmpty(values.skip)) ? ((values.skip / values.take) + 1) : 0,
+        //        };
+        //        if (values.sort) {
+        //            params['SortCol'] = values.sort[0].selector;
+        //            params['SortADSC'] = values.sort[0].desc;
+        //        }
 
-                $.ajax({
-                    headers: header,
-                    url: URL_API_PM_READ + ACTION_GIAIDOAN,
-                    dataType: "json",
-                    data: params,
-                    success: function (data) {
-                        deferred.resolve(data.result.items, { totalCount: data.result.pagingInfo.totalItems });
-                    },
-                    error: function (xhr) {
-                        console.log(xhr.responseJSON ? xhr.responseJSON.Message : xhr.statusText);
-                        deferred.reject("Đã có lỗi xảy ra trong quá trình này. Mở Console để xem chi tiết hoặc liên hệ Quản trị viên.");
-                    },
-                });
-                return deferred.promise();
-            },
-            insert: (values) => ajax_insert(URL_API_PM_CMD + ACTION_GIAIDOAN, values),
-            update: (key, values) => ajax_update(URL_API_PM_CMD + ACTION_GIAIDOAN, key, values),
-            remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION_GIAIDOAN, key),
-        });
+        //        $.ajax({
+        //            headers: header,
+        //            url: URL_API_PM_READ + ACTION_GIAIDOAN,
+        //            dataType: "json",
+        //            data: params,
+        //            success: function (data) {
+        //                deferred.resolve(data.result.items, { totalCount: data.result.pagingInfo.totalItems });
+        //            },
+        //            error: function (xhr) {
+        //                console.log(xhr.responseJSON ? xhr.responseJSON.Message : xhr.statusText);
+        //                deferred.reject("Đã có lỗi xảy ra trong quá trình này. Mở Console để xem chi tiết hoặc liên hệ Quản trị viên.");
+        //            },
+        //        });
+        //        return deferred.promise();
+        //    },
+        //    insert: (values) => ajax_insert(URL_API_PM_CMD + ACTION_GIAIDOAN, values),
+        //    update: (key, values) => ajax_update(URL_API_PM_CMD + ACTION_GIAIDOAN, key, values),
+        //    remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION_GIAIDOAN, key),
+        //});
         var customStore_Groups = new DevExpress.data.CustomStore({
             key: "id", loadMode: "raw",
             load: (values) => {
@@ -72,23 +72,38 @@
             },
         }); 
 
-        $(function () {
-            loadData(customStore);
+        var ds_giaidoan = new DevExpress.data.DataSource({
+            store: new DevExpress.data.CustomStore({
+                key: "id",
+                load: (values) => ajax_read(ACTION_GIAIDOAN, values),
+                insert: (values) => ajax_insert(URL_API_PM_CMD + ACTION_GIAIDOAN, values),
+                update: (key, values) => ajax_update(URL_API_PM_CMD + ACTION_GIAIDOAN, key, values),
+                remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION_GIAIDOAN, key),
+                byKey: (key) => {
+                    var deferred = $.Deferred();
+                    ds_giaidoan.store().load().done((rs) => {
+                        deferred.resolve(rs.find(x => x.id == key));
+                    });
+                    return deferred.promise();
+                },
+            }),
+            filter: ["projectId", "=", PROJECTID],
+            sort: [{ selector: "status", desc: false }]
         });
-        var loadData = (dataSource) => {
+
+        $(function () {
+            loadData();
+        });
+        var loadData = () => {
             $("#container").dxDataGrid({
                 height: heightScreen,
-                dataSource: dataSource,
-                remoteOperations: {
-                    paging: true,
-                    sorting: true,
-                    filtering: true,
-                },
+                dataSource: ds_giaidoan,
+                remoteOperations: true,
                 showBorders: false, showColumnHeaders: true, showColumnLines: false, hoverStateEnabled: true,
                 showRowLines: true, columnAutoWidth: true, wordWrapEnabled: true, rowAlternationEnabled: true,
                 columns: [
                     {
-                        caption: "STT", dataField: "status", sortOrder: "desc",
+                        caption: "STT", dataField: "status",
                         dataType: "number", width: 100, alignment: "center",
                         cellTemplate: (c, o) => c.append(o.rowIndex + 1)
                     },
@@ -194,7 +209,7 @@
                                 onValueChanged: function (data) {
                                     PROJECTID = data.value;
                                     localStorage.setItem('projectIdCurrent', PROJECTID);
-                                    loadData(customStore);
+                                    loadData();
                                 },
                             },
                         }, 
@@ -222,7 +237,7 @@
                             target = e.component.getVisibleRows()[e.toIndex].data,
                             d = $.Deferred();
                         if (source.id != target.id) {
-                            customStore.update(source.id, { status: target.status }).then(() => {
+                            ds_giaidoan.store().update(source.id, { status: target.status }).then(() => {
                                 e.component.refresh().then(d.resolve, d.reject);
                             }, d.reject);
                         }

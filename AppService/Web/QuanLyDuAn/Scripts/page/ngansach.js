@@ -25,16 +25,26 @@ const ACTION_DUCHI              = "/NS_DuChi";
 const ACTION_THUCCHI = "/NS_ThucChi";
 
 const ACTION_GROUP = "/Groups"; 
+var GIAIDOANID = isNullOrEmpty(localStorage.getItem("giaiDoanIdCurrent")) ? parseInt(localStorage.getItem("giaiDoanIdCurrent")) : 0;
 
 var listActiveStatus = [
     { value: true, text: "Hoạt động", color: "success", icon: 'fa fa-check-circle' },
     { value: false, text: "Tạm dừng", color: "danger", icon: 'fa fa-minus-circle' },
 ]
 
-var customStore_Projects = new DevExpress.data.CustomStore({
-    key: "id", loadMode:"raw",
-    load: (values) => ajax_read(ACTION_PROJECT, values),
-    //byKey: (key) => ajax_getby(ACTION_PROJECT, key),
+var customStore_Projects = new DevExpress.data.DataSource({
+    store: new DevExpress.data.CustomStore({
+        key: "id",
+        load: (values) => ajax_read(ACTION_PROJECT, values),
+        byKey: (key) => {
+            var deferred = $.Deferred();
+            customStore_Projects.store().load().done((rs) => {
+                deferred.resolve(rs.find(x => x.id == key));
+            });
+            return deferred.promise();
+        },
+    }),
+    filter: ["isActive", "=", 1]
 });
 
 var customStore_Phat_Nhom = new DevExpress.data.CustomStore({
