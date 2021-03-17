@@ -88,11 +88,13 @@ namespace ProjectManager.Read.Sql.Repositories
                 {
                     if (dataSourceLoadOptionsBase.Filter.Count > 0)
                     {
-                        dataSourceLoadOptionsBase.Filter.Add("and");
+                        IList newList = new List<object>();
+                        newList.Add(dataSourceLoadOptionsBase.Filter);
+                        newList.Add("and");
+                        dataSourceLoadOptionsBase.Filter = newList;
                     }
                     dataSourceLoadOptionsBase.Filter.Add(ConvertSearch(searchOperation, searchValue,searchExpr)) ;
                 }    
-
                 return DataSourceLoader.Load(objEF, dataSourceLoadOptionsBase);
             }
             else
