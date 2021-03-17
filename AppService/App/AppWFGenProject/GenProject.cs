@@ -26,7 +26,8 @@ namespace AppWFGenProject
             clbFunction.Items.Add("CMD", false);
             clbFunction.Items.Add("READ", false);
             clbFunction.Items.Add("HTML", false);
-
+            //Appointment newapp = new Appointment();
+            //newapp.AllDayEventExample();
         }
 
         private void btnTestConnec_Click(object sender, EventArgs e)
@@ -55,7 +56,7 @@ namespace AppWFGenProject
 
         private void btnGen_Click(object sender, EventArgs e)
         {
-            
+
 
             int typeCreate = cbkOverWrite.Checked ? 1 : cbkCreateNew.Checked ? 2 : cbkBackUp.Checked ? 3 : -1;
             if (typeCreate <= 0)
