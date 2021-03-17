@@ -1,5 +1,5 @@
 ﻿using System;
-using  Microsoft.Office.Interop.Outlook;
+//using  Microsoft.Office.Interop.Outlook;
 
 namespace AppWFGenProject.FrameWork
 {
