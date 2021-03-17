@@ -9,10 +9,12 @@ using System.Threading.Tasks;
 
 namespace  ProjectManager.CMD.Api.Application.Commands
 {
-    public class CreatePlanJobCommandHandler : PlanJobCommandHandler, IRequestHandler<CreatePlanJobCommand, MethodResult<CreatePlanJobCommandResponse>>
+    public class CreatePlanJobFullCommandHandler : PlanJobCommandHandler, IRequestHandler<CreatePlanJobFullCommand, MethodResult<CreatePlanJobCommandResponse>>
     {
-        public CreatePlanJobCommandHandler(IMapper mapper,IHttpContextAccessor httpContextAccessor,IPlanJobRepository planJobRepository) : base(mapper, httpContextAccessor, planJobRepository)
+        protected readonly IPlanScheduleRepository _planScheduleRepository;
+        public CreatePlanJobFullCommandHandler(IMapper mapper,IHttpContextAccessor httpContextAccessor,IPlanJobRepository planJobRepository, IPlanScheduleRepository planScheduleRepository) : base(mapper, httpContextAccessor, planJobRepository)
         {
+            _planScheduleRepository = planScheduleRepository;
         }
 
         /// <summary>
@@ -21,7 +23,7 @@ namespace  ProjectManager.CMD.Api.Application.Commands
         /// <param name="request"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task<MethodResult<CreatePlanJobCommandResponse>> Handle(CreatePlanJobCommand request, CancellationToken cancellationToken)
+        public async Task<MethodResult<CreatePlanJobCommandResponse>> Handle(CreatePlanJobFullCommand request, CancellationToken cancellationToken)
         {
             var methodResult = new MethodResult<CreatePlanJobCommandResponse>();
             var newPlanJob = new PlanJob(request.PlanMasterId,request.ParentId,request.Title,request.Description,request.Unit,request.Amount,request.StartDate,request.EndDate,request.ModifyTimes,request.Priority,request.ImportantLevel,request.IsDone);
@@ -31,6 +33,9 @@ namespace  ProjectManager.CMD.Api.Application.Commands
             newPlanJob.IsVisible = request.IsVisible.HasValue ? request.IsVisible : true;
             await _planJobRepository.AddAsync(newPlanJob).ConfigureAwait(false);
             await _planJobRepository.UnitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+            var newPlanSchedule = new PlanSchedule(request.PlanMasterId, newPlanJob.Id, request.planScheduleCommandSet.Title, request.planScheduleCommandSet.Note, request.planScheduleCommandSet.Remind, request.planScheduleCommandSet.Repead, request.planScheduleCommandSet.RepeadType, request.planScheduleCommandSet.StartDate, request.planScheduleCommandSet.EndDate, request.planScheduleCommandSet.ModifyTimes);
+            await _planScheduleRepository.AddAsync(newPlanSchedule).ConfigureAwait(false);
+            await _planScheduleRepository.UnitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
             methodResult.Result = _mapper.Map<CreatePlanJobCommandResponse>(newPlanJob);
             return methodResult;
         }

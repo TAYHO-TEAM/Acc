@@ -10,4 +10,11 @@ namespace  ProjectManager.CMD.Api.Application.Commands
     }
 
     public class CreatePlanJobCommandResponse : PlanJobCommandResponseDTO { }
+
+    public class CreatePlanJobFullCommand : PlanJobFullCommandSet, IRequest<MethodResult<CreatePlanJobCommandResponse>>
+    {
+
+    }
+
+    public class CreatePlanJobFullCommandResponse : PlanJobFullCommandResponseDTO { }
 }
