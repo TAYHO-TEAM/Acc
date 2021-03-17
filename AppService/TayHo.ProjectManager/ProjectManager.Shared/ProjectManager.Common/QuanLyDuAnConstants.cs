@@ -16,6 +16,10 @@ namespace ProjectManager.Common
         public const string ContractorInfo_TABLENAME = "ContractorInfo";
         public const string Functions_TABLENAME = "Functions";
         public const string GroupActionPermistion_TABLENAME = "GroupActionPermistion";
+        public const string GroupFunctionPermistion_TABLENAME = "GroupFunctionPermistion";
+        public const string GroupStepProcessPermistion_TABLENAME = "GroupStepProcessPermistion";
+
+
 
         public const string NS_CongViec_TABLENAME = "NS_CongViec";
         public const string NS_CongViecDetail_TABLENAME = "NS_CongViecDetail";

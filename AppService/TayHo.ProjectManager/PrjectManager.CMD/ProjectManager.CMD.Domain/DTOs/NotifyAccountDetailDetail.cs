@@ -44,5 +44,6 @@ namespace ProjectManager.CMD.Domain.DTOs
         public DateTime? NAUpdateDate { get; set; }
         public byte? NAStatus { get; set; }
         public int? CreateBy{get; set;}
+        public bool? IsDelete { get; set; }
     }
 }

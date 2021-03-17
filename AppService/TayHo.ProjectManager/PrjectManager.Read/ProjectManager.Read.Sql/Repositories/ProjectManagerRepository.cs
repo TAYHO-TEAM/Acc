@@ -31,7 +31,7 @@ namespace ProjectManager.Read.Sql.Repositories
             _dbContext.ChangeTracker.AutoDetectChangesEnabled = false;
             //_connectionFactory = connectionFactory ?? throw new ArgumentNullException(nameof(connectionFactory));
         }
-        public async Task<LoadResult> GetAll(int user, string nameEF, DevLoadOptionsBase dataSourceLoadOptionsBase)
+        public async Task<LoadResult> GetAll(int user, string nameEF, DevLoadOptionsBase dataSourceLoadOptionsBase, string searchOperation, string searchValue, List<string> searchExpr)
         {
             List<int?> getActionId = _dbContext.Functions
                                                 .Where(c => c.TableName == nameEF
@@ -55,7 +55,7 @@ namespace ProjectManager.Read.Sql.Repositories
                 //{
                 //    dataSourceLoadOptionsBase.Filter = JsonConvert.DeserializeObject<IList>(dataSourceLoadOptionsBase.Filter[0].ToString());
                 //}
-                if (!checkPermit && getActionId.Count>0)
+                if (!checkPermit && getActionId.Count > 0)
                 {
                     IList filterOwnerBy = ConvertFilter(JsonConvert.DeserializeObject<IList>(@"[""createBy"",""=""," + user.ToString() + @"]"));
                     IList filterDeleteNull = ConvertFilter(JsonConvert.DeserializeObject<IList>(@"[""isDelete"",""IS NULL""]"));
@@ -84,7 +84,17 @@ namespace ProjectManager.Read.Sql.Repositories
                     //}
                     dataSourceLoadOptionsBase.Filter = filter;
                 }
-
+                if(searchExpr.Count> 0 && searchExpr != null && !string.IsNullOrEmpty(searchValue))
+                {
+                    if (dataSourceLoadOptionsBase.Filter.Count > 0)
+                    {
+                        IList newList = new List<object>();
+                        newList.Add(dataSourceLoadOptionsBase.Filter);
+                        newList.Add("and");
+                        dataSourceLoadOptionsBase.Filter = newList;
+                    }
+                    dataSourceLoadOptionsBase.Filter.Add(ConvertSearch(searchOperation, searchValue,searchExpr)) ;
+                }    
                 return DataSourceLoader.Load(objEF, dataSourceLoadOptionsBase);
             }
             else
@@ -350,12 +360,35 @@ namespace ProjectManager.Read.Sql.Repositories
             }
             return orders;
         }
+        private IList ConvertSearch(string searchOperation, string searchValue, List<string> searchExpr)
+        {
+            IList newList = new List<object>();
+            if (searchExpr.Count > 0 && !string.IsNullOrEmpty(searchValue))
+            {
+                int i = 1;
+                foreach (var searchItem in searchExpr)
+                {
+                   
+                    IList item = new List<string>();
+                    item.Add(searchItem);
+                    item.Add(searchOperation);
+                    item.Add(searchValue);
+                    newList.Add(item);
+                    if(i< searchExpr.Count)
+                    {
+                        newList.Add("or");
+                    }    
+                    i++;
+                }    
+            }
+            return newList;
+        }
         private IList ConvertFilter(IList filter)
         {
             IList newList = new List<object>();
             foreach (var item in filter)
             {
-                if(item != null)
+                if (item != null)
                 {
                     if (item.ToString().Length > 0)
                     {
@@ -399,7 +432,7 @@ namespace ProjectManager.Read.Sql.Repositories
                     {
                         newList.Add(item);
                     }
-                }    
+                }
                 else
                 {
                     newList.Add(item);
