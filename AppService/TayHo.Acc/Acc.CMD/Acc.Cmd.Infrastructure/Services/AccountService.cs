@@ -134,6 +134,10 @@ namespace Acc.Cmd.Infrastructure.Services
                     tokenResult.AccountId = existingAccount.Id;
                 }     
             }
+            else
+            {
+                tokenResult.AccountId = existingAccount.Id;
+            }
             DeviceAccount existDeviceAccount = await _deviceAccountRepository.SingleOrDefaultAsync(x => x.DeviceToken == deviceToken && (x.IsDelete == false || !x.IsDelete.HasValue)) ;// new DeviceAccount(device, existingAccount.Id, deviceToken, browser);
             if (existDeviceAccount != null )
             {

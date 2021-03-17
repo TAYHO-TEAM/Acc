@@ -350,11 +350,6 @@
                     if (e.rowType == "data" && e.columnIndex == 1)
                         e.cellElement.find('.dx-treelist-empty-space').toggleClass("dx-treelist-collapsed", e.data.chilCount > 0)
                 },
-                onCellClick: function (e) {
-                    if (e.column.dataField === "noAttachment") {
-                        //loadUpload("DocumentReleased", e.row.data, false);
-                    }
-                },
                 onContentReady: (e) => {
                     e.component;
                     if (getParamInUrl('id', location.href) !== null && getParamInUrl('id', location.href) > 0) {

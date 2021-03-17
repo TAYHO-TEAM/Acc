@@ -45,5 +45,6 @@ namespace ProjectManager.CMD.Domain.DTOs
         public DateTime? DRLUpdateDate { get; set; }
         public byte? DRLStatus { get; set; }
         public int? CreateBy{get; set;}
+        public bool? IsDelete { get; set; }
     }
 }
