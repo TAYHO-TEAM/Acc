@@ -17,7 +17,10 @@ namespace ProjectManager.Read.Api.ViewModels.DevExpressClasses
     }
     public class DevRequestLoadOptionsViewModel : DataSourceLoadOptionsBase
     {
-     
+        public string searchOperation { get; set; }
+        public string searchValue { get; set; }
+        public List<string> searchExpr { get; set; } = new List<string>();
+
     }
     //DataSourceLoadOptionsBase
     //"sort": [
