@@ -24,7 +24,10 @@
     </div>
 </div>
 <style>
-  /*  .card-header {
+    #container_conversation .dx-toolbar .dx-toolbar-items-container {
+        height: 33px!important;
+    }
+    /*  .card-header {
         background-color: #ffd6ae !important;
     }*/
 </style>
@@ -223,22 +226,16 @@
                     //    dataType: "number",
 
                     //},
+                  
                     {
-                        colSpan: 6,
-                        dataField: "description",
-                        label: { text: "Mô tả CV" },
-                        editorType: "dxTextArea",
-                        //visible: false,
-                    },
-                    {
-                        colSpan: 6,
+
                         dataField: "note",
                         label: { text: "Lưu ý" },
                         editorType: "dxTextArea",
                         visible: false,
                     },
                     {
-                        colSpan: 6,
+         
                         dataField: "startDate",
                         label: { text: "Ngày bắt đầu" },
                         visible: false,
@@ -249,7 +246,7 @@
                         },
                     },
                     {
-                        colSpan: 6,
+
                         dataField: "endDate",
                         visible: false,
                         label: { text: "Ngày hoàn thành" },
@@ -260,13 +257,12 @@
                         },
                     },
                     {
-                        colSpan: 6,
+              
                         dataField: "amount",
                         visible: false,
                         label: { text: "Khối lượng" },
                     },
                     {
-                        colSpan: 6,
                         dataField: "unit",
                         visible: false,
                         label: { text: "Đơn vị" },
@@ -283,7 +279,7 @@
                             displayExpr: "userName",
                         },
                         editorOptions: {
-                         
+
                             readOnly: true,
                         }
                     },
@@ -762,7 +758,7 @@
         //}
         let loadAttach = (item) => {
             $("#container_attachment").dxDataGrid({
-                height: heightScreen / 8,
+                height: heightScreen / 16,
                 dataSource: customStore_READDATASOURCE(item),
                 repaintChangesOnly: true,
                 remoteOperations: {
@@ -772,7 +768,7 @@
                 },
                 scrolling: { mode: "standard" },
                 showBorders: false,
-                showColumnHeaders: true,
+                showColumnHeaders: false,
                 showColumnLines: false,
                 hoverStateEnabled: true,
                 showRowLines: false,
@@ -785,7 +781,7 @@
                     dataType: "number",
                     alignment: "left",
                     cellTemplate: (container, options) => {
-                        container.append($('<a>').attr("href", "javaScript:void(0)").text(options.displayValue !== null ? options.displayValue + " file(s)" : "chưa có file"));
+                        container.append($('<a>').attr("href", "javaScript:void(0)").text( options.displayValue !== null ?  "Đính kèm : " +options.displayValue + " file(s)" : "chưa có file"));
                     },
                 },],
                 onCellClick: function (e) {
@@ -798,7 +794,7 @@
         let loadComversation = (id) => {
             $("#container_conversation").dxDataGrid({
                 title: "Hội thoại",
-                height: (heightScreen / 8) * 3,
+                height: (heightScreen / 8) * 2,
                 dataSource: customStore_CONVERSATION(id),
                 repaintChangesOnly: true,
                 remoteOperations: {
@@ -822,7 +818,7 @@
                         caption: "Phản hồi",
                         dataType: "string",
                         width: "70%",
-                      
+
                     },
                     {
                         colSpan: 4,
