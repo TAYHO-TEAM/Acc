@@ -354,6 +354,12 @@ namespace ProjectManager.Read.Sql.Repositories
                 case nameof(_dbContext.NotifyAccountDetail):
                     orders = _dbContext.NotifyAccountDetail;
                     break;
+                case nameof(_dbContext.PlanJobAccount):
+                    orders = _dbContext.PlanJobAccount;
+                    break;
+                case nameof(_dbContext.PlanMasterAccount):
+                    orders = _dbContext.PlanMasterAccount;
+                    break;
                 default:
                     orders = null;
                     break;

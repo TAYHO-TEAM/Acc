@@ -21,6 +21,7 @@
         <div id="container_schedule" class="elevation-2 col-lg-12 col-md-12 col-sm-12 col-xs-12"></div>
         <div id="container_attachment" class="elevation-2 col-lg-12 col-md-12 col-sm-12 col-xs-12"></div>
         <div id="container_conversation" class="elevation-2 col-lg-12 col-md-12 col-sm-12 col-xs-12"> </div>
+        <div id="container_schedule" class="elevation-2 col-lg-12 col-md-12 col-sm-12 col-xs-12"> </div>
     </div>
 </div>
 <style>
@@ -35,6 +36,7 @@
 @section script{
     <script src="~/Scripts/page/thongtin.js"></script>
     <script>
+        var NAMECOVNER = "Conversation";
         //--------------------READ------------------------------
         const ACTION = "/PlanMaster/GetWithAccountProgress";
         const ACTION_DETAIL = "/PlanJob/GetWithAccount";
@@ -62,6 +64,8 @@
         //    PROJECTID = 3;
         //}
         var WIDTH_CONTAINER = $("#container").width();
+    
+
 
         let customStore_AccountInfo = new DevExpress.data.CustomStore({
             key: "accountId",
@@ -142,13 +146,32 @@
         });
 
         let customStore = customStore_CMD_READ_PLANPROJECTID(ACTION_CMD, ACTION, 3);
+        //let customStore_Conver = (id) => new DevExpress.data.DataSource({
+        //    store: new DevExpress.data.CustomStore({
+        //        key: "id",
+        //        load: (values) => ajax_read(ACTION, values),
+        //        insert: (values) => ajax_insert(URL_API_PM_CMD + ACTION, values),
+        //        update: (key, values) => ajax_update(URL_API_PM_CMD + ACTION, key, values),
+        //        remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION, key),
+        //    }),
+        //    filter: [["projectId", "=", 3]],
+        //});
         let customStore_DETAIL = (id) => customStore_CMD_READ_FILTER_ID(ACTION_CMD_DETAIL, ACTION_DETAIL, 'planMasterId,' + id);
         let customStore_SCHEDULE = (id) => customStore_CMD_READ_FILTER_ID(ACTION_CMD_SCHEDULE, ACTION_SCHEDULE, 'planMasterId,' + id);
         let customStore_PLANJOB_ACCOUNT = (id) => customStore_CMD_READ_FILTER_ID_KEYWORD(ACTION_CMD_PLAN_ACCOUNT, ACTION_PLAN_ACCOUNT, 'ownerById,' + id, 'PlanJob');
         //let customStore_PLANMASTER_ACCOUNT = (id) => customStore_CMD_READ_FILTER_ID_KEYWORD(ACTION_CMD_PLAN_ACCOUNT, ACTION_PLAN_ACCOUNT, 'ownerById,' + id, 'PlanMaster');
         let customStore_PLANMASTER_ACCOUNT = (id) => customStore_CMD_READ_FILTER_ID(ACTION_CMD_PLAN_ACCOUNT, ACTION_PLAN_ACCOUNT, "ownerById," + id + ";OwnerTable,'PlanMaster'");
-        let customStore_CONVERSATION = (id) => customStore_CMD_READ_FILTER_ID_KEYWORD(ACTION_CMD_CONVERSATION, ACTION_CONVERSATION, 'topicId,' + id, 'PlanMaster');
-
+        //let customStore_CONVERSATION = (id) => customStore_CMD_READ_FILTER_ID_KEYWORD(ACTION_CMD_CONVERSATION, ACTION_CONVERSATION, 'topicId,' + id, 'PlanMaster');
+        let customStore_Conver = (id) => new DevExpress.data.DataSource({
+            store: new DevExpress.data.CustomStore({
+                key: "id",
+                load: (values) => ajax_read(NAMECOVNER, values),
+                insert: (values) => ajax_insert(URL_API_PM_CMD + ACTION_CMD_CONVERSATION, values),
+                //update: (key, values) => ajax_update(URL_API_PM_CMD + ACTION, key, values),
+                //remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION, key),
+            }),
+            filter: [["topicId", "=", id], "and", ["OwnerTable", "=", "PlanMaster"]],
+        });
         $(function () {
             loadData();
         });
@@ -795,13 +818,9 @@
             $("#container_conversation").dxDataGrid({
                 title: "Hội thoại",
                 height: (heightScreen / 8) * 2,
-                dataSource: customStore_CONVERSATION(id),
+                dataSource: customStore_Conver(id),
                 repaintChangesOnly: true,
-                remoteOperations: {
-                    filtering: true,
-                    sorting: true,
-                    grouping: false
-                },
+                remoteOperations: true,
                 scrolling: { mode: "standard" },
                 showBorders: false,
                 showColumnHeaders: true,

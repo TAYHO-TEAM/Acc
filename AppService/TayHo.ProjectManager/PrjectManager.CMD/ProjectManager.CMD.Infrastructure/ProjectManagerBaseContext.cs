@@ -83,6 +83,9 @@ namespace ProjectManager.CMD.Infrastructure
         #region Bilder View Table
         public DbSet<DocumentReleasedLogDetail> DocumentReleasedLogDetail { get; set; }
         public DbSet<NotifyAccountDetail> NotifyAccountDetail { get; set; }
+        public DbSet<PlanJobAccount> PlanJobAccount { get; set; }
+        public DbSet<PlanMasterAccount> PlanMasterAccount { get; set; }
+        
         #endregion Bilder View Table
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
