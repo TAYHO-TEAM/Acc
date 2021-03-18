@@ -18,16 +18,21 @@
     </div>
     <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12" id="div_container_detail">
         <div id="container_step" class="elevation-2 col-lg-12 col-md-12 col-sm-12 col-xs-12"></div>
-        <div id="container_schedule" class="elevation-2 col-lg-12 col-md-12 col-sm-12 col-xs-12"></div>
         <div id="container_attachment" class="elevation-2 col-lg-12 col-md-12 col-sm-12 col-xs-12"></div>
-        <div id="container_conversation" class="elevation-2 col-lg-12 col-md-12 col-sm-12 col-xs-12"> </div>
         <div id="container_schedule" class="elevation-2 col-lg-12 col-md-12 col-sm-12 col-xs-12"> </div>
+        <div id="container_conversation" class="elevation-2 col-lg-12 col-md-12 col-sm-12 col-xs-12"> </div>
+
     </div>
 </div>
 <style>
     #container_conversation .dx-toolbar .dx-toolbar-items-container {
-        height: 33px!important;
+        height: 33px !important;
     }
+
+    #container_schedule .dx-toolbar .dx-toolbar-items-container {
+        height: 33px !important;
+    }
+
     /*  .card-header {
         background-color: #ffd6ae !important;
     }*/
@@ -37,6 +42,8 @@
     <script src="~/Scripts/page/thongtin.js"></script>
     <script>
         var NAMECOVNER = "Conversation";
+        var NAMEPLANMASTER = "PlanMasterAccount";
+        var NAMEPLANSCHEDULE = "PlanSchedule";
         //--------------------READ------------------------------
         const ACTION = "/PlanMaster/GetWithAccountProgress";
         const ACTION_DETAIL = "/PlanJob/GetWithAccount";
@@ -64,7 +71,7 @@
         //    PROJECTID = 3;
         //}
         var WIDTH_CONTAINER = $("#container").width();
-    
+
 
 
         let customStore_AccountInfo = new DevExpress.data.CustomStore({
@@ -145,19 +152,19 @@
 
         });
 
-        let customStore = customStore_CMD_READ_PLANPROJECTID(ACTION_CMD, ACTION, 3);
-        //let customStore_Conver = (id) => new DevExpress.data.DataSource({
-        //    store: new DevExpress.data.CustomStore({
-        //        key: "id",
-        //        load: (values) => ajax_read(ACTION, values),
-        //        insert: (values) => ajax_insert(URL_API_PM_CMD + ACTION, values),
-        //        update: (key, values) => ajax_update(URL_API_PM_CMD + ACTION, key, values),
-        //        remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION, key),
-        //    }),
-        //    filter: [["projectId", "=", 3]],
-        //});
+        //let customStore = customStore_CMD_READ_PLANPROJECTID(ACTION_CMD, ACTION, 3);
+        let customStore = (gid) => new DevExpress.data.DataSource({
+            store: new DevExpress.data.CustomStore({
+                key: "paId",
+                load: (values) => ajax_read(NAMEPLANMASTER, values),
+                insert: (values) => ajax_insert(URL_API_PM_CMD + ACTION, values),
+                update: (key, values) => ajax_update(URL_API_PM_CMD + ACTION, key, values),
+                remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION, key),
+            }),
+            filter: [["pmPlanProjectId", "=", 3], "and", ["createBy", "=", UserCurrentInfo.accountId]],
+        });
         let customStore_DETAIL = (id) => customStore_CMD_READ_FILTER_ID(ACTION_CMD_DETAIL, ACTION_DETAIL, 'planMasterId,' + id);
-        let customStore_SCHEDULE = (id) => customStore_CMD_READ_FILTER_ID(ACTION_CMD_SCHEDULE, ACTION_SCHEDULE, 'planMasterId,' + id);
+        //let customStore_SCHEDULE = (id) => customStore_CMD_READ_FILTER_ID(ACTION_CMD_SCHEDULE, ACTION_SCHEDULE, 'planMasterId,' + id);
         let customStore_PLANJOB_ACCOUNT = (id) => customStore_CMD_READ_FILTER_ID_KEYWORD(ACTION_CMD_PLAN_ACCOUNT, ACTION_PLAN_ACCOUNT, 'ownerById,' + id, 'PlanJob');
         //let customStore_PLANMASTER_ACCOUNT = (id) => customStore_CMD_READ_FILTER_ID_KEYWORD(ACTION_CMD_PLAN_ACCOUNT, ACTION_PLAN_ACCOUNT, 'ownerById,' + id, 'PlanMaster');
         let customStore_PLANMASTER_ACCOUNT = (id) => customStore_CMD_READ_FILTER_ID(ACTION_CMD_PLAN_ACCOUNT, ACTION_PLAN_ACCOUNT, "ownerById," + id + ";OwnerTable,'PlanMaster'");
@@ -172,6 +179,18 @@
             }),
             filter: [["topicId", "=", id], "and", ["OwnerTable", "=", "PlanMaster"]],
         });
+        let customStore_Schelude = (id) => new DevExpress.data.CustomStore({
+            key: "id",
+            load: (values) => {
+                values["filter"] = [["PlanMasterId", "=", id], "and", ["CreateBy", "=", UserCurrentInfo.accountId]];
+                return ajax_read(NAMEPLANSCHEDULE, values);
+            },
+            insert: (values) => { console.log(values); ajax_insert(URL_API_PM_CMD + ACTION_SCHEDULE, values) },
+            update: (key, values) => { console.log(values); ajax_update(URL_API_PM_CMD + ACTION_SCHEDULE, key, values); },
+            //remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION, key)
+        });
+
+
         $(function () {
             loadData();
         });
@@ -179,14 +198,9 @@
         let loadData = () => {
             $("#container").dxDataGrid({
                 height: heightScreen,
-                dataSource: customStore,
+                dataSource: customStore(1),
                 repaintChangesOnly: true,
-                remoteOperations: {
-                    filtering: true,
-                    sorting: true,
-                    grouping: false,
-
-                },
+                remoteOperations: true,
                 scrolling: { mode: "standard" },
                 showBorders: false,
                 showColumnHeaders: true,
@@ -198,7 +212,7 @@
                 rowAlternationEnabled: true,
                 columns: [
                     {
-                        dataField: "isVisible",
+                        dataField: "pmIsVisible",
                         caption: "Hoàn thành",
                         dataType: "boolean",
                         groupIndex: 0,
@@ -206,9 +220,10 @@
                             o.value ? c.append($("<div>").addClass("text-success card-header-custom").append("Đã Hoàn Thành(" + o.summaryItems[0].value + ")")) : c.append($("<div>").addClass("text-danger card-header-custom").append("Chưa Hoàn Thành(" + o.summaryItems[0].value + ")"));
                         },
                         editorType: "dxCheckBox",
+                        sortOrder: "desc"
                     },
                     {
-                        dataField: "code",
+                        dataField: "pmCode",
                         width: "10%",
                         caption: "Mã",
                         dataType: "string",
@@ -221,14 +236,14 @@
                         validationRules: [{ type: "required" }],
                     },
                     {
-                        dataField: "description",
+                        dataField: "pmDescription",
                         width: "30%",
                         caption: "Mô tả CV",
                         dataType: "string",
                         //visible: false,
                     },
                     {
-                        dataField: "importantLevel",
+                        dataField: "pmImportantLevel",
                         caption: "Độ quan trọng",
                         dataType: "number",
                         lookup: {
@@ -247,19 +262,16 @@
                     //    dataField: "priority",
                     //    caption: "Độ ưu tiên",
                     //    dataType: "number",
-
                     //},
-                  
                     {
 
-                        dataField: "note",
+                        dataField: "pmNote",
                         label: { text: "Lưu ý" },
                         editorType: "dxTextArea",
                         visible: false,
                     },
                     {
-         
-                        dataField: "startDate",
+                        dataField: "pmStartDate",
                         label: { text: "Ngày bắt đầu" },
                         visible: false,
                         editorType: "dxDateBox",
@@ -270,7 +282,7 @@
                     },
                     {
 
-                        dataField: "endDate",
+                        dataField: "pmEndDate",
                         visible: false,
                         label: { text: "Ngày hoàn thành" },
                         editorType: "dxDateBox",
@@ -280,19 +292,19 @@
                         },
                     },
                     {
-              
-                        dataField: "amount",
+
+                        dataField: "pmAmount",
                         visible: false,
                         label: { text: "Khối lượng" },
                     },
                     {
-                        dataField: "unit",
+                        dataField: "pmUnit",
                         visible: false,
                         label: { text: "Đơn vị" },
 
                     },
                     {
-                        dataField: "createBy",
+                        dataField: "pmCreateBy",
                         width: "20%",
                         caption: "Người tạo",
                         dataType: "number",
@@ -309,7 +321,7 @@
                 ],
                 summary: {
                     groupItems: [{
-                        column: "isVisible",
+                        column: "pmIsVisible",
                         summaryType: "count"
                     },
                     ]
@@ -568,10 +580,11 @@
                     container.classList.replace("col-lg-12", "col-lg-8");
                     container.classList.replace("col-md-12", "col-md-8");
                     e.component.refresh();
-                    loadData_detail(selectedRowData.id);
+                    loadData_detail(selectedRowData.pmId);
                     //loadData_schedule(selectedRowData.id);
                     loadAttach(selectedRowData);
-                    loadComversation(selectedRowData.id);
+                    loadComversation(selectedRowData.pmId);
+                    loadSchedule(selectedRowData.pmId);
                     if (selectedRowData != null && selectedRowKey != null) {
                         var data = e.component.getRowIndexByKey(selectedRowKey);
                         $("#action-update").dxSpeedDialAction({
@@ -589,7 +602,7 @@
                                 DevExpress.ui.dialog.confirm("Bạn có chắc là muốn hủy bỏ giá trị của hạng mục?", "XÁC NHẬN THÔNG TIN").done(function (dialogResult) {
                                     if (dialogResult) {
                                         var deferred = $.Deferred();
-                                        customStore.remove(selectedRowData.id).then(() => {
+                                        customStore.remove(selectedRowData.pmId).then(() => {
                                             DevExpress.ui.notify("Xoá thành công", "success", 3000);
                                             e.component.refresh();
                                         }, deferred.reject);
@@ -750,35 +763,6 @@
                 },
             });
         };
-        //let loadData_schedule = (id) => {
-        //    $("#container_schedule").dxForm({
-        //        height: heightScreen/4,
-        //        dataSource: customStore_SCHEDULE(id),
-        //        items: [
-        //            {
-        //                dataField: "remind",
-        //                label: { text: "Nhắc tôi" },
-        //                editorType: "dxDateBox",
-        //                editorOptions: {
-        //                    pickerType: "rollers",
-        //                    type: "datetime",
-        //                },
-        //            },
-        //            //{
-        //            //    dataField: "repeadType",
-        //            //    label: { text: "Lặp lại" },
-        //            //    editorType: "string",
-        //            //    editorOptions: {},
-        //            //},
-        //            //{
-        //            //    dataField: "endDate",
-        //            //    label: { text: "Ngày hết hạn" },
-        //            //    editorType: "string",
-        //            //    editorOptions: {},
-        //            //},
-        //        ],
-        //    });
-        //}
         let loadAttach = (item) => {
             $("#container_attachment").dxDataGrid({
                 height: heightScreen / 16,
@@ -799,16 +783,16 @@
                 wordWrapEnabled: true,
                 rowAlternationEnabled: false,
                 columns: [{
-                    dataField: "noAttachment",
+                    dataField: "pmNoAttachment",
                     caption: "File đính kèm",
                     dataType: "number",
                     alignment: "left",
                     cellTemplate: (container, options) => {
-                        container.append($('<a>').attr("href", "javaScript:void(0)").text( options.displayValue !== null ?  "Đính kèm : " +options.displayValue + " file(s)" : "chưa có file"));
+                        container.append($('<a>').attr("href", "javaScript:void(0)").text(options.displayValue !== null ? "Đính kèm : " + options.displayValue + " file(s)" : "chưa có file"));
                     },
                 },],
                 onCellClick: function (e) {
-                    if (e.column.dataField === "noAttachment") {
+                    if (e.column.dataField === "pmNoAttachment") {
                         loadUpload("PlanMaster", e.row.data, false);
                     }
                 },
@@ -908,6 +892,119 @@
                     //    ($(window).width() > 767 ? "50%" : "80%"),
                     //    container
                     //);
+                },
+            });
+        };
+        let loadSchedule = (id) => {
+            $("#container_schedule").dxDataGrid({
+                title: "Nhắc nhở",
+                height: (heightScreen / 8) * 1.5,
+                dataSource: customStore_Schelude(id),
+                repaintChangesOnly: true,
+                remoteOperations: true,
+                scrolling: { mode: "standard" },
+                showBorders: false,
+                showColumnHeaders: true,
+                showColumnLines: false,
+                hoverStateEnabled: true,
+                showRowLines: true,
+                columnAutoWidth: true,
+                wordWrapEnabled: true,
+                rowAlternationEnabled: false,
+                columns: [
+                    {
+                        dataField: "remind",
+                        caption: "Nhắc tôi",
+                        dataType: "datetime",
+                        editorType: "dxDateBox",
+                        editorOptions: {
+                            type: "datetime",
+                        },
+                    },
+                    {
+                        dataField: "repead",
+                        dataType: "number",
+                        caption: "Lặp lại",
+                        //editorType: "dxSelectBox",
+                        lookup: {
+                            dataSource: reportPeriodicalType,
+                            valueExpr: "ID",
+                            displayExpr: "Name",
+                        },
+                        //editorOptions: {
+                        //    //value: "repead",
+                        //    dataSource: reportPeriodicalType,
+                        //    valueExpr: "Id",
+                        //    displayExpr: "Name",
+                        //},
+                    },
+                    {
+                        dataField: "endDate",
+                        caption: "Ngày hết hạn",
+                        editorType: "dxDateBox",
+                        editorOptions: {
+                            type: "datetime",
+                        },
+                    },
+                ],
+                paging: {
+                    enabled: true,
+                    pageSize: 20
+                },
+                pager: {
+                    showPageSizeSelector: true,
+                    allowedPageSizes: [10, 20, 40],
+                    showInfo: true,
+                },
+                //searchPanel: {
+                //    highlightCaseSensitive: true,
+                //    highlightSearchText: true,
+                //    searchVisibleColumnsOnly: true,
+                //    visible: WIDTH_CONTAINER > 350
+                //},
+                editing: {
+                    //allowAdding: true,
+                    allowUpdating: true,
+                    allowDeleting: false,
+                    mode: "cell",
+                    useIcons: false,
+                    confirmDelete: true,
+                },
+                onToolbarPreparing: function (e) {
+
+                    var container = e.component;
+                    e.toolbarOptions.items.unshift(
+                        {
+                            location: "after",
+                            widget: "dxButton",
+                            options: {
+                                elementAttr: {
+                                    id: "insert_button"
+                                },
+                                text: "Thêm mới",
+                                visible: PermitInAction.insert ,
+                                onClick: () => container.addRow()
+                            }
+                        },
+                    )
+                },
+                onContentReady: (e) => {
+                    e.component;
+                    console.log('abc');
+                    if (e.component.totalCount() > 0)
+                    {
+                        $("#insert_button").dxButton('instance').option('visible',false) ;
+                    };
+                },
+                onInitNewRow: (e) => {
+                    e.data.isActive = true;
+                    e.data.isVisible = true;
+                    e.data.planMasterId = id;
+                    //e.data.ProjectId = PROJECTID;
+                },
+                onCellPrepared: (e) => {
+                    if (e.rowType == "data" && e.columnIndex == 1)
+                        e.cellElement.find('.dx-treelist-empty-space').toggleClass("dx-treelist-collapsed", e.data.chilCount > 0)
                 },
             });
         };
@@ -1019,7 +1116,6 @@
                             accept: "*",
                             uploadMode: "useForm",
                         });
-
                         $("#button").dxButton({
                             text: "Update profile",
                             type: "success",
@@ -1058,7 +1154,6 @@
             //    $("#dxDataGrid_detail").dxDataGrid('instance').refresh();
             //},
         }).addClass("popup-priority-2");
-
         let loadAccountPlanMaster = (item) => $("#popup-main-upload").dxPopup({
             width: "50%",
             height: "50%",
@@ -1077,7 +1172,7 @@
                     elementAttr: {
                         id: "dxDataGrid_detail"
                     },
-                    dataSource: customStore_PLANMASTER_ACCOUNT(item.id),
+                    dataSource: customStore_PLANMASTER_ACCOUNT(item.pmId),
                     remoteOperations: {
                         paging: true,
                         sorting: true,

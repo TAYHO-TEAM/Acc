@@ -749,26 +749,26 @@ const planProject = [
     //},
 ];
 const reportPeriodicalType = [
+    //{
+    //    ID: '1',
+    //    Name: 'Hàng giờ'
+    //},
     {
-        ID: '1',
-        Name: 'Hàng giờ'
-    },
-    {
-        ID: '2',
+        ID: 2,
         Name: 'Hàng ngày'
     },
     {
-        ID: '3',
+        ID: 3,
         Name: 'Hàng tuần'
     },
     {
-        ID: '4',
+        ID: 4,
         Name: 'Hàng tháng'
     },
-    {
-        ID: '5',
-        Name: 'Hàng năm'
-    },
+    //{
+    //    ID: 5,
+    //    Name: 'Hàng năm'
+    //},
     //{
     //    ID: '3',
     //    Name: 'Phân công giám sát'

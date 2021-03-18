@@ -9,11 +9,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 
-namespace  ProjectManager.CMD.Api.Application.Commands
+namespace ProjectManager.CMD.Api.Application.Commands
 {
-    public class UpdatePlanScheduleCommandHandler : PlanScheduleCommandHandler,IRequestHandler<UpdatePlanScheduleCommand, MethodResult<UpdatePlanScheduleCommandResponse>>
+    public class UpdatePlanScheduleCommandHandler : PlanScheduleCommandHandler, IRequestHandler<UpdatePlanScheduleCommand, MethodResult<UpdatePlanScheduleCommandResponse>>
     {
-        public UpdatePlanScheduleCommandHandler(IMapper mapper,IHttpContextAccessor httpContextAccessor, IPlanScheduleRepository planScheduleRepository) : base(mapper,httpContextAccessor,planScheduleRepository)
+        public UpdatePlanScheduleCommandHandler(IMapper mapper, IHttpContextAccessor httpContextAccessor, IPlanScheduleRepository planScheduleRepository) : base(mapper, httpContextAccessor, planScheduleRepository)
         {
         }
 
@@ -40,18 +40,18 @@ namespace  ProjectManager.CMD.Api.Application.Commands
             existingPlanSchedule.Status = request.Status.HasValue ? request.Status : existingPlanSchedule.Status;
 
             existingPlanSchedule.SetPlanMasterId(request.PlanMasterId);
-	existingPlanSchedule.SetPlanJobId(request.PlanJobId);
-			existingPlanSchedule.SetTitle(request.Title);
-			existingPlanSchedule.SetNote(request.Note);
-			existingPlanSchedule.SetRemind(request.Remind);
-			existingPlanSchedule.SetRepead(request.Repead);
-			existingPlanSchedule.SetRepeadType(request.RepeadType);
-			existingPlanSchedule.SetStartDate(request.StartDate);
-			existingPlanSchedule.SetEndDate(request.EndDate);
-			existingPlanSchedule.SetModifyTimes(request.ModifyTimes);
-			
+            existingPlanSchedule.SetPlanJobId(request.PlanJobId);
+            existingPlanSchedule.SetTitle(request.Title);
+            existingPlanSchedule.SetNote(request.Note);
+            existingPlanSchedule.SetRemind(request.Remind);
+            existingPlanSchedule.SetRepead(request.Repead);
+            existingPlanSchedule.SetRepeadType(request.RepeadType);
+            existingPlanSchedule.SetStartDate(request.StartDate);
+            existingPlanSchedule.SetEndDate(request.EndDate);
+            existingPlanSchedule.SetModifyTimes(request.ModifyTimes);
 
-            existingPlanSchedule.SetUpdate(_user,null);
+
+            existingPlanSchedule.SetUpdate(_user, null);
             _planScheduleRepository.Update(existingPlanSchedule);
             await _planScheduleRepository.UnitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
             methodResult.Result = _mapper.Map<UpdatePlanScheduleCommandResponse>(existingPlanSchedule);

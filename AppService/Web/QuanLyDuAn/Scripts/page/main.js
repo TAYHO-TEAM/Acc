@@ -159,7 +159,6 @@ var ajax_read = (name, loadOptions) => {
         headers: header, url: URL_API_PM_READ_All, dataType: "json", type: "POST",
         data: JSON.stringify(data),
         success: function (result) {
-            console.log(result);
             deferred.resolve(result.data, {
                 totalCount: result.totalCount,
                 summary: result.summary,
