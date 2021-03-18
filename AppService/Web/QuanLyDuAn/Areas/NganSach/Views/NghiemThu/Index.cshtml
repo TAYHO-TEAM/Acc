@@ -21,7 +21,6 @@
 @section script{
     <script src="~/Scripts/page/ngansach.js"></script>
     <script>
-
         var MAX_DOT=0;
         var ds_nghiemthu = (idGoiThau, idGiaiDoan, dot)=> new DevExpress.data.CustomStore({
             key: "id",
@@ -48,46 +47,35 @@
             },
             insert: (values) => ajax_insert(URL_API_PM_CMD + ACTION_NGHIEMTHU, values),
             update: (key, values) => ajax_update(URL_API_PM_CMD + ACTION_NGHIEMTHU, key, values),
-        });
+        }); 
         var ds_goithau = new DevExpress.data.CustomStore({
-            key: "id", loadMode: "raw",
+            key: "id",
             load: (values) => {
-                let deferred = $.Deferred();
-                $.ajax({
-                    data: { FindParentId: 0, FindId: 'projectId,' + PROJECTID },
-                    headers: header, dataType: "json", url: URL_API_PM_READ + ACTION_GOITHAU,
-                    success: function (data) {
-                        deferred.resolve(data.result.items);
-                    },
-                    error: function (xhr) {
-                        console.log(xhr.responseJSON ? xhr.responseJSON.Message : xhr.statusText);
-                        deferred.reject("Đã có lỗi xảy ra trong quá trình này. Mở Console để xem chi tiết hoặc liên hệ Quản trị viên.");
-                    },
+                values['filter'] = [["projectId", "=", PROJECTID], 'and',["parentId", "=", 0], 'and', ["isActive", "=", 1]];
+                return ajax_read(ACTION_GOITHAU, values);
+            },
+            byKey: (key) => {
+                var deferred = $.Deferred();
+                ds_goithau.load().done((rs) => {
+                    deferred.resolve(rs.find(x => x.id == key));
                 });
                 return deferred.promise();
-            }
+            },
         });
         var ds_giaidoan = new DevExpress.data.CustomStore({
-            key: "id", loadMode: "raw",
-        	load: (values) => {
-        		let deferred = $.Deferred();
-        		let params = {
-        			'SortCol': 'status', 'SortADSC': '1',
-        			'FindId': 'projectId,' + PROJECTID + ';isActive,1;isVisible,1',
-        			'KeyWord':'thanh toán'
-        		};
-        		$.ajax({
-        			headers: header, dataType: "json",
-        			data: params,
-        			url: URL_API_PM_READ + ACTION_GIAIDOAN,
-                    success: (rs) => deferred.resolve(rs.result.items),
-                    error: function (xhr) {
-                        console.log(xhr.responseJSON ? xhr.responseJSON.Message : xhr.statusText);
-                        deferred.reject("Đã có lỗi xảy ra trong quá trình này. Mở Console để xem chi tiết hoặc liên hệ Quản trị viên.");
-                    },
-        		});
-        		return deferred.promise();
-        	},
+            key: "id",
+            load: (values) => {
+                values['filter'] = [["projectId", "=", PROJECTID], 'and', ["tenGiaiDoan", "contains", 'thanh toán'], 'and', ["isActive", "=", 1]];
+                values['sort'] = [{ selector: "status", desc: false }];
+                return ajax_read(ACTION_GIAIDOAN, values);
+            },
+            byKey: (key) => {
+                var deferred = $.Deferred();
+                ds_giaidoan.load().done((rs) => {
+                    deferred.resolve(rs.find(x => x.id == key));
+                });
+                return deferred.promise();
+            },
         });
         var ds_congviec_detail = (idGoiThau, idGiaiDoan) => new DevExpress.data.CustomStore({
             key: "id",
@@ -119,7 +107,6 @@
                 return deferred.promise();
             },
         });
-
         var ds_hangmuc = (idGoiThau) => new DevExpress.data.CustomStore({
             key: "id",
             load: (values) => {
@@ -169,8 +156,11 @@
 
         $(document).on('submit', '#container-filter', function (e) {
             var formData = $(this).dxForm('instance').option("formData");
-            e.preventDefault();
-            loadCreate(formData);
+            if (Object.keys(formData).length == 4) {
+                e.preventDefault();
+                loadCreate(formData);
+            } else
+                DevExpress.ui.notify("Vui lòng chọn thông tin", "error", 3000);
         });
 
         var loadFilter = () => $("#container-filter").dxForm({
@@ -186,8 +176,9 @@
                             editorType: "dxLookup",
                             editorOptions: {
                                 dataSource: customStore_Projects,
-                                valueExpr: "id", displayExpr: (item) => { return item && item.title + ' - ' + item.code },
                                 searchEnabled: true, searchMode: "contains",
+                                searchExpr: ["title", "code", "descriptions"],
+                                valueExpr: "id", displayExpr: "title",
                                 placeholder: "Vui lòng chọn...",
                                 itemTemplate: (data, index) => {
                                     return $("<div>").html("<b>" + data.title + "</b> - " + data.code + ' - <em>' + data.descriptions + "</em>");
@@ -208,6 +199,7 @@
                                 dataSource: ds_goithau,
                                 valueExpr: "id", displayExpr: (item) => { return item && item.soHopDong + " - " + item.dienGiai; },
                                 searchEnabled: true, searchMode: "contains",
+                                searchExpr: ["dienGiai", "soHopDong"],
                                 placeholder: "Vui lòng chọn...",
                                 itemTemplate: (data) => {
                                     return $("<div>").html("<b>" + data.soHopDong + "</b> - <em>" + data.dienGiai + "</em>");
@@ -276,7 +268,7 @@
             ],
             onFieldDataChanged: (e) => {
                 var formData = $("#container-filter").dxForm('instance').option("formData");
-                if (formData != null && formData.giaiDoanId != null && formData.goiThauId != null && formData.projectId != null && formData.dot != null) {
+                if (Object.keys(formData).length == 4) {
                     $("#btnSubmitFilter").dxButton('instance').option('disabled', false);
                     loadPanel(formData);
                 }

@@ -11,9 +11,9 @@
 </div>
 
 @section script{
-    <script>
-        const ACTION_NHOMPHAT = "/NS_Phat_Nhom"; 
-        var customStore = new DevExpress.data.CustomStore({
+    <script src="~/Scripts/page/ngansach.js"></script>
+    <script> 
+        var customStore2 = new DevExpress.data.CustomStore({
             key: "id",
             load: (values) => {
                 let deferred = $.Deferred();
@@ -27,7 +27,7 @@
                 $.ajax({
                     headers: header, dataType: "json",
                     data: params,
-                    url: URL_API_PM_READ + ACTION_NHOMPHAT,
+                    url: URL_API_PM_READ + ACTION_PHAT_NHOM,
                     success: function (data) {
                         deferred.resolve(
                             data.result.items,
@@ -43,26 +43,42 @@
                 });
                 return deferred.promise();
             },
-            insert: (values) => ajax_insert(URL_API_PM_CMD + ACTION_NHOMPHAT, values),
-            update: (key, values) => ajax_update(URL_API_PM_CMD + ACTION_NHOMPHAT, key, values),
-            remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION_NHOMPHAT, key),
+            insert: (values) => ajax_insert(URL_API_PM_CMD + ACTION_PHAT_NHOM, values),
+            update: (key, values) => ajax_update(URL_API_PM_CMD + ACTION_PHAT_NHOM, key, values),
+            remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION_PHAT_NHOM, key),
         });
+
+        var ds_main = new DevExpress.data.CustomStore({
+            key: "id",
+            load: (values) => {
+                values['sort'] = [{ selector: "status", desc: false }];
+                return ajax_read(ACTION_PHAT_NHOM, values);
+            },
+            insert: (values) => ajax_insert(URL_API_PM_CMD + ACTION_PHAT_NHOM, values),
+            update: (key, values) => ajax_update(URL_API_PM_CMD + ACTION_PHAT_NHOM, key, values),
+            remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION_PHAT_NHOM, key),
+            byKey: (key) => {
+                var deferred = $.Deferred();
+                ds_main.store().load().done((rs) => {
+                    deferred.resolve(rs.find(x => x.id == key));
+                });
+                return deferred.promise();
+            },
+        });
+
         $(function () {
             loadData();
         });
 
-        let loadData = () => $("#container").dxDataGrid({
+        var loadData = () => $("#container").dxDataGrid({
             height: heightScreen,
-            dataSource: customStore,
-            remoteOperations: {
-                paging: true,
-                sorting: true,
-            },
+            dataSource: ds_main,
+            remoteOperations: true,
             showBorders: false, showColumnHeaders: true, showColumnLines: false, hoverStateEnabled: true,
             showRowLines: true, columnAutoWidth: true, wordWrapEnabled: true, rowAlternationEnabled: false,
             onToolbarPreparing: (e) => {
                 var container = e.component;
-                e.toolbarOptions.items.unshift( 
+                e.toolbarOptions.items.unshift(
                     {
                         location: "after", widget: "dxButton",
                         options: {
@@ -82,7 +98,7 @@
             },
             searchPanel: {
                 highlightCaseSensitive: true, highlightSearchText: true,
-                visible: true, searchVisibleColumnsOnly: true                
+                visible: true, searchVisibleColumnsOnly: true
             },
             paging: {
                 enabled: true,
@@ -95,14 +111,11 @@
             },
             columns: [
                 {
-                    dataField: "id", caption: "ID", alignment: "center", width: 80, allowEditing: false,
+                    dataField: "status", caption: "ID", alignment: "center", width: 80, allowEditing: false,
                 },
                 {
-                    dataField: "status",  sortOrder: "desc", visible: false,
-                },
-                {
-                    dataField: "tenNhomPhat", caption: "Tên nhóm", dataType: "string", cssClass:"font-weight-bold",
-                    validationRules: [{ type: "required" }],
+                    dataField: "tenNhomPhat", caption: "Tên nhóm", dataType: "string", cssClass: "font-weight-bold",
+                    validationRules: [{ type: "required" }], width: 300,
                     editorType: "dxTextBox",
                     editorOptions: {
                         showClearButton: true,
@@ -110,38 +123,25 @@
                     }
                 },
                 {
-                    dataField: "dienGiai", caption: "Diễn giải", dataType: "string",
+                    dataField: "dienGiai", caption: "Diễn giải", dataType: "string", width: ($("#container").width() <= 1250 ? 200 : null),
                     cellTemplate: (c, o) => {
-                        c.append(isNullOrEmpty(o.value) ? o.value : "--" )
+                        c.append(isNullOrEmpty(o.value) ? o.value : "--")
                     },
                     editorOptions: {
                         showClearButton: true, placeholder: "Vui lòng nhập(nếu có)..."
                     }
                 },
                 {
-                    caption: "Tương tác",
-                    alignment: "center", width: 100,
-                    cellTemplate: (c, o) => {
-                        if (o.data.createBy_Name != null) {
-                            $("<div />").attr('id', "popover-target-" + o.key).append(
-                                $("<img />").attr("src", "data:image/png;base64," + o.data.createBy_Avartar).addClass("img-circle elevation-2 img-size-30"),
-                                (o.data.modifyBy_Name != null && o.data.modifyBy_Name != o.data.createBy_Name) ? $("<img />").attr("src", "data:image/png;base64," + o.data.modifyBy_Avartar).addClass("img-circle elevation-2 img-size-30").attr("style", "margin-left: -15px !important") : null
-                            ).appendTo(c);
-                            $("<div />").attr('id', "popover-detail-" + o.key).append(
-                                "<div><b>" + o.data.createBy_Name + "</b></div><em>" + o.data.createBy_Title + ' - ' + o.data.createBy_Department + "</em><div>" + "(Đã tạo cách đây " + moment(o.data.createDate).locale("vi").fromNow() + ")" + "</div>",
-                                (o.data.modifyBy_Name != null) ? "<br/><div><b>" + o.data.modifyBy_Name + "</b></div><em>" + o.data.modifyBy_Title + ' - ' + o.data.modifyBy_Department + "</em><div>" + "(Đã cập nhật cách đây " + moment(o.data.updateDate).locale("vi").fromNow() + ")" + "</div>" : null
-                            ).appendTo(c);
-                            $("#popover-detail-" + o.key).dxPopover({
-                                target: "#popover-target-" + o.key,
-                                showEvent: "mouseenter", hideEvent: "mouseleave",
-                                position: "bottom",
-                                animation: {
-                                    show: { type: "pop", from: { scale: 0 }, to: { scale: 1 } },
-                                    hide: { type: "fade", from: 1, to: 0 }
-                                }
-                            });
+                    caption: "Tương tác", dataField: "createBy",
+                    alignment: "center", width: 150,
+                    lookup: {
+                        dataSource: ds_nguoidung,
+                        valueExpr: "accountId",
+                        displayExpr: (item) => {
+                            return item && '<b>' + item.userName + '</b><br/><em class="small">' + item.title + '</em>';
                         }
                     },
+                    cellTemplate: (c, o) => c.append(o.text),
                     allowEditing: false,
                 },//nguoiTao
                 {
@@ -158,30 +158,33 @@
                     allowEditing: false,
                 },//createDate
                 {
-                    dataField: "isActive", width: 100,
-                    editorType: "dxSwitch",
-                }, 
-            ], 
+                    dataField: "isActive", caption: "Tình trạng",
+                    width: 130, alignment: "center",
+                    lookup: {
+                        dataSource: listActiveStatus,
+                        valueExpr: "value", displayExpr: "text",
+                    },
+                    cellTemplate: (c, o) => $("<span />").addClass("badge badge-" + listActiveStatus.find(x => x.value == o.value).color).append($("<i />").addClass("mr-1 " + listActiveStatus.find(x => x.value == o.value).icon), o.text).appendTo(c)
+                },
+            ],
             editing: {
-                allowUpdating: PermitInAction["update"] ? true : null,
-                allowDeleting: PermitInAction["delete"] ? true : null,
+                allowUpdating: PermitInAction.update,
+                allowDeleting: PermitInAction.delete,
                 mode: "cell", useIcons: false, confirmDelete: true,
             },
             onInitNewRow: (e) => {
                 e.data.isActive = true;
-                e.data.isVisible = true; 
+                e.data.isVisible = true;
             },
             rowDragging: {
-                allowReordering: PermitInAction["update"],
-                showDragIcons: false,
-                dropFeedbackMode: "push",
-                dragDirection: "vertical",
-                onDragEnd: function (e) {
+                allowReordering: PermitInAction.update,
+                showDragIcons: true, dropFeedbackMode: "push", dragDirection: "vertical",
+                onDragEnd: (e) => {
                     var source = e.itemData,
                         target = e.component.getVisibleRows()[e.toIndex].data,
-                        d = $.Deferred(); 
+                        d = $.Deferred();
                     if (source.id != target.id) {
-                        customStore.update(source.id, { status: target.status }).then(() => {
+                        ds_main.update(source.id, { status: target.status }).then(() => {
                             e.component.refresh().then(d.resolve, d.reject);
                         }, d.reject);
                     }

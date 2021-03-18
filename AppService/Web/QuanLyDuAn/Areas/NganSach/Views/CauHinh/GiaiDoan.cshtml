@@ -7,51 +7,27 @@
 
 <div class="row">
     <div class="col-12">
-        <div id="container" class="elevation-2"></div>
+        <div class="card">
+            <div class="card-body" style="padding: 0.7rem;">
+                <form id="container-filter"></form>
+            </div>
+        </div>
     </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div id="container-main" class="elevation-2"></div>
+    </div> 
 </div>
 
 @section script{
     <script src="~/Scripts/page/ngansach.js"></script>
-    <script> 
+    <script>
         var capDoList = [
             { value: "HM", text: "Hạng mục" },
             { value: "NCV", text: "Nhóm công việc" },
-            { value: "CV", text: "Công việc" }]
+            { value: "CV", text: "Công việc" }];
 
-        //var customStore = new DevExpress.data.CustomStore({
-        //    key: "id",
-        //    load: (values) => {
-        //        let deferred = $.Deferred();
-        //        var params = {
-        //            'FindId': 'projectId,' + PROJECTID,
-        //            'PageSize': isNullOrEmpty(values.take) ? values.take : 0,
-        //            'PageNumber': (isNullOrEmpty(values.take) && isNullOrEmpty(values.skip)) ? ((values.skip / values.take) + 1) : 0,
-        //        };
-        //        if (values.sort) {
-        //            params['SortCol'] = values.sort[0].selector;
-        //            params['SortADSC'] = values.sort[0].desc;
-        //        }
-
-        //        $.ajax({
-        //            headers: header,
-        //            url: URL_API_PM_READ + ACTION_GIAIDOAN,
-        //            dataType: "json",
-        //            data: params,
-        //            success: function (data) {
-        //                deferred.resolve(data.result.items, { totalCount: data.result.pagingInfo.totalItems });
-        //            },
-        //            error: function (xhr) {
-        //                console.log(xhr.responseJSON ? xhr.responseJSON.Message : xhr.statusText);
-        //                deferred.reject("Đã có lỗi xảy ra trong quá trình này. Mở Console để xem chi tiết hoặc liên hệ Quản trị viên.");
-        //            },
-        //        });
-        //        return deferred.promise();
-        //    },
-        //    insert: (values) => ajax_insert(URL_API_PM_CMD + ACTION_GIAIDOAN, values),
-        //    update: (key, values) => ajax_update(URL_API_PM_CMD + ACTION_GIAIDOAN, key, values),
-        //    remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION_GIAIDOAN, key),
-        //});
         var customStore_Groups = new DevExpress.data.CustomStore({
             key: "id", loadMode: "raw",
             load: (values) => {
@@ -70,9 +46,9 @@
                 });
                 return deferred.promise();
             },
-        }); 
+        });
 
-        var ds_giaidoan = new DevExpress.data.DataSource({
+        var ds_giaidoan = (formData)=> new DevExpress.data.DataSource({
             store: new DevExpress.data.CustomStore({
                 key: "id",
                 load: (values) => ajax_read(ACTION_GIAIDOAN, values),
@@ -86,164 +62,189 @@
                     });
                     return deferred.promise();
                 },
+
+                onInserted: (key, values) => ajax_log_insert("Insert", ACTION_GIAIDOAN, values, key),
+                onUpdated: (key, values) => ajax_log_insert("Update", ACTION_GIAIDOAN, key, values),
+                onRemoved: (key) => ajax_log_insert("Delete", ACTION_GIAIDOAN, key, null),
             }),
-            filter: ["projectId", "=", PROJECTID],
+            filter: ["projectId", "=", formData.projectId],
             sort: [{ selector: "status", desc: false }]
         });
-
+         
         $(function () {
-            loadData();
+            loadFilter();
         });
-        var loadData = () => {
-            $("#container").dxDataGrid({
-                height: heightScreen,
-                dataSource: ds_giaidoan,
-                remoteOperations: true,
-                showBorders: false, showColumnHeaders: true, showColumnLines: false, hoverStateEnabled: true,
-                showRowLines: true, columnAutoWidth: true, wordWrapEnabled: true, rowAlternationEnabled: true,
-                columns: [
-                    {
-                        caption: "STT", dataField: "status",
-                        dataType: "number", width: 100, alignment: "center",
-                        cellTemplate: (c, o) => c.append(o.rowIndex + 1)
-                    },
-                    {
-                        dataField: "tenGiaiDoan", caption: "Tên giai đoạn",
-                        dataType: "string", cssClass: "font-weight-bold",
-                        editorOptions: {
-                            placeholder: "Vui lòng nhập...",
-                            showClearButton: true
-                        },
-                        validationRules: [{ type: "required" }]
-                    },
-                    {
-                        dataField: "dienGiai", caption: "Diễn giải",
-                        dataType: "string",
-                        editorOptions: {
-                            placeholder: "Vui lòng nhập(nếu có)...",
-                            showClearButton: true
-                        },
-                    },
-                    {
-                        dataField: "capDo", caption: "Cấp tương tác", dataType: "string",
-                        editorType: "dxSelectBox",
-                        lookup: {
-                            dataSource: capDoList,
-                            valueExpr: "value", displayExpr: "text",
-                        },
-                        editorOptions: {
-                            dataSource: capDoList,
-                            valueExpr: "value", displayExpr: "text",
-                            placeholder: "Vui lòng chọn...",
-                        },
-                        validationRules: [{ type: "required" }]
-                    },
-                    {
-                        dataField: "groupId", caption: "Nhóm nhập liệu",
-                        lookup: {
-                            dataSource: customStore_Groups,
-                            valueExpr: "id", displayExpr: "title",
-                        },
-                        editorType: "dxSelectBox",
-                        editorOptions: {
-                            dataSource: customStore_Groups,
-                            valueExpr: "id", displayExpr: "title",
-                            placeholder: "Vui lòng chọn...",
-                        },
-                        validationRules: [{ type: "required" }]
-                    },
-                    {
-                        dataField: "isActive", caption: "Tình trạng",
-                        width: 130, alignment: "center",
-                        lookup: {
-                            dataSource: listActiveStatus,
-                            valueExpr: "value", displayExpr: "text",
-                        },
-                        editorType: "dxSwitch",
-                        cellTemplate: (c, o) => {
-                            $("<span />").addClass("badge badge-" + listActiveStatus.find(x => x.value == o.value).color).append(
-                                $("<i />").addClass("mr-1 " + listActiveStatus.find(x => x.value == o.value).icon), o.text
-                            ).appendTo(c);
-                        }
-                    },
-                    {
-                        dataField: "isVisible", width: 100,
-                        editorType: "dxSwitch", visible: false
-                    },
-                ],
-                paging: {
-                    enabled: true,
-                    pageSize: 20
-                },
-                pager: {
-                    showPageSizeSelector: true,
-                    allowedPageSizes: [10, 20, 40],
-                    showInfo: true,
-                },
-                searchPanel: {
-                    highlightCaseSensitive: true,
-                    highlightSearchText: true,
-                    searchVisibleColumnsOnly: true,
-                    visible: true
-                },
-                editing: {
-                    allowAdding: PermitInAction.insert,
-                    allowUpdating: PermitInAction.update,
-                    allowDeleting: PermitInAction.delete,
-                    mode: "cell", useIcons: false, confirmDelete: true,
-                },
-                onToolbarPreparing: function (e) {
-                    var container = e.component;
-                    e.toolbarOptions.items.unshift(
+
+        var loadFilter = () => $("#container-filter").dxForm({
+            labelLocation: ($(document).width() >= 768 ? "top" : "left"), requiredMark: "(*)",
+            items: [
+                {
+                    itemType: "group", colCount: 12,
+                    items: [
                         {
-                            location: "before", widget: "dxSelectBox",
-                            options: {
+                            colSpan: 6,
+                            dataField: "projectId", label: { text: "Dự án" },
+                            editorType: "dxLookup",
+                            editorOptions: {
                                 dataSource: customStore_Projects,
-                                valueExpr: "id", displayExpr: (item) => { return item && item.title + ' - ' + item.code },
-                                searchEnabled: true, searchMode: "contains",
+                                searchEnabled: true, searchMode: "contains", searchExpr: ["title", "code", "descriptions"],
+                                valueExpr: "id", displayExpr: "title",
                                 placeholder: "Vui lòng chọn...",
                                 itemTemplate: (data, index) => {
                                     return $("<div>").html("<b>" + data.title + "</b> - " + data.code + ' - <em>' + data.descriptions + "</em>");
                                 },
-                                value: PROJECTID, 
-                                onValueChanged: function (data) {
-                                    PROJECTID = data.value;
-                                    localStorage.setItem('projectIdCurrent', PROJECTID);
-                                    loadData();
+                                value: PROJECTID,
+                                onValueChanged: (data) => {
+                                    localStorage.setItem('projectIdCurrent', data.value); 
+                                    location.reload();
                                 },
                             },
+                            validationRules: [{ type: "required" }]
                         }, 
-                        {
-                            location: "after", widget: "dxButton",
-                            options: {
-                                icon: "refresh", type: "default",
-                                onClick: () => container.refresh()
-                            }
-                        })
+                    ]
+                }
+            ],
+            onFieldDataChanged: (e) => {
+                var formData = $("#container-filter").dxForm('instance').option("formData");
+                if (Object.keys(formData).length == 1) loadData(formData)
+            },
+        }).dxForm("instance");
+        var loadData = (formData) => $("#container-main").dxDataGrid({
+            height: heightScreenWithFilter,
+            dataSource: ds_giaidoan(formData),
+            remoteOperations: true,
+            showBorders: false, showColumnHeaders: true, showColumnLines: false, hoverStateEnabled: true,
+            showRowLines: true, columnAutoWidth: true, wordWrapEnabled: false, rowAlternationEnabled: true,
+            columns: [
+                {
+                    caption: "STT", dataField: "status",
+                    dataType: "number", width: 100, alignment: "center",
+                    cellTemplate: (c, o) => c.append(o.rowIndex + 1)
                 },
-                onInitNewRow: (e) => {
-                    e.data.isActive = true;
-                    e.data.isVisible = true;
-                    e.data.status = 0;
-                    e.data.projectId = PROJECTID;
+                {
+                    dataField: "tenGiaiDoan", caption: "Tên giai đoạn",
+                    dataType: "string", cssClass: "font-weight-bold",
+                    editorOptions: {
+                        placeholder: "Vui lòng nhập...",
+                        showClearButton: true
+                    },
+                    validationRules: [{ type: "required" }]
                 },
-                rowDragging: {
-                    allowReordering: PermitInAction["update"],
-                    showDragIcons: true,
-                    dropFeedbackMode: "push",
-                    dragDirection: "vertical",
-                    onDragEnd: function (e) {
-                        var source = e.itemData,
-                            target = e.component.getVisibleRows()[e.toIndex].data,
-                            d = $.Deferred();
-                        if (source.id != target.id) {
-                            ds_giaidoan.store().update(source.id, { status: target.status }).then(() => {
-                                e.component.refresh().then(d.resolve, d.reject);
-                            }, d.reject);
-                        }
+                {
+                    dataField: "dienGiai", caption: "Diễn giải",
+                    dataType: "string",
+                    editorOptions: {
+                        placeholder: "Vui lòng nhập(nếu có)...",
+                        showClearButton: true
                     },
                 },
-            });
-        }
+                {
+                    dataField: "capDo", caption: "Cấp tương tác", dataType: "string",
+                    editorType: "dxSelectBox",
+                    lookup: {
+                        dataSource: capDoList,
+                        valueExpr: "value", displayExpr: "text",
+                    },
+                    editorOptions: {
+                        dataSource: capDoList,
+                        valueExpr: "value", displayExpr: "text",
+                        placeholder: "Vui lòng chọn...",
+                    },
+                    validationRules: [{ type: "required" }]
+                },
+                {
+                    dataField: "groupId", caption: "Nhóm nhập liệu",
+                    lookup: {
+                        dataSource: customStore_Groups,
+                        valueExpr: "id", displayExpr: "title",
+                    },
+                    editorType: "dxSelectBox",
+                    editorOptions: {
+                        dataSource: customStore_Groups,
+                        valueExpr: "id", displayExpr: "title",
+                        placeholder: "Vui lòng chọn...",
+                    },
+                    validationRules: [{ type: "required" }]
+                },
+                {
+                    dataField: "isActive", caption: "Tình trạng",
+                    width: 130, alignment: "center",
+                    lookup: {
+                        dataSource: listActiveStatus,
+                        valueExpr: "value", displayExpr: "text",
+                    },
+                    editorType: "dxSwitch",
+                    cellTemplate: (c, o) => {
+                        $("<span />").addClass("badge badge-" + listActiveStatus.find(x => x.value == o.value).color).append(
+                            $("<i />").addClass("mr-1 " + listActiveStatus.find(x => x.value == o.value).icon), o.text
+                        ).appendTo(c);
+                    }
+                },
+                {
+                    type: "buttons", 
+                    buttons: [{ text: "Log", onClick: (e) => callLogEvent(e.row.data.id, ACTION_GIAIDOAN) },"delete", ]
+                },
+            ],
+            paging: {
+                enabled: true, pageSize: 20
+            },
+            pager: {
+                showPageSizeSelector: true,
+                allowedPageSizes: [10, 20, 40],
+                showInfo: true,
+            },
+            searchPanel: {
+                highlightCaseSensitive: true,
+                highlightSearchText: true,
+                searchVisibleColumnsOnly: true,
+                visible: true
+            },
+            editing: { 
+                allowUpdating: PermitInAction.update,
+                allowDeleting: PermitInAction.delete,
+                mode: "cell", useIcons: false, confirmDelete: true,
+            },
+            onToolbarPreparing: function (e) {
+                var container = e.component;
+                e.toolbarOptions.items.unshift( 
+                    {
+                        location: "after", widget: "dxButton",
+                        options: {
+                            icon: "refresh", type: "default",
+                            onClick: () => container.refresh()
+                        }
+                    },
+                    {
+                        location: "before", widget: "dxButton",
+                        options: {
+                            icon: "add", type: "default", text: "Thêm mới", stylingMode: "filter",
+                            visible: PermitInAction.insert,
+                            onClick: () => container.addRow()
+                        }
+                    })
+            },
+            onInitNewRow: (e) => {
+                e.data.isActive = true;
+                e.data.isVisible = true;
+                e.data.status = 0;
+                e.data.projectId = PROJECTID;
+            },
+            rowDragging: {
+                allowReordering: PermitInAction["update"],
+                showDragIcons: true,
+                dropFeedbackMode: "push",
+                dragDirection: "vertical",
+                onDragEnd: function (e) {
+                    var source = e.itemData,
+                        target = e.component.getVisibleRows()[e.toIndex].data,
+                        d = $.Deferred();
+                    if (source.id != target.id) {
+                        ds_giaidoan.store().update(source.id, { status: target.status }).then(() => {
+                            e.component.refresh().then(d.resolve, d.reject);
+                        }, d.reject);
+                    }
+                },
+            },
+        });
     </script>
 }

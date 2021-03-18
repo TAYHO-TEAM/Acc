@@ -47,6 +47,33 @@ var customStore_Projects = new DevExpress.data.DataSource({
     filter: ["isActive", "=", 1]
 });
 
+var ds_nguoidung = new DevExpress.data.CustomStore({
+    key: "accountId",
+    load: (values) => { 
+        let deferred = $.Deferred();
+        let params = {'PageSize': 0, 'PageNumber': 0}; 
+        $.ajax({
+            headers: header, dataType: "json", data: params,
+            url: URL_API_PM_READ + "/AccountInfo",
+            success: function (data) {
+                deferred.resolve(data.result.items, { totalCount: data.result.pagingInfo.totalItems });
+            },
+            error: function (xhr) {
+                console.log(xhr.responseJSON ? xhr.responseJSON.Message : xhr.statusText);
+                deferred.reject("Đã có lỗi xảy ra trong quá trình này. Mở Console để xem chi tiết hoặc liên hệ Quản trị viên.");
+            },
+        });
+        return deferred.promise();
+    },
+    byKey: (key) => {
+        var deferred = $.Deferred();
+        ds_nguoidung.load().done((rs) => {
+            deferred.resolve(rs.find(x => x.accountId == key));
+        });
+        return deferred.promise();
+    },
+});
+
 var customStore_Phat_Nhom = new DevExpress.data.CustomStore({
     key: "id", loadMode: "raw",
     load: (values) => {

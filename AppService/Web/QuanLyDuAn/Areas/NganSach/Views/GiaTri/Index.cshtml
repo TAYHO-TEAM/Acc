@@ -536,7 +536,7 @@
                     {
                         location: "after", widget: "dxButton",
                         options: {
-                            icon: "add", tylingMode: "filled", type: "default",
+                            icon: "add", stylingMode: "filled", type: "default",
                             onClick: () => genFormNCV({ "hangMucId": item.id }, true)
                         }
                     },
@@ -706,8 +706,7 @@
             },
             onContentReady: () => {
                 $("#container-sub").fadeIn();
-            },
-            export: { enabled: true },
+            }
         });
 
         var genFormNCV = (data, type) => $("#popup-main").dxPopup({
