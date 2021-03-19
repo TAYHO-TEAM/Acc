@@ -718,11 +718,11 @@ const permisionAassign = [
     //    Name: 'Tất cả'
     //},
     {
-        ID: '9',
+        ID: 9,
         Name: 'Của tôi'
     },
     {
-        ID: '7',
+        ID: 7,
         Name: 'Phân công thực hiện'
     },
     //{
@@ -754,15 +754,15 @@ const reportPeriodicalType = [
     //    Name: 'Hàng giờ'
     //},
     {
-        ID: 2,
+        ID: 1,
         Name: 'Hàng ngày'
     },
     {
-        ID: 3,
+        ID: 7,
         Name: 'Hàng tuần'
     },
     {
-        ID: 4,
+        ID: 30,
         Name: 'Hàng tháng'
     },
     //{

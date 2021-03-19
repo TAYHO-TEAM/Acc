@@ -50,10 +50,19 @@ namespace ProjectManager.CMD.Api.Application.Commands
                 var getPlanMaster = _planMasterRepository.GetSingle(x=>x.Id == newPlanSchedule.PlanMasterId);
                 if (newPlanSchedule.Remind.HasValue && getAccountInfo != null && getAccountInfo.Email != null && getPlanMaster != null)
                 {
-                    _sendMailService.SendMailAppoinment((DateTime)newPlanSchedule.Remind, (DateTime)newPlanSchedule.Remind, "", getPlanMaster.Title, getPlanMaster.Description, "Cảnh báo từ hệ thống","",new List<string> { getAccountInfo.Email }, new List<string>(), new List<string>(), true);
-                }    
+                    _sendMailService.SendMailAppoinment((DateTime)newPlanSchedule.Remind, (DateTime)newPlanSchedule.Remind, "", getPlanMaster.Title, getPlanMaster.Description, "Cảnh báo từ hệ thống","",new List<string> { getAccountInfo.Email }, new List<string>(), new List<string>(), false);
+                }
                 //_sendMailService.SendMailAppoinment((newPlanSchedule.Calendar.HasValue ? (DateTime)documentRealesed.Calendar : DateTime.Now), (documentRealesed.Calendar.HasValue ? (DateTime)documentRealesed.Calendar : DateTime.Now), documentRealesed.Location, documentRealesed.Title, documentRealesed.Description, documentRealesed.Title, "", toMails, null, null, false);
-               
+                if (newPlanSchedule.Remind.HasValue && newPlanSchedule.Repead.HasValue && newPlanSchedule.EndDate.HasValue)
+                {
+                    if ((int)newPlanSchedule.Repead > 0)
+                    {
+                        for(int i =1; i<((DateTime)newPlanSchedule.EndDate - (DateTime)newPlanSchedule.Remind).TotalDays; i=+(int)newPlanSchedule.Repead)
+                        {
+                            _sendMailService.SendMailAppoinment(((DateTime)newPlanSchedule.Remind).AddDays((int)newPlanSchedule.Repead), ((DateTime)newPlanSchedule.Remind).AddDays((int)newPlanSchedule.Repead), "", getPlanMaster.Title, getPlanMaster.Description, "Cảnh báo từ hệ thống", "", new List<string> { getAccountInfo.Email }, new List<string>(), new List<string>(), false);
+                        }    
+                    }
+                }
                 methodResult.Result = _mapper.Map<CreatePlanScheduleCommandResponse>(newPlanSchedule);
                 return methodResult;
             }
@@ -64,8 +73,6 @@ namespace ProjectManager.CMD.Api.Application.Commands
                 });
                 return methodResult;
             }
-
-
         }
     }
 }
