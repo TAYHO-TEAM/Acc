@@ -22,9 +22,9 @@ namespace QuanLyDuAn.Areas.ThongTin.Controllers
         {
             return View();
         }
-        public ActionResult _CongViecDetail()
+        public ActionResult _CongViecDetail(int id)
         {
-            return PartialView();
+            return PartialView(id);
         }
         [HttpPost, ValidateInput(false)]
         public async Task<JsonResult> Create(PlanMaster requestOBJ)

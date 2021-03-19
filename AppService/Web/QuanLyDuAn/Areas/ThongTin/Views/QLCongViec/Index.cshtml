@@ -25,6 +25,9 @@
     </div>
 </div>
 <style>
+    .dx-editor-container .dx-dropdowneditor-input-wrapper .dx-texteditor-input-container .dx-placeholder {
+        color: white !important;
+    }
     #container_conversation .dx-toolbar .dx-toolbar-items-container {
         height: 33px !important;
     }
@@ -73,6 +76,50 @@
         var WIDTH_CONTAINER = $("#container").width();
 
 
+
+       
+        let customStore = (gid) => {
+            var fillterCustomStore = [["pmPlanProjectId", "=", 3], "and", ["createBy", "=", UserCurrentInfo.accountId]];
+            if (gid > 0) {
+                fillterCustomStore.push("and", ["paPermistionId", "=", gid]);
+            }
+            return new DevExpress.data.DataSource({
+                store: new DevExpress.data.CustomStore({
+                    key: "paId",
+                    load: (values) => ajax_read(NAMEPLANMASTER, values),
+                    insert: (values) => ajax_insert(URL_API_PM_CMD + ACTION_CMD, values),
+                    update: (key, values) => ajax_update(URL_API_PM_CMD + ACTION_CMD, key, values),
+                    remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION_CMD, key),
+                }),
+                filter: fillterCustomStore,
+            })
+        };
+        let customStore_DETAIL = (id) => customStore_CMD_READ_FILTER_ID(ACTION_CMD_DETAIL, ACTION_DETAIL, 'planMasterId,' + id);
+        //let customStore_SCHEDULE = (id) => customStore_CMD_READ_FILTER_ID(ACTION_CMD_SCHEDULE, ACTION_SCHEDULE, 'planMasterId,' + id);
+        let customStore_PLANJOB_ACCOUNT = (id) => customStore_CMD_READ_FILTER_ID_KEYWORD(ACTION_CMD_PLAN_ACCOUNT, ACTION_PLAN_ACCOUNT, 'ownerById,' + id, 'PlanJob');
+        //let customStore_PLANMASTER_ACCOUNT = (id) => customStore_CMD_READ_FILTER_ID_KEYWORD(ACTION_CMD_PLAN_ACCOUNT, ACTION_PLAN_ACCOUNT, 'ownerById,' + id, 'PlanMaster');
+        let customStore_PLANMASTER_ACCOUNT = (id) => customStore_CMD_READ_FILTER_ID(ACTION_CMD_PLAN_ACCOUNT, ACTION_PLAN_ACCOUNT, "ownerById," + id + ";OwnerTable,'PlanMaster'");
+        //let customStore_CONVERSATION = (id) => customStore_CMD_READ_FILTER_ID_KEYWORD(ACTION_CMD_CONVERSATION, ACTION_CONVERSATION, 'topicId,' + id, 'PlanMaster');
+        let customStore_Conver = (id) => new DevExpress.data.DataSource({
+            store: new DevExpress.data.CustomStore({
+                key: "id",
+                load: (values) => ajax_read(NAMECOVNER, values),
+                insert: (values) => ajax_insert(URL_API_PM_CMD + ACTION_CMD_CONVERSATION, values),
+                //update: (key, values) => ajax_update(URL_API_PM_CMD + ACTION, key, values),
+                //remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION, key),
+            }),
+            filter: [["topicId", "=", id], "and", ["OwnerTable", "=", "PlanMaster"]],
+        });
+        let customStore_Schelude = (id) => new DevExpress.data.CustomStore({
+            key: "id",
+            load: (values) => {
+                values["filter"] = [["PlanMasterId", "=", id], "and", ["CreateBy", "=", UserCurrentInfo.accountId]];
+                return ajax_read(NAMEPLANSCHEDULE, values);
+            },
+            insert: (values) => { console.log(values); ajax_insert(URL_API_PM_CMD + ACTION_SCHEDULE, values) },
+            update: (key, values) => { console.log(values); ajax_update(URL_API_PM_CMD + ACTION_SCHEDULE, key, values); },
+            //remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION, key)
+        });
 
         let customStore_AccountInfo = new DevExpress.data.CustomStore({
             key: "accountId",
@@ -151,48 +198,6 @@
             },
 
         });
-        let customStore = (gid) => {
-            var fillterCustomStore = [["pmPlanProjectId", "=", 3], "and", ["createBy", "=", UserCurrentInfo.accountId]];
-            if (gid > 0) {
-                fillterCustomStore.push("and", ["paPermistionId", "=", gid]);
-            }
-            return new DevExpress.data.DataSource({
-                store: new DevExpress.data.CustomStore({
-                    key: "paId",
-                    load: (values) => ajax_read(NAMEPLANMASTER, values),
-                    insert: (values) => ajax_insert(URL_API_PM_CMD + ACTION, values),
-                    update: (key, values) => ajax_update(URL_API_PM_CMD + ACTION, key, values),
-                    remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION, key),
-                }),
-                filter: fillterCustomStore,
-            })
-        };
-        let customStore_DETAIL = (id) => customStore_CMD_READ_FILTER_ID(ACTION_CMD_DETAIL, ACTION_DETAIL, 'planMasterId,' + id);
-        //let customStore_SCHEDULE = (id) => customStore_CMD_READ_FILTER_ID(ACTION_CMD_SCHEDULE, ACTION_SCHEDULE, 'planMasterId,' + id);
-        let customStore_PLANJOB_ACCOUNT = (id) => customStore_CMD_READ_FILTER_ID_KEYWORD(ACTION_CMD_PLAN_ACCOUNT, ACTION_PLAN_ACCOUNT, 'ownerById,' + id, 'PlanJob');
-        //let customStore_PLANMASTER_ACCOUNT = (id) => customStore_CMD_READ_FILTER_ID_KEYWORD(ACTION_CMD_PLAN_ACCOUNT, ACTION_PLAN_ACCOUNT, 'ownerById,' + id, 'PlanMaster');
-        let customStore_PLANMASTER_ACCOUNT = (id) => customStore_CMD_READ_FILTER_ID(ACTION_CMD_PLAN_ACCOUNT, ACTION_PLAN_ACCOUNT, "ownerById," + id + ";OwnerTable,'PlanMaster'");
-        //let customStore_CONVERSATION = (id) => customStore_CMD_READ_FILTER_ID_KEYWORD(ACTION_CMD_CONVERSATION, ACTION_CONVERSATION, 'topicId,' + id, 'PlanMaster');
-        let customStore_Conver = (id) => new DevExpress.data.DataSource({
-            store: new DevExpress.data.CustomStore({
-                key: "id",
-                load: (values) => ajax_read(NAMECOVNER, values),
-                insert: (values) => ajax_insert(URL_API_PM_CMD + ACTION_CMD_CONVERSATION, values),
-                //update: (key, values) => ajax_update(URL_API_PM_CMD + ACTION, key, values),
-                //remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION, key),
-            }),
-            filter: [["topicId", "=", id], "and", ["OwnerTable", "=", "PlanMaster"]],
-        });
-        let customStore_Schelude = (id) => new DevExpress.data.CustomStore({
-            key: "id",
-            load: (values) => {
-                values["filter"] = [["PlanMasterId", "=", id], "and", ["CreateBy", "=", UserCurrentInfo.accountId]];
-                return ajax_read(NAMEPLANSCHEDULE, values);
-            },
-            insert: (values) => { console.log(values); ajax_insert(URL_API_PM_CMD + ACTION_SCHEDULE, values) },
-            update: (key, values) => { console.log(values); ajax_update(URL_API_PM_CMD + ACTION_SCHEDULE, key, values); },
-            //remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION, key)
-        });
 
 
         $(function () {
@@ -214,6 +219,7 @@
                 columnAutoWidth: true,
                 wordWrapEnabled: true,
                 rowAlternationEnabled: true,
+                filterRow: { visible: true },
                 columns: [
                     {
                         dataField: "pmIsVisible",
@@ -233,7 +239,7 @@
                         dataType: "string",
                     },
                     {
-                        dataField: "title",
+                        dataField: "pmTitle",
                         width: "20%",
                         caption: "Tên kế hoạch CV",
                         dataType: "string",
@@ -322,6 +328,18 @@
                             readOnly: true,
                         }
                     },
+                    {
+                        type: "buttons",
+                        //caption: "Tác vụ",
+                        width: 150,
+                        alignment: "center",
+                        buttons: [{
+                            text: "1",
+                            onClick: function (e) {
+                                var containerE = e.component;
+                            }
+                        }]
+                    }
                 ],
                 summary: {
                     groupItems: [{
@@ -354,7 +372,7 @@
                         items: [
                             {
                                 colSpan: 3,
-                                dataField: "code",
+                                dataField: "pmCode",
                                 label: { text: "Mã " },
                                 editorOptions: {
                                     stylingMode: "filled",
@@ -363,7 +381,7 @@
                             },
                             {
                                 colSpan: 5,
-                                dataField: "title",
+                                dataField: "pmTitle",
                                 label: { text: "Kế hoạch CV" },
                                 editorOptions: {
                                     stylingMode: "filled",
@@ -377,7 +395,7 @@
                             //},
                             {
                                 colSpan: 4,
-                                dataField: "importantLevel",
+                                dataField: "pmImportantLevel",
                                 caption: "Quan trọng",
                                 dataType: "number",
                                 lookup: {
@@ -585,7 +603,6 @@
                     container.classList.replace("col-md-12", "col-md-8");
                     e.component.refresh();
                     loadData_detail(selectedRowData.pmId);
-                    //loadData_schedule(selectedRowData.id);
                     loadAttach(selectedRowData);
                     loadComversation(selectedRowData.pmId);
                     loadSchedule(selectedRowData.pmId);
@@ -874,6 +891,7 @@
                     //)
                 },
                 onInitNewRow: (e) => {
+                    console.log(id)
                     e.data.isActive = true;
                     e.data.isVisible = true;
                     e.data.TopicId = id;
@@ -995,7 +1013,6 @@
                 },
                 onContentReady: (e) => {
                     e.component;
-                    console.log('abc');
                     if (e.component.totalCount() > 0) {
                         $("#insert_button").dxButton('instance').option('visible', false);
                     };

@@ -23,19 +23,19 @@ namespace ProjectManager.CMD.Domain.DTOs
         public DateTime? PAUpdateDateUTC { get; set; }
         public DateTime? PAUpdateDate { get; set; }
         public byte? PAStatus { get; set; }
-        public int? PJId { get; set; }
-        public int? PJPlanMasterId { get; set; }
-        public int? PJParentId { get; set; }
-        public string PJTitle { get; set; }
-        public string PJDescription { get; set; }
-        public string PJUnit { get; set; }
-        public int? PJAmount { get; set; }
-        public DateTime? PJStartDate { get; set; }
-        public DateTime? PJEndDate { get; set; }
-        public int? PJModifyTimes { get; set; }
-        public int? PJPriority { get; set; }
-        public byte? PJImportantLevel { get; set; }
-        public bool? PJIsDone { get; set; }
+        public int? Id { get; set; }
+        public int? PlanMasterId { get; set; }
+        public int? ParentId { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public string Unit { get; set; }
+        public int? Amount { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
+        public int? ModifyTimes { get; set; }
+        public int? Priority { get; set; }
+        public byte? ImportantLevel { get; set; }
+        public bool? IsDone { get; set; }
         public bool? PJIsDelete { get; set; }
         public bool? PJIsActive { get; set; }
         public bool? PJIsVisible { get; set; }

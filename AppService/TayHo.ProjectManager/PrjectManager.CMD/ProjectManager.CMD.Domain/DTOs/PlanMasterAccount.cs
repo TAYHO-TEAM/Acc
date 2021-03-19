@@ -23,24 +23,24 @@ namespace ProjectManager.CMD.Domain.DTOs
         public DateTime? PAUpdateDateUTC { get; set; }
         public DateTime? PAUpdateDate { get; set; }
         public byte? PAStatus { get; set; }
-        public int? PMId { get; set; }
-        public string PMCode { get; set; }
-        public int? PMParentId { get; set; }
-        public string PMPlanProjectId { get; set; }
-        public string PMTitle { get; set; }
-        public int? PMTimeLine { get; set; }
-        public string PMDescription { get; set; }
-        public string PMNote { get; set; }
-        public DateTime? PMStartDate { get; set; }
-        public DateTime? PMEndDate { get; set; }
-        public string PMUnit { get; set; }
-        public int? PMAmount { get; set; }
-        public string PMReportPeriodicalType { get; set; }
-        public int? PMReportPeriodical { get; set; }
-        public int? PMReportFrequency { get; set; }
-        public int? PMPriority { get; set; }
-        public byte? PMImportantLevel { get; set; }
-        public byte? PMNoAttachment { get; set; }
+        public int? Id { get; set; }
+        public string Code { get; set; }
+        public int? ParentId { get; set; }
+        public string PlanProjectId { get; set; }
+        public string Title { get; set; }
+        public int? TimeLine { get; set; }
+        public string Description { get; set; }
+        public string Note { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
+        public string Unit { get; set; }
+        public int? Amount { get; set; }
+        public string ReportPeriodicalType { get; set; }
+        public int? ReportPeriodical { get; set; }
+        public int? ReportFrequency { get; set; }
+        public int? Priority { get; set; }
+        public byte? ImportantLevel { get; set; }
+        public byte? NoAttachment { get; set; }
         public bool? PMIsDelete { get; set; }
         public bool? PMIsActive { get; set; }
         public bool? PMIsVisible { get; set; }
