@@ -29,6 +29,10 @@
                     });
                     return deferred.promise();
                 },
+
+                onInserted: (key, values) => ajax_log_insert("Insert", ACTION_NHOMCHIPHI, values, key),
+                onUpdated: (key, values) => ajax_log_insert("Update", ACTION_NHOMCHIPHI, key, values),
+                onRemoved: (key) => ajax_log_insert("Delete", ACTION_NHOMCHIPHI, key, null),
             }), 
             sort: [{ selector: "status", desc: false }]
         });
@@ -83,7 +87,11 @@
                         valueExpr: "value", displayExpr: "text",
                     },
                     cellTemplate: (c, o) => $("<span />").addClass("badge badge-" + listActiveStatus.find(x => x.value == o.value).color).append($("<i />").addClass("mr-1 " + listActiveStatus.find(x => x.value == o.value).icon), o.text).appendTo(c)
-                }, 
+                },
+                {
+                    type: "buttons",
+                    buttons: [{ text: "Log", onClick: (e) => callLogEvent(e.row.data.id, ACTION_NHOMCHIPHI) }, "delete",]
+                },
             ],
             paging: { enabled: true, pageSize: 20 },
             pager: {
@@ -98,7 +106,6 @@
                 visible: true
             },
             editing: {
-                allowAdding: PermitInAction.insert,
                 allowUpdating: PermitInAction.update,
                 allowDeleting: PermitInAction.delete,
                 mode: "cell", useIcons: false, confirmDelete: true,                
@@ -112,7 +119,16 @@
                             icon: "refresh", type: "default",
                             onClick: () => container.refresh()
                         }
-                    })
+                    },
+                    {
+                        location: "before", widget: "dxButton",
+                        options: {
+                            icon: "add", type: "default", text: "Thêm mới", stylingMode: "filter",
+                            visible: PermitInAction.insert,
+                            onClick: () => container.addRow()
+                        }
+                    }
+                )
             },
             onInitNewRow: (e) => {
                 e.data.isActive = true;

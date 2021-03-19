@@ -302,7 +302,7 @@ var callLogEvent = (id, table) => {
             content.dxDataGrid({
                 dataSource: customStoreEvent,
                 showBorders: true, showColumnHeaders: true, showColumnLines: false, rowAlternationEnabled: false,
-                showRowLines: true, columnAutoWidth: true, wordWrapEnabled: true, hoverStateEnabled: false,
+                showRowLines: true, columnAutoWidth: true, wordWrapEnabled: false, hoverStateEnabled: false,
                 columns: [
                     {
                         caption: "STT", cellTemplate: (c, o) => c.append(o.rowIndex + 1),
@@ -333,8 +333,7 @@ var callLogEvent = (id, table) => {
                         cssClass:"font-weight-bold"
                     },
                     {
-                        dataField: "createDate", dataType: "date", caption: "Thời gian",
-                        width: 150, alignment: "center",
+                        dataField: "createDate", dataType: "date", caption: "Thời gian", alignment: "center",
                         cellTemplate: (c, o) => {
                             $("<div />").append(
                                 $("<em />").addClass("small").append("Cách đây " + moment(o.value).locale("vi").fromNow()),
@@ -344,9 +343,7 @@ var callLogEvent = (id, table) => {
                     },
                     {
                         dataField: "message", caption: "Nội dung cập nhật",
-                        cellTemplate: (c, o) => {
-                            c.append(o.value.replaceAll('{', '').replaceAll('}', '').replaceAll(',', '<br/>').replaceAll('"', '').replaceAll(':', ' : '));
-                        }
+                        cellTemplate: (c, o) => c.append(o.value)
                     },
                 ]
             });

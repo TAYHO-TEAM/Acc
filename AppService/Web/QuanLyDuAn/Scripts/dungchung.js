@@ -1,5 +1,6 @@
 ﻿//Tinh chiều cao - chiều cao header
 var heightScreen = $(document).height() - $('.main-header').height()-50;
+var heightScreenWithFilter = heightScreen - $("#container-filter").parent().parent().parent().parent().height()-65;
 var widthScreen = $(document).width();
 //Thông số api
 const api_version = 1; 
