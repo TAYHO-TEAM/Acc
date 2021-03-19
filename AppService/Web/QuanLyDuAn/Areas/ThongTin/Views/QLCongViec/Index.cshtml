@@ -85,7 +85,7 @@
             }
             return new DevExpress.data.DataSource({
                 store: new DevExpress.data.CustomStore({
-                    key: "paId",
+                    key: "id",
                     load: (values) => ajax_read(NAMEPLANMASTER, values),
                     insert: (values) => ajax_insert(URL_API_PM_CMD + ACTION_CMD, values),
                     update: (key, values) => ajax_update(URL_API_PM_CMD + ACTION_CMD, key, values),
@@ -611,7 +611,8 @@
                     loadComversation(selectedRowData.id);
                     loadSchedule(selectedRowData.id);
                     if (selectedRowData != null && selectedRowKey != null) {
-                        var data = e.component.getRowIndexByKey(selectedRowKey);
+                        console.log(selectedRowData);
+                        var data = e.component.getRowIndexByKey(selectedRowData.id);
                         $("#action-update").dxSpeedDialAction({
                             index: 2, icon: "fas fa-edit", label: "Cập nhật thông tin",
                             visible: PermitInAction["update"] && (selectedRowData.paPermistionId == 9 || selectedRowData.paPermistionId == 7),
