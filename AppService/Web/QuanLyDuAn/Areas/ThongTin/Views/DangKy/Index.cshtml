@@ -601,6 +601,7 @@
                 customStore_Detail(item.id).load().then((items) => {
                     var masterItiem = items[0];
                     code = masterItiem.code;
+                    console.log(masterItiem);
                     $('#div_dxForm_Main').dxForm({
                         elementAttr: {
                             id: "dxForm_Main",
@@ -657,10 +658,10 @@
                                     label: { text: "Mô tả" },
                                 },
                                 {
-                                    colSpan: 12,
                                     dataField: "note",
+                                    colSpan: 12,
                                     label: { text: "Ghi chú" },
-                                    alignment: "left",
+                                    //alignment: "left",
                                 },
                                 {
                                     colSpan: 12,

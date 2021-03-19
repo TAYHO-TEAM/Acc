@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ProjectManager.CMD.Domain.DomainObjects
 {
-    public class AccountInfo : DOBase
+    public class AccountInfo :DOBase
     {
         #region Fields
         private int? _accountId;

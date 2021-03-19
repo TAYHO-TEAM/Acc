@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="EFConfig\AccountInfoConfiguration.cs" />
     <Compile Remove="EFCoreConfig\NS_GiaiDoanConfiguration.cs" />
   </ItemGroup>
 
