@@ -593,7 +593,7 @@
                         var data = e.component.getRowIndexByKey(selectedRowKey);
                         $("#action-update").dxSpeedDialAction({
                             index: 2, icon: "fas fa-edit", label: "Cập nhật thông tin",
-                            visible: PermitInAction["update"] && (selectedRowData.permistionId == 9 || selectedRowData.permistionId == 7),
+                            visible: PermitInAction["update"] && (selectedRowData.paPermistionId == 9 || selectedRowData.paPermistionId == 7),
                             onClick: () => e.component.editRow(data)
                         }).dxSpeedDialAction("instance");
 
@@ -601,7 +601,7 @@
                             index: 3,
                             icon: "fas fa-trash",
                             label: "Xoá",
-                            visible: (selectedRowData.id != null && PermitInAction["delete"] && selectedRowData.createBy == UserCurrentInfo.accountId),
+                            visible: (selectedRowData.paId != null && PermitInAction["delete"] && selectedRowData.pmCreateBy == UserCurrentInfo.accountId),
                             onClick: () => {
                                 DevExpress.ui.dialog.confirm("Bạn có chắc là muốn hủy bỏ giá trị của hạng mục?", "XÁC NHẬN THÔNG TIN").done(function (dialogResult) {
                                     if (dialogResult) {
