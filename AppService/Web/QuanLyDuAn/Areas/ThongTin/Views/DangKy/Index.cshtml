@@ -5,7 +5,7 @@
 @section style{
 
     <style>
-        .dx-placeholder {
+        .dx-editor-container .dx-dropdowneditor-input-wrapper .dx-texteditor-input-container .dx-placeholder {
             color: white !important;
         }
 
@@ -440,6 +440,7 @@
                                 },
                                 editorType: "dxSelectBox",
                                 editorOptions: {
+                                    stylingMode: "filled",
                                     searchMode: "contains",
                                     searchExpr: ['code', 'title'],
                                     showClearButton: true,
@@ -459,27 +460,42 @@
                                 colSpan: 12,
                                 dataField: "documentTypeId",
                                 label: { text: "Loại tài liệu" },
+                                editorOptions: {
+                                    stylingMode: "filled",
+                                },
                             },
                             {
                                 colSpan: 12,
                                 dataField: "workItemId",
                                 label: { text: "Hạng mục" },
+                                editorOptions: {
+                                    stylingMode: "filled",
+                                },
                             },
                             {
                                 colSpan: 12,
                                 dataField: "title",
                                 label: { text: "Tiêu đề" },
+                                editorOptions: {
+                                    stylingMode: "filled",
+                                },
                             },
                             {
                                 colSpan: 12,
                                 dataField: "descriptions",
                                 label: { text: "Mô tả" },
                                 editorType: "dxTextArea",
+                                editorOptions: {
+                                    stylingMode: "filled",
+                                },
                             },
                             {
                                 colSpan: 12,
                                 dataField: "note",
                                 label: { text: "Ghi chú" },
+                                editorOptions: {
+                                    stylingMode: "filled",
+                                },
                             },
                         ],
 
@@ -601,7 +617,6 @@
                 customStore_Detail(item.id).load().then((items) => {
                     var masterItiem = items[0];
                     code = masterItiem.code;
-                    console.log(masterItiem);
                     $('#div_dxForm_Main').dxForm({
                         elementAttr: {
                             id: "dxForm_Main",
@@ -623,12 +638,18 @@
                                     colSpan: 12,
                                     dataField: "barCode",
                                     label: { text: "Mã" },
+                                    editorOptions: {
+                                        stylingMode: "filled",
+                                    },
 
                                 },//tenCongViec
                                 {
                                     colSpan: 12,
                                     dataField: "rev",
                                     label: { text: "REV" },
+                                    editorOptions: {
+                                        stylingMode: "filled",
+                                    },
                                 },//rev
                                 {
                                     colSpan: 12,
@@ -642,6 +663,7 @@
                                     editorType: "dxLookup",
                                     alignment: "left",
                                     editorOptions: {
+                                        stylingMode: "filled",
                                         dataSource: customStore_AccountInfo,
                                         valueExpr: "accountId",
                                         displayExpr: "accountName",
@@ -656,11 +678,17 @@
                                     colSpan: 12,
                                     dataField: "descriptions",
                                     label: { text: "Mô tả" },
+                                    editorOptions: {
+                                        stylingMode: "filled",
+                                    },
                                 },
                                 {
                                     dataField: "note",
                                     colSpan: 12,
                                     label: { text: "Ghi chú" },
+                                    editorOptions: {
+                                        stylingMode: "filled",
+                                    },
                                     //alignment: "left",
                                 },
                                 {
@@ -671,6 +699,9 @@
                                     width: 150,
                                     alignment: "center",
                                     format: "dd/MM/yyyy",
+                                    editorOptions: {
+                                        stylingMode: "filled",
+                                    },
                                 },
                                 {
                                     colSpan: 12,
@@ -680,6 +711,9 @@
                                     width: 150,
                                     alignment: "center",
                                     format: "dd/MM/yyyy",
+                                    editorOptions: {
+                                        stylingMode: "filled",
+                                    },
                                 },
                                 {
                                     colSpan: 12,
@@ -689,6 +723,9 @@
                                     width: 150,
                                     alignment: "center",
                                     format: "dd/MM/yyyy",
+                                    editorOptions: {
+                                        stylingMode: "filled",
+                                    },
                                 },
                                 {
                                     colSpan: 12,
@@ -699,8 +736,9 @@
                                     alignment: "center",
                                     format: "dd/MM/yyyy",
                                     editorOptions: {
+                                        stylingMode: "filled",
                                         value: masterItiem.responseRegistDTOs[1].updateDate !== null ? masterItiem.responseRegistDTOs[1].updateDate : '',
-                                    }
+                                    },
                                 }]
                         }]
                     }).appendTo(content_main);
@@ -750,6 +788,7 @@
                                                 alignment: "left",
                                                 editorType: "dxSelectBox",
                                                 editorOptions: {
+                                                    stylingMode: "filled",
                                                     disabled: 0,
                                                     dataSource: typeApprove,
                                                     displayExpr: "text",
@@ -768,15 +807,20 @@
                                                 colSpan: 12,
                                                 dataField: "description",
                                                 label: { text: "Ý kiến" },
-                                                //editorOptions: {
-                                                //    value: noteRes !== '' ? noteRes : (value.description !== '' && value.description !== null)?value.description:null,
-                                                //}
+                                                editorOptions: {
+                                                    stylingMode: "filled",
+                                                    
+                                                },
                                                 //editorType: "dxTextArea",
                                             },
                                             {
                                                 colSpan: 12,
                                                 dataField: "noAttachment",
                                                 label: { text: "File(s)" },
+                                                editorOptions: {
+                                                    stylingMode: "filled",
+
+                                                },
                                                 template: (container) => {
                                                     return $('<a>').click(function () {
                                                         loadFileAttachment("ResponseRegist", value, (value.modifyBy == null || value.modifyBy == 0) ? ((value.update == true ? (masterItiem.status < 5 ? true : false) : false)) : false, item);
@@ -786,13 +830,17 @@
                                             {
                                                 itemType: "button",
                                                 horizontalAlignment: "center",
+                                                editorOptions: {
+                                                    stylingMode: "filled",
+
+                                                },
                                                 buttonOptions: {
                                                     text: "Đánh giá",
                                                     type: "success",
                                                     //useSubmitBehavior: true,
                                                     visible: ((value.modifyBy < 1 && !$checkNexStepDone) ? (value.update == true ? true : false) : false),
                                                     onClick: function () {
-                                                        
+
                                                         var request = {
                                                             'id': value.id,
                                                             'description': value.description,

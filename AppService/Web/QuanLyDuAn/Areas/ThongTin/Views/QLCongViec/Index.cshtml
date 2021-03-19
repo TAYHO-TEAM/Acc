@@ -151,18 +151,22 @@
             },
 
         });
-
-        //let customStore = customStore_CMD_READ_PLANPROJECTID(ACTION_CMD, ACTION, 3);
-        let customStore = (gid) => new DevExpress.data.DataSource({
-            store: new DevExpress.data.CustomStore({
-                key: "paId",
-                load: (values) => ajax_read(NAMEPLANMASTER, values),
-                insert: (values) => ajax_insert(URL_API_PM_CMD + ACTION, values),
-                update: (key, values) => ajax_update(URL_API_PM_CMD + ACTION, key, values),
-                remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION, key),
-            }),
-            filter: [["pmPlanProjectId", "=", 3], "and", ["createBy", "=", UserCurrentInfo.accountId]],
-        });
+        let customStore = (gid) => {
+            var fillterCustomStore = [["pmPlanProjectId", "=", 3], "and", ["createBy", "=", UserCurrentInfo.accountId]];
+            if (gid > 0) {
+                fillterCustomStore.push("and", ["paPermistionId", "=", gid]);
+            }
+            return new DevExpress.data.DataSource({
+                store: new DevExpress.data.CustomStore({
+                    key: "paId",
+                    load: (values) => ajax_read(NAMEPLANMASTER, values),
+                    insert: (values) => ajax_insert(URL_API_PM_CMD + ACTION, values),
+                    update: (key, values) => ajax_update(URL_API_PM_CMD + ACTION, key, values),
+                    remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION, key),
+                }),
+                filter: fillterCustomStore,
+            })
+        };
         let customStore_DETAIL = (id) => customStore_CMD_READ_FILTER_ID(ACTION_CMD_DETAIL, ACTION_DETAIL, 'planMasterId,' + id);
         //let customStore_SCHEDULE = (id) => customStore_CMD_READ_FILTER_ID(ACTION_CMD_SCHEDULE, ACTION_SCHEDULE, 'planMasterId,' + id);
         let customStore_PLANJOB_ACCOUNT = (id) => customStore_CMD_READ_FILTER_ID_KEYWORD(ACTION_CMD_PLAN_ACCOUNT, ACTION_PLAN_ACCOUNT, 'ownerById,' + id, 'PlanJob');
@@ -192,13 +196,13 @@
 
 
         $(function () {
-            loadData();
+            loadData(GROUPOWNERID);
         });
 
-        let loadData = () => {
+        let loadData = (id) => {
             $("#container").dxDataGrid({
                 height: heightScreen,
-                dataSource: customStore(1),
+                dataSource: customStore(id),
                 repaintChangesOnly: true,
                 remoteOperations: true,
                 scrolling: { mode: "standard" },
@@ -494,7 +498,7 @@
                                 onValueChanged: function (data) {
                                     GROUPOWNERID = data.value;
                                     localStorage.setItem('groupOwnerIdCurrent', GROUPOWNERID);
-                                    loadData();
+                                    loadData(GROUPOWNERID);
                                 },
                             },
                         },
@@ -983,7 +987,7 @@
                                     id: "insert_button"
                                 },
                                 text: "Thêm mới",
-                                visible: PermitInAction.insert ,
+                                visible: PermitInAction.insert,
                                 onClick: () => container.addRow()
                             }
                         },
@@ -992,9 +996,8 @@
                 onContentReady: (e) => {
                     e.component;
                     console.log('abc');
-                    if (e.component.totalCount() > 0)
-                    {
-                        $("#insert_button").dxButton('instance').option('visible',false) ;
+                    if (e.component.totalCount() > 0) {
+                        $("#insert_button").dxButton('instance').option('visible', false);
                     };
                 },
                 onInitNewRow: (e) => {

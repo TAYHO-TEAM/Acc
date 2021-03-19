@@ -44,6 +44,7 @@
                             },
                             editorType: "dxSelectBox",
                             editorOptions: {
+                                stylingMode: "filled",
                                 value: formData["documentTypeId"],
                                 dataSource: customStore_DocumetnType,
                                 valueExpr: "id",
@@ -79,6 +80,7 @@
                             },
                             editorType: "dxSelectBox",
                             editorOptions: {
+                                stylingMode: "filled",
                                 value: formData["workItemId"],
                                 dataSource: customStore_HangMuc,
                                 valueExpr: "id",
@@ -112,6 +114,7 @@
                             },
                             editorType: "dxSelectBox",
                             editorOptions: {
+                                stylingMode: "filled",
                                 dataSource: customStore_PLAN(""),
                                 value: formData["planRegisterId"],
                                 searchMode: "contains",
@@ -178,6 +181,7 @@
                             label: { text: "Tiêu đề" },
                             editorType: "dxTextBox",
                             editorOptions: {
+                                stylingMode: "filled",
                                 value: formData["title"],
                                 dataSource: customStore_HangMuc,
                                 valueExpr: "id",
@@ -194,6 +198,7 @@
                             label: { text: "Mô tả" },
                             editorType: "dxTextArea",
                             editorOptions: {
+                                stylingMode: "filled",
                                 value: formData["descriptions"],
                             },
 
@@ -203,7 +208,8 @@
                             dataField: "note",
                             label: { text: "Ghi chú" },
                             editorOptions: {
-                                value: formData["descriptions"],
+                                stylingMode: "filled",
+                                value: formData["note"],
                             },
                         },
                         {
