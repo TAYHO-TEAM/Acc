@@ -1,5 +1,4 @@
-﻿@model int
-<form id="form-regist" action="#" method="POST" enctype="application/json">
+﻿<form id="form-regist" action="#" method="POST" enctype="application/json">
 </form>
 <script>
 
@@ -52,117 +51,134 @@
     };
 
     $(document).ready(function () {
-            var params = {
-            'PageSize': 0,
-            'PageNumber': 0,
-            'FindId': @Model,
-        }
-        $.ajax({
-            headers: header,
-            url: URL_API_PM_READ + ACTION,
-            dataType: "json",
-            data: params,
-            async: false,
-            success: function (data) {
-                let list = data.result.items;
-                formData = {
-                    "planRegisterId": list[0].planRegisterId
-                    , "documentTypeId": list[0].documentTypeId
-                    , "workItemId": list[0].workItemId
-                    , "title": list[0].title
-                    , "descriptions": list[0].descriptions
-                    , "note": list[0].note
-                };
-            },
-            complete: function (e) {
-                 var formInstance = $("#form-regist").dxForm({
-                            formData: formData,
-                            labelLocation: "top",
-                            items: [
-                                 {
-                                     dataField: "code",
-                                     label: { text: "Mã CV" },
-                                     editorOptions: {
-                                         stylingMode: "filled",
-                                         placeholder: "Vui lòng nhập...",
-                                     }
-                                 },
-                                 {
-                                     dataField: "title",
-                                     colSpan: 2,
-                                     label: { text: "Tên công việc" },
-                                     validationRules: [{ type: "required" }],
-                                     editorOptions: {
-                                         stylingMode: "filled",
-                                         placeholder: "Vui lòng nhập...",
-                                     }
-                                 },
-                                 {
-                                     dataField: "importantLevel",
-                                     caption: "Mức độ quan trọng",
-                                     dataType: "number",
-                                     lookup: {
-                                         dataSource: important,
-                                         valueExpr: "ID",
-                                         displayExpr: "Name",
-                                     },
-                                     editorType: "dxSelectBox",
-                                     editorOptions: {
-                                         stylingMode: "filled",
-                                         placeholder: "Vui lòng chọn...",
-                                         value: "importantLevel",
-                                         dataSource: important,
-                                         valueExpr: "ID",
-                                         displayExpr: "Name",
-                                     },
-                                 },
-                                 {
-                                     colSpan: 4,
-                                     dataField: "description",
-                                     label: { text: "Mô tả CV" },
-                                     editorType: "dxTextArea",
-                                     editorOptions: {
-                                         stylingMode: "filled",
-                                         placeholder: "Vui lòng nhập...",
-                                     }
-                                 },
-                                 {
-                                     colSpan: 2,
-                                     dataField: "endDate",
-                                     label: { text: "Ngày hoàn thành" },
-                                     editorType: "dxDateBox",
-                                     editorOptions: {
-                                         stylingMode: "filled",
-                                         placeholder: "Vui lòng nhập...",
-                                         pickerType: "rollers",
-                                         type: "datetime",
-                                     },
-                                 },
-                                 {
-                                     colSpan: 2,
-                                     template: '<span class="dx-field-item-label-text font-bold">Các tập tin đính kèm</span><div class="file-uploader"></div>',
-                                 },
-                                 {
-                                     colSpan: 4,
-                                     itemType: "button",
-                                     horizontalAlignment: "center",
-                                     buttonOptions: {
-                                         text: "Lưu lại",
-                                         icon: "fa fa-save",
-                                         type: "success",
-                                         useSubmitBehavior: true,
-                                         elementAttr: {
-                                             id: "submit",
-                                         }
-                                     }
-                                 },
-                             ],
-                            onFieldDataChanged: function (e) {
-                                var newFormData = e.component.option("formData");
-                            }
-                        }).dxForm("instance");
-            },
-        });
+        var formInstance = $("#form-regist").dxForm({
+            formData: formData,
+            colCount: 4,
+            labelLocation: "top",
+            items: [
+
+                {
+                    dataField: "code",
+                    label: { text: "Mã CV" },
+                    editorOptions: {
+                        stylingMode: "filled",
+                        placeholder: "Vui lòng nhập...",
+                    }
+                },
+                {
+                    dataField: "title",
+                    colSpan: 2,
+                    label: { text: "Tên công việc" },
+                    validationRules: [{ type: "required" }],
+                    editorOptions: {
+                        stylingMode: "filled",
+                        placeholder: "Vui lòng nhập...",
+                    }
+                },
+                //{
+                //    dataField: "priority",
+                //    label: { text: "Độ ưu tiên" },
+                //    editorType: "dxNumberBox",
+                //},
+                {
+                    dataField: "importantLevel",
+                    caption: "Mức độ quan trọng",
+                    dataType: "number",
+                    lookup: {
+                        dataSource: important,
+                        valueExpr: "ID",
+                        displayExpr: "Name",
+                    },
+                    editorType: "dxSelectBox",
+                    editorOptions: {
+                        stylingMode: "filled",
+                        placeholder: "Vui lòng chọn...",
+                        value: "importantLevel",
+                        dataSource: important,
+                        valueExpr: "ID",
+                        displayExpr: "Name",
+                    },
+                },
+                {
+                    colSpan: 4,
+                    dataField: "description",
+                    label: { text: "Mô tả CV" },
+                    editorType: "dxTextArea",
+                    editorOptions: {
+                        stylingMode: "filled",
+                        placeholder: "Vui lòng nhập...",
+                    }
+                },
+                //{
+                //    colSpan: 4,
+                //    dataField: "note",
+                //    label: { text: "Lưu ý" },
+                //    editorType: "dxTextArea",
+                //},
+                //{
+                //    dataField: "startDate",
+                //    label: { text: "Ngày bắt đầu" },
+                //    editorType: "dxDateBox",
+                //    editorOptions: {
+                //        pickerType: "rollers",
+                //        type: "datetime",
+                //    },
+                //},
+                {
+                    colSpan: 2,
+                    dataField: "endDate",
+                    label: { text: "Ngày hoàn thành" },
+                    editorType: "dxDateBox",
+                    editorOptions: {
+                        stylingMode: "filled",
+                        placeholder: "Vui lòng nhập...",
+                        pickerType: "rollers",
+                        type: "datetime",
+                    },
+                },
+                //{
+                //    dataField: "amount",
+                //    label: { text: "Khối lượng" },
+                //},
+                //{
+                //    dataField: "unit",
+                //    label: { text: "Đơn vị" },
+                //    lookup: {
+                //        dataSource: unit,
+                //        valueExpr: "ID",
+                //        displayExpr: "Name",
+                //    },
+                //    editorType: "dxSelectBox",
+                //    editorOptions: {
+                //        value: "unit",
+                //        dataSource: unit,
+                //        valueExpr: "ID", displayExpr: "Name",
+                //    },
+                //},
+                {
+                    colSpan: 2,
+                    template: '<span class="dx-field-item-label-text font-bold">Các tập tin đính kèm</span><div class="file-uploader"></div>',
+                },
+                {
+                    colSpan: 4,
+                    itemType: "button",
+                    horizontalAlignment: "center",
+                    buttonOptions: {
+                        text: "Lưu lại",
+                        icon: "fa fa-save",
+                        type: "success",
+                        useSubmitBehavior: true,
+                        elementAttr: {
+                            id: "submit",
+                        }
+                    }
+                },
+            ],
+            onFieldDataChanged: function (e) {
+                var newFormData = e.component.option("formData");
+            }
+        }).dxForm("instance");
+
         $(".file-uploader").dxFileUploader({
             selectButtonText: "Chọn tập tin...",
             labelText: "Hoặc kéo thả vào đây",

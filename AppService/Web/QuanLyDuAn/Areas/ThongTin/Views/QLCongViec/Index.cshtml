@@ -79,9 +79,9 @@
 
        
         let customStore = (gid) => {
-            var fillterCustomStore = [["pmPlanProjectId", "=", 3], "and", ["createBy", "=", UserCurrentInfo.accountId]];
+            var fillterCustomStore = [["pmIsDelete", "<>", true],  "and", ["PlanProjectId", "=", 3], "and", ["createBy", "=", UserCurrentInfo.accountId]];
             if (gid > 0) {
-                fillterCustomStore.push("and", ["paPermistionId", "=", gid]);
+                fillterCustomStore.push("and", ["PermistionId", "=", gid]);
             }
             return new DevExpress.data.DataSource({
                 store: new DevExpress.data.CustomStore({
@@ -233,27 +233,27 @@
                         sortOrder: "desc"
                     },
                     {
-                        dataField: "pmCode",
+                        dataField: "code",
                         width: "10%",
                         caption: "Mã",
                         dataType: "string",
                     },
                     {
-                        dataField: "pmTitle",
+                        dataField: "title",
                         width: "20%",
                         caption: "Tên kế hoạch CV",
                         dataType: "string",
                         validationRules: [{ type: "required" }],
                     },
                     {
-                        dataField: "pmDescription",
+                        dataField: "description",
                         width: "30%",
                         caption: "Mô tả CV",
                         dataType: "string",
                         //visible: false,
                     },
                     {
-                        dataField: "pmImportantLevel",
+                        dataField: "importantLevel",
                         caption: "Độ quan trọng",
                         dataType: "number",
                         lookup: {
@@ -275,13 +275,13 @@
                     //},
                     {
 
-                        dataField: "pmNote",
+                        dataField: "note",
                         label: { text: "Lưu ý" },
                         editorType: "dxTextArea",
                         visible: false,
                     },
                     {
-                        dataField: "pmStartDate",
+                        dataField: "startDate",
                         label: { text: "Ngày bắt đầu" },
                         visible: false,
                         editorType: "dxDateBox",
@@ -292,7 +292,7 @@
                     },
                     {
 
-                        dataField: "pmEndDate",
+                        dataField: "endDate",
                         visible: false,
                         label: { text: "Ngày hoàn thành" },
                         editorType: "dxDateBox",
@@ -303,12 +303,12 @@
                     },
                     {
 
-                        dataField: "pmAmount",
+                        dataField: "amount",
                         visible: false,
                         label: { text: "Khối lượng" },
                     },
                     {
-                        dataField: "pmUnit",
+                        dataField: "unit",
                         visible: false,
                         label: { text: "Đơn vị" },
 
@@ -372,7 +372,7 @@
                         items: [
                             {
                                 colSpan: 3,
-                                dataField: "pmCode",
+                                dataField: "code",
                                 label: { text: "Mã " },
                                 editorOptions: {
                                     stylingMode: "filled",
@@ -381,7 +381,7 @@
                             },
                             {
                                 colSpan: 5,
-                                dataField: "pmTitle",
+                                dataField: "title",
                                 label: { text: "Kế hoạch CV" },
                                 editorOptions: {
                                     stylingMode: "filled",
@@ -395,7 +395,7 @@
                             //},
                             {
                                 colSpan: 4,
-                                dataField: "pmImportantLevel",
+                                dataField: "importantLevel",
                                 caption: "Quan trọng",
                                 dataType: "number",
                                 lookup: {
@@ -472,7 +472,7 @@
                             //},
                             {
                                 colSpan: 4,
-                                dataField: "isVisible",
+                                dataField: "pmIsVisible",
                                 label: { text: "Đã Hoàn thành" },
                                 editorType: "dxCheckBox",
                                 editorOptions: {
@@ -536,6 +536,10 @@
                     e.data.isActive = true;
                     e.data.isVisible = true;
                     //e.data.planProjectId = 3;
+                },
+                onRowUpdating: (e) => {
+                    console.log(e);
+                    e.newData['isVisible'] = e.newData['pmIsVisible']
                 },
                 onCellPrepared: (e) => {
                     if (e.rowType == "data" && e.columnIndex == 1)
@@ -602,10 +606,10 @@
                     container.classList.replace("col-lg-12", "col-lg-8");
                     container.classList.replace("col-md-12", "col-md-8");
                     e.component.refresh();
-                    loadData_detail(selectedRowData.pmId);
+                    loadData_detail(selectedRowData.id);
                     loadAttach(selectedRowData);
-                    loadComversation(selectedRowData.pmId);
-                    loadSchedule(selectedRowData.pmId);
+                    loadComversation(selectedRowData.id);
+                    loadSchedule(selectedRowData.id);
                     if (selectedRowData != null && selectedRowKey != null) {
                         var data = e.component.getRowIndexByKey(selectedRowKey);
                         $("#action-update").dxSpeedDialAction({
