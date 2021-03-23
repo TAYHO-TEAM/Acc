@@ -54,7 +54,7 @@
             },
             byKey: (key) => {
                 var deferred = $.Deferred();
-                ds_loaicongviec.load().done((rs) => {
+                ds_loaicongviec(projectId).load().done((rs) => {
                     deferred.resolve(rs.find(x => x.id == key));
                 });
                 return deferred.promise();
@@ -598,7 +598,7 @@
                                 allowEditing: false,
                             },
                             {
-                                dataField: "tenCongViec", caption: "Nội dung công việc", dataType: "string",
+                                dataField: "tenCongViec", caption: "Nội dung công việc", dataType: "string", width: 200,
                                 cellTemplate: (c, o) => c.append(
                                     $("<b>").addClass("font-weight-bold").append(o.value),
                                     (o.data.dienGiai != null && o.data.dienGiai.length > 0) ? $("<em />").addClass("mt-1 ml-1").append("- " + o.data.dienGiai) : null
