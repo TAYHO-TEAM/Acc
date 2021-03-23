@@ -307,16 +307,16 @@
                         onClick: () => e.component.editRow(data)
                     }).dxSpeedDialAction("instance");
 
-                    //$("#action-delete").dxSpeedDialAction({
-                    //    index: 3, icon: "fas fa-trash", label: "Xóa",
-                    //    visible: PermitInAction["delete"],
-                    //    onClick: (e) => e.component.deleteRow(data)
-                    //}).dxSpeedDialAction("instance");
+                    $("#action-delete").dxSpeedDialAction({
+                        index: 3, icon: "fas fa-trash", label: "Xóa",
+                        visible: PermitInAction["delete"],
+                        onClick: (e) => e.component.deleteRow(data)
+                    }).dxSpeedDialAction("instance");
 
                     $("#action-log").dxSpeedDialAction({
-                        index: 4, icon: "fas fa-user", label: "Thêm người nhận",
+                        index: 4, icon: "fas fa-user", label: "Thêm nhà thầu",
                         onClick: () => {
-                            loadAccount(selectedRowData);
+                            //loadAccount(selectedRowData);
                         }
                     }).dxSpeedDialAction("instance");
                 }
