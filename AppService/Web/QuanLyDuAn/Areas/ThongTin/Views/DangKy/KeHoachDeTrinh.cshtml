@@ -163,6 +163,7 @@
                     {
                         dataField: "workItemId",
                         caption: "Hạng mục",
+                        width: 300,
                         lookup: {
                             dataSource: customStore_HangMuc,
                             valueExpr: "id",
@@ -184,7 +185,8 @@
                     },//hangMucId
                     {
                         dataField: "contractorInfoId",
-                        caption: "Nhà thầu", width: 250,
+                        caption: "Nhà thầu",
+                        width: 300,
                         lookup: {
                             dataSource: customStore_ContractorInfo,
                             valueExpr: "id",
@@ -211,6 +213,7 @@
                     {
                         dataField: "documentTypeId",
                         caption: "Loại tài liệu",
+                        width: 250,
                         lookup: {
                             dataSource: customStore_DocumetnType,
                             valueExpr: "id",
@@ -289,14 +292,14 @@
                         alignment: "center",
                         format: "dd/MM/yyyy"
                     },
-                    {
-                        dataField: "isActive",
-                        allowFiltering: false,
-                        caption: "Kích hoạt",
-                        width: 100,
-                        alignment: "center",
-                        editorType: "dxSwitch",
-                    },
+                    //{
+                    //    dataField: "isActive",
+                    //    allowFiltering: false,
+                    //    caption: "Kích hoạt",
+                    //    width: 100,
+                    //    alignment: "center",
+                    //    editorType: "dxSwitch",
+                    //},
                     {
                         type: "buttons", caption: "Tác vụ",
                         allowFiltering: false,

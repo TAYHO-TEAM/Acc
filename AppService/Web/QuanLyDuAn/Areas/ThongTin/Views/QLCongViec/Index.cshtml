@@ -82,7 +82,7 @@
         let customStore = (gid) => {
             var fillterCustomStore = [["pmIsDelete", "<>", true], "and", ["PlanProjectId", "=", 3], "and", ["createBy", "=", UserCurrentInfo.accountId]];
             if (gid > 0) {
-                fillterCustomStore.push("and", ["PermistionId", "=", gid]);
+                fillterCustomStore.push("and", ["paPermistionId", "=", gid]);
             }
             return new DevExpress.data.DataSource({
                 store: new DevExpress.data.CustomStore({
