@@ -2,14 +2,21 @@
 </form>
 <script>
     var formData = {
-        "title": ""
-        , "documentTypeId": ""
-        , "tagWorkItem": ""
-        , "description": ""
-        , "location": ""
-        , "calender": ""
+        "id": ""
+        , "code": ""
+        , "taxCode": ""
+        , "avatarImg": ""
+        , "name": ""
+        , "descriptions": ""
+        , "businessAreas": ""
+        , "country": ""
+        , "city": ""
+        , "district": ""
+        , "address": ""
+        , "phone": ""
+        , "email": ""
+        , "status": ""
     };
-    var fdata = new FormData();
     $(document).ready(function () {
         var formInstance = $("#form-regist").dxForm({
             formData: formData,
@@ -21,107 +28,59 @@
                     items: [
                         {
                             colSpan: 6,
-                            dataField: "documentTypeId",
-                            label: { text: "Loại tài liệu" },
-                            lookup: {
-                                dataSource: customStore_DocumetnType,
-                                valueExpr: "id",
-                                displayExpr: "title",
-                            },
-                            editorType: "dxSelectBox",
-                            editorOptions: {
-                                stylingMode: "filled",
-                                //value: formData["documentTypeId"],
-                                dataSource: customStore_DocumetnType,
-                                valueExpr: "id",
-                                displayExpr: "title",
-                                elementAttr: {
-                                    id: "elementDocumentTypeId",
-                                },
-                                onValueChanged: function (e) {
-
-                                    if (e.value === 7) {
-                                        formInstance.itemOption("address", "visible", false);
-                                        formInstance.itemOption("calen", "visible", false);
-                                    }
-                                    else {
-
-                                        formInstance.itemOption("address", "visible", true);
-                                        formInstance.itemOption("calen", "visible", true);
-                                    }
-                                    fileUploader();
-                                },
-                            },
+                            dataField: "code",
+                            label: { text: "Mã nhà thầu" },
                             validationRules: [{ type: "required" }],
                         },
                         {
                             colSpan: 6,
-                            dataField: "title",
-                            label: { text: "Tiêu đề" },
-                            editorType: "dxTextBox",
-                            editorOptions: {
-                                stylingMode: "filled",
-                                value: formData["title"],
-                                dataSource: customStore_HangMuc,
-                                valueExpr: "id",
-                                displayExpr: "title",
-                                elementAttr: {
-                                    id: "elementTitle",
-                                }
-                            },
-                        },
-                        {
-                            colSpan: 12,
-                            dataField: "description",
-                            label: { text: "Mô tả" },
-                            editorType: "dxTextArea",
-                            editorOptions: {
-                                stylingMode: "filled",
-                                value: formData["description"],
-                            },
+                            dataField: "taxCode",
+                            label: { text: "Mã số thuế" },
                         },
                         {
                             colSpan: 6,
-                            dataField: "tagWorkItem",
-                            label: { text: "Nhóm hạng mục" },
-                            editorType: "dxTagBox",
-                            editorOptions: {
-                                stylingMode: "filled",
-                                dataSource: customStore_HangMuc,
-                                displayExpr: "title",
-                                valueExpr: "title",
-                                maxDisplayedTags: 3,
-                                showSelectionControls: true,
-                                itemTemplate: function (data) {
-                                    return "<div>" + data.title + "</div>";
-                                }
-                            },
+                            dataField: "name",
+                            label: { text: "Nhà thầu" },
                         },
                         {
                             colSpan: 6,
-                            dataField: "location",
-                            name: "address",
-                            label: { text: "Địa điểm" },
-                            editorOptions: {
-                                stylingMode: "filled",
-                            }
+                            dataField: "descriptions",
+                            label: { text: "Mô tổ" },
                         },
                         {
                             colSpan: 6,
-                            dataField: "calendar",
-                            name: "calen",
-                            label: { text: "Lịch dự kiến" },
-                            editorType: "dxDateBox",
-                            editorOptions: {
-                                stylingMode: "filled",
-                                pickerType: "rollers",
-                                type: "datetime",
-                                invalidDateMessage: "Sai định dạng ngày tháng"
-                            },
+                            dataField: "businessAreas",
+                            label: { text: "Lĩnh vực kinh doanh" },
                         },
                         {
                             colSpan: 6,
-                            template: '<span class="dx-field-item-label-text font-bold">Các tập tin đính kèm</span><div class="file-uploader" id="file-uploader"></div>',
+                            dataField: "phone",
+                            label: { text: "Số điện thoại" },
+                        },
+                        {
+                            colSpan: 6,
+                            dataField: "address",
+                            label: { text: "Địa chỉ" },
+                        },
+                        {
+                            colSpan: 6,
+                            dataField: "district",
+                            label: { text: "Quận" },
+                        },
+                        {
+                            colSpan: 6,
+                            dataField: "city",
+                            label: { text: "Thành phố" },
+                        },
+                        {
+                            colSpan: 6,
+                            dataField: "email",
+                            label: { text: "Email" },
+                        },
+                        {
+                            colSpan: 6,
+                            dataField: "country",
+                            label: { text: "Nước" },
                         },
                     ]
                 },
@@ -143,18 +102,20 @@
                 var newFormData = e.component.option("formData");
             }
         }).dxForm("instance");
-        fileUploader();
+        //fileUploader();
     });
     $(document).on('submit', '#form-regist', function (e) {
         //$(this).prop("disabled", true);
         e.preventDefault();
-        var fileWrappers = fileUploader()._files;
+        //var fileWrappers = fileUploader()._files;
         var resValid = true
-        for (var i = 0; i < fileWrappers.length; i++) {
-            if (fileWrappers[i].isValid() === false) {
-                resValid = false;
-            }
-        }
+
+          // ảnh đại diện sau này sẽ update
+        //for (var i = 0; i < fileWrappers.length; i++) {
+        //    if (fileWrappers[i].isValid() === false) {
+        //        resValid = false;
+        //    }
+        //}
         if (!resValid) {
             DevExpress.ui.notify("Vui lòng kiểm tra lại file đính kèm!", "error", 3000);
         }
@@ -162,29 +123,19 @@
             loadingPanel.show();
             var fdata = new FormData();
             var i = 10;
-            $.each(formData, function (key, value) {
-                if (key === 'calendar') {
-                    fdata.append(key, moment(value).format('YYYY-MM-DD HH:mm:ss'));
-                }
-                else {
-                    fdata.append(key, value);
-                }
-
-            });
-            fdata.append('projectId', PROJECTID);
             fdata.append('token', UserCurrentInfo.accessToken);
+            $.each(formData, function (key, value) {
+                fdata.append(key, value);
+            });
 
-            var files = $("#file-uploader").dxFileUploader("instance").option("value");
-            if (files.length > 0) {
-                $.each(files, function (key, value) {
-                    fdata.append(files[key].name, files[key]);
-                });
-            }
-            //else {
-            //    DevExpress.ui.notify("Vui lòng chọn file đính kèm", "error", 3000);
-            //    e.preventDefault();
-            //    return false;
-            //};
+            // ảnh đại diện sau này sẽ update
+            //var files = $("#file-uploader").dxFileUploader("instance").option("value");
+            //if (files.length > 0) {
+            //    $.each(files, function (key, value) {
+            //        fdata.append(files[key].name, files[key]);
+            //    });
+            //}
+
             for (var pair of fdata.entries()) {
                 console.log(pair[0] + ', ' + pair[1]);
             }
@@ -193,7 +144,7 @@
             $.ajax({
                 type: "POST",
                 enctype: 'multipart/form-data',
-                url: "/ThongTin/PhatHanh/Create",
+                url: "/Admin/SystemConfig/_ContractorInfoCreate",
                 data: fdata,
                 processData: false,
                 contentType: false,

@@ -1,7 +1,8 @@
 ﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+<div id="popup-main-upload"></div>
+<div id="popup-register"></div>
 <div class="row">
     <div class="col-12">
         <div id="container" class="elevation-2"></div>
@@ -34,7 +35,6 @@
                     params['SortCol'] = values.sort[0].selector;
                     params['SortADSC'] = values.sort[0].desc;
                 }
-
                 $.ajax({
                     headers: header,
                     url: URL_API_ACC_READ + ACTION_ACCOUNT,
@@ -55,9 +55,9 @@
                 });
                 return deferred.promise();
             },
-            insert: (values) => ajax_insert(URL_API_ACC_CMD + ACTION, values),
-            update: (key, values) => ajax_update(URL_API_ACC_CMD + ACTION, key, values),
-            remove: (key) => ajax_delete(URL_API_ACC_CMD + ACTION, key),
+            insert: (values) => ajax_insert(URL_API_ACC_CMD + ACTION_CMD_ACCOUNT, values),
+            update: (key, values) => ajax_update(URL_API_ACC_CMD + ACTION_CMD_ACCOUNT, key, values),
+            remove: (key) => ajax_delete(URL_API_ACC_CMD + ACTION_CMD_ACCOUNT, key),
         });
         var ds_account_info = new DevExpress.data.CustomStore({
             key: "id",
@@ -185,9 +185,9 @@
                 visible: true, searchVisibleColumnsOnly: true
             },
             editing: {
-                allowAdding: true,
-                allowUpdating: true,
-                allowDeleting: true,
+                //allowAdding: true,
+                //allowUpdating: true,
+                //allowDeleting: true,
                 mode: "popup",
                 useIcons: true,
                 confirmDelete: true,
@@ -316,7 +316,12 @@
                     $("#action-log").dxSpeedDialAction({
                         index: 4, icon: "fas fa-user", label: "Thêm nhà thầu",
                         onClick: () => {
-                            //loadAccount(selectedRowData);
+                            callPopup(
+                                "THÊM NHÀ THẦU",
+                                "/Admin/SystemConfig/_ContractorInfoAdd",
+                                ($(window).width() > 767 ? "50%" : "80%"),
+                                e.component
+                            );
                         }
                     }).dxSpeedDialAction("instance");
                 }
@@ -327,6 +332,42 @@
                 e.data.status = 0;
             }
         });
+
+        function callPopup(title, url, width, container) {
+            var isFullscreen = false;
+            if (width == "100%") isFullscreen = true;
+            $("#popup-register").dxPopup({
+                width: width,
+                height: "100vh",
+                fullScreen: isFullscreen,
+                position: { my: 'top', at: 'top', of: window },
+                dragEnabled: true,
+                resizeEnabled: true,
+                visible: true,
+                showTitle: true,
+                closeOnOutsideClick: false,
+                showCloseButton: true,
+                title: title,
+                contentTemplate: function (container) {
+                    var scrollView = $("<div id='scrollView'></div>");
+                    var content = $("<div/>");
+                    content.load(url);
+                    scrollView.append(content);
+                    scrollView.dxScrollView({
+                        width: '100%',
+                        height: '100%'
+                    });
+                    container.append(scrollView);
+                    return container;
+                },
+                onHiding: function () {
+                    container.refresh();
+                },
+                onHidden: function () {
+                   
+                }
+            });
+        }
     </script>
 }
 

@@ -1,4 +1,5 @@
 ﻿const ACTION_ACCOUNT = "/Accounts"; 
+const ACTION_CMD_ACCOUNT = "/Account"; 
 const ACTION_ACCOUNT_INFO = "/AccountInfo"; 
 const ACTION_GROUP_ACCOUNT = "/GroupAccount"; 
 const ACTION_GROUP = "/Groups"; 
