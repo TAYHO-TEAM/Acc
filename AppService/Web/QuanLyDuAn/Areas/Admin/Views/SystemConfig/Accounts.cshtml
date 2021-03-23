@@ -10,12 +10,22 @@
 
 @section script{
     <script src="~/Scripts/page/hethong.js"></script>
+
     <script>
+        var ds_contractorinfo = new DevExpress.data.DataSource({
+            store: new DevExpress.data.CustomStore({
+                key: "id",
+                loadMode: "raw",
+                load: (values) => { values["take"] = 0; values["skip"] = 0; return ajax_read(ACTION_CONTRACTOR, values) },
+                insert: (values) => ajax_insert(URL_API_PM_CMD + ACTION_CONTRACTOR, values),
+                update: (key, values) => ajax_update(URL_API_PM_CMD + ACTION_CONTRACTOR, key, values),
+                remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION_CONTRACTOR, key),
+            }),
+        });
         var ds_account = new DevExpress.data.CustomStore({
             key: "id",
             load: (values) => {
                 let deferred = $.Deferred(), params = {};
-
                 params = {
                     'PageSize': isNullOrEmpty(values.take) ? values.take : 0,
                     'PageNumber': (isNullOrEmpty(values.take) && isNullOrEmpty(values.skip)) ? ((values.skip / values.take) + 1) : 0,
@@ -86,7 +96,7 @@
             insert: (values) => ajax_insert(URL_API_ACC_CMD + ACTION, values),
             update: (key, values) => ajax_update(URL_API_ACC_CMD + ACTION, key, values),
             remove: (key) => ajax_delete(URL_API_ACC_CMD + ACTION, key),
-        }); 
+        });
 
         $(function () {
             loadData();
@@ -106,35 +116,53 @@
                     cellTemplate: (c, o) => c.append(o.rowIndex + 1)
                 },
                 {
-                    dataField: "accountName", caption: "Tài khoản",
+                    dataField: "accountName",
+                    caption: "Tài khoản",
                     dataType: "string", width: 200,
                     editorOptions: {
                         placeholder: "Vui lòng nhập...",
                         showClearButton: true
                     },
                     validationRules: [{ type: "required" }]
-                },  
+                },
                 {
-                    dataField: "id", caption: "Thông tin người dùng",
+                    dataField: "id",
+                    caption: "Thông tin người dùng",
                     dataType: "string", width: 300,
                     lookup: {
                         dataSource: ds_account_info,
                         valueExpr: "accountId",
                         displayExpr: (e) => {
                             var rs = "<div class='d-flex'>\
-                                <img class='img-circle elevation-2 img-size-30' \
-                                src='data:image/png;base64,"+ e.avatarImg + "' onerror='ImgError(this);'></img >\
-                                <div class='ml-2 text-left'>\
-                                <div class='font-weight-bold'>"+ (e.userName??"Chưa xác định") +"</div>\
-                                <em class='small'>"+ (e.title ?? "Chưa xác định") + " - Phòng " + (e.department ?? "Chưa xác định")+"</em>\
-                                </div><div>"; 
+                                    <img class='img-circle elevation-2 img-size-30' \
+                                    src='data:image/png;base64,"+ e.avatarImg + "' onerror='ImgError(this);'></img >\
+                                    <div class='ml-2 text-left'>\
+                                    <div class='font-weight-bold'>"+ (e.userName ?? "Chưa xác định") + "</div>\
+                                    <em class='small'>"+ (e.title ?? "Chưa xác định") + " - Phòng " + (e.department ?? "Chưa xác định") + "</em>\
+                                    </div><div>";
                             return rs;
                         }
                     },
-                    cellTemplate: (c, o) => { 
-                        c.append((o.value != null) ? o.text: null)
+                    cellTemplate: (c, o) => {
+                        c.append((o.value != null) ? o.text : null)
                     }
-                }, 
+                },
+                {
+                    dataField: "type",
+                    caption: "Loại TK",
+                    width: 130,
+                    lookup: {
+                        dataSource: AccountType,
+                        valueExpr: "ID",
+                        displayExpr: "Name",
+                    }
+                },
+                {
+                    dataField: "userId",
+                    caption: "Mã người dùng",
+                    width: 50,
+                    visible : false,
+                },
                 {
                     dataField: "isActive", caption: "Tình trạng",
                     width: 130, alignment: "center",
@@ -151,17 +179,82 @@
                 },
             ],
             paging: { enabled: true, pageSize: 10 },
-            pager: {  showInfo: true },
+            pager: { showInfo: true },
             searchPanel: {
                 highlightCaseSensitive: true, highlightSearchText: true,
                 visible: true, searchVisibleColumnsOnly: true
             },
-            //editing: {
-            //    allowAdding: true,
-            //    allowUpdating: true,
-            //    allowDeleting: true,
-            //    mode: "cell", useIcons: false, confirmDelete: true
-            //},
+            editing: {
+                allowAdding: true,
+                allowUpdating: true,
+                allowDeleting: true,
+                mode: "popup",
+                useIcons: true,
+                confirmDelete: true,
+                popup: {
+                    width: 600, height: "auto",
+                    showTitle: true, title: "Trình duyệt",
+                    closeOnOutsideClick: false, showCloseButton: true,
+                },
+                form: {
+                    labelLocation: "left",
+                    itemType: "group",
+                    colCount: 12,
+                    showRequiredMark: true,
+                    requiredMark: "(*)",
+                    items: [
+                        {
+                            colSpan: 12,
+                            dataField: "accountName",
+                            label: { text: "Tên TK" },
+                        },
+                        {
+                            colSpan: 12,
+                            dataField: "type",
+                            label: { text: "Loại TK" },
+                            lookup: {
+                                dataSource: AccountType,
+                                valueExpr: "ID",
+                                displayExpr: "Name",
+                            },
+                            editorOptions: {
+                                dataSource: AccountType,
+                                valueExpr: "ID",
+                                displayExpr: "Name",
+                                placeholder: "Vui lòng chọn...",
+                            },
+                            validationRules: [{ type: "required" }]
+                        },
+
+                        {
+                            colSpan: 12,
+                            dataField: "passwordHash",
+                            label: { text: "Mật khẩu" },
+                            editorOptions: {
+                                mode: 'password',
+                            }
+                        },
+                        {
+                            colSpan: 12,
+                            dataField: "userId",
+                            label: { text: "Mã thông tin người dùng" },
+                            editorType: "dxLookup",
+                            editorOptions: {
+                                dataSource: ds_contractorinfo,
+                                valueExpr: "id",
+                                displayExpr: "name",
+                                placeholder: "Vui lòng chọn...",
+                                searchEnabled: true,
+                                showClearButton: true,
+                                itemTemplate: function (data) {
+                                    return $("<div>").append($("<b>").append(data.code).addClass("mr-1"), $("<em>").append(data.name));
+                                },
+                            },
+                        },
+
+                    ],
+                },
+            },
             onToolbarPreparing: function (e) {
                 var container = e.component;
                 e.toolbarOptions.items.unshift(
@@ -172,6 +265,61 @@
                             onClick: () => container.refresh()
                         }
                     });
+            },
+            selection: {
+                mode: "single"
+            },
+            onContentReady: (e) => {
+                var container = e.component;
+                $("#action-add").dxSpeedDialAction({
+                    index: 1, icon: "fas fa-plus",
+                    label: "Thêm mới",
+                    visible: PermitInAction["insert"],
+                    onClick: () => {
+                        container.addRow();
+                    }
+                }).dxSpeedDialAction("instance");
+
+                DevExpress.config({
+                    floatingActionButtonConfig: {
+                        icon: "rowfield",
+                        label: "Tác vụ",
+                        shading: true,
+                        position: {
+                            of: e.element,
+                            my: "right bottom",
+                            at: "right bottom",
+                            offset: e.component.pageCount() > 1 ? "-15 -60" : "-15 -15"
+                        }
+                    }
+                });
+                DevExpress.ui.repaintFloatingActionButton();
+            },
+            onSelectionChanged: (e) => {
+                var selectedRowData = e.selectedRowsData[0];
+                var selectedRowKey = e.selectedRowKeys[0];
+                if (selectedRowData != null && selectedRowKey != null) {
+                    var data = e.component.getRowIndexByKey(selectedRowKey);
+
+                    $("#action-update").dxSpeedDialAction({
+                        index: 2, icon: "fas fa-edit", label: "Cập nhật thông tin",
+                        visible: PermitInAction["update"],
+                        onClick: () => e.component.editRow(data)
+                    }).dxSpeedDialAction("instance");
+
+                    $("#action-delete").dxSpeedDialAction({
+                        index: 3, icon: "fas fa-trash", label: "Xóa",
+                        visible: PermitInAction["delete"],
+                        onClick: (e) => e.component.deleteRow(data)
+                    }).dxSpeedDialAction("instance");
+
+                    $("#action-log").dxSpeedDialAction({
+                        index: 4, icon: "fas fa-user", label: "Thêm nhà thầu",
+                        onClick: () => {
+                            //loadAccount(selectedRowData);
+                        }
+                    }).dxSpeedDialAction("instance");
+                }
             },
             onInitNewRow: (e) => {
                 e.data.isActive = true;

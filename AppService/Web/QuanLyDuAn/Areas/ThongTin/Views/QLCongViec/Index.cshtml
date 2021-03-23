@@ -28,6 +28,7 @@
     .dx-editor-container .dx-dropdowneditor-input-wrapper .dx-texteditor-input-container .dx-placeholder {
         color: white !important;
     }
+
     #container_conversation .dx-toolbar .dx-toolbar-items-container {
         height: 33px !important;
     }
@@ -75,17 +76,14 @@
         //}
         var WIDTH_CONTAINER = $("#container").width();
 
-
-
-       
         let customStore = (gid) => {
-            var fillterCustomStore = [["pmIsDelete", "<>", true],  "and", ["PlanProjectId", "=", 3], "and", ["createBy", "=", UserCurrentInfo.accountId]];
+            var fillterCustomStore = [["pmIsDelete", "<>", true], "and", ["PlanProjectId", "=", 3], "and", ["createBy", "=", UserCurrentInfo.accountId]];
             if (gid > 0) {
-                fillterCustomStore.push("and", ["PermistionId", "=", gid]);
+                fillterCustomStore.push("and", ["paPermistionId", "=", gid]);
             }
             return new DevExpress.data.DataSource({
                 store: new DevExpress.data.CustomStore({
-                    key: "id",
+                    key: "paId",
                     load: (values) => ajax_read(NAMEPLANMASTER, values),
                     insert: (values) => ajax_insert(URL_API_PM_CMD + ACTION_CMD, values),
                     update: (key, values) => ajax_update(URL_API_PM_CMD + ACTION_CMD, key, values),
@@ -198,7 +196,6 @@
             },
 
         });
-
 
         $(function () {
             loadData(GROUPOWNERID);
@@ -318,6 +315,7 @@
                         width: "20%",
                         caption: "Người tạo",
                         dataType: "number",
+                        allowEditing: false,
                         lookup: {
                             dataSource: customStore_AccountInfo,
                             valueExpr: "accountId",
@@ -329,17 +327,45 @@
                         }
                     },
                     {
-                        type: "buttons",
-                        //caption: "Tác vụ",
-                        width: 150,
-                        alignment: "center",
-                        buttons: [{
-                            text: "1",
-                            onClick: function (e) {
-                                var containerE = e.component;
-                            }
-                        }]
-                    }
+                        dataField: "priority",
+                        caption: "Đánh dấu",
+                        //dataType: "bool",
+                        //editorType: "dxCheckBox",
+                        //showEditorAlways: true,
+                        //calculateCellValue: function (rowData) {
+                        //    return rowData.priority == 1;
+                        //},
+                        cellTemplate: function (container, options) {
+                            //console.log(container);
+                            //console.log(options);
+                            $("<div />").dxCheckBox({
+                                value: options.value,
+                                onValueChanged: function (data) {
+                                    var values = { 'priority':(data.value == true) ? 1: 0 };
+                                    customStore(0).store().update(options.row.data.id, values );
+                                }
+                            }).attr('id', 'CheckBox').appendTo(container);
+                        }, 
+                        editorOptions: {
+                            //value: true,
+                            stylingMode: "filled",
+                        },
+                    },
+                    //{
+                    //    type: "buttons",
+                    //    //caption: "Tác vụ",
+                    //    width: 150,
+                    //    alignment: "center",
+                    //    //editorOptions: {
+                    //    //    value: true,
+                    //    //},
+                    //    buttons: [{
+                    //        template: function(e){
+                    //            console.log(e);
+                    //            return $("<div>").append($("<b>").append(data.code).addClass("mr-1"), $("<em>").append(data.title));
+                    //        }
+                    //    }]
+                    //}
                 ],
                 summary: {
                     groupItems: [{
@@ -539,7 +565,8 @@
                 },
                 onRowUpdating: (e) => {
                     console.log(e);
-                    e.newData['isVisible'] = e.newData['pmIsVisible']
+                    e.newData['isVisible'] = e.newData['pmIsVisible'];
+                    e.newData['id'] = e.oldData['id'];
                 },
                 onCellPrepared: (e) => {
                     if (e.rowType == "data" && e.columnIndex == 1)
@@ -606,13 +633,12 @@
                     container.classList.replace("col-lg-12", "col-lg-8");
                     container.classList.replace("col-md-12", "col-md-8");
                     e.component.refresh();
-                    loadData_detail(selectedRowData.id);
+                    loadData_detail(selectedRowData.paId);
                     loadAttach(selectedRowData);
-                    loadComversation(selectedRowData.id);
+                    loadComversation(selectedRowData.paId);
                     loadSchedule(selectedRowData.id);
                     if (selectedRowData != null && selectedRowKey != null) {
-                        console.log(selectedRowData);
-                        var data = e.component.getRowIndexByKey(selectedRowData.id);
+                        var data = e.component.getRowIndexByKey(selectedRowData.paId);
                         $("#action-update").dxSpeedDialAction({
                             index: 2, icon: "fas fa-edit", label: "Cập nhật thông tin",
                             visible: PermitInAction["update"] && (selectedRowData.paPermistionId == 9 || selectedRowData.paPermistionId == 7),
