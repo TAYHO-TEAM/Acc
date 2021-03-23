@@ -208,6 +208,7 @@
                     },//mã barcode
                     {
                         dataField: "rev",
+                        width: 40,
                         caption: "REV",
                         dataType: "string",
                         allowEditing: false,
@@ -221,6 +222,7 @@
                     },//rev
                     {
                         dataField: "workItemId", caption: "Hạng mục",
+                        width: 250,
                         allowFiltering: true,
                         lookup: {
                             dataSource: customStore_HangMuc,
@@ -243,6 +245,7 @@
                     },//hangMucId
                     {
                         dataField: "createBy",
+                        width: 150,
                         caption: "Người đệ trình",
                         dataType: "number",
                         allowEditing: false,
@@ -282,6 +285,7 @@
                     {
                         dataField: "documentTypeId",
                         caption: "Loại tài liệu",
+                        width: 250,
                         alignment: "left",
                         lookup: {
                             dataSource: customStore_DocumetnType,

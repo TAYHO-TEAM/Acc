@@ -76,9 +76,6 @@
         //}
         var WIDTH_CONTAINER = $("#container").width();
 
-
-
-
         let customStore = (gid) => {
             var fillterCustomStore = [["pmIsDelete", "<>", true], "and", ["PlanProjectId", "=", 3], "and", ["createBy", "=", UserCurrentInfo.accountId]];
             if (gid > 0) {
@@ -199,7 +196,6 @@
             },
 
         });
-
 
         $(function () {
             loadData(GROUPOWNERID);
