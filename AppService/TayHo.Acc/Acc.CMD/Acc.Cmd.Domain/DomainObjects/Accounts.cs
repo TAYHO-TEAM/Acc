@@ -55,10 +55,10 @@ namespace Acc.Cmd.Domain.DomainObjects
         }
         #endregion Constructors
         #region Properties
-      
+
         [MaxLength(32, ErrorMessage = nameof(ErrorCodeInsert.IErr32))] public string Code { get => _code; }
         public byte? Type { get => _type; }
-        [MaxLength(128, ErrorMessage = nameof(ErrorCodeInsert.IErr128))] [Required(ErrorMessage = nameof(ErrorCodeInsert.IErr000))]  public string AccountName { get => _accountName; }
+        [MaxLength(128, ErrorMessage = nameof(ErrorCodeInsert.IErr128))] [Required(ErrorMessage = nameof(ErrorCodeInsert.IErr000))] public string AccountName { get => _accountName; }
         [MaxLength(128, ErrorMessage = nameof(ErrorCodeInsert.IErr128))] public string PasswordHash { get => _passwordHash; }
         [MaxLength(512, ErrorMessage = nameof(ErrorCodeInsert.IErr512))] public string Salt { get => _salt; }
         [MaxLength(128, ErrorMessage = nameof(ErrorCodeInsert.IErr128))] public string TokenKey { get => _tokenKey; }
@@ -67,21 +67,21 @@ namespace Acc.Cmd.Domain.DomainObjects
         [MaxLength(256, ErrorMessage = nameof(ErrorCodeInsert.IErr256))] public string RefreshToken { get => _refreshToken; }
         public int? UserId { get => _userId; }
         #endregion Properties
-           #region Behaviours 
+        #region Behaviours 
         public void SetCode(string Code) { _code = string.IsNullOrEmpty(Code) ? _code : Code; if (!IsValid()) throw new DomainException(_errorMessages); }
-        public void SetType(byte? Type) { _type = Type.HasValue ? _type : Type; if (!IsValid()) throw new DomainException(_errorMessages); }
+        public void SetType(byte? Type) { _type = Type.HasValue ? Type : _type; if (!IsValid()) throw new DomainException(_errorMessages); }
         public void SetAccountName(string AccountName) { _accountName = string.IsNullOrEmpty(AccountName) ? _accountName : AccountName; if (!IsValid()) throw new DomainException(_errorMessages); }
-        public void SetPasswordHash(string Password) 
-        { 
+        public void SetPasswordHash(string Password)
+        {
             _passwordHash = string.IsNullOrEmpty(Password) ? _passwordHash : Hash.Create(Password, _salt); if (!IsValid()) throw new DomainException(_errorMessages);
-      
+
         }
         public void SetSalt(string Salt) { _salt = string.IsNullOrEmpty(Salt) ? _salt : Salt; if (!IsValid()) throw new DomainException(_errorMessages); }
         public void SetTokenKey(string TokenKey) { _tokenKey = string.IsNullOrEmpty(TokenKey) ? _tokenKey : TokenKey; if (!IsValid()) throw new DomainException(_errorMessages); }
-        public void SetExpiryTimeUTC(DateTime? ExpiryTimeUTC) { _expiryTimeUTC = ExpiryTimeUTC.HasValue ? _expiryTimeUTC : ExpiryTimeUTC; if (!IsValid()) throw new DomainException(_errorMessages); }
-        public void SetExpiryTime(DateTime? ExpiryTime) { _expiryTime = ExpiryTime.HasValue ? _expiryTime : ExpiryTime; if (!IsValid()) throw new DomainException(_errorMessages); }
+        public void SetExpiryTimeUTC(DateTime? ExpiryTimeUTC) { _expiryTimeUTC = ExpiryTimeUTC.HasValue ? ExpiryTimeUTC : _expiryTimeUTC; if (!IsValid()) throw new DomainException(_errorMessages); }
+        public void SetExpiryTime(DateTime? ExpiryTime) { _expiryTime = ExpiryTime.HasValue ? ExpiryTime : _expiryTime; if (!IsValid()) throw new DomainException(_errorMessages); }
         public void SetRefreshToken(string RefreshToken) { _refreshToken = string.IsNullOrEmpty(RefreshToken) ? _refreshToken : RefreshToken; if (!IsValid()) throw new DomainException(_errorMessages); }
-        public void SetUserId(int? UserId) { _userId = UserId.HasValue ? _userId : UserId; if (!IsValid()) throw new DomainException(_errorMessages); }
+        public void SetUserId(int? UserId) { _userId = UserId.HasValue ? UserId : _userId; if (!IsValid()) throw new DomainException(_errorMessages); }
         public void ValidatePassword(string password)
         {
             if (string.IsNullOrEmpty(password))

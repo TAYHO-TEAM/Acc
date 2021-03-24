@@ -24,5 +24,9 @@ const AccountType = [
         ID: 2,
         Name: "Nhà thầu",
     },
+    {
+        ID: 3,
+        Name: "Cty Tây Hồ 2",
+    },
 ];
  

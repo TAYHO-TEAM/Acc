@@ -26,7 +26,7 @@ namespace  Acc.Cmd.Api.Application.Commands
         public async Task<MethodResult<UpdateAccountsCommandResponse>> Handle(UpdateAccountsCommand request, CancellationToken cancellationToken)
         {
             var methodResult = new MethodResult<UpdateAccountsCommandResponse>();
-            var existingAccounts = await _accountsRepository.SingleOrDefaultAsync(x => x.Id == request.Id && x.IsDelete == false).ConfigureAwait(false);
+            var existingAccounts = await _accountsRepository.SingleOrDefaultAsync(x => x.Id == request.Id && (x.IsDelete == false || !x.IsDelete.HasValue)).ConfigureAwait(false);
             //if (existingAccounts.CreateBy != _user)
             //{
             //    methodResult.AddAPIErrorMessage(nameof(ErrorCodeUpdate.UErr02), new[]
