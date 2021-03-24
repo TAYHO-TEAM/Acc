@@ -546,7 +546,6 @@
                     container.classList.replace("col-lg-12", "col-lg-8");
                     container.classList.replace("col-md-12", "col-md-8");
                     e.component.refresh();
-                    console.log(selectedRowData);
                     loadData_detail(selectedRowData.paId);
                     loadAttach(selectedRowData);
                     loadComversation(selectedRowData.paId);
@@ -581,7 +580,7 @@
                             index: 4,
                             icon: "fas fa-user",
                             label: "Phân công",
-                            visible: (selectedRowData.createBy === UserCurrentInfo.accountId),
+                            visible: (selectedRowData.createBy === UserCurrentInfo.accountId && PermitInAction["update"]),
                             onClick: () => {
                                 loadAccountPlanMaster(selectedRowData);
                             }
@@ -665,9 +664,8 @@
                                     }
                                 },
                                 onClick: function (e) {
-                                    console.log(e);
                                     var container = e.component;
-                                    CALLPOPUP(
+                                    callpopup(
                                         "Báo cáo tiến độ",
                                         "/ThongTin/QLTienDo/_TienDoReport/" + e.row.data.id,
                                         ($(window).width() > 767 ? "50%" : "80%"),
@@ -694,7 +692,7 @@
                 //    visible: WIDTH_CONTAINER > 350
                 //},
                 editing: {
-                    allowAdding: false,
+                    allowAdding: true,
                     allowUpdating: true,
                     allowDeleting: false,
                     mode: "cell",
@@ -895,6 +893,7 @@
                 var content_main = $("<div  ><div id = 'div_dxForm_Main'></div></div>");
                 var d = $.Deferred();
                 customStore_ItemDetail(item).load().then((items) => {
+                    console.log(items);
                     $('#div_dxForm_Main').dxForm({
                         elementAttr: {
                             id: "dxForm_Main",
@@ -906,64 +905,111 @@
                             itemType: "group",
                             //caption: "Chi tiết tiến độ",
                             colCountByScreen: {
-                                md: 2,
-                                lg: 2,
+                                md: 4,
+                                lg: 4,
                                 xs: 1,
                                 sm: 1
                             },
                             items: [
                                 {
-                                    colSpan: 12,
+                                    colSpan: 1,
                                     dataField: "code",
                                     label: { text: "Mã" },
+                                    editorOptions: {
+                                        stylingMode: "filled",
+                                    }
                                 },//tenCongViec
                                 {
-                                    colSpan: 12,
+                                    colSpan: 2,
                                     dataField: "title",
                                     label: { text: "Tiêu đề" },
+                                    editorOptions: {
+                                        stylingMode: "filled",
+                                    }
                                 },
                                 {
-                                    colSpan: 12,
+                                    colSpan: 1,
+                                    dataField: "importantLevel",
+                                    label: { text: "Độ quan trọng" },
+                                    editorOptions: {
+                                        stylingMode: "filled",
+                                    }
+                                },
+                                {
+                                    colSpan: 4,
                                     dataField: "description",
                                     label: { text: "Mô tả" },
+                                    editorOptions: {
+                                        stylingMode: "filled",
+                                    }
                                 },
                                 {
-                                    colSpan: 12,
+                                    colSpan: 4,
                                     dataField: "note",
                                     label: { text: "Ghi chú" },
                                     alignment: "left",
+                                    editorOptions: {
+                                        stylingMode: "filled",
+                                    }
                                 },
                                 {
-                                    colSpan: 12,
+                                    colSpan: 2,
+                                    dataField: "amount",
+                                    label: { text: "Khối lượng" },
+                                    editorOptions: {
+                                        stylingMode: "filled",
+                                    }
+                                },//tenCongViec
+                                {
+                                    colSpan: 2,
+                                    dataField: "unit",
+                                    label: { text: "đơn vị" },
+                                    editorOptions: {
+                                        stylingMode: "filled",
+                                    }
+                                },
+                                {
+                                    colSpan: 1,
                                     dataField: "startDate",
                                     label: { text: "Ngày dự kiến bắt đầu" },
                                     dataType: "date",
                                     width: 150,
                                     alignment: "center",
                                     format: "dd/MM/yyyy",
+                                    editorOptions: {
+                                        stylingMode: "filled",
+                                    }
                                 },
                                 {
-                                    colSpan: 12,
+                                    colSpan: 1,
                                     dataField: "endDate",
                                     label: { text: "Ngày dự kiến kết thúc" },
                                     dataType: "date",
-                                    width: 150,
                                     alignment: "center",
                                     format: "dd/MM/yyyy",
+                                    editorOptions: {
+                                        stylingMode: "filled",
+                                    }
                                 },
                                 {
-                                    colSpan: 12,
+                                    colSpan: 1,
                                     dataField: "createBy",
                                     label: { text: "Người tạo" },
+                                    editorOptions: {
+                                        stylingMode: "filled",
+                                    }
                                 },//account
                                 {
-                                    colSpan: 12,
+                                    colSpan: 1,
                                     dataField: "pmCreateDate",
                                     label: { text: "Ngày tạo" },
                                     dataType: "date",
                                     width: 150,
                                     alignment: "center",
                                     format: "dd/MM/yyyy",
+                                    editorOptions: {
+                                        stylingMode: "filled",
+                                    }
                                 },
                                 ]
                         }]
@@ -978,7 +1024,6 @@
                 return c;
             }
         }).addClass("popup-priority-1");
-
         let loadUpload = (table, item, isUpload) => $("#popup-main-upload").dxPopup({
             width: "70%",
             height: "50%",
@@ -1514,6 +1559,43 @@
                 return c;
             }
         });
+        function callpopup(title, url, width, container) {
+
+            var isFullscreen = false;
+            if (width == "100%") isFullscreen = true;
+
+            $("#popup-main").dxPopup({
+                width: width,
+                height: "auto",
+                fullScreen: isFullscreen,
+                position: { my: 'top', at: 'top', of: window },
+                dragEnabled: true,
+                resizeEnabled: true,
+                visible: true,
+                showTitle: true,
+                closeOnOutsideClick: false,
+                showCloseButton: true,
+                title: title,
+                contentTemplate: function (container) {
+                    var scrollView = $("<div id='scrollView'></div>");
+                    var content = $("<div/>");
+                    content.load(url);
+                    scrollView.append(content);
+                    scrollView.dxScrollView({
+                        width: '100%',
+                        height: '100%'
+                    });
+                    container.append(scrollView);
+                    return container;
+                },
+                onHiding: function () {
+                    container.refresh();
+                },
+                onHidden: function () {
+                    loadData(PROJECTID, GROUPOWNERID);
+                }
+            });
+        }
     </script>
 }
 
