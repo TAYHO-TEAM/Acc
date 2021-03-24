@@ -123,6 +123,7 @@ namespace Acc.Cmd.Infrastructure.Services
             }
             if (errorResults.Any()) throw new ServiceException(errorResults);
             var tokenResult = await GetTokenResultByUserAsync(existingAccount).ConfigureAwait(false);
+            tokenResult.AccountId = existingAccount.Id;
             if (existingAccount.Type ==1)
             {
                 StaffTayHo existingStaffTaHo = await _staffTayHoRepository.SingleOrDefaultAsync(x => x.AccountName == existingAccount.AccountName).ConfigureAwait(false);
@@ -131,12 +132,7 @@ namespace Acc.Cmd.Infrastructure.Services
                     tokenResult.Title = existingStaffTaHo.Title;
                     tokenResult.AvatarImg = existingStaffTaHo.AvatarImg;
                     tokenResult.UserName = existingStaffTaHo.UserName;
-                    tokenResult.AccountId = existingAccount.Id;
-                }     
-            }
-            else
-            {
-                tokenResult.AccountId = existingAccount.Id;
+                }
             }
             DeviceAccount existDeviceAccount = await _deviceAccountRepository.SingleOrDefaultAsync(x => x.DeviceToken == deviceToken && (x.IsDelete == false || !x.IsDelete.HasValue)) ;// new DeviceAccount(device, existingAccount.Id, deviceToken, browser);
             if (existDeviceAccount != null )

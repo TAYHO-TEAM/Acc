@@ -667,8 +667,9 @@
                             index: 4,
                             icon: "fas fa-user",
                             label: "Phân công",
-                            visible: (selectedRowData.createBy === UserCurrentInfo.accountId),
+                            visible: (selectedRowData.pmCreateBy === UserCurrentInfo.accountId || selectedRowData.paPermistionId === 7),
                             onClick: () => {
+                                console.log(selectedRowData);
                                 loadAccountPlanMaster(selectedRowData);
                             }
                         }).dxSpeedDialAction("instance");
@@ -1224,7 +1225,7 @@
                     elementAttr: {
                         id: "dxDataGrid_detail"
                     },
-                    dataSource: customStore_PLANMASTER_ACCOUNT(item.pmId),
+                    dataSource: customStore_PLANMASTER_ACCOUNT(item.id),
                     remoteOperations: {
                         paging: true,
                         sorting: true,
@@ -1276,7 +1277,7 @@
 
                         //},//nhóm
                         {
-                            dataField: "permissionId",
+                            dataField: "permistionId",
                             caption: "Thực hiện",
                             alignment: "center",
                             dataType: "number",

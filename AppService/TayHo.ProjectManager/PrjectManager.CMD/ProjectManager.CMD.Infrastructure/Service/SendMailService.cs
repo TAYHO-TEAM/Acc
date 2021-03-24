@@ -33,7 +33,8 @@ namespace ProjectManager.CMD.Infrastructure.Service
 
             StringBuilder str = new StringBuilder();
             str.AppendLine("BEGIN:VCALENDAR");
-            str.AppendLine("PRODID:-//Microsoft Corporation//Outlook 12.0 MIMEDIR//EN");
+            //str.AppendLine("PRODID:-//Microsoft Corporation//Outlook 12.0 MIMEDIR//EN");
+            str.AppendLine("PRODID:"+ Subject);
             str.AppendLine("VERSION:2.0");
             str.AppendLine(string.Format("METHOD:{0}", (isCancel ? "CANCEL" : "REQUEST")));
             str.AppendLine("BEGIN:VEVENT");
@@ -56,14 +57,15 @@ namespace ProjectManager.CMD.Infrastructure.Service
             str.AppendLine("END:VEVENT");
             str.AppendLine("END:VCALENDAR");
 
+
             byte[] byteArray = Encoding.ASCII.GetBytes(str.ToString());
             MemoryStream stream = new MemoryStream(byteArray);
 
-            Attachment attach = new Attachment(stream, "Calendar.ics");
+            //Attachment attach = new Attachment(stream, "Calendar.ics");
 
 
             MailMessage msg = new MailMessage();///MailFrom, string.Join(",", MailTo)
-            msg.Attachments.Add(attach);
+            //msg.Attachments.Add(attach);
             msg.From = new MailAddress(_profileMailOptions.userName, _profileMailOptions.name);
             if (MailTo != null && MailTo.Count > 0)
             {

@@ -861,4 +861,8 @@ const SetPermit = [
         ID: 8,
         Name: 'Quyền thực hiện',
     },
+    {
+        ID: 9,
+        Name: 'Quyền sở hữu',
+    },
 ];
