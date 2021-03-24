@@ -415,7 +415,8 @@
                     //    return e.row.data.parentId == 0 && e.row.data.update;
                     //},
                     allowDeleting: (e) => {
-                        return e.row.data.parentId == 0 && e.row.data.delete;
+                        console.log(e);
+                        return e.row.data.parentId == 0 && e.row.data.status < 1 && e.row.data.createBy === UserCurrentInfo.accountId;
                     },
                     //allowAdding: (e) => {
                     //    return false;//e.row.data.parentId == 0;
@@ -823,12 +824,11 @@
                                                 label: { text: "File(s)" },
                                                 editorOptions: {
                                                     stylingMode: "filled",
-
                                                 },
                                                 template: (container) => {
                                                     return $('<a>').click(function () {
                                                         loadFileAttachment("ResponseRegist", value, (value.modifyBy == null || value.modifyBy == 0) ? ((value.update == true ? (masterItiem.status < 5 ? true : false) : false)) : false, item);
-                                                    }).attr("href", "javaScript:void(0)").text(container.editorOptions.value !== null ? container.editorOptions.value + " fiels" : "Chưa có file");
+                                                    }).attr("href", "javaScript:void(0)").text(container.editorOptions.value !== null ? container.editorOptions.value + " file(s)" : "Chưa có file");
                                                 },
                                             },
                                             {

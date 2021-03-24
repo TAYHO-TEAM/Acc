@@ -10,6 +10,7 @@ namespace ProjectManager.Read.Sql.DTOs.DTO
         public string BarCode { get; set; }
         public string Title { get; set; }
         public string Descriptions { get; set; }
+        public string Note { get; set; }
         public int? ParentId { get; set; }
         public int? PlanRegisterId { get; set; }
         public int? Level { get; set; }
