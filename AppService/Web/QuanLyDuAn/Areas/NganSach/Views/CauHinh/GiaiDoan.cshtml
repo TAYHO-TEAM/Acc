@@ -239,7 +239,7 @@
                         target = e.component.getVisibleRows()[e.toIndex].data,
                         d = $.Deferred();
                     if (source.id != target.id) {
-                        ds_giaidoan.store().update(source.id, { status: target.status }).then(() => {
+                        ds_giaidoan(formData).store().update(source.id, { status: target.status }).then(() => {
                             e.component.refresh().then(d.resolve, d.reject);
                         }, d.reject);
                     }
