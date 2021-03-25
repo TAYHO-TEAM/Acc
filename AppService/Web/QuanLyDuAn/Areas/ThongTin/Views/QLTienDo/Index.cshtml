@@ -515,7 +515,7 @@
                         label: "Thêm mới",
                         visible: PermitInAction["insert"],
                         onClick: () => {
-                            CALLPOPUP(
+                            callpopup(
                                 "Tạo kế hoạch công việc",
                                 "/ThongTin/QLTienDo/_TienDoCreate",
                                 ($(window).width() > 767 ? "50%" : "80%"),
@@ -609,34 +609,40 @@
                 wordWrapEnabled: true,
                 rowAlternationEnabled: false,
                 columns: [
-                    {
-                        dataField: "isDone",
-                        caption: "",
-                        dataType: "boolean",
-                        editorType: "dxCheckBox",
-                        editorOptions: {
-                            readOnly:true,
-                        }
-                    },
+                    //{
+                    //    dataField: "isDone",
+                    //    caption: "",
+                    //    dataType: "boolean",
+                    //    editorType: "dxCheckBox",
+                    //    editorOptions: {
+                    //        readOnly:true,
+                    //    }
+                    //},
                     {
                         dataField: "title",
                         caption: "Lịch trình",
                         dataType: "string",
+                        alignment: "center",
                     },
                     {
                         dataField: "amount",
-                        caption: "Mục tiêu",
+                        caption: "MT đề ra",
                         dataType: "number",
+                        alignment: "center",
+                        //editorOptions: {
+                        //    readOnly: true,
+                        //}
                     },
-                    {
-                        dataField: "unit",
-                        caption: "Đơn vị",
-                        dataType: "string",
-                    },
+                    //{
+                    //    dataField: "unit",
+                    //    caption: "Đơn vị",
+                    //    dataType: "string",
+                    //},
                     {
                         dataField: "endDate",
-                        caption: "Hạn bc",
+                        caption: "Hạn HT",
                         dataType: "date",
+                        alignment: "center",
                     },
                     {
                         type: "buttons", caption: "Tác vụ",
@@ -666,7 +672,7 @@
                                 onClick: function (e) {
                                     var container = e.component;
                                     callpopup(
-                                        "Báo cáo tiến độ",
+                                        "Báo cáo tiến độ thực tế",
                                         "/ThongTin/QLTienDo/_TienDoReport/" + e.row.data.id,
                                         ($(window).width() > 767 ? "50%" : "80%"),
                                         container
@@ -1596,6 +1602,7 @@
                 }
             });
         }
+        
     </script>
 }
 
