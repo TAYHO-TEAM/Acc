@@ -2254,6 +2254,7 @@
     <Content Include="Content\plugins\toastr\toastr.min.css" />
     <Content Include="Content\plugins\toastr\toastr.min.js" />
     <Content Include="Content\Site.css" />
+    <Content Include="Content\Template\PlanRegister\Temp_PlanRegister_001.xlsm" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\aspnet\dx.aspnet.data.js" />
@@ -2495,7 +2496,6 @@
     <Content Include="Areas\ThongTin\Views\QLTienDo\_TienDoReport.cshtml" />
     <Content Include="Areas\ThongTin\Views\QLTienDo\_TienDoCreate.cshtml" />
     <Content Include="Areas\NganSach\Views\DongChi\Index.cshtml" />
-    <Content Include="Content\Template\PlanRegister\Temp_PlanRegister_001.xlsm" />
     <Content Include="Areas\ThongTin\Views\VanBanMau\_DuyetVanBan.cshtml" />
     <Content Include="Areas\NganSach\Views\GiaTri\Index.cshtml" />
     <Content Include="Areas\NganSach\Views\NghiemThu\Index - Copy.cshtml" />

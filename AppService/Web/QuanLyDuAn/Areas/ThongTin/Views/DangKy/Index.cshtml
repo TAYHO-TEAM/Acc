@@ -200,6 +200,7 @@
                         caption: "Mã",
                         dataType: "string",
                         alignment: "left",
+                        width: 200,
                         allowFiltering: false,
                         editorOptions: {
                             readOnly: true,
@@ -208,7 +209,7 @@
                     },//mã barcode
                     {
                         dataField: "rev",
-                        width: 40,
+                        width: 80,
                         caption: "REV",
                         dataType: "string",
                         allowEditing: false,
@@ -249,6 +250,7 @@
                         caption: "Người đệ trình",
                         dataType: "number",
                         allowEditing: false,
+                        allowFiltering: true,
                         alignment: "left",
                         lookup: {
                             dataSource: customStore_AccountInfo,
@@ -268,7 +270,7 @@
                                 .appendTo(c);
                             $("<div />")
                                 .attr('id', "popover-detail-" + o.key)
-                                .append("<div>( " + (o.data.accountName) + ' Đã tạo ' + moment(o.data.createDate).locale("vi").fromNow() + ")" + "</div>")
+                                .append("<div>( "+' Đã tạo ' + moment(o.data.createDate).locale("vi").fromNow() + ")" + "</div>")
                                 .appendTo(c);
                             $("#popover-detail-" + o.key).dxPopover({
                                 target: "#popover-target-" + o.key,
@@ -279,7 +281,6 @@
                                     hide: { type: "fade", from: 1, to: 0 },
                                 }
                             });
-
                         },
                     },//account
                     {
@@ -325,13 +326,13 @@
                         format: "dd/MM/yyyy",
                         alignment: "left",
                     },//date
-                    {
-                        dataField: "descriptions",
-                        allowFiltering: true,
-                        caption: "Mô tả",
-                        dataType: "string",
-                        alignment: "left",
-                    },// descriptions
+                    //{
+                    //    dataField: "descriptions",
+                    //    allowFiltering: true,
+                    //    caption: "Mô tả",
+                    //    dataType: "string",
+                    //    alignment: "left",
+                    //},// descriptions
                     {
                         dataField: "note",
                         allowFiltering: true,
@@ -415,7 +416,6 @@
                     //    return e.row.data.parentId == 0 && e.row.data.update;
                     //},
                     allowDeleting: (e) => {
-                        console.log(e);
                         return e.row.data.parentId == 0 && e.row.data.status < 1 && e.row.data.createBy === UserCurrentInfo.accountId;
                     },
                     //allowAdding: (e) => {
