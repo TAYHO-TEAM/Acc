@@ -230,7 +230,7 @@ namespace Acc.Cmd.Infrastructure.Services
         {
             DateTime utcNow = DateTime.UtcNow;
             TokenAccountResult tokenResult = _tokenManager.GenerateTokens(GetClaims(existingAccount), utcNow);
-            existingAccount.SetRefreshToken(tokenResult.RefreshToken);
+            existingAccount.SetRefreshToken(tokenResult.RefreshToken); 
             existingAccount.SetExpiryTime(DateTime.Now);
             existingAccount.SetExpiryTimeUTC(utcNow);
             _accountRepository.Update(existingAccount, x => x.ExpiryTimeUTC,x=>x.ExpiryTime, x => x.RefreshToken);

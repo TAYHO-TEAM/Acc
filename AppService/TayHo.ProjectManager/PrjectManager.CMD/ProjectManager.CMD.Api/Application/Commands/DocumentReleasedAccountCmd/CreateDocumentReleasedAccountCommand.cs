@@ -9,6 +9,10 @@ namespace  ProjectManager.CMD.Api.Application.Commands
     {
         
     }
+    public class CreateDocumentReleasedAccountsCommand : DocumentReleasedAccountsCommandSet, IRequest<MethodResult<CreateDocumentReleasedAccountCommandResponse>>
+    {
+
+    }
     public class CreateDocumentReleasedAccountCommandResponse
     {
         public CreateDocumentReleasedAccountCommandResponse(List<DocumentReleasedAccountCommandResponseDTO> DocumentReleasedAccount)

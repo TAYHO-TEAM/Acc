@@ -12,7 +12,7 @@ namespace ProjectManager.CMD.Infrastructure
         public ProjectManagerBaseContext(DbContextOptions<ProjectManagerBaseContext> options) : base(options)
         {
         }
-        public DbSet<AccountInfo> AccountInfo { get; set; }
+        public DbSet<Domain.DTOs.AccountInfo> AccountInfo { get; set; }
         public DbSet<Assignments> Assignments { get; set; }
         public DbSet<ContractorInfo> ContractorInfo { get; set; }
         public DbSet<DocumentReleased> DocumentReleased { get; set; }

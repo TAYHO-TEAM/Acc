@@ -72,7 +72,7 @@
         const ACTION_HANGMUC = "/WorkItems";
         const ACTION_DOCUMENTTYPE = "/DocumentType";
         const ACTION_REPLY = "/ResponseRegistReply";
-        const ACTION_ACCOUNTINFO = "/ACCOUNTINFO";
+        const ACTION_ACCOUNTINFO = "/AccountInfo";
         var NAMEREGIST = "RequestRegist";
 
         var code = "";
@@ -136,27 +136,39 @@
             remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION_REMOVE_FILE, key),
         });
         //let customStore_AccountInfo = customStore_READ_ALL_ACC(ACTION_READ_ACCOUNTINFO);
-        let customStore_AccountInfo = new DevExpress.data.CustomStore({
-            key: "accountId",
-            loadMode: "raw",
-            load: (values) => {
-                var deferred = $.Deferred();
-                $.ajax({
-                    headers: header, dataType: "json",
-                    url: URL_API_PM_READ + ACTION_ACCOUNTINFO,
-                    success: function (data) {
-                        var list = data.result.items;
-                        deferred.resolve(list);
-                    },
-                    error: function (xhr, textStatus, errorThrown) {
-                        console.log(xhr.responseJSON);
-                        deferred.reject("Có lỗi xảy ra trong quá trình lấy danh sách 'Giai Đoạn'. Mở Console để xem chi tiết.");
-                    },
-                    timeout: 10000
-                });
-                return deferred.promise();
-            },
+        //let customStore_AccountInfo = new DevExpress.data.CustomStore({
+        //    key: "accountId",
+        //    loadMode: "raw",
+        //    load: (values) => {
+        //        var deferred = $.Deferred();
+        //        $.ajax({
+        //            headers: header, dataType: "json",
+        //            url: URL_API_PM_READ + ACTION_ACCOUNTINFO,
+        //            success: function (data) {
+        //                var list = data.result.items;
+        //                deferred.resolve(list);
+        //            },
+        //            error: function (xhr, textStatus, errorThrown) {
+        //                console.log(xhr.responseJSON);
+        //                deferred.reject("Có lỗi xảy ra trong quá trình lấy danh sách 'Giai Đoạn'. Mở Console để xem chi tiết.");
+        //            },
+        //            timeout: 10000
+        //        });
+        //        return deferred.promise();
+        //    },
+        //});
+        let customStore_AccountInfo =(type) => new DevExpress.data.DataSource({
+            store: new DevExpress.data.CustomStore({
+                key: "id",
+                loadMode: "raw",
+                load: (values) => ajax_read(ACTION_ACCOUNTINFO, values),
+                //insert: (values) => ajax_insert(URL_API_PM_CMD + ACTION_CMD_REQUESTREGIST, values),
+                //update: (key, values) => ajax_update(URL_API_PM_CMD + ACTION_CMD_REQUESTREGIST, key, values),
+                //remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION_CMD_REQUESTREGIST, key),
+            }),
+            //filter: [["isDelete", "><", true]]
         });
+
 
 
         //------------------------- Load dữ liệu --------------------------------------------
@@ -222,9 +234,10 @@
                         },
                     },//rev
                     {
-                        dataField: "workItemId", caption: "Hạng mục",
+                        dataField: "workItemId",
+                        caption: "Hạng mục",
                         width: 250,
-                        allowFiltering: true,
+                        allowFiltering: false,
                         lookup: {
                             dataSource: customStore_HangMuc,
                             valueExpr: "id", displayExpr: "title",
@@ -248,20 +261,30 @@
                         dataField: "createBy",
                         width: 150,
                         caption: "Người đệ trình",
-                        dataType: "number",
+                        //dataType: "number",
                         allowEditing: false,
                         allowFiltering: true,
                         alignment: "left",
+                        editorType: "dxLookup",
                         lookup: {
-                            dataSource: customStore_AccountInfo,
-                            valueExpr: "accountId", displayExpr: "avatarImg",
+                            dataSource: customStore_AccountInfo(2).store(),
+                            valueExpr: "accountId",
+                            displayExpr: "avatarImg",
                         },
                         editorOptions: {
-                            readOnly: true,
-                            //visible: false,
-                            placeholder: "auto gen",
+                            dataSource: customStore_AccountInfo(2),
+                            valueExpr: "accountId",
+                            displayExpr: "userName",
+                            placeholder: "Vui lòng chọn...",
+                            searchExpr: ['accountName', 'userName'],
+                            searchEnabled: true,
+                            showClearButton: true,
+                            itemTemplate: function (data) {
+                                return $("<div>").append($("<b>").append(data.userName).addClass("mr-1"), $("<em>").append(data.accountName));
+                            },
                         },
                         cellTemplate: (c, o) => {
+                            console.log(o);
                             $("<img />")
                                 .attr('id', "popover-target-" + o.key)
                                 .attr("src", "data:image/png;base64," + o.text)
@@ -298,7 +321,9 @@
                             dataSource: customStore_DocumetnType,
                             valueExpr: "id", displayExpr: "title",
                             placeholder: "Vui lòng chọn...",
-                            searchEnabled: true, showClearButton: true,
+                            searchEnabled: true,
+                            
+                            showClearButton: true,
                             itemTemplate: function (data) {
                                 return $("<div>").append($("<b>").append(data.code).addClass("mr-1"), $("<em>").append(data.title));
                             },
@@ -814,7 +839,7 @@
                                                 label: { text: "Ý kiến" },
                                                 editorOptions: {
                                                     stylingMode: "filled",
-                                                    
+
                                                 },
                                                 //editorType: "dxTextArea",
                                             },

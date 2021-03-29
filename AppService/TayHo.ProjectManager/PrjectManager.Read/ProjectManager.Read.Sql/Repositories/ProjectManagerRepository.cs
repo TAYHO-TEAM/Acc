@@ -117,9 +117,9 @@ namespace ProjectManager.Read.Sql.Repositories
             dynamic orders = null;
             switch (nameEntity)
             {
-                //case nameof(_dbContext.AccountInfo):
-                //    orders = _dbContext.AccountInfo;
-                //    break;
+                case nameof(_dbContext.AccountInfo):
+                    orders = _dbContext.AccountInfo;
+                    break;
                 //case nameof(_dbContext.Accounts):
                 //    orders = _dbContext.Accounts;
                 //    break;

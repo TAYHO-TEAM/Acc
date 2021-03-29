@@ -1,4 +1,6 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using ProjectManager.CMD.Api.Application.Commands;
 using ProjectManager.CMD.Api.Controllers.v1.BaseClasses;
@@ -8,6 +10,8 @@ using System.Threading.Tasks;
 
 namespace ProjectManager.CMD.Api.Controllers.v1
 {
+    [Authorize]
+    [EnableCors("EnableCORS")]
     public class DocumentReleasedAccountController : APIControllerBase
     {
         public DocumentReleasedAccountController(IMediator mediator) : base(mediator)
@@ -22,6 +26,7 @@ namespace ProjectManager.CMD.Api.Controllers.v1
         /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>
+        //[Authorize]
         [HttpPost]
         [ProducesResponseType(typeof(Services.Common.DomainObjects.MethodResult<CreateDocumentReleasedAccountCommandResponse>), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(VoidMethodResult), (int)HttpStatusCode.BadRequest)]
