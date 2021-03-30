@@ -32,7 +32,7 @@
         const ACTION_DOCUMENTLOG = "/DocumentReleasedLog";
         const ACTION_FILEGET = "/FilesAttachment/getBy";
         const ACTION_GROUPS = "/Groups";
-        const ACTION_ACCOUNTINFO = "/ACCOUNTINFO";
+        const ACTION_ACCOUNTINFO = "/AccountInfo";
         const ACTION_PROJECT = "/Projects";
         const ACTION_HANGMUC = "/WorkItems";
         var PROJECTID = isNullOrEmpty(localStorage.getItem("projectIdCurrent")) ? parseInt(localStorage.getItem("projectIdCurrent")) : 0;
@@ -68,7 +68,7 @@
                     'PageSize': isNullOrEmpty(values.take) ? values.take : 0,
                     'PageNumber': (isNullOrEmpty(values.take) && isNullOrEmpty(values.skip)) ? ((values.skip / values.take) + 1) : 0,
                     'FindParentId': table,
-                    'FindId': item.documentReleasedId,
+                    'FindId': item.drId,
                 };
                 if (values.sort) {
                     params['SortCol'] = values.sort[0].selector;
@@ -396,6 +396,7 @@
                 var table = "DocumentReleased";
                 customStore_Detail(item.drlId).load().then((items) => {
                     var masterItiem = items[0];
+                    console.log(items);
                     var readonly = isNullOrEmpty(masterItiem.note);
                     $('#div_dxForm_Main').dxForm({
                         elementAttr: {
