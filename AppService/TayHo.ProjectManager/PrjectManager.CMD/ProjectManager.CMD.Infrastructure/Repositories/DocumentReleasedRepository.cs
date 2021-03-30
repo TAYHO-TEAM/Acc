@@ -75,5 +75,26 @@ namespace ProjectManager.CMD.Infrastructure.Repositories
                 return toMails;
             }
         }
+        public async Task<string> GetBodyContentWithTempId(int DocumentTypeId = 0 , int TemplateId = 0)
+        {
+            List<string> toMails = new List<string>();
+            await using (var cmd = _dbContext.Database.GetDbConnection().CreateCommand())
+            {
+
+                await cmd.Connection.OpenAsync();
+                cmd.CommandText = "sp_DocumentReleased_ConvertBodyContent";
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new SqlParameter("@DocumentReleasedId", DocumentTypeId));
+                cmd.Parameters.Add(new SqlParameter("@TempalteMailId", TemplateId));
+                var result = await cmd.ExecuteReaderAsync().ConfigureAwait(false);
+
+                while (result.Read())
+                {
+                    toMails.Add(result["BodyHtml"].ToString());
+                }
+                await cmd.Connection.CloseAsync();
+                return toMails[0].ToString();
+            }
+        }
     }
 }

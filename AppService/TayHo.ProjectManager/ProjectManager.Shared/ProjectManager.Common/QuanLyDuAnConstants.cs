@@ -75,6 +75,7 @@ namespace ProjectManager.Common
         public const string NotifyAccount_TABLENAME = "NotifyAccount";
         public const string Notify_TABLENAME = "Notify";
         public const string NotifyTemplate_TABLENAME = "NotifyTemplate";
+        public const string TemplateMail_TABLENAME = "TemplateMail";
 
         public const string Conversation_TABLENAME = "Conversation";
         public const string PlanAccount_TABLENAME = "PlanAccount";

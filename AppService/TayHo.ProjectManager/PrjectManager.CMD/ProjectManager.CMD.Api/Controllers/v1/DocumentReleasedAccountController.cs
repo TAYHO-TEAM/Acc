@@ -14,6 +14,7 @@ namespace ProjectManager.CMD.Api.Controllers.v1
     [EnableCors("EnableCORS")]
     public class DocumentReleasedAccountController : APIControllerBase
     {
+        private const string Accounts = nameof(Accounts);
         public DocumentReleasedAccountController(IMediator mediator) : base(mediator)
         {
         }
@@ -26,16 +27,29 @@ namespace ProjectManager.CMD.Api.Controllers.v1
         /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>
-        //[Authorize]
         [HttpPost]
-        [ProducesResponseType(typeof(Services.Common.DomainObjects.MethodResult<CreateDocumentReleasedAccountCommandResponse>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(MethodResult<CreateDocumentReleasedAccountCommandResponse>), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(VoidMethodResult), (int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> CreateDocumentReleasedAccountAsync([FromBody] CreateDocumentReleasedAccountCommand command)
+        public async Task<IActionResult> CreateDocumentReleasedAccountAsync([FromBody]CreateDocumentReleasedAccountCommand command)
         {
             var result = await _mediator.Send(command).ConfigureAwait(false);
             return Ok(result);
         }
-
+        /// <summary>
+        /// Create a new DocumentReleasedAccounts.
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        //[Authorize]
+        [Route(Accounts)]
+        [HttpPost]
+        [ProducesResponseType(typeof(MethodResult<CreateDocumentReleasedAccountCommandResponse>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(VoidMethodResult), (int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> CreateDocumentReleasedAccountsAsync([FromBody] CreateDocumentReleasedAccountsCommand command)
+        {
+            var result = await _mediator.Send(command).ConfigureAwait(false);
+            return Ok(result);
+        }
         /// <summary>
         /// Update a existing DocumentReleasedAccount.
         /// </summary>

@@ -73,6 +73,7 @@ namespace ProjectManager.CMD.Infrastructure
         public DbSet<Notify> Notify { get; set; }
         public DbSet<NotifyAccount> NotifyAccount { get; set; }
         public DbSet<NotifyTemplate> NotifyTemplate { get; set; }
+        public DbSet<TemplateMail> TemplateMail { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

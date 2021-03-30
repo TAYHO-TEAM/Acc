@@ -80,11 +80,13 @@ namespace ProjectManager.CMD.Infrastructure
         public DbSet<Notify> Notify { get; set; }
         public DbSet<NotifyAccount> NotifyAccount { get; set; }
         public DbSet<NotifyTemplate> NotifyTemplate { get; set; }
+        public DbSet<TemplateMail> TemplateMail { get; set; }
         #region Bilder View Table
         public DbSet<DocumentReleasedLogDetail> DocumentReleasedLogDetail { get; set; }
         public DbSet<NotifyAccountDetail> NotifyAccountDetail { get; set; }
         public DbSet<PlanJobAccount> PlanJobAccount { get; set; }
         public DbSet<PlanMasterAccount> PlanMasterAccount { get; set; }
+
         
         #endregion Bilder View Table
 

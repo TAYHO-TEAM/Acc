@@ -8,10 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Application\Commands\DocumentReleasedAccountCmd\CreateDocumentReleasedAccountsCommandHandler.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="ViewModels\" />
   </ItemGroup>
 

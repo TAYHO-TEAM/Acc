@@ -11,5 +11,6 @@ namespace ProjectManager.CMD.Domain.IRepositories
         Task<string> IsGetTitleDocumentReleasedAsync(int ProjectId, int WorkItemId, int DocumentTypeId);
         Task DocumentReleasedProcessAsync();
         Task<List<string>> IsGetToMailsAsync(int DocumentTypeId = 0);
+        Task<string> GetBodyContentWithTempId(int DocumentTypeId = 0, int TemplateId = 0);
     }
 }

@@ -28,13 +28,13 @@ namespace ProjectManager.CMD.Infrastructure.Service
             _clientFactory = clientFactory;
             _env = env;
         }
-        public void SendMailAppoinment(DateTime StartDate , DateTime EndDate, string LocationTaget , string Subject, string Body, string DisplayName, string MailFrom, List<string> MailTo, List<string> MailCC, List<string> MailBCC, bool isCancel)
+        public void SendMailAppoinment(DateTime StartDate, DateTime EndDate, string LocationTaget, string Subject, string Body, string DisplayName, string MailFrom, List<string> MailTo, List<string> MailCC, List<string> MailBCC, bool isCancel)
         {
 
             StringBuilder str = new StringBuilder();
             str.AppendLine("BEGIN:VCALENDAR");
             //str.AppendLine("PRODID:-//Microsoft Corporation//Outlook 12.0 MIMEDIR//EN");
-            str.AppendLine("PRODID:"+ Subject);
+            str.AppendLine("PRODID:" + Subject);
             str.AppendLine("VERSION:2.0");
             str.AppendLine(string.Format("METHOD:{0}", (isCancel ? "CANCEL" : "REQUEST")));
             str.AppendLine("BEGIN:VEVENT");
@@ -43,7 +43,7 @@ namespace ProjectManager.CMD.Infrastructure.Service
             str.AppendLine(string.Format("DTEND:{0:yyyyMMddTHHmmss}", EndDate));
             str.AppendLine("LOCATION: " + LocationTaget);
             str.AppendLine(string.Format("UID:{0}", Guid.NewGuid()));
-            str.AppendLine(string.Format("DESCRIPTION:{0}",!string.IsNullOrEmpty(Body)?Body.Replace("\n", "<br>"): Body));
+            str.AppendLine(string.Format("DESCRIPTION:{0}", !string.IsNullOrEmpty(Body) ? Body.Replace("\n", "<br>") : Body));
             str.AppendLine(string.Format("X-ALT-DESC;FMTTYPE=text/html:{0}", !string.IsNullOrEmpty(Body) ? Body.Replace("\n", "<br>") : Body));
             str.AppendLine(string.Format("SUMMARY:{0}", Subject));
             str.AppendLine(string.Format("ORGANIZER;CN=\"{0}\":MAILTO:{1}", _profileMailOptions.name, _profileMailOptions.name));
@@ -71,8 +71,8 @@ namespace ProjectManager.CMD.Infrastructure.Service
             {
                 foreach (string tomail in MailTo)
                 {
-                    if(!string.IsNullOrEmpty(tomail) )
-                    msg.To.Add(tomail);
+                    if (!string.IsNullOrEmpty(tomail))
+                        msg.To.Add(tomail);
                 }
             }
             if (MailCC != null && MailCC.Count > 0)
@@ -90,16 +90,57 @@ namespace ProjectManager.CMD.Infrastructure.Service
                     if (!string.IsNullOrEmpty(bccmail))
                         msg.Bcc.Add(bccmail);
                 }
-            } 
+            }
             ContentType contype = new ContentType("text/calendar");
             contype.Parameters.Add("method", "REQUEST");
 
-  
+
             //  contype.Parameters.Add("name", "Meeting.ics");
             AlternateView avCal = AlternateView.CreateAlternateViewFromString(str.ToString(), contype);
             msg.AlternateViews.Add(avCal);
 
             //Now sending a mail with attachment ICS file.                     
+            SmtpClient smtpclient = new SmtpClient();
+            smtpclient.Host = _profileMailOptions.serverName; //-------this has to given the Mailserver IP
+            smtpclient.Port = _profileMailOptions.port;
+            smtpclient.EnableSsl = true;
+            smtpclient.Credentials = new NetworkCredential(_profileMailOptions.userName, _profileMailOptions.passWord);
+            smtpclient.DeliveryMethod = SmtpDeliveryMethod.Network;
+            smtpclient.Send(msg);
+        }
+        public void SendMail(string Subject, string Body, string DisplayName, string MailFrom, List<string> MailTo, List<string> MailCC, List<string> MailBCC, bool IsBodyHtml = true )
+        {
+            MailMessage msg = new MailMessage();
+            
+            msg.From = new MailAddress(_profileMailOptions.userName, _profileMailOptions.name);
+            if (MailTo != null && MailTo.Count > 0)
+            {
+                foreach (string tomail in MailTo)
+                {
+                    if (!string.IsNullOrEmpty(tomail))
+                        msg.To.Add(tomail);
+                }
+            }
+            if (MailCC != null && MailCC.Count > 0)
+            {
+                foreach (string ccmail in MailCC)
+                {
+                    if (!string.IsNullOrEmpty(ccmail))
+                        msg.CC.Add(ccmail);
+                }
+            }
+            if (MailBCC != null && MailBCC.Count > 0)
+            {
+                foreach (string bccmail in MailBCC)
+                {
+                    if (!string.IsNullOrEmpty(bccmail))
+                        msg.Bcc.Add(bccmail);
+                }
+            }
+            msg.Subject = string.IsNullOrEmpty(Subject)?"Thông báo hệ thống" : Subject;
+            msg.Body = Body;
+            msg.IsBodyHtml = IsBodyHtml;
+                 
             SmtpClient smtpclient = new SmtpClient();
             smtpclient.Host = _profileMailOptions.serverName; //-------this has to given the Mailserver IP
             smtpclient.Port = _profileMailOptions.port;

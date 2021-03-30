@@ -671,26 +671,14 @@ const unit = [
 const important = [
     {
         ID: 0,
-        Name: 'Không quan tâm'
-    },
-    {
-        ID: 1,
-        Name: 'Có thể đợi'
-    },
-    {
-        ID: 2,
         Name: 'Trung bình'
     },
     {
-        ID: 3,
-        Name: 'Cần thiết'
+        ID: 1,
+        Name: 'Quan trọng'
     },
     {
-        ID: 4,
-        Name: 'Cần gấp'
-    },
-    {
-        ID: 5,
+        ID: 2,
         Name: 'Cấp bách'
     }
 ];

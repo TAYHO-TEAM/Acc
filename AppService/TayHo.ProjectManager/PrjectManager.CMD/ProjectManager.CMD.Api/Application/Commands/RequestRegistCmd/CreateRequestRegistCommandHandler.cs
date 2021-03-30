@@ -35,12 +35,11 @@ namespace ProjectManager.CMD.Api.Application.Commands
         {
             string tableName = QuanLyDuAnConstants.RequestRegist_TABLENAME;
             var methodResult = new MethodResult<CreateRequestRegistCommandResponse>();
-
             var parentRequestRegist = await _requestRegistRepository.SingleOrDefaultAsync(x => x.Id == request.ParentId && x.IsDelete == false).ConfigureAwait(false);
             var lastRequestRegistsRev = (await _requestRegistRepository.GetAllListAsync(x => x.ParentId == request.ParentId && x.IsDelete == false).ConfigureAwait(false)).Max(x => x.Rev);
             if (parentRequestRegist == null && (request.ParentId.HasValue && request.ParentId != 0))
             {
-                methodResult.AddErrorMessage(nameof(ErrorCodeInsert.IErrN3), new[]
+                methodResult.AddAPIErrorMessage(nameof(ErrorCodeInsert.IErrN3), new[]
                 {
                     ErrorHelpers.GenerateErrorResult(nameof(request.ParentId),request.ParentId)
                 });

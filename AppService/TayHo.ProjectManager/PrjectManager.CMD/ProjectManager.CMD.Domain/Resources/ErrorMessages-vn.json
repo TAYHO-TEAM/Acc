@@ -1,5 +1,5 @@
 ﻿{
-  // Insert Error
+
   "IErr000": "Dữ liệu không được để trống!",
   "IErr001": "Dự liệu thêm mới đã bị trùng khoá chính!",
   "IErr002": "Dự liệu thêm mới thiếu trường dữ liệu!",
@@ -22,11 +22,11 @@
   "IErrN3": "Dự liệu không tồn tại dữ liệu cha!",
   "IErrN4": "Dự liệu không thêm được do thiếu dữ liệu liên kết!",
   "IErrN5": "Không có file đính kèm!",
-  // Update Error 
+ 
   "UErr01": "Dữ liệu không tông tại!",
   "UErr02": "Không được phép cập nhật dòng dữ liệu này!",
   "UErr03": "Không tồn tại liên kết phụ!",
-  // Delete Error
+ 
   "DErr001": "Dữ liệu không tông tại!",
   "DErr002": "Không được phép xoá dòng dữ liệu này!"
 }
