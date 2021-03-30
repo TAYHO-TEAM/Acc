@@ -80,8 +80,10 @@ namespace ProjectManager.CMD.Api.Application.Commands
                 {
                     string body = await _documentReleasedRepository.GetBodyContentWithTempId((int)request.DocumentReleasedId, 2);
                     body = body.Replace("{Dear}","Kính gửi Anh(Chị)!").Replace("{TitleContent}", "Phát hành tài liệu.");
-                    List<AccountInfo> listAccountMails  = await _accountInfoRepository.GetAllListAsync(x=>(newDocumentReleasedAccounts.Select(n=>n.AccountId).ToList()).Contains(x.AccountId)).ConfigureAwait(false);
-                    _sendMailService.SendMail(documentRealesed.Title, body,"","", listAccountMails.Select(x=>x.Email).ToList(), null, null, true);
+                   
+
+
+                    _sendMailService.SendMail(documentRealesed.Title, body,"","", toMails, null, null, true);
                     await _documentReleasedLogRepository.AddRangeAsync(newDocumentReleasedLogs).ConfigureAwait(false);
                     await _documentReleasedLogRepository.UnitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
                 }
