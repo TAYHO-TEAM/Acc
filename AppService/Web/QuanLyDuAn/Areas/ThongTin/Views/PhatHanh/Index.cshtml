@@ -28,10 +28,11 @@
         const ACTION = "/DocumentReleased";
         const ACTION_DOCUMENTTYPE = "/DocumentType";
         const ACTION_DOCUMENTACC = "/DocumentReleasedAccount";
+        const ACTION_DOCUMENTACCS = "/DocumentReleasedAccount/Accounts";
         const ACTION_DOCUMENTLOG = "/DocumentReleasedLog";
         const ACTION_FILEGET = "/FilesAttachment/getBy";
         const ACTION_GROUPS = "/Groups";
-        const ACTION_ACCOUNTINFO = "/ACCOUNTINFO";
+        const ACTION_ACCOUNTINFO = "/AccountInfo";
         const ACTION_PROJECT = "/Projects";
         const ACTION_HANGMUC = "/WorkItems";
         var PROJECTID = isNullOrEmpty(localStorage.getItem("projectIdCurrent")) ? parseInt(localStorage.getItem("projectIdCurrent")) : 1;
@@ -52,26 +53,12 @@
             }),
             filter: [["projectId", "=", PROJECT], "and", ["createBy", "=", UserCurrentInfo.accountId]],
         });
-        let customStore_AccountInfo = new DevExpress.data.CustomStore({
-            key: "accountId",
-            loadMode: "raw",
-            load: (values) => {
-                var deferred = $.Deferred();
-                $.ajax({
-                    headers: header, dataType: "json",
-                    url: URL_API_PM_READ + ACTION_ACCOUNTINFO,
-                    success: function (data) {
-                        var list = data.result.items;
-                        deferred.resolve(list);
-                    },
-                    error: function (xhr, textStatus, errorThrown) {
-                        console.log(xhr.responseJSON);
-                        deferred.reject("Có lỗi xảy ra trong quá trình lấy danh sách 'Giai Đoạn'. Mở Console để xem chi tiết.");
-                    },
-                    timeout: 10000
-                });
-                return deferred.promise();
-            },
+        let customStore_AccountInfo = new DevExpress.data.DataSource({
+            store: new DevExpress.data.CustomStore({
+                key: "id",
+                loadMode: "raw",
+                load: (values) => ajax_read(ACTION_ACCOUNTINFO, values),
+            }),
         });
         let customStore_DocumetnType = new DevExpress.data.CustomStore({
             key: "id", loadMode: "raw",
@@ -270,6 +257,21 @@
                 return deferred.promise();
             },
         });
+        var customStore_DocumentAcc = (DocId) => {
+            return new DevExpress.data.DataSource({
+                store: new DevExpress.data.CustomStore({
+                    key: "id",
+                    load: (values) => ajax_read(ACTION_DOCUMENTACC, values),
+                    insert: (values) => ajax_insert(URL_API_PM_CMD + ACTION_DOCUMENTACCS, values),
+                    //update: (key, values) => ajax_update(URL_API_PM_CMD + ACTION_CMD_REQUESTREGIST, key, values),
+                    //remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION_CMD_REQUESTREGIST, key),
+                }),
+                filter: ["documentReleasedId", "=", DocId],
+            });
+        };
+
+
+
         //..........................  Load View -------------------------------------------------------------
         $(function () {
             loadData(PROJECTID);
@@ -362,17 +364,6 @@
                         caption: "Ngày phát hành",
                         dataType: "datetime",
                     },
-                    //{
-                    //    type: "buttons", caption: "Tác vụ",
-                    //    width: 120, alignment: "center",
-                    //    buttons: ["edit", "delete", {
-                    //        hint: "Người nhận",
-                    //        icon: "user",
-                    //        onClick: function (e) {
-                    //            loadAccount(e.row.data);
-                    //        }
-                    //    }],
-                    //}
                 ],
                 paging: { enabled: true, pageSize: 20 },
                 pager: {
@@ -818,6 +809,7 @@
             showCloseButton: true, closeOnOutsideClick: true,
             visible: true,
             contentTemplate: (c) => {
+                var dataSource = customStore_DocumentAcc(item.id);
                 var scrollView = $("<div id='scrollView-detail'></div>");
                 var content = $("<div/>");
                 var d = $.Deferred();
@@ -825,11 +817,8 @@
                     elementAttr: {
                         id: "dxDataGrid_detail"
                     },
-                    dataSource: customStore_Detail(item),
-                    remoteOperations: {
-                        paging: true,
-                        sorting: true,
-                    },
+                    dataSource: dataSource,
+                    remoteOperations: true,
                     repaintChangesOnly: true,
                     showBorders: true,
                     showColumnHeaders: true,
@@ -854,63 +843,24 @@
                             alignment: "center",
                             cellTemplate: (c, o) => $("<div/>").append(o.rowIndex + 1).appendTo(c),
                         },
-                        //{
-                        //    dataField: "accountId",
-                        //    caption: "Ảnh đại diện",
-                        //    alignment: "center",
-                        //    dataType: "number",
-                        //    allowEditing: false,
-                        //    lookup: {
-                        //        dataSource: customStore_AccountInfo,
-                        //        valueExpr: "accountId", displayExpr: "avatarImg",
-                        //    },
-                        //    cellTemplate: (c, o) => {
-                        //        $("<img />").attr("src", "data:image/png;base64," + o.text).addClass("img-circle elevation-2 img-size-30").attr("onerror", "this.onerror=null;this.src='https://qlcv.tayho.com.vn/Content/user-avartar/avartar-default.jpg';").appendTo(c);
-                        //    },
-                        //},
                         {
                             dataField: "accountId",
                             caption: "Họ Tên",
                             alignment: "center",
                             //dataType: "number",
                             lookup: {
-                                dataSource: customStore_AccountInfo,
+                                dataSource: customStore_AccountInfo.store(),
                                 valueExpr: "accountId",
                                 displayExpr: "userName",
                             },
-
+                            editCellTemplate: (cellElement, cellInfo) => dropDownBoxTemplate(cellElement, cellInfo, dataSource._items.map(a => a.accountId)),
                         },//account
-                        {
-                            dataField: "groupId",
-                            caption: "Nhóm",
-                            alignment: "center",
-                            //dataType: "number",
-                            lookup: {
-                                dataSource: customStore_Groups,
-                                valueExpr: "id",
-                                displayExpr: "title",
-                            },
-
-                        },//nhóm
-                        //{
-                        //    dataField: "isActive",
-                        //    width: 100,
-                        //    alignment: "center",
-                        //    editorType: "dxSwitch",
-                        //},
-                        //{
-                        //    dataField: "isVisible",
-                        //    width: 100,
-                        //    alignment: "center",
-                        //    editorType: "dxSwitch",
-                        //},
                     ],
                     editing: {
                         mode: "popup",
                         allowAdding: true,
                         allowDeleting: true,
                         allowUpdating: false,
-
                         popup: {
                             width: 600, height: "auto",
                             showTitle: true, title: "Trình duyệt",
@@ -939,25 +889,18 @@
                                         itemTemplate: function (data) {
                                             return $("<div>").append($("<b>").append(data.title).addClass("mr-1"), $("<em>").append(data.descriptions));
                                         },
-                                        validationRules: [{
-                                            type: "async",
-                                            message: "Đã có thông tin Nhóm",
-                                            validationCallback: function (params) {
-                                                var d = $.Deferred();
-                                                d.resolve(!(typeof $('#accountIdSelect').dxLookup('instance').option('value') === 'number'));
-                                                //$('#groupIdSelect').dxSelectBox('instance').option('value', null)
-                                                return d.promise();
-                                                /*sendRequest(params.value);*/
-                                            }
-                                        }]
-                                        //onValueChanged: function (e) {
-                                        //    //if (data.value != null) {
-                                        //    //    $('#accountIdSelect').dxSelectBox('instance').option('disabled', data.value != null);
-                                        //    //}
-                                        //    //else {
-                                        //    //    $('#accountIdSelect').dxSelectBox('instance').option('disabled', null);
-                                        //    //};
-                                        //},
+                                        //validationRules: [{
+                                        //    type: "async",
+                                        //    message: "Đã có thông tin Nhóm",
+                                        //    validationCallback: function (params) {
+                                        //        var d = $.Deferred();
+                                        //        d.resolve(!(typeof $('#accountIdSelect').dxLookup('instance').option('value') === 'number'));
+                                        //        //$('#groupIdSelect').dxSelectBox('instance').option('value', null)
+                                        //        return d.promise();
+                                        //        /*sendRequest(params.value);*/
+                                        //    }
+                                        //}]
+
                                     },
                                 },
                                 {
@@ -975,41 +918,17 @@
                                         itemTemplate: function (data) {
                                             return $("<div>").append($("<b>").append(data.userName).addClass("mr-1"), $("<em>").append(data.accountName));
                                         },
-                                        //onValueChanged: function (data) {
-
-                                        //    if (data.value != null) {
-                                        //        $('#groupIdSelect').dxSelectBox('instance').option('disabled', data.value != null);
-                                        //    }
-                                        //    else {
-                                        //        $('#groupIdSelect').dxSelectBox('instance').option('disabled', null);
-                                        //    };
-                                        //},
                                     },
-                                    validationRules: [{
-                                        type: "async",
-                                        message: "Đã có thông tin Nhóm",
-                                        validationCallback: function (params) {
-                                            var d = $.Deferred();
-                                            d.resolve(!((typeof $('#accountIdSelect').dxLookup('instance').option('value') === 'number') && (typeof $('#groupIdSelect').dxLookup('instance').option('value') === 'number')));
-                                            //$('#accountIdSelect').dxSelectBox('instance').option('value',null)
-                                            return d.promise();
-                                            /*sendRequest(params.value);*/
-                                        }
-                                    }]
+                                    //validationRules: [{
+                                    //    type: "async",
+                                    //    message: "Đã có thông tin Nhóm",
+                                    //    validationCallback: function (params) {
+                                    //        var d = $.Deferred();
+                                    //        d.resolve(!((typeof $('#accountIdSelect').dxLookup('instance').option('value') === 'number') && (typeof $('#groupIdSelect').dxLookup('instance').option('value') === 'number')));
+                                    //        return d.promise();
+                                    //    }
+                                    //}]
                                 },
-
-                                //{
-                                //    colSpan: 6,
-                                //    dataField: "isActive",
-                                //    alignment: "center",
-                                //    editorType: "dxSwitch",
-                                //},
-                                //{
-                                //    colSpan: 6,
-                                //    dataField: "isVisible",
-                                //    alignment: "center",
-                                //    editorType: "dxSwitch",
-                                //},
                             ],
                         },
                     },
@@ -1030,8 +949,16 @@
                         if (!e.row.isNewRow)
                             e.editorOptions.disabled = true;
                     },
+                    //onRowUpdating: (e) => {
+                    //    console.log(e);
+                    //},
+                    onRowInserting: (e) => {
 
-                });
+                        console.log(e);
+                        e.data['accountIds'] = e.data['accountId'];
+                    }
+
+                }).dxDataGrid('instance');
                 scrollView.append(content);
                 scrollView.dxScrollView({
                     width: '100%',
@@ -1044,10 +971,8 @@
         });
 
         function callPopup(title, url, width, container) {
-
             var isFullscreen = false;
             if (width == "100%") isFullscreen = true;
-
             $("#popup-register").dxPopup({
                 width: width, height: "auto",
                 fullScreen: isFullscreen,
@@ -1094,6 +1019,65 @@
                 onSelectionChanged: function (e) {
                     cellInfo.component.updateDimensions();
                 },
+            });
+        }; 
+        // ---------------------------------- Dropbox Multiple Custom --------------------------------
+        function dropDownBoxTemplate(cellElement, cellInfo, docAcc) {
+            console.log(docAcc);
+            return $("<div>").dxDropDownBox({
+                value: docAcc,
+                valueExpr: "accountId",
+                displayExpr: "userName",
+                showSelectionControls: true,
+                showClearButton: true,
+                dataSource: customStore_AccountInfo.store(),
+                //applyValueMode: "useButtons",
+                searchEnabled: true,
+                placeholder: "Select a value...",
+                contentTemplate: function (e) {
+                    var value = e.component.option("value"),
+                        $dataGrid = $("<div>").dxDataGrid({
+                            dataSource: customStore_AccountInfo.store(),
+                            columns: [
+                                {
+                                    dataField: "accountId",
+                                    caption: "Mã",
+                                    alignment: "center",
+                                    width: '10%', 
+                                },//account,
+                                {
+                                    dataField: "userName",
+                                    alignment: "center",
+                                    caption: "Tên",
+                                    width: '90%',
+                                },
+                            ],
+                            hoverStateEnabled: true,
+                            //paging: { enabled: true, pageSize: 20 },
+                            filterRow: { visible: true },
+                            scrolling: { mode: "virtual" },
+                            height: 345,
+                            selection: { mode: "multiple" },
+                            selectedRowKeys: value,
+                            onSelectionChanged: function (selectedItems) {
+                                var keys = selectedItems.selectedRowKeys;
+                                e.component.option("value", keys);
+                            }
+                        });
+                    dataGrid = $dataGrid.dxDataGrid("instance");
+                    e.component.on("valueChanged", function (args) {
+                        var value = args.value;
+                        dataGrid.selectRows(value, false);
+                    });
+                    return $dataGrid;
+                },
+                onValueChanged: function (e) {
+                    console.log(e);
+                    cellInfo.setValue(e.value);
+                },
+                //onSelectionChanged: function (e) {
+                //    cellInfo.component.updateDimensions();
+                //},
             });
         };
 
