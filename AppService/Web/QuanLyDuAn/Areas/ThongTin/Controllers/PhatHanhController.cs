@@ -1,4 +1,5 @@
-﻿using QuanLyDuAn.Utilities;
+﻿using Newtonsoft.Json;
+using QuanLyDuAn.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -10,6 +11,7 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 
 namespace QuanLyDuAn.Areas.ThongTin.Controllers
 {
@@ -93,7 +95,7 @@ namespace QuanLyDuAn.Areas.ThongTin.Controllers
                 client.BaseAddress = new Uri(ConfigurationSettings.AppSettings["pmCMD"].ToString()); //http://localhost:50999/,https://api-pm-cmd.tayho.com.vn/
                 client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
+                int id = 0;
                 using (HttpResponseMessage response =  client.PostAsync("api/cmd/v1/DocumentReleased", mFormData).Result)
                 {
                     if (response.StatusCode != HttpStatusCode.OK)
@@ -101,6 +103,11 @@ namespace QuanLyDuAn.Areas.ThongTin.Controllers
                         var err = response.Content.ReadAsStringAsync().Result;
                         return Json(new { status = "error", result = err });
                     }
+                    else
+                    {
+                        var json = new JavaScriptSerializer().Deserialize<dynamic>(response.Content.ReadAsStringAsync().Result.ToString());
+                        id = Convert.ToInt32(json.result.id.ToString());
+                    }    
                 }
             }
             return Json(new { status = "success", result = "Đã lưu thông tin yêu cầu thành công" });

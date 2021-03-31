@@ -244,9 +244,11 @@
                         editorType: "dxLookup",
                         editorOptions: {
                             dataSource: customStore_DocumetnType,
-                            valueExpr: "id", displayExpr: "title",
+                            valueExpr: "id",
+                            displayExpr: "title",
                             placeholder: "Vui lòng chọn...",
-                            searchEnabled: true, showClearButton: true,
+                            searchEnabled: true,
+                            showClearButton: true,
                             itemTemplate: function (data) {
                                 return $("<div>").append($("<b>").append(data.code).addClass("mr-1"), $("<em>").append(data.title));
                             },

@@ -362,7 +362,7 @@
                     {
                         dataField: "createDate",
                         caption: "Ngày phát hành",
-                        dataType: "datetime",
+                        dataType: "date",
                     },
                 ],
                 paging: { enabled: true, pageSize: 20 },
@@ -501,34 +501,14 @@
                             showBorders: true,
                             dataSource: customStore_Log(options.data),
                             columns: [
-                                //{
-                                //    dataField: "accountId",
-                                //    caption: "Ảnh đại diện",
-                                //    alignment: "center",
-                                //    dataType: "number",
-                                //    allowEditing: false,
-                                //    lookup: {
-                                //        dataSource: customStore_AccountInfo,
-                                //        valueExpr: "accountId", displayExpr: "avatarImg",
-                                //    },
-                                //    cellTemplate: (c, o) => {
-
-                                //        $("<img />")
-                                //            .attr("src", "data:image/png;base64," + o.text)
-                                //            .addClass("img-circle elevation-2 img-size-30")
-                                //            .attr("onerror", "this.onerror=null;this.src='https://qlcv.tayho.com.vn/Content/user-avartar/avartar-default.jpg';")
-                                //            .appendTo(c);
-
-                                //    },
-                                //},//avarta
-                                {
+                                  {
                                     dataField: "accountId",
                                     caption: "Họ Tên",
                                     dataType: "string",
                                     alignment: "center",
                                     dataType: "number",
                                     lookup: {
-                                        dataSource: customStore_AccountInfo,
+                                        dataSource: customStore_AccountInfo.store(),
                                         valueExpr: "accountId", displayExpr: "userName",
                                     },
                                 },//account
@@ -859,7 +839,7 @@
                     editing: {
                         mode: "popup",
                         allowAdding: true,
-                        allowDeleting: true,
+                        allowDeleting: false,
                         allowUpdating: false,
                         popup: {
                             width: 600, height: "auto",
@@ -874,38 +854,39 @@
                             showRequiredMark: true,
                             requiredMark: "(*)",
                             items: [
-                                {
-                                    colSpan: 12,
-                                    dataField: "groupId",
-                                    editorType: "dxLookup",
-                                    editorOptions: {
-                                        elementAttr: {
-                                            id: "groupIdSelect",
-                                        },
-                                        placeholder: "Vui lòng chọn...",
-                                        searchEnabled: true,
-                                        showClearButton: true,
-                                        searchExpr: ['descriptions', 'title'],
-                                        itemTemplate: function (data) {
-                                            return $("<div>").append($("<b>").append(data.title).addClass("mr-1"), $("<em>").append(data.descriptions));
-                                        },
-                                        //validationRules: [{
-                                        //    type: "async",
-                                        //    message: "Đã có thông tin Nhóm",
-                                        //    validationCallback: function (params) {
-                                        //        var d = $.Deferred();
-                                        //        d.resolve(!(typeof $('#accountIdSelect').dxLookup('instance').option('value') === 'number'));
-                                        //        //$('#groupIdSelect').dxSelectBox('instance').option('value', null)
-                                        //        return d.promise();
-                                        //        /*sendRequest(params.value);*/
-                                        //    }
-                                        //}]
+                                //{
+                                //    colSpan: 12,
+                                //    dataField: "groupId",
+                                //    editorType: "dxLookup",
+                                //    editorOptions: {
+                                //        elementAttr: {
+                                //            id: "groupIdSelect",
+                                //        },
+                                //        placeholder: "Vui lòng chọn...",
+                                //        searchEnabled: true,
+                                //        showClearButton: true,
+                                //        searchExpr: ['descriptions', 'title'],
+                                //        itemTemplate: function (data) {
+                                //            return $("<div>").append($("<b>").append(data.title).addClass("mr-1"), $("<em>").append(data.descriptions));
+                                //        },
+                                //        //validationRules: [{
+                                //        //    type: "async",
+                                //        //    message: "Đã có thông tin Nhóm",
+                                //        //    validationCallback: function (params) {
+                                //        //        var d = $.Deferred();
+                                //        //        d.resolve(!(typeof $('#accountIdSelect').dxLookup('instance').option('value') === 'number'));
+                                //        //        //$('#groupIdSelect').dxSelectBox('instance').option('value', null)
+                                //        //        return d.promise();
+                                //        //        /*sendRequest(params.value);*/
+                                //        //    }
+                                //        //}]
 
-                                    },
-                                },
+                                //    },
+                                //},
                                 {
                                     colSpan: 12,
                                     dataField: "accountId",
+                                    dataType: "textArea",
                                     editorType: "dxLookup",
                                     editorOptions: {
                                         elementAttr: {
@@ -1006,6 +987,7 @@
         };
         // ---------------------------------- Tag Custom --------------------------------
         function tagBoxEditorTemplate(cellElement, cellInfo) {
+            console.log(cellInfo);
             return $("<div>").dxTagBox({
                 dataSource: customStore_HangMuc,
                 value: (cellInfo.value != null ? cellInfo.value.split(",") : "" || []).map(function (element) { return element }),
@@ -1014,9 +996,11 @@
                 applyValueMode: "useButtons",
                 searchEnabled: true,
                 onValueChanged: function (e) {
+                    console.log(e);
                     cellInfo.setValue(e.value.join(','));
                 },
                 onSelectionChanged: function (e) {
+                    console.log(e);
                     cellInfo.component.updateDimensions();
                 },
             });
