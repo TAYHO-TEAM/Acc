@@ -108,7 +108,7 @@
             },
 
         });
-        let customStore_NotifyAccount = (ID) => {
+        var customStore_NotifyAccount = (ID) => {
             return new DevExpress.data.DataSource({
                 store: new DevExpress.data.CustomStore({
                     key: "id",
@@ -117,7 +117,7 @@
                     //update: (key, values) => ajax_update(URL_API_PM_CMD + ACTION_CMD_REQUESTREGIST, key, values),
                     //remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION_CMD_REQUESTREGIST, key),
                 }),
-                filter: [["notifyId", "=", ID]],
+                filter: ["notifyId", "=", ID],
             });
         };
         let customStore_Log = (item) => new DevExpress.data.CustomStore({
@@ -406,12 +406,44 @@
                             columns: [
                                 {
                                     dataField: "accountId",
+                                    caption: "Avatar",
+                                    dataType: "string",
+                                    alignment: "center",
+                                    dataType: "number",
+                                    lookup: {
+                                        dataSource: customStore_AccountInfo.store(),
+                                        valueExpr: "accountId", displayExpr: "avatarImg",
+                                    },
+                                    cellTemplate: (c, o) => {
+                                        $("<img />")
+                                            .attr('id', "popover-target-" + o.key)
+                                            .attr("src", "data:image/png;base64," + o.text)
+                                            .addClass("img-circle elevation-2 img-size-30")
+                                            .attr("onerror", "this.onerror=null;this.src='https://qlcv.tayho.com.vn/Content/user-avartar/avartar-default.jpg';")
+                                            .appendTo(c);
+                                        $("<div />")
+                                            .attr('id', "popover-detail-" + o.key)
+                                            .append("<div>( " + ' Đã tạo ' + moment(o.data.createDate).locale("vi").fromNow() + ")" + "</div>")
+                                            .appendTo(c);
+                                        $("#popover-detail-" + o.key).dxPopover({
+                                            target: "#popover-target-" + o.key,
+                                            showEvent: "mouseenter", hideEvent: "mouseleave",
+                                            position: "bottom",
+                                            animation: {
+                                                show: { type: "pop", from: { scale: 0 }, to: { scale: 1 } },
+                                                hide: { type: "fade", from: 1, to: 0 },
+                                            }
+                                        });
+                                    },
+                                },//account
+                                {
+                                    dataField: "accountId",
                                     caption: "Người nhận",
                                     dataType: "string",
                                     alignment: "center",
                                     dataType: "number",
                                     lookup: {
-                                        dataSource: customStore_AccountInfo,
+                                        dataSource: customStore_AccountInfo.store(),
                                         valueExpr: "accountId", displayExpr: "userName",
                                     },
                                 },//account
@@ -474,7 +506,7 @@
                         index: 1, icon: "fas fa-plus",
                         label: "Thêm mới",
                         visible: PermitInAction["insert"],
-                        onClick: () => e.component.addRow()
+                        onClick: () => e.component.addRow(),
                     }).dxSpeedDialAction("instance");
 
                     DevExpress.config({
@@ -525,14 +557,19 @@
                         $("#action-log").dxSpeedDialAction({
                             index: 4, icon: "fas fa-user", label: "Thêm người nhận",
                             onClick: () => {
-                                loadAccount(selectedRowData);
+                                loadAccount(selectedRowKey);
                             }
                         }).dxSpeedDialAction("instance");
                     }
                 },
+                onRowInserted: (e) => {
+                    loadAccount(e.key);
+                },
+               
+
             });
         };
-        let loadAccount = (item) => $("#popup-main-upload").dxPopup({
+        let loadAccount = (id) => $("#popup-main-upload").dxPopup({
             width: "50%",
             height: "50%",
             fullScreen: false,
@@ -544,7 +581,7 @@
             closeOnOutsideClick: true,
             visible: true,
             contentTemplate: (c) => {
-                console.log(item.id);
+                var dataSource = customStore_NotifyAccount(id);
                 var scrollView = $("<div id='scrollView-detail'></div>");
                 var content = $("<div/>");
                 var d = $.Deferred();
@@ -552,7 +589,7 @@
                     elementAttr: {
                         id: "dxDataGrid_detail"
                     },
-                    dataSource: customStore_NotifyAccount(item.id).store(),
+                    dataSource: dataSource,
                     remoteOperations: true,
                     repaintChangesOnly: true,
                     showBorders: true,
@@ -582,48 +619,22 @@
                             dataField: "accountId",
                             caption: "Họ Tên",
                             alignment: "center",
-                            ////dataType: "number",
+                            //dataType: "number",
                             lookup: {
-                                dataSource: customStore_AccountInfo,
+                                dataSource: customStore_AccountInfo.store(),
                                 valueExpr: "accountId",
                                 displayExpr: "userName",
                             },
+                            editCellTemplate: (cellElement, cellInfo) => dropDownBoxTemplate(cellElement, cellInfo, dataSource._items.map(a => a.accountId)),
                         },//account
-                        //{
-                        //    dataField: "groupId",
-                        //    caption: "Nhóm",
-                        //    alignment: "center",
-                        //    //dataType: "number",
-                        //    lookup: {
-                        //        dataSource: customStore_Groups,
-                        //        valueExpr: "id",
-                        //        displayExpr: "title",
-                        //    },
-                        //},//nhóm
-                        //{
-                        //    dataField: "pushTime",
-                        //    caption: "Lịch gửi",
-                        //    //alignment: "datetime",
-                        //    //dataType: "number",
-                        //},//gửi lúc
+
                         {
                             dataField: "status",
                             caption: "Trạng thái",
                             //alignment: "datetime",
                             //dataType: "number",
                         },//gửi lúc
-                        {
-                            dataField: "isActive",
-                            width: 100,
-                            alignment: "center",
-                            editorType: "dxSwitch",
-                        },
-                        {
-                            dataField: "isVisible",
-                            width: 100,
-                            alignment: "center",
-                            editorType: "dxSwitch",
-                        },
+
                     ],
                     editing: {
                         mode: "popup",
@@ -644,37 +655,12 @@
                             showRequiredMark: true,
                             requiredMark: "(*)",
                             items: [
-                                {
-                                    colSpan: 12,
-                                    dataField: "groupId",
-                                    editorType: "dxSelectBox",
-                                    editorOptions: {
-                                        elementAttr: {
-                                            id: "groupIdSelect",
-                                        },
-                                        placeholder: "Vui lòng chọn...",
-                                        searchEnabled: true,
-                                        showClearButton: true,
-                                        itemTemplate: function (data) {
-                                            return $("<div>").append($("<b>").append(data.title).addClass("mr-1"), $("<em>").append(data.descriptions));
-                                        },
-                                    },
-                                    validationRules: [{
-                                        type: "async",
-                                        message: "Đã có thông tin Nhóm",
-                                        validationCallback: function (params) {
-                                            var d = $.Deferred();
-                                            d.resolve(!((typeof $('#accountIdSelect').dxSelectBox('instance').option('value') === 'number') && (typeof $('#groupIdSelect').dxSelectBox('instance').option('value') === 'number')));
-                                            //$('#groupIdSelect').dxSelectBox('instance').option('value', null)
-                                            return d.promise();
-                                            /*sendRequest(params.value);*/
-                                        }
-                                    }]
-                                },
+
                                 {
                                     colSpan: 12,
                                     dataField: "accountId",
-                                    editorType: "dxSelectBox",
+                                    dataType: "textArea",
+                                    editorType: "dxLookup",
                                     editorOptions: {
                                         elementAttr: {
                                             id: "accountIdSelect",
@@ -682,96 +668,22 @@
                                         placeholder: "Vui lòng chọn...",
                                         searchEnabled: true,
                                         showClearButton: true,
+                                        searchExpr: ['userName', 'accountName'],
                                         itemTemplate: function (data) {
                                             return $("<div>").append($("<b>").append(data.userName).addClass("mr-1"), $("<em>").append(data.accountName));
                                         },
                                     },
-                                    validationRules: [{
-                                        type: "async",
-                                        message: "Đã có thông tin Nhóm",
-                                        validationCallback: function (params) {
-                                            var d = $.Deferred();
-                                            d.resolve(!((typeof $('#accountIdSelect').dxSelectBox('instance').option('value') === 'number') && (typeof $('#groupIdSelect').dxSelectBox('instance').option('value') === 'number')));
-                                            return d.promise();
-                                        }
-                                    }]
+                                    //validationRules: [{
+                                    //    type: "async",
+                                    //    message: "Đã có thông tin Nhóm",
+                                    //    validationCallback: function (params) {
+                                    //        var d = $.Deferred();
+                                    //        d.resolve(!((typeof $('#accountIdSelect').dxSelectBox('instance').option('value') === 'number') && (typeof $('#groupIdSelect').dxSelectBox('instance').option('value') === 'number')));
+                                    //        return d.promise();
+                                    //    }
+                                    //}]
                                 },
-                                //{
-                                //    colSpan: 12,
-                                //    dataField: "accountId",
-                                //    editorType: "dxDropDownBox",
-                                //    editorOptions: {
-                                //        elementAttr: {
-                                //            id: "accountIdSelect",
-                                //        },
-                                //        dataSource: customStore_AccountInfo,
-                                //        placeholder: "Vui lòng chọn...",
-                                //        searchEnabled: true,
-                                //        showClearButton: true,
-                                //        contentTemplate: function (e) {
-                                //            var value = e.component.option("value"),
-                                //                $dataGrid = $("<div>").dxDataGrid({
-                                //                    dataSource: e.component.getDataSource(),
-                                //                    columns: ["id", "userName"],
-                                //                    hoverStateEnabled: true,
-                                //                    paging: { enabled: true, pageSize: 10 },
-                                //                    filterRow: { visible: true },
-                                //                    scrolling: { mode: "infinite" },
-                                //                    height: 345,
-                                //                    selection: { mode: "multiple" },
-                                //                    selectedRowKeys: value,
-                                //                    onSelectionChanged: function (selectedItems) {
-                                //                        var keys = selectedItems.selectedRowKeys;
-                                //                        e.component.option("value", keys);
-                                //                    }
-                                //                });
-                                //            dataGrid = $dataGrid.dxDataGrid("instance");
 
-                                //            e.component.on("valueChanged", function (args) {
-                                //                var value = args.value;
-                                //                dataGrid.selectRows(value, false);
-                                //            });
-                                //            console.log($dataGrid);
-                                //            return $dataGrid;
-                                //        }
-                                //        //itemTemplate: function (data) {
-                                //        //    return $("<div>").append($("<b>").append(data.userName).addClass("mr-1"), $("<em>").append(data.department));
-                                //        //},
-                                //    },
-                                //    validationRules: [{
-                                //        type: "async",
-                                //        message: "Đã có thông tin Nhóm",
-                                //        validationCallback: function (params) {
-                                //            console.log(params);
-                                //            var d = $.Deferred();
-                                //            d.resolve(!((typeof $('#accountIdSelect').dxSelectBox('instance').option('value') === 'number') && (typeof $('#groupIdSelect').dxSelectBox('instance').option('value') === 'number')));
-                                //            //$('#accountIdSelect').dxSelectBox('instance').option('value',null)
-                                //            return d.promise();
-                                //            /*sendRequest(params.value);*/
-                                //        }
-                                //    }]
-
-                                //},
-                                //{
-                                //    colSpan: 12,
-                                //    dataField: "pushTime",
-                                //    editorType: "dxDateBox",
-                                //    editorOptions: {
-                                //        type: "datetime",
-                                //    },
-                                //},
-                                {
-                                    colSpan: 6,
-                                    dataField: "isActive",
-                                    alignment: "center",
-                                    editorType: "dxSwitch",
-                                },
-                                {
-                                    colSpan: 6,
-                                    dataField: "isVisible",
-                                    alignment: "center",
-                                    editorType: "dxSwitch",
-                                },
                             ],
                         },
                     },
@@ -781,7 +693,7 @@
                         }
                     },
                     onInitNewRow: (e) => {
-                        e.data.notifyId = item.id;
+                        e.data.notifyId = id;
                         e.data.isActive = true;
                         e.data.isVisible = true;
                     },
@@ -854,6 +766,77 @@
                 onSelectionChanged: function (e) {
                     cellInfo.component.updateDimensions();
                 },
+            });
+        };
+        // ---------------------------------- Dropbox Multiple Custom --------------------------------
+        function dropDownBoxTemplate(cellElement, cellInfo, docAcc) {
+            console.log(docAcc);
+            return $("<div>").dxDropDownBox({
+                value: docAcc,
+                valueExpr: "accountId",
+                displayExpr: "userName",
+                showSelectionControls: true,
+                showClearButton: true,
+                dataSource: customStore_AccountInfo.store(),
+                //applyValueMode: "useButtons",
+                searchEnabled: true,
+                placeholder: "Select a value...",
+                contentTemplate: function (e) {
+                    var value = e.component.option("value"),
+                        $dataGrid = $("<div>").dxDataGrid({
+                            dataSource: customStore_AccountInfo.store(),
+                            columns: [
+                                {
+                                    dataField: "accountId",
+                                    caption: "Mã",
+                                    alignment: "center",
+                                    width: '10%',
+                                },//account,
+                                {
+                                    dataField: "userName",
+                                    alignment: "center",
+                                    caption: "Tên",
+                                    width: '50%',
+                                },
+                                {
+                                    dataField: "type",
+                                    alignment: "center",
+                                    caption: "Thuộc cty",
+                                    width: '40%',
+                                    groupIndex: 0,
+                                    lookup: {
+                                        dataSource: AccountType,
+                                        valueExpr: "ID",
+                                        displayExpr: "Name",
+                                    },
+                                },
+                            ],
+                            hoverStateEnabled: true,
+                            //paging: { enabled: true, pageSize: 20 },
+                            filterRow: { visible: true },
+                            scrolling: { mode: "virtual" },
+                            height: 345,
+                            selection: { mode: "multiple" },
+                            selectedRowKeys: value,
+                            onSelectionChanged: function (selectedItems) {
+                                var keys = selectedItems.selectedRowKeys;
+                                e.component.option("value", keys);
+                            }
+                        });
+                    dataGrid = $dataGrid.dxDataGrid("instance");
+                    e.component.on("valueChanged", function (args) {
+                        var value = args.value;
+                        dataGrid.selectRows(value, false);
+                    });
+                    return $dataGrid;
+                },
+                onValueChanged: function (e) {
+                    console.log(e);
+                    cellInfo.setValue(e.value);
+                },
+                //onSelectionChanged: function (e) {
+                //    cellInfo.component.updateDimensions();
+                //},
             });
         };
 
