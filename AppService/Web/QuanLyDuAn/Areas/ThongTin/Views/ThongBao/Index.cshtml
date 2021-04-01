@@ -235,8 +235,14 @@
                     sorting: true,
                     grouping: false
                 },
-                showBorders: false, showColumnHeaders: true, showColumnLines: false, hoverStateEnabled: true,
-                showRowLines: true, columnAutoWidth: true, wordWrapEnabled: true, rowAlternationEnabled: true,
+                showBorders: false,
+                showColumnHeaders: true,
+                showColumnLines: false,
+                hoverStateEnabled: true,
+                showRowLines: true,
+                columnAutoWidth: true,
+                wordWrapEnabled: true,
+                rowAlternationEnabled: true,
                 columns: [
                     {
                         dataField: "title",
@@ -325,7 +331,7 @@
                     confirmDelete: true,
                     popup: {
                         width: 600, height: "auto",
-                        showTitle: true, title: "Trình duyệt",
+                        showTitle: true, title: "Tạo thông báo mới",
                         closeOnOutsideClick: false, showCloseButton: true,
                     },
                 },
@@ -384,9 +390,11 @@
                     enabled: true,
                     render: null,
                     template: function (container, options) {
+                        container.attr("style", "background-color: rgba(248,141,43,0.5) !important; padding: 10px !important;")
+                        var data = options.data;
                         $("<div>").dxDataGrid({
                             showBorders: false,
-                            showColumnHeaders: false,
+                            showColumnHeaders: true,
                             showColumnLines: false,
                             hoverStateEnabled: true,
                             showRowLines: true,
@@ -399,7 +407,7 @@
                             columns: [
                                 {
                                     dataField: "accountId",
-                                    caption: "Họ Tên",
+                                    caption: "Người nhận",
                                     dataType: "string",
                                     alignment: "center",
                                     dataType: "number",
@@ -410,7 +418,7 @@
                                 },//account
                                 {
                                     dataField: "note",
-                                    caption: "Ghi chú",
+                                    caption: "ý kiến phản hồi",
                                     dataType: "string",
                                     alignment: "center",
                                     dataType: "string",
@@ -532,7 +540,7 @@
             dragEnabled: true,
             resizeEnabled: true,
             showTitle: true,
-            title: 'Cài đặt người nhận phát hành',
+            title: 'Cài đặt người nhận thông báo',
             showCloseButton: true,
             closeOnOutsideClick: true,
             visible: true,
@@ -585,17 +593,17 @@
                                 displayExpr: "userName",
                             },
                         },//account
-                        {
-                            dataField: "groupId",
-                            caption: "Nhóm",
-                            alignment: "center",
-                            //dataType: "number",
-                            lookup: {
-                                dataSource: customStore_Groups,
-                                valueExpr: "id",
-                                displayExpr: "title",
-                            },
-                        },//nhóm
+                        //{
+                        //    dataField: "groupId",
+                        //    caption: "Nhóm",
+                        //    alignment: "center",
+                        //    //dataType: "number",
+                        //    lookup: {
+                        //        dataSource: customStore_Groups,
+                        //        valueExpr: "id",
+                        //        displayExpr: "title",
+                        //    },
+                        //},//nhóm
                         //{
                         //    dataField: "pushTime",
                         //    caption: "Lịch gửi",
@@ -628,7 +636,8 @@
                         allowUpdating: false,
                         popup: {
                             width: 600, height: "auto",
-                            showTitle: true, title: "Trình duyệt",
+                            showTitle: true,
+                            title: "Tạo thông báo mới",
                             closeOnOutsideClick: false,
                             showCloseButton: true,
                         },

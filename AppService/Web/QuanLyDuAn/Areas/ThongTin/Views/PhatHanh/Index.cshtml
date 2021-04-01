@@ -919,7 +919,7 @@
                         }
                     },
                     onInitNewRow: (e) => {
-                        e.data.documentReleasedId = item.id;
+                        e.data.documentReleasedId = id;
                         e.data.isActive = true;
                         e.data.isVisible = true;
                     },
@@ -1033,7 +1033,19 @@
                                     dataField: "userName",
                                     alignment: "center",
                                     caption: "Tên",
-                                    width: '90%',
+                                    width: '50%',
+                                },
+                                {
+                                    dataField: "type",
+                                    alignment: "center",
+                                    caption: "Thuộc cty",
+                                    width: '40%',
+                                    groupIndex: 0,
+                                    lookup: {
+                                        dataSource: AccountType,
+                                        valueExpr: "ID",
+                                        displayExpr: "Name",
+                                    },
                                 },
                             ],
                             hoverStateEnabled: true,

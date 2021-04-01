@@ -10,6 +10,7 @@ namespace ProjectManager.CMD.Api.Controllers.v1
 {
     public class NotifyAccountController : APIControllerBase
     {
+        private const string Accounts = nameof(Accounts);
         public NotifyAccountController(IMediator mediator) : base(mediator)
         {
         }
@@ -26,6 +27,20 @@ namespace ProjectManager.CMD.Api.Controllers.v1
         [ProducesResponseType(typeof(Services.Common.DomainObjects.MethodResult<CreateNotifyAccountCommandResponse>), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(VoidMethodResult), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> CreateNotifyAccountAsync([FromBody] CreateNotifyAccountCommand command)
+        {
+            var result = await _mediator.Send(command).ConfigureAwait(false);
+            return Ok(result);
+        }
+        /// <summary>
+        /// Create a new NotifyAccounts.
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        [Route(Accounts)]
+        [HttpPost]
+        [ProducesResponseType(typeof(Services.Common.DomainObjects.MethodResult<CreateNotifyAccountCommandResponse>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(VoidMethodResult), (int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> CreateNotifyAccountsAsync([FromBody] CreateNotifyAccountsCommand command)
         {
             var result = await _mediator.Send(command).ConfigureAwait(false);
             return Ok(result);

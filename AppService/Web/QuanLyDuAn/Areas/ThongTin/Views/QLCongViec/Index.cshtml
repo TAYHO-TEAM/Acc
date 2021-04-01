@@ -25,6 +25,18 @@
     </div>
 </div>
 <style>
+    #container_step .dx-link-delete {
+        margin-right: 15px !important;
+    }
+    #container_step {
+        margin-bottom: 7px;
+    }
+    #container_attachment {
+        margin-bottom: 7px;
+    }
+    #container_schedule {
+        margin-bottom: 7px;
+    }
     .dx-editor-container .dx-dropdowneditor-input-wrapper .dx-texteditor-input-container .dx-placeholder {
         color: white !important;
     }
@@ -341,11 +353,11 @@
                             $("<div />").dxCheckBox({
                                 value: options.value,
                                 onValueChanged: function (data) {
-                                    var values = { 'priority':(data.value == true) ? 1: 0 };
-                                    customStore(0).store().update(options.row.data.id, values );
+                                    var values = { 'priority': (data.value == true) ? 1 : 0 };
+                                    customStore(0).store().update(options.row.data.id, values);
                                 }
                             }).attr('id', 'CheckBox').appendTo(container);
-                        }, 
+                        },
                         editorOptions: {
                             //value: true,
                             stylingMode: "filled",
@@ -679,7 +691,7 @@
         };
         let loadData_detail = (id) => {
             $("#container_step").dxDataGrid({
-                height: heightScreen / 2,
+                height: (heightScreen / 2) - 7,
                 dataSource: customStore_DETAIL(id),
                 repaintChangesOnly: true,
                 remoteOperations: {
@@ -707,15 +719,17 @@
                         dataField: "title",
                         caption: "Bước thực hiện",
                         dataType: "string",
-                        //editorOptions:
-                        //{
-                        //    readOnly: (e) => {
-                        //        //if (e.row.data.permistionId === 9 || e.row.data.permistionId === 7)
-                        //           return false;
-                        //        //else
-                        //           //return true;
-                        //    },
-                        //},
+
+                        editorOptions:
+                        {
+                            placeholder: "Nhập tên công việc con tại đây",
+                            //readOnly: (e) => {
+                            //    //if (e.row.data.permistionId === 9 || e.row.data.permistionId === 7)
+                            //       return false;
+                            //    //else
+                            //       //return true;
+                            //},
+                        },
                         validationRules: [{ type: "required" }],
                     },
                     {
@@ -758,7 +772,7 @@
                 //    visible: WIDTH_CONTAINER > 350
                 //},
                 editing: {
-                    allowAdding: true,
+                    allowAdding: false,
                     allowUpdating: (e) => {
                         if (e.row.data.permistionId === 9 || e.row.data.permistionId === 7 || e.row.data.permistionId === 8)
                             return true;
@@ -786,6 +800,18 @@
                                 onClick: () => container.refresh()
                             },
 
+                        },
+                        {
+                            location: "after",
+                            widget: "dxButton",
+                            options: {
+                                //elementAttr: {
+                                //    id: "insert_button"
+                                //},
+                                text: "Thêm bước",
+                                visible: PermitInAction.insert,
+                                onClick: () => container.addRow()
+                            }
                         },
 
                     )
@@ -818,7 +844,7 @@
         };
         let loadAttach = (item) => {
             $("#container_attachment").dxDataGrid({
-                height: heightScreen / 16,
+                height: (heightScreen / 16)-7,
                 dataSource: customStore_READDATASOURCE(item),
                 repaintChangesOnly: true,
                 remoteOperations: {
@@ -874,7 +900,9 @@
                         caption: "Phản hồi",
                         dataType: "string",
                         width: "70%",
-
+                        editorOptions: {
+                            placeHolder:"Nhập nội dung phản hồi",
+                        }
                     },
                     {
                         colSpan: 4,
@@ -884,7 +912,8 @@
                         width: "30%",
                         lookup: {
                             dataSource: customStore_AccountInfo,
-                            valueExpr: "accountId", displayExpr: "userName",
+                            valueExpr: "accountId",
+                            displayExpr: "userName",
                         },
                         editorOptions: {
                             readOnly: true,
@@ -907,7 +936,7 @@
                 //    visible: WIDTH_CONTAINER > 350
                 //},
                 editing: {
-                    allowAdding: true,
+                    allowAdding: false,
                     allowUpdating: false,
                     allowDeleting: false,
                     mode: "cell",
@@ -915,12 +944,20 @@
                     confirmDelete: true,
                 },
                 onToolbarPreparing: function (e) {
-                    //e.toolbarOptions.items.unshift(
-                    //    {
-                    //        text: "Phản hồi",
-                    //        location: "before",
-                    //    },
-                    //)
+                    e.toolbarOptions.items.unshift(
+                        {
+                            location: "after",
+                            widget: "dxButton",
+                            options: {
+                                //elementAttr: {
+                                //    id: "insert_button"
+                                //},
+                                text: "Tạo phản hồi",
+                                visible: PermitInAction.insert,
+                                onClick: () => e.component.addRow()
+                            }
+                        },
+                    )
                 },
                 onInitNewRow: (e) => {
                     console.log(id)
@@ -952,7 +989,7 @@
         let loadSchedule = (id) => {
             $("#container_schedule").dxDataGrid({
                 title: "Nhắc nhở",
-                height: (heightScreen / 8) * 1.5,
+                height: ((heightScreen / 8) * 1.5) -7,
                 dataSource: customStore_Schelude(id),
                 repaintChangesOnly: true,
                 remoteOperations: true,
@@ -972,6 +1009,7 @@
                         dataType: "datetime",
                         editorType: "dxDateBox",
                         editorOptions: {
+                            placeholder: "Chọn thời gian",
                             type: "datetime",
                         },
                     },
@@ -998,6 +1036,7 @@
                         dataType: "datetime",
                         editorType: "dxDateBox",
                         editorOptions: {
+                            placeholder: "Chọn ngày hết hạn",
                             type: "datetime",
                         },
                     },
