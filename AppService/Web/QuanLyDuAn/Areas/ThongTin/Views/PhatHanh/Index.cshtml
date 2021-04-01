@@ -280,11 +280,7 @@
             $("#container").dxDataGrid({
                 height: heightScreen,
                 dataSource: customStore(ID),
-                remoteOperations: {
-                    filtering: true,
-                    sorting: true,
-                    grouping: false
-                },
+                remoteOperations: true,
                 showBorders: false,
                 filterRow: { visible: true },
                 showColumnHeaders: true,

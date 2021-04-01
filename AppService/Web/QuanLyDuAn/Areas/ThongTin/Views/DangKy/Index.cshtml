@@ -135,28 +135,6 @@
             },
             remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION_REMOVE_FILE, key),
         });
-        //let customStore_AccountInfo = customStore_READ_ALL_ACC(ACTION_READ_ACCOUNTINFO);
-        //let customStore_AccountInfo = new DevExpress.data.CustomStore({
-        //    key: "accountId",
-        //    loadMode: "raw",
-        //    load: (values) => {
-        //        var deferred = $.Deferred();
-        //        $.ajax({
-        //            headers: header, dataType: "json",
-        //            url: URL_API_PM_READ + ACTION_ACCOUNTINFO,
-        //            success: function (data) {
-        //                var list = data.result.items;
-        //                deferred.resolve(list);
-        //            },
-        //            error: function (xhr, textStatus, errorThrown) {
-        //                console.log(xhr.responseJSON);
-        //                deferred.reject("Có lỗi xảy ra trong quá trình lấy danh sách 'Giai Đoạn'. Mở Console để xem chi tiết.");
-        //            },
-        //            timeout: 10000
-        //        });
-        //        return deferred.promise();
-        //    },
-        //});
         let customStore_AccountInfo =(type) => new DevExpress.data.DataSource({
             store: new DevExpress.data.CustomStore({
                 key: "id",
@@ -237,7 +215,7 @@
                         dataField: "workItemId",
                         caption: "Hạng mục",
                         width: 250,
-                        allowFiltering: false,
+                        allowFiltering: true,
                         lookup: {
                             dataSource: customStore_HangMuc,
                             valueExpr: "id", displayExpr: "title",
@@ -252,7 +230,7 @@
                             searchEnabled: true,
                             showClearButton: true,
                             itemTemplate: function (data) {
-                                return $("<div>").append($("<b>").append(data.code).addClass("mr-1"), $("<em>").append(data.title));
+                                return $("<div>").append($("<b>").append(data.title).addClass("mr-1"));
                             },
                         },
                         validationRules: [{ type: "required" }],
@@ -280,11 +258,10 @@
                             searchEnabled: true,
                             showClearButton: true,
                             itemTemplate: function (data) {
-                                return $("<div>").append($("<b>").append(data.userName).addClass("mr-1"), $("<em>").append(data.accountId));
+                                return $("<div>").append($("<b>").append(data.userName).addClass("mr-1"));
                             },
                         },
                         cellTemplate: (c, o) => {
-                            console.log(o);
                             $("<img />")
                                 .attr('id', "popover-target-" + o.key)
                                 .attr("src", "data:image/png;base64," + o.text)

@@ -28,6 +28,7 @@
         const ACTION_CONTRACTORINFO = "/ContractorInfo";
         const ACTION_HANGMUC = "/WorkItems";
         const ACTION_DOCUMENTTYPE = "/DocumentType";
+        const ACTION_ACCOUNTINFO = "/AccountInfo";
         //var PROJECTID = isNullOrEmpty(localStorage.getItem("projectIdCurrent")) ? parseInt(localStorage.getItem("projectIdCurrent")) : 1;
 
         var WIDTH_CONTAINER = $("#container").width();
@@ -124,7 +125,14 @@
             },
             byKey: (key) => { return key; }
         });
-
+        let customStore_AccountInfo = (type) => new DevExpress.data.DataSource({
+            store: new DevExpress.data.CustomStore({
+                key: "id",
+                loadMode: "raw",
+                load: (values) => ajax_read(ACTION_ACCOUNTINFO, values),
+            }),
+          
+        });
 
 
         $(function () {
@@ -178,7 +186,7 @@
                             searchEnabled: true,
                             showClearButton: true,
                             itemTemplate: function (data) {
-                                return $("<div>").append($("<b>").append(data.code).addClass("mr-1"), $("<em>").append(data.title));
+                                return $("<div>").append($("<b>").append(data.title).addClass("mr-1"));
                             },
                         },
                         validationRules: [{ type: "required" }],
@@ -186,7 +194,7 @@
                     {
                         dataField: "contractorInfoId",
                         caption: "Nhà thầu",
-                        width: 300,
+                        width: 200,
                         lookup: {
                             dataSource: customStore_ContractorInfo,
                             valueExpr: "id",
@@ -231,49 +239,12 @@
                         },
                         validationRules: [{ type: "required" }],
                     },//loại tài liệu Id
-                    //{
-                    //    dataField: "projectId",
-                    //    caption: "Dự án",
-                    //    width: '10%',
-                    //    lookup: {
-                    //        dataSource: customStore_Projects,
-                    //        valueExpr: "id",
-                    //        displayExpr: "title",
-                    //    },
-                    //    editorType: "dxLookup",
-                    //    editorOptions: {
-                    //        dataSource: customStore_Projects,
-                    //        valueExpr: "id", displayExpr: "title",
-                    //        placeholder: "Vui lòng chọn...",
-                    //        searchEnabled: true, showClearButton: true,
-                    //        itemTemplate: function (data) {
-                    //            return $("<div>").append($("<b>").append(data.code).addClass("mr-1"), $("<em>").append(data.title));
-                    //        },
-                    //    },
-                    //    validationRules: [{ type: "required" }],
-                    //},
                     {
                         dataField: "title",
                         caption: "Tiêu đề",
                         dataType: "string",
                         allowFiltering: true,
                     },//title
-                    //{
-                    //    dataField: "requestDate",
-                    //    caption: "Ngày đệ trình",
-                    //    dataType: "date",
-                    //    width: 150,
-                    //    alignment: "center",
-                    //    format: "dd/MM/yyyy"
-                    //},
-                    //{
-                    //    dataField: "responseDate",
-                    //    caption: "Ngày duyệt",
-                    //    dataType: "date",
-                    //    width: 150,
-                    //    alignment: "center",
-                    //    format: "dd/MM/yyyy"
-                    //},
                     {
                         dataField: "expectRequestDate",
                         allowFiltering: false,
@@ -292,14 +263,55 @@
                         alignment: "center",
                         format: "dd/MM/yyyy"
                     },
-                    //{
-                    //    dataField: "isActive",
-                    //    allowFiltering: false,
-                    //    caption: "Kích hoạt",
-                    //    width: 100,
-                    //    alignment: "center",
-                    //    editorType: "dxSwitch",
-                    //},
+                    {
+                        dataField: "createBy",
+                        allowFiltering: false,
+                        caption: "Người tạo",
+                        width: 150,
+                        allowEditing: false,
+                        allowFiltering: true,
+                        alignment: "left",
+                        editorType: "dxLookup",
+                        lookup: {
+                            dataSource: customStore_AccountInfo(2).store(),
+                            valueExpr: "accountId",
+                            displayExpr: "avatarImg",
+                        },
+                        editorOptions: {
+                            dataSource: customStore_AccountInfo(2),
+                            valueExpr: "accountId",
+                            displayExpr: "userName",
+                            placeholder: "Vui lòng chọn...",
+                            searchExpr: ['accountName', 'userName'],
+                            searchEnabled: true,
+                            showClearButton: true,
+                            itemTemplate: function (data) {
+                                return $("<div>").append($("<b>").append(data.userName).addClass("mr-1"));
+                            },
+                        },
+                        cellTemplate: (c, o) => {
+                            $("<img />")
+                                .attr('id', "popover-target-" + o.key)
+                                .attr("src", "data:image/png;base64," + o.text)
+                                .addClass("img-circle elevation-2 img-size-30")
+                                .attr("onerror", "this.onerror=null;this.src='https://qlcv.tayho.com.vn/Content/user-avartar/avartar-default.jpg';")
+                                .appendTo(c);
+                            $("<div />")
+                                .attr('id', "popover-detail-" + o.key)
+                                .append("<div>( " + ' Đã tạo ' + moment(o.data.createDate).locale("vi").fromNow() + ")" + "</div>")
+                                .appendTo(c);
+                            $("#popover-detail-" + o.key).dxPopover({
+                                target: "#popover-target-" + o.key,
+                                showEvent: "mouseenter", hideEvent: "mouseleave",
+                                position: "bottom",
+                                animation: {
+                                    show: { type: "pop", from: { scale: 0 }, to: { scale: 1 } },
+                                    hide: { type: "fade", from: 1, to: 0 },
+                                }
+                            });
+                        },
+
+                    },
                     {
                         type: "buttons", caption: "Tác vụ",
                         allowFiltering: false,

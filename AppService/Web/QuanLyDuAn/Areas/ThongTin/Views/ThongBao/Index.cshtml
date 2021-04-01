@@ -25,7 +25,7 @@
         const ACTION_DOCUMENTLOG = "/NotifyAccount";
         const ACTION_FILEGET = "/FilesAttachment/getBy";
         const ACTION_GROUPS = "/Groups";
-        const ACTION_ACCOUNTINFO = "/ACCOUNTINFO";
+        const ACTION_ACCOUNTINFO = "/AccountInfo";
         const ACTION_PROJECT = "/Projects";
         const ACTION_HANGMUC = "/WorkItems";
         var PROJECTID = isNullOrEmpty(localStorage.getItem("projectIdCurrent")) ? parseInt(localStorage.getItem("projectIdCurrent")) : 0;
@@ -34,6 +34,7 @@
         //-----------------------------CMD ------------------------
         const ACTION_CMD = "/Notify";
         const ACTION_CMD_NOTIFYACCOUNT = "/NotifyAccount";
+        const ACTION_CMD_NOTIFYACCOUNTS = "/NotifyAccount/Accounts";
 
 
 
@@ -43,25 +44,12 @@
         //..........................Get data -------------------------------------------------------------
 
         let customStore = customStore_CMD_READ(ACTION_CMD, ACTION_READ);
-        let customStore_AccountInfo = new DevExpress.data.CustomStore({
-            key: "accountId",
-            load: (values) => {
-                var deferred = $.Deferred();
-                $.ajax({
-                    headers: header, dataType: "json",
-                    url: URL_API_PM_READ + ACTION_ACCOUNTINFO,
-                    success: function (data) {
-                        var list = data.result.items;
-                        deferred.resolve(list);
-                    },
-                    error: function (xhr, textStatus, errorThrown) {
-                        console.log(xhr.responseJSON);
-                        deferred.reject("Có lỗi xảy ra trong quá trình lấy danh sách 'Giai Đoạn'. Mở Console để xem chi tiết.");
-                    },
-                    timeout: 10000
-                });
-                return deferred.promise();
-            },
+        let customStore_AccountInfo = new DevExpress.data.DataSource({
+            store: new DevExpress.data.CustomStore({
+                key: "id",
+                loadMode: "raw",
+                load: (values) => ajax_read(ACTION_ACCOUNTINFO, values),
+            }),
         });
         let customStore_DocumetnType = new DevExpress.data.CustomStore({
             key: "id", loadMode: "raw",
@@ -120,7 +108,18 @@
             },
 
         });
-        let customStore_NotifyAccount = (FKID) => customStore_CMD_READ_FILTER_ID(ACTION_CMD_NOTIFYACCOUNT, ACTION_CMD_NOTIFYACCOUNT, FKID);
+        let customStore_NotifyAccount = (ID) => {
+            return new DevExpress.data.DataSource({
+                store: new DevExpress.data.CustomStore({
+                    key: "id",
+                    load: (values) => ajax_read(ACTION_READ_NOTIFYACCOUNT, values),
+                    insert: (values) => ajax_insert(URL_API_PM_CMD + ACTION_CMD_NOTIFYACCOUNTS, values),
+                    //update: (key, values) => ajax_update(URL_API_PM_CMD + ACTION_CMD_REQUESTREGIST, key, values),
+                    //remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION_CMD_REQUESTREGIST, key),
+                }),
+                filter: [["notifyId", "=", ID]],
+            });
+        };
         let customStore_Log = (item) => new DevExpress.data.CustomStore({
             key: "id",
             load: (values) => {
@@ -545,7 +544,7 @@
             closeOnOutsideClick: true,
             visible: true,
             contentTemplate: (c) => {
-                console.log(item);
+                console.log(item.id);
                 var scrollView = $("<div id='scrollView-detail'></div>");
                 var content = $("<div/>");
                 var d = $.Deferred();
@@ -553,11 +552,8 @@
                     elementAttr: {
                         id: "dxDataGrid_detail"
                     },
-                    dataSource: customStore_NotifyAccount('notifyId,' + item.id),
-                    remoteOperations: {
-                        paging: false,
-                        sorting: true,
-                    },
+                    dataSource: customStore_NotifyAccount(item.id).store(),
+                    remoteOperations: true,
                     repaintChangesOnly: true,
                     showBorders: true,
                     showColumnHeaders: true,
