@@ -243,6 +243,7 @@ namespace Services.Common.APIs.Cmd.EF
         {
             return _dbContext.LoadStoredProcedure(name);
         }
+       
         //public virtual Task<Object> ExecuteSQLDefaultAsync(string StoreProcedure, List<SqlParameter> Parameters)
         //{
         //    var cmd = _dbContext.Database.GetDbConnection().CreateCommand());
@@ -285,7 +286,22 @@ namespace Services.Common.APIs.Cmd.EF
                 throw;
             }
         }
+        public virtual int BaseCheckPermistion(List<SqlParameter> Parameters)
+        {
+            //var cmd = _dbContext.Database.GetDbConnection().CreateCommand();
+            //cmd.Connection.OpenAsync();
+            //cmd.CommandText = StoreProcedure;
+            //cmd.CommandType = CommandType.StoredProcedure;
+            //foreach (var parameter in Parameters)
+            //{
+            //    cmd.Parameters.Add(parameter);
+            //}
 
+            //return await cmd.ExecuteScalarAsync().ConfigureAwait(false);
+
+            ////return queryable.SingleOrDefaultAsync();
+            return 1;
+        }
         #endregion Helpers
     }
 }

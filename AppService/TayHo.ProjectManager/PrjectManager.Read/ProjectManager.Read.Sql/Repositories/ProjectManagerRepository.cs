@@ -35,7 +35,9 @@ namespace ProjectManager.Read.Sql.Repositories
         {
             List<int?> getActionId = _dbContext.Functions
                                                 .Where(c => c.TableName == nameEF
-                                                        && c.ActionId != null && (c.IsDelete == false || !c.IsDelete.HasValue)).Select(x => x.ActionId).ToList();
+                                                        && c.ActionId != null 
+                                                        && (c.IsDelete == false || !c.IsDelete.HasValue))
+                                                .Select(x => x.ActionId).ToList();
 
             bool checkPermit = _dbContext.GroupAccount
                                         .Join(_dbContext.GroupActionPermistion, x => x.GroupId, y => y.GroupId, (y, x) => new { y, x })
@@ -44,6 +46,7 @@ namespace ProjectManager.Read.Sql.Repositories
                                             && getActionId.Contains(c.x.ActionId)
                                             && (c.x.IsDelete == false || !c.x.IsDelete.HasValue)
                                             && (c.y.IsDelete == false || !c.y.IsDelete.HasValue));
+
             dynamic objEF = ConvertEF(nameEF);
             if (objEF != null)
             {

@@ -29,7 +29,7 @@ namespace ProjectManager.CMD.Api.Application.Commands
         public async Task<MethodResult<DeleteConversationCommandResponse>> Handle(DeleteConversationCommand request, CancellationToken cancellationToken)
         {
             var methodResult = new MethodResult<DeleteConversationCommandResponse>();
-            var existingConversations = await _conversationRepository.GetAllListAsync(x => request.Ids.Contains(x.Id) && x.IsDelete == false).ConfigureAwait(false);
+            var existingConversations = await _conversationRepository.GetAllListAsync(x => request.Ids.Contains(x.Id) && x.IsDelete == false ).ConfigureAwait(false);
             if (existingConversations == null || !existingConversations.Any())
             {
                 methodResult.AddAPIErrorMessage(nameof(ErrorCodeDelete.DErr001), new[]
