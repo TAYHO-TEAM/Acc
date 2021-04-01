@@ -284,6 +284,7 @@
                 }
                 else {
                     DevExpress.ui.notify("Vui lòng chọn file đính kèm", "error", 3000);
+                    loadingPanel.hide();
                     e.preventDefault();
                     return false;
                 };

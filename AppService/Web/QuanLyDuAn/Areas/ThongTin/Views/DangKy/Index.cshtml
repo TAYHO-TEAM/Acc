@@ -1135,7 +1135,7 @@
                         }, //url
                     ],
                     editing: {
-                        mode: "batch",
+                        mode: "row",
                         allowAdding: false,
                         allowDeleting: (e) => { return (e.row.data.createBy === UserCurrentInfo.accountId && isUpload) ? true : false; },
                         allowUpdating: false,
@@ -1154,7 +1154,7 @@
                     },
 
                 }).dxDataGrid("instance");
-                scrollView.append(content, content_Upload);
+                scrollView.append(content_Upload,content);
                 scrollView.dxScrollView({
                     width: '100%',
                     height: '100%'
@@ -1164,7 +1164,7 @@
                     if (isUpload) {
                         fileUploader();
                         $("#button").dxButton({
-                            text: "Lưu ảnh",
+                            text: "Lưu tập tin",
                             type: "success",
                             onClick: function (e) {
 
@@ -1222,7 +1222,8 @@
                                         },
                                         error: function (xhr, textStatus, errorThrown) {
                                             loadingPanel.hide();
-                                            DevExpress.ui.notify("Có lỗi xảy ra: " + errorThrown, "error", 3000);
+                                            DevExpress.ui.notify("Vui lòng chọn File!" , "error", 3000);
+                     
                                         }
                                     });
                                 }
@@ -1259,128 +1260,6 @@
         function loadFileAttachment(table, item, isUpload, parentItem) {
             loadUpload(table, item, isUpload, parentItem);
         }
-        //function uploadProcess(item) {
-        //    console.log(item);
-        //    //$(this).prop("disabled", true);
-        //    //isUpload++;
-        //    var fileWrappers = fileUploader()._files;
-        //    var resValid = true
-        //    for (var i = 0; i < fileWrappers.length; i++) {
-        //        if (fileWrappers[i].isValid() === false) {
-        //            resValid = false;
-        //        }
-        //    }
-        //    if (!resValid) {
-
-        //        DevExpress.ui.notify("Vui lòng kiểm tra lại!", "error", 3000);
-        //    }
-        //    else {
-        //        loadingPanel.show();
-        //        var fd = $("#form")[0];
-        //        var formData = new FormData(fd);
-        //        formData.append("OwnerById", item.id);
-        //        if ('code' in item) {
-        //            formData.append("Code", item.code);
-        //        }
-        //        else {
-        //            formData.append("Code", code);
-        //        }
-        //        formData.append('token', UserCurrentInfo.accessToken);
-        //        for (var pair of formData.entries()) {
-        //            console.log(pair[0] + ', ' + pair[1]);
-        //        }
-        //        var files = $("#file-uploader").dxFileUploader("instance").option("value");
-        //        if (files.length > 0) {
-        //            $.each(files, function (key, value) {
-        //                formData.append(files[key].name, files[key]);
-        //            });
-        //        }
-        //        //formData.append("Code", item.code);
-        //        formData.append("OwnerByTable", table);
-        //        $.ajax({
-        //            type: "POST",
-        //            enctype: 'multipart/form-data',
-        //            url: "/ThongTin/DangKy/CreateFile",
-        //            data: formData,
-        //            processData: false,
-        //            contentType: false,
-        //            cache: false,
-        //            timeout: 600000,
-        //            success: function (rs) {
-        //                loadingPanel.hide();
-        //                DevExpress.ui.notify(rs.result, rs.status, 3000);
-        //                //if (rs.status == "success") {
-        //                //    $("#popup-register").dxPopup('instance').hide();
-        //                //}
-        //            },
-        //            error: function (xhr, textStatus, errorThrown) {
-        //                loadingPanel.hide();
-        //                DevExpress.ui.notify("Có lỗi xảy ra: " + errorThrown, "error", 3000);
-        //            }
-        //        });
-        //    }
-        //}
-        //$(document).on('click', '#file-uploader', function (e) {
-        //    //console.log(e);
-        //    ////$(this).prop("disabled", true);
-        //    ////isUpload++;
-        //    //var fileWrappers = fileUploader()._files;
-        //    //var resValid = true
-        //    //for (var i = 0; i < fileWrappers.length; i++) {
-        //    //    if (fileWrappers[i].isValid() === false) {
-        //    //        resValid = false;
-        //    //    }
-        //    //}
-        //    //if (!resValid) {
-
-        //    //    DevExpress.ui.notify("Vui lòng kiểm tra lại!", "error", 3000);
-        //    //}
-        //    //else {
-        //    //    loadingPanel.show();
-        //    //    var fd = $("#form")[0];
-        //    //    var formData = new FormData(fd);
-        //    //    formData.append("OwnerById", item.id);
-        //    //    if ('code' in item) {
-        //    //        formData.append("Code", item.code);
-        //    //    }
-        //    //    else {
-        //    //        formData.append("Code", code);
-        //    //    }
-        //    //    formData.append('token', UserCurrentInfo.accessToken);
-        //    //    for (var pair of formData.entries()) {
-        //    //        console.log(pair[0] + ', ' + pair[1]);
-        //    //    }
-        //    //    var files = fileUploader().dxFileUploader("instance").option("value");
-        //    //    if (files.length > 0) {
-        //    //        $.each(files, function (key, value) {
-        //    //            formData.append(files[key].name, files[key]);
-        //    //        });
-        //    //    }
-        //    //    //formData.append("Code", item.code);
-        //    //    formData.append("OwnerByTable", table);
-        //    //    $.ajax({
-        //    //        type: "POST",
-        //    //        enctype: 'multipart/form-data',
-        //    //        url: "/ThongTin/DangKy/CreateFile",
-        //    //        data: formData,
-        //    //        processData: false,
-        //    //        contentType: false,
-        //    //        cache: false,
-        //    //        timeout: 600000,
-        //    //        success: function (rs) {
-        //    //            loadingPanel.hide();
-        //    //            DevExpress.ui.notify(rs.result, rs.status, 3000);
-        //    //            //if (rs.status == "success") {
-        //    //            //    $("#popup-register").dxPopup('instance').hide();
-        //    //            //}
-        //    //        },
-        //    //        error: function (xhr, textStatus, errorThrown) {
-        //    //            loadingPanel.hide();
-        //    //            DevExpress.ui.notify("Có lỗi xảy ra: " + errorThrown, "error", 3000);
-        //    //        }
-        //    //    });
-        //    //}
-        //});
         function callPopup(title, url, width, container) {
             var isFullscreen = false;
             if (width == "100%") isFullscreen = true;

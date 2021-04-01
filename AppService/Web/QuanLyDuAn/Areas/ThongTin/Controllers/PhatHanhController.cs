@@ -57,7 +57,6 @@ namespace QuanLyDuAn.Areas.ThongTin.Controllers
         [HttpPost, ValidateInput(false)]
         public async Task<JsonResult> Create(DocumentReleasedOBJ requestOBJ)
         {
-
             MultipartFormDataContent mFormData = new MultipartFormDataContent();
             HttpFileCollectionBase listFile = HttpContext.Request.Files;
             string token = requestOBJ.token;
@@ -108,7 +107,7 @@ namespace QuanLyDuAn.Areas.ThongTin.Controllers
                     }    
                 }
             }
-            return Json(new { status = "success", result = "Đã lưu thông tin yêu cầu thành công" , id= id});
+            return Json(new { status = "success", result = "Tập tin đã được tải lên thành công. Vui lòng đóng cửa sổ này để quay lại giao diện đệ trình" , id= id});
         }
       
 
