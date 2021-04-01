@@ -90,12 +90,13 @@ namespace QuanLyDuAn.Areas.ThongTin.Controllers
                 }
 
             }
+            int id = 0;
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(ConfigurationSettings.AppSettings["pmCMD"].ToString()); //http://localhost:50999/,https://api-pm-cmd.tayho.com.vn/
                 client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-                int id = 0;
+                
                 using (HttpResponseMessage response =  client.PostAsync("api/cmd/v1/DocumentReleased", mFormData).Result)
                 {
                     if (response.StatusCode != HttpStatusCode.OK)
@@ -106,11 +107,11 @@ namespace QuanLyDuAn.Areas.ThongTin.Controllers
                     else
                     {
                         var json = new JavaScriptSerializer().Deserialize<dynamic>(response.Content.ReadAsStringAsync().Result.ToString());
-                        id = Convert.ToInt32(json.result.id.ToString());
+                        id = Convert.ToInt32(json["result"]["id"].ToString());
                     }    
                 }
             }
-            return Json(new { status = "success", result = "Đã lưu thông tin yêu cầu thành công" });
+            return Json(new { status = "success", result = "Đã lưu thông tin yêu cầu thành công" , id= id});
         }
       
 

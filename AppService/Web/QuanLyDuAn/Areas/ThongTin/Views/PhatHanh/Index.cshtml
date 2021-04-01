@@ -626,7 +626,7 @@
                         $("#action-log").dxSpeedDialAction({
                             index: 4, icon: "fas fa-user", label: "Thêm người nhận",
                             onClick: () => {
-                                loadAccount(selectedRowData);
+                                loadAccount(selectedRowKey);
                             }
                         }).dxSpeedDialAction("instance");
                     }
@@ -778,7 +778,7 @@
             //    $("#dxDataGrid_detail").dxDataGrid('instance').refresh();
             //},
         }).addClass("popup-priority-2");
-        let loadAccount = (item) => $("#popup-main-upload").dxPopup({
+        let loadAccount = (id) => $("#popup-main-upload").dxPopup({
             width: "50%",
             height: "50%",
             fullScreen: false,
@@ -789,7 +789,7 @@
             showCloseButton: true, closeOnOutsideClick: true,
             visible: true,
             contentTemplate: (c) => {
-                var dataSource = customStore_DocumentAcc(item.id);
+                var dataSource = customStore_DocumentAcc(id);
                 var scrollView = $("<div id='scrollView-detail'></div>");
                 var content = $("<div/>");
                 var d = $.Deferred();
