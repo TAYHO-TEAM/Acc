@@ -74,19 +74,31 @@ namespace ProjectManager.CMD.Api.Application.Commands
                 var documentRealesed = await _documentReleasedRepository.SingleOrDefaultAsync(x => x.Id == request.DocumentReleasedId).ConfigureAwait(false);
                 if (documentRealesed.DocumentTypeId == 8)
                 {
-                    _sendMailService.SendMailAppoinment((documentRealesed.Calendar.HasValue ? (DateTime)documentRealesed.Calendar : DateTime.Now), (documentRealesed.Calendar.HasValue ? (DateTime)documentRealesed.Calendar : DateTime.Now), documentRealesed.Location, documentRealesed.Title, documentRealesed.Description, documentRealesed.Title, "", toMails, null, null, false);
+                    try
+                    {
+                        _sendMailService.SendMailAppoinment((documentRealesed.Calendar.HasValue ? (DateTime)documentRealesed.Calendar : DateTime.Now), (documentRealesed.Calendar.HasValue ? (DateTime)documentRealesed.Calendar : DateTime.Now), documentRealesed.Location, documentRealesed.Title, documentRealesed.Description, documentRealesed.Title, "", toMails, null, null, false);
+                    }
+                    catch
+                    {
+                        
+                    }
+                    
                 }
                 else if (documentRealesed.DocumentTypeId == 7)
                 {
                     string body = await _documentReleasedRepository.GetBodyContentWithTempId((int)request.DocumentReleasedId, 2);
                     body = body.Replace("{Dear}","Kính gửi Anh(Chị)!").Replace("{TitleContent}", "Phát hành tài liệu.");
-                   
-
-
-                    _sendMailService.SendMail(documentRealesed.Title, body,"","", toMails, null, null, true);
-                    await _documentReleasedLogRepository.AddRangeAsync(newDocumentReleasedLogs).ConfigureAwait(false);
-                    await _documentReleasedLogRepository.UnitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+                    try
+                    {
+                        _sendMailService.SendMail(documentRealesed.Title, body, "", "", toMails, null, null, true);
+                    }
+                    catch
+                    {
+                        
+                    }
                 }
+                await _documentReleasedLogRepository.AddRangeAsync(newDocumentReleasedLogs).ConfigureAwait(false);
+                await _documentReleasedLogRepository.UnitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
             }
 
             var DocumentReleasedAccountResponseDTOs = _mapper.Map<List<DocumentReleasedAccountCommandResponseDTO>>(newDocumentReleasedAccounts);

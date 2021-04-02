@@ -286,21 +286,14 @@ namespace Services.Common.APIs.Cmd.EF
                 throw;
             }
         }
-        public virtual int BaseCheckPermistion(List<SqlParameter> Parameters)
+        public virtual async Task<int> BaseCheckPermistion(int RecordId = 0 , int AccountId =0 , int ActionId = 0, string TableName ="", int @FunctionCUD = 0)
         {
-            //var cmd = _dbContext.Database.GetDbConnection().CreateCommand();
-            //cmd.Connection.OpenAsync();
-            //cmd.CommandText = StoreProcedure;
-            //cmd.CommandType = CommandType.StoredProcedure;
-            //foreach (var parameter in Parameters)
-            //{
-            //    cmd.Parameters.Add(parameter);
-            //}
-
-            //return await cmd.ExecuteScalarAsync().ConfigureAwait(false);
-
-            ////return queryable.SingleOrDefaultAsync();
-            return 1;
+            (string, object)[] parameter = new (string, object)[] { ("@RecordId", RecordId), ("@AccountId", AccountId), ("@ActionsId", ActionId), ("@TableName", TableName), ("@FunctionCUD", @FunctionCUD) };
+            SprocRepository _sprocRepository = new SprocRepository(_dbContext);
+            IList<ResultCheck>  result = await _sprocRepository.GetStoredProcedure("sp_DataBase_Check_CUD")
+                        .WithSqlParams(parameter)
+                        .ExecuteStoredProcedureAsync<ResultCheck>();
+            return result.Count >0? (result[0].resultCheck != null ? result[0].resultCheck: 0):0;
         }
         #endregion Helpers
     }
