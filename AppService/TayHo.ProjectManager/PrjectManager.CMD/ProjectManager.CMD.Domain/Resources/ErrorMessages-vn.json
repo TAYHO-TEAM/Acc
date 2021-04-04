@@ -22,11 +22,12 @@
   "IErrN3": "Dự liệu không tồn tại dữ liệu cha!",
   "IErrN4": "Dự liệu không thêm được do thiếu dữ liệu liên kết!",
   "IErrN5": "Không có file đính kèm!",
- 
+  "IErrN101": "Không có quyền ghi dữ liệu!",
+
   "UErr01": "Dữ liệu không tông tại!",
   "UErr02": "Không được phép cập nhật dòng dữ liệu này!",
   "UErr03": "Không tồn tại liên kết phụ!",
- 
+
   "DErr001": "Dữ liệu không tông tại!",
   "DErr002": "Không được phép xoá dòng dữ liệu này!"
 }

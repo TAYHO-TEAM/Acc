@@ -18,7 +18,7 @@ namespace ProjectManager.CMD.Api.Application.Commands
 {
     public class DeleteConversationCommandHandler : ConversationCommandHandler, IRequestHandler<DeleteConversationCommand, MethodResult<DeleteConversationCommandResponse>>
     {
-        
+        private int _function = 4;
         public DeleteConversationCommandHandler(IMapper mapper, IConversationRepository ConversationRepository, IHttpContextAccessor httpContextAccessor) : base(mapper, httpContextAccessor, ConversationRepository)
         {
         }
@@ -49,7 +49,7 @@ namespace ProjectManager.CMD.Api.Application.Commands
             List<Conversation> acceptDeleteConversations = new List<Conversation>();
             foreach (var existingConversation in existingConversations)
             {
-                int checkDelete = await _conversationRepository.BaseCheckPermistion(existingConversation.Id,_user, _actionId,_tableName,4);
+                int checkDelete = await _conversationRepository.BaseCheckPermistion(existingConversation.Id,_user, _actionId,_tableName, _function);
                 if(checkDelete == 0)
                 {
 

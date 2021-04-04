@@ -6,11 +6,15 @@ using MediatR;
 using Services.Common.DomainObjects;
 using System.Threading;
 using System.Threading.Tasks;
+using ProjectManager.CMD.Domain;
+using Services.Common.Utilities;
+using Services.Common.DomainObjects.Exceptions;
 
 namespace  ProjectManager.CMD.Api.Application.Commands
 {
     public class CreateContractorInfoCommandHandler : ContractorInfoCommandHandler, IRequestHandler<CreateContractorInfoCommand, MethodResult<CreateContractorInfoCommandResponse>>
     {
+        private int _function = 2;
         public CreateContractorInfoCommandHandler(IMapper mapper, IContractorInfoRepository ContractorInfoRepository,IHttpContextAccessor httpContextAccessor) : base(mapper, ContractorInfoRepository,httpContextAccessor)
         {
         }
@@ -24,6 +28,14 @@ namespace  ProjectManager.CMD.Api.Application.Commands
         public async Task<MethodResult<CreateContractorInfoCommandResponse>> Handle(CreateContractorInfoCommand request, CancellationToken cancellationToken)
         {
             var methodResult = new MethodResult<CreateContractorInfoCommandResponse>();
+            if ((await _ContractorInfoRepository.BaseCheckPermistion(0, _user, _actionId, _tableName, _function)) < 1)
+            {
+                methodResult.AddAPIErrorMessage(nameof(ErrorCodeInsert.IErrN101), new[]
+               {
+                    ErrorHelpers.GenerateErrorResult(nameof(request.Id),request.Id)
+                });
+            }
+            if (!methodResult.IsOk) throw new CommandHandlerException(methodResult.ErrorMessages);
             var newContractorInfo = new ContractorInfo(request.Code,
                                                         request.TaxCode,
                                                         request.AvatarImg,

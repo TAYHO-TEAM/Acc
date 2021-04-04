@@ -1,6 +1,7 @@
 ﻿using ProjectManager.CMD.Domain.IRepositories;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
+using ProjectManager.Common;
 
 namespace ProjectManager.CMD.Api.Application.Commands
 {
@@ -9,6 +10,8 @@ namespace ProjectManager.CMD.Api.Application.Commands
         protected readonly IMapper _mapper;
         protected readonly IHttpContextAccessor _httpContextAccessor;
         protected readonly IContractorInfoRepository _ContractorInfoRepository;
+        protected const int _actionId = 0;
+        protected const string _tableName = QuanLyDuAnConstants.ContractorInfo_TABLENAME;
 
         public ContractorInfoCommandHandler(IMapper mapper, IContractorInfoRepository ContractorInfoRepository,  IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
         {
