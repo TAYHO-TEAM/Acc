@@ -4,11 +4,11 @@
 <script>
 
     var formData = {
-        "OwnerTable": "",
-        "TopicId": @Model,
-        "ParentId": "",
-        "Content": "",
-        "NoAttachment": "",
+        "ownerTable": "",
+        "topicId": @Model,
+        "parentId": 0,
+        "content": "",
+        "noAttachment": "",
         "isActive": true,
         "isVisible": true,
         "status": 0
@@ -21,17 +21,18 @@
             labelLocation: "top",
             items: [
                 {
-                    dataField: "Content",
-                    colSpan: 2,
+                    dataField: "content",
+                    colSpan: 4,
                     label: { text: "Nội dung" },
                     validationRules: [{ type: "required" }],
+                    editorType: "dxTextArea",
                     editorOptions: {
                         stylingMode: "filled",
                         placeholder: "Vui lòng nhập...",
                     }
                 },
                 {
-                    colSpan: 2,
+                    colSpan: 4,
                     template: '<span class="dx-field-item-label-text font-bold">Các tập tin đính kèm</span><div class="file-uploader"></div>',
                 },
                 {
@@ -77,7 +78,7 @@
                 }
 
             });
-            fdata.append('planProjectId', 3);
+
             fdata.append('token', UserCurrentInfo.accessToken);
             //for (var pair of fdata.entries()) {
             //    console.log(pair[0] + ', ' + pair[1]);

@@ -677,7 +677,7 @@
                     e.component.refresh();
                     loadData_detail(selectedRowData.id, pemistionKey);
                     //loadAttach(selectedRowData);
-                    loadComversation(selectedRowData.paId);
+                    loadConversation(selectedRowData.paId);
                     loadSchedule(selectedRowData.id);
                     if (selectedRowData != null && selectedRowKey != null) {
                         var data = e.component.getRowIndexByKey(selectedRowData.paId);
@@ -718,7 +718,6 @@
                     }
                 },
                 onCellClick: function (e) {
-                    console.log(e.data);
                     if (e.column.dataField === "noAttachment") {
                         loadUpload("PlanMaster", e.row.data, false);
                     }
@@ -916,7 +915,7 @@
                 },
             });
         };
-        let loadComversation = (id) => {
+        let loadConversation = (id) => {
             $("#container_conversation").dxDataGrid({
                 title: "Hội thoại",
                 height: (heightScreen / 16) * 5,
@@ -977,23 +976,30 @@
                 editing: {
                     allowAdding: false,
                     allowUpdating: false,
-                    allowDeleting: false,
-                    mode: "cell",
+                    allowDeleting: true,
+                    mode: "row",
                     useIcons: false,
                     confirmDelete: true,
                 },
                 onToolbarPreparing: function (e) {
+                    var container = e.component;
                     e.toolbarOptions.items.unshift(
                         {
                             location: "after",
                             widget: "dxButton",
                             options: {
-                                //elementAttr: {
-                                //    id: "insert_button"
-                                //},
+
                                 text: "Tạo phản hồi",
                                 visible: PermitInAction.insert,
-                                onClick: () => e.component.addRow()
+                                onClick: () => {
+                                    console.log(e);
+                                    CALLPOPUP(
+                                        "Tạo văn bản theo mẫu:",
+                                        "/ThongTin/QLCongViec/_PhanHoi?id=" + id,
+                                        ($(window).width() > 767 ? "50%" : "80%"),
+                                        container
+                                    );
+                                }
                             }
                         },
                     )
@@ -1679,6 +1685,7 @@
                 return c;
             }
         });
+    
     </script>
 }
 
