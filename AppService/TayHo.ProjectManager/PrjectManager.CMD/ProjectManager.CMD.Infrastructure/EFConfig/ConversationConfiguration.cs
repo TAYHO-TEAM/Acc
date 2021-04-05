@@ -15,7 +15,7 @@ namespace ProjectManager.CMD.Infrastructure.EFConfig
             builder.Property(x => x.TopicId).HasField("_topicId").UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.ParentId).HasField("_parentId").UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.Content).HasField("_content").UsePropertyAccessMode(PropertyAccessMode.Field);
-
+            builder.Property(x => x.NoAttachment).HasField("_noAttachment").UsePropertyAccessMode(PropertyAccessMode.Field);
         }
     }
 }

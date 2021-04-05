@@ -916,6 +916,7 @@
             });
         };
         let loadConversation = (id) => {
+
             $("#container_conversation").dxDataGrid({
                 title: "Hội thoại",
                 height: (heightScreen / 16) * 5,
@@ -933,7 +934,7 @@
                 rowAlternationEnabled: false,
                 columns: [
                     {
-                        colSpan: 8,
+                        colSpan: 6,
                         dataField: "content",
                         caption: "Phản hồi",
                         dataType: "string",
@@ -941,6 +942,18 @@
                         editorOptions: {
                             placeHolder: "Nhập nội dung phản hồi",
                         }
+                    },
+                    {
+                        colSpan: 2,
+                        dataField: "noAttachment",
+                        caption: "File đính kèm",
+                        dataType: "number",
+                        alignment: "left",
+                        allowFiltering: false,
+                        cellTemplate: (container, options) => {
+                            console.log(options);
+                            container.append($('<a>').attr("href", "javaScript:void(0)").text(options.displayValue !== null ? options.displayValue + " file(s)" : "chưa có file"));
+                        },
                     },
                     {
                         colSpan: 4,
@@ -1028,6 +1041,12 @@
                     //    ($(window).width() > 767 ? "50%" : "80%"),
                     //    container
                     //);
+                },
+                onCellClick: function (e) {
+
+                    if (e.column.dataField === "noAttachment") {
+                        loadUpload("Conversation", e.row.data, false);
+                    }
                 },
             });
         };
