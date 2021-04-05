@@ -666,6 +666,10 @@ const unit = [
     {
         ID: 'm2',
         Name: 'm2'
+    },
+    {
+        ID: 'Khác',
+        Name: 'Khác'
     }
 ];
 const important = [

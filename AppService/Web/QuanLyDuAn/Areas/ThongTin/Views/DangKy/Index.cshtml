@@ -175,16 +175,6 @@
                 wordWrapEnabled: true,
                 rowAlternationEnabled: false,
                 columns: [
-                    //{
-                    //    dataField: "code",
-                    //    caption: "Mã",
-                    //    dataType: "string",
-                    //    visiable :false,
-                    //    editorOptions: {
-                    //        readOnly: true,
-                    //        placeholder: "auto gen",
-                    //    }
-                    //},//mã
                     {
                         dataField: "barCode",
                         caption: "Mã",
@@ -660,20 +650,19 @@
                                     colSpan: 12,
                                     dataField: "createBy",
                                     label: { text: "Người đệ trình" },
-                                    //lookup: {
-                                    //    dataSource: customStore_AccountInfo,
-                                    //    valueExpr: "accountId",
-                                    //    displayExpr: "accountName",
-                                    //},
-                                    editorType: "dxLookup",
+                                    lookup: {
+                                        dataSource: customStore_AccountInfo(2).store(),
+                                        valueExpr: "accountId",
+                                        displayExpr: "userName",
+                                    },
+                                    editorType: "dxSelectBox",
                                     alignment: "left",
                                     editorOptions: {
                                         stylingMode: "filled",
-                                        dataSource: customStore_AccountInfo,
+                                        dataSource: customStore_AccountInfo(2),
                                         valueExpr: "accountId",
-                                        displayExpr: "accountName",
-                                        searchEnabled: true,
-                                        showClearButton: true,
+                                        displayExpr: "userName",
+                                        readOnly: true,
                                         itemTemplate: function (data) {
                                             return $("<div>").append($("<b>").append(data.accountName).addClass("mr-1"));
                                         },
