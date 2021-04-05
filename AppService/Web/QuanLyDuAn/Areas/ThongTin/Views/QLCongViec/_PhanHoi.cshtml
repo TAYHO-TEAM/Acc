@@ -1,20 +1,14 @@
-﻿
+﻿@model int
 <form id="form-regist" action="#" method="POST" enctype="application/json">
 </form>
 <script>
 
     var formData = {
-        "planMasterId": 0,
-        "planJobId": 0,
-        "title": "",
-        "note": "",
-        "remind": "",
-        "repead": 0,
-        "repeadType": "",
-        "startDate": "",
-        "endDate": "",
-        "modifyTimes": 0,
-        "id": 0,
+        "OwnerTable": "",
+        "TopicId": @Model,
+        "ParentId": "",
+        "Content": "",
+        "NoAttachment": "",
         "isActive": true,
         "isVisible": true,
         "status": 0
@@ -26,109 +20,16 @@
             colCount: 4,
             labelLocation: "top",
             items: [
-
                 {
-                    dataField: "code",
-                    label: { text: "Mã CV" },
-                    editorOptions: {
-                        stylingMode: "filled",
-                        placeholder: "Vui lòng nhập...",
-                    }
-                },
-                {
-                    dataField: "title",
+                    dataField: "Content",
                     colSpan: 2,
-                    label: { text: "Tên công việc" },
+                    label: { text: "Nội dung" },
                     validationRules: [{ type: "required" }],
                     editorOptions: {
                         stylingMode: "filled",
                         placeholder: "Vui lòng nhập...",
                     }
                 },
-                //{
-                //    dataField: "priority",
-                //    label: { text: "Độ ưu tiên" },
-                //    editorType: "dxNumberBox",
-                //},
-                {
-                    dataField: "importantLevel",
-                    label: { text: "Mức độ quan trọng" },
-                    dataType: "number",
-                    lookup: {
-                        dataSource: important,
-                        valueExpr: "ID",
-                        displayExpr: "Name",
-                    },
-                    editorType: "dxSelectBox",
-                    editorOptions: {
-                        stylingMode: "filled",
-                        placeholder: "Vui lòng chọn...",
-                        value: "importantLevel",
-                        dataSource: important,
-                        valueExpr: "ID",
-                        displayExpr: "Name",
-                    },
-                },
-                {
-                    colSpan: 4,
-                    dataField: "description",
-                    label: { text: "Mô tả CV" },
-                    editorType: "dxTextArea",
-                    editorOptions: {
-                        stylingMode: "filled",
-                        placeholder: "Vui lòng nhập...",
-                    }
-                },
-                //{
-                //    colSpan: 4,
-                //    dataField: "note",
-                //    label: { text: "Lưu ý" },
-                //    editorType: "dxTextArea",
-                //},
-                //{
-                //    dataField: "startDate",
-                //    label: { text: "Ngày bắt đầu" },
-                //    editorType: "dxDateBox",
-                //    editorOptions: {
-                //        pickerType: "rollers",
-                //        type: "datetime",
-                //    },
-                //},
-                {
-                    colSpan: 2,
-                    dataField: "endDate",
-                    label: { text: "Ngày hoàn thành" },
-                    //dataType: "datetime",
-                    editorType: "dxDateBox",
-                    editorOptions: {
-                        showClearButton: true,
-                        stylingMode: "filled",
-                        placeholder: "Vui lòng nhập...",
-                        pickerType: "rollers",
-                        type: "datetime",
-                        displayFormat: "dd/MM/yyyy",
-
-                    },
-                },
-                //{
-                //    dataField: "amount",
-                //    label: { text: "Khối lượng" },
-                //},
-                //{
-                //    dataField: "unit",
-                //    label: { text: "Đơn vị" },
-                //    lookup: {
-                //        dataSource: unit,
-                //        valueExpr: "ID",
-                //        displayExpr: "Name",
-                //    },
-                //    editorType: "dxSelectBox",
-                //    editorOptions: {
-                //        value: "unit",
-                //        dataSource: unit,
-                //        valueExpr: "ID", displayExpr: "Name",
-                //    },
-                //},
                 {
                     colSpan: 2,
                     template: '<span class="dx-field-item-label-text font-bold">Các tập tin đính kèm</span><div class="file-uploader"></div>',
@@ -197,7 +98,7 @@
             $.ajax({
                 type: "POST",
                 enctype: 'multipart/form-data',
-                url: "/ThongTin/QLCongViec/Create",
+                url: "/ThongTin/QLCongViec/_PhanHoiCreate",
                 data: fdata,
                 processData: false,
                 contentType: false,
@@ -212,7 +113,8 @@
                 },
                 error: function (xhr, textStatus, errorThrown) {
                     loadingPanel.hide();
-                    DevExpress.ui.notify("Có lỗi xảy ra: " + errorThrown, "error", 3000);
+                    console.log(errorThrown);
+                    DevExpress.ui.notify("Có lỗi xảy ra vui lòng liên hệ Hệ Thống ", "error", 3000);
                 }
             });
             e.preventDefault();

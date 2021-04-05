@@ -48,36 +48,6 @@
                     label: { text: "Kế hoạch CV" },
                     validationRules: [{ type: "required" }],
                 },
-                //{
-                //    dataField: "reportPeriodicalType",
-                //    label: { text: "Báo cáo định kỳ" },
-                //    //lookup: {
-                //    //    dataSource: reportPeriodicalType,
-                //    //    valueExpr: "Name",
-                //    //    displayExpr: "Name",
-                //    //},
-                //    editorType: "dxSelectBox",
-                //    editorOptions: {
-                //        value: "reportPeriodicalType",
-                //        dataSource: reportPeriodicalType,
-                //        //searchEnabled: true,
-                //        //showClearButton: true,
-                //        valueExpr: "Name",
-                //        displayExpr: "Name",
-                //        elementAttr: {
-                //            id: "reportPeriodicalTypeSelect",
-                //        },
-                //    },
-                //    //validationRules: [{
-                //    //    type: "async",
-                //    //    message: "Đã có thông tin tần suất",
-                //    //    validationCallback: function (params) {
-                //    //        var d = $.Deferred();
-                //    //        d.resolve(!(typeof $('#reportFrequencySelect').dxSelectBox('instance').option('value') === 'number'));
-                //    //        return  d.promise();
-                //    //    }
-                //    //}]
-                //},
                 {
                     dataField: "reportFrequency",
                     label: { text: "Số lần yêu cầu báo cáo" },
@@ -88,37 +58,7 @@
                         },
                     },
                     validationRules: [{ type: "required" }],
-                    //validationRules: [{
-                    //    type: "async",
-                    //    message: "Đã có thông tin báo cáo định kỳ",
-                    //    validationCallback: function (params) {
-                    //        var d = $.Deferred();
-                    //        d.resolve(!(typeof $('#reportPeriodicalTypeSelect').dxSelectBox('instance').option('value') === 'number'));
-                    //        return d.promise();
-                    //    }
-                    //}]
                 },
-                //{
-                //    dataField: "priority",
-                //    label: { text: "Độ ưu tiên" },
-                //    editorType: "dxNumberBox",
-                //},
-                //{
-                //    dataField: "importantLevel",
-                //    caption: "Mức độ quan trọng",
-                //    dataType: "number",
-                //    lookup: {
-                //        dataSource: important,
-                //        valueExpr: "ID",
-                //        displayExpr: "Name",
-                //    },
-                //    editorType: "dxSelectBox",
-                //    editorOptions: {
-                //        value: "importantLevel",
-                //        dataSource: important,
-                //        valueExpr: "ID", displayExpr: "Name",
-                //    },
-                //},
                 {
                     colSpan: 4,
                     dataField: "description",
