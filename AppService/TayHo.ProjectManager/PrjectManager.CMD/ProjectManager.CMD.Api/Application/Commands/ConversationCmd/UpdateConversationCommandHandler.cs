@@ -51,7 +51,7 @@ namespace ProjectManager.CMD.Api.Application.Commands
             existingConversation.SetTopicId(request.TopicId);
             existingConversation.SetParentId(request.ParentId);
             existingConversation.SetContent(request.Content);
-
+            existingConversation.SetNoAttachment(request.NoAttachment);
 
             existingConversation.SetUpdate(_user, null);
             _conversationRepository.Update(existingConversation);

@@ -26,6 +26,10 @@ namespace QuanLyDuAn.Areas.ThongTin.Controllers
         {
             return PartialView();
         }
+        public ActionResult _PhanHoiCreate()
+        {
+            return PartialView();
+        }
         [HttpPost, ValidateInput(false)]
         public async Task<JsonResult> Create(PlanMaster requestOBJ)
         {

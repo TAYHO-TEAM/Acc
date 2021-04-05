@@ -78,6 +78,7 @@
         //--------------------CMD------------------------------
         const ACTION_CMD = "/PlanMaster";
         const ACTION_CMD_DETAIL = "/PlanJob";
+        const ACTION_CMD_DETAILACC = "/PlanJobAccount";
         const ACTION_CMD_SCHEDULE = "/PlanSchedule";
         const ACTION_CMD_PLAN_ACCOUNT = "/PlanAccount";
         const ACTION_CMD_CONVERSATION = "/Conversation";
@@ -112,12 +113,12 @@
         let customStore_DETAIL = (id) => new DevExpress.data.DataSource({
             store: new DevExpress.data.CustomStore({
                 key: "id",
-                load: (values) => ajax_read(ACTION_CMD_DETAIL, values),
+                load: (values) => ajax_read(ACTION_CMD_DETAILACC, values),
                 insert: (values) => ajax_insert(URL_API_PM_CMD + ACTION_CMD_DETAIL, values),
                 update: (key, values) => ajax_update(URL_API_PM_CMD + ACTION_CMD_DETAIL, key, values),
                 remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION_CMD_DETAIL, key),
             }),
-            filter: ["planMasterId", "=", id],
+            filter: [["planMasterId", "=", id], "and", ["createby", "=", UserCurrentInfo.accountId]],
         });
         //let customStore_SCHEDULE = (id) => customStore_CMD_READ_FILTER_ID(ACTION_CMD_SCHEDULE, ACTION_SCHEDULE, 'planMasterId,' + id);
         let customStore_PLANJOB_ACCOUNT = (id) => customStore_CMD_READ_FILTER_ID_KEYWORD(ACTION_CMD_PLAN_ACCOUNT, ACTION_PLAN_ACCOUNT, 'ownerById,' + id, 'PlanJob');
@@ -672,8 +673,9 @@
                     var container = document.getElementById("div_container");
                     container.classList.replace("col-lg-12", "col-lg-8");
                     container.classList.replace("col-md-12", "col-md-8");
+                    var pemistionKey = (selectedRowData.paPermistionId == 9);
                     e.component.refresh();
-                    loadData_detail(selectedRowData.id);
+                    loadData_detail(selectedRowData.id, pemistionKey);
                     //loadAttach(selectedRowData);
                     loadComversation(selectedRowData.paId);
                     loadSchedule(selectedRowData.id);
@@ -720,11 +722,11 @@
                     if (e.column.dataField === "noAttachment") {
                         loadUpload("PlanMaster", e.row.data, false);
                     }
-           
+
                 },
             });
         };
-        let loadData_detail = (id) => {
+        let loadData_detail = (id, isManager) => {
             $("#container_step").dxDataGrid({
                 height: (heightScreen / 2) - 7,
                 dataSource: customStore_DETAIL(id),
@@ -768,7 +770,7 @@
                         validationRules: [{ type: "required" }],
                     },
                     {
-                        dataField: "permissionId",
+                        dataField: "paPermistionId",
                         caption: "Quyền",
                         dataType: "number",
                         visible: false,
@@ -776,19 +778,21 @@
                     {
                         type: "buttons", caption: "Tác vụ",
                         width: 120, alignment: "center",
-                        buttons: ["edit", "delete", {
-                            hint: "Người nhận",
-                            icon: "user",
-                            visible: (e) => {
-                                if (e.row.data.permistionId === 9 || e.row.data.permistionId === 7)
-                                    return true;
-                                else
-                                    return false;
-                            },
-                            onClick: function (e) {
-                                loadAccount(e.row.data);
-                            }
-                        }],
+                        buttons: ["edit",
+                            "delete",
+                            {
+                                hint: "Người nhận",
+                                icon: "user",
+                                visible: (e) => {
+                                    if ((e.row.data.paPermistionId === 9 || e.row.data.paPermistionId === 7) || isManager)
+                                        return true;
+                                    else
+                                        return false;
+                                },
+                                onClick: function (e) {
+                                    loadAccount(e.row.data);
+                                }
+                            }],
                     }
                 ],
                 paging: {
@@ -809,13 +813,13 @@
                 editing: {
                     allowAdding: false,
                     allowUpdating: (e) => {
-                        if (e.row.data.permistionId === 9 || e.row.data.permistionId === 7 || e.row.data.permistionId === 8)
+                        if ((e.row.data.paPermistionId === 9 || e.row.data.paPermistionId === 7 || e.row.data.paPermistionId === 8) || isManager)
                             return true;
                         else
                             return false;
                     },
                     allowDeleting: (e) => {
-                        if (e.row.data.permistionId === 9 || e.row.data.permistionId === 7)
+                        if ((e.row.data.paPermistionId === 9 || e.row.data.paPermistionId === 7) || isManager)
                             return true;
                         else
                             return false;
@@ -915,7 +919,7 @@
         let loadComversation = (id) => {
             $("#container_conversation").dxDataGrid({
                 title: "Hội thoại",
-                height: (heightScreen / 8) * 2,
+                height: (heightScreen / 16) * 5,
                 dataSource: customStore_Conver(id),
                 repaintChangesOnly: true,
                 remoteOperations: true,
@@ -1487,7 +1491,7 @@
             dragEnabled: true,
             resizeEnabled: true,
             showTitle: true,
-            title: 'Cài đặt người nhận phát hành',
+            title: 'Cài đặt người thực hiện bước công việc',
             showCloseButton: true, closeOnOutsideClick: true,
             visible: true,
             contentTemplate: (c) => {

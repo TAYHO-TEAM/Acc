@@ -2501,6 +2501,7 @@
     <Content Include="Areas\NganSach\Views\NghiemThu\Index - Copy.cshtml" />
     <Content Include="Areas\ThongTin\Views\ThongBao\ViewNotify.cshtml" />
     <Content Include="Areas\Admin\Views\SystemConfig\_ContractorInfoAdd.cshtml" />
+    <Content Include="Areas\ThongTin\Views\QLCongViec\_PhanHoiCreate.cshtml" />
     <None Include="packages.config" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Home\About.cshtml" />

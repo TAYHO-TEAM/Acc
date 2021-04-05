@@ -8,6 +8,7 @@ namespace ProjectManager.CMD.Api.Application.Commands
         public int? TopicId { get; set; }
         public int? ParentId { get; set; }
         public string Content { get; set; }
+        public byte? NoAttachment { get; set; }
 
     }
 }

@@ -35,7 +35,7 @@ namespace  ProjectManager.CMD.Api.Application.Commands
                 });
             }
             if (!methodResult.IsOk) throw new CommandHandlerException(methodResult.ErrorMessages);
-            var newConversation = new Conversation(request.OwnerTable,request.TopicId,request.ParentId,request.Content);
+            var newConversation = new Conversation(request.OwnerTable,request.TopicId,request.ParentId,request.Content,request.NoAttachment);
             newConversation.SetCreate(_user);
             newConversation.Status = request.Status.HasValue ? request.Status : newConversation.Status;
             newConversation.IsActive = request.IsActive.HasValue ? request.IsActive : newConversation.IsActive;
