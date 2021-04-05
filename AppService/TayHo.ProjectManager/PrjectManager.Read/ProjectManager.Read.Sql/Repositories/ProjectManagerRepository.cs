@@ -35,6 +35,7 @@ namespace ProjectManager.Read.Sql.Repositories
         {
             List<int?> getActionId = _dbContext.Functions
                                                 .Where(c => c.TableName == nameEF
+                                                        && c.Type == 1
                                                         && c.ActionId != null 
                                                         && (c.IsDelete == false || !c.IsDelete.HasValue))
                                                 .Select(x => x.ActionId).ToList();

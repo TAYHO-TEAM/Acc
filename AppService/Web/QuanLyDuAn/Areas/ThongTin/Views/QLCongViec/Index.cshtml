@@ -28,15 +28,19 @@
     #container_step .dx-link-delete {
         margin-right: 15px !important;
     }
+
     #container_step {
         margin-bottom: 7px;
     }
+
     #container_attachment {
         margin-bottom: 7px;
     }
+
     #container_schedule {
         margin-bottom: 7px;
     }
+
     .dx-editor-container .dx-dropdowneditor-input-wrapper .dx-texteditor-input-container .dx-placeholder {
         color: white !important;
     }
@@ -104,7 +108,17 @@
                 filter: fillterCustomStore,
             })
         };
-        let customStore_DETAIL = (id) => customStore_CMD_READ_FILTER_ID(ACTION_CMD_DETAIL, ACTION_DETAIL, 'planMasterId,' + id);
+        //let customStore_DETAIL = (id) => customStore_CMD_READ_FILTER_ID(ACTION_CMD_DETAIL, ACTION_DETAIL, 'planMasterId,' + id);
+        let customStore_DETAIL = (id) => new DevExpress.data.DataSource({
+            store: new DevExpress.data.CustomStore({
+                key: "id",
+                load: (values) => ajax_read(ACTION_CMD_DETAIL, values),
+                insert: (values) => ajax_insert(URL_API_PM_CMD + ACTION_CMD_DETAIL, values),
+                update: (key, values) => ajax_update(URL_API_PM_CMD + ACTION_CMD_DETAIL, key, values),
+                remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION_CMD_DETAIL, key),
+            }),
+            filter: ["planMasterId", "=", id],
+        });
         //let customStore_SCHEDULE = (id) => customStore_CMD_READ_FILTER_ID(ACTION_CMD_SCHEDULE, ACTION_SCHEDULE, 'planMasterId,' + id);
         let customStore_PLANJOB_ACCOUNT = (id) => customStore_CMD_READ_FILTER_ID_KEYWORD(ACTION_CMD_PLAN_ACCOUNT, ACTION_PLAN_ACCOUNT, 'ownerById,' + id, 'PlanJob');
         //let customStore_PLANMASTER_ACCOUNT = (id) => customStore_CMD_READ_FILTER_ID_KEYWORD(ACTION_CMD_PLAN_ACCOUNT, ACTION_PLAN_ACCOUNT, 'ownerById,' + id, 'PlanMaster');
@@ -332,6 +346,20 @@
                             dataSource: customStore_AccountInfo,
                             valueExpr: "accountId",
                             displayExpr: "userName",
+                        },
+                        editorOptions: {
+
+                            readOnly: true,
+                        }
+                    },
+                    {
+                        dataField: "noAttachment",
+                        width: "10%",
+                        caption: "Người tạo",
+                        dataType: "number",
+                        allowEditing: false,
+                        cellTemplate: (container, options) => {
+                            container.append($('<a>').attr("href", "javaScript:void(0)").text(options.displayValue !== null ? options.displayValue + " file(s)" : "chưa có file"));
                         },
                         editorOptions: {
 
@@ -645,8 +673,8 @@
                     container.classList.replace("col-lg-12", "col-lg-8");
                     container.classList.replace("col-md-12", "col-md-8");
                     e.component.refresh();
-                    loadData_detail(selectedRowData.paId);
-                    loadAttach(selectedRowData);
+                    loadData_detail(selectedRowData.id);
+                    //loadAttach(selectedRowData);
                     loadComversation(selectedRowData.paId);
                     loadSchedule(selectedRowData.id);
                     if (selectedRowData != null && selectedRowKey != null) {
@@ -686,6 +714,13 @@
                             }
                         }).dxSpeedDialAction("instance");
                     }
+                },
+                onCellClick: function (e) {
+                    console.log(e.data);
+                    if (e.column.dataField === "noAttachment") {
+                        loadUpload("PlanMaster", e.row.data, false);
+                    }
+           
                 },
             });
         };
@@ -844,7 +879,7 @@
         };
         let loadAttach = (item) => {
             $("#container_attachment").dxDataGrid({
-                height: (heightScreen / 16)-7,
+                height: (heightScreen / 16) - 7,
                 dataSource: customStore_READDATASOURCE(item),
                 repaintChangesOnly: true,
                 remoteOperations: {
@@ -871,7 +906,7 @@
                     },
                 },],
                 onCellClick: function (e) {
-                    if (e.column.dataField === "pmNoAttachment") {
+                    if (e.column.dataField === "noAttachment") {
                         loadUpload("PlanMaster", e.row.data, false);
                     }
                 },
@@ -901,7 +936,7 @@
                         dataType: "string",
                         width: "70%",
                         editorOptions: {
-                            placeHolder:"Nhập nội dung phản hồi",
+                            placeHolder: "Nhập nội dung phản hồi",
                         }
                     },
                     {
@@ -989,7 +1024,7 @@
         let loadSchedule = (id) => {
             $("#container_schedule").dxDataGrid({
                 title: "Nhắc nhở",
-                height: ((heightScreen / 8) * 1.5) -7,
+                height: ((heightScreen / 8) * 1.5) - 7,
                 dataSource: customStore_Schelude(id),
                 repaintChangesOnly: true,
                 remoteOperations: true,
