@@ -27,7 +27,7 @@ namespace  ProjectManager.CMD.Api.Application.Commands
         public async Task<MethodResult<CreateConversationCommandResponse>> Handle(CreateConversationCommand request, CancellationToken cancellationToken)
         {
             var methodResult = new MethodResult<CreateConversationCommandResponse>();
-            if ((await _conversationRepository.BaseCheckPermistion(0, _user, _actionId, _tableName, _function)) < 1)
+            if ((await _conversationRepository.BaseCheckPermistion(0, _user, _actionForAll, _tableName, _function)) < 1)
             {
                 methodResult.AddAPIErrorMessage(nameof(ErrorCodeInsert.IErrN101), new[]
                {

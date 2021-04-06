@@ -130,10 +130,10 @@
                 key: "id",
                 load: (values) => ajax_read(NAMECOVNER, values),
                 insert: (values) => ajax_insert(URL_API_PM_CMD + ACTION_CMD_CONVERSATION, values),
-                //update: (key, values) => ajax_update(URL_API_PM_CMD + ACTION, key, values),
-                //remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION, key),
+                update: (key, values) => ajax_update(URL_API_PM_CMD + ACTION_CMD_CONVERSATION, key, values),
+                remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION_CMD_CONVERSATION, key),
             }),
-            filter: [["topicId", "=", id], "and", ["OwnerTable", "=", "PlanMaster"]],
+            filter: [["topicId", "=", id], "and", ["OwnerTable", "=", "PlanMaster"],"and",["IsDelete","=",0] ],
         });
         let customStore_Schelude = (id) => new DevExpress.data.CustomStore({
             key: "id",
@@ -677,7 +677,7 @@
                     e.component.refresh();
                     loadData_detail(selectedRowData.id, pemistionKey);
                     //loadAttach(selectedRowData);
-                    loadConversation(selectedRowData.paId);
+                    loadConversation(selectedRowData.id, pemistionKey);
                     loadSchedule(selectedRowData.id);
                     if (selectedRowData != null && selectedRowKey != null) {
                         var data = e.component.getRowIndexByKey(selectedRowData.paId);
@@ -915,7 +915,7 @@
                 },
             });
         };
-        let loadConversation = (id) => {
+        let loadConversation = (id, isManager) => {
 
             $("#container_conversation").dxDataGrid({
                 title: "Hội thoại",
@@ -989,7 +989,7 @@
                 editing: {
                     allowAdding: false,
                     allowUpdating: false,
-                    allowDeleting: true,
+                    allowDeleting: isManager,
                     mode: "row",
                     useIcons: false,
                     confirmDelete: true,
@@ -1043,9 +1043,10 @@
                     //);
                 },
                 onCellClick: function (e) {
-
-                    if (e.column.dataField === "noAttachment") {
-                        loadUpload("Conversation", e.row.data, false);
+                    if (typeof e.column.dataField !== "undefined") {
+                        if (e.column.dataField === "noAttachment") {
+                            loadUpload("Conversation", e.row.data, false);
+                        }
                     }
                 },
             });
