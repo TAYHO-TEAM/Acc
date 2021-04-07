@@ -3,11 +3,11 @@ var UserCurrent = localStorage.getItem("userCurrent");
 var UserCurrentInfo = JSON.parse(localStorage.getItem("userCurrentInfo"));
 var PROJECTID = isNullOrEmpty(localStorage.getItem("projectIdCurrent")) ? parseInt(localStorage.getItem("projectIdCurrent")) : 1;
 var header = {};
-var PermitInAction = { id: 0, view: false, insert: false, update: false, delete: false, readonly: false, assign: false, approve:false };
+var PermitInAction = { id: 0, view: false, insert: false, update: false, delete: false, readonly: false, assign: false, approve: false };
 
 DevExpress.localization.locale('vi');
 
-$(function () { 
+$(function () {
     if (checkLogin()) loadMenu();
     else logout(window.location.pathname);
 });
@@ -22,8 +22,8 @@ function logout(url) {
     if (url == null || url.length == 0 || url == "/") url = "/Home";
     localStorage.clear();
     window.location = "/Account/Login?url=" + url;
-} 
-function loadMenu() {    
+}
+function loadMenu() {
     //loadHeader
     header = {
         'Accept': 'application/json',
@@ -35,9 +35,9 @@ function loadMenu() {
     $('.user-panel div.image img')
         .attr("src", "data:image/png;base64," + UserCurrentInfo.avatarImg)
         .attr("alt", UserCurrentInfo.UserCurrent)
-        .attr("onerror","ImgError(this);");
+        .attr("onerror", "ImgError(this);");
     $('.user-panel div.info a').html(UserCurrentInfo.userName != null ? UserCurrentInfo.userName : UserCurrent);
-    $('.user-panel div.info span').html(UserCurrentInfo.title != null ? UserCurrentInfo.title:"Không xác định");
+    $('.user-panel div.info span').html(UserCurrentInfo.title != null ? UserCurrentInfo.title : "Không xác định");
     //LoadMenu
     var rs = "", url = URL_API_ACC_READ + "/Actions/getMenuOfUser";
     var container = $(".list-menu-left");
@@ -45,7 +45,7 @@ function loadMenu() {
     $.ajax({
         headers: header, url: url, dataType: "json", data: { FindParentId: 5 }, async: false,
         success: function (data) {
-            if (data.isOk) { 
+            if (data.isOk) {
                 container.html(null);
                 var listMenu = data.result.items;
                 listMenu.filter(e => e.parentId === 0).forEach(x => rs += menuItem(x, listMenu));
@@ -66,7 +66,7 @@ function loadMenu() {
                 if (window.location.pathname == aTarget.attr('href')) {
                     checkPermitInAction(aTarget.data('id'), url);
                     $(this).children(".nav-link").addClass('active', true);
-                     
+
                     var title = aTarget.data('descriptions').toUpperCase()
                     $('.title-page').append(title);
                     document.title = aTarget.data('descriptions') + ' - ' + document.title;
@@ -95,7 +95,7 @@ var checkPermitInAction = (id, url) => {
                     view: list.filter(x => x.permistionId == 5).length > 0,
                     assign: list.filter(x => x.permistionId == 7).length > 0,
                     approve: list.filter(x => x.permistionId == 8).length > 0,
-                };                
+                };
             } else {
                 DevExpress.ui.notify("Xảy ra lỗi trong quá trình lấy quyền theo menu", "error", 3000);
                 console.log(data);
@@ -104,8 +104,8 @@ var checkPermitInAction = (id, url) => {
         error: (xhr, textStatus, errorThrown) => {
             DevExpress.ui.notify("Xảy ra lỗi trong quá trình lấy quyền theo menu", "error", 3000);
             console.log(xhr);
-        }, 
-    });    
+        },
+    });
 }
 
 let menuItem = (item, list) => {
@@ -167,7 +167,11 @@ var ajax_read = (name, loadOptions) => {
         },
         error: function (xhr) {
             console.log(xhr.responseJSON ? xhr.responseJSON.Message : xhr.statusText);
-            deferred.reject("Đã có lỗi xảy ra trong quá trình này. Mở Console để xem chi tiết hoặc liên hệ Quản trị viên.");
+            if (!xhr.responseJSON.isOk) {
+                deferred.reject("Đã có lỗi xảy ra trong quá trình này. " + xhr.responseJSON.errorMessages[0].errorMessage);
+            }
+            else
+                deferred.reject("Đã có lỗi xảy ra trong quá trình này. Mở Console để xem chi tiết hoặc liên hệ Quản trị viên.");
         },
     });
     return deferred.promise();
@@ -182,13 +186,21 @@ var ajax_insert = (url, values) => {
             //loadingPanel.hide();
             if (data != null && data.isOk && data.result != null)
                 deferred.resolve(data.result);
+            else if (!data.isOk) {
+                console.log(data);
+                deferred.reject("Có lỗi xảy ra trong quá trình thêm dữ liệu." + data.errorMessages.errorMessage + ".");
+            }
             else
                 deferred.reject("Có lỗi xảy ra trong quá trình thêm dữ liệu.");
         },
         error: function (xhr) {
             //loadingPanel.hide();
             console.log(xhr.responseJSON ? xhr.responseJSON.Message : xhr.statusText);
-            deferred.reject("Đã có lỗi xảy ra trong quá trình này. Mở Console để xem chi tiết hoặc liên hệ Quản trị viên.");
+            if (!xhr.responseJSON.isOk) {
+                deferred.reject("Đã có lỗi xảy ra trong quá trình này. " + xhr.responseJSON.errorMessages[0].errorMessage);
+            }
+            else
+                deferred.reject("Đã có lỗi xảy ra trong quá trình này. Mở Console để xem chi tiết hoặc liên hệ Quản trị viên.");
         },
     });
     return deferred.promise();
@@ -202,12 +214,23 @@ var ajax_update = (url, key, values) => {
         data: JSON.stringify($.extend(keyObj, values)),
         success: function (data) {
             //loadingPanel.hide();
+            if (data != null && data.isOk && data.result != null)
+                deferred.resolve(data.result);
+            else if (!data.isOk) {
+                deferred.reject("Có lỗi xảy ra trong quá trình sửa dữ liệu." + data.errorMessages[0].errorMessage + ".");
+            }
+            else
+                deferred.reject("Có lỗi xảy ra trong quá trình sửa dữ liệu.");
             deferred.resolve();
         },
         error: function (xhr) {
             //loadingPanel.hide();
             console.log(xhr.responseJSON ? xhr.responseJSON.Message : xhr.statusText);
-            deferred.reject("Đã có lỗi xảy ra trong quá trình này. Mở Console để xem chi tiết hoặc liên hệ Quản trị viên.");
+            if (!xhr.responseJSON.isOk) {
+                deferred.reject("Đã có lỗi xảy ra trong quá trình này. " + xhr.responseJSON.errorMessages[0].errorMessage);
+            }
+            else
+                deferred.reject("Đã có lỗi xảy ra trong quá trình này. Mở Console để xem chi tiết hoặc liên hệ Quản trị viên.");
         },
     });
     return deferred.promise();
@@ -221,12 +244,23 @@ var ajax_delete = (url, key) => {
         data: JSON.stringify({ "ids": keys }),
         success: function (data) {
             //loadingPanel.hide();
+            if (data != null && data.isOk && data.result != null)
+                deferred.resolve(data.result);
+            else if (!data.isOk) {
+                deferred.reject("Có lỗi xảy ra trong quá trình xoá dữ liệu." + data.errorMessages[0].errorMessage + ".");
+            }
+            else
+                deferred.reject("Có lỗi xảy ra trong quá trình xoá dữ liệu.");
             deferred.resolve();
         },
         error: function (xhr) {
             //loadingPanel.hide();
             console.log(xhr.responseJSON ? xhr.responseJSON.Message : xhr.statusText);
-            deferred.reject("Đã có lỗi xảy ra trong quá trình này. Mở Console để xem chi tiết hoặc liên hệ Quản trị viên.");
+            if (!xhr.responseJSON.isOk) {
+                deferred.reject("Đã có lỗi xảy ra trong quá trình này. " + xhr.responseJSON.errorMessages[0].errorMessage);
+            }
+            else
+                deferred.reject("Đã có lỗi xảy ra trong quá trình này. Mở Console để xem chi tiết hoặc liên hệ Quản trị viên.");
         },
     });
     return deferred.promise();
@@ -246,16 +280,16 @@ var ajax_log_insert = (event, table, key, values) => {
 var callLogEvent = (id, table) => {
     var eventList = [
         {
-            value : "Insert",
-            text : "Tạo mới"
+            value: "Insert",
+            text: "Tạo mới"
         },
         {
-            value : "Update",
-            text : "Cập nhật"
+            value: "Update",
+            text: "Cập nhật"
         },
         {
-            value : "Delete",
-            text : "Xóa bỏ"
+            value: "Delete",
+            text: "Xóa bỏ"
         }
     ];
     var customStoreEvent = new DevExpress.data.CustomStore({
@@ -265,10 +299,10 @@ var callLogEvent = (id, table) => {
             params = {
                 'PageSize': isNullOrEmpty(values.take) ? values.take : 0,
                 'PageNumber': (isNullOrEmpty(values.take) && isNullOrEmpty(values.skip)) ? ((values.skip / values.take) + 1) : 0,
-                'FindId': "ownerById," + id + ";ownerByTable,'" + table.replace('/', '')+"'",
+                'FindId': "ownerById," + id + ";ownerByTable,'" + table.replace('/', '') + "'",
                 'SortCol': 'createDate',
-                'SortADSC':'0'
-            }; 
+                'SortADSC': '0'
+            };
 
             $.ajax({
                 headers: header,
@@ -319,7 +353,7 @@ var callLogEvent = (id, table) => {
                                         $("<div />").addClass("font-weight-bold").append(o.value),
                                         $("<em />").addClass("small").append(o.data.createBy_Title + ' - ' + o.data.createBy_Department)
                                     )
-                                ).appendTo(c); 
+                                ).appendTo(c);
                             }
                         }
                     },
@@ -330,7 +364,7 @@ var callLogEvent = (id, table) => {
                             dataSource: eventList,
                             valueExpr: "value", displayExpr: "text",
                         },
-                        cssClass:"font-weight-bold"
+                        cssClass: "font-weight-bold"
                     },
                     {
                         dataField: "createDate", dataType: "date", caption: "Thời gian", alignment: "center",

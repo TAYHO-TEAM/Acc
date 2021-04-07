@@ -8,12 +8,6 @@
 <div id="popup-register"></div>
 <div id="popup-main"></div>
 <div id="popup-detail"></div>
-@*<div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <div id="container" class="elevation-2 col-lg-8 col-md-8 col-sm-12 col-xs-12"></div>
-            <div id="container_detail" class="elevation-2 col-lg-4 col-md-4 col-sm-12 col-xs-12" ></div>
-        </div>
-    </div>*@
 <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="div_container">
         <div id="container" class="elevation-2 col-lg-12 col-md-12 col-sm-12 col-xs-12"></div>
@@ -41,8 +35,10 @@
 @section script{
     <script src="~/Scripts/page/thongtin.js"></script>
     <script>
+        //------------------- Parameter ------------------------
         var NAMECOVNER = "Conversation";
         var NAMEPLANMASTER = "PlanMasterAccount";
+        var WIDTH_CONTAINER = $("#container").width();
         //--------------------READ------------------------------
         const ACTION = "/PlanMaster/GetWithAccountProgress";
         const ACTION_DETAIL = "/PlanJob";
@@ -55,7 +51,7 @@
         const ACTION_CONVERSATION = "/Conversation";
 
 
-        //--------------------CMD------------------------------
+        //-------------------- CMD ------------------------------
         const ACTION_CMD = "/PlanMaster";
         const ACTION_CMD_DETAIL = "/PlanJob";
         const ACTION_CMD_SCHEDULE = "/PlanSchedule";
@@ -66,11 +62,8 @@
             GROUPOWNERID = 0;
             localStorage.setItem('groupOwnerIdCurrent', GROUPOWNERID);
         }
-        var WIDTH_CONTAINER = $("#container").width();
 
-      
-
-        //var customStore = (id) => customStore_CMD_READ_PLANPROJECTID(ACTION_CMD, ACTION, id);
+        //-------------------- CustomStore -------------------------
         let customStore = (id,gid) => {
             var fillterCustomStore = [["createBy", "=", UserCurrentInfo.accountId]];
             if (id > 0) {
@@ -93,7 +86,6 @@
         let customStore_DETAIL = (id) => customStore_CMD_READ_FILTER_ID(ACTION_CMD_DETAIL, ACTION_DETAIL, 'planMasterId,' + id);
         let customStore_SCHEDULE = (id) => customStore_CMD_READ_FILTER_ID(ACTION_CMD_SCHEDULE, ACTION_SCHEDULE, 'planMasterId,' + id);
         let customStore_PLANJOB_ACCOUNT = (id) => customStore_CMD_READ_FILTER_ID_KEYWORD(ACTION_CMD_PLAN_ACCOUNT, ACTION_PLAN_ACCOUNT, 'ownerById,' + id, 'PlanJob');
-        //let customStore_PLANMASTER_ACCOUNT = (id) => customStore_CMD_READ_FILTER_ID_KEYWORD(ACTION_CMD_PLAN_ACCOUNT, ACTION_PLAN_ACCOUNT, 'ownerById,' + id, 'PlanMaster');
         let customStore_PLANMASTER_ACCOUNT = (id) => customStore_CMD_READ_FILTER_ID(ACTION_CMD_PLAN_ACCOUNT, ACTION_PLAN_ACCOUNT, "ownerById," + id + ";OwnerTable,'PlanMaster'");
         let customStore_Conver = (id) => new DevExpress.data.DataSource({
             store: new DevExpress.data.CustomStore({
@@ -106,7 +98,6 @@
             filter: [["topicId", "=", id], "and", ["OwnerTable", "=", "PlanMaster"]],
         });
         let customStore_ItemDetail = (item) => customStore_READDATASOURCE(item);
-
         let customStore_AccountInfo = new DevExpress.data.CustomStore({
             key: "accountId",
             load: (values) => {
@@ -185,10 +176,12 @@
 
         });
 
+        //-------------------- Function ----------------------------
         $(function () {
             loadData(PROJECTID, GROUPOWNERID);
         });
 
+        //-------------------- Load --------------------------------
         var loadData = (proId, gid) => {
             $("#container").dxDataGrid({
                 height: heightScreen,
@@ -485,23 +478,16 @@
                     e.data.isVisible = true;
                     //e.data.ProjectId = PROJECTID;
                 },
+                onRowUpdating: (e) => {
+                    console.log(e);
+                    e.newData['isVisible'] = e.newData['pmIsVisible'];
+                    e.newData['id'] = e.oldData['id'];
+                },
                 onCellPrepared: (e) => {
                     if (e.rowType == "data" && e.columnIndex == 1)
                         e.cellElement.find('.dx-treelist-empty-space').toggleClass("dx-treelist-collapsed", e.data.chilCount > 0)
                 },
-                //onRowClick: function (e) {
-                //    console.log(e);
-                //    var container = document.getElementById("div_container");
-                //    container.classList.replace("col-lg-12", "col-lg-8");
-                //    container.classList.replace("col-md-12", "col-md-8");
-                //    //var container_sub = document.getElementById("container_sub");
-                //    //container_sub.classList.replace("col-lg-12", "col-lg-4");
-                //    //container_sub.classList.replace("col-md-12", "col-md-4");
-                //    e.component.refresh();
-                //    loadData_detail(e.data.id);
-                //},
                 onRowDblClick: function (e) {
-                    //var container = e.component;
                     console.log(e.data);
                     loadItem_Detail(e.data);
                 },
@@ -609,15 +595,6 @@
                 wordWrapEnabled: true,
                 rowAlternationEnabled: false,
                 columns: [
-                    //{
-                    //    dataField: "isDone",
-                    //    caption: "",
-                    //    dataType: "boolean",
-                    //    editorType: "dxCheckBox",
-                    //    editorOptions: {
-                    //        readOnly:true,
-                    //    }
-                    //},
                     {
                         dataField: "title",
                         caption: "Lịch trình",
@@ -629,15 +606,7 @@
                         caption: "MT đề ra",
                         dataType: "number",
                         alignment: "center",
-                        //editorOptions: {
-                        //    readOnly: true,
-                        //}
                     },
-                    //{
-                    //    dataField: "unit",
-                    //    caption: "Đơn vị",
-                    //    dataType: "string",
-                    //},
                     {
                         dataField: "endDate",
                         caption: "Hạn HT",
@@ -649,13 +618,6 @@
                         width: 120, alignment: "center",
                         buttons: ["edit",
                             "delete",
-                            //{
-                            //    hint: "Người nhận",
-                            //    icon: "user",
-                            //    onClick: function (e) {
-                            //        loadAccount(e.row.data);
-                            //    },
-                            //},
                             {
                                 hint: "Báo cáo",
                                 text: "Báo cáo",
@@ -691,12 +653,6 @@
                     allowedPageSizes: [10, 20, 40],
                     showInfo: true,
                 },
-                //searchPanel: {
-                //    highlightCaseSensitive: true,
-                //    highlightSearchText: true,
-                //    searchVisibleColumnsOnly: true,
-                //    visible: WIDTH_CONTAINER > 350
-                //},
                 editing: {
                     allowAdding: true,
                     allowUpdating: true,
@@ -725,25 +681,12 @@
                     e.data.isVisible = true;
                     e.data.planMasterId = id;
                     e.data.isDone = false;
-                    //e.data.ProjectId = PROJECTID;
                 },
                 onCellPrepared: (e) => {
                     if (e.rowType == "data" && e.columnIndex == 1)
                         e.cellElement.find('.dx-treelist-empty-space').toggleClass("dx-treelist-collapsed", e.data.chilCount > 0)
                 },
-                onRowClick: function (e) {
-
-
-                },
-                onRowDblClick: function (e) {
-                    var container = e.component;
-                    //CALLPOPUP(
-                    //    "Tạo văn bản theo mẫu:",
-                    //    "/ThongTin/VanBanMau/_VanBanChiTiet/" + e.data.id,
-                    //    ($(window).width() > 767 ? "50%" : "80%"),
-                    //    container
-                    //);
-                },
+            
             });
         };
         let loadAttach = (item) => {
@@ -830,12 +773,6 @@
                     allowedPageSizes: [10, 20, 40],
                     showInfo: true,
                 },
-                //searchPanel: {
-                //    highlightCaseSensitive: true,
-                //    highlightSearchText: true,
-                //    searchVisibleColumnsOnly: true,
-                //    visible: WIDTH_CONTAINER > 350
-                //},
                 editing: {
                     allowAdding: true,
                     allowUpdating: false,
@@ -844,42 +781,21 @@
                     useIcons: false,
                     confirmDelete: true,
                 },
-                onToolbarPreparing: function (e) {
-                    //e.toolbarOptions.items.unshift(
-                    //    {
-                    //        text: "Phản hồi",
-                    //        location: "before",
-                    //    },
-                    //)
-                },
                 onInitNewRow: (e) => {
                     console.log(id)
                     e.data.isActive = true;
                     e.data.isVisible = true;
                     e.data.TopicId = id;
                     e.data.OwnerTable = 'PlanMaster';
-                    //e.data.ProjectId = PROJECTID;
                 },
                 onCellPrepared: (e) => {
                     if (e.rowType == "data" && e.columnIndex == 1)
                         e.cellElement.find('.dx-treelist-empty-space').toggleClass("dx-treelist-collapsed", e.data.chilCount > 0)
                 },
-                onRowClick: function (e) {
-
-
-                },
-                onRowDblClick: function (e) {
-                    var container = e.component;
-                    //CALLPOPUP(
-                    //    "Tạo văn bản theo mẫu:",
-                    //    "/ThongTin/VanBanMau/_VanBanChiTiet/" + e.data.id,
-                    //    ($(window).width() > 767 ? "50%" : "80%"),
-                    //    container
-                    //);
-                },
             });
         };
-        /// Load Popup
+
+        //-------------------- Load PopUp --------------------------
         let loadItem_Detail = (item) => $("#popup-detail").dxPopup({
             width: "60%", height: "95%",
             fullScreen: false,

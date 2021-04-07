@@ -60,6 +60,15 @@
 @section script{
     <script src="~/Scripts/page/thongtin.js"></script>
     <script>
+        //------------------- Parameter ------------------------
+        var NAMEREGIST = "RequestRegist";
+        var code = "";
+        var typeRes = 0;
+        var noteRes = '';
+        var PROJECTID = isNullOrEmpty(localStorage.getItem("projectIdCurrent")) ? parseInt(localStorage.getItem("projectIdCurrent")) : 1;
+        var WIDTH_CONTAINER = $("#container").width();
+
+        //--------------------CURD------------------------------
         const ACTION = "/RequestRegist/GetByAccountID";
         const ACTION_DETAIL = "/RequestRegist/GetDetail";
         const ACTION_RESPONSEBYACC = "/ResponseRegist/getByAccount";
@@ -73,14 +82,8 @@
         const ACTION_DOCUMENTTYPE = "/DocumentType";
         const ACTION_REPLY = "/ResponseRegistReply";
         const ACTION_ACCOUNTINFO = "/AccountInfo";
-        var NAMEREGIST = "RequestRegist";
-
-        var code = "";
-        var typeRes = 0;
-        var noteRes = '';
-
-        var PROJECTID = isNullOrEmpty(localStorage.getItem("projectIdCurrent")) ? parseInt(localStorage.getItem("projectIdCurrent")) : 1;
-        var WIDTH_CONTAINER = $("#container").width();
+            
+        //-------------------- CustomStore -------------------------
         let customStore = (PROJECT) => new DevExpress.data.DataSource({
             store: new DevExpress.data.CustomStore({
                 key: "id",
@@ -90,14 +93,13 @@
                 remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION_CMD_REQUESTREGIST, key),
             }),
             filter: ["projectId", "=", PROJECT],
-        });///customStore_CMD_READ_WITHPROJECTID_PAGGING(ACTION_CMD_REQUESTREGIST, ACTION_READ_REQUESTREGISTBYACC);
+        });
         let customStore_Projects = customStore_READ_ALL_ACC(ACTION_READ_PROJECT);
         var customStore_PLAN = (id) => customStore_READ_ID(ACTION_READ_PLAN, id);
         let customStore_HangMuc = customStore_READ_ALL_ACC(ACTION_READ_HANGMUC);
         let customStore_DocumetnType = customStore_READ_FILTER(ACTION_READ_DOCUMENTTYPE, 'status,1');
         let customStore_Detail = (id) => customStore_UPDATE_READ(id, ACTION_CMD_RESPONSEREGIST, ACTION_READ_REQUESTREGISTDETAIL);
         let customStore_Response = (id) => customStore_UPDATE_READ(id, ACTION_RESPONSE, ACTION_RESPONSEBYACC)
-
         let customStore_File = (table, item) => new DevExpress.data.CustomStore({
             key: "id",
             load: (values) => {
@@ -140,21 +142,18 @@
                 key: "id",
                 loadMode: "raw",
                 load: (values) => ajax_read(ACTION_ACCOUNTINFO, values),
-                //insert: (values) => ajax_insert(URL_API_PM_CMD + ACTION_CMD_REQUESTREGIST, values),
-                //update: (key, values) => ajax_update(URL_API_PM_CMD + ACTION_CMD_REQUESTREGIST, key, values),
-                //remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION_CMD_REQUESTREGIST, key),
             }),
             //filter: [["isDelete", "><", true]]
         });
 
 
 
-        //------------------------- Load dữ liệu --------------------------------------------
-
+      
         $(function () {
             loadData(PROJECTID);
-        });
+        })
 
+        //------------------------- Load --------------------------------------------
         let loadData = (ID) => {
             $("#container").dxTreeList({
                 height: heightScreen,
@@ -589,7 +588,6 @@
                 //},
             });
         }
-        /// Load Popup
         let loadDetail = (item) => $("#popup-main").dxPopup({
             width: "60%", height: "95%",
             fullScreen: false,
@@ -1022,6 +1020,7 @@
             }
         }).addClass("popup-priority-1");
 
+        //------------------------- Load Popup --------------------------------------------
         let loadUpload = (table, item, isUpload, parentItem) => $("#popup-main-upload").dxPopup({
             width: "70%",
             height: "50%",
@@ -1221,6 +1220,8 @@
             allowedFileExtensions: [".jpg", ".jpeg", ".png", ".pdf"],
             maxFileSize: 52428800,
         }).dxFileUploader("instance");
+
+        //------------------------- Function --------------------------------------------
         function loadFileAttachment(table, item, isUpload, parentItem) {
             loadUpload(table, item, isUpload, parentItem);
         }
@@ -1259,7 +1260,6 @@
                 }
             });
         }
-
 
     </script>
 }

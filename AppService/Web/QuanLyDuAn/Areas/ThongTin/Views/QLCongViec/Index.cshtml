@@ -61,9 +61,16 @@
 @section script{
     <script src="~/Scripts/page/thongtin.js"></script>
     <script>
+        //------------------- Parameter ------------------------
         var NAMECOVNER = "Conversation";
         var NAMEPLANMASTER = "PlanMasterAccount";
         var NAMEPLANSCHEDULE = "PlanSchedule";
+        var WIDTH_CONTAINER = $("#container").width();
+
+        if (GROUPOWNERID !== 0 && GROUPOWNERID !== 7 && GROUPOWNERID !== 9) {
+            GROUPOWNERID = 0;
+            localStorage.setItem('groupOwnerIdCurrent', GROUPOWNERID);
+        }
         //--------------------READ------------------------------
         const ACTION = "/PlanMaster/GetWithAccountProgress";
         const ACTION_DETAIL = "/PlanJob/GetWithAccount";
@@ -84,15 +91,8 @@
         const ACTION_CMD_CONVERSATION = "/Conversation";
 
 
-        if (GROUPOWNERID !== 0 && GROUPOWNERID !== 7 && GROUPOWNERID !== 9) {
-            GROUPOWNERID = 0;
-            localStorage.setItem('groupOwnerIdCurrent', GROUPOWNERID);
-        }
-        //if (PROJECTID === 1 || PROJECTID === 2) {
-        //    PROJECTID = 3;
-        //}
-        var WIDTH_CONTAINER = $("#container").width();
 
+        //-------------------- CustomStore -------------------------
         let customStore = (gid) => {
             var fillterCustomStore = [["pmIsDelete", "<>", true], "and", ["PlanProjectId", "=", 3], "and", ["createBy", "=", UserCurrentInfo.accountId]];
             if (gid > 0) {
@@ -109,7 +109,6 @@
                 filter: fillterCustomStore,
             })
         };
-        //let customStore_DETAIL = (id) => customStore_CMD_READ_FILTER_ID(ACTION_CMD_DETAIL, ACTION_DETAIL, 'planMasterId,' + id);
         let customStore_DETAIL = (id) => new DevExpress.data.DataSource({
             store: new DevExpress.data.CustomStore({
                 key: "id",
@@ -120,11 +119,8 @@
             }),
             filter: [["planMasterId", "=", id], "and", ["createby", "=", UserCurrentInfo.accountId]],
         });
-        //let customStore_SCHEDULE = (id) => customStore_CMD_READ_FILTER_ID(ACTION_CMD_SCHEDULE, ACTION_SCHEDULE, 'planMasterId,' + id);
         let customStore_PLANJOB_ACCOUNT = (id) => customStore_CMD_READ_FILTER_ID_KEYWORD(ACTION_CMD_PLAN_ACCOUNT, ACTION_PLAN_ACCOUNT, 'ownerById,' + id, 'PlanJob');
-        //let customStore_PLANMASTER_ACCOUNT = (id) => customStore_CMD_READ_FILTER_ID_KEYWORD(ACTION_CMD_PLAN_ACCOUNT, ACTION_PLAN_ACCOUNT, 'ownerById,' + id, 'PlanMaster');
         let customStore_PLANMASTER_ACCOUNT = (id) => customStore_CMD_READ_FILTER_ID(ACTION_CMD_PLAN_ACCOUNT, ACTION_PLAN_ACCOUNT, "ownerById," + id + ";OwnerTable,'PlanMaster'");
-        //let customStore_CONVERSATION = (id) => customStore_CMD_READ_FILTER_ID_KEYWORD(ACTION_CMD_CONVERSATION, ACTION_CONVERSATION, 'topicId,' + id, 'PlanMaster');
         let customStore_Conver = (id) => new DevExpress.data.DataSource({
             store: new DevExpress.data.CustomStore({
                 key: "id",
@@ -133,7 +129,7 @@
                 update: (key, values) => ajax_update(URL_API_PM_CMD + ACTION_CMD_CONVERSATION, key, values),
                 remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION_CMD_CONVERSATION, key),
             }),
-            filter: [["topicId", "=", id], "and", ["OwnerTable", "=", "PlanMaster"],"and",["IsDelete","=",0] ],
+            filter: [["topicId", "=", id], "and", ["OwnerTable", "=", "PlanMaster"], "and", ["IsDelete", "=", 0]],
         });
         let customStore_Schelude = (id) => new DevExpress.data.CustomStore({
             key: "id",
@@ -145,7 +141,6 @@
             update: (key, values) => { console.log(values); ajax_update(URL_API_PM_CMD + ACTION_SCHEDULE, key, values); },
             //remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION, key)
         });
-
         let customStore_AccountInfo = new DevExpress.data.CustomStore({
             key: "accountId",
             load: (values) => {
@@ -224,10 +219,12 @@
 
         });
 
+        //-------------------- Function ----------------------------
         $(function () {
             loadData(GROUPOWNERID);
         });
 
+        //-------------------- Load --------------------------------
         let loadData = (id) => {
             $("#container").dxDataGrid({
                 height: heightScreen,
@@ -613,17 +610,6 @@
                     if (e.rowType == "data" && e.columnIndex == 1)
                         e.cellElement.find('.dx-treelist-empty-space').toggleClass("dx-treelist-collapsed", e.data.chilCount > 0)
                 },
-                //onRowClick: function (e) {
-                //    console.log(e);
-                //    var container = document.getElementById("div_container");
-                //    container.classList.replace("col-lg-12", "col-lg-8");
-                //    container.classList.replace("col-md-12", "col-md-8");
-                //    //var container_sub = document.getElementById("container_sub");
-                //    //container_sub.classList.replace("col-lg-12", "col-lg-4");
-                //    //container_sub.classList.replace("col-md-12", "col-md-4");
-                //    e.component.refresh();
-                //    loadData_detail(e.data.id);
-                //},
                 onRowDblClick: function (e) {
                     var container = e.component;
                     //CALLPOPUP(
@@ -718,8 +704,11 @@
                     }
                 },
                 onCellClick: function (e) {
-                    if (e.column.dataField === "noAttachment") {
-                        loadUpload("PlanMaster", e.row.data, false);
+
+                    if (typeof e.column !== "undefined") {
+                        if (e.column.dataField === "noAttachment") {
+                            loadUpload("PlanMaster", e.row.data, false);
+                        }
                     }
 
                 },
@@ -755,16 +744,9 @@
                         dataField: "title",
                         caption: "Bước thực hiện",
                         dataType: "string",
-
                         editorOptions:
                         {
                             placeholder: "Nhập tên công việc con tại đây",
-                            //readOnly: (e) => {
-                            //    //if (e.row.data.permistionId === 9 || e.row.data.permistionId === 7)
-                            //       return false;
-                            //    //else
-                            //       //return true;
-                            //},
                         },
                         validationRules: [{ type: "required" }],
                     },
@@ -803,12 +785,6 @@
                     allowedPageSizes: [10, 20, 40],
                     showInfo: true,
                 },
-                //searchPanel: {
-                //    highlightCaseSensitive: true,
-                //    highlightSearchText: true,
-                //    searchVisibleColumnsOnly: true,
-                //    visible: WIDTH_CONTAINER > 350
-                //},
                 editing: {
                     allowAdding: false,
                     allowUpdating: (e) => {
@@ -909,8 +885,10 @@
                     },
                 },],
                 onCellClick: function (e) {
-                    if (e.column.dataField === "noAttachment") {
-                        loadUpload("PlanMaster", e.row.data, false);
+                    if (typeof e.column !== 'undefined') {
+                        if (e.column.dataField === "noAttachment") {
+                            loadUpload("PlanMaster", e.row.data, false);
+                        }
                     }
                 },
             });
@@ -951,7 +929,6 @@
                         alignment: "left",
                         allowFiltering: false,
                         cellTemplate: (container, options) => {
-                            console.log(options);
                             container.append($('<a>').attr("href", "javaScript:void(0)").text(options.displayValue !== null ? options.displayValue + " file(s)" : "chưa có file"));
                         },
                     },
@@ -1005,7 +982,6 @@
                                 text: "Tạo phản hồi",
                                 visible: PermitInAction.insert,
                                 onClick: () => {
-                                    console.log(e);
                                     CALLPOPUP(
                                         "Tạo văn bản theo mẫu:",
                                         "/ThongTin/QLCongViec/_PhanHoi?id=" + id,
@@ -1043,7 +1019,7 @@
                     //);
                 },
                 onCellClick: function (e) {
-                    if (typeof e.column.dataField !== "undefined") {
+                    if (typeof e.column !== "undefined") {
                         if (e.column.dataField === "noAttachment") {
                             loadUpload("Conversation", e.row.data, false);
                         }
@@ -1165,6 +1141,8 @@
                 },
             });
         };
+
+        //-------------------- Load PopUp --------------------------
         let loadUpload = (table, item, isUpload) => $("#popup-main-upload").dxPopup({
             width: "70%",
             height: "50%",
@@ -1460,29 +1438,16 @@
                                         }
                                     }]
                                 },
-                                //{
-                                //    colSpan: 12,
-                                //    dataField: "permissionId",
-                                //    lookup: {
-                                //        dataSource: permisionAassign,
-                                //        valueExpr: "ID",
-                                //        displayExpr: "Name",
-                                //    },
-                                //    editorType: "dxSelectBox",
-                                //    editorOptions: {
-                                //        value: "unit",
-                                //        dataSource: permisionAassign,
-                                //        valueExpr: "ID", displayExpr: "Name",
-                                //    },
-                                //    validationRules: [{ type: "required" }],
-                                //},
                             ],
                         },
                     },
                     onCellClick: function (e) {
-                        if (e.column.dataField === "noAttachment") {
-                            loadUpload("RequestRegist", e.row.data, false);
+                        if (typeof e.column !== "undefined") {
+                            if (e.column.dataField === "noAttachment") {
+                                loadUpload("RequestRegist", e.row.data, false);
+                            }
                         }
+
                     },
                     onInitNewRow: (e) => {
                         e.data.ownerById = item.id;
@@ -1566,16 +1531,6 @@
                             },
 
                         },//account
-                        //{
-                        //    dataField: "groupId",
-                        //    caption: "Nhóm",
-                        //    alignment: "center",
-                        //    //dataType: "number",
-                        //    lookup: {
-                        //        dataSource: customStore_Groups,
-                        //        valueExpr: "id", displayExpr: "title",
-                        //    },
-
                         //},//nhóm
                         {
                             colSpan: 12,
@@ -1678,8 +1633,10 @@
                         },
                     },
                     onCellClick: function (e) {
-                        if (e.column.dataField === "noAttachment") {
-                            loadUpload("RequestRegist", e.row.data, false);
+                        if (typeof e.column !== "undefined") {
+                            if (e.column.dataField === "noAttachment") {
+                                loadUpload("RequestRegist", e.row.data, false);
+                            }
                         }
                     },
                     onInitNewRow: (e) => {
@@ -1705,7 +1662,7 @@
                 return c;
             }
         });
-    
+
     </script>
 }
 

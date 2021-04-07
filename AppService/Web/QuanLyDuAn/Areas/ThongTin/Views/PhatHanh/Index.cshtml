@@ -36,13 +36,12 @@
         const ACTION_PROJECT = "/Projects";
         const ACTION_HANGMUC = "/WorkItems";
         var PROJECTID = isNullOrEmpty(localStorage.getItem("projectIdCurrent")) ? parseInt(localStorage.getItem("projectIdCurrent")) : 1;
-        //var DOCUMENTTYPEID = isNullOrEmpty(localStorage.getItem("documentTypeIdCurrent")) ? parseInt(localStorage.getItem("documentTypeIdCurrent")) : 7;
 
         var WIDTH_CONTAINER = $("#container").width();
 
 
 
-        //..........................Get data -------------------------------------------------------------
+        //-------------------- CustomStore -------------------------
         let customStore = (PROJECT) => new DevExpress.data.DataSource({
             store: new DevExpress.data.CustomStore({
                 key: "id",
@@ -270,12 +269,11 @@
             });
         };
 
-
-
-        //..........................  Load View -------------------------------------------------------------
+        
         $(function () {
             loadData(PROJECTID);
         });
+        //------------------------- Load --------------------------------------------
         let loadData = (ID) => {
             $("#container").dxDataGrid({
                 height: heightScreen,
@@ -327,18 +325,12 @@
                         dataField: "tagWorkItem",
                         caption: "Nhóm hạng mục",
                         dataType: "string",
-                        //lookup: {
-                        //    dataSource: customStore_HangMuc,
-                        //    valueExpr: "id", displayExpr: "title",
-                        //},
                         editCellTemplate: tagBoxEditorTemplate,
                         calculateFilterExpression: function (filterValue, selectedFilterOperation, target) {
-
                             if (target === "search" && typeof (filterValue) === "string") {
                                 return [this.dataField, "contains", filterValue]
                             }
                             return function (data) {
-
                                 return (data.tagWorkItem || []).indexOf(filterValue) !== -1
                             }
                         },
@@ -409,14 +401,6 @@
                                 label: { text: "Nhóm hạng mục" },
                                 editorType: "dxTagBox",
                                 editorOptions: {
-                                    //dataSource: customStore_HangMuc,
-                                    //displayExpr: "title",
-                                    //valueExpr: "title",
-                                    //maxDisplayedTags: 3,
-                                    //showSelectionControls: true,
-                                    //itemTemplate: function (data) {
-                                    //    return "<div>" + data.title + "</div>";
-                                    //}
                                 },
                             },
                             {
@@ -611,12 +595,6 @@
                             visible: PermitInAction["update"],
                             onClick: () => e.component.editRow(data)
                         }).dxSpeedDialAction("instance");
-
-                        //$("#action-delete").dxSpeedDialAction({
-                        //    index: 3, icon: "fas fa-trash", label: "Xóa",
-                        //    visible: PermitInAction["delete"],
-                        //    onClick: (e) => e.component.deleteRow(data)
-                        //}).dxSpeedDialAction("instance");
 
                         $("#action-log").dxSpeedDialAction({
                             index: 4, icon: "fas fa-user", label: "Thêm người nhận",
@@ -849,35 +827,6 @@
                             showRequiredMark: true,
                             requiredMark: "(*)",
                             items: [
-                                //{
-                                //    colSpan: 12,
-                                //    dataField: "groupId",
-                                //    editorType: "dxLookup",
-                                //    editorOptions: {
-                                //        elementAttr: {
-                                //            id: "groupIdSelect",
-                                //        },
-                                //        placeholder: "Vui lòng chọn...",
-                                //        searchEnabled: true,
-                                //        showClearButton: true,
-                                //        searchExpr: ['descriptions', 'title'],
-                                //        itemTemplate: function (data) {
-                                //            return $("<div>").append($("<b>").append(data.title).addClass("mr-1"), $("<em>").append(data.descriptions));
-                                //        },
-                                //        //validationRules: [{
-                                //        //    type: "async",
-                                //        //    message: "Đã có thông tin Nhóm",
-                                //        //    validationCallback: function (params) {
-                                //        //        var d = $.Deferred();
-                                //        //        d.resolve(!(typeof $('#accountIdSelect').dxLookup('instance').option('value') === 'number'));
-                                //        //        //$('#groupIdSelect').dxSelectBox('instance').option('value', null)
-                                //        //        return d.promise();
-                                //        //        /*sendRequest(params.value);*/
-                                //        //    }
-                                //        //}]
-
-                                //    },
-                                //},
                                 {
                                     colSpan: 12,
                                     dataField: "accountId",
@@ -895,15 +844,6 @@
                                             return $("<div>").append($("<b>").append(data.userName).addClass("mr-1"), $("<em>").append(data.accountName));
                                         },
                                     },
-                                    //validationRules: [{
-                                    //    type: "async",
-                                    //    message: "Đã có thông tin Nhóm",
-                                    //    validationCallback: function (params) {
-                                    //        var d = $.Deferred();
-                                    //        d.resolve(!((typeof $('#accountIdSelect').dxLookup('instance').option('value') === 'number') && (typeof $('#groupIdSelect').dxLookup('instance').option('value') === 'number')));
-                                    //        return d.promise();
-                                    //    }
-                                    //}]
                                 },
                             ],
                         },
@@ -925,9 +865,6 @@
                         if (!e.row.isNewRow)
                             e.editorOptions.disabled = true;
                     },
-                    //onRowUpdating: (e) => {
-                    //    console.log(e);
-                    //},
                     onRowInserting: (e) => {
 
                         console.log(e);
@@ -946,6 +883,8 @@
             onHidden: () => { $("#container").dxDataGrid('instance').refresh(); },
         });
 
+       
+        // ---------------------------------- Funtion --------------------------------
         function callPopup(title, url, width, container) {
             var isFullscreen = false;
             if (width == "100%") isFullscreen = true;
@@ -980,7 +919,7 @@
                 }
             });
         };
-        // ---------------------------------- Tag Custom --------------------------------
+        //---------------------------------- Tag Custom --------------------------------
         function tagBoxEditorTemplate(cellElement, cellInfo) {
             console.log(cellInfo);
             return $("<div>").dxTagBox({
@@ -1000,7 +939,7 @@
                 },
             });
         }; 
-        // ---------------------------------- Dropbox Multiple Custom --------------------------------
+        //---------------------------------- Dropbox Multiple Custom --------------------------------
         function dropDownBoxTemplate(cellElement, cellInfo, docAcc) {
             console.log(docAcc);
             return $("<div>").dxDropDownBox({
