@@ -100,7 +100,7 @@ namespace ProjectManager.CMD.Infrastructure.Service
                     break;
             }
         }
-        public async Task<Tuple<string,string,string,string,string>> SaveFile(IFormFile file, string Folder, string filename)
+        public async Task<Tuple<string,string,string,string,string,string>> SaveFile(IFormFile file, string Folder, string filename)
         {
             if (file == null ) return default;
             var fileType = new FileType();
@@ -125,7 +125,7 @@ namespace ProjectManager.CMD.Infrastructure.Service
                 {
                     await file.CopyToAsync(stream);
                 }
-                return new Tuple<string, string, string,string,string>(file.FileName, _mediaOptions.Host,_mediaOptions.FolderForWeb + Folder, filePath, Path.GetExtension(ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"')));
+                return new Tuple<string, string, string,string,string,string>(filename, _mediaOptions.Host,_mediaOptions.FolderForWeb + Folder, filePath, Path.GetExtension(ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"')), file.FileName);
             }
             catch
             {

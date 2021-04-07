@@ -17,6 +17,7 @@ namespace ProjectManager.CMD.Domain.DomainObjects
         private string _host;
         private string _type;
         private string _direct;
+        private string _displayName;
         #endregion Fields
         #region Constructors
         private FilesAttachment()
@@ -28,6 +29,7 @@ namespace ProjectManager.CMD.Domain.DomainObjects
                                 string OwnerByTable,
                                 string Code,
                                 string FileName,
+                                string DisplayName,
                                 string Tail,
                                 string Url,
                                 string Host,
@@ -38,6 +40,7 @@ namespace ProjectManager.CMD.Domain.DomainObjects
             _ownerByTable = OwnerByTable;
             _code = Code;
             _fileName = FileName;
+            _displayName = DisplayName;
             _tail = Tail;
             _url = Url;
             _host = Host;
@@ -51,6 +54,7 @@ namespace ProjectManager.CMD.Domain.DomainObjects
         [MaxLength(128, ErrorMessage = nameof(ErrorCodeInsert.IErr128))] public string OwnerByTable { get => _ownerByTable; }
         [MaxLength(32, ErrorMessage = nameof(ErrorCodeInsert.IErr32))] public string Code { get => _code; }
         [MaxLength(256, ErrorMessage = nameof(ErrorCodeInsert.IErr256))] public string FileName { get => _fileName; }
+        [MaxLength(256, ErrorMessage = nameof(ErrorCodeInsert.IErr256))] public string DisplayName { get => _displayName; }
         [MaxLength(10, ErrorMessage = nameof(ErrorCodeInsert.IErr10))] public string Tail { get => _tail; }
         [MaxLength(256, ErrorMessage = nameof(ErrorCodeInsert.IErr256))] public string Url { get => _url; }
         [MaxLength(256, ErrorMessage = nameof(ErrorCodeInsert.IErr256))] public string Host { get => _host; }
@@ -63,6 +67,7 @@ namespace ProjectManager.CMD.Domain.DomainObjects
         public void SetOwnerByTable(string OwnerByTable) { _ownerByTable = string.IsNullOrEmpty(OwnerByTable) ? _ownerByTable : OwnerByTable; if (!IsValid()) throw new DomainException(_errorMessages); }
         public void SetCode(string Code) { _code = string.IsNullOrEmpty(Code) ? _code : Code; if (!IsValid()) throw new DomainException(_errorMessages); }
         public void SetFileName(string FileName) { _fileName = string.IsNullOrEmpty(FileName) ? _fileName : FileName; if (!IsValid()) throw new DomainException(_errorMessages); }
+        public void SetDisplayName(string DisplayName) { _displayName = string.IsNullOrEmpty(DisplayName) ? _displayName : DisplayName; if (!IsValid()) throw new DomainException(_errorMessages); }
         public void SetTail(string Tail) { _tail = string.IsNullOrEmpty(Tail) ? _tail : Tail; if (!IsValid()) throw new DomainException(_errorMessages); }
         public void SetUrl(string Url) { _url = string.IsNullOrEmpty(Url) ? _url : Url; if (!IsValid()) throw new DomainException(_errorMessages); }
         public void SetHost(string Host) { _host = string.IsNullOrEmpty(Host) ? _host : Host; if (!IsValid()) throw new DomainException(_errorMessages); }

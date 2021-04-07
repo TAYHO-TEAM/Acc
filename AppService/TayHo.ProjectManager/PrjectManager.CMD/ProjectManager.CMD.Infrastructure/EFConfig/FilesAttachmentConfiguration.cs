@@ -15,6 +15,7 @@ namespace ProjectManager.CMD.Infrastructure.EFConfig
             builder.Property(x => x.OwnerByTable).HasField("_ownerByTable").HasMaxLength(128).UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.Code).HasField("_code").HasMaxLength(32).UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.FileName).HasField("_fileName").HasMaxLength(256).UsePropertyAccessMode(PropertyAccessMode.Field);
+            builder.Property(x => x.DisplayName).HasField("_displayName").HasMaxLength(256).UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.Tail).HasField("_tail").HasMaxLength(10).UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.Url).HasField("_url").HasMaxLength(256).UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.Host).HasField("_host").HasMaxLength(256).UsePropertyAccessMode(PropertyAccessMode.Field);
