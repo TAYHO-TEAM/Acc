@@ -157,7 +157,6 @@
         let customStore_Log = (item) => new DevExpress.data.CustomStore({
             key: "id",
             load: (values) => {
-                console.log(item);
                 var deferred = $.Deferred();
                 var params = {
                     'PageSize': isNullOrEmpty(values.take) ? values.take : 0,
@@ -273,6 +272,7 @@
         $(function () {
             loadData(PROJECTID);
         });
+
         //------------------------- Load --------------------------------------------
         let loadData = (ID) => {
             $("#container").dxDataGrid({
@@ -866,8 +866,6 @@
                             e.editorOptions.disabled = true;
                     },
                     onRowInserting: (e) => {
-
-                        console.log(e);
                         e.data['accountIds'] = e.data['accountId'];
                     }
 
@@ -883,7 +881,6 @@
             onHidden: () => { $("#container").dxDataGrid('instance').refresh(); },
         });
 
-       
         // ---------------------------------- Funtion --------------------------------
         function callPopup(title, url, width, container) {
             var isFullscreen = false;
@@ -921,7 +918,6 @@
         };
         //---------------------------------- Tag Custom --------------------------------
         function tagBoxEditorTemplate(cellElement, cellInfo) {
-            console.log(cellInfo);
             return $("<div>").dxTagBox({
                 dataSource: customStore_HangMuc,
                 value: (cellInfo.value != null ? cellInfo.value.split(",") : "" || []).map(function (element) { return element }),
@@ -930,18 +926,15 @@
                 applyValueMode: "useButtons",
                 searchEnabled: true,
                 onValueChanged: function (e) {
-                    console.log(e);
                     cellInfo.setValue(e.value.join(','));
                 },
                 onSelectionChanged: function (e) {
-                    console.log(e);
                     cellInfo.component.updateDimensions();
                 },
             });
         }; 
         //---------------------------------- Dropbox Multiple Custom --------------------------------
         function dropDownBoxTemplate(cellElement, cellInfo, docAcc) {
-            console.log(docAcc);
             return $("<div>").dxDropDownBox({
                 value: docAcc,
                 valueExpr: "accountId",
@@ -1002,7 +995,6 @@
                     return $dataGrid;
                 },
                 onValueChanged: function (e) {
-                    console.log(e);
                     cellInfo.setValue(e.value);
                 },
                 //onSelectionChanged: function (e) {

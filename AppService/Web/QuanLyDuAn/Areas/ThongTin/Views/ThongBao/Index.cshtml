@@ -123,7 +123,6 @@
         let customStore_Log = (item) => new DevExpress.data.CustomStore({
             key: "id",
             load: (values) => {
-                console.log(item);
                 var deferred = $.Deferred();
                 var params = {
                     'PageSize': isNullOrEmpty(values.take) ? values.take : 0,
@@ -155,7 +154,6 @@
                 });
                 return deferred.promise();
             },
-
         });
         let customStore_Groups = new DevExpress.data.CustomStore({
             key: "id",
@@ -269,11 +267,6 @@
                             //},
                         }
                     },
-                    //{
-                    //    dataField: "message",
-                    //    caption: "Lời nhắn",
-                    //    dataType: "string",
-                    //},
                     {
                         dataField: "link",
                         caption: "Đường dẫn",
@@ -283,11 +276,6 @@
                             placeholder: "Vui lòng nhập...",
                         },
                     },
-                    //{
-                    //    dataField: "sub",
-                    //    caption: "Lời chào",
-                    //    dataType: "string",
-                    //},
                     {
 
                         dataField: "bodyContent",
@@ -307,7 +295,6 @@
                             placeholder: "Vui lòng nhập...",
                         }
                     },
-
                 ],
                 paging: { enabled: true, pageSize: 20 },
                 pager: {
@@ -412,7 +399,8 @@
                                     dataType: "number",
                                     lookup: {
                                         dataSource: customStore_AccountInfo.store(),
-                                        valueExpr: "accountId", displayExpr: "avatarImg",
+                                        valueExpr: "accountId",
+                                        displayExpr: "avatarImg",
                                     },
                                     cellTemplate: (c, o) => {
                                         $("<img />")
@@ -444,7 +432,8 @@
                                     dataType: "number",
                                     lookup: {
                                         dataSource: customStore_AccountInfo.store(),
-                                        valueExpr: "accountId", displayExpr: "userName",
+                                        valueExpr: "accountId",
+                                        displayExpr: "userName",
                                     },
                                 },//account
                                 {
@@ -527,7 +516,6 @@
                 onSelectionChanged: (e) => {
                     var selectedRowData = e.selectedRowsData[0];
                     var selectedRowKey = e.selectedRowKeys[0];
-                    console.log(selectedRowData);
                     if (selectedRowData != null && selectedRowKey != null) {
                         var data = e.component.getRowIndexByKey(selectedRowKey);
                         $("#action-update").dxSpeedDialAction({
@@ -770,7 +758,6 @@
         };
         // ---------------------------------- Dropbox Multiple Custom --------------------------------
         function dropDownBoxTemplate(cellElement, cellInfo, docAcc) {
-            console.log(docAcc);
             return $("<div>").dxDropDownBox({
                 value: docAcc,
                 valueExpr: "accountId",
@@ -831,7 +818,6 @@
                     return $dataGrid;
                 },
                 onValueChanged: function (e) {
-                    console.log(e);
                     cellInfo.setValue(e.value);
                 },
                 //onSelectionChanged: function (e) {
