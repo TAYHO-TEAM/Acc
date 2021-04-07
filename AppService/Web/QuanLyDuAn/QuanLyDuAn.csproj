@@ -15,7 +15,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>QuanLyDuAn</RootNamespace>
     <AssemblyName>QuanLyDuAn</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />
@@ -185,8 +185,6 @@
     <Compile Include="Areas\NganSach\Controllers\NhomCongViecController.cs" />
     <Compile Include="Areas\NganSach\Controllers\ThanhToanController.cs" />
     <Compile Include="Areas\NganSach\NganSachAreaRegistration.cs" />
-    <Compile Include="Areas\PDFEditer\Controllers\HomeController.cs" />
-    <Compile Include="Areas\PDFEditer\PDFEditerAreaRegistration.cs" />
     <Compile Include="Areas\ThongTin\Controllers\CauHinhController.cs" />
     <Compile Include="Areas\ThongTin\Controllers\DangKyController.cs" />
     <Compile Include="Areas\ThongTin\Controllers\HomeController.cs" />
@@ -215,10 +213,6 @@
     <Compile Include="Utilities\RequestOBJ.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Areas\PDFEditer\Views\Home\Index.cshtml" />
-    <Content Include="Areas\PDFEditer\Views\Shared\_Layout.cshtml" />
-    <Content Include="Areas\PDFEditer\Views\web.config" />
-    <Content Include="Areas\PDFEditer\Views\_ViewStart.cshtml" />
     <Content Include="Content\css\adminlte.css" />
     <Content Include="Content\dx-diagram.css" />
     <Content Include="Content\dx-diagram.min.css" />
@@ -2522,9 +2516,7 @@
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Areas\PDFEditer\Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
