@@ -13,6 +13,9 @@ using Services.Common.Paging;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using System.IO;
+using Services.Common.Media;
+using System.Linq;
 
 namespace ProjectManager.Read.Api.Controllers.v1
 {
@@ -21,6 +24,7 @@ namespace ProjectManager.Read.Api.Controllers.v1
         private readonly IDOBaseRepository<FilesAttachmentDTO> _dOBaseRepository;
         private readonly IFilesAttachmentRepository<FilesAttachmentDTO> _filesAttachmentRepository;
         private const string getBy = nameof(getBy);
+        private const string down = nameof(down);
 
         public FilesAttachmentController(IMapper mapper, IHttpContextAccessor httpContextAccessor, IDOBaseRepository<FilesAttachmentDTO> dOBaseRepository, IFilesAttachmentRepository<FilesAttachmentDTO> filesAttachmentRepository) : base(mapper,httpContextAccessor)
         {
@@ -70,6 +74,46 @@ namespace ProjectManager.Read.Api.Controllers.v1
                 Items = _mapper.Map<IEnumerable<FilesAttachmentResponseViewModel>>(queryResult.Items)
             };
             return Ok(methodResult);
+        }
+        /// <summary>
+        /// DownLoad FilesAttachment.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [Route(down)]
+        [HttpGet]
+        public async Task<IActionResult> DownFilesAttachmentAsync(int id)
+        {
+            RequestBaseFilterParam requestFilter = new RequestBaseFilterParam();
+            requestFilter.FindId = id.ToString();
+            requestFilter.TableName = QuanLyDuAnConstants.FilesAttachment_TABLENAME;
+            var queryResult = await _dOBaseRepository.GetWithPaggingAsync(requestFilter).ConfigureAwait(false);
+            if (queryResult.Items.ToList().Count > 0)
+            {
+                FilesAttachmentDTO oldFile = queryResult.Items.ToList()[0];
+                var files = Path.GetFileName(oldFile.Direct.ToString()).ToList();
+                string filename = oldFile.FileName.ToString();
+                try
+                {
+                    if (string.IsNullOrEmpty(filename))
+                        filename = "";
+                    var memoryStream = new MemoryStream();
+
+                    using (var stream = new FileStream(oldFile.Direct.ToString(), FileMode.Open))
+                    {
+                        await stream.CopyToAsync(memoryStream);
+                    }
+                    memoryStream.Position = 0;
+                    var ext = Path.GetExtension(oldFile.Direct.ToString()).ToLowerInvariant();
+                    return File(memoryStream, FileHelpers.GetMimeTypes()[ext], filename);
+                }
+                catch
+                {
+                    return null;
+                }
+            }
+            else
+                return null;
         }
     }
 }

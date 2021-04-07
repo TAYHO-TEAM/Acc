@@ -125,7 +125,7 @@ namespace ProjectManager.CMD.Infrastructure.Service
                 {
                     await file.CopyToAsync(stream);
                 }
-                return new Tuple<string, string, string,string,string>(filename, _mediaOptions.Host,_mediaOptions.FolderForWeb + Folder, filePath, Path.GetExtension(ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"')));
+                return new Tuple<string, string, string,string,string>(file.FileName, _mediaOptions.Host,_mediaOptions.FolderForWeb + Folder, filePath, Path.GetExtension(ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"')));
             }
             catch
             {
@@ -172,7 +172,7 @@ namespace ProjectManager.CMD.Infrastructure.Service
             return result;
         }
 
-        public async Task<FileResponse> FetechFiles(string subDirectory)
+        public async Task<FileResponse> FetechFilesZip(string subDirectory)
         {
             var zipName = $"archive-{DateTime.Now.ToString("yyyy_MM_dd-HH_mm_ss")}.zip";
 
@@ -197,7 +197,17 @@ namespace ProjectManager.CMD.Infrastructure.Service
             }
 
         }
-
+        public async Task<MemoryStream> FetechFiles(string subDirectory)
+        {
+            var files = Directory.GetFiles(Path.Combine(subDirectory)).ToList();
+            var memoryStream = new MemoryStream();
+            using (var stream = new FileStream(subDirectory, FileMode.Open))
+            {
+                await stream.CopyToAsync(memoryStream);
+            }
+            memoryStream.Position = 0;
+            return memoryStream;
+        }
         public static string SizeConverter(long bytes)
         {
             var fileSize = new decimal(bytes);
