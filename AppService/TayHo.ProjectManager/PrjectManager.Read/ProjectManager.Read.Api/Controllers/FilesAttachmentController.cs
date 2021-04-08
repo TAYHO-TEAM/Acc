@@ -96,7 +96,7 @@ namespace ProjectManager.Read.Api.Controllers.v1
                 try
                 {
                     if (string.IsNullOrEmpty(filename))
-                        filename = "";
+                        filename = string.IsNullOrEmpty(oldFile.FileName.ToString())? "": oldFile.FileName.ToString();
                     var memoryStream = new MemoryStream();
 
                     using (var stream = new FileStream(oldFile.Direct.ToString(), FileMode.Open))

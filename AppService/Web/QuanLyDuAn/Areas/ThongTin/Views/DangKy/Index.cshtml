@@ -146,9 +146,6 @@
             //filter: [["isDelete", "><", true]]
         });
 
-
-
-      
         $(function () {
             loadData(PROJECTID);
         })
@@ -1074,13 +1071,13 @@
                             width: '10%',
                         },
                         {
-                            dataField: "fileName",
+                            dataField: "displayName",
                             caption: "Tên file",
                             dataType: "string",
-                            width: '50%',
+                            width: '60%',
                         },//rev
                         {
-                            caption: "File",
+                            caption: "Tập tin",
                             dataType: "string",
                             cellTemplate: (c, o) => {
                                 var x = (o.data.host + "\\" + o.data.url + "\\" + o.data.fileName).replaceAll('/', '\\');
@@ -1096,6 +1093,28 @@
                                     }
                             },
                         }, //url
+                        {
+                            caption: "Loại",
+                            dataType: "string",
+                            dataField: "tail",
+                            width: '10%',
+                        }, //url
+                        {
+                            type: "buttons",
+                            caption: "Tải xuống",
+                            width: '10%',
+                            alignment: "center",
+                            buttons: [{
+                                icon: "download",
+                                //visible: function (e) {
+                                //    return (e.row.data.parentId === 0 && e.row.data.createBy === UserCurrentInfo.accountId && e.row.data.isVisible === true);
+                                //},
+                                onClick: function (e) {
+                                    var containerE = e.component;
+                                    window.location.href = 'https://api-pm-read.tayho.com.vn/api/read/v1/FilesAttachment/down?id=' + e.row.data.id;
+                                }
+                            }]
+                        },
                     ],
                     editing: {
                         mode: "row",
@@ -1103,19 +1122,7 @@
                         allowDeleting: (e) => { return (e.row.data.createBy === UserCurrentInfo.accountId && isUpload) ? true : false; },
                         allowUpdating: false,
                     },
-                    onToolbarPreparing: (e) => {
-                        //    var container = e.component;
-                        //    e.toolbarOptions.items.unshift(
-                        //        {
-                        //            location: "after", widget: "dxButton",
-                        //            options: {
-                        //                stylingMode: "filled",
-
-                        //                onClick: () => container.refresh()
-                        //            }
-                        //        })
-                    },
-
+   
                 }).dxDataGrid("instance");
                 scrollView.append(content_Upload,content);
                 scrollView.dxScrollView({
