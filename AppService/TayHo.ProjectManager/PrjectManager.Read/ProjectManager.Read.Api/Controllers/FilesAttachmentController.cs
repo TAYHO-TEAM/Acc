@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using System.IO;
 using Services.Common.Media;
 using System.Linq;
+using Services.Common.DomainObjects.Exceptions;
 
 namespace ProjectManager.Read.Api.Controllers.v1
 {
@@ -25,7 +26,7 @@ namespace ProjectManager.Read.Api.Controllers.v1
         private readonly IFilesAttachmentRepository<FilesAttachmentDTO> _filesAttachmentRepository;
         private const string getBy = nameof(getBy);
         private const string down = nameof(down);
-
+        private const int err = 0;
         public FilesAttachmentController(IMapper mapper, IHttpContextAccessor httpContextAccessor, IDOBaseRepository<FilesAttachmentDTO> dOBaseRepository, IFilesAttachmentRepository<FilesAttachmentDTO> filesAttachmentRepository) : base(mapper,httpContextAccessor)
         {
             _dOBaseRepository = dOBaseRepository;
@@ -82,22 +83,31 @@ namespace ProjectManager.Read.Api.Controllers.v1
         /// <returns></returns>
         [Route(down)]
         [HttpGet]
+        [ProducesResponseType(typeof(MethodResult<dynamic>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(VoidMethodResult), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> DownFilesAttachmentAsync(int id)
         {
-            RequestBaseFilterParam requestFilter = new RequestBaseFilterParam();
+            var methodResult = new MethodResult<dynamic>();
+            ErrorResult err = new ErrorResult();
+            err.ErrorCode = "101";
+            err.ErrorMessage = "File không tồn tại";
+    
+           RequestBaseFilterParam requestFilter = new RequestBaseFilterParam();
             requestFilter.FindId = id.ToString();
             requestFilter.TableName = QuanLyDuAnConstants.FilesAttachment_TABLENAME;
             var queryResult = await _dOBaseRepository.GetWithPaggingAsync(requestFilter).ConfigureAwait(false);
+            var memoryStream = new MemoryStream();
             if (queryResult.Items.ToList().Count > 0)
             {
                 FilesAttachmentDTO oldFile = queryResult.Items.ToList()[0];
                 var files = Path.GetFileName(oldFile.Direct.ToString()).ToList();
                 string filename = oldFile.DisplayName.ToString();
+                
                 try
                 {
                     if (string.IsNullOrEmpty(filename))
                         filename = string.IsNullOrEmpty(oldFile.FileName.ToString())? "": oldFile.FileName.ToString();
-                    var memoryStream = new MemoryStream();
+                 
 
                     using (var stream = new FileStream(oldFile.Direct.ToString(), FileMode.Open))
                     {
@@ -109,11 +119,18 @@ namespace ProjectManager.Read.Api.Controllers.v1
                 }
                 catch
                 {
-                    return null;
+                    methodResult.AddErrorMessage(err);
+                    
+                    //if (!methodResult.IsOk) throw new CommandHandlerException(methodResult.ErrorMessages);
+                    return File(memoryStream,"");
                 }
             }
             else
-                return null;
+            {
+                methodResult.AddErrorMessage(err);
+                //if (!methodResult.IsOk) throw new CommandHandlerException(methodResult.ErrorMessages);
+                return File(memoryStream, "");
+            }
         }
     }
 }

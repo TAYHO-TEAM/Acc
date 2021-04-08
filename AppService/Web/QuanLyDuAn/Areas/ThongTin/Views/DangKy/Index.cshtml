@@ -82,7 +82,7 @@
         const ACTION_DOCUMENTTYPE = "/DocumentType";
         const ACTION_REPLY = "/ResponseRegistReply";
         const ACTION_ACCOUNTINFO = "/AccountInfo";
-            
+
         //-------------------- CustomStore -------------------------
         let customStore = (PROJECT) => new DevExpress.data.DataSource({
             store: new DevExpress.data.CustomStore({
@@ -137,7 +137,7 @@
             },
             remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION_REMOVE_FILE, key),
         });
-        let customStore_AccountInfo =(type) => new DevExpress.data.DataSource({
+        let customStore_AccountInfo = (type) => new DevExpress.data.DataSource({
             store: new DevExpress.data.CustomStore({
                 key: "id",
                 loadMode: "raw",
@@ -256,7 +256,7 @@
                                 .appendTo(c);
                             $("<div />")
                                 .attr('id', "popover-detail-" + o.key)
-                                .append("<div>( "+' Đã tạo ' + moment(o.data.createDate).locale("vi").fromNow() + ")" + "</div>")
+                                .append("<div>( " + ' Đã tạo ' + moment(o.data.createDate).locale("vi").fromNow() + ")" + "</div>")
                                 .appendTo(c);
                             $("#popover-detail-" + o.key).dxPopover({
                                 target: "#popover-target-" + o.key,
@@ -334,15 +334,27 @@
                         dataType: "number",
                         alignment: "left",
                         cellTemplate: (container, options) => {
-                            container.append(options.value == 0 ? 'Chờ phản hồi' :
-                                options.value == 1 ? 'Tư vấn phản hồi(A)' :
-                                    options.value == 2 ? 'Tư vấn phản hồi(B)' :
-                                        options.value == 3 ? 'Tư vấn phản hồi(C)' :
-                                            options.value == 4 ? 'Tư vấn phản hồi(D)' :
-                                                options.value == 5 ? 'Ban phản hồi(A)' :
-                                                    options.value == 6 ? 'Ban phản hồi(B)' :
-                                                        options.value == 7 ? 'Ban phản hồi(C)' :
-                                                            options.value == 8 ? 'Ban phản hồi(D)' : 'Đã gửi')
+                            container
+                                .attr('id', "popover-target-" + options.key)
+                                .append(options.value == 0 ? 'Chờ' :
+                                    options.value == 1 ? 'TV phản hồi(A)' :
+                                        options.value == 2 ? 'TV phản hồi(B)' :
+                                            options.value == 3 ? 'TV phản hồi(C)' :
+                                                options.value == 4 ? 'TV phản hồi(D)' :
+                                                    options.value == 5 ? 'Ban phản hồi(A)' :
+                                                        options.value == 6 ? 'Ban phản hồi(B)' :
+                                                            options.value == 7 ? 'Ban phản hồi(C)' :
+                                                                options.value == 8 ? 'Ban phản hồi(D)' : 'Đã gửi')
+                                .addClass(options.value == 0 ? 'text-warning font-weight-bold' :
+                                    options.value == 1 ? 'text-muted font-weight-bold' :
+                                        options.value == 2 ? 'text-muted font-weight-bold' :
+                                            options.value == 3 ? 'text-muted font-weight-bold' :
+                                                options.value == 4 ? 'text-muted font-weight-bold' :
+                                                    options.value == 5 ? 'text-success font-weight-bold' :
+                                                        options.value == 6 ? 'text-success font-weight-bold' :
+                                                            options.value == 7 ? 'text-success font-weight-bold' :
+                                                                options.value == 8 ? 'text-success font-weight-bold' : 'text-danger font-weight-bold');
+
                         },
                     },//status
                     {
@@ -1111,7 +1123,7 @@
                                 //},
                                 onClick: function (e) {
                                     var containerE = e.component;
-                                    window.location.href = 'https://api-pm-read.tayho.com.vn/api/read/v1/FilesAttachment/down?id=' + e.row.data.id;
+                                    window.open('https://api-pm-read.tayho.com.vn/api/read/v1/FilesAttachment/down?id=' + e.row.data.id, '_blank');
                                 }
                             }]
                         },
@@ -1122,9 +1134,9 @@
                         allowDeleting: (e) => { return (e.row.data.createBy === UserCurrentInfo.accountId && isUpload) ? true : false; },
                         allowUpdating: false,
                     },
-   
+
                 }).dxDataGrid("instance");
-                scrollView.append(content_Upload,content);
+                scrollView.append(content_Upload, content);
                 scrollView.dxScrollView({
                     width: '100%',
                     height: '100%'
@@ -1192,8 +1204,8 @@
                                         },
                                         error: function (xhr, textStatus, errorThrown) {
                                             loadingPanel.hide();
-                                            DevExpress.ui.notify("Vui lòng chọn File!" , "error", 3000);
-                     
+                                            DevExpress.ui.notify("Vui lòng chọn File!", "error", 3000);
+
                                         }
                                     });
                                 }
