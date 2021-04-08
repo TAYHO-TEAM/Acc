@@ -49,6 +49,7 @@
         const ACTION_PLAN_REPORT = "/PlanReport";
         const ACTION_FILEGET = "/FilesAttachment/getBy";
         const ACTION_CONVERSATION = "/Conversation";
+        const ACTION_CMD_DETAILACC = "/PlanJobAccount";
 
 
         //-------------------- CMD ------------------------------
@@ -83,7 +84,20 @@
                 filter: fillterCustomStore,
             })
         };
-        let customStore_DETAIL = (id) => customStore_CMD_READ_FILTER_ID(ACTION_CMD_DETAIL, ACTION_DETAIL, 'planMasterId,' + id);
+        let customStore_DETAIL = (id) => new DevExpress.data.DataSource({
+            store: new DevExpress.data.CustomStore({
+                key: "id",
+                load: (values) => ajax_read(ACTION_CMD_DETAILACC, values),
+                insert: (values) => ajax_insert(URL_API_PM_CMD + ACTION_CMD_DETAIL, values),
+                update: (key, values) => ajax_update(URL_API_PM_CMD + ACTION_CMD_DETAIL, key, values),
+                remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION_CMD_DETAIL, key),
+            }),
+            filter: [["planMasterId", "=", id], "and", ["createBy", "=", UserCurrentInfo.accountId]],
+            //sort: {
+            //    selector: "createDate",
+            //    desc: 1,
+            //}
+        });
         let customStore_SCHEDULE = (id) => customStore_CMD_READ_FILTER_ID(ACTION_CMD_SCHEDULE, ACTION_SCHEDULE, 'planMasterId,' + id);
         let customStore_PLANJOB_ACCOUNT = (id) => customStore_CMD_READ_FILTER_ID_KEYWORD(ACTION_CMD_PLAN_ACCOUNT, ACTION_PLAN_ACCOUNT, 'ownerById,' + id, 'PlanJob');
         let customStore_PLANMASTER_ACCOUNT = (id) => customStore_CMD_READ_FILTER_ID(ACTION_CMD_PLAN_ACCOUNT, ACTION_PLAN_ACCOUNT, "ownerById," + id + ";OwnerTable,'PlanMaster'");
@@ -532,7 +546,7 @@
                     container.classList.replace("col-lg-12", "col-lg-8");
                     container.classList.replace("col-md-12", "col-md-8");
                     e.component.refresh();
-                    loadData_detail(selectedRowData.paId);
+                    loadData_detail(selectedRowData.id);
                     loadAttach(selectedRowData);
                     loadComversation(selectedRowData.paId);
                     //loadSchedule(selectedRowData.id);
@@ -1004,6 +1018,7 @@
                         {
                             caption: "File",
                             dataType: "string",
+                            width: '10%',
                             cellTemplate: (c, o) => {
                                 var x = (o.data.host + "\\" + o.data.url + "\\" + o.data.fileName).replaceAll('/', '\\');
                                 if (!x.includes('null'))
@@ -1018,6 +1033,25 @@
                                     }
                             },
                         }, //url
+                        {
+                            caption: "Loại",
+                            dataType: "string",
+                            dataField: "tail",
+                            width: '10%',
+                        }, //url
+                        {
+                            type: "buttons",
+                            caption: "Tải xuống",
+                            width: '10%',
+                            alignment: "center",
+                            buttons: [{
+                                icon: "download",
+                                onClick: function (e) {
+                                    var containerE = e.component;
+                                    window.open('https://api-pm-read.tayho.com.vn/api/read/v1/FilesAttachment/down?id=' + e.row.data.id, '_blank');
+                                }
+                            }]
+                        },
                     ],
                     editing: {
                         mode: "batch",

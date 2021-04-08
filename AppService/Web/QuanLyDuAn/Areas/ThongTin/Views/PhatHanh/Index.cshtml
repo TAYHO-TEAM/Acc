@@ -655,7 +655,7 @@
                             width: '10%',
                         },
                         {
-                            dataField: "fileName",
+                            dataField: "displayName",
                             caption: "Tên file",
                             dataType: "string",
                             width: '50%',
@@ -663,6 +663,7 @@
                         {
                             caption: "File",
                             dataType: "string",
+                            width: '20%',
                             cellTemplate: (c, o) => {
                                 var x = (o.data.host + "\\" + o.data.url + "\\" + o.data.fileName).replaceAll('/', '\\');
                                 if (!x.includes('null'))
@@ -677,6 +678,25 @@
                                     }
                             },
                         }, //url
+                        {
+                            caption: "Loại",
+                            dataType: "string",
+                            dataField: "tail",
+                            width: '10%',
+                        }, //url
+                        {
+                            type: "buttons",
+                            caption: "Tải xuống",
+                            width: '10%',
+                            alignment: "center",
+                            buttons: [{
+                                icon: "download",
+                                onClick: function (e) {
+                                    var containerE = e.component;
+                                    window.open('https://api-pm-read.tayho.com.vn/api/read/v1/FilesAttachment/down?id=' + e.row.data.id, '_blank');
+                                }
+                            }]
+                        },
                     ],
                     editing: {
                         mode: "batch",

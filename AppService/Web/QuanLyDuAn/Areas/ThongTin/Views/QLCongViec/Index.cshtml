@@ -117,7 +117,11 @@
                 update: (key, values) => ajax_update(URL_API_PM_CMD + ACTION_CMD_DETAIL, key, values),
                 remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION_CMD_DETAIL, key),
             }),
-            filter: [["planMasterId", "=", id], "and", ["createby", "=", UserCurrentInfo.accountId]],
+            filter: [["planMasterId", "=", id], "and", ["createBy", "=", UserCurrentInfo.accountId]],
+            //sort: {
+            //    selector: "createDate",
+            //    desc: 1,
+            //}
         });
         let customStore_PLANJOB_ACCOUNT = (id) => customStore_CMD_READ_FILTER_ID_KEYWORD(ACTION_CMD_PLAN_ACCOUNT, ACTION_PLAN_ACCOUNT, 'ownerById,' + id, 'PlanJob');
         let customStore_PLANMASTER_ACCOUNT = (id) => customStore_CMD_READ_FILTER_ID(ACTION_CMD_PLAN_ACCOUNT, ACTION_PLAN_ACCOUNT, "ownerById," + id + ";OwnerTable,'PlanMaster'");
