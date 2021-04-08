@@ -29,7 +29,7 @@
     <script src="~/Scripts/page/ngansach.js"></script>
     <script>
         var giaidoan;
-        var quyen; 
+        var quyen;
 
         var ds_giaidoan = new DevExpress.data.CustomStore({
             key: "id",
@@ -37,7 +37,7 @@
                 values['filter'] = [["projectId", "=", PROJECTID], 'and', ["isActive", "=", 1]];
                 values['sort'] = [{ selector: "status", desc: false }];
                 return ajax_read(ACTION_GIAIDOAN, values);
-            }, 
+            },
             byKey: (key) => {
                 var deferred = $.Deferred();
                 ds_giaidoan.load().done((rs) => {
@@ -82,7 +82,6 @@
                 return deferred.promise();
             },
         });
-
         var ds_hangmuc = new DevExpress.data.CustomStore({
             key: "id",
             load: (values) => {
@@ -121,6 +120,7 @@
                 if (values.giaTri != null && values.giaTri > 0) {
                     if (values.hangMucDetailId != null) {
                         ds_hangmuc_detail.update(values.hangMucDetailId, { giaTri: values.giaTri }).then(() => {
+                            ajax_log_insert("Update", ACTION_HANGMUC, key, values);
                             $("#container-main").dxTreeList('instance').refresh();
                         }, deferred.reject);
                     } else {
@@ -147,9 +147,11 @@
             insert: (values) => ajax_insert(URL_API_PM_CMD + ACTION_HANGMUCDETAIL, values),
             update: (key, values) => ajax_update(URL_API_PM_CMD + ACTION_HANGMUCDETAIL, key, values),
             remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION_HANGMUCDETAIL, key),
+            /*
             onInserted: (key, values) => ajax_log_insert("Insert", ACTION_HANGMUCDETAIL, values, key),
             onUpdated: (key, values) => ajax_log_insert("Update", ACTION_HANGMUCDETAIL, key, values),
             onRemoved: (key) => ajax_log_insert("Delete", ACTION_HANGMUCDETAIL, key, null),
+            */
             reshapeOnPush: true,
         });
         var ds_nhomcongviec = (hangMucId) => new DevExpress.data.CustomStore({
@@ -222,7 +224,7 @@
             onUpdated: (key, values) => ajax_log_insert("Update", ACTION_NHOMCONGVIECDETAIL, key, values),
             onRemoved: (key) => ajax_log_insert("Delete", ACTION_NHOMCONGVIECDETAIL, key, null),
             reshapeOnPush: true,
-        });        
+        });
         var ds_congviec = (nhomCongViecId) => new DevExpress.data.CustomStore({
             key: "id",
             load: (values) => {
@@ -295,7 +297,7 @@
             reshapeOnPush: true,
         });
 
-        $(function () { 
+        $(function () {
             loadFilter();
         });
 
@@ -321,7 +323,7 @@
                                 value: PROJECTID,
                                 onValueChanged: (data) => {
                                     localStorage.setItem('projectIdCurrent', data.value);
-                                    localStorage.setItem('giaiDoanIdCurrent', 0); 
+                                    localStorage.setItem('giaiDoanIdCurrent', 0);
                                     location.reload();
                                 },
                             },
@@ -335,7 +337,7 @@
                                 dataSource: ds_giaidoan,
                                 searchEnabled: true, searchMode: "contains", searchExpr: ["tenGiaiDoan", "dienGiai"],
                                 valueExpr: "id", displayExpr: "tenGiaiDoan",
-                                placeholder: "Vui lòng chọn...", 
+                                placeholder: "Vui lòng chọn...",
                                 value: GIAIDOANID,
                                 itemTemplate: (data) => {
                                     return $("<div>").append($("<b>").append(data.tenGiaiDoan).addClass("mr-1"), $("<em>").append(data.dienGiai));
@@ -343,7 +345,7 @@
                                 onValueChanged: (data) => {
                                     $("#container-sub").fadeOut();
                                     GIAIDOANID = data.value;
-                                    localStorage.setItem('giaiDoanIdCurrent', GIAIDOANID); 
+                                    localStorage.setItem('giaiDoanIdCurrent', GIAIDOANID);
                                 },
                             },
                             validationRules: [{ type: "required" }]
@@ -446,9 +448,22 @@
                 mode: giaidoan.capDo.toUpperCase() == "HM" ? "none" : "single"
             },
             onSelectionChanged: (e) => {
-                var data = e.selectedRowsData[0]; 
+                var data = e.selectedRowsData[0];
                 if (data != null && data.chilCount == 0 && GIAIDOANID != 0) {
                     loadSubData(data);
+                }
+            },
+            onContextMenuPreparing: (e) => {
+                var container = e.component;
+                if (e.row !== "undefined" && e.target == "content" && e.row.rowType == "data") {
+                    var data = e.row.data; if (!e.items) e.items = [];
+					e.items.push({
+                        icon: "clock", text: "Xem lịch sử",
+                        onItemClick: () => {
+                            console.log(data)
+                            callLogEvent(data.id, ACTION_HANGMUCDETAIL)
+                        }
+					});
                 }
             },
         });
@@ -880,7 +895,7 @@
                 c.append(scrollView);
                 return c;
             }
-        }).dxPopup('instance'); 
+        }).dxPopup('instance');
 
         $(document).on('submit', '#form-ncv', function (e) {
             var form = $(this);

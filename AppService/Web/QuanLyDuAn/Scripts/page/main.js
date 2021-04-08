@@ -271,22 +271,18 @@ var callLogEvent = (id, table) => {
             }; 
 
             $.ajax({
-                headers: header,
-                url: URL_API_ACC_READ + "/LogEvent",
-                dataType: "json",
-                data: params,
+                headers: header, url: URL_API_ACC_READ + "/LogEvent", dataType: "json", data: params,
                 success: function (data) {
                     deferred.resolve(data.result.items);
                 },
-                error: function (xhr, textStatus, errorThrown) {
-                    console.log(xhr.responseJSON);
+                error: function (xhr) {
+                    console.log(xhr.responseJSON ? xhr.responseJSON.Message : xhr.statusText);
                     deferred.reject("Có lỗi xảy ra trong quá trình lấy danh sách. Mở Console để xem chi tiết.");
-                },
-                timeout: 5000
+                }
             });
             return deferred.promise();
         },
-    });
+    }); 
 
     $("#popup-log-event").dxPopup({
         width: 900, height: "auto",
@@ -303,11 +299,7 @@ var callLogEvent = (id, table) => {
                 dataSource: customStoreEvent,
                 showBorders: true, showColumnHeaders: true, showColumnLines: false, rowAlternationEnabled: false,
                 showRowLines: true, columnAutoWidth: true, wordWrapEnabled: false, hoverStateEnabled: false,
-                columns: [
-                    {
-                        caption: "STT", cellTemplate: (c, o) => c.append(o.rowIndex + 1),
-                        alignment: "center", width: 80,
-                    },
+                columns: [ 
                     {
                         dataField: "createBy_Name", caption: "Người tạo",
                         alignment: "center", width: 200,
