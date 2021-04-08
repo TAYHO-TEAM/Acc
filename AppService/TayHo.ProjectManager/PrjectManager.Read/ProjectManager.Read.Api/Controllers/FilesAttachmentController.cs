@@ -92,7 +92,7 @@ namespace ProjectManager.Read.Api.Controllers.v1
             {
                 FilesAttachmentDTO oldFile = queryResult.Items.ToList()[0];
                 var files = Path.GetFileName(oldFile.Direct.ToString()).ToList();
-                string filename = oldFile.FileName.ToString();
+                string filename = oldFile.DisplayName.ToString();
                 try
                 {
                     if (string.IsNullOrEmpty(filename))

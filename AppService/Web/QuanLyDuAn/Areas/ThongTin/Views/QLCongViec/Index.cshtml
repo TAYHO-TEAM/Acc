@@ -268,7 +268,7 @@
                     },
                     {
                         dataField: "description",
-                        width: "30%",
+                        width: "25%",
                         caption: "Mô tả CV",
                         dataType: "string",
                         //visible: false,
@@ -277,6 +277,7 @@
                         dataField: "importantLevel",
                         caption: "Độ quan trọng",
                         dataType: "number",
+                        width: "10%",
                         lookup: {
                             dataSource: important,
                             valueExpr: "ID",
@@ -336,7 +337,7 @@
                     },
                     {
                         dataField: "pmCreateBy",
-                        width: "20%",
+                        width: "10%",
                         caption: "Người tạo",
                         dataType: "number",
                         allowEditing: false,
@@ -353,7 +354,7 @@
                     {
                         dataField: "noAttachment",
                         width: "10%",
-                        caption: "Người tạo",
+                        caption: "Đính kèm",
                         dataType: "number",
                         allowEditing: false,
                         cellTemplate: (container, options) => {
