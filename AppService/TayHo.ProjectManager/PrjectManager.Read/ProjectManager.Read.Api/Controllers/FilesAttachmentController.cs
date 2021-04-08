@@ -27,7 +27,7 @@ namespace ProjectManager.Read.Api.Controllers.v1
         private const string getBy = nameof(getBy);
         private const string down = nameof(down);
         private const int err = 0;
-        public FilesAttachmentController(IMapper mapper, IHttpContextAccessor httpContextAccessor, IDOBaseRepository<FilesAttachmentDTO> dOBaseRepository, IFilesAttachmentRepository<FilesAttachmentDTO> filesAttachmentRepository) : base(mapper,httpContextAccessor)
+        public FilesAttachmentController(IMapper mapper, IHttpContextAccessor httpContextAccessor, IDOBaseRepository<FilesAttachmentDTO> dOBaseRepository, IFilesAttachmentRepository<FilesAttachmentDTO> filesAttachmentRepository) : base(mapper, httpContextAccessor)
         {
             _dOBaseRepository = dOBaseRepository;
             _filesAttachmentRepository = filesAttachmentRepository;
@@ -41,7 +41,7 @@ namespace ProjectManager.Read.Api.Controllers.v1
         [HttpGet]
         [ProducesResponseType(typeof(MethodResult<PagingItems<FilesAttachmentResponseViewModel>>), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(VoidMethodResult), (int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> GetFilesAttachmentAsync([FromQuery]BaseRequestViewModel request)
+        public async Task<IActionResult> GetFilesAttachmentAsync([FromQuery] BaseRequestViewModel request)
         {
             var methodResult = new MethodResult<PagingItems<FilesAttachmentResponseViewModel>>();
             RequestBaseFilterParam requestFilter = _mapper.Map<RequestBaseFilterParam>(request);
@@ -91,23 +91,25 @@ namespace ProjectManager.Read.Api.Controllers.v1
             ErrorResult err = new ErrorResult();
             err.ErrorCode = "101";
             err.ErrorMessage = "File không tồn tại";
-    
-           RequestBaseFilterParam requestFilter = new RequestBaseFilterParam();
-            requestFilter.FindId = id.ToString();
-            requestFilter.TableName = QuanLyDuAnConstants.FilesAttachment_TABLENAME;
-            var queryResult = await _dOBaseRepository.GetWithPaggingAsync(requestFilter).ConfigureAwait(false);
             var memoryStream = new MemoryStream();
-            if (queryResult.Items.ToList().Count > 0)
+
+            try
             {
-                FilesAttachmentDTO oldFile = queryResult.Items.ToList()[0];
-                var files = Path.GetFileName(oldFile.Direct.ToString()).ToList();
-                string filename = oldFile.DisplayName.ToString();
+                RequestBaseFilterParam requestFilter = new RequestBaseFilterParam();
+                requestFilter.FindId = id.ToString();
+                requestFilter.TableName = QuanLyDuAnConstants.FilesAttachment_TABLENAME;
+                var queryResult = await _dOBaseRepository.GetWithPaggingAsync(requestFilter).ConfigureAwait(false);
                 
-                try
+                if (queryResult.Items.ToList().Count > 0)
                 {
+                    FilesAttachmentDTO oldFile = queryResult.Items.ToList()[0];
+                    var files = Path.GetFileName(oldFile.Direct.ToString()).ToList();
+                    string filename = oldFile.DisplayName.ToString();
+
+
                     if (string.IsNullOrEmpty(filename))
-                        filename = string.IsNullOrEmpty(oldFile.FileName.ToString())? "": oldFile.FileName.ToString();
-                 
+                        filename = string.IsNullOrEmpty(oldFile.FileName.ToString()) ? "" : oldFile.FileName.ToString();
+
 
                     using (var stream = new FileStream(oldFile.Direct.ToString(), FileMode.Open))
                     {
@@ -116,18 +118,19 @@ namespace ProjectManager.Read.Api.Controllers.v1
                     memoryStream.Position = 0;
                     var ext = Path.GetExtension(oldFile.Direct.ToString()).ToLowerInvariant();
                     return File(memoryStream, FileHelpers.GetMimeTypes()[ext], filename);
+
                 }
-                catch
+                else
                 {
                     methodResult.AddErrorMessage(err);
-                    
                     //if (!methodResult.IsOk) throw new CommandHandlerException(methodResult.ErrorMessages);
-                    return File(memoryStream,"");
+                    return File(memoryStream, "");
                 }
             }
-            else
+            catch
             {
                 methodResult.AddErrorMessage(err);
+
                 //if (!methodResult.IsOk) throw new CommandHandlerException(methodResult.ErrorMessages);
                 return File(memoryStream, "");
             }
