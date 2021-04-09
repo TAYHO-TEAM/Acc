@@ -30,9 +30,9 @@ namespace QuanLyDuAn.Areas.ThongTin.Controllers
         {
             return PartialView();
         }
-        public ActionResult _TienDoReport(int id)
+        public ActionResult _TienDoReport(int id , string unit)
         {
-            return PartialView(id);
+            return PartialView(new Tuple <int,string>(id, unit));
         }
         [HttpPost, ValidateInput(false)]
         public async Task<JsonResult> Create(PlanMaster requestOBJ)

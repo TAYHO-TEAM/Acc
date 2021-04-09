@@ -1,14 +1,14 @@
-﻿@model int
+﻿@model Tuple<int,string>
 <form id="form-regist" action="#" method="POST" enctype="application/json">
 </form>
 
 <script>
     var formData = {
         "planMasterId": "",
-        "planJobId": @Model,
+        "planJobId": @Model.Item1,
         "content": "",
-        "unit": "",
-        "amount": ""
+        "unit":  "@Model.Item2.ToString()",
+        "amount": "",
     };
     $(document).ready(function () {
         var formInstance = $("#form-regist").dxForm({
@@ -41,7 +41,6 @@
                                 displayExpr: "Name",
                             },
                             editorOptions: {
-                                value:'%',
                                 readOnly: true,
                             },
                         },

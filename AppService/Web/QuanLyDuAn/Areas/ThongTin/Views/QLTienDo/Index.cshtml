@@ -636,20 +636,24 @@
                                 hint: "Báo cáo",
                                 text: "Báo cáo",
                                 visible: function (e) {
-                                    if (e.row.data.status > 0 || e.row.data.status !== null) {
+                                    console.log(e);
+                                    if (e.row.data.pjStatus > 0 || e.row.data.pjStatus === null) {
                                         return false;
                                     } else if (e.row.data.endDate < moment()) {
                                         return false;
                                     }
-                                    else {
+                                    else if (e.row.data.paPermistionId === 7 || e.row.data.paPermistionId === 9) {
                                         return true;
+                                    }
+                                    else {
+                                        return false;
                                     }
                                 },
                                 onClick: function (e) {
                                     var container = e.component;
                                     callpopup(
                                         "Báo cáo tiến độ thực tế",
-                                        "/ThongTin/QLTienDo/_TienDoReport/" + e.row.data.id,
+                                        "/ThongTin/QLTienDo/_TienDoReport/" + e.row.data.id + "/" + e.row.data.unit,
                                         ($(window).width() > 767 ? "50%" : "80%"),
                                         container
                                     );
