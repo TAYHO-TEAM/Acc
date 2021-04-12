@@ -39,5 +39,24 @@ namespace ProjectManager.Read.Sql.Repositories
 
             return result;
         }
+        public async Task<DataTable> GetReportAsync(int PlanMasterId)
+        {
+            var table = new DataTable();
+            try
+            {
+                using var conn = await _connectionFactory.CreateConnectionAsync();
+                using var rs = conn.ExecuteReader("sp_PlanReport_GetReport", new { PlanMasterId } , commandType: CommandType.StoredProcedure);
+               
+                table.Load(rs);
+                return table;
+            }
+           
+            catch (Exception ex)
+            {
+                string exm = ex.ToString();
+                return new DataTable();
+            }
+          
+        }
     }
 }

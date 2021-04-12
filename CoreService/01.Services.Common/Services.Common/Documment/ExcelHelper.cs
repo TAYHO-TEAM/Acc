@@ -9,7 +9,7 @@ namespace Services.Common.Documment
 {
     public static class ExcelHelper
     {
-        public static async Task<byte[]> ExportExcel(DataTable dt, string fileName = "")
+        public static async Task<MemoryStream> ExportExcel(DataTable dt, string fileName = "")
         {
             await Task.Yield();
             string excelName = fileName + $"-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
@@ -23,11 +23,11 @@ namespace Services.Common.Documment
                     package.Save();
                 }
                 stream.Position = 0;
-                return stream.ToArray();
+                return stream;
             }
             catch (Exception ex)
             {
-                return new byte[0];
+                return new MemoryStream();
             }
         }
     }
