@@ -130,7 +130,6 @@ namespace ProjectManager.Read.Api.Controllers.v1
             catch
             {
                 methodResult.AddErrorMessage(err);
-
                 //if (!methodResult.IsOk) throw new CommandHandlerException(methodResult.ErrorMessages);
                 return File(memoryStream, "");
             }
