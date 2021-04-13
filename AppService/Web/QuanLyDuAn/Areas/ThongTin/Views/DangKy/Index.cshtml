@@ -1093,6 +1093,7 @@
                             dataType: "string",
                             width: '20%',
                             cellTemplate: (c, o) => {
+                                console.log(o.data);
                                 var x = (o.data.host + "\\" + o.data.url + "\\" + o.data.fileName).replaceAll('/', '\\');
                                 if (!x.includes('null'))
                                     if (['.png', '.jpg', '.jpge'].includes(o.data.tail.toLowerCase(x))) {

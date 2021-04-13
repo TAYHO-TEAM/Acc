@@ -10,8 +10,8 @@ namespace ProjectManager.Read.Api.ViewModels
         public string FileName { get; set; }
         public string DisplayName { get; set; }
         public string Tail { get; set; }
-        //public string Url { get; set; }
-        //public string Host { get; set; }
+        public string Url { get; set; }
+        public string Host { get; set; }
         public string Type { get; set; }
         //public string Direct { get; set; }
     }
