@@ -636,7 +636,7 @@
                                 hint: "Báo cáo",
                                 text: "Báo cáo",
                                 visible: function (e) {
-                                    console.log(e);
+                                
                                     if (e.row.data.pjStatus > 0 || e.row.data.pjStatus === null) {
                                         return false;
                                     } else if (e.row.data.endDate < moment()) {
@@ -687,10 +687,11 @@
                             widget: "dxButton",
                             options: {
                                 text: "Tải báo cáo",
-                                tylingMode: "filled",
+                                stylingMode: "filled",
                                 type: "default",
-                                onClick: (id) => {
-
+                                onClick: () => {
+                                    console.log(id);
+                                    window.open('https://api-pm-read.tayho.com.vn/api/read/v1/PlanMaster/GetReport?planMasterId=' + id, '_blank');
                                 }
                             },
 
@@ -699,7 +700,7 @@
                             location: "after",
                             widget: "dxButton",
                             options: {
-                                icon: "refresh", tylingMode: "filled", type: "default",
+                                icon: "refresh", stylingMode: "filled", type: "default",
                                 onClick: () => container.refresh()
                             },
 
@@ -1064,7 +1065,6 @@
                             buttons: [{
                                 icon: "download",
                                 onClick: function (e) {
-                                    var containerE = e.component;
                                     window.open('https://api-pm-read.tayho.com.vn/api/read/v1/FilesAttachment/down?id=' + e.row.data.id, '_blank');
                                 }
                             }]
