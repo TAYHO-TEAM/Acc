@@ -357,7 +357,8 @@
                                 editorOptions: {
                                     //value: "importantLevel",
                                     dataSource: important,
-                                    valueExpr: "ID", displayExpr: "Name",
+                                    valueExpr: "ID",
+                                    displayExpr: "Name",
                                 },
                             },
                             {
@@ -493,7 +494,6 @@
                     //e.data.ProjectId = PROJECTID;
                 },
                 onRowUpdating: (e) => {
-                    console.log(e);
                     e.newData['isVisible'] = e.newData['pmIsVisible'];
                     e.newData['id'] = e.oldData['id'];
                 },
@@ -653,7 +653,7 @@
                                     var container = e.component;
                                     callpopup(
                                         "Báo cáo tiến độ thực tế",
-                                        "/ThongTin/QLTienDo/_TienDoReport/" + e.row.data.id + "/" + e.row.data.unit,
+                                        "/ThongTin/QLTienDo/_TienDoReport/" + e.row.data.id + "?unit=" + encodeURIComponent( e.row.data.unit),
                                         ($(window).width() > 767 ? "50%" : "80%"),
                                         container
                                     );
@@ -682,6 +682,19 @@
                 onToolbarPreparing: function (e) {
                     var container = e.component;
                     e.toolbarOptions.items.unshift(
+                        {
+                            location: "after",
+                            widget: "dxButton",
+                            options: {
+                                text: "Tải báo cáo",
+                                tylingMode: "filled",
+                                type: "default",
+                                onClick: (id) => {
+
+                                }
+                            },
+
+                        },
                         {
                             location: "after",
                             widget: "dxButton",

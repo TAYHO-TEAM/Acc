@@ -35,7 +35,7 @@ namespace ProjectManager.Read.Sql.Repositories
             using var rs = conn.QueryMultipleAsync("sp_GetDataTableSS_WithPage", requestBaseFilterParam, commandType: CommandType.StoredProcedure).Result;
             result.PagingInfo.TotalItems = await rs.ReadSingleAsync<int>().ConfigureAwait(false);
             result.Items = await rs.ReadAsync<T>().ConfigureAwait(false);
-
+            
             return result;
         }
         public async Task<PagingItems<T>> GetWithPaggingFKAsync(RequestBaseFilterParam requestBaseFilterParam)

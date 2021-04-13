@@ -24,12 +24,18 @@
                             dataField: "content",
                             label: { text: "Nội dung báo cáo" },
                             editorType: "dxTextArea",
+                            editorOptions: {
+                                stylingMode: "filled",
+                            },
                         },
                         {
                             colSpan: 1,
                             dataField: "amount",
                             label: { text: "Khối lượng thực tế" },
                             editorType: "dxNumberBox",
+                            editorOptions: {
+                                stylingMode: "filled",
+                            },
                         },
                         {
                             colSpan: 1,
@@ -41,6 +47,7 @@
                                 displayExpr: "Name",
                             },
                             editorOptions: {
+                                stylingMode: "filled",
                                 readOnly: true,
                             },
                         },
