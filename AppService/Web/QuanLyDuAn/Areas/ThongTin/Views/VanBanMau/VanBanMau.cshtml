@@ -210,28 +210,13 @@
                 onToolbarPreparing: function (e) {
                     var container = e.component;
                     e.toolbarOptions.items.unshift(
-                        //{
-                        //    location: "before", widget: "dxSelectBox",
-                        //    options: {
-                        //        dataSource: customStore_Projects,
-                        //        valueExpr: "id", displayExpr: "title",
-                        //        searchEnabled: true,
-                        //        searchMode: "contains",
-                        //        width: "100%",
-                        //        showClearButton: false,
-                        //        value: PROJECTID,
-                        //        onValueChanged: function (data) {
-                        //            PROJECTID = data.value;
-                        //            localStorage.setItem('projectIdCurrent', PROJECTID);
-                        //            loadData(customStore);
-                        //        },
-                        //    },
-                        //},
                         {
                             location: "after",
                             widget: "dxButton",
                             options: {
-                                icon: "refresh", tylingMode: "filled", type: "default",
+                                icon: "refresh",
+                                stylingMode: "filled",
+                                type: "default",
                                 onClick: () => container.refresh()
                             }
                         })
