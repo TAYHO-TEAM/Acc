@@ -21,6 +21,7 @@
 </div>
 
 @section script{
+    <script src="~/Scripts/page/thongtin.js"></script>
     <script>
         var id = 1;
         var NAMEDOCUMENT = "DocumentReleased";
@@ -32,7 +33,6 @@
         const ACTION_DOCUMENTLOG = "/DocumentReleasedLog";
         const ACTION_FILEGET = "/FilesAttachment/getBy";
         const ACTION_GROUPS = "/Groups";
-        const ACTION_ACCOUNTINFO = "/AccountInfo";
         const ACTION_PROJECT = "/Projects";
         const ACTION_HANGMUC = "/WorkItems";
         var PROJECTID = isNullOrEmpty(localStorage.getItem("projectIdCurrent")) ? parseInt(localStorage.getItem("projectIdCurrent")) : 1;
@@ -51,13 +51,6 @@
                 remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION, key),
             }),
             filter: [["projectId", "=", PROJECT], "and", ["createBy", "=", UserCurrentInfo.accountId]],
-        });
-        let customStore_AccountInfo = new DevExpress.data.DataSource({
-            store: new DevExpress.data.CustomStore({
-                key: "id",
-                loadMode: "raw",
-                load: (values) => ajax_read(ACTION_ACCOUNTINFO, values),
-            }),
         });
         let customStore_DocumetnType = new DevExpress.data.CustomStore({
             key: "id", loadMode: "raw",
@@ -488,7 +481,7 @@
                                     alignment: "center",
                                     dataType: "number",
                                     lookup: {
-                                        dataSource: customStore_AccountInfo.store(),
+                                        dataSource: customStore_AccountInfo().store(),
                                         valueExpr: "accountId", displayExpr: "userName",
                                     },
                                 },//account
@@ -821,7 +814,7 @@
                             alignment: "center",
                             //dataType: "number",
                             lookup: {
-                                dataSource: customStore_AccountInfo.store(),
+                                dataSource: customStore_AccountInfo().store(),
                                 valueExpr: "accountId",
                                 displayExpr: "userName",
                             },
@@ -960,14 +953,14 @@
                 displayExpr: "userName",
                 showSelectionControls: true,
                 showClearButton: true,
-                dataSource: customStore_AccountInfo.store(),
+                dataSource: customStore_AccountInfo().store(),
                 //applyValueMode: "useButtons",
                 searchEnabled: true,
                 placeholder: "Select a value...",
                 contentTemplate: function (e) {
                     var value = e.component.option("value"),
                         $dataGrid = $("<div>").dxDataGrid({
-                            dataSource: customStore_AccountInfo.store(),
+                            dataSource: customStore_AccountInfo().store(),
                             columns: [
                                 {
                                     dataField: "accountId",

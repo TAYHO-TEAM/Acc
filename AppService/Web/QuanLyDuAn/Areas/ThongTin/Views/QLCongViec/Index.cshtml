@@ -72,23 +72,22 @@
             localStorage.setItem('groupOwnerIdCurrent', GROUPOWNERID);
         }
         //--------------------READ------------------------------
-        const ACTION = "/PlanMaster/GetWithAccountProgress";
-        const ACTION_DETAIL = "/PlanJob/GetWithAccount";
-        const ACTION_SCHEDULE = "/PlanSchedule";
-        const ACTION_ACCOUNTINFO = "/AccountInfo";
-        const ACTION_GROUPS = "/Groups";
-        const ACTION_PLAN_ACCOUNT = "/PlanAccount";
-        const ACTION_FILEGET = "/FilesAttachment/getBy";
-        const ACTION_CONVERSATION = "/Conversation";
+        var ACTION = "/PlanMaster/GetWithAccountProgress";
+        var ACTION_DETAIL = "/PlanJob/GetWithAccount";
+        var ACTION_SCHEDULE = "/PlanSchedule";
+        var ACTION_GROUPS = "/Groups";
+        var ACTION_PLAN_ACCOUNT = "/PlanAccount";
+        var ACTION_FILEGET = "/FilesAttachment/getBy";
+        var ACTION_CONVERSATION = "/Conversation";
 
 
         //--------------------CMD------------------------------
-        const ACTION_CMD = "/PlanMaster";
-        const ACTION_CMD_DETAIL = "/PlanJob";
-        const ACTION_CMD_DETAILACC = "/PlanJobAccount";
-        const ACTION_CMD_SCHEDULE = "/PlanSchedule";
-        const ACTION_CMD_PLAN_ACCOUNT = "/PlanAccount";
-        const ACTION_CMD_CONVERSATION = "/Conversation";
+        var ACTION_CMD = "/PlanMaster";
+        var ACTION_CMD_DETAIL = "/PlanJob";
+        var ACTION_CMD_DETAILACC = "/PlanJobAccount";
+        var ACTION_CMD_SCHEDULE = "/PlanSchedule";
+        var ACTION_CMD_PLAN_ACCOUNT = "/PlanAccount";
+        var ACTION_CMD_CONVERSATION = "/Conversation";
 
 
 
@@ -145,26 +144,7 @@
             update: (key, values) => { console.log(values); ajax_update(URL_API_PM_CMD + ACTION_SCHEDULE, key, values); },
             //remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION, key)
         });
-        let customStore_AccountInfo = new DevExpress.data.CustomStore({
-            key: "accountId",
-            load: (values) => {
-                var deferred = $.Deferred();
-                $.ajax({
-                    headers: header, dataType: "json",
-                    url: URL_API_PM_READ + ACTION_ACCOUNTINFO,
-                    success: function (data) {
-                        var list = data.result.items;
-                        deferred.resolve(list);
-                    },
-                    error: function (xhr, textStatus, errorThrown) {
-                        console.log(xhr.responseJSON);
-                        deferred.reject("Có lỗi xảy ra trong quá trình lấy danh sách 'Giai Đoạn'. Mở Console để xem chi tiết.");
-                    },
-                    timeout: 10000
-                });
-                return deferred.promise();
-            },
-        });
+
         let customStore_Groups = new DevExpress.data.CustomStore({
             key: "id",
             load: (values) => {
@@ -346,7 +326,7 @@
                         dataType: "number",
                         allowEditing: false,
                         lookup: {
-                            dataSource: customStore_AccountInfo,
+                            dataSource: customStore_AccountInfo().store(),
                             valueExpr: "accountId",
                             displayExpr: "userName",
                         },
@@ -944,7 +924,7 @@
                         dataType: "string",
                         width: "30%",
                         lookup: {
-                            dataSource: customStore_AccountInfo,
+                            dataSource: customStore_AccountInfo().store(),
                             valueExpr: "accountId",
                             displayExpr: "userName",
                         },
@@ -1345,7 +1325,7 @@
                             alignment: "center",
                             //dataType: "number",
                             lookup: {
-                                dataSource: customStore_AccountInfo,
+                                dataSource: customStore_AccountInfo().store(),
                                 valueExpr: "accountId", displayExpr: "userName",
                             },
 
@@ -1531,7 +1511,7 @@
                             alignment: "center",
                             //dataType: "number",
                             lookup: {
-                                dataSource: customStore_AccountInfo,
+                                dataSource: customStore_AccountInfo().store(),
                                 valueExpr: "accountId", displayExpr: "userName",
                             },
 

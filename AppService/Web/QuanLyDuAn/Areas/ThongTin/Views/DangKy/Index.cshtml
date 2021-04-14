@@ -81,7 +81,6 @@
         var ACTION_HANGMUC = "/WorkItems";
         var ACTION_DOCUMENTTYPE = "/DocumentType";
         var ACTION_REPLY = "/ResponseRegistReply";
-        var ACTION_ACCOUNTINFO = "/AccountInfo";
 
         //-------------------- CustomStore -------------------------
         let customStore = (PROJECT) => new DevExpress.data.DataSource({
@@ -137,14 +136,7 @@
             },
             remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION_REMOVE_FILE, key),
         });
-        let customStore_AccountInfo = (type) => new DevExpress.data.DataSource({
-            store: new DevExpress.data.CustomStore({
-                key: "id",
-                loadMode: "raw",
-                load: (values) => ajax_read(ACTION_ACCOUNTINFO, values),
-            }),
-            //filter: [["isDelete", "><", true]]
-        });
+     
 
         $(function () {
             loadData(PROJECTID);

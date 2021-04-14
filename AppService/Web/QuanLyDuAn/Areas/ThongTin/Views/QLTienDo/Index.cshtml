@@ -112,26 +112,7 @@
             filter: [["topicId", "=", id], "and", ["OwnerTable", "=", "PlanMaster"]],
         });
         let customStore_ItemDetail = (item) => customStore_READDATASOURCE(item);
-        let customStore_AccountInfo = new DevExpress.data.CustomStore({
-            key: "accountId",
-            load: (values) => {
-                var deferred = $.Deferred();
-                $.ajax({
-                    headers: header, dataType: "json",
-                    url: URL_API_PM_READ + ACTION_ACCOUNTINFO,
-                    success: function (data) {
-                        var list = data.result.items;
-                        deferred.resolve(list);
-                    },
-                    error: function (xhr, textStatus, errorThrown) {
-                        console.log(xhr.responseJSON);
-                        deferred.reject("Có lỗi xảy ra trong quá trình lấy danh sách 'Giai Đoạn'. Mở Console để xem chi tiết.");
-                    },
-                    timeout: 10000
-                });
-                return deferred.promise();
-            },
-        });
+       
         let customStore_Groups = new DevExpress.data.CustomStore({
             key: "id",
             load: (values) => {
@@ -301,8 +282,9 @@
                         caption: "Người tạo",
                         dataType: "number",
                         lookup: {
-                            dataSource: customStore_AccountInfo,
-                            valueExpr: "accountId", displayExpr: "userName",
+                            dataSource: customStore_AccountInfo().store(),
+                            valueExpr: "accountId",
+                            displayExpr: "userName",
                         },
                         editorOptions: {
                             readOnly: true,
@@ -788,7 +770,7 @@
                         dataType: "string",
                         width: "30%",
                         lookup: {
-                            dataSource: customStore_AccountInfo,
+                            dataSource: customStore_AccountInfo().store(),
                             valueExpr: "accountId", displayExpr: "userName",
                         },
                         editorOptions: {
@@ -1195,7 +1177,7 @@
                             alignment: "center",
                             //dataType: "number",
                             lookup: {
-                                dataSource: customStore_AccountInfo,
+                                dataSource: customStore_AccountInfo().store(),
                                 valueExpr: "accountId", displayExpr: "userName",
                             },
 
@@ -1390,7 +1372,7 @@
                             alignment: "center",
                             //dataType: "number",
                             lookup: {
-                                dataSource: customStore_AccountInfo,
+                                dataSource: customStore_AccountInfo().store(),
                                 valueExpr: "accountId", displayExpr: "userName",
                             },
 

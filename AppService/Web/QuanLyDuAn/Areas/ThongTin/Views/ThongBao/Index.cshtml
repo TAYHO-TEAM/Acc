@@ -19,22 +19,21 @@
     <script>
         var id = 1;
         ///-----------------------------READ ------------------------
-        const ACTION_READ = "/Notify";
-        const ACTION_READ_NOTIFYACCOUNT = "/NotifyAccount";
-        const ACTION_DOCUMENTACC = "/DocumentReleasedAccount";
-        const ACTION_DOCUMENTLOG = "/NotifyAccount";
-        const ACTION_FILEGET = "/FilesAttachment/getBy";
-        const ACTION_GROUPS = "/Groups";
-        const ACTION_ACCOUNTINFO = "/AccountInfo";
-        const ACTION_PROJECT = "/Projects";
-        const ACTION_HANGMUC = "/WorkItems";
+        var ACTION_READ = "/Notify";
+        var ACTION_READ_NOTIFYACCOUNT = "/NotifyAccount";
+        var ACTION_DOCUMENTACC = "/DocumentReleasedAccount";
+        var ACTION_DOCUMENTLOG = "/NotifyAccount";
+        var ACTION_FILEGET = "/FilesAttachment/getBy";
+        var ACTION_GROUPS = "/Groups";
+        var ACTION_PROJECT = "/Projects";
+        var ACTION_HANGMUC = "/WorkItems";
         var PROJECTID = isNullOrEmpty(localStorage.getItem("projectIdCurrent")) ? parseInt(localStorage.getItem("projectIdCurrent")) : 0;
         //var DOCUMENTTYPEID = isNullOrEmpty(localStorage.getItem("documentTypeIdCurrent")) ? parseInt(localStorage.getItem("documentTypeIdCurrent")) : 7;
 
         //-----------------------------CMD ------------------------
-        const ACTION_CMD = "/Notify";
-        const ACTION_CMD_NOTIFYACCOUNT = "/NotifyAccount";
-        const ACTION_CMD_NOTIFYACCOUNTS = "/NotifyAccount/Accounts";
+        var ACTION_CMD = "/Notify";
+        var ACTION_CMD_NOTIFYACCOUNT = "/NotifyAccount";
+        var ACTION_CMD_NOTIFYACCOUNTS = "/NotifyAccount/Accounts";
 
 
 
@@ -44,13 +43,6 @@
         //..........................Get data -------------------------------------------------------------
 
         let customStore = customStore_CMD_READ(ACTION_CMD, ACTION_READ);
-        let customStore_AccountInfo = new DevExpress.data.DataSource({
-            store: new DevExpress.data.CustomStore({
-                key: "id",
-                loadMode: "raw",
-                load: (values) => ajax_read(ACTION_ACCOUNTINFO, values),
-            }),
-        });
         let customStore_DocumetnType = new DevExpress.data.CustomStore({
             key: "id", loadMode: "raw",
             load: (values) => {
@@ -398,7 +390,7 @@
                                     alignment: "center",
                                     dataType: "number",
                                     lookup: {
-                                        dataSource: customStore_AccountInfo.store(),
+                                        dataSource: customStore_AccountInfo().store(),
                                         valueExpr: "accountId",
                                         displayExpr: "avatarImg",
                                     },
@@ -431,7 +423,7 @@
                                     alignment: "center",
                                     dataType: "number",
                                     lookup: {
-                                        dataSource: customStore_AccountInfo.store(),
+                                        dataSource: customStore_AccountInfo().store(),
                                         valueExpr: "accountId",
                                         displayExpr: "userName",
                                     },
@@ -609,7 +601,7 @@
                             alignment: "center",
                             //dataType: "number",
                             lookup: {
-                                dataSource: customStore_AccountInfo.store(),
+                                dataSource: customStore_AccountInfo().store(),
                                 valueExpr: "accountId",
                                 displayExpr: "userName",
                             },
@@ -764,14 +756,14 @@
                 displayExpr: "userName",
                 showSelectionControls: true,
                 showClearButton: true,
-                dataSource: customStore_AccountInfo.store(),
+                dataSource: customStore_AccountInfo().store(),
                 //applyValueMode: "useButtons",
                 searchEnabled: true,
                 placeholder: "Select a value...",
                 contentTemplate: function (e) {
                     var value = e.component.option("value"),
                         $dataGrid = $("<div>").dxDataGrid({
-                            dataSource: customStore_AccountInfo.store(),
+                            dataSource: customStore_AccountInfo().store(),
                             columns: [
                                 {
                                     dataField: "accountId",

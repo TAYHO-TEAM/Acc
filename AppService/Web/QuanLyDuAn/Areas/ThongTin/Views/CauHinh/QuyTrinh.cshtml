@@ -19,7 +19,6 @@
         var ACTION_GROUPSSTEPPERMISTION = "/GroupStepProcessPermistion";
         var ACTION_PERMISTIONS = "/Permistions";
         var WIDTH_CONTAINER = $("#container").width();
-        var ACTION_ACCOUNTINFO = "/AccountInfo";
 
 
         let customStore = () => {
@@ -96,15 +95,7 @@
                 return deferred.promise();
             },
         });
-        let customStore_AccountInfo = (type) => new DevExpress.data.DataSource({
-            store: new DevExpress.data.CustomStore({
-                key: "id",
-                loadMode: "raw",
-                load: (values) => ajax_read(ACTION_ACCOUNTINFO, values),
-            }),
-            //filter: [["isDelete", "><", true]]
-        });
-
+       
 
         $(function () {
             loadData();

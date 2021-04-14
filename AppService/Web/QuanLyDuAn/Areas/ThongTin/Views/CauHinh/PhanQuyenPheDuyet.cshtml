@@ -20,6 +20,8 @@
         var ACTION_GROUPS = "/Groups";
         var ACTION_PERMISTIONS = "/Permistions";
         var WIDTH_CONTAINER = $("#container").width();
+
+
         $(function () {
             var customStore = new DevExpress.data.CustomStore({
                 key: "id",
@@ -59,6 +61,8 @@
             });
             loadData(customStore);
         });
+
+
         let customStore_Permistions = new DevExpress.data.CustomStore({
             key: "id", loadMode: "raw",
             load: (values) => {
@@ -133,8 +137,14 @@
                     grouping: false
                 },
                 //rootValue: 0, parentIdExpr: "parentId", keyExpr: "id",
-                showBorders: false, showColumnHeaders: true, showColumnLines: false, hoverStateEnabled: true,
-                showRowLines: true, columnAutoWidth: true, wordWrapEnabled: true, rowAlternationEnabled: true,
+                showBorders: false,
+                showColumnHeaders: true,
+                showColumnLines: false,
+                hoverStateEnabled: true,
+                showRowLines: true,
+                columnAutoWidth: true,
+                wordWrapEnabled: true,
+                rowAlternationEnabled: true,
                 columns: [
                     {
                         dataField: "groupId",
