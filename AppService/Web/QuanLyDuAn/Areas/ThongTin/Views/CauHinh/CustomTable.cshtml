@@ -13,14 +13,22 @@
     <script src="~/Scripts/page/thongtin.js"></script>
     <script>
         //--------------------READ------------------------------
-        const ACTION = "/CustomTable";
+        var ACTION = "/CustomTable";
+        var ACTION_ACCOUNTINFO = "/AccountInfo";
 
         //--------------------CMD------------------------------
-        const ACTION_CMD = "/CustomTable";
+        var ACTION_CMD = "/CustomTable";
 
         var WIDTH_CONTAINER = $("#container").width();
 
         let customStore = customStore_CMD_READ(ACTION_CMD, ACTION);
+        let customStore_AccountInfo = (type) => new DevExpress.data.DataSource({
+            store: new DevExpress.data.CustomStore({
+                key: "id",
+                loadMode: "raw",
+                load: (values) => ajax_read(ACTION_ACCOUNTINFO, values),
+            }),
+        });
 
 
         $(function () {
@@ -44,8 +52,9 @@
                 columns: [
                     {
                         dataField: "code",
-                        caption: "Ký Hiệu",
+                        caption: "Kiểu dữ liệu",
                         dataType: "string",
+                        alignment: "center",
                         lookup: {
                             dataSource: parameterType,
                             valueExpr: "ID",
@@ -62,22 +71,75 @@
                         dataField: "title",
                         caption: "Tên trường dữ liệu",
                         dataType: "string",
+                        alignment: "center",
                     },
                     {
                         dataField: "noColum",
                         caption: "Vị trí cột",
                         dataType: "number",
+                        alignment: "center",
                     },
                     {
                         dataField: "noRown",
                         caption: "Giới hạn dòng",
                         dataType: "number",
+                        alignment: "center",
                     },
                     {
                         dataField: "style",
                         caption: "Định dạng CSS",
                         dataType: "number",
+                        alignment: "center",
                     },
+                    {
+                        dataField: "createBy",
+                        width: 150,
+                        caption: "Người đệ trình",
+                        //dataType: "number",
+                        allowEditing: false,
+                        allowFiltering: true,
+                        readOnly: true,
+                        alignment: "center",
+                        editorType: "dxLookup",
+                        lookup: {
+                            dataSource: customStore_AccountInfo(2).store(),
+                            valueExpr: "accountId",
+                            displayExpr: "avatarImg",
+                        },
+                        editorOptions: {
+                            dataSource: customStore_AccountInfo(2),
+                            valueExpr: "accountId",
+                            displayExpr: "userName",
+                            placeholder: "Vui lòng chọn...",
+                            searchExpr: ['accountName', 'userName'],
+                            searchEnabled: true,
+                            showClearButton: true,
+                            itemTemplate: function (data) {
+                                return $("<div>").append($("<b>").append(data.userName).addClass("mr-1"));
+                            },
+                        },
+                        cellTemplate: (c, o) => {
+                            $("<img />")
+                                .attr('id', "popover-target-" + o.key)
+                                .attr("src", "data:image/png;base64," + o.text)
+                                .addClass("img-circle elevation-2 img-size-30")
+                                .attr("onerror", "this.onerror=null;this.src='https://qlcv.tayho.com.vn/Content/user-avartar/avartar-default.jpg';")
+                                .appendTo(c);
+                            $("<div />")
+                                .attr('id', "popover-detail-" + o.key)
+                                .append("<div>( " + ' Đã tạo ' + moment(o.data.createDate).locale("vi").fromNow() + ")" + "</div>")
+                                .appendTo(c);
+                            $("#popover-detail-" + o.key).dxPopover({
+                                target: "#popover-target-" + o.key,
+                                showEvent: "mouseenter", hideEvent: "mouseleave",
+                                position: "bottom",
+                                animation: {
+                                    show: { type: "pop", from: { scale: 0 }, to: { scale: 1 } },
+                                    hide: { type: "fade", from: 1, to: 0 },
+                                }
+                            });
+                        },
+                    },//account
                     //{
                     //    dataField: "priority",
                     //    caption: "Vị trí",
@@ -207,7 +269,7 @@
                         }).dxSpeedDialAction("instance");
 
                         $("#action-log").dxSpeedDialAction({
-                            index: 4, icon: "fas fa-list", label: "Cài đặt chi tiết",
+                            index: 4, icon: "fas fa-list", label: "Cài đặt dữ liệu con",
                             onClick: () => {
                                 var container = e.component;
                                 var model = { id: e.selectedRowsData[0].id, noRown: e.selectedRowsData[0].noRown };

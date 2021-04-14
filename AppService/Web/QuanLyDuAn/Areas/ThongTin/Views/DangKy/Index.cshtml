@@ -69,19 +69,19 @@
         var WIDTH_CONTAINER = $("#container").width();
 
         //--------------------CURD------------------------------
-        const ACTION = "/RequestRegist/GetByAccountID";
-        const ACTION_DETAIL = "/RequestRegist/GetDetail";
-        const ACTION_RESPONSEBYACC = "/ResponseRegist/getByAccount";
-        const ACTION_READ_PLAN = "/PlanRegister/GetByContractorID";
-        const ACTION_RESPONSE = "/ResponseRegist";
-        const ACTION_FILEGET = "/FilesAttachment/getBy";
-        const ACTION_REMOVE_FILE = "/FilesAttachment";
-        const ACTION_CMD = "/RequestRegist";
-        const ACTION_PROJECT = "/Projects";
-        const ACTION_HANGMUC = "/WorkItems";
-        const ACTION_DOCUMENTTYPE = "/DocumentType";
-        const ACTION_REPLY = "/ResponseRegistReply";
-        const ACTION_ACCOUNTINFO = "/AccountInfo";
+        var ACTION = "/RequestRegist/GetByAccountID";
+        var ACTION_DETAIL = "/RequestRegist/GetDetail";
+        var ACTION_RESPONSEBYACC = "/ResponseRegist/getByAccount";
+        var ACTION_READ_PLAN = "/PlanRegister/GetByContractorID";
+        var ACTION_RESPONSE = "/ResponseRegist";
+        var ACTION_FILEGET = "/FilesAttachment/getBy";
+        var ACTION_REMOVE_FILE = "/FilesAttachment";
+        var ACTION_CMD = "/RequestRegist";
+        var ACTION_PROJECT = "/Projects";
+        var ACTION_HANGMUC = "/WorkItems";
+        var ACTION_DOCUMENTTYPE = "/DocumentType";
+        var ACTION_REPLY = "/ResponseRegistReply";
+        var ACTION_ACCOUNTINFO = "/AccountInfo";
 
         //-------------------- CustomStore -------------------------
         let customStore = (PROJECT) => new DevExpress.data.DataSource({
@@ -540,6 +540,7 @@
                             options: {
                                 text: "Thêm mới",
                                 visible: PermitInAction.insert,
+                                stylingMode: "filled",
                                 //icon: "add",
                                 onClick: function () {
                                     callPopup(

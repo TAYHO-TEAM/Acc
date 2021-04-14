@@ -6,7 +6,7 @@
 
 @section style{
     <style>
-        .dx-placeholder {
+        .dx-datagrid-filter-row .dx-placeholder {
             color: white !important;
         }
     </style>
@@ -268,7 +268,7 @@
             });
         };
 
-        
+
         $(function () {
             loadData(PROJECTID);
         });
@@ -481,7 +481,7 @@
                             showBorders: true,
                             dataSource: customStore_Log(options.data),
                             columns: [
-                                  {
+                                {
                                     dataField: "accountId",
                                     caption: "Họ Tên",
                                     dataType: "string",
@@ -951,7 +951,7 @@
                     cellInfo.component.updateDimensions();
                 },
             });
-        }; 
+        };
         //---------------------------------- Dropbox Multiple Custom --------------------------------
         function dropDownBoxTemplate(cellElement, cellInfo, docAcc) {
             return $("<div>").dxDropDownBox({
@@ -973,7 +973,7 @@
                                     dataField: "accountId",
                                     caption: "Mã",
                                     alignment: "center",
-                                    width: '10%', 
+                                    width: '10%',
                                 },//account,
                                 {
                                     dataField: "userName",

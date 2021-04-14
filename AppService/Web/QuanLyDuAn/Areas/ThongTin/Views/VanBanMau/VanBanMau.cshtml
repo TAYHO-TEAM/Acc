@@ -3,9 +3,10 @@
     ViewBag.Title = "VanBanMau";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 @section style{
     <style>
-        .dx-placeholder {
+        .dx-datagrid-filter-row .dx-placeholder {
             color: white !important;
         }
     </style>
@@ -206,6 +207,14 @@
                     mode: "popup",
                     useIcons: false,
                     confirmDelete: true,
+                    popup: {
+                        width: 600,
+                        height: "auto",
+                        showTitle: true,
+                        title: "Tạo thông báo mới",
+                        closeOnOutsideClick: false,
+                        showCloseButton: true,
+                    },
                 },
                 onToolbarPreparing: function (e) {
                     var container = e.component;
@@ -246,7 +255,8 @@
                 },
                 onContentReady: (e) => {
                     $("#action-add").dxSpeedDialAction({
-                        index: 1, icon: "fas fa-plus",
+                        index: 1,
+                        icon: "fas fa-plus",
                         label: "Thêm mới",
                         visible: PermitInAction["insert"],
                         onClick: () => e.component.addRow()
