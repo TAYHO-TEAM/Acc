@@ -15,4 +15,14 @@ var listActiveStatus = [
 ]
 
 
+let customStore_AccountInfo = (type) => new DevExpress.data.DataSource({
+    store: new DevExpress.data.CustomStore({
+        key: "id",
+        loadMode: "raw",
+        load: (values) => ajax_read(ACTION_ACCOUNT_INFO, values),
+    }),
+    //filter: [["type", "=", type]]
+});
+
+
  
