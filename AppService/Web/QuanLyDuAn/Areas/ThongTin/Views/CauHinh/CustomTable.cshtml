@@ -62,8 +62,11 @@
                         },
                         editorType: "dxSelectBox",
                         editorOptions: {
+                            stylingMode: "filled",
                             dataSource: parameterType,
-                            valueExpr: "ID", displayExpr: "Name",
+                            valueExpr: "ID",
+                            displayExpr: "Name",
+                            placeholder: "Vui lòng chọn...",
                         },
                         validationRules: [{ type: "required" }],
                     },
@@ -72,29 +75,45 @@
                         caption: "Tên trường dữ liệu",
                         dataType: "string",
                         alignment: "center",
+                        editorOptions: {
+                            placeholder: "Vui lòng nhập...",
+                            stylingMode: "filled",
+                        }
                     },
                     {
                         dataField: "noColum",
                         caption: "Vị trí cột",
                         dataType: "number",
                         alignment: "center",
+                        editorOptions: {
+                            stylingMode: "filled",
+                            placeholder: "Vui lòng nhập...",
+                        }
                     },
                     {
                         dataField: "noRown",
                         caption: "Giới hạn dòng",
                         dataType: "number",
                         alignment: "center",
+                        editorOptions: {
+                            stylingMode: "filled",
+                            placeholder: "Vui lòng nhập...",
+                        }
                     },
                     {
                         dataField: "style",
                         caption: "Định dạng CSS",
                         dataType: "number",
                         alignment: "center",
+                        editorOptions: {
+                            stylingMode: "filled",
+                            placeholder: "Vui lòng nhập...",
+                        }
                     },
                     {
                         dataField: "createBy",
                         width: 150,
-                        caption: "Người đệ trình",
+                        caption: "Người tạo",
                         //dataType: "number",
                         allowEditing: false,
                         allowFiltering: true,
@@ -114,6 +133,8 @@
                             searchExpr: ['accountName', 'userName'],
                             searchEnabled: true,
                             showClearButton: true,
+                            stylingMode: "filled",
+                            //visible: false,
                             itemTemplate: function (data) {
                                 return $("<div>").append($("<b>").append(data.userName).addClass("mr-1"));
                             },
@@ -141,31 +162,10 @@
                         },
                     },//account
                     //{
-                    //    dataField: "priority",
-                    //    caption: "Vị trí",
-                    //    dataType: "number",
-                    //    width: 110,
-                    //    alignment: "center",
-                    //    editorType: "dxNumberBox",
-                    //    editorOptions: {
-                    //        min: 1, step: 1,
-                    //        showSpinButtons: true,
-                    //    },
-                    //    sortOrder: "desc",
+                    //    dataField: "createDate",
+                    //    caption: "Ngày phát hành",
+                    //    dataType: "date",
                     //},
-                    //{
-                    //    dataField: "isActive", width: 100, alignment: "center",
-                    //    editorType: "dxSwitch",
-                    //},
-                    //{
-                    //    dataField: "isVisible", width: 100, alignment: "center",
-                    //    editorType: "dxSwitch",
-                    //},
-                    //{
-                    //    type: "buttons", caption: "Tác vụ",
-                    //    width: 120, alignment: "center",
-                    //    buttons: ["add", "edit", "delete"]
-                    //}
                 ],
                 //rowDragging: {
                 //    allowDropInsideItem: true,
@@ -202,6 +202,11 @@
                     mode: "popup",
                     useIcons: false,
                     confirmDelete: true,
+                    popup: {
+                        width: 600, height: "auto",
+                        showTitle: true, title: "Trình duyệt",
+                        closeOnOutsideClick: false, showCloseButton: true,
+                    },
                 },
                 onToolbarPreparing: function (e) {
                     var container = e.component;
