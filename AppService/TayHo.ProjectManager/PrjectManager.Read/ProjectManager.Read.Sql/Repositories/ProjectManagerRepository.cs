@@ -364,6 +364,31 @@ namespace ProjectManager.Read.Sql.Repositories
                 case nameof(_dbContext.PlanMasterAccount):
                     orders = _dbContext.PlanMasterAccount;
                     break;
+                case nameof(_dbContext.NotifyConfig):
+                    orders = _dbContext.NotifyConfig;
+                    break;
+                case nameof(_dbContext.NotifyConfigLog):
+                    orders = _dbContext.PlanMasterAccount;
+                    break;
+                case nameof(_dbContext.SysAutoSendMail):
+                    orders = _dbContext.SysAutoSendMail;
+                    break;
+                case nameof(_dbContext.SysJob):
+                    orders = _dbContext.SysJob;
+                    break;
+                case nameof(_dbContext.SysJobColum):
+                    orders = _dbContext.SysJobColum;
+                    break;
+                case nameof(_dbContext.SysJobParameter):
+                    orders = _dbContext.SysJobParameter;
+                    break;
+                case nameof(_dbContext.SysJobTable):
+                    orders = _dbContext.SysJobTable;
+                    break;
+                case nameof(_dbContext.SysMailAccount):
+                    orders = _dbContext.SysMailAccount;
+                    break;
+
                 default:
                     orders = null;
                     break;

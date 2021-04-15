@@ -86,8 +86,15 @@ namespace ProjectManager.CMD.Infrastructure
         public DbSet<NotifyAccountDetail> NotifyAccountDetail { get; set; }
         public DbSet<PlanJobAccount> PlanJobAccount { get; set; }
         public DbSet<PlanMasterAccount> PlanMasterAccount { get; set; }
+        public DbSet<NotifyConfig> NotifyConfig { get; set; }
+        public DbSet<NotifyConfigLog> NotifyConfigLog { get; set; }
+        public DbSet<SysAutoSendMail> SysAutoSendMail { get; set; }
+        public DbSet<SysJob> SysJob { get; set; }
+        public DbSet<SysJobParameter> SysJobParameter { get; set; }
+        public DbSet<SysJobTable> SysJobTable { get; set; }
+        public DbSet<SysMailAccount> SysMailAccount { get; set; }
+        public DbSet<SysJobColum> SysJobColum { get; set; }
 
-        
         #endregion Bilder View Table
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
