@@ -23,7 +23,7 @@ namespace  ProjectManager.CMD.Api.Application.Commands
         public async Task<MethodResult<CreateSysJobCommandResponse>> Handle(CreateSysJobCommand request, CancellationToken cancellationToken)
         {
             var methodResult = new MethodResult<CreateSysJobCommandResponse>();
-            var newSysJob = new SysJob(request.JobName,request.NameDataBase,request.NameStoreProce,request.StartTime,request.EndTime,request.StartDate,request.EndDate,request.FirstDate,request.LastDate,request.NextDate,request.Times,request.Unit,request.StepTime);
+            var newSysJob = new SysJob(request.JobName,request.NameDataBase,request.NameStoreProce, request.ConnStringHash, request.StartTime,request.EndTime,request.StartDate,request.EndDate,request.FirstDate,request.LastDate,request.NextDate,request.Times,request.Unit,request.StepTime);
             newSysJob.SetCreate(_user);
             newSysJob.Status = request.Status.HasValue ? request.Status : newSysJob.Status;
             newSysJob.IsActive = request.IsActive.HasValue ? request.IsActive : newSysJob.IsActive;

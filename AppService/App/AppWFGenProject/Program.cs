@@ -1,19 +1,26 @@
 using AppWFGenProject.Extensions;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration.Json;
+//using Microsoft.Extensions.Configuration.FileExtensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
+using ProjectManager.CMD.Infrastructure;
+using Serilog;
+using Services.Common.Options;
 using System;
 using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
+using Serilog.Events;
 //using System.Configuration;
 
 namespace AppWFGenProject
 {
     static class Program
     {
-        public static IConfiguration _configuration;
+        
+        //public static IConfiguration _configuration;
         /// <summary>
         ///  The main entry point for the application.
         /// </summary>
@@ -22,42 +29,67 @@ namespace AppWFGenProject
         {
             //var provider = new PhysicalFileProvider(@"\Content\Config");
             var currentDirectory = Directory.GetCurrentDirectory();
-            _configuration = new ConfigurationBuilder()
-                            .SetBasePath(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location))
-                            .AddJsonFile(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\Content\Config\appconfig.json", true, true)
-                            .Build();
-            //var hostBuilder = Host.CreateDefaultBuilder()
-            //                        .ConfigureAppConfiguration((context, builder) =>
-            //                        {
-            //                            builder.AddJsonFile("/Content/Config/appconfig.json", optional: true);
-            //                        })
-            //                        .ConfigureServices((hostContext, services) => { 
-            //                            services.AddTransient<MyApplication>();
-            //                        }).UseConsoleLifetime();
 
-            //var builderDefault = hostBuilder.Build();
-
-            //using (var serviceScope = builderDefault.Services.CreateScope())
-            //{
-            //    var services = serviceScope.ServiceProvider;
-            //    try
-            //    {
-            //        var myService = services.GetRequiredService<MyApplication>();
-            //    }
-            //    catch(Exception ex)
-            //    {
-
-            //    }
-            //}
-
+            //_configuration = new ConfigurationBuilder()
+            //                .SetBasePath(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location))
+            //                .AddJsonFile(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\Content\Config\appsettings.json", true, true)
+            //                .Build();
 
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new GenProject(_configuration));
+            //Application.Run(new GenProject(_configuration));
+            var host = CreateHostBuilder(args).Build();
+            using (var serviceScope = host.Services.CreateScope())
+            {
+                var services = serviceScope.ServiceProvider;
+                Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+               .Enrich.FromLogContext()
+               .WriteTo.File("logs\\log.txt", rollingInterval: RollingInterval.Day)
+               .CreateLogger();
+                try
+                {
+                    Log.Information("Application Starting.");
+                    var form1 = services.GetRequiredService<GenProject>();
+
+                    Application.Run(form1);
+                    return;
+                }
+                catch (Exception ex)
+                {
+                    Console.ReadLine();
+                    Log.Fatal(ex, "The Application failed to start.");
+                }
+                finally
+                {
+                    Log.CloseAndFlush();
+                }
+            }
 
         }
 
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+           Host.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration((hostContext, config) =>
+                {
+                    // Configure the app here.
+                    config
+                       .SetBasePath(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location))
+                       .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                       .AddJsonFile(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + $"\\Content\\Config\\appsettings.{hostContext.HostingEnvironment.EnvironmentName}.json", optional: true)
+                       .AddJsonFile(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\Content\Config\appsettings.json", true, true);
+                    config.AddEnvironmentVariables();
+                })
+               .ConfigureServices((hostContext, services) =>
+               {
+                   IConfiguration configuration = hostContext.Configuration;
+                   services.Configure<ProfileMailOptions>(configuration.GetSection("ProfileMailOptions"));
+                   services.AddDbContext<ProjectManagerBaseContext>(opt => opt.UseSqlServer(configuration.GetConnectionString("TayHoConnection")));
+                   services.AddScoped<GenProject>();
+               })
+               .UseSerilog();
     }
     public static class ConfigExtenstions
     {

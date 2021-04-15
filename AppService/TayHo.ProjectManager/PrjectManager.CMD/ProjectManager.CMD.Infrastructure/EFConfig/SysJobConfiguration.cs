@@ -14,6 +14,8 @@ namespace ProjectManager.CMD.Infrastructure.EFConfig
             builder.Property(x => x.JobName).HasField("_jobName").HasMaxLength(256).UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.NameDataBase).HasField("_nameDataBase").HasMaxLength(256).UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.NameStoreProce).HasField("_nameStoreProce").HasMaxLength(512).UsePropertyAccessMode(PropertyAccessMode.Field);
+            builder.Property(x => x.ConnStringHash).HasField("_connStringHash").HasMaxLength(4000).UsePropertyAccessMode(PropertyAccessMode.Field);
+            builder.Property(x => x.Salt).HasField("_salt").HasMaxLength(512).UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.StartTime).HasField("_startTime").UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.EndTime).HasField("_endTime").UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.StartDate).HasField("_startDate").UsePropertyAccessMode(PropertyAccessMode.Field);

@@ -1,6 +1,9 @@
 ﻿using AppWFGenProject.Extensions;
 using AppWFGenProject.FrameWork;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
+using Serilog;
+using Services.Common.Options;
 using System;
 using System.Windows.Forms;
 
@@ -8,12 +11,14 @@ namespace AppWFGenProject
 {
     public partial class GenProject : Form
     {
-        public IConfiguration _configuration;
-        public GenProject(IConfiguration configuration)
+        private IConfiguration _configuration;
+        private readonly ProfileMailOptions _profileMailOptions;
+        public GenProject(IOptionsSnapshot<ProfileMailOptions> snapshotOptionsAccessor)
         {
-            _configuration = configuration;
+            _profileMailOptions = snapshotOptionsAccessor.Value;
             InitializeComponent();
             Environment.GetEnvironmentVariable("Content");
+       
             txtPass.PasswordChar = '*';
             txtServer.Text = "db.tayho.net.vn";
             txtUser.Text = "trienpc";
@@ -21,13 +26,23 @@ namespace AppWFGenProject
             btnGen.Enabled = false;
         }
 
+        //public GenProject(IConfiguration configuration)
+        //{
+        //    _configuration = configuration;
+        //    InitializeComponent();
+        //    Environment.GetEnvironmentVariable("Content");
+        //    txtPass.PasswordChar = '*';
+        //    txtServer.Text = "db.tayho.net.vn";
+        //    txtUser.Text = "trienpc";
+        //    txtDB.Text = "QuanLyDuAn";
+        //    btnGen.Enabled = false;
+        //}
+
         private void GenProject_Load(object sender, EventArgs e)
         {
             clbFunction.Items.Add("CMD", false);
             clbFunction.Items.Add("READ", false);
             clbFunction.Items.Add("HTML", false);
-            //Appointment newapp = new Appointment();
-            //newapp.AllDayEventExample();
         }
 
         private void btnTestConnec_Click(object sender, EventArgs e)
@@ -150,6 +165,29 @@ namespace AppWFGenProject
         {
             cbkCreateNew.Checked = false;
             cbkOverWrite.Checked = false;
+        }
+
+        private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
+        }
+        private void AutoSendMail_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+
+        private void sub11GenNetApi_Click(object sender, EventArgs e)
+        {
+            gbGenCode.Visible = true;
+            gbAutoSendMail.Visible = false;
+        }
+
+     
+        private void sub12SendMail_Click(object sender, EventArgs e)
+        {
+            gbGenCode.Visible = false;
+            gbAutoSendMail.Visible = true;
         }
     }
 }

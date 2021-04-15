@@ -118,70 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="appconfig" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Content\Config\appconfig.json;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="ApplicationModule" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Content\TemPlate\CMD\Api\Infrastructure\AutofacModules\ApplicationModule.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="CreateEntityCommand" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Content\TemPlate\CMD\Api\Application\Command\CreateEntityCommand.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="CreateEntityCommandHandler" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Content\TemPlate\CMD\Api\Application\Command\CreateEntityCommandHandler.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="DeleteEntityCommand" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Content\TemPlate\CMD\Api\Application\Command\DeleteEntityCommand.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="DeleteEntityCommandHandler" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Content\TemPlate\CMD\Api\Application\Command\DeleteEntityCommandHandler.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="Entity" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Content\TemPlate\CMD\Domain\Entity.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="EntityCommand" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Content\TemPlate\CMD\Api\Application\Command\BaseClasses\EntityCommand.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="EntityCommandHandler" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Content\TemPlate\CMD\Api\Application\Command\BaseClasses\EntityCommandHandler.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="EntityCommandSet" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Content\TemPlate\CMD\Api\Application\Command\BaseClasses\EntityCommandSet.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="EntityConfiguration" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Content\TemPlate\CMD\Infra\EntityConfiguration.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="EntityController" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Content\TemPlate\READ\Api\Controllers\EntityController.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="EntityControllerCMD" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Content\TemPlate\CMD\Api\Controllers\EntityController.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="EntityDTO" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Content\TemPlate\READ\Sql\DTOs\EntityDTO.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="EntityProfile" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Content\TemPlate\READ\Api\Infrastructure\Mappings\EntityProfile.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="EntityProfileCMD" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Content\TemPlate\CMD\Api\Infrastructure\Mappings\EntityProfile.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="EntityRepository" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Content\TemPlate\CMD\Infra\EntityRepository.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="EntityResponseViewModel" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Content\TemPlate\READ\Api\ViewModels\EntityResponseViewModel.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="IEntityRepository" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Content\TemPlate\CMD\Domain\IEntityRepository.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="listReplace" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Content\TemPlate\listReplace.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="UpdateEntityCommand" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Content\TemPlate\CMD\Api\Application\Command\UpdateEntityCommand.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="UpdateEntityCommandHandler" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Content\TemPlate\CMD\Api\Application\Command\UpdateEntityCommandHandler.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  <data name="appsettings" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Content\Config\appsettings.json;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>

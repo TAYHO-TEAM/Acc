@@ -29,7 +29,9 @@ namespace AppWFGenProject
         /// </summary>
         private void InitializeComponent()
         {
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GenProject));
+            this.gbGenCode = new System.Windows.Forms.GroupBox();
+            this.gbAutoSendMail = new System.Windows.Forms.GroupBox();
             this.clbFunction = new System.Windows.Forms.CheckedListBox();
             this.btnBrowser = new System.Windows.Forms.Button();
             this.txtDir = new System.Windows.Forms.TextBox();
@@ -46,7 +48,6 @@ namespace AppWFGenProject
             this.chlTable = new System.Windows.Forms.CheckedListBox();
             this.lbl7 = new System.Windows.Forms.Label();
             this.txtDB = new System.Windows.Forms.TextBox();
-            this.lbl6 = new System.Windows.Forms.Label();
             this.btnLoadTable = new System.Windows.Forms.Button();
             this.txtUser = new System.Windows.Forms.TextBox();
             this.txtPass = new System.Windows.Forms.TextBox();
@@ -57,39 +58,82 @@ namespace AppWFGenProject
             this.lbl4 = new System.Windows.Forms.Label();
             this.lbl1 = new System.Windows.Forms.Label();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.groupBox1.SuspendLayout();
+            this.menuMain = new System.Windows.Forms.MenuStrip();
+            this.mnfile = new System.Windows.Forms.ToolStripMenuItem();
+            this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sub11GenNetApi = new System.Windows.Forms.ToolStripMenuItem();
+            this.sub12SendMail = new System.Windows.Forms.ToolStripMenuItem();
+            this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
+            this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.printToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.printPreviewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnEdit = new System.Windows.Forms.ToolStripMenuItem();
+            this.undoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.redoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.cutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.pasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.selectAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnTool = new System.Windows.Forms.ToolStripMenuItem();
+            this.customizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnHelp = new System.Windows.Forms.ToolStripMenuItem();
+            this.contentsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.indexToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.searchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.gbGenCode.SuspendLayout();
             this.tbcConfigGen.SuspendLayout();
             this.tbpCUDR.SuspendLayout();
+            this.menuMain.SuspendLayout();
             this.SuspendLayout();
             // 
-            // groupBox1
+            // gbGenCode
             // 
-            this.groupBox1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.groupBox1.Controls.Add(this.clbFunction);
-            this.groupBox1.Controls.Add(this.btnBrowser);
-            this.groupBox1.Controls.Add(this.txtDir);
-            this.groupBox1.Controls.Add(this.lblDir);
-            this.groupBox1.Controls.Add(this.btnGen);
-            this.groupBox1.Controls.Add(this.tbcConfigGen);
-            this.groupBox1.Controls.Add(this.chlTable);
-            this.groupBox1.Controls.Add(this.lbl7);
-            this.groupBox1.Controls.Add(this.txtDB);
-            this.groupBox1.Controls.Add(this.lbl6);
-            this.groupBox1.Controls.Add(this.btnLoadTable);
-            this.groupBox1.Controls.Add(this.txtUser);
-            this.groupBox1.Controls.Add(this.txtPass);
-            this.groupBox1.Controls.Add(this.txtServer);
-            this.groupBox1.Controls.Add(this.btnTestConnec);
-            this.groupBox1.Controls.Add(this.lbl2);
-            this.groupBox1.Controls.Add(this.lbl3);
-            this.groupBox1.Controls.Add(this.lbl4);
-            this.groupBox1.Controls.Add(this.lbl1);
-            this.groupBox1.Location = new System.Drawing.Point(0, 12);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(932, 418);
-            this.groupBox1.TabIndex = 0;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "GenCode";
+            this.gbGenCode.AutoSize = true;
+            this.gbGenCode.Controls.Add(this.clbFunction);
+            this.gbGenCode.Controls.Add(this.btnBrowser);
+            this.gbGenCode.Controls.Add(this.txtDir);
+            this.gbGenCode.Controls.Add(this.lblDir);
+            this.gbGenCode.Controls.Add(this.btnGen);
+            this.gbGenCode.Controls.Add(this.tbcConfigGen);
+            this.gbGenCode.Controls.Add(this.chlTable);
+            this.gbGenCode.Controls.Add(this.lbl7);
+            this.gbGenCode.Controls.Add(this.txtDB);
+            this.gbGenCode.Controls.Add(this.btnLoadTable);
+            this.gbGenCode.Controls.Add(this.txtUser);
+            this.gbGenCode.Controls.Add(this.txtPass);
+            this.gbGenCode.Controls.Add(this.txtServer);
+            this.gbGenCode.Controls.Add(this.btnTestConnec);
+            this.gbGenCode.Controls.Add(this.lbl2);
+            this.gbGenCode.Controls.Add(this.lbl3);
+            this.gbGenCode.Controls.Add(this.lbl4);
+            this.gbGenCode.Controls.Add(this.lbl1);
+            this.gbGenCode.Location = new System.Drawing.Point(12, 39);
+            this.gbGenCode.Name = "gbGenCode";
+            this.gbGenCode.Size = new System.Drawing.Size(953, 425);
+            this.gbGenCode.TabIndex = 0;
+            this.gbGenCode.TabStop = false;
+            this.gbGenCode.Text = "Gen Code";
+            // 
+            // gbAutoSendMail
+            // 
+            this.gbAutoSendMail.Location = new System.Drawing.Point(1001, 45);
+            this.gbAutoSendMail.Name = "gbAutoSendMail";
+            this.gbAutoSendMail.Size = new System.Drawing.Size(932, 419);
+            this.gbAutoSendMail.TabIndex = 24;
+            this.gbAutoSendMail.TabStop = false;
+            this.gbAutoSendMail.Text = "Send Mail";
+            this.gbAutoSendMail.Visible = false;
+            this.gbAutoSendMail.Enter += new System.EventHandler(this.AutoSendMail_Enter);
             // 
             // clbFunction
             // 
@@ -251,13 +295,6 @@ namespace AppWFGenProject
             this.txtDB.Size = new System.Drawing.Size(140, 23);
             this.txtDB.TabIndex = 11;
             // 
-            // lbl6
-            // 
-            this.lbl6.Location = new System.Drawing.Point(0, 0);
-            this.lbl6.Name = "lbl6";
-            this.lbl6.Size = new System.Drawing.Size(100, 23);
-            this.lbl6.TabIndex = 12;
-            // 
             // btnLoadTable
             // 
             this.btnLoadTable.Location = new System.Drawing.Point(845, 37);
@@ -337,25 +374,283 @@ namespace AppWFGenProject
             this.lbl1.TabIndex = 0;
             this.lbl1.Text = "Server:";
             // 
+            // menuMain
+            // 
+            this.menuMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnfile,
+            this.mnEdit,
+            this.mnTool,
+            this.mnHelp});
+            this.menuMain.Location = new System.Drawing.Point(0, 0);
+            this.menuMain.Name = "menuMain";
+            this.menuMain.Size = new System.Drawing.Size(1237, 24);
+            this.menuMain.TabIndex = 1;
+            this.menuMain.Text = "menuStrip1";
+            // 
+            // mnfile
+            // 
+            this.mnfile.AutoToolTip = true;
+            this.mnfile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.newToolStripMenuItem,
+            this.sub11GenNetApi,
+            this.sub12SendMail,
+            this.openToolStripMenuItem,
+            this.toolStripSeparator,
+            this.saveToolStripMenuItem,
+            this.saveAsToolStripMenuItem,
+            this.toolStripSeparator1,
+            this.printToolStripMenuItem,
+            this.printPreviewToolStripMenuItem,
+            this.toolStripSeparator2,
+            this.exitToolStripMenuItem});
+            this.mnfile.Name = "mnfile";
+            this.mnfile.Size = new System.Drawing.Size(37, 20);
+            this.mnfile.Text = "&File";
+            // 
+            // newToolStripMenuItem
+            // 
+            this.newToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("newToolStripMenuItem.Image")));
+            this.newToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.newToolStripMenuItem.Name = "newToolStripMenuItem";
+            this.newToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.newToolStripMenuItem.Text = "&New";
+            // 
+            // sub11GenNetApi
+            // 
+            this.sub11GenNetApi.Name = "sub11GenNetApi";
+            this.sub11GenNetApi.Size = new System.Drawing.Size(190, 22);
+            this.sub11GenNetApi.Text = "Gen CURD API Net 3.1";
+            this.sub11GenNetApi.Click += new System.EventHandler(this.sub11GenNetApi_Click);
+            // 
+            // sub12SendMail
+            // 
+            this.sub12SendMail.Name = "sub12SendMail";
+            this.sub12SendMail.Size = new System.Drawing.Size(190, 22);
+            this.sub12SendMail.Text = "Setting Send Mail";
+            this.sub12SendMail.Click += new System.EventHandler(this.sub12SendMail_Click);
+            // 
+            // openToolStripMenuItem
+            // 
+            this.openToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("openToolStripMenuItem.Image")));
+            this.openToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.openToolStripMenuItem.Name = "openToolStripMenuItem";
+            this.openToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.openToolStripMenuItem.Text = "&Open";
+            // 
+            // toolStripSeparator
+            // 
+            this.toolStripSeparator.Name = "toolStripSeparator";
+            this.toolStripSeparator.Size = new System.Drawing.Size(187, 6);
+            // 
+            // saveToolStripMenuItem
+            // 
+            this.saveToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("saveToolStripMenuItem.Image")));
+            this.saveToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
+            this.saveToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.saveToolStripMenuItem.Text = "&Save";
+            // 
+            // saveAsToolStripMenuItem
+            // 
+            this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.saveAsToolStripMenuItem.Text = "Save &As";
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(187, 6);
+            // 
+            // printToolStripMenuItem
+            // 
+            this.printToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("printToolStripMenuItem.Image")));
+            this.printToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.printToolStripMenuItem.Name = "printToolStripMenuItem";
+            this.printToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
+            this.printToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.printToolStripMenuItem.Text = "&Print";
+            // 
+            // printPreviewToolStripMenuItem
+            // 
+            this.printPreviewToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("printPreviewToolStripMenuItem.Image")));
+            this.printPreviewToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.printPreviewToolStripMenuItem.Name = "printPreviewToolStripMenuItem";
+            this.printPreviewToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.printPreviewToolStripMenuItem.Text = "Print Pre&view";
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(187, 6);
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.exitToolStripMenuItem.Text = "E&xit";
+            // 
+            // mnEdit
+            // 
+            this.mnEdit.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.undoToolStripMenuItem,
+            this.redoToolStripMenuItem,
+            this.toolStripSeparator3,
+            this.cutToolStripMenuItem,
+            this.copyToolStripMenuItem,
+            this.pasteToolStripMenuItem,
+            this.toolStripSeparator4,
+            this.selectAllToolStripMenuItem});
+            this.mnEdit.Name = "mnEdit";
+            this.mnEdit.Size = new System.Drawing.Size(39, 20);
+            this.mnEdit.Text = "&Edit";
+            // 
+            // undoToolStripMenuItem
+            // 
+            this.undoToolStripMenuItem.Name = "undoToolStripMenuItem";
+            this.undoToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
+            this.undoToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.undoToolStripMenuItem.Text = "&Undo";
+            // 
+            // redoToolStripMenuItem
+            // 
+            this.redoToolStripMenuItem.Name = "redoToolStripMenuItem";
+            this.redoToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Y)));
+            this.redoToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.redoToolStripMenuItem.Text = "&Redo";
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(141, 6);
+            // 
+            // cutToolStripMenuItem
+            // 
+            this.cutToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("cutToolStripMenuItem.Image")));
+            this.cutToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.cutToolStripMenuItem.Name = "cutToolStripMenuItem";
+            this.cutToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
+            this.cutToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.cutToolStripMenuItem.Text = "Cu&t";
+            // 
+            // copyToolStripMenuItem
+            // 
+            this.copyToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("copyToolStripMenuItem.Image")));
+            this.copyToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
+            this.copyToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
+            this.copyToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.copyToolStripMenuItem.Text = "&Copy";
+            // 
+            // pasteToolStripMenuItem
+            // 
+            this.pasteToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("pasteToolStripMenuItem.Image")));
+            this.pasteToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
+            this.pasteToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
+            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.pasteToolStripMenuItem.Text = "&Paste";
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(141, 6);
+            // 
+            // selectAllToolStripMenuItem
+            // 
+            this.selectAllToolStripMenuItem.Name = "selectAllToolStripMenuItem";
+            this.selectAllToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.selectAllToolStripMenuItem.Text = "Select &All";
+            // 
+            // mnTool
+            // 
+            this.mnTool.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.customizeToolStripMenuItem,
+            this.optionsToolStripMenuItem});
+            this.mnTool.Name = "mnTool";
+            this.mnTool.Size = new System.Drawing.Size(46, 20);
+            this.mnTool.Text = "&Tools";
+            // 
+            // customizeToolStripMenuItem
+            // 
+            this.customizeToolStripMenuItem.Name = "customizeToolStripMenuItem";
+            this.customizeToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
+            this.customizeToolStripMenuItem.Text = "&Customize";
+            // 
+            // optionsToolStripMenuItem
+            // 
+            this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
+            this.optionsToolStripMenuItem.Text = "&Options";
+            // 
+            // mnHelp
+            // 
+            this.mnHelp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.contentsToolStripMenuItem,
+            this.indexToolStripMenuItem,
+            this.searchToolStripMenuItem,
+            this.toolStripSeparator5,
+            this.aboutToolStripMenuItem});
+            this.mnHelp.Name = "mnHelp";
+            this.mnHelp.Size = new System.Drawing.Size(44, 20);
+            this.mnHelp.Text = "&Help";
+            // 
+            // contentsToolStripMenuItem
+            // 
+            this.contentsToolStripMenuItem.Name = "contentsToolStripMenuItem";
+            this.contentsToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.contentsToolStripMenuItem.Text = "&Contents";
+            // 
+            // indexToolStripMenuItem
+            // 
+            this.indexToolStripMenuItem.Name = "indexToolStripMenuItem";
+            this.indexToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.indexToolStripMenuItem.Text = "&Index";
+            // 
+            // searchToolStripMenuItem
+            // 
+            this.searchToolStripMenuItem.Name = "searchToolStripMenuItem";
+            this.searchToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.searchToolStripMenuItem.Text = "&Search";
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(119, 6);
+            // 
+            // aboutToolStripMenuItem
+            // 
+            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.aboutToolStripMenuItem.Text = "&About...";
+            // 
             // GenProject
             // 
-            this.ClientSize = new System.Drawing.Size(932, 429);
-            this.Controls.Add(this.groupBox1);
+            this.AutoScroll = true;
+            this.ClientSize = new System.Drawing.Size(1237, 545);
+            this.Controls.Add(this.gbAutoSendMail);
+            this.Controls.Add(this.gbGenCode);
+            this.Controls.Add(this.menuMain);
             this.Name = "GenProject";
             this.Text = "GenProjectNetCore";
             this.Load += new System.EventHandler(this.GenProject_Load);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
+            this.gbGenCode.ResumeLayout(false);
+            this.gbGenCode.PerformLayout();
             this.tbcConfigGen.ResumeLayout(false);
             this.tbpCUDR.ResumeLayout(false);
             this.tbpCUDR.PerformLayout();
+            this.menuMain.ResumeLayout(false);
+            this.menuMain.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox gbGenCode;
         private System.Windows.Forms.Button btnTestConnec;
         private System.Windows.Forms.Label lbl2;
         private System.Windows.Forms.Label lbl3;
@@ -366,7 +661,6 @@ namespace AppWFGenProject
         private System.Windows.Forms.TextBox txtServer;
         private System.Windows.Forms.Button btnLoadTable;
         private System.Windows.Forms.TextBox txtDB;
-        private System.Windows.Forms.Label lbl6;
         private System.Windows.Forms.Label lbl7;
         private System.Windows.Forms.CheckedListBox chlTable;
         private System.Windows.Forms.TabControl tbcConfigGen;
@@ -377,7 +671,6 @@ namespace AppWFGenProject
         private System.Windows.Forms.TextBox txtDir;
         private System.Windows.Forms.Button btnBrowser;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox tbl;
         private System.Windows.Forms.Label lblNameProject;
         private System.Windows.Forms.TextBox txtNameProject;
@@ -385,6 +678,39 @@ namespace AppWFGenProject
         private System.Windows.Forms.CheckBox cbkCreateNew;
         private System.Windows.Forms.CheckBox cbkOverWrite;
         private System.Windows.Forms.CheckedListBox clbFunction;
+        private System.Windows.Forms.MenuStrip menuMain;
+        private System.Windows.Forms.ToolStripMenuItem mnfile;
+        private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator;
+        private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem printToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem printPreviewToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mnEdit;
+        private System.Windows.Forms.ToolStripMenuItem undoToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem redoToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripMenuItem cutToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem copyToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem pasteToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.ToolStripMenuItem selectAllToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mnTool;
+        private System.Windows.Forms.ToolStripMenuItem customizeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mnHelp;
+        private System.Windows.Forms.ToolStripMenuItem contentsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem indexToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem searchToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
+        private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem sub11GenNetApi;
+        private System.Windows.Forms.ToolStripMenuItem sub12SendMail;
+        private System.Windows.Forms.GroupBox gbAutoSendMail;
     }
 }
 

@@ -1,6 +1,10 @@
 using ProjectManager.CMD.Domain.DomainObjects.BaseClasses;
+using Services.Common.DomainObjects;
 using Services.Common.DomainObjects.Exceptions;
+using Services.Common.Security;
+using Services.Common.Utilities;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 
@@ -13,6 +17,8 @@ namespace ProjectManager.CMD.Domain.DomainObjects
         private string _jobName;
         private string _nameDataBase;
         private string _nameStoreProce;
+        private string _connStringHash;
+        private string _salt;
         private TimeSpan? _startTime;
         private TimeSpan? _endTime;
         private DateTime? _startDate;
@@ -30,13 +36,15 @@ namespace ProjectManager.CMD.Domain.DomainObjects
 
         private SysJob()
         {
+            _salt = Helpers.RandomSecretKey();
         }
 
-        public SysJob(string JobName, string NameDataBase, string NameStoreProce, TimeSpan? StartTime, TimeSpan? EndTime, DateTime? StartDate, DateTime? EndDate, DateTime? FirstDate, DateTime? LastDate, DateTime? NextDate, int? Times, byte? Unit, int? StepTime) : this()
+        public SysJob(string JobName, string NameDataBase, string NameStoreProce, string ConnStringHash, TimeSpan? StartTime, TimeSpan? EndTime, DateTime? StartDate, DateTime? EndDate, DateTime? FirstDate, DateTime? LastDate, DateTime? NextDate, int? Times, byte? Unit, int? StepTime) : this()
         {
             _jobName = JobName;
             _nameDataBase = NameDataBase;
             _nameStoreProce = NameStoreProce;
+            _connStringHash = ConnStringHash;
             _startTime = StartTime;
             _endTime = EndTime;
             _startDate = StartDate;
@@ -47,6 +55,9 @@ namespace ProjectManager.CMD.Domain.DomainObjects
             _times = Times;
             _unit = Unit;
             _stepTime = StepTime;
+            if (!string.IsNullOrEmpty(ConnStringHash)) _connStringHash = Hash.Create(ConnStringHash, _salt);
+            ValidatePassword(_connStringHash);
+            if (!IsValid()) throw new DomainException(_errorMessages);
 
         }
 
@@ -56,6 +67,8 @@ namespace ProjectManager.CMD.Domain.DomainObjects
         [MaxLength(256, ErrorMessage = nameof(ErrorCodeInsert.IErr256))] public string JobName { get => _jobName; }
         [MaxLength(256, ErrorMessage = nameof(ErrorCodeInsert.IErr256))] public string NameDataBase { get => _nameDataBase; }
         [MaxLength(512, ErrorMessage = nameof(ErrorCodeInsert.IErr512))] public string NameStoreProce { get => _nameStoreProce; }
+        [MaxLength(512, ErrorMessage = nameof(ErrorCodeInsert.IErr512))] public string ConnStringHash { get => _connStringHash; }
+        [MaxLength(512, ErrorMessage = nameof(ErrorCodeInsert.IErr512))] public string Salt { get => _salt; }
         public TimeSpan? StartTime { get => _startTime; }
         public TimeSpan? EndTime { get => _endTime; }
         public DateTime? StartDate { get => _startDate; }
@@ -97,11 +110,30 @@ namespace ProjectManager.CMD.Domain.DomainObjects
         { _unit = !Unit.HasValue ? _unit : Unit; if (!IsValid()) throw new DomainException(_errorMessages); }
         public void SetStepTime(int? StepTime)
         { _stepTime = !StepTime.HasValue ? _stepTime : StepTime; if (!IsValid()) throw new DomainException(_errorMessages); }
+        public void SetConnStringHash(string ConnStringHash)
+        {
+            _connStringHash = string.IsNullOrEmpty(ConnStringHash) ? _connStringHash : Hash.Create(ConnStringHash, _salt); if (!IsValid()) throw new DomainException(_errorMessages);
 
-
+        }
+        public void SetSalt(string Salt) { _salt = string.IsNullOrEmpty(Salt) ? _salt : Salt; if (!IsValid()) throw new DomainException(_errorMessages); }
         public sealed override bool IsValid()
         {
             return base.IsValid();
+        }
+        public void ValidatePassword(string password)
+        {
+            if (string.IsNullOrEmpty(password))
+            {
+                _errorMessages.Add(new ErrorResult
+                {
+                    ErrorCode = "-101",
+                    ErrorMessage = nameof(ErrorCodeInsert.IErr000),
+                    ErrorValues = new List<string>
+                    {
+                        ErrorHelpers.GenerateErrorResult(nameof(password),password)
+                    }
+                });
+            }
         }
         #endregion Behaviours
     }

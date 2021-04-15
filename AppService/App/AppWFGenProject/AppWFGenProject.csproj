@@ -36,8 +36,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="EPPlus" Version="5.4.2" />
+    <PackageReference Include="EPPlus" Version="5.6.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="5.0.0" />
@@ -52,7 +53,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="Content\Config\appconfig.json" />
+    <Content Remove="Content\Config\appsettings.json" />
   </ItemGroup>
 
   <ItemGroup>
@@ -68,7 +69,71 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Content\Config\appconfig.json" />
+    <ProjectReference Include="..\..\..\CoreService\01.Services.Common\Services.Common\Services.Common.csproj" />
+    <ProjectReference Include="..\..\TayHo.ProjectManager\PrjectManager.CMD\ProjectManager.CMD.Infrastructure\ProjectManager.CMD.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Content\Config\appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Content\TemPlate\CMD\Api\Application\Command\CreateEntityCommand.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Content\TemPlate\CMD\Api\Application\Command\CreateEntityCommandHandler.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Content\TemPlate\CMD\Api\Application\Command\DeleteEntityCommand.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Content\TemPlate\CMD\Api\Application\Command\DeleteEntityCommandHandler.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Content\TemPlate\CMD\Api\Application\Command\UpdateEntityCommand.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Content\TemPlate\CMD\Api\Application\Command\UpdateEntityCommandHandler.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Content\TemPlate\CMD\Api\Controllers\EntityController.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Content\TemPlate\CMD\Api\Infrastructure\AutofacModules\ApplicationModule.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Content\TemPlate\CMD\Api\Infrastructure\Mappings\EntityProfile.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Content\TemPlate\CMD\Domain\Entity.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Content\TemPlate\CMD\Domain\IEntityRepository.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Content\TemPlate\CMD\Infra\EntityConfiguration.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Content\TemPlate\CMD\Infra\EntityRepository.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Content\TemPlate\listReplace.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Content\TemPlate\READ\Api\Controllers\EntityController.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Content\TemPlate\READ\Api\Infrastructure\Mappings\EntityProfile.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Content\TemPlate\READ\Api\ViewModels\EntityResponseViewModel.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Content\TemPlate\READ\Sql\DTOs\EntityDTO.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
