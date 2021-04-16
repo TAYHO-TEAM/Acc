@@ -13,8 +13,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="bin\**" />
     <Compile Remove="Properties\App_Data\Content\netcoreapp3.1\**" />
+    <EmbeddedResource Remove="bin\**" />
     <EmbeddedResource Remove="Properties\App_Data\Content\netcoreapp3.1\**" />
+    <None Remove="bin\**" />
     <None Remove="Properties\App_Data\Content\netcoreapp3.1\**" />
   </ItemGroup>
 

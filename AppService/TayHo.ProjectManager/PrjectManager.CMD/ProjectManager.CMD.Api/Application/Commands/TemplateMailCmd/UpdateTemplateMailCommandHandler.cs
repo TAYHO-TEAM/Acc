@@ -9,11 +9,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 
-namespace  ProjectManager.CMD.Api.Application.Commands
+namespace ProjectManager.CMD.Api.Application.Commands
 {
-    public class UpdateTemplateMailCommandHandler : TemplateMailCommandHandler,IRequestHandler<UpdateTemplateMailCommand, MethodResult<UpdateTemplateMailCommandResponse>>
+    public class UpdateTemplateMailCommandHandler : TemplateMailCommandHandler, IRequestHandler<UpdateTemplateMailCommand, MethodResult<UpdateTemplateMailCommandResponse>>
     {
-        public UpdateTemplateMailCommandHandler(IMapper mapper,IHttpContextAccessor httpContextAccessor, ITemplateMailRepository templateMailRepository) : base(mapper,httpContextAccessor,templateMailRepository)
+        public UpdateTemplateMailCommandHandler(IMapper mapper, IHttpContextAccessor httpContextAccessor, ITemplateMailRepository templateMailRepository) : base(mapper, httpContextAccessor, templateMailRepository)
         {
         }
 
@@ -40,11 +40,11 @@ namespace  ProjectManager.CMD.Api.Application.Commands
             existingTemplateMail.Status = request.Status.HasValue ? request.Status : existingTemplateMail.Status;
 
             existingTemplateMail.SetTitle(request.Title);
-	existingTemplateMail.SetBodyContent(request.BodyContent);
-			existingTemplateMail.SetIsBodyHtml(request.IsBodyHtml);
-			
+            existingTemplateMail.SetBodyContent(request.BodyContent);
+            existingTemplateMail.SetIsBodyHtml(request.IsBodyHtml);
 
-            existingTemplateMail.SetUpdate(_user,null);
+
+            existingTemplateMail.SetUpdate(_user, null);
             _templateMailRepository.Update(existingTemplateMail);
             await _templateMailRepository.UnitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
             methodResult.Result = _mapper.Map<UpdateTemplateMailCommandResponse>(existingTemplateMail);

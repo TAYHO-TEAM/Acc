@@ -22,12 +22,12 @@ namespace AppWFGenProject.FrameWork
             {
                 i++;
                 GenOB.builderFields += row["PrivateOBJ"].ToString() + "\r\n\t" + (i > 1 ? "\t\t" : "");
-                GenOB.paramCreate += row["PublicParameter"].ToString().TrimEnd(','); 
+                GenOB.paramCreate += row["PublicParameter"].ToString(); 
                 GenOB.functionCreate += row["FunctionPublic"].ToString() + "\r\n\t" + (i > 1 ? "\t\t" : "");
                 GenOB.builderProperties += row["PropertiesOBJ"].ToString() + "\r\n\t" + (i > 1 ? "\t\t" : "");
                 GenOB.builderBehaviours += row["FunctionBehavior"].ToString() + "\r\n\t" + (i > 1 ? "\t\t" : "");
             }
-            //GenOB.paramCreate = GenOB.paramCreate.TrimEnd(',');
+            GenOB.paramCreate = GenOB.paramCreate.TrimEnd(',');
             fileHelper.CreateFileFrom(pathentitytxt, fileHelper.ReplaceFileName((direct.DomainObjects + ConstFileNameTxt.Entity), GenOB), GenOB.getDictionatyChange());
         }
         public void GenIRespositories(GenOB GenOB)
@@ -36,7 +36,6 @@ namespace AppWFGenProject.FrameWork
             ConstDirect direct = new ConstDirect(GenOB.nameproject, GenOB.rootDir);
             /// get repos  
             string pathRepository = ConstPath.CMDDomain + ConstFileNameTxt.IEntityRepository;
-
             fileHelper.CreateFileFrom(pathRepository, fileHelper.ReplaceFileName((direct.IRepositories + ConstFileNameTxt.IEntityRepository), GenOB), GenOB.getDictionatyChange());
         }
         /// <summary>
