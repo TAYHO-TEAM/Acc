@@ -27,6 +27,9 @@
         var ACTION_GROUPS = "/Groups";
         var ACTION_PROJECT = "/Projects";
         var ACTION_HANGMUC = "/WorkItems";
+        var ACTION_TEMPLATE = "/TemplateMail";
+
+
         var PROJECTID = isNullOrEmpty(localStorage.getItem("projectIdCurrent")) ? parseInt(localStorage.getItem("projectIdCurrent")) : 0;
         //var DOCUMENTTYPEID = isNullOrEmpty(localStorage.getItem("documentTypeIdCurrent")) ? parseInt(localStorage.getItem("documentTypeIdCurrent")) : 7;
 
@@ -211,6 +214,14 @@
                 return deferred.promise();
             },
         });
+        let customStore_Template = () => {
+            return new DevExpress.data.DataSource({
+                store: new DevExpress.data.CustomStore({
+                    key: "id",
+                    load: (values) => ajax_read(ACTION_TEMPLATE, values),
+                }),
+            })
+        };
         //..........................  Load View -------------------------------------------------------------
         $(function () {
             loadData();
@@ -269,7 +280,6 @@
                         },
                     },
                     {
-
                         dataField: "bodyContent",
                         caption: "Nội dung",
                         dataType: "string",
@@ -282,9 +292,13 @@
                         dataField: "templateId",
                         caption: "Theo mẫu",
                         dataType: "number",
+                        editorType: "dxSelectBox",
                         editorOptions: {
+                            dataSource: customStore_Template().store(),
                             stylingMode: "filled",
-                            placeholder: "Vui lòng nhập...",
+                            placeholder: "Vui lòng chọn...",
+                            valueExpr: "id",
+                            displayExpr: "title",
                         }
                     },
                 ],
