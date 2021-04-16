@@ -19,6 +19,7 @@ namespace ProjectManager.CMD.Api.Application.Commands
         public int? Times { get; set; }
         public byte? Unit { get; set; }
         public int? StepTime { get; set; }
+        public bool? IsTemplate { get; set; }
 
     }
 }

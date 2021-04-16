@@ -9,11 +9,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 
-namespace  ProjectManager.CMD.Api.Application.Commands
+namespace ProjectManager.CMD.Api.Application.Commands
 {
-    public class UpdateSysJobCommandHandler : SysJobCommandHandler,IRequestHandler<UpdateSysJobCommand, MethodResult<UpdateSysJobCommandResponse>>
+    public class UpdateSysJobCommandHandler : SysJobCommandHandler, IRequestHandler<UpdateSysJobCommand, MethodResult<UpdateSysJobCommandResponse>>
     {
-        public UpdateSysJobCommandHandler(IMapper mapper,IHttpContextAccessor httpContextAccessor, ISysJobRepository sysJobRepository) : base(mapper,httpContextAccessor,sysJobRepository)
+        public UpdateSysJobCommandHandler(IMapper mapper, IHttpContextAccessor httpContextAccessor, ISysJobRepository sysJobRepository) : base(mapper, httpContextAccessor, sysJobRepository)
         {
         }
 
@@ -40,21 +40,21 @@ namespace  ProjectManager.CMD.Api.Application.Commands
             existingSysJob.Status = request.Status.HasValue ? request.Status : existingSysJob.Status;
 
             existingSysJob.SetJobName(request.JobName);
-	existingSysJob.SetNameDataBase(request.NameDataBase);
-			existingSysJob.SetNameStoreProce(request.NameStoreProce);
-			existingSysJob.SetStartTime(request.StartTime);
-			existingSysJob.SetEndTime(request.EndTime);
-			existingSysJob.SetStartDate(request.StartDate);
-			existingSysJob.SetEndDate(request.EndDate);
-			existingSysJob.SetFirstDate(request.FirstDate);
-			existingSysJob.SetLastDate(request.LastDate);
-			existingSysJob.SetNextDate(request.NextDate);
-			existingSysJob.SetTimes(request.Times);
-			existingSysJob.SetUnit(request.Unit);
-			existingSysJob.SetStepTime(request.StepTime);
-			
+            existingSysJob.SetNameDataBase(request.NameDataBase);
+            existingSysJob.SetNameStoreProce(request.NameStoreProce);
+            existingSysJob.SetStartTime(request.StartTime);
+            existingSysJob.SetEndTime(request.EndTime);
+            existingSysJob.SetStartDate(request.StartDate);
+            existingSysJob.SetEndDate(request.EndDate);
+            existingSysJob.SetFirstDate(request.FirstDate);
+            existingSysJob.SetLastDate(request.LastDate);
+            existingSysJob.SetNextDate(request.NextDate);
+            existingSysJob.SetTimes(request.Times);
+            existingSysJob.SetUnit(request.Unit);
+            existingSysJob.SetStepTime(request.StepTime);
+            existingSysJob.SetIsTemplate(request.IsTemplate);
 
-            existingSysJob.SetUpdate(_user,null);
+            existingSysJob.SetUpdate(_user, null);
             _sysJobRepository.Update(existingSysJob);
             await _sysJobRepository.UnitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
             methodResult.Result = _mapper.Map<UpdateSysJobCommandResponse>(existingSysJob);
