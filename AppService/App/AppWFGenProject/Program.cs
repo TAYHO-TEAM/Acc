@@ -13,6 +13,7 @@ using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
 using Serilog.Events;
+using AppWFGenProject.Entities;
 //using System.Configuration;
 
 namespace AppWFGenProject
@@ -86,6 +87,7 @@ namespace AppWFGenProject
                {
                    IConfiguration configuration = hostContext.Configuration;
                    services.Configure<ProfileMailOptions>(configuration.GetSection("ProfileMailOptions"));
+                   services.Configure<Common>(configuration.GetSection("Common"));
                    services.AddDbContext<ProjectManagerBaseContext>(opt => opt.UseSqlServer(configuration.GetConnectionString("TayHoConnection")));
                    services.AddScoped<GenProject>();
                })

@@ -1,4 +1,5 @@
-﻿using AppWFGenProject.Extensions;
+﻿using AppWFGenProject.Entities;
+using AppWFGenProject.Extensions;
 using AppWFGenProject.FrameWork;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
@@ -11,21 +12,19 @@ namespace AppWFGenProject
 {
     public partial class GenProject : Form
     {
-        private IConfiguration _configuration;
-        private readonly ProfileMailOptions _profileMailOptions;
-        public GenProject(IOptionsSnapshot<ProfileMailOptions> snapshotOptionsAccessor)
+
+        private readonly Common _common;
+        public GenProject( IOptionsSnapshot<Common> commonAccessor)
         {
-            _profileMailOptions = snapshotOptionsAccessor.Value;
+            _common = commonAccessor.Value;
             InitializeComponent();
             Environment.GetEnvironmentVariable("Content");
-       
             txtPass.PasswordChar = '*';
             txtServer.Text = "db.tayho.net.vn";
             txtUser.Text = "trienpc";
             txtDB.Text = "QuanLyDuAn";
             btnGen.Enabled = false;
         }
-
         //public GenProject(IConfiguration configuration)
         //{
         //    _configuration = configuration;
@@ -37,7 +36,6 @@ namespace AppWFGenProject
         //    txtDB.Text = "QuanLyDuAn";
         //    btnGen.Enabled = false;
         //}
-
         private void GenProject_Load(object sender, EventArgs e)
         {
             clbFunction.Items.Add("CMD", false);
@@ -88,13 +86,11 @@ namespace AppWFGenProject
                     //ReadTemplate readTemplate = new ReadTemplate();
 
                     // Set rootDir
-                    genOB.rootDir = txtDir.Text == "" ? @"F:\Test\" : txtDir.Text;
+                    genOB.rootDir = txtDir.Text == "" ? _common.DirectDefault.ToString() : txtDir.Text;
                     // Set common
-                    genOB.common = _configuration.GetValue<string>("Common", "CmdEF").ToString();// "Services.Common.APIs.Cmd.EF;"; // config setting tạo sau
-                                                                                                 // Set db
-                    genOB.db = "QuanLyDuAn"; // config setting tạo sau
-                                             // Set version 
-                    genOB.version = _configuration.GetValue<string>("Common", "Version").ToString();//"v1"; // config setting tạo sau
+                    genOB.common = _common.CmdEF.ToString();
+                    genOB.db = _common.DB.ToString();
+                    genOB.version = _common.Version.ToString();
 
                     if (chlTable.GetItemChecked(i))
                     {
