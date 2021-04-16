@@ -22,12 +22,12 @@ namespace AppWFGenProject.FrameWork
             {
                 i++;
                 GenOB.builderFields += row["PrivateOBJ"].ToString() + "\r\n\t" + (i > 1 ? "\t\t" : "");
-                GenOB.paramCreate += row["PublicParameter"].ToString(); 
+                GenOB.paramCreate += row["PublicParameter"].ToString().TrimEnd(','); 
                 GenOB.functionCreate += row["FunctionPublic"].ToString() + "\r\n\t" + (i > 1 ? "\t\t" : "");
                 GenOB.builderProperties += row["PropertiesOBJ"].ToString() + "\r\n\t" + (i > 1 ? "\t\t" : "");
                 GenOB.builderBehaviours += row["FunctionBehavior"].ToString() + "\r\n\t" + (i > 1 ? "\t\t" : "");
             }
-            GenOB.paramCreate = GenOB.paramCreate.TrimEnd(',');
+            //GenOB.paramCreate = GenOB.paramCreate.TrimEnd(',');
             fileHelper.CreateFileFrom(pathentitytxt, fileHelper.ReplaceFileName((direct.DomainObjects + ConstFileNameTxt.Entity), GenOB), GenOB.getDictionatyChange());
         }
         public void GenIRespositories(GenOB GenOB)
@@ -83,7 +83,6 @@ namespace AppWFGenProject.FrameWork
                 i++;
                 GenOB.builderPublic += row[0].ToString() + "\r\n\t" + (i > 1 ? "\t\t" : "");
             }
-
             fileHelper.CreateFileFrom(pathEntityConfig, fileHelper.ReplaceFileName((direct.CommandBaseClasses + ConstFileNameTxt.EntityCommand), GenOB), GenOB.getDictionatyChange());
             fileHelper.CreateFileFrom(pathEntityCommandHandler, fileHelper.ReplaceFileName((direct.CommandBaseClasses + ConstFileNameTxt.EntityCommandHandler), GenOB), GenOB.getDictionatyChange());
             fileHelper.CreateFileFrom(pathEntityCommandSet, fileHelper.ReplaceFileName((direct.CommandBaseClasses + ConstFileNameTxt.EntityCommandSet), GenOB), GenOB.getDictionatyChange());

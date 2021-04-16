@@ -31,7 +31,6 @@ namespace AppWFGenProject
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GenProject));
             this.gbGenCode = new System.Windows.Forms.GroupBox();
-            this.gbAutoSendMail = new System.Windows.Forms.GroupBox();
             this.clbFunction = new System.Windows.Forms.CheckedListBox();
             this.btnBrowser = new System.Windows.Forms.Button();
             this.txtDir = new System.Windows.Forms.TextBox();
@@ -57,6 +56,7 @@ namespace AppWFGenProject
             this.lbl3 = new System.Windows.Forms.Label();
             this.lbl4 = new System.Windows.Forms.Label();
             this.lbl1 = new System.Windows.Forms.Label();
+            this.gbAutoSendMail = new System.Windows.Forms.GroupBox();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.menuMain = new System.Windows.Forms.MenuStrip();
             this.mnfile = new System.Windows.Forms.ToolStripMenuItem();
@@ -99,6 +99,7 @@ namespace AppWFGenProject
             // gbGenCode
             // 
             this.gbGenCode.AutoSize = true;
+            this.gbGenCode.Controls.Add(this.gbAutoSendMail);
             this.gbGenCode.Controls.Add(this.clbFunction);
             this.gbGenCode.Controls.Add(this.btnBrowser);
             this.gbGenCode.Controls.Add(this.txtDir);
@@ -119,21 +120,10 @@ namespace AppWFGenProject
             this.gbGenCode.Controls.Add(this.lbl1);
             this.gbGenCode.Location = new System.Drawing.Point(12, 39);
             this.gbGenCode.Name = "gbGenCode";
-            this.gbGenCode.Size = new System.Drawing.Size(953, 425);
+            this.gbGenCode.Size = new System.Drawing.Size(1899, 482);
             this.gbGenCode.TabIndex = 0;
             this.gbGenCode.TabStop = false;
             this.gbGenCode.Text = "Gen Code";
-            // 
-            // gbAutoSendMail
-            // 
-            this.gbAutoSendMail.Location = new System.Drawing.Point(1001, 45);
-            this.gbAutoSendMail.Name = "gbAutoSendMail";
-            this.gbAutoSendMail.Size = new System.Drawing.Size(932, 419);
-            this.gbAutoSendMail.TabIndex = 24;
-            this.gbAutoSendMail.TabStop = false;
-            this.gbAutoSendMail.Text = "Send Mail";
-            this.gbAutoSendMail.Visible = false;
-            this.gbAutoSendMail.Enter += new System.EventHandler(this.AutoSendMail_Enter);
             // 
             // clbFunction
             // 
@@ -374,6 +364,17 @@ namespace AppWFGenProject
             this.lbl1.TabIndex = 0;
             this.lbl1.Text = "Server:";
             // 
+            // gbAutoSendMail
+            // 
+            this.gbAutoSendMail.Location = new System.Drawing.Point(961, 41);
+            this.gbAutoSendMail.Name = "gbAutoSendMail";
+            this.gbAutoSendMail.Size = new System.Drawing.Size(932, 419);
+            this.gbAutoSendMail.TabIndex = 24;
+            this.gbAutoSendMail.TabStop = false;
+            this.gbAutoSendMail.Text = "Send Mail";
+            this.gbAutoSendMail.Visible = false;
+            this.gbAutoSendMail.Enter += new System.EventHandler(this.AutoSendMail_Enter);
+            // 
             // menuMain
             // 
             this.menuMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -383,7 +384,7 @@ namespace AppWFGenProject
             this.mnHelp});
             this.menuMain.Location = new System.Drawing.Point(0, 0);
             this.menuMain.Name = "menuMain";
-            this.menuMain.Size = new System.Drawing.Size(1237, 24);
+            this.menuMain.Size = new System.Drawing.Size(1911, 24);
             this.menuMain.TabIndex = 1;
             this.menuMain.Text = "menuStrip1";
             // 
@@ -629,8 +630,7 @@ namespace AppWFGenProject
             // GenProject
             // 
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(1237, 545);
-            this.Controls.Add(this.gbAutoSendMail);
+            this.ClientSize = new System.Drawing.Size(1237, 562);
             this.Controls.Add(this.gbGenCode);
             this.Controls.Add(this.menuMain);
             this.Name = "GenProject";
