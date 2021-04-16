@@ -14,7 +14,6 @@
     <script>
         //--------------------READ------------------------------
         var ACTION = "/CustomTable";
-        var ACTION_ACCOUNTINFO = "/AccountInfo";
 
         //--------------------CMD------------------------------
         var ACTION_CMD = "/CustomTable";
@@ -22,13 +21,6 @@
         var WIDTH_CONTAINER = $("#container").width();
 
         let customStore = customStore_CMD_READ(ACTION_CMD, ACTION);
-        let customStore_AccountInfo = (type) => new DevExpress.data.DataSource({
-            store: new DevExpress.data.CustomStore({
-                key: "id",
-                loadMode: "raw",
-                load: (values) => ajax_read(ACTION_ACCOUNTINFO, values),
-            }),
-        });
 
 
         $(function () {

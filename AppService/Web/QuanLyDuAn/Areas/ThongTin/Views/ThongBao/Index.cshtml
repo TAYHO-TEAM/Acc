@@ -218,6 +218,7 @@
             return new DevExpress.data.DataSource({
                 store: new DevExpress.data.CustomStore({
                     key: "id",
+                    loadMode: "raw",
                     load: (values) => ajax_read(ACTION_TEMPLATE, values),
                 }),
             })
@@ -293,6 +294,11 @@
                         caption: "Theo mẫu",
                         dataType: "number",
                         editorType: "dxSelectBox",
+                        lookup: {
+                            dataSource: customStore_Template().store(),
+                            valueExpr: "id",
+                            displayExpr: "title",
+                        },
                         editorOptions: {
                             dataSource: customStore_Template().store(),
                             stylingMode: "filled",
