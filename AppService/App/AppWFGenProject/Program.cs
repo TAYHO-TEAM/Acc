@@ -54,7 +54,6 @@ namespace AppWFGenProject
                 {
                     Log.Information("Application Starting.");
                     var form1 = services.GetRequiredService<GenProject>();
-
                     Application.Run(form1);
                     return;
                 }
