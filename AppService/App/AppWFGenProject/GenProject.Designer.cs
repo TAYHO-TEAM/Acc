@@ -31,7 +31,6 @@ namespace AppWFGenProject
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GenProject));
             this.gbGenCode = new System.Windows.Forms.GroupBox();
-            this.gbAutoSendMail = new System.Windows.Forms.GroupBox();
             this.clbFunction = new System.Windows.Forms.CheckedListBox();
             this.btnBrowser = new System.Windows.Forms.Button();
             this.txtDir = new System.Windows.Forms.TextBox();
@@ -57,6 +56,25 @@ namespace AppWFGenProject
             this.lbl3 = new System.Windows.Forms.Label();
             this.lbl4 = new System.Windows.Forms.Label();
             this.lbl1 = new System.Windows.Forms.Label();
+            this.gbAutoSendMail = new System.Windows.Forms.GroupBox();
+            this.tbcSM = new System.Windows.Forms.TabControl();
+            this.tbpSMJob = new System.Windows.Forms.TabPage();
+            this.dgvSMSysAutoSendMail = new System.Windows.Forms.DataGridView();
+            this.tbpSMSendMail = new System.Windows.Forms.TabPage();
+            this.tbpSetting = new System.Windows.Forms.TabPage();
+            this.lblSMListDB = new System.Windows.Forms.Label();
+            this.cbxSMListDB = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.txtSMDB = new System.Windows.Forms.TextBox();
+            this.btnSMLoad = new System.Windows.Forms.Button();
+            this.txtSMUser = new System.Windows.Forms.TextBox();
+            this.txtSMPass = new System.Windows.Forms.TextBox();
+            this.txtSMServer = new System.Windows.Forms.TextBox();
+            this.btnSMTest = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.menuMain = new System.Windows.Forms.MenuStrip();
             this.mnfile = new System.Windows.Forms.ToolStripMenuItem();
@@ -90,31 +108,16 @@ namespace AppWFGenProject
             this.searchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.txtSMDB = new System.Windows.Forms.TextBox();
-            this.btnSMLoad = new System.Windows.Forms.Button();
-            this.txtSMUser = new System.Windows.Forms.TextBox();
-            this.txtSMPass = new System.Windows.Forms.TextBox();
-            this.txtSMServer = new System.Windows.Forms.TextBox();
-            this.btnSMTest = new System.Windows.Forms.Button();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.cbxSMListDB = new System.Windows.Forms.ComboBox();
-            this.lblSMListDB = new System.Windows.Forms.Label();
-            this.dgvSMSysAutoSendMail = new System.Windows.Forms.DataGridView();
-            this.tbcSM = new System.Windows.Forms.TabControl();
-            this.tbpSMJob = new System.Windows.Forms.TabPage();
-            this.tbpSMSendMail = new System.Windows.Forms.TabPage();
+            this.lblListStore = new System.Windows.Forms.Label();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.gbGenCode.SuspendLayout();
-            this.gbAutoSendMail.SuspendLayout();
             this.tbcConfigGen.SuspendLayout();
             this.tbpCUDR.SuspendLayout();
-            this.menuMain.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvSMSysAutoSendMail)).BeginInit();
+            this.gbAutoSendMail.SuspendLayout();
             this.tbcSM.SuspendLayout();
             this.tbpSMJob.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvSMSysAutoSendMail)).BeginInit();
+            this.menuMain.SuspendLayout();
             this.SuspendLayout();
             // 
             // gbGenCode
@@ -144,31 +147,6 @@ namespace AppWFGenProject
             this.gbGenCode.TabIndex = 0;
             this.gbGenCode.TabStop = false;
             this.gbGenCode.Text = "Gen Code";
-            // 
-            // gbAutoSendMail
-            // 
-            this.gbAutoSendMail.Controls.Add(this.tbcSM);
-            this.gbAutoSendMail.Controls.Add(this.lblSMListDB);
-            this.gbAutoSendMail.Controls.Add(this.cbxSMListDB);
-            this.gbAutoSendMail.Controls.Add(this.label1);
-            this.gbAutoSendMail.Controls.Add(this.txtSMDB);
-            this.gbAutoSendMail.Controls.Add(this.btnSMLoad);
-            this.gbAutoSendMail.Controls.Add(this.txtSMUser);
-            this.gbAutoSendMail.Controls.Add(this.txtSMPass);
-            this.gbAutoSendMail.Controls.Add(this.txtSMServer);
-            this.gbAutoSendMail.Controls.Add(this.btnSMTest);
-            this.gbAutoSendMail.Controls.Add(this.label3);
-            this.gbAutoSendMail.Controls.Add(this.label4);
-            this.gbAutoSendMail.Controls.Add(this.label5);
-            this.gbAutoSendMail.Controls.Add(this.label2);
-            this.gbAutoSendMail.Location = new System.Drawing.Point(944, 36);
-            this.gbAutoSendMail.Name = "gbAutoSendMail";
-            this.gbAutoSendMail.Size = new System.Drawing.Size(966, 470);
-            this.gbAutoSendMail.TabIndex = 24;
-            this.gbAutoSendMail.TabStop = false;
-            this.gbAutoSendMail.Text = "Job";
-            this.gbAutoSendMail.Visible = false;
-            this.gbAutoSendMail.Enter += new System.EventHandler(this.AutoSendMail_Enter);
             // 
             // clbFunction
             // 
@@ -409,6 +387,197 @@ namespace AppWFGenProject
             this.lbl1.TabIndex = 0;
             this.lbl1.Text = "Server:";
             // 
+            // gbAutoSendMail
+            // 
+            this.gbAutoSendMail.Controls.Add(this.tbcSM);
+            this.gbAutoSendMail.Controls.Add(this.label1);
+            this.gbAutoSendMail.Controls.Add(this.txtSMDB);
+            this.gbAutoSendMail.Controls.Add(this.btnSMLoad);
+            this.gbAutoSendMail.Controls.Add(this.txtSMUser);
+            this.gbAutoSendMail.Controls.Add(this.txtSMPass);
+            this.gbAutoSendMail.Controls.Add(this.txtSMServer);
+            this.gbAutoSendMail.Controls.Add(this.btnSMTest);
+            this.gbAutoSendMail.Controls.Add(this.label3);
+            this.gbAutoSendMail.Controls.Add(this.label4);
+            this.gbAutoSendMail.Controls.Add(this.label5);
+            this.gbAutoSendMail.Controls.Add(this.label2);
+            this.gbAutoSendMail.Location = new System.Drawing.Point(1025, 55);
+            this.gbAutoSendMail.Name = "gbAutoSendMail";
+            this.gbAutoSendMail.Size = new System.Drawing.Size(966, 470);
+            this.gbAutoSendMail.TabIndex = 24;
+            this.gbAutoSendMail.TabStop = false;
+            this.gbAutoSendMail.Text = "Job";
+            this.gbAutoSendMail.Visible = false;
+            this.gbAutoSendMail.Enter += new System.EventHandler(this.AutoSendMail_Enter);
+            // 
+            // tbcSM
+            // 
+            this.tbcSM.Controls.Add(this.tbpSMJob);
+            this.tbcSM.Controls.Add(this.tbpSMSendMail);
+            this.tbcSM.Controls.Add(this.tbpSetting);
+            this.tbcSM.Location = new System.Drawing.Point(15, 67);
+            this.tbcSM.Name = "tbcSM";
+            this.tbcSM.SelectedIndex = 0;
+            this.tbcSM.Size = new System.Drawing.Size(945, 397);
+            this.tbcSM.TabIndex = 27;
+            // 
+            // tbpSMJob
+            // 
+            this.tbpSMJob.Controls.Add(this.comboBox1);
+            this.tbpSMJob.Controls.Add(this.lblListStore);
+            this.tbpSMJob.Controls.Add(this.dgvSMSysAutoSendMail);
+            this.tbpSMJob.Controls.Add(this.lblSMListDB);
+            this.tbpSMJob.Controls.Add(this.cbxSMListDB);
+            this.tbpSMJob.Location = new System.Drawing.Point(4, 24);
+            this.tbpSMJob.Name = "tbpSMJob";
+            this.tbpSMJob.Padding = new System.Windows.Forms.Padding(3);
+            this.tbpSMJob.Size = new System.Drawing.Size(937, 369);
+            this.tbpSMJob.TabIndex = 0;
+            this.tbpSMJob.Text = "Job";
+            this.tbpSMJob.UseVisualStyleBackColor = true;
+            // 
+            // dgvSMSysAutoSendMail
+            // 
+            this.dgvSMSysAutoSendMail.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvSMSysAutoSendMail.Location = new System.Drawing.Point(29, 95);
+            this.dgvSMSysAutoSendMail.Name = "dgvSMSysAutoSendMail";
+            this.dgvSMSysAutoSendMail.RowTemplate.Height = 25;
+            this.dgvSMSysAutoSendMail.Size = new System.Drawing.Size(891, 223);
+            this.dgvSMSysAutoSendMail.TabIndex = 26;
+            // 
+            // tbpSMSendMail
+            // 
+            this.tbpSMSendMail.Location = new System.Drawing.Point(4, 24);
+            this.tbpSMSendMail.Name = "tbpSMSendMail";
+            this.tbpSMSendMail.Padding = new System.Windows.Forms.Padding(3);
+            this.tbpSMSendMail.Size = new System.Drawing.Size(937, 309);
+            this.tbpSMSendMail.TabIndex = 1;
+            this.tbpSMSendMail.Text = "Send Mail";
+            this.tbpSMSendMail.UseVisualStyleBackColor = true;
+            // 
+            // tbpSetting
+            // 
+            this.tbpSetting.Location = new System.Drawing.Point(4, 24);
+            this.tbpSetting.Name = "tbpSetting";
+            this.tbpSetting.Padding = new System.Windows.Forms.Padding(3);
+            this.tbpSetting.Size = new System.Drawing.Size(937, 309);
+            this.tbpSetting.TabIndex = 2;
+            this.tbpSetting.Text = "Setting";
+            this.tbpSetting.UseVisualStyleBackColor = true;
+            // 
+            // lblSMListDB
+            // 
+            this.lblSMListDB.AutoSize = true;
+            this.lblSMListDB.Location = new System.Drawing.Point(29, 24);
+            this.lblSMListDB.Name = "lblSMListDB";
+            this.lblSMListDB.Size = new System.Drawing.Size(57, 15);
+            this.lblSMListDB.TabIndex = 25;
+            this.lblSMListDB.Text = "Chọn DB:";
+            // 
+            // cbxSMListDB
+            // 
+            this.cbxSMListDB.Enabled = false;
+            this.cbxSMListDB.FormattingEnabled = true;
+            this.cbxSMListDB.Location = new System.Drawing.Point(92, 21);
+            this.cbxSMListDB.Name = "cbxSMListDB";
+            this.cbxSMListDB.Size = new System.Drawing.Size(121, 23);
+            this.cbxSMListDB.TabIndex = 24;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(620, 28);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(25, 15);
+            this.label1.TabIndex = 23;
+            this.label1.Text = "DB:";
+            // 
+            // txtSMDB
+            // 
+            this.txtSMDB.Location = new System.Drawing.Point(651, 24);
+            this.txtSMDB.Name = "txtSMDB";
+            this.txtSMDB.PlaceholderText = "QuanLyDuAn";
+            this.txtSMDB.Size = new System.Drawing.Size(140, 23);
+            this.txtSMDB.TabIndex = 22;
+            // 
+            // btnSMLoad
+            // 
+            this.btnSMLoad.Location = new System.Drawing.Point(878, 24);
+            this.btnSMLoad.Name = "btnSMLoad";
+            this.btnSMLoad.Size = new System.Drawing.Size(75, 23);
+            this.btnSMLoad.TabIndex = 21;
+            this.btnSMLoad.Text = "Load Data";
+            this.btnSMLoad.UseVisualStyleBackColor = false;
+            // 
+            // txtSMUser
+            // 
+            this.txtSMUser.Location = new System.Drawing.Point(280, 24);
+            this.txtSMUser.Name = "txtSMUser";
+            this.txtSMUser.PlaceholderText = "trienpc";
+            this.txtSMUser.Size = new System.Drawing.Size(139, 23);
+            this.txtSMUser.TabIndex = 20;
+            // 
+            // txtSMPass
+            // 
+            this.txtSMPass.Location = new System.Drawing.Point(464, 24);
+            this.txtSMPass.Name = "txtSMPass";
+            this.txtSMPass.PasswordChar = '*';
+            this.txtSMPass.Size = new System.Drawing.Size(140, 23);
+            this.txtSMPass.TabIndex = 19;
+            // 
+            // txtSMServer
+            // 
+            this.txtSMServer.Location = new System.Drawing.Point(94, 25);
+            this.txtSMServer.Name = "txtSMServer";
+            this.txtSMServer.PlaceholderText = "db.tayho.net.vn";
+            this.txtSMServer.Size = new System.Drawing.Size(138, 23);
+            this.txtSMServer.TabIndex = 18;
+            // 
+            // btnSMTest
+            // 
+            this.btnSMTest.Location = new System.Drawing.Point(797, 25);
+            this.btnSMTest.Name = "btnSMTest";
+            this.btnSMTest.Size = new System.Drawing.Size(75, 23);
+            this.btnSMTest.TabIndex = 17;
+            this.btnSMTest.Text = "Test Connect";
+            this.btnSMTest.UseVisualStyleBackColor = false;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(241, 28);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(33, 15);
+            this.label3.TabIndex = 16;
+            this.label3.Text = "User:";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(425, 28);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(33, 15);
+            this.label4.TabIndex = 15;
+            this.label4.Text = "Pass:";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(46, 29);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(42, 15);
+            this.label5.TabIndex = 14;
+            this.label5.Text = "Server:";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(478, 29);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(42, 15);
+            this.label2.TabIndex = 1;
+            this.label2.Text = "Server:";
+            // 
             // menuMain
             // 
             this.menuMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -418,7 +587,7 @@ namespace AppWFGenProject
             this.mnHelp});
             this.menuMain.Location = new System.Drawing.Point(0, 0);
             this.menuMain.Name = "menuMain";
-            this.menuMain.Size = new System.Drawing.Size(1910, 24);
+            this.menuMain.Size = new System.Drawing.Size(1991, 24);
             this.menuMain.TabIndex = 1;
             this.menuMain.Text = "menuStrip1";
             // 
@@ -661,163 +830,28 @@ namespace AppWFGenProject
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
             this.aboutToolStripMenuItem.Text = "&About...";
             // 
-            // label2
+            // lblListStore
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(478, 29);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(42, 15);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "Server:";
+            this.lblListStore.AutoSize = true;
+            this.lblListStore.Location = new System.Drawing.Point(250, 25);
+            this.lblListStore.Name = "lblListStore";
+            this.lblListStore.Size = new System.Drawing.Size(87, 15);
+            this.lblListStore.TabIndex = 27;
+            this.lblListStore.Text = "Chọn Store DB:";
             // 
-            // label1
+            // comboBox1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(620, 28);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(25, 15);
-            this.label1.TabIndex = 23;
-            this.label1.Text = "DB:";
-            // 
-            // txtSMDB
-            // 
-            this.txtSMDB.Location = new System.Drawing.Point(651, 24);
-            this.txtSMDB.Name = "txtSMDB";
-            this.txtSMDB.PlaceholderText = "QuanLyDuAn";
-            this.txtSMDB.Size = new System.Drawing.Size(140, 23);
-            this.txtSMDB.TabIndex = 22;
-            // 
-            // btnSMLoad
-            // 
-            this.btnSMLoad.Location = new System.Drawing.Point(878, 24);
-            this.btnSMLoad.Name = "btnSMLoad";
-            this.btnSMLoad.Size = new System.Drawing.Size(75, 23);
-            this.btnSMLoad.TabIndex = 21;
-            this.btnSMLoad.Text = "Load Data";
-            this.btnSMLoad.UseVisualStyleBackColor = false;
-            // 
-            // txtSMUser
-            // 
-            this.txtSMUser.Location = new System.Drawing.Point(280, 24);
-            this.txtSMUser.Name = "txtSMUser";
-            this.txtSMUser.PlaceholderText = "trienpc";
-            this.txtSMUser.Size = new System.Drawing.Size(139, 23);
-            this.txtSMUser.TabIndex = 20;
-            // 
-            // txtSMPass
-            // 
-            this.txtSMPass.Location = new System.Drawing.Point(464, 24);
-            this.txtSMPass.Name = "txtSMPass";
-            this.txtSMPass.PasswordChar = '*';
-            this.txtSMPass.Size = new System.Drawing.Size(140, 23);
-            this.txtSMPass.TabIndex = 19;
-            // 
-            // txtSMServer
-            // 
-            this.txtSMServer.Location = new System.Drawing.Point(94, 25);
-            this.txtSMServer.Name = "txtSMServer";
-            this.txtSMServer.PlaceholderText = "db.tayho.net.vn";
-            this.txtSMServer.Size = new System.Drawing.Size(138, 23);
-            this.txtSMServer.TabIndex = 18;
-            // 
-            // btnSMTest
-            // 
-            this.btnSMTest.Location = new System.Drawing.Point(797, 25);
-            this.btnSMTest.Name = "btnSMTest";
-            this.btnSMTest.Size = new System.Drawing.Size(75, 23);
-            this.btnSMTest.TabIndex = 17;
-            this.btnSMTest.Text = "Test Connect";
-            this.btnSMTest.UseVisualStyleBackColor = false;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(241, 28);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(33, 15);
-            this.label3.TabIndex = 16;
-            this.label3.Text = "User:";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(425, 28);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(33, 15);
-            this.label4.TabIndex = 15;
-            this.label4.Text = "Pass:";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(46, 28);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(42, 15);
-            this.label5.TabIndex = 14;
-            this.label5.Text = "Server:";
-            // 
-            // cbxSMListDB
-            // 
-            this.cbxSMListDB.Enabled = false;
-            this.cbxSMListDB.FormattingEnabled = true;
-            this.cbxSMListDB.Location = new System.Drawing.Point(94, 76);
-            this.cbxSMListDB.Name = "cbxSMListDB";
-            this.cbxSMListDB.Size = new System.Drawing.Size(121, 23);
-            this.cbxSMListDB.TabIndex = 24;
-            // 
-            // lblSMListDB
-            // 
-            this.lblSMListDB.AutoSize = true;
-            this.lblSMListDB.Location = new System.Drawing.Point(42, 80);
-            this.lblSMListDB.Name = "lblSMListDB";
-            this.lblSMListDB.Size = new System.Drawing.Size(46, 15);
-            this.lblSMListDB.TabIndex = 25;
-            this.lblSMListDB.Text = "List DB:";
-            // 
-            // dgvSMSysAutoSendMail
-            // 
-            this.dgvSMSysAutoSendMail.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvSMSysAutoSendMail.Location = new System.Drawing.Point(3, 40);
-            this.dgvSMSysAutoSendMail.Name = "dgvSMSysAutoSendMail";
-            this.dgvSMSysAutoSendMail.RowTemplate.Height = 25;
-            this.dgvSMSysAutoSendMail.Size = new System.Drawing.Size(931, 223);
-            this.dgvSMSysAutoSendMail.TabIndex = 26;
-            // 
-            // tbcSM
-            // 
-            this.tbcSM.Controls.Add(this.tbpSMJob);
-            this.tbcSM.Controls.Add(this.tbpSMSendMail);
-            this.tbcSM.Location = new System.Drawing.Point(15, 127);
-            this.tbcSM.Name = "tbcSM";
-            this.tbcSM.SelectedIndex = 0;
-            this.tbcSM.Size = new System.Drawing.Size(945, 337);
-            this.tbcSM.TabIndex = 27;
-            // 
-            // tbpSMJob
-            // 
-            this.tbpSMJob.Controls.Add(this.dgvSMSysAutoSendMail);
-            this.tbpSMJob.Location = new System.Drawing.Point(4, 24);
-            this.tbpSMJob.Name = "tbpSMJob";
-            this.tbpSMJob.Padding = new System.Windows.Forms.Padding(3);
-            this.tbpSMJob.Size = new System.Drawing.Size(937, 309);
-            this.tbpSMJob.TabIndex = 0;
-            this.tbpSMJob.Text = "Job";
-            this.tbpSMJob.UseVisualStyleBackColor = true;
-            // 
-            // tbpSMSendMail
-            // 
-            this.tbpSMSendMail.Location = new System.Drawing.Point(4, 24);
-            this.tbpSMSendMail.Name = "tbpSMSendMail";
-            this.tbpSMSendMail.Padding = new System.Windows.Forms.Padding(3);
-            this.tbpSMSendMail.Size = new System.Drawing.Size(937, 258);
-            this.tbpSMSendMail.TabIndex = 1;
-            this.tbpSMSendMail.Text = "Send Mail";
-            this.tbpSMSendMail.UseVisualStyleBackColor = true;
+            this.comboBox1.Enabled = false;
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(343, 21);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(121, 23);
+            this.comboBox1.TabIndex = 28;
             // 
             // GenProject
             // 
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(1280, 573);
+            this.ClientSize = new System.Drawing.Size(1280, 607);
             this.Controls.Add(this.gbAutoSendMail);
             this.Controls.Add(this.gbGenCode);
             this.Controls.Add(this.menuMain);
@@ -826,16 +860,17 @@ namespace AppWFGenProject
             this.Load += new System.EventHandler(this.GenProject_Load);
             this.gbGenCode.ResumeLayout(false);
             this.gbGenCode.PerformLayout();
-            this.gbAutoSendMail.ResumeLayout(false);
-            this.gbAutoSendMail.PerformLayout();
             this.tbcConfigGen.ResumeLayout(false);
             this.tbpCUDR.ResumeLayout(false);
             this.tbpCUDR.PerformLayout();
-            this.menuMain.ResumeLayout(false);
-            this.menuMain.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvSMSysAutoSendMail)).EndInit();
+            this.gbAutoSendMail.ResumeLayout(false);
+            this.gbAutoSendMail.PerformLayout();
             this.tbcSM.ResumeLayout(false);
             this.tbpSMJob.ResumeLayout(false);
+            this.tbpSMJob.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvSMSysAutoSendMail)).EndInit();
+            this.menuMain.ResumeLayout(false);
+            this.menuMain.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -921,6 +956,9 @@ namespace AppWFGenProject
         private System.Windows.Forms.TabPage tbpSMSendMail;
         private System.Windows.Forms.Label lblSMListDB;
         private System.Windows.Forms.ComboBox cbxSMListDB;
+        private System.Windows.Forms.TabPage tbpSetting;
+        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.Label lblListStore;
     }
 }
 
