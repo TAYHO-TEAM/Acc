@@ -54,8 +54,8 @@ namespace AppWFGenProject
                 {
                     Log.Information("Application Starting.");
                     //DevExpress.UserSkins.BonusSkins.Register();
-                    DevExpress.LookAndFeel.UserLookAndFeel.Default.SetSkinStyle("TayHoDevApp");
-                    var form1 = services.GetRequiredService<TayHoDevApp>();
+                    //DevExpress.LookAndFeel.UserLookAndFeel.Default.SetSkinStyle("TayHoDevApp");
+                    var form1 = services.GetRequiredService<GenProject>();
                     Application.Run(form1);
                     return;
                 }
@@ -91,8 +91,8 @@ namespace AppWFGenProject
                    services.Configure<Common>(configuration.GetSection("Common"));
                    services.AddDbContext<ProjectManagerBaseContext>(opt => opt.UseSqlServer(configuration.GetConnectionString("TayHoConnection")));
                    services.AddScoped<GenProject>();
-                   services.AddScoped<TayHoDevApp>(); 
-                   services.AddScoped<testApp>();
+                   //services.AddScoped<TayHoDevApp>(); 
+                   //services.AddScoped<testApp>();
                })
                .UseSerilog();
     }
