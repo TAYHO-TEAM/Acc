@@ -185,5 +185,9 @@ namespace AppWFGenProject
             gbGenCode.Visible = false;
             gbAutoSendMail.Visible = true;
         }
+        private void LoadSendMailConfig()
+        {
+
+        }
     }
 }
