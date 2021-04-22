@@ -1,0 +1,60 @@
+2021-04-22 08:39:07.547 +07:00 [INF] Application Starting.
+2021-04-22 08:39:11.146 +07:00 [INF] User profile is available. Using 'C:\Users\USER\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2021-04-22 08:39:11.837 +07:00 [INF] Now listening on: https://localhost:54321
+2021-04-22 08:39:11.841 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2021-04-22 08:39:11.842 +07:00 [INF] Hosting environment: Development
+2021-04-22 08:39:11.844 +07:00 [INF] Content root path: D:\Github\SystemCore\AppService\TayHo.ProjectManager\PrjectManager.Read\ProjectManager.Read.Api
+2021-04-22 08:39:14.912 +07:00 [INF] Request starting HTTP/2 GET https://localhost:54321/swagger  
+2021-04-22 08:39:15.201 +07:00 [INF] Request finished in 289.7121ms 301 
+2021-04-22 08:39:15.203 +07:00 [INF] Request starting HTTP/2 GET https://localhost:54321/swagger/index.html  
+2021-04-22 08:39:15.241 +07:00 [INF] Request finished in 38.6505ms 200 text/html;charset=utf-8
+2021-04-22 08:39:15.262 +07:00 [INF] Request starting HTTP/2 GET https://localhost:54321/swagger/swagger-ui.css  
+2021-04-22 08:39:15.263 +07:00 [INF] Request starting HTTP/2 GET https://localhost:54321/swagger/swagger-ui-bundle.js  
+2021-04-22 08:39:15.263 +07:00 [INF] Request starting HTTP/2 GET https://localhost:54321/swagger/swagger-ui-standalone-preset.js  
+2021-04-22 08:39:15.298 +07:00 [INF] Sending file. Request path: '/swagger-ui-standalone-preset.js'. Physical path: 'N/A'
+2021-04-22 08:39:15.298 +07:00 [INF] Sending file. Request path: '/swagger-ui.css'. Physical path: 'N/A'
+2021-04-22 08:39:15.301 +07:00 [INF] Sending file. Request path: '/swagger-ui-bundle.js'. Physical path: 'N/A'
+2021-04-22 08:39:15.302 +07:00 [INF] Request finished in 39.6352ms 200 text/css
+2021-04-22 08:39:15.302 +07:00 [INF] Request finished in 39.1211ms 200 application/javascript
+2021-04-22 08:39:15.303 +07:00 [INF] Request finished in 40.302ms 200 application/javascript
+2021-04-22 08:39:15.426 +07:00 [INF] Request starting HTTP/2 GET https://localhost:54321/swagger/v1/swagger.json  
+2021-04-22 08:39:15.448 +07:00 [INF] Request starting HTTP/2 GET https://localhost:54321/swagger/favicon-32x32.png  
+2021-04-22 08:39:15.450 +07:00 [INF] Sending file. Request path: '/favicon-32x32.png'. Physical path: 'N/A'
+2021-04-22 08:39:15.453 +07:00 [INF] Request finished in 5.0083ms 200 image/png
+2021-04-22 08:39:15.787 +07:00 [INF] Request finished in 361.6407ms 200 application/json;charset=utf-8
+2021-04-22 08:39:56.780 +07:00 [INF] Request starting HTTP/2 GET https://localhost:54321/api/read/v1/NS_CongViecDetail/Detail?PageSize=0&PageNumber=0  
+2021-04-22 08:39:56.812 +07:00 [INF] Executing endpoint 'ProjectManager.Read.Api.Controllers.v1.NS_CongViecDetailController.GetNS_CongViecDetail_GoiThau_GiaiDoanAsync (ProjectManager.Read.Api)'
+2021-04-22 08:39:56.849 +07:00 [INF] Route matched with {action = "GetNS_CongViecDetail_GoiThau_GiaiDoan", controller = "NS_CongViecDetail"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetNS_CongViecDetail_GoiThau_GiaiDoanAsync(ProjectManager.Read.Api.ViewModels.BaseClasses.BaseRequestViewModel) on controller ProjectManager.Read.Api.Controllers.v1.NS_CongViecDetailController (ProjectManager.Read.Api).
+2021-04-22 08:40:09.015 +07:00 [INF] Executing ObjectResult, writing value of type 'Services.Common.DomainObjects.MethodResult`1[[Services.Common.Paging.PagingItems`1[[ProjectManager.Read.Api.ViewModels.NS_CongViecDetail_GoiThau_GiaiDoanResponseViewModel, ProjectManager.Read.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], Services.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2021-04-22 08:40:09.047 +07:00 [INF] Executed action ProjectManager.Read.Api.Controllers.v1.NS_CongViecDetailController.GetNS_CongViecDetail_GoiThau_GiaiDoanAsync (ProjectManager.Read.Api) in 12189.6247ms
+2021-04-22 08:40:09.050 +07:00 [INF] Executed endpoint 'ProjectManager.Read.Api.Controllers.v1.NS_CongViecDetailController.GetNS_CongViecDetail_GoiThau_GiaiDoanAsync (ProjectManager.Read.Api)'
+2021-04-22 08:40:09.052 +07:00 [INF] Request finished in 12271.1042ms 200 application/json; charset=utf-8
+2021-04-22 08:41:35.901 +07:00 [INF] Request starting HTTP/2 GET https://localhost:54321/api/read/v1/NS_CongViecDetail/Detail?PageSize=0&PageNumber=0  
+2021-04-22 08:41:35.926 +07:00 [INF] Executing endpoint 'ProjectManager.Read.Api.Controllers.v1.NS_CongViecDetailController.GetNS_CongViecDetail_GoiThau_GiaiDoanAsync (ProjectManager.Read.Api)'
+2021-04-22 08:41:35.928 +07:00 [INF] Route matched with {action = "GetNS_CongViecDetail_GoiThau_GiaiDoan", controller = "NS_CongViecDetail"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetNS_CongViecDetail_GoiThau_GiaiDoanAsync(ProjectManager.Read.Api.ViewModels.BaseClasses.BaseRequestViewModel) on controller ProjectManager.Read.Api.Controllers.v1.NS_CongViecDetailController (ProjectManager.Read.Api).
+2021-04-22 08:41:38.471 +07:00 [INF] Executing ObjectResult, writing value of type 'Services.Common.DomainObjects.MethodResult`1[[Services.Common.Paging.PagingItems`1[[ProjectManager.Read.Api.ViewModels.NS_CongViecDetail_GoiThau_GiaiDoanResponseViewModel, ProjectManager.Read.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], Services.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2021-04-22 08:41:38.474 +07:00 [INF] Executed action ProjectManager.Read.Api.Controllers.v1.NS_CongViecDetailController.GetNS_CongViecDetail_GoiThau_GiaiDoanAsync (ProjectManager.Read.Api) in 2542.4775ms
+2021-04-22 08:41:38.476 +07:00 [INF] Executed endpoint 'ProjectManager.Read.Api.Controllers.v1.NS_CongViecDetailController.GetNS_CongViecDetail_GoiThau_GiaiDoanAsync (ProjectManager.Read.Api)'
+2021-04-22 08:41:38.477 +07:00 [INF] Request finished in 2576.7308ms 200 application/json; charset=utf-8
+2021-04-22 14:12:19.615 +07:00 [INF] Application Starting.
+2021-04-22 14:12:20.337 +07:00 [INF] User profile is available. Using 'C:\Users\USER\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2021-04-22 14:12:20.967 +07:00 [INF] Now listening on: https://localhost:54321
+2021-04-22 14:12:20.974 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2021-04-22 14:12:20.977 +07:00 [INF] Hosting environment: Development
+2021-04-22 14:12:20.979 +07:00 [INF] Content root path: D:\Github\SystemCore\AppService\TayHo.ProjectManager\PrjectManager.Read\ProjectManager.Read.Api
+2021-04-22 14:12:22.052 +07:00 [INF] Request starting HTTP/2 GET https://localhost:54321/swagger  
+2021-04-22 14:12:22.171 +07:00 [INF] Request starting HTTP/2 GET https://localhost:54321/swagger/index.html  
+2021-04-22 14:12:22.178 +07:00 [INF] Request finished in 127.0543ms 301 
+2021-04-22 14:12:22.209 +07:00 [INF] Request finished in 37.9328ms 200 text/html;charset=utf-8
+2021-04-22 14:12:22.697 +07:00 [INF] Request starting HTTP/2 GET https://localhost:54321/swagger/swagger-ui.css  
+2021-04-22 14:12:22.697 +07:00 [INF] Request starting HTTP/2 GET https://localhost:54321/swagger/swagger-ui-bundle.js  
+2021-04-22 14:12:22.697 +07:00 [INF] Request starting HTTP/2 GET https://localhost:54321/swagger/swagger-ui-standalone-preset.js  
+2021-04-22 14:12:22.723 +07:00 [INF] Sending file. Request path: '/swagger-ui.css'. Physical path: 'N/A'
+2021-04-22 14:12:22.727 +07:00 [INF] Request finished in 29.6222ms 200 text/css
+2021-04-22 14:12:22.727 +07:00 [INF] Sending file. Request path: '/swagger-ui-standalone-preset.js'. Physical path: 'N/A'
+2021-04-22 14:12:22.729 +07:00 [INF] Request finished in 32.0444ms 200 application/javascript
+2021-04-22 14:12:22.745 +07:00 [INF] Sending file. Request path: '/swagger-ui-bundle.js'. Physical path: 'N/A'
+2021-04-22 14:12:22.745 +07:00 [INF] Request finished in 48.1331ms 200 application/javascript
+2021-04-22 14:12:22.858 +07:00 [INF] Request starting HTTP/2 GET https://localhost:54321/swagger/v1/swagger.json  
+2021-04-22 14:12:23.214 +07:00 [INF] Request finished in 355.7392ms 200 application/json;charset=utf-8
+2021-04-22 14:12:24.612 +07:00 [INF] Application is shutting down...

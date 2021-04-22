@@ -17,10 +17,10 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-lg-5">
+    <div class="col-lg-4">
         <div id="container-main" class="elevation-2"></div>
     </div>
-    <div class="col-lg-7">
+    <div class="col-lg-8">
         <div id="container-sub" class="elevation-2"></div>
     </div>
 </div>
@@ -186,7 +186,7 @@
             update: (key, values) => {
                 var deferred = $.Deferred();
                 if (values.giaTri != null) {
-                    if (values.giaTri > 0) {
+                    if (values.giaTri != 0) {
                         if (values.nhomCongViecDetailId != null) {
                             ds_nhomcongviec_detail.update(values.nhomCongViecDetailId, { giaTri: values.giaTri }).then(() => {
                                 $("#container-sub").dxDataGrid('instance').refresh();
@@ -257,7 +257,7 @@
             update: (key, values) => {
                 var deferred = $.Deferred();
                 if (values.khoiLuong != null || values.donGia != null) {
-                    if (values.donGia > 0 || values.khoiLuong > 0) {
+                    if (values.donGia != 0) {
                         if (values.congViecDetailId != null) {
                             ds_congviec_detail.update(values.congViecDetailId, { donGia: values.donGia, khoiLuong: values.khoiLuong }).then(() => {
                                 $("#container-sub2").dxDataGrid('instance').refresh(true);
@@ -383,18 +383,19 @@
             filterMode: "matchOnly",
             rootValue: 0, parentIdExpr: "parentId", keyExpr: "id",
             showBorders: true, showColumnHeaders: true, showColumnLines: false, hoverStateEnabled: true,
-            showRowLines: true, columnAutoWidth: true, wordWrapEnabled: true, rowAlternationEnabled: false,
+            showRowLines: true, columnAutoWidth: true, wordWrapEnabled: false, rowAlternationEnabled: false,
             columns: [
                 {
-                    dataField: "tenHangMuc", caption: "Thông tin", dataType: "string", width: "50%",
+                    dataField: "tenHangMuc", caption: "Thông tin", dataType: "string", //width: "50%",
                     cellTemplate: (c, o) => {
                         if (o.data.chilCount > 0) c.parent().parent().attr("style", "background-color: #cccccc; font-weight: bold");
-                        $("<div/>").append(o.value, $("<em />").addClass("small").append(" (" + o.data.kyHieu+")")).appendTo(c);
+                        $("<div/>").append(o.data.kyHieu,'. ',o.value).appendTo(c);
                     },
                     allowEditing: false,
                 },
                 {
-                    width: "30%", allowFiltering:false,
+                    allowFiltering: false,
+                    //width: "30%", 
                     dataField: "giaTri", caption: "Giá trị", dataType: "number", alignment: "right",
                     format: { type: "currency", currency: "VND" },
                     editorType: "dxNumberBox",
@@ -490,7 +491,7 @@
                 {
                     caption: "#", width: 50, alignment: "center",
                     cellTemplate: (c, o) => c.append(o.row.dataIndex + 1),
-                    allowEditing: false,
+                    allowEditing: false, visible:false,
                 },
                 {
                     dataField: "tenNhomCongViec", caption: "Thông tin", dataType: "string",
@@ -523,7 +524,7 @@
                     },
                 },
                 {
-                    dataField: "nhomCongViecDetailId", dataType: "number", visible: false,
+                    dataField: "nhomCongViecDetailId", dataType: "number", visible: false, 
                 },
             ],
             editing: {
@@ -551,14 +552,14 @@
                     {
                         location: "after", widget: "dxButton",
                         options: {
-                            icon: "add", stylingMode: "filled", type: "default",
+                            icon: "add", type: "default",
                             onClick: () => genFormNCV({ "hangMucId": item.id }, true)
                         }
                     },
                     {
                         location: "after", widget: "dxButton",
                         options: {
-                            icon: "refresh", tylingMode: "filled", type: "default",
+                            icon: "refresh", type: "default",
                             onClick: () => container.refresh()
                         }
                     }
@@ -608,12 +609,11 @@
                                 }, "delete"]
                             },
                             {
-                                caption: "#", width: 50, alignment: "center",
-                                cellTemplate: (c, o) => c.append(o.row.dataIndex + 1),
-                                allowEditing: false,
+                                caption: "id", width: 50, alignment: "center", 
+                                allowEditing: false, 
                             },
                             {
-                                dataField: "tenCongViec", caption: "Nội dung công việc", dataType: "string", width: 200,
+                                dataField: "tenCongViec", caption: "Nội dung công việc", dataType: "string", width: ($("#container-sub2").width() > 860 ? null : 250),
                                 cellTemplate: (c, o) => c.append(
                                     $("<b>").addClass("font-weight-bold").append(o.value),
                                     (o.data.dienGiai != null && o.data.dienGiai.length > 0) ? $("<em />").addClass("mt-1 ml-1").append("- " + o.data.dienGiai) : null
@@ -622,33 +622,35 @@
                             },
                             {
                                 dataField: "nhom", caption: "Nhóm",
-                                allowEditing: false,
+                                allowEditing: false, groupIndex:0,
                             },
                             {
                                 dataField: "donViTinh", caption: "ĐVT",
-                                width: 120, alignment: "center",
+                                width: 100, alignment: "center",
                                 allowEditing: false,
                             },
                             {
-                                dataField: "khoiLuong", caption: "Khối lượng", dataType: "number",
+                                dataField: "khoiLuong", caption: "Khối lượng", 
                                 width: 120, alignment: "center",
+                                dataType: "number",
+                                format: {
+                                    type: "fixedPoint",
+                                    precision: 1
+                                },
                                 editorType: "dxNumberBox",
                                 editorOptions: {
                                     placeholder: "Vui lòng nhập giá trị...",
-                                    showClearButton: true,
-                                    min: 0, step: 1, showSpinButtons: true,
+                                    showClearButton: true, min:0
                                 },
                                 validationRules: [{ type: "required" }]
                             },
                             {
-                                dataField: "donGia", caption: "Đơn giá", dataType: "number", alignment: "right", width: 150,
-                                format: { type: "currency", currency: "VND" },
+                                dataField: "donGia", caption: "Đơn giá",  alignment: "right", width: 150,
+                                format: { type: "currency", currency: "VND" }, dataType: "number",
                                 editorType: "dxNumberBox",
                                 editorOptions: {
                                     placeholder: "Vui lòng nhập giá trị...",
-                                    showClearButton: true,
-                                    format: "#,##0 đ",
-                                    min: 0, step: 1000000000, showSpinButtons: true,
+                                    showClearButton: true, format: "#,##0 đ", 
                                 },
                                 validationRules: [{ type: "required" }]
                             },
@@ -657,7 +659,7 @@
                                 format: { type: "currency", currency: "VND" },
                                 allowEditing: false,
                                 calculateCellValue: function (data) {
-                                    return (data.donGia > 0 && data.khoiLuong > 0) ? data.donGia * data.khoiLuong : null;
+                                    return (data.khoiLuong > 0) ? data.donGia * data.khoiLuong : null;
                                 }
                             },
                         ],
@@ -684,13 +686,13 @@
                                     location: "before",
                                     template: "<h6 class='mb-0 mt-0 text-muted'>GIÁ TRỊ CÔNG VIỆC</h5><em class='text-muted'>Nhóm " + data.tenNhomCongViec + "</em>"
                                 },
-                                //{
-                                //    location: "after", widget: "dxButton",
-                                //    options: {
-                                //        icon: "xlsxfile", tylingMode: "filled", type: "default",
-                                //        onClick: () => genFormImportCV(data.id)
-                                //    }
-                                //},
+                                {
+                                    location: "after", widget: "dxButton",
+                                    options: {
+                                        icon: "xlsxfile", tylingMode: "filled", type: "default",
+                                        onClick: () => genFormImport(data)
+                                    }
+                                },
                                 {
                                     location: "after", widget: "dxButton",
                                     options: {
@@ -710,11 +712,20 @@
                         summary: {
                             totalItems: [
                                 {
-                                    column: "giaTri",
+                                    column: "thanhTien",
                                     summaryType: "sum",
                                     valueFormat: { type: "currency", currency: "VND" },
+                                    displayFormat: "{0}",
                                 },
                             ],
+                            groupItems: [
+                                {
+                                    column: "thanhTien",
+                                    summaryType: "sum", alignByColumn: true,
+                                    valueFormat: { type: "currency", currency: "VND" },
+                                    displayFormat: "{0}",
+                                },
+                            ]
                         },
                     }).appendTo(container);
                 }
@@ -955,49 +966,81 @@
             return deferred.promise();
         });
 
-        @*
         var listImport = [];
-        var genFormImportCV = (id) => $("#popup-main").dxPopup({
-            position: { of: $(document) },
-            width: 800, height: 500,
-            fullScreen: $(window).width() <= 800,
-            dragEnabled: true, resizeEnabled: false,
-            showTitle: true, title:"Import dữ liệu công việc", visible: true,
-            showCloseButton: true, closeOnOutsideClick: false,
+        var genFormImport = (data) => $("#popup-main").dxPopup({
+            fullScreen: true, showTitle: true, title: ("Import công việc vào nhóm " + data.tenNhomCongViec).toUpperCase(),
+            visible: true, showCloseButton: true, closeOnOutsideClick: false,
             contentTemplate: (c) => {
                 var scrollView = $("<div id='scrollView'></div>");
                 var content = $("<div />");
-                content.dxDataGrid({
+                content.dxDataGrid({ 
                     elementAttr: { id: "container-sub3" },
                     showBorders: true, showColumnHeaders: true, showColumnLines: false, hoverStateEnabled: true,
-                    showRowLines: true, columnAutoWidth: true, wordWrapEnabled: true, rowAlternationEnabled: false,
+                    showRowLines: true, columnAutoWidth: true, wordWrapEnabled: false, rowAlternationEnabled: false,
                     paging: { enabled: false},
                     columns: [
                         {
-                            dataField: "0",
-                            caption: "Tên công việc"
-                        },
-                        {
-                            dataField: "1",
+                            dataField: "nhom",
                             caption: "Nhóm"
                         },
                         {
-                            dataField: "2",
+                            dataField: "tenCongViec",
+                            caption: "Tên công việc"
+                        },
+                        {
+                            dataField: "dienGiai",
                             caption: "Diễn giải"
                         },
                         {
-                            dataField: "3",
+                            dataField: "dvt",
                             caption: "Đơn vị tính"
                         },
+                        {
+                            dataField: "khoiLuong",
+                            caption: "Khối lượng",
+                            dataType: "number",
+                            format: {
+                                type: "fixedPoint",
+                                precision: 1
+                            },
+                            editorType: "dxNumberBox",
+                            editorOptions: {
+                                placeholder: "Vui lòng nhập giá trị...",
+                                showClearButton: true, min: 0
+                            },
+                        },
+                        {
+                            dataField: "donGia",
+                            caption: "Đơn giá",
+                            format: { type: "currency", currency: "VND" }, dataType: "number",
+                            editorType: "dxNumberBox",
+                            editorOptions: {
+                                placeholder: "Vui lòng nhập giá trị...",
+                                showClearButton: true, format: "#,##0 đ",
+                            },
+                        },
+                        {
+                            dataField:"thanhTien", caption: "Thành tiền", dataType: "number", alignment: "right", width: 150,
+                            format: { type: "currency", currency: "VND" },
+                            allowEditing: false,
+                            calculateCellValue: function (data) {
+                                return (data.khoiLuong > 0 || data.donGia > 0) ? data.khoiLuong * data.donGia : 0;
+                            }
+                        },
                     ],
-                    selection: {
-                        allowSelectAll: true,
-                        mode: "multiple",
-                        selectAllMode: "allPages",
-                        showCheckBoxesMode: "always"
+                    summary: {
+                        totalItems: [
+                            {
+                                column: "thanhTien",
+                                summaryType: "sum",
+                                valueFormat: { type: "currency", currency: "VND" },
+                                displayFormat: "{0}",
+                            },
+                        ], 
                     },
+                    selection: { allowSelectAll: true,  mode: "multiple", selectAllMode: "allPages", showCheckBoxesMode: "always" },
                     editing: {
-                        mode: "batch", useIcons: false, confirmDelete: false,
+                        mode: "cell", useIcons: false, confirmDelete: false,
                         allowUpdating: true,
                         allowDeleting: true,
                     },
@@ -1007,25 +1050,18 @@
                             {
                                 location: "before", widget: "dxButton",
                                 options: {
-                                    text:"CHỌN",
-                                    icon: "add", stylingMode: "filled", type: "default",
+                                    text:"IMPORT", icon: "add", stylingMode: "filled", type: "default",
                                     disabled: true, elementAttr: { id :"btnSelectImport"},
                                     onClick: () => {
                                         var dataSelected = $("#container-sub3").dxDataGrid('instance').getSelectedRowsData();
                                         if (dataSelected.length > 0) {
-                                            DevExpress.ui.dialog.confirm("Đã tìm thấy " + dataSelected.length+" dòng dữ liệu!<br/>Bạn có muốn lưu lại không?", "XÁC NHẬN THÔNG TIN").done(function (dialogResult) {
+                                            DevExpress.ui.dialog.confirm("Đã chọn <b>" + dataSelected.length + " dòng dữ liệu</b> để import!<br/>Bạn có muốn import vào nhóm <b>" + data.tenNhomCongViec+"</b> không?", "XÁC NHẬN THÔNG TIN").done(function (dialogResult) {
                                                 if (dialogResult) {
-                                                    var deferred = $.Deferred();
-                                                    dataSelected.forEach(async function (item) {
-                                                        await ds_congviec(id).insert({
-                                                            nhomCongViecId: id,
-                                                            tenCongViec: item[0],
-                                                            nhom: item[1],
-                                                            dienGiai: item[2],
-                                                            donViTinh: item[3],
-                                                        }).then(deferred.resolve, deferred.reject);
-                                                    });
-                                                    return deferred.promise();
+                                                    //var deferred = $.Deferred();
+                                                     
+                                                    //return deferred.promise();
+
+                                                    console.log(dataSelected);
                                                 }
                                             });
                                         } else {
@@ -1045,7 +1081,14 @@
                     },
                     onSelectionChanged: function (selectedItems) {
                         var data = selectedItems.selectedRowsData;
-                        $("#btnSelectImport").dxButton("instance").option("disabled", !(data.length > 0));
+                        if (data.length > 0) {
+                            $("#btnSelectImport").dxButton("instance").option("disabled", false);
+                            $("#btnSelectImport").dxButton("instance").option("text", "IMPORT (" + data.length + ")");
+                        } else {
+                            $("#btnSelectImport").dxButton("instance").option("disabled", true);
+                            $("#btnSelectImport").dxButton("instance").option("text", "IMPORT");
+                        }
+                        
                     }
                 }).dxDataGrid("instance");
 
@@ -1055,7 +1098,7 @@
                 return c;
             }
         }).dxPopup('instance');
-
+        
         $(document).on('paste', '#scrollView', function (e) {
             e.preventDefault();
             var cb;
@@ -1069,9 +1112,7 @@
             } else {
                 cb = e.originalEvent.clipboardData;
                 clipText = cb.getData('text/plain');
-            }
-            console.log(cb);
-            console.log(clipText);
+            } 
             var clipRows = clipText.split('\n');
             for (i = 0; i < clipRows.length; i++) {
                 clipRows[i] = clipRows[i].split('\t');
@@ -1081,8 +1122,13 @@
                 var item = {};
                 for (j = 0; j < clipRows[i].length; j++) {
                     if (clipRows[i][j] != '\r') {
-                        if (clipRows[i][j].length !== 0) {
-                            item[j] = clipRows[i][j];
+                        if (clipRows[i][j].length !== 0) { 
+                            item.nhom = clipRows[i][0];
+                            item.tenCongViec = clipRows[i][1];
+                            item.dienGiai = clipRows[i][2];
+                            item.dvt = clipRows[i][3];
+                            item.khoiLuong = clipRows[i][4] * 1.0;
+                            item.donGia = clipRows[i][5] * 1.0;
                         }
                     }
                 }
@@ -1092,6 +1138,5 @@
             temp.option("dataSource", jsonObj);
             temp.refresh(true);
         });
-            *@
     </script>
 }

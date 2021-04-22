@@ -22,6 +22,6 @@ namespace ProjectManager.Read.Sql.DTOs.DTO
         public int? GiaiDoanId { get; set; }
         public int? ReasonId { get; set; }
         public decimal? DonGia { get; set; }
-        public int? KhoiLuong { get; set; }
+        public decimal? KhoiLuong { get; set; }
     }
 }

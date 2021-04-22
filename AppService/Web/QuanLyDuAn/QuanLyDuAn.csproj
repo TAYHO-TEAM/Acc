@@ -203,6 +203,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\ContractorInfoOBJ - Copy.cs" />
     <Compile Include="Utilities\ContractorInfoOBJ.cs" />
+    <Compile Include="Utilities\CongViecOBJ.cs" />
     <Compile Include="Utilities\DocumentReleasedOBJ.cs" />
     <Compile Include="Utilities\DynamicOBJ.cs" />
     <Compile Include="Utilities\FilesAttachmentOBJ.cs" />

@@ -12,7 +12,7 @@ namespace ProjectManager.CMD.Domain.DomainObjects
         private int? _reasonId;
         private int? _giaiDoanId;
         private decimal? _donGia;
-        private int? _khoiLuong;
+        private decimal? _khoiLuong;
         #endregion Fields
 
         #region Constructors
@@ -25,7 +25,7 @@ namespace ProjectManager.CMD.Domain.DomainObjects
             int? ReasonId,
             int? GiaiDoanId,
             decimal? DonGia,
-            int? KhoiLuong) : this()
+            decimal? KhoiLuong) : this()
         {
             _congViecId = CongViecId;
             _giaiDoanId = GiaiDoanId;
@@ -40,7 +40,7 @@ namespace ProjectManager.CMD.Domain.DomainObjects
         public int? ReasonId { get => _reasonId; }
         public int? GiaiDoanId { get => _giaiDoanId; }
         public decimal? DonGia { get => _donGia; }
-        public int? KhoiLuong { get => _khoiLuong; }
+        public decimal? KhoiLuong { get => _khoiLuong; }
         #endregion Properties
 
         #region Behaviours
@@ -48,7 +48,7 @@ namespace ProjectManager.CMD.Domain.DomainObjects
         public void SetReasonId(int? ReasonId) { _reasonId = !ReasonId.HasValue ? _reasonId : ReasonId; if (!IsValid()) throw new DomainException(_errorMessages); }
         public void SetGiaiDoanId(int? GiaiDoanId) { _giaiDoanId = !GiaiDoanId.HasValue ? _giaiDoanId : GiaiDoanId; if (!IsValid()) throw new DomainException(_errorMessages); }
         public void SetDonGia(decimal? DonGia) { _donGia = !DonGia.HasValue ? _donGia : DonGia; if (!IsValid()) throw new DomainException(_errorMessages); }
-        public void SetKhoiLuong(int? KhoiLuong) { _khoiLuong = !KhoiLuong.HasValue ? _khoiLuong : KhoiLuong; if (!IsValid()) throw new DomainException(_errorMessages); }
+        public void SetKhoiLuong(decimal? KhoiLuong) { _khoiLuong = !KhoiLuong.HasValue ? _khoiLuong : KhoiLuong; if (!IsValid()) throw new DomainException(_errorMessages); }
         public sealed override bool IsValid()
         {
             return base.IsValid();
