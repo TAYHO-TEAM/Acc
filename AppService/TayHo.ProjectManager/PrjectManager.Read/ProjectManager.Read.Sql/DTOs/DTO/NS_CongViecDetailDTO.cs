@@ -10,7 +10,7 @@ namespace ProjectManager.Read.Sql.DTOs.DTO
         public int? CongViecId { get; set; }
         public int? GiaiDoanId { get; set; }
         public decimal? DonGia { get; set; }
-        public int? KhoiLuong { get; set; }
+        public decimal? KhoiLuong { get; set; }
         public int? ReasonId { get; set; }
     }
     public class NS_CongViecDetail_GoiThau_GiaiDoanDTO : NS_CongViecDetailDTO
