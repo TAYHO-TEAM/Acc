@@ -53,7 +53,7 @@ namespace AppWFGenProject
                 try
                 {
                     Log.Information("Application Starting.");
-                    //DevExpress.UserSkins.BonusSkins.Register();
+                    DevExpress.UserSkins.BonusSkins.Register();
                     //DevExpress.LookAndFeel.UserLookAndFeel.Default.SetSkinStyle("TayHoDevApp");
                     var form1 = services.GetRequiredService<GenProject>();
                     Application.Run(form1);

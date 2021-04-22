@@ -59,11 +59,13 @@ namespace AppWFGenProject
             this.gbAutoSendMail = new System.Windows.Forms.GroupBox();
             this.tbcSM = new System.Windows.Forms.TabControl();
             this.tbpSMJob = new System.Windows.Forms.TabPage();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.lblListStore = new System.Windows.Forms.Label();
             this.dgvSMSysAutoSendMail = new System.Windows.Forms.DataGridView();
-            this.tbpSMSendMail = new System.Windows.Forms.TabPage();
-            this.tbpSetting = new System.Windows.Forms.TabPage();
             this.lblSMListDB = new System.Windows.Forms.Label();
             this.cbxSMListDB = new System.Windows.Forms.ComboBox();
+            this.tbpSMSendMail = new System.Windows.Forms.TabPage();
+            this.tbpSetting = new System.Windows.Forms.TabPage();
             this.label1 = new System.Windows.Forms.Label();
             this.txtSMDB = new System.Windows.Forms.TextBox();
             this.btnSMLoad = new System.Windows.Forms.Button();
@@ -108,8 +110,6 @@ namespace AppWFGenProject
             this.searchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.lblListStore = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.gbGenCode.SuspendLayout();
             this.tbcConfigGen.SuspendLayout();
             this.tbpCUDR.SuspendLayout();
@@ -436,34 +436,32 @@ namespace AppWFGenProject
             this.tbpSMJob.Text = "Job";
             this.tbpSMJob.UseVisualStyleBackColor = true;
             // 
+            // comboBox1
+            // 
+            this.comboBox1.Enabled = false;
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(343, 21);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(121, 23);
+            this.comboBox1.TabIndex = 28;
+            // 
+            // lblListStore
+            // 
+            this.lblListStore.AutoSize = true;
+            this.lblListStore.Location = new System.Drawing.Point(250, 25);
+            this.lblListStore.Name = "lblListStore";
+            this.lblListStore.Size = new System.Drawing.Size(87, 15);
+            this.lblListStore.TabIndex = 27;
+            this.lblListStore.Text = "Chọn Store DB:";
+            // 
             // dgvSMSysAutoSendMail
             // 
             this.dgvSMSysAutoSendMail.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvSMSysAutoSendMail.Location = new System.Drawing.Point(29, 95);
             this.dgvSMSysAutoSendMail.Name = "dgvSMSysAutoSendMail";
             this.dgvSMSysAutoSendMail.RowTemplate.Height = 25;
-            this.dgvSMSysAutoSendMail.Size = new System.Drawing.Size(891, 223);
+            this.dgvSMSysAutoSendMail.Size = new System.Drawing.Size(891, 243);
             this.dgvSMSysAutoSendMail.TabIndex = 26;
-            // 
-            // tbpSMSendMail
-            // 
-            this.tbpSMSendMail.Location = new System.Drawing.Point(4, 24);
-            this.tbpSMSendMail.Name = "tbpSMSendMail";
-            this.tbpSMSendMail.Padding = new System.Windows.Forms.Padding(3);
-            this.tbpSMSendMail.Size = new System.Drawing.Size(937, 309);
-            this.tbpSMSendMail.TabIndex = 1;
-            this.tbpSMSendMail.Text = "Send Mail";
-            this.tbpSMSendMail.UseVisualStyleBackColor = true;
-            // 
-            // tbpSetting
-            // 
-            this.tbpSetting.Location = new System.Drawing.Point(4, 24);
-            this.tbpSetting.Name = "tbpSetting";
-            this.tbpSetting.Padding = new System.Windows.Forms.Padding(3);
-            this.tbpSetting.Size = new System.Drawing.Size(937, 309);
-            this.tbpSetting.TabIndex = 2;
-            this.tbpSetting.Text = "Setting";
-            this.tbpSetting.UseVisualStyleBackColor = true;
             // 
             // lblSMListDB
             // 
@@ -482,6 +480,26 @@ namespace AppWFGenProject
             this.cbxSMListDB.Name = "cbxSMListDB";
             this.cbxSMListDB.Size = new System.Drawing.Size(121, 23);
             this.cbxSMListDB.TabIndex = 24;
+            // 
+            // tbpSMSendMail
+            // 
+            this.tbpSMSendMail.Location = new System.Drawing.Point(4, 24);
+            this.tbpSMSendMail.Name = "tbpSMSendMail";
+            this.tbpSMSendMail.Padding = new System.Windows.Forms.Padding(3);
+            this.tbpSMSendMail.Size = new System.Drawing.Size(937, 369);
+            this.tbpSMSendMail.TabIndex = 1;
+            this.tbpSMSendMail.Text = "Send Mail";
+            this.tbpSMSendMail.UseVisualStyleBackColor = true;
+            // 
+            // tbpSetting
+            // 
+            this.tbpSetting.Location = new System.Drawing.Point(4, 24);
+            this.tbpSetting.Name = "tbpSetting";
+            this.tbpSetting.Padding = new System.Windows.Forms.Padding(3);
+            this.tbpSetting.Size = new System.Drawing.Size(937, 369);
+            this.tbpSetting.TabIndex = 2;
+            this.tbpSetting.Text = "Setting";
+            this.tbpSetting.UseVisualStyleBackColor = true;
             // 
             // label1
             // 
@@ -830,28 +848,10 @@ namespace AppWFGenProject
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
             this.aboutToolStripMenuItem.Text = "&About...";
             // 
-            // lblListStore
-            // 
-            this.lblListStore.AutoSize = true;
-            this.lblListStore.Location = new System.Drawing.Point(250, 25);
-            this.lblListStore.Name = "lblListStore";
-            this.lblListStore.Size = new System.Drawing.Size(87, 15);
-            this.lblListStore.TabIndex = 27;
-            this.lblListStore.Text = "Chọn Store DB:";
-            // 
-            // comboBox1
-            // 
-            this.comboBox1.Enabled = false;
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(343, 21);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 23);
-            this.comboBox1.TabIndex = 28;
-            // 
             // GenProject
             // 
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(1280, 607);
+            this.ClientSize = new System.Drawing.Size(1280, 624);
             this.Controls.Add(this.gbAutoSendMail);
             this.Controls.Add(this.gbGenCode);
             this.Controls.Add(this.menuMain);
