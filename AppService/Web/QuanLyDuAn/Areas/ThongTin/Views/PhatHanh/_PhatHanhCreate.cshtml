@@ -62,6 +62,7 @@
                             editorOptions: {
                                 stylingMode: "filled",
                                 value: formData["title"],
+                                placeholder: "Vui lòng nhập...",
                                 dataSource: customStore_HangMuc,
                                 valueExpr: "id",
                                 displayExpr: "title",
@@ -69,6 +70,7 @@
                                     id: "elementTitle",
                                 }
                             },
+                            validationRules: [{ type: "required" }],
                         },
                         {
                             colSpan: 12,
@@ -77,6 +79,7 @@
                             editorType: "dxTextArea",
                             editorOptions: {
                                 stylingMode: "filled",
+                                placeholder: "Vui lòng nhập...",
                                 value: formData["description"],
                             },
                         },
@@ -104,6 +107,7 @@
                             label: { text: "Địa điểm" },
                             editorOptions: {
                                 stylingMode: "filled",
+                                placeholder: "Vui lòng nhập...",
                             }
                         },
                         {
@@ -116,7 +120,8 @@
                                 stylingMode: "filled",
                                 pickerType: "rollers",
                                 type: "datetime",
-                                invalidDateMessage: "Sai định dạng ngày tháng"
+                                invalidDateMessage: "Sai định dạng ngày tháng",
+                                placeholder: "Vui lòng chọn...",
                             },
                         },
                         {
@@ -204,6 +209,7 @@
                     DevExpress.ui.notify(rs.result, rs.status, 3000);
                     if (rs.status == "success") {
                         $("#popup-register").dxPopup('instance').hide();
+                        loadAccount(rs.id);
                     }
                 },
                 error: function (xhr, textStatus, errorThrown) {

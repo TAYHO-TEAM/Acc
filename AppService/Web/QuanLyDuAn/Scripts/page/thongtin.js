@@ -374,6 +374,14 @@ let customStore_CMD_READ_WITHPROJECTID_PAGGING = (CMD, READ) => new DevExpress.d
     remove: (key) => ajax_delete(URL_API_PM_CMD + CMD, key),
 });
 ////---------------------------READ--------------------------- 
+let customStore_AccountInfo = (type) => new DevExpress.data.DataSource({
+    store: new DevExpress.data.CustomStore({
+        key: "id",
+        loadMode: "raw",
+        load: (values) => ajax_read(ACTION_READ_ACCOUNTINFO, values),
+    }),
+    //filter: [["type", "=", type]]
+});
 let customStore_READ_ALL_ACC = (READ) => new DevExpress.data.CustomStore({
     key: "id",
     loadMode: "raw",
@@ -666,6 +674,10 @@ const unit = [
     {
         ID: 'm2',
         Name: 'm2'
+    },
+    {
+        ID: 'Khác',
+        Name: 'Khác'
     }
 ];
 const important = [

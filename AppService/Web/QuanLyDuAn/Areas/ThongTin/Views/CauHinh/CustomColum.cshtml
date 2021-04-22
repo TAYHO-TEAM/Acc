@@ -13,8 +13,8 @@
     <script src="~/Scripts/page/thongtin.js"></script>
     <script>
         //--------------------READ------------------------------
-        const ACTION = "/CustomColum";
-        const ACTION_CUSTOMTABLE = "/CustomTable";
+        var ACTION = "/CustomColum";
+        var ACTION_CUSTOMTABLE = "/CustomTable";
 
         //--------------------CMD------------------------------
         const ACTION_CMD = "/CustomColum";
@@ -147,9 +147,12 @@
                     var container = e.component;
                     e.toolbarOptions.items.unshift(
                         {
-                            location: "after", widget: "dxButton",
+                            location: "after",
+                            widget: "dxButton",
                             options: {
-                                icon: "refresh", tylingMode: "filled", type: "default",
+                                icon: "refresh",
+                                stylingMode: "filled",
+                                type: "default",
                                 onClick: () => container.refresh()
                             }
                         })

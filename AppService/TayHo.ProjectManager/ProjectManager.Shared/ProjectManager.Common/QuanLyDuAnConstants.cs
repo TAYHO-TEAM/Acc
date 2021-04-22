@@ -74,13 +74,21 @@ namespace ProjectManager.Common
         public const string CustomFormAccount_TABLENAME = "CustomFormAccount";
         public const string NotifyAccount_TABLENAME = "NotifyAccount";
         public const string Notify_TABLENAME = "Notify";
-        public const string NotifyTemplate_TABLENAME = "NotifyTemplate";
+        public const string NotifyTemplate_TABLENAME = "NotifyTemplate"; 
+        public const string NotifyConfig_TABLENAME = "NotifyConfig";
+        public const string NotifyConfigLog_TABLENAME = "NotifyConfigLog";
         public const string TemplateMail_TABLENAME = "TemplateMail";
+        public const string SysAutoSendMail_TABLENAME = "SysAutoSendMail";
+        public const string SysJob_TABLENAME = "SysJob";
+        public const string SysJobParameter_TABLENAME = "SysJobParameter";
+        public const string SysJobTable_TABLENAME = "SysJobTable";
+        public const string SysMailAccount_TABLENAME = "SysMailAccount";
+        public const string SysJobColum_TABLENAME = "SysJobColum";
 
         public const string Conversation_TABLENAME = "Conversation";
         public const string PlanAccount_TABLENAME = "PlanAccount";
         public const string PlanJob_TABLENAME = "PlanJob";
-        public const string PlanMaster_TABLENAME = "PlanMaster";
+        public const string PlanMaster_TABLENAME = "PlanMaster"; 
         public const string PlanProject_TABLENAME = "PlanProject";
         public const string PlanReport_TABLENAME = "PlanReport";
         public const string PlanSchedule_TABLENAME = "PlanSchedule";

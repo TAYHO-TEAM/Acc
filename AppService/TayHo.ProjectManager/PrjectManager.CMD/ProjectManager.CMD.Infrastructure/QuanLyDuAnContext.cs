@@ -74,6 +74,14 @@ namespace ProjectManager.CMD.Infrastructure
         public DbSet<NotifyAccount> NotifyAccount { get; set; }
         public DbSet<NotifyTemplate> NotifyTemplate { get; set; }
         public DbSet<TemplateMail> TemplateMail { get; set; }
+        public DbSet<NotifyConfig> NotifyConfig { get; set; }
+        public DbSet<NotifyConfigLog> NotifyConfigLog { get; set; }
+        public DbSet<SysAutoSendMail> SysAutoSendMail { get; set; }
+        public DbSet<SysJob> SysJob { get; set; }
+        public DbSet<SysJobParameter> SysJobParameter { get; set; }
+        public DbSet<SysJobTable> SysJobTable { get; set; }
+        public DbSet<SysMailAccount> SysMailAccount { get; set; }
+        public DbSet<SysJobColum> SysJobColum { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

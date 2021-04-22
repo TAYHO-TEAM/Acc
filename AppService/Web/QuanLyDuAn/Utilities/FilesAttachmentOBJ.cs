@@ -11,5 +11,7 @@ namespace QuanLyDuAn.Utilities
         public string ownerByTable { get; set; }
         public string code { get; set; }
         public string token { get; set; }
+        public string fileName { get; set; }
+        public string url { get; set; }
     }
 }

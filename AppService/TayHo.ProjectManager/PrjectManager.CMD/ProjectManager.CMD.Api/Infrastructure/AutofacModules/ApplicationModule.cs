@@ -74,6 +74,8 @@ namespace ProjectManager.CMD.Api.Infrastructure.AutofacModules
             builder.RegisterType<NotifyRepository>().As<INotifyRepository>().InstancePerLifetimeScope();
             builder.RegisterType<NotifyAccountRepository>().As<INotifyAccountRepository>().InstancePerLifetimeScope();
             builder.RegisterType<NotifyTemplateRepository>().As<INotifyTemplateRepository>().InstancePerLifetimeScope();
+            builder.RegisterType<NotifyConfigRepository>().As<INotifyConfigRepository>().InstancePerLifetimeScope();
+            builder.RegisterType<NotifyConfigLogRepository>().As<INotifyConfigLogRepository>().InstancePerLifetimeScope();
             builder.RegisterType<TemplateMailRepository>().As<ITemplateMailRepository>().InstancePerLifetimeScope();
 
             builder.RegisterType<ConversationRepository>().As<IConversationRepository>().InstancePerLifetimeScope();
@@ -85,7 +87,15 @@ namespace ProjectManager.CMD.Api.Infrastructure.AutofacModules
             builder.RegisterType<PlanScheduleRepository>().As<IPlanScheduleRepository>().InstancePerLifetimeScope();
             //builder.RegisterType<CustomFormAccountRepository>().As<ICustomFormAccountRepository>().InstancePerLifetimeScope();
 
+            builder.RegisterType<SysAutoSendMailRepository>().As<ISysAutoSendMailRepository>().InstancePerLifetimeScope();
+            builder.RegisterType<SysJobRepository>().As<ISysJobRepository>().InstancePerLifetimeScope();
+            builder.RegisterType<SysJobColumRepository>().As<ISysJobColumRepository>().InstancePerLifetimeScope();
+            builder.RegisterType<SysJobParameterRepository>().As<ISysJobParameterRepository>().InstancePerLifetimeScope();
+            builder.RegisterType<SysJobTableRepository>().As<ISysJobTableRepository>().InstancePerLifetimeScope();
+            builder.RegisterType<SysMailAccountRepository>().As<ISysMailAccountRepository>().InstancePerLifetimeScope();
+
             builder.RegisterType<AccountInfoRepository>().As<IAccountInfoRepository>().InstancePerLifetimeScope();
+
         }
     }
 }

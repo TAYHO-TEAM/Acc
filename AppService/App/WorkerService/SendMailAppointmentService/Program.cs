@@ -56,7 +56,7 @@ namespace SendMailAppointmentService
                 .ConfigureServices((hostContext, services) =>
                 {
                     IConfiguration configuration = hostContext.Configuration;
-                    ProfileMailOptions profileMailoptions = configuration.GetSection("ProfileMailOptions").Get<ProfileMailOptions>();
+                    services.Configure<ProfileMailOptions>(configuration.GetSection("ProfileMailOptions"));
                     services.AddDbContext<ProjectManagerBaseContext>(opt => opt.UseSqlServer(configuration.GetConnectionString("TayHoConnection")));
                     services.AddHostedService<Worker>();
                 })

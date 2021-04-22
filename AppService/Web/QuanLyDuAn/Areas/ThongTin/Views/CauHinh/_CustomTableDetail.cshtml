@@ -22,8 +22,14 @@
                 sorting: true,
             },
             repaintChangesOnly: true,
-            showBorders: true, showColumnHeaders: true, showColumnLines: true, hoverStateEnabled: true,
-            showRowLines: true, columnAutoWidth: true, wordWrapEnabled: true, rowAlternationEnabled: true,
+            showBorders: true,
+            showColumnHeaders: true,
+            showColumnLines: true,
+            hoverStateEnabled: true,
+            showRowLines: true,
+            columnAutoWidth: true,
+            wordWrapEnabled: true,
+            rowAlternationEnabled: true,
             paging: {
                 enabled: true,
                 pageSize: 20
@@ -40,33 +46,23 @@
                 allowDeleting: true,
             },
             columns: [
-                //{
-                //    dataField: "customTableId",
-                //    //groupIndex: 0,
-                //    caption: "Mã dữ liệu",
-                //    dataType: "number",
-                //    calculateCellValue: function () {
-                //        return CustomTableId;
-                //    },
-                //    editorOptions: {
-                //        readOnly: true,
-                //    },
-                //    validationRules: [{ type: "required" }],
-                //},
                 {
                     dataField: "colIndex",
-                    caption: "Vị trí",
+                    caption: "Vị trí hiểm thị",
                     dataType: "number",
+                    alignment: "center",
                 },
                 {
                     dataField: "header",
                     caption: "Tên cột",
                     dataType: "string",
+                    alignment: "center",
                 },
                 {
                     dataField: "typeParam",
                     caption: "Kiểu dữ liệu",
                     dataType: "string",
+                    alignment: "center",
                     lookup: {
                         dataSource: Type,
                         valueExpr: "ID",
@@ -83,11 +79,13 @@
                     dataField: "sourceValue",
                     caption: "Giá trị mặc định",
                     dataType: "string",
+                    alignment: "center",
                 },
                 {
                     dataField: "sourceLink",
                     caption: "Đường dẫn",
                     dataType: "string",
+                    alignment: "center",
                 },
                 {
                     dataField: "isActive",

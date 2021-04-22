@@ -9,6 +9,10 @@ namespace  ProjectManager.CMD.Api.Application.Commands
     {
        
     }
+    public class CreateNotifyAccountsCommand : NotifyAccountsCommandSet, IRequest<MethodResult<CreateNotifyAccountCommandResponse>>
+    {
+
+    }
     public class CreateNotifyAccountCommandResponse
     {
         public CreateNotifyAccountCommandResponse(List<NotifyAccountCommandResponseDTO> NotifyAccount)

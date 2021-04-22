@@ -20,6 +20,7 @@ namespace ProjectManager.CMD.Infrastructure.EFConfig
             builder.Property(x => x.Url).HasField("_url").HasMaxLength(1024).UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.CategoryId).HasField("_categoryId").UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.Level).HasField("_level").UsePropertyAccessMode(PropertyAccessMode.Field);
+            builder.Property(x => x.Type).HasField("_type").UsePropertyAccessMode(PropertyAccessMode.Field);
         }
     }
 }

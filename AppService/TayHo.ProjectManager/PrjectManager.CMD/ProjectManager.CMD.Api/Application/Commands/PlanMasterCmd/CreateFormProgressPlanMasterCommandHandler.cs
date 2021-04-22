@@ -62,6 +62,7 @@ namespace ProjectManager.CMD.Api.Application.Commands
                                                           tableName,
                                                           code,
                                                           result.Item1,
+                                                          result.Item6,
                                                           result.Item5,
                                                           result.Item3,
                                                           result.Item2,
@@ -94,8 +95,8 @@ namespace ProjectManager.CMD.Api.Application.Commands
                     {
                         PlanJob newPlanJobEnd = new PlanJob(newPlanMaster.Id,
                                                    0,
-                                                   newPlanMaster.Title + " - " + stepDate.Date.ToString("dd-MM-yyyy"),
-                                                   "Công việc ngày:" + stepDate.Date.ToString("dd-MM-yyyy"),
+                                                   "Báo cáo lần " + i.ToString(),
+                                                   "Dự toán lần "+i+" công việc ngày:" + stepDate.Date.ToString("dd-MM-yyyy"),
                                                    newPlanMaster.Unit,
                                                    (int)request.Amount - (amout*(i-1)),
                                                    (DateTime)request.StartDate,
@@ -104,14 +105,20 @@ namespace ProjectManager.CMD.Api.Application.Commands
                                                    i,
                                                    (byte)i,
                                                    false);
+                        newPlanJobEnd.SetCreate( _user);
+                        newPlanJobEnd.Status = 0;
+                        newPlanJobEnd.IsActive =  true;
+                        newPlanJobEnd.IsVisible =  true;
                         newPlanJobs.Add(newPlanJobEnd);
+                        await _planJobRepository.AddAsync(newPlanJobEnd).ConfigureAwait(false);
+                        await _planJobRepository.UnitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
                     }    
                     else
                     {
                         PlanJob newPlanJob = new PlanJob(newPlanMaster.Id,
                                                     0,
-                                                    newPlanMaster.Title + " - " + stepDate.Date.ToString("dd-MM-yyyy"),
-                                                    "Dự toán công việc ngày:" + stepDate.Date.ToString("dd-MM-yyyy"),
+                                                    "Báo cáo lần "+ i.ToString(),
+                                                    "Dự toán lần " + i.ToString() + " công việc ngày:" + stepDate.Date.ToString("dd-MM-yyyy"),
                                                     newPlanMaster.Unit,
                                                     amout * i,
                                                     (DateTime)request.StartDate,
@@ -120,11 +127,17 @@ namespace ProjectManager.CMD.Api.Application.Commands
                                                     i,
                                                     (byte)i,
                                                     false);
+                        newPlanJob.SetCreate(_user);
+                        newPlanJob.Status = 0;
+                        newPlanJob.IsActive = true;
+                        newPlanJob.IsVisible = true;
                         newPlanJobs.Add(newPlanJob);
+                        await _planJobRepository.AddAsync(newPlanJob).ConfigureAwait(false);
+                        await _planJobRepository.UnitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
                     }                        
                 }
-                await _planJobRepository.AddRangeAsync(newPlanJobs).ConfigureAwait(false);
-                await _planJobRepository.UnitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+                //await _planJobRepository.AddRangeAsync(newPlanJobs).ConfigureAwait(false);
+                //await _planJobRepository.UnitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
             }
             methodResult.Result = _mapper.Map<CreateFormProgressPlanMasterCommandResponse>(newPlanMaster);
             return methodResult;

@@ -4,6 +4,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.30711.63
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CoreService", "CoreService", "{B2CA29F2-CDA8-46D7-AD94-D2DC7F6C1CF0}"
+	ProjectSection(SolutionItems) = preProject
+		AppService\Web\QuanLyDuAn\Web.config = AppService\Web\QuanLyDuAn\Web.config
+		AppService\Web\QuanLyDuAn\Web.Debug.config = AppService\Web\QuanLyDuAn\Web.Debug.config
+		AppService\Web\QuanLyDuAn\Web.Release.config = AppService\Web\QuanLyDuAn\Web.Release.config
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "03.BackgroundJobs.Common", "03.BackgroundJobs.Common", "{C004614F-8C8D-4E28-BD6F-86A3B088E1B3}"
 EndProject
@@ -130,7 +135,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PhatHanh", "PhatHanh", "{9A
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WorkerService", "WorkerService", "{F5AF1BD5-7BE2-4F07-87F5-27523A28C453}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SendMailAppointmentService", "AppService\App\WorkerService\SendMailAppointmentService\SendMailAppointmentService.csproj", "{BAC64B23-1A4C-405D-9C48-16D9B3D84C6F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SendMailAppointmentService", "AppService\App\WorkerService\SendMailAppointmentService\SendMailAppointmentService.csproj", "{BAC64B23-1A4C-405D-9C48-16D9B3D84C6F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

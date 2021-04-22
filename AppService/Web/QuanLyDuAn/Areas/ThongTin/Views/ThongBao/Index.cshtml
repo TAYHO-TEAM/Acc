@@ -19,21 +19,24 @@
     <script>
         var id = 1;
         ///-----------------------------READ ------------------------
-        const ACTION_READ = "/Notify";
-        const ACTION_READ_NOTIFYACCOUNT = "/NotifyAccount";
-        const ACTION_DOCUMENTACC = "/DocumentReleasedAccount";
-        const ACTION_DOCUMENTLOG = "/NotifyAccount";
-        const ACTION_FILEGET = "/FilesAttachment/getBy";
-        const ACTION_GROUPS = "/Groups";
-        const ACTION_ACCOUNTINFO = "/ACCOUNTINFO";
-        const ACTION_PROJECT = "/Projects";
-        const ACTION_HANGMUC = "/WorkItems";
+        var ACTION_READ = "/Notify";
+        var ACTION_READ_NOTIFYACCOUNT = "/NotifyAccount";
+        var ACTION_DOCUMENTACC = "/DocumentReleasedAccount";
+        var ACTION_DOCUMENTLOG = "/NotifyAccount";
+        var ACTION_FILEGET = "/FilesAttachment/getBy";
+        var ACTION_GROUPS = "/Groups";
+        var ACTION_PROJECT = "/Projects";
+        var ACTION_HANGMUC = "/WorkItems";
+        var ACTION_TEMPLATE = "/TemplateMail";
+
+
         var PROJECTID = isNullOrEmpty(localStorage.getItem("projectIdCurrent")) ? parseInt(localStorage.getItem("projectIdCurrent")) : 0;
         //var DOCUMENTTYPEID = isNullOrEmpty(localStorage.getItem("documentTypeIdCurrent")) ? parseInt(localStorage.getItem("documentTypeIdCurrent")) : 7;
 
         //-----------------------------CMD ------------------------
-        const ACTION_CMD = "/Notify";
-        const ACTION_CMD_NOTIFYACCOUNT = "/NotifyAccount";
+        var ACTION_CMD = "/Notify";
+        var ACTION_CMD_NOTIFYACCOUNT = "/NotifyAccount";
+        var ACTION_CMD_NOTIFYACCOUNTS = "/NotifyAccount/Accounts";
 
 
 
@@ -43,26 +46,6 @@
         //..........................Get data -------------------------------------------------------------
 
         let customStore = customStore_CMD_READ(ACTION_CMD, ACTION_READ);
-        let customStore_AccountInfo = new DevExpress.data.CustomStore({
-            key: "accountId",
-            load: (values) => {
-                var deferred = $.Deferred();
-                $.ajax({
-                    headers: header, dataType: "json",
-                    url: URL_API_PM_READ + ACTION_ACCOUNTINFO,
-                    success: function (data) {
-                        var list = data.result.items;
-                        deferred.resolve(list);
-                    },
-                    error: function (xhr, textStatus, errorThrown) {
-                        console.log(xhr.responseJSON);
-                        deferred.reject("Có lỗi xảy ra trong quá trình lấy danh sách 'Giai Đoạn'. Mở Console để xem chi tiết.");
-                    },
-                    timeout: 10000
-                });
-                return deferred.promise();
-            },
-        });
         let customStore_DocumetnType = new DevExpress.data.CustomStore({
             key: "id", loadMode: "raw",
             load: (values) => {
@@ -120,11 +103,21 @@
             },
 
         });
-        let customStore_NotifyAccount = (FKID) => customStore_CMD_READ_FILTER_ID(ACTION_CMD_NOTIFYACCOUNT, ACTION_CMD_NOTIFYACCOUNT, FKID);
+        var customStore_NotifyAccount = (ID) => {
+            return new DevExpress.data.DataSource({
+                store: new DevExpress.data.CustomStore({
+                    key: "id",
+                    load: (values) => ajax_read(ACTION_READ_NOTIFYACCOUNT, values),
+                    insert: (values) => ajax_insert(URL_API_PM_CMD + ACTION_CMD_NOTIFYACCOUNTS, values),
+                    //update: (key, values) => ajax_update(URL_API_PM_CMD + ACTION_CMD_REQUESTREGIST, key, values),
+                    //remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION_CMD_REQUESTREGIST, key),
+                }),
+                filter: ["notifyId", "=", ID],
+            });
+        };
         let customStore_Log = (item) => new DevExpress.data.CustomStore({
             key: "id",
             load: (values) => {
-                console.log(item);
                 var deferred = $.Deferred();
                 var params = {
                     'PageSize': isNullOrEmpty(values.take) ? values.take : 0,
@@ -156,7 +149,6 @@
                 });
                 return deferred.promise();
             },
-
         });
         let customStore_Groups = new DevExpress.data.CustomStore({
             key: "id",
@@ -222,6 +214,15 @@
                 return deferred.promise();
             },
         });
+        let customStore_Template = () => {
+            return new DevExpress.data.DataSource({
+                store: new DevExpress.data.CustomStore({
+                    key: "id",
+                    loadMode: "raw",
+                    load: (values) => ajax_read(ACTION_TEMPLATE, values),
+                }),
+            })
+        };
         //..........................  Load View -------------------------------------------------------------
         $(function () {
             loadData();
@@ -235,8 +236,14 @@
                     sorting: true,
                     grouping: false
                 },
-                showBorders: false, showColumnHeaders: true, showColumnLines: false, hoverStateEnabled: true,
-                showRowLines: true, columnAutoWidth: true, wordWrapEnabled: true, rowAlternationEnabled: true,
+                showBorders: false,
+                showColumnHeaders: true,
+                showColumnLines: false,
+                hoverStateEnabled: true,
+                showRowLines: true,
+                columnAutoWidth: true,
+                wordWrapEnabled: true,
+                rowAlternationEnabled: true,
                 columns: [
                     {
                         dataField: "title",
@@ -264,11 +271,6 @@
                             //},
                         }
                     },
-                    //{
-                    //    dataField: "message",
-                    //    caption: "Lời nhắn",
-                    //    dataType: "string",
-                    //},
                     {
                         dataField: "link",
                         caption: "Đường dẫn",
@@ -278,13 +280,7 @@
                             placeholder: "Vui lòng nhập...",
                         },
                     },
-                    //{
-                    //    dataField: "sub",
-                    //    caption: "Lời chào",
-                    //    dataType: "string",
-                    //},
                     {
-
                         dataField: "bodyContent",
                         caption: "Nội dung",
                         dataType: "string",
@@ -297,12 +293,20 @@
                         dataField: "templateId",
                         caption: "Theo mẫu",
                         dataType: "number",
+                        editorType: "dxSelectBox",
+                        lookup: {
+                            dataSource: customStore_Template().store(),
+                            valueExpr: "id",
+                            displayExpr: "title",
+                        },
                         editorOptions: {
+                            dataSource: customStore_Template().store(),
                             stylingMode: "filled",
-                            placeholder: "Vui lòng nhập...",
+                            placeholder: "Vui lòng chọn...",
+                            valueExpr: "id",
+                            displayExpr: "title",
                         }
                     },
-
                 ],
                 paging: { enabled: true, pageSize: 20 },
                 pager: {
@@ -325,7 +329,7 @@
                     confirmDelete: true,
                     popup: {
                         width: 600, height: "auto",
-                        showTitle: true, title: "Trình duyệt",
+                        showTitle: true, title: "Tạo thông báo mới",
                         closeOnOutsideClick: false, showCloseButton: true,
                     },
                 },
@@ -384,9 +388,11 @@
                     enabled: true,
                     render: null,
                     template: function (container, options) {
+                        container.attr("style", "background-color: rgba(248,141,43,0.5) !important; padding: 10px !important;")
+                        var data = options.data;
                         $("<div>").dxDataGrid({
                             showBorders: false,
-                            showColumnHeaders: false,
+                            showColumnHeaders: true,
                             showColumnLines: false,
                             hoverStateEnabled: true,
                             showRowLines: true,
@@ -399,18 +405,52 @@
                             columns: [
                                 {
                                     dataField: "accountId",
-                                    caption: "Họ Tên",
+                                    caption: "Avatar",
                                     dataType: "string",
                                     alignment: "center",
                                     dataType: "number",
                                     lookup: {
-                                        dataSource: customStore_AccountInfo,
-                                        valueExpr: "accountId", displayExpr: "userName",
+                                        dataSource: customStore_AccountInfo().store(),
+                                        valueExpr: "accountId",
+                                        displayExpr: "avatarImg",
+                                    },
+                                    cellTemplate: (c, o) => {
+                                        $("<img />")
+                                            .attr('id', "popover-target-" + o.key)
+                                            .attr("src", "data:image/png;base64," + o.text)
+                                            .addClass("img-circle elevation-2 img-size-30")
+                                            .attr("onerror", "this.onerror=null;this.src='https://qlcv.tayho.com.vn/Content/user-avartar/avartar-default.jpg';")
+                                            .appendTo(c);
+                                        $("<div />")
+                                            .attr('id', "popover-detail-" + o.key)
+                                            .append("<div>( " + ' Đã tạo ' + moment(o.data.createDate).locale("vi").fromNow() + ")" + "</div>")
+                                            .appendTo(c);
+                                        $("#popover-detail-" + o.key).dxPopover({
+                                            target: "#popover-target-" + o.key,
+                                            showEvent: "mouseenter", hideEvent: "mouseleave",
+                                            position: "bottom",
+                                            animation: {
+                                                show: { type: "pop", from: { scale: 0 }, to: { scale: 1 } },
+                                                hide: { type: "fade", from: 1, to: 0 },
+                                            }
+                                        });
+                                    },
+                                },//account
+                                {
+                                    dataField: "accountId",
+                                    caption: "Người nhận",
+                                    dataType: "string",
+                                    alignment: "center",
+                                    dataType: "number",
+                                    lookup: {
+                                        dataSource: customStore_AccountInfo().store(),
+                                        valueExpr: "accountId",
+                                        displayExpr: "userName",
                                     },
                                 },//account
                                 {
                                     dataField: "note",
-                                    caption: "Ghi chú",
+                                    caption: "ý kiến phản hồi",
                                     dataType: "string",
                                     alignment: "center",
                                     dataType: "string",
@@ -467,7 +507,7 @@
                         index: 1, icon: "fas fa-plus",
                         label: "Thêm mới",
                         visible: PermitInAction["insert"],
-                        onClick: () => e.component.addRow()
+                        onClick: () => e.component.addRow(),
                     }).dxSpeedDialAction("instance");
 
                     DevExpress.config({
@@ -488,7 +528,6 @@
                 onSelectionChanged: (e) => {
                     var selectedRowData = e.selectedRowsData[0];
                     var selectedRowKey = e.selectedRowKeys[0];
-                    console.log(selectedRowData);
                     if (selectedRowData != null && selectedRowKey != null) {
                         var data = e.component.getRowIndexByKey(selectedRowKey);
                         $("#action-update").dxSpeedDialAction({
@@ -518,26 +557,31 @@
                         $("#action-log").dxSpeedDialAction({
                             index: 4, icon: "fas fa-user", label: "Thêm người nhận",
                             onClick: () => {
-                                loadAccount(selectedRowData);
+                                loadAccount(selectedRowKey);
                             }
                         }).dxSpeedDialAction("instance");
                     }
                 },
+                onRowInserted: (e) => {
+                    loadAccount(e.key);
+                },
+               
+
             });
         };
-        let loadAccount = (item) => $("#popup-main-upload").dxPopup({
+        let loadAccount = (id) => $("#popup-main-upload").dxPopup({
             width: "50%",
             height: "50%",
             fullScreen: false,
             dragEnabled: true,
             resizeEnabled: true,
             showTitle: true,
-            title: 'Cài đặt người nhận phát hành',
+            title: 'Cài đặt người nhận thông báo',
             showCloseButton: true,
             closeOnOutsideClick: true,
             visible: true,
             contentTemplate: (c) => {
-                console.log(item);
+                var dataSource = customStore_NotifyAccount(id);
                 var scrollView = $("<div id='scrollView-detail'></div>");
                 var content = $("<div/>");
                 var d = $.Deferred();
@@ -545,11 +589,8 @@
                     elementAttr: {
                         id: "dxDataGrid_detail"
                     },
-                    dataSource: customStore_NotifyAccount('notifyId,' + item.id),
-                    remoteOperations: {
-                        paging: false,
-                        sorting: true,
-                    },
+                    dataSource: dataSource,
+                    remoteOperations: true,
                     repaintChangesOnly: true,
                     showBorders: true,
                     showColumnHeaders: true,
@@ -578,48 +619,22 @@
                             dataField: "accountId",
                             caption: "Họ Tên",
                             alignment: "center",
-                            ////dataType: "number",
+                            //dataType: "number",
                             lookup: {
-                                dataSource: customStore_AccountInfo,
+                                dataSource: customStore_AccountInfo().store(),
                                 valueExpr: "accountId",
                                 displayExpr: "userName",
                             },
+                            editCellTemplate: (cellElement, cellInfo) => dropDownBoxTemplate(cellElement, cellInfo, dataSource._items.map(a => a.accountId)),
                         },//account
-                        {
-                            dataField: "groupId",
-                            caption: "Nhóm",
-                            alignment: "center",
-                            //dataType: "number",
-                            lookup: {
-                                dataSource: customStore_Groups,
-                                valueExpr: "id",
-                                displayExpr: "title",
-                            },
-                        },//nhóm
-                        //{
-                        //    dataField: "pushTime",
-                        //    caption: "Lịch gửi",
-                        //    //alignment: "datetime",
-                        //    //dataType: "number",
-                        //},//gửi lúc
+
                         {
                             dataField: "status",
                             caption: "Trạng thái",
                             //alignment: "datetime",
                             //dataType: "number",
                         },//gửi lúc
-                        {
-                            dataField: "isActive",
-                            width: 100,
-                            alignment: "center",
-                            editorType: "dxSwitch",
-                        },
-                        {
-                            dataField: "isVisible",
-                            width: 100,
-                            alignment: "center",
-                            editorType: "dxSwitch",
-                        },
+
                     ],
                     editing: {
                         mode: "popup",
@@ -628,7 +643,8 @@
                         allowUpdating: false,
                         popup: {
                             width: 600, height: "auto",
-                            showTitle: true, title: "Trình duyệt",
+                            showTitle: true,
+                            title: "Tạo thông báo mới",
                             closeOnOutsideClick: false,
                             showCloseButton: true,
                         },
@@ -639,37 +655,12 @@
                             showRequiredMark: true,
                             requiredMark: "(*)",
                             items: [
-                                {
-                                    colSpan: 12,
-                                    dataField: "groupId",
-                                    editorType: "dxSelectBox",
-                                    editorOptions: {
-                                        elementAttr: {
-                                            id: "groupIdSelect",
-                                        },
-                                        placeholder: "Vui lòng chọn...",
-                                        searchEnabled: true,
-                                        showClearButton: true,
-                                        itemTemplate: function (data) {
-                                            return $("<div>").append($("<b>").append(data.title).addClass("mr-1"), $("<em>").append(data.descriptions));
-                                        },
-                                    },
-                                    validationRules: [{
-                                        type: "async",
-                                        message: "Đã có thông tin Nhóm",
-                                        validationCallback: function (params) {
-                                            var d = $.Deferred();
-                                            d.resolve(!((typeof $('#accountIdSelect').dxSelectBox('instance').option('value') === 'number') && (typeof $('#groupIdSelect').dxSelectBox('instance').option('value') === 'number')));
-                                            //$('#groupIdSelect').dxSelectBox('instance').option('value', null)
-                                            return d.promise();
-                                            /*sendRequest(params.value);*/
-                                        }
-                                    }]
-                                },
+
                                 {
                                     colSpan: 12,
                                     dataField: "accountId",
-                                    editorType: "dxSelectBox",
+                                    dataType: "textArea",
+                                    editorType: "dxLookup",
                                     editorOptions: {
                                         elementAttr: {
                                             id: "accountIdSelect",
@@ -677,96 +668,22 @@
                                         placeholder: "Vui lòng chọn...",
                                         searchEnabled: true,
                                         showClearButton: true,
+                                        searchExpr: ['userName', 'accountName'],
                                         itemTemplate: function (data) {
                                             return $("<div>").append($("<b>").append(data.userName).addClass("mr-1"), $("<em>").append(data.accountName));
                                         },
                                     },
-                                    validationRules: [{
-                                        type: "async",
-                                        message: "Đã có thông tin Nhóm",
-                                        validationCallback: function (params) {
-                                            var d = $.Deferred();
-                                            d.resolve(!((typeof $('#accountIdSelect').dxSelectBox('instance').option('value') === 'number') && (typeof $('#groupIdSelect').dxSelectBox('instance').option('value') === 'number')));
-                                            return d.promise();
-                                        }
-                                    }]
+                                    //validationRules: [{
+                                    //    type: "async",
+                                    //    message: "Đã có thông tin Nhóm",
+                                    //    validationCallback: function (params) {
+                                    //        var d = $.Deferred();
+                                    //        d.resolve(!((typeof $('#accountIdSelect').dxSelectBox('instance').option('value') === 'number') && (typeof $('#groupIdSelect').dxSelectBox('instance').option('value') === 'number')));
+                                    //        return d.promise();
+                                    //    }
+                                    //}]
                                 },
-                                //{
-                                //    colSpan: 12,
-                                //    dataField: "accountId",
-                                //    editorType: "dxDropDownBox",
-                                //    editorOptions: {
-                                //        elementAttr: {
-                                //            id: "accountIdSelect",
-                                //        },
-                                //        dataSource: customStore_AccountInfo,
-                                //        placeholder: "Vui lòng chọn...",
-                                //        searchEnabled: true,
-                                //        showClearButton: true,
-                                //        contentTemplate: function (e) {
-                                //            var value = e.component.option("value"),
-                                //                $dataGrid = $("<div>").dxDataGrid({
-                                //                    dataSource: e.component.getDataSource(),
-                                //                    columns: ["id", "userName"],
-                                //                    hoverStateEnabled: true,
-                                //                    paging: { enabled: true, pageSize: 10 },
-                                //                    filterRow: { visible: true },
-                                //                    scrolling: { mode: "infinite" },
-                                //                    height: 345,
-                                //                    selection: { mode: "multiple" },
-                                //                    selectedRowKeys: value,
-                                //                    onSelectionChanged: function (selectedItems) {
-                                //                        var keys = selectedItems.selectedRowKeys;
-                                //                        e.component.option("value", keys);
-                                //                    }
-                                //                });
-                                //            dataGrid = $dataGrid.dxDataGrid("instance");
 
-                                //            e.component.on("valueChanged", function (args) {
-                                //                var value = args.value;
-                                //                dataGrid.selectRows(value, false);
-                                //            });
-                                //            console.log($dataGrid);
-                                //            return $dataGrid;
-                                //        }
-                                //        //itemTemplate: function (data) {
-                                //        //    return $("<div>").append($("<b>").append(data.userName).addClass("mr-1"), $("<em>").append(data.department));
-                                //        //},
-                                //    },
-                                //    validationRules: [{
-                                //        type: "async",
-                                //        message: "Đã có thông tin Nhóm",
-                                //        validationCallback: function (params) {
-                                //            console.log(params);
-                                //            var d = $.Deferred();
-                                //            d.resolve(!((typeof $('#accountIdSelect').dxSelectBox('instance').option('value') === 'number') && (typeof $('#groupIdSelect').dxSelectBox('instance').option('value') === 'number')));
-                                //            //$('#accountIdSelect').dxSelectBox('instance').option('value',null)
-                                //            return d.promise();
-                                //            /*sendRequest(params.value);*/
-                                //        }
-                                //    }]
-
-                                //},
-                                //{
-                                //    colSpan: 12,
-                                //    dataField: "pushTime",
-                                //    editorType: "dxDateBox",
-                                //    editorOptions: {
-                                //        type: "datetime",
-                                //    },
-                                //},
-                                {
-                                    colSpan: 6,
-                                    dataField: "isActive",
-                                    alignment: "center",
-                                    editorType: "dxSwitch",
-                                },
-                                {
-                                    colSpan: 6,
-                                    dataField: "isVisible",
-                                    alignment: "center",
-                                    editorType: "dxSwitch",
-                                },
                             ],
                         },
                     },
@@ -776,7 +693,7 @@
                         }
                     },
                     onInitNewRow: (e) => {
-                        e.data.notifyId = item.id;
+                        e.data.notifyId = id;
                         e.data.isActive = true;
                         e.data.isVisible = true;
                     },
@@ -849,6 +766,75 @@
                 onSelectionChanged: function (e) {
                     cellInfo.component.updateDimensions();
                 },
+            });
+        };
+        // ---------------------------------- Dropbox Multiple Custom --------------------------------
+        function dropDownBoxTemplate(cellElement, cellInfo, docAcc) {
+            return $("<div>").dxDropDownBox({
+                value: docAcc,
+                valueExpr: "accountId",
+                displayExpr: "userName",
+                showSelectionControls: true,
+                showClearButton: true,
+                dataSource: customStore_AccountInfo().store(),
+                //applyValueMode: "useButtons",
+                searchEnabled: true,
+                placeholder: "Select a value...",
+                contentTemplate: function (e) {
+                    var value = e.component.option("value"),
+                        $dataGrid = $("<div>").dxDataGrid({
+                            dataSource: customStore_AccountInfo().store(),
+                            columns: [
+                                {
+                                    dataField: "accountId",
+                                    caption: "Mã",
+                                    alignment: "center",
+                                    width: '10%',
+                                },//account,
+                                {
+                                    dataField: "userName",
+                                    alignment: "center",
+                                    caption: "Tên",
+                                    width: '50%',
+                                },
+                                {
+                                    dataField: "type",
+                                    alignment: "center",
+                                    caption: "Thuộc cty",
+                                    width: '40%',
+                                    groupIndex: 0,
+                                    lookup: {
+                                        dataSource: AccountType,
+                                        valueExpr: "ID",
+                                        displayExpr: "Name",
+                                    },
+                                },
+                            ],
+                            hoverStateEnabled: true,
+                            //paging: { enabled: true, pageSize: 20 },
+                            filterRow: { visible: true },
+                            scrolling: { mode: "virtual" },
+                            height: 345,
+                            selection: { mode: "multiple" },
+                            selectedRowKeys: value,
+                            onSelectionChanged: function (selectedItems) {
+                                var keys = selectedItems.selectedRowKeys;
+                                e.component.option("value", keys);
+                            }
+                        });
+                    dataGrid = $dataGrid.dxDataGrid("instance");
+                    e.component.on("valueChanged", function (args) {
+                        var value = args.value;
+                        dataGrid.selectRows(value, false);
+                    });
+                    return $dataGrid;
+                },
+                onValueChanged: function (e) {
+                    cellInfo.setValue(e.value);
+                },
+                //onSelectionChanged: function (e) {
+                //    cellInfo.component.updateDimensions();
+                //},
             });
         };
 

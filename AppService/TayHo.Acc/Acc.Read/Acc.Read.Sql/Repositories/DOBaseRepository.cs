@@ -1,6 +1,4 @@
-﻿
-
-using Acc.Read.Sql.Interfaces;
+﻿using Acc.Read.Sql.Interfaces;
 using Acc.Read.Sql.Parameters;
 using Dapper;
 using Dapper.Common;

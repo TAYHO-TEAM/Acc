@@ -37,7 +37,7 @@ namespace  ProjectManager.CMD.Api.Application.Commands
             if (!methodResult.IsOk) throw new CommandHandlerException(methodResult.ErrorMessages);
             var newPlanReport = new PlanReport(request.PlanMasterId,request.PlanJobId,request.Content,request.Unit,request.Amount);
             newPlanReport.SetCreate(_user);
-            newPlanReport.Status = request.Status.HasValue ? request.Status : newPlanReport.Status;
+            newPlanReport.Status = request.Status.HasValue ? request.Status : 1;
             newPlanReport.IsActive = request.IsActive.HasValue ? request.IsActive : true;
             newPlanReport.IsVisible = request.IsVisible.HasValue ? request.IsVisible : true;
             await _planReportRepository.AddAsync(newPlanReport).ConfigureAwait(false);

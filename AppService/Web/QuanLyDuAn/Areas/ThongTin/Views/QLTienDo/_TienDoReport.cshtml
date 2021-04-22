@@ -1,14 +1,14 @@
-﻿@model int
+﻿@model Tuple<int,string>
 <form id="form-regist" action="#" method="POST" enctype="application/json">
 </form>
 
 <script>
     var formData = {
         "planMasterId": "",
-        "planJobId": @Model,
+        "planJobId": @Model.Item1,
         "content": "",
-        "unit": "",
-        "amount": ""
+        "unit":  "@Model.Item2.ToString()",
+        "amount": "",
     };
     $(document).ready(function () {
         var formInstance = $("#form-regist").dxForm({
@@ -24,12 +24,18 @@
                             dataField: "content",
                             label: { text: "Nội dung báo cáo" },
                             editorType: "dxTextArea",
+                            editorOptions: {
+                                stylingMode: "filled",
+                            },
                         },
                         {
                             colSpan: 1,
                             dataField: "amount",
                             label: { text: "Khối lượng thực tế" },
                             editorType: "dxNumberBox",
+                            editorOptions: {
+                                stylingMode: "filled",
+                            },
                         },
                         {
                             colSpan: 1,
@@ -41,7 +47,7 @@
                                 displayExpr: "Name",
                             },
                             editorOptions: {
-                                value:'%',
+                                stylingMode: "filled",
                                 readOnly: true,
                             },
                         },

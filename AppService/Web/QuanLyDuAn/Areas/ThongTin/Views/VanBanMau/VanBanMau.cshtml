@@ -3,9 +3,10 @@
     ViewBag.Title = "VanBanMau";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 @section style{
     <style>
-        .dx-placeholder {
+        .dx-datagrid-filter-row .dx-placeholder {
             color: white !important;
         }
     </style>
@@ -21,15 +22,14 @@
     <script>
         var NAMEFORM = "CustomForm";
         //--------------------READ------------------------------
-        const ACTION = "/CustomForm";
-        const ACTION_CUSTOMTABLE = "/CustomTable";
-        const ACTION_PROJECT = "/Project";
-        const ACTION_CUSTOMFORMBODY = "/CustomFormBody";
-        const ACTION_DETAIL = "/CustomForm/Detail";
-        const ACTION_CELLCONTENT = "/CustomCellContent";
-
+        var ACTION = "/CustomForm";
+        var ACTION_CUSTOMTABLE = "/CustomTable";
+        var ACTION_PROJECT = "/Project";
+        var ACTION_CUSTOMFORMBODY = "/CustomFormBody";
+        var ACTION_DETAIL = "/CustomForm/Detail";
+        var ACTION_CELLCONTENT = "/CustomCellContent";
         //--------------------CMD------------------------------
-        const ACTION_CMD = "/CustomForm";
+        var ACTION_CMD = "/CustomForm";
 
 
 
@@ -206,31 +206,25 @@
                     mode: "popup",
                     useIcons: false,
                     confirmDelete: true,
+                    popup: {
+                        width: 600,
+                        height: "auto",
+                        showTitle: true,
+                        title: "Tạo thông báo mới",
+                        closeOnOutsideClick: false,
+                        showCloseButton: true,
+                    },
                 },
                 onToolbarPreparing: function (e) {
                     var container = e.component;
                     e.toolbarOptions.items.unshift(
-                        //{
-                        //    location: "before", widget: "dxSelectBox",
-                        //    options: {
-                        //        dataSource: customStore_Projects,
-                        //        valueExpr: "id", displayExpr: "title",
-                        //        searchEnabled: true,
-                        //        searchMode: "contains",
-                        //        width: "100%",
-                        //        showClearButton: false,
-                        //        value: PROJECTID,
-                        //        onValueChanged: function (data) {
-                        //            PROJECTID = data.value;
-                        //            localStorage.setItem('projectIdCurrent', PROJECTID);
-                        //            loadData(customStore);
-                        //        },
-                        //    },
-                        //},
                         {
-                            location: "after", widget: "dxButton",
+                            location: "after",
+                            widget: "dxButton",
                             options: {
-                                icon: "refresh", tylingMode: "filled", type: "default",
+                                icon: "refresh",
+                                stylingMode: "filled",
+                                type: "default",
                                 onClick: () => container.refresh()
                             }
                         })
@@ -260,7 +254,8 @@
                 },
                 onContentReady: (e) => {
                     $("#action-add").dxSpeedDialAction({
-                        index: 1, icon: "fas fa-plus",
+                        index: 1,
+                        icon: "fas fa-plus",
                         label: "Thêm mới",
                         visible: PermitInAction["insert"],
                         onClick: () => e.component.addRow()

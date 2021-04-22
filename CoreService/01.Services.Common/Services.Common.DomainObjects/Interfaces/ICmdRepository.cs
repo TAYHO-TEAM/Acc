@@ -57,6 +57,9 @@ namespace Services.Common.DomainObjects.Interfaces
         Task<bool> AnyAsync(Expression<Func<T, bool>> predicate);
 
         #endregion Check
+        #region Helpers
+        Task<int> BaseCheckPermistion(int RecordId = 0, int AccountId = 0, int ActionId = 0, string TableName = "", int @FunctionCUD = 0);
+        #endregion Helpers
     }
 
 }

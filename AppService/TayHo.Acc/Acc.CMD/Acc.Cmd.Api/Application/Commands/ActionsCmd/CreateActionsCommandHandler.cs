@@ -9,6 +9,7 @@ using Services.Common.Security;
 using Services.Common.Utilities;
 using System.Threading;
 using System.Threading.Tasks;
+using Services.Common.DomainObjects.Exceptions;
 
 namespace  Acc.Cmd.Api.Application.Commands
 {
@@ -27,18 +28,22 @@ namespace  Acc.Cmd.Api.Application.Commands
         public async Task<MethodResult<CreateActionsCommandResponse>> Handle(CreateActionsCommand request, CancellationToken cancellationToken)
         {
             var methodResult = new MethodResult<CreateActionsCommandResponse>();
-            var parentAction = await _actionsRepository.SingleOrDefaultAsync(x => x.Id == request.ParentId && x.IsDelete == false).ConfigureAwait(false);
-            if (parentAction == null)
+            if(request.ParentId > 0)
             {
-                methodResult.AddErrorMessage(nameof(ErrorCodeInsert.IErrN3), new[]
+                var parentAction = await _actionsRepository.SingleOrDefaultAsync(x => x.Id == request.ParentId && x.IsDelete == false).ConfigureAwait(false);
+                if (parentAction == null)
                 {
+                    methodResult.AddErrorMessage(nameof(ErrorCodeInsert.IErrN3), new[]
+                    {
                     ErrorHelpers.GenerateErrorResult(nameof(request.ParentId),request.ParentId)
                 });
+                }
+                else
+                {
+                    request.Level = (parentAction.Level.HasValue ? ((int)parentAction.Level + 1) : 0);
+                }
             }
-            else
-            {
-                request.Level =( parentAction.Level.HasValue ? ((int)parentAction.Level + 1) : 0);
-            }                
+            if (!methodResult.IsOk) throw new CommandHandlerException(methodResult.ErrorMessages);
             var newActions = new Actions(request.ParentId,
                                         request.Title,
                                         request.Descriptions,

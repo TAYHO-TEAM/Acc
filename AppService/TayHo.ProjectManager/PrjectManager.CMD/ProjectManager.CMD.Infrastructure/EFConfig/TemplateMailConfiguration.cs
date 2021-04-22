@@ -11,10 +11,10 @@ namespace ProjectManager.CMD.Infrastructure.EFConfig
         public void Configure(EntityTypeBuilder<TemplateMail> builder)
         {
             builder.ToTable(QuanLyDuAnConstants.TemplateMail_TABLENAME);
-	        builder.Property(x => x.Title).HasField("_title").HasMaxLength(256).UsePropertyAccessMode(PropertyAccessMode.Field);
-			builder.Property(x => x.BodyContent).HasField("_bodyContent").UsePropertyAccessMode(PropertyAccessMode.Field);
-			builder.Property(x => x.IsBodyHtml).HasField("_isBodyHtml").UsePropertyAccessMode(PropertyAccessMode.Field);
-			
+            builder.Property(x => x.Title).HasField("_title").HasMaxLength(256).UsePropertyAccessMode(PropertyAccessMode.Field);
+            builder.Property(x => x.BodyContent).HasField("_bodyContent").UsePropertyAccessMode(PropertyAccessMode.Field);
+            builder.Property(x => x.IsBodyHtml).HasField("_isBodyHtml").UsePropertyAccessMode(PropertyAccessMode.Field);
+
         }
     }
 }

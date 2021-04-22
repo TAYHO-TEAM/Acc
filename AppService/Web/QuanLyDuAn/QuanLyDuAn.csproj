@@ -27,6 +27,7 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <TypeScriptToolsVersion>3.8</TypeScriptToolsVersion>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -54,12 +55,16 @@
     <Reference Include="Microsoft.CSharp">
       <Private>True</Private>
     </Reference>
+    <Reference Include="RadPdf">
+      <HintPath>..\packages\RadPdf.dll</HintPath>
+    </Reference>
     <Reference Include="System">
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Data">
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Drawing">
       <Private>True</Private>
     </Reference>
@@ -79,23 +84,12 @@
     <Reference Include="System.ComponentModel.DataAnnotations">
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Core">
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Data.DataSetExtensions">
-      <Private>True</Private>
-    </Reference>
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Http, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.7\lib\net45\System.Web.Http.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Xml.Linq">
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System.Web">
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Web.Extensions">
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.Abstractions">
@@ -158,6 +152,7 @@
       <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
@@ -206,6 +201,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilities\ContractorInfoOBJ - Copy.cs" />
     <Compile Include="Utilities\ContractorInfoOBJ.cs" />
     <Compile Include="Utilities\DocumentReleasedOBJ.cs" />
     <Compile Include="Utilities\DynamicOBJ.cs" />
@@ -2501,6 +2497,8 @@
     <Content Include="Areas\NganSach\Views\NghiemThu\Index - Copy.cshtml" />
     <Content Include="Areas\ThongTin\Views\ThongBao\ViewNotify.cshtml" />
     <Content Include="Areas\Admin\Views\SystemConfig\_ContractorInfoAdd.cshtml" />
+    <Content Include="Areas\ThongTin\Views\QLCongViec\_PhanHoi.cshtml" />
+    <Content Include="Areas\ThongTin\Views\CauHinh\TemplateMail.cshtml" />
     <None Include="packages.config" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
@@ -2519,6 +2517,7 @@
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

@@ -94,7 +94,10 @@ namespace QuanLyDuAn.Areas.ThongTin.Controllers
 
             return PartialView(model);
         }
-
+        public ActionResult TemplateMail()
+        {
+            return View();
+        }
     }
 
 }

@@ -63,6 +63,7 @@
                                     valueExpr: "id",
                                     displayExpr: "title",
                                     placeholder: "Vui lòng chọn...",
+                                    stylingMode: "filled",
                                     searchEnabled: true, showClearButton: true,
                                     itemTemplate: function (data) {
                                         return $("<div>").append($("<b>").append(data.title).addClass("mr-1"));
@@ -119,13 +120,14 @@
                                     valueExpr: "id",
                                     displayExpr: "title",
                                 },
-                                editorType: "dxTextBox",
                                 editorType: "dxSelectBox",
                                 editorOptions: {
                                     value: formData["documentTypeId"],
+                                    stylingMode: "filled",
                                     readOnly:true,
                                     dataSource: customStore_DocumetnType,
-                                    valueExpr: "id", displayExpr: "title",
+                                    valueExpr: "id",
+                                    displayExpr: "title",
                                     elementAttr: {
                                         id: "elementDocumentTypeId",
                                     }
@@ -146,6 +148,7 @@
                                     readOnly: true,
                                     value: formData["workItemId"],
                                     dataSource: customStore_HangMuc,
+                                    stylingMode: "filled",
                                     valueExpr: "id",
                                     displayExpr: "title",
                                     elementAttr: {
@@ -162,6 +165,7 @@
                                 editorOptions: {
                                     value: formData["title"],
                                     dataSource: customStore_HangMuc,
+                                    stylingMode: "filled",
                                     valueExpr: "id",
                                     displayExpr: "title",
                                     elementAttr: {
@@ -175,6 +179,7 @@
                                 label: { text: "Mô tả" },
                                 editorType: "dxTextArea",
                                 editorOptions: {
+                                    stylingMode: "filled",
                                     value: formData["descriptions"],
                                 },
                             },
@@ -183,6 +188,7 @@
                                 dataField: "note",
                                 label: { text: "Ghi chú" },
                                 editorOptions: {
+                                    stylingMode: "filled",
                                     value: formData["descriptions"],
                                 },
                             },

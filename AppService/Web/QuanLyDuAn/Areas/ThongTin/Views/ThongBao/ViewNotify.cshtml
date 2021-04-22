@@ -33,7 +33,7 @@
         const ACTION_DOCUMENTLOG = "/DocumentReleasedLog";
         const ACTION_FILEGET = "/FilesAttachment/getBy";
         const ACTION_GROUPS = "/Groups";
-        const ACTION_ACCOUNTINFO = "/ACCOUNTINFO";
+        const ACTION_ACCOUNTINFO = "/AccountInfo";
         const ACTION_PROJECT = "/Projects";
         const ACTION_HANGMUC = "/WorkItems";
         var PROJECTID = isNullOrEmpty(localStorage.getItem("projectIdCurrent")) ? parseInt(localStorage.getItem("projectIdCurrent")) : 0;
@@ -200,6 +200,13 @@
                 return deferred.promise();
             },
         });
+        let customStore_AccountInfo = new DevExpress.data.DataSource({
+            store: new DevExpress.data.CustomStore({
+                key: "id",
+                loadMode: "raw",
+                load: (values) => ajax_read(ACTION_ACCOUNTINFO, values),
+            }),
+        });
         //..........................  Load View -------------------------------------------------------------
         $(function () {
             loadData();
@@ -273,6 +280,19 @@
                         caption: "Ngày gửi thông báo",
                         dataType: "date",
                         alignment: "center",
+                    },
+                    {
+                        dataField: "nCreateBy",
+                        caption: "Người gửi",
+                        dataType: "string",
+                        alignment: "center",
+                        allowFiltering: false,
+                        lookup: {
+                            dataSource: customStore_AccountInfo.store(),
+                            valueExpr: "accountId",
+                            displayExpr: "userName",
+                        },
+
                     },
                 ],
                 paging: { enabled: true, pageSize: 20 },

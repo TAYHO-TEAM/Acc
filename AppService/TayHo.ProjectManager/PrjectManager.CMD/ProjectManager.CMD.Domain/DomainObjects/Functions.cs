@@ -17,6 +17,7 @@ namespace ProjectManager.CMD.Domain.DomainObjects
         private string _url;
         private int? _categoryId;
         private int? _level;
+        private int? _type;
         #endregion Fields
         #region Constructors
         private Functions()
@@ -32,7 +33,8 @@ namespace ProjectManager.CMD.Domain.DomainObjects
                             string Icon,
                             string Url,
                             int? CategoryId,
-                            int? Level) : this()
+                            int? Level,
+                            int? Type) : this()
         {
             _actionId = ActionId;
             _tableName = TableName;
@@ -43,6 +45,7 @@ namespace ProjectManager.CMD.Domain.DomainObjects
             _url = Url;
             _categoryId = CategoryId;
             _level = Level;
+            _type = Type;
             if (!IsValid()) throw new DomainException(_errorMessages);
         }
         #endregion Constructors
@@ -56,6 +59,7 @@ namespace ProjectManager.CMD.Domain.DomainObjects
         [MaxLength(1024, ErrorMessage = nameof(ErrorCodeInsert.IErr1024))] public string Url { get => _url; }
         public int? CategoryId { get => _categoryId; }
         public int? Level { get => _level; }
+        public int? Type { get => _type; }
         #endregion Properties
 
         #region Behaviours
@@ -68,6 +72,7 @@ namespace ProjectManager.CMD.Domain.DomainObjects
         public void SetUrl(string Url) { _url = Url == null ? _url : Url; if (!IsValid()) throw new DomainException(_errorMessages); }
         public void SetCategoryId(int? CategoryId) { _categoryId = !CategoryId.HasValue ? _categoryId : CategoryId; if (!IsValid()) throw new DomainException(_errorMessages); }
         public void SetLevel(int? Level) { _level = !Level.HasValue ? _level : Level; if (!IsValid()) throw new DomainException(_errorMessages); }
+        public void SetType(int? Type) { _type = !Type.HasValue ? _type : Type; if (!IsValid()) throw new DomainException(_errorMessages); }
         public sealed override bool IsValid()
         {
             return base.IsValid();

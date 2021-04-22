@@ -11,6 +11,7 @@
 
 
 @section script{
+    <script src="~/Scripts/page/thongtin.js"></script>
     <script>
         var ACTION = "/OperationProcess";
         var ACTION_ACTIONS = "/StepsProcess";
@@ -18,45 +19,19 @@
         var ACTION_GROUPSSTEPPERMISTION = "/GroupStepProcessPermistion";
         var ACTION_PERMISTIONS = "/Permistions";
         var WIDTH_CONTAINER = $("#container").width();
-        $(function () {
-            var customStore = new DevExpress.data.CustomStore({
-                key: "id",
-                load: (values) => {
-                    console.log(values)
-                    let deferred = $.Deferred(), params = {};
-                    params = {
-                        'PageSize': isNullOrEmpty(values.take) ? values.take : 0,
-                        'PageNumber': (isNullOrEmpty(values.take) && isNullOrEmpty(values.skip)) ? ((values.skip / values.take) + 1) : 0,
-                    };
-                    if (values.sort) {
-                        params['SortCol'] = values.sort[0].selector;
-                        params['SortADSC'] = values.sort[0].desc;
-                    }
 
-                    $.ajax({
-                        headers: header,
-                        url: URL_API_ACC_READ + ACTION,
-                        dataType: "json",
-                        data: params,
-                        success: function (data) {
-                            let list = data.result.items;
-                            deferred.resolve(list);
-                        },
-                        error: function (xhr, textStatus, errorThrown) {
-                            console.log(xhr.responseJSON);
-                            deferred.reject("Có lỗi xảy ra trong quá trình lấy danh sách. Mở Console để xem chi tiết.");
-                        },
-                        timeout: 10000//10 giây
-                    });
 
-                    return deferred.promise();
-                },
-                insert: (values) => ajax_insert(URL_API_ACC_CMD + ACTION, values),
-                update: (key, values) => ajax_update(URL_API_ACC_CMD + ACTION, key, values),
-                remove: (key) => ajax_delete(URL_API_ACC_CMD + ACTION, key),
-            });
-            loadData(customStore);
-        });
+        let customStore = () => {
+            return new DevExpress.data.DataSource({
+                store: new DevExpress.data.CustomStore({
+                    key: "id",
+                    load: (values) => ajax_read(ACTION, values),
+                    insert: (values) => ajax_insert(URL_API_ACC_CMD + ACTION, values),
+                    update: (key, values) => ajax_update(URL_API_ACC_CMD + ACTION, key, values),
+                    remove: (key) => ajax_delete(URL_API_ACC_CMD + ACTION, key),
+                }),
+            })
+        };
         let customStore_Permistions = new DevExpress.data.CustomStore({
             key: "id", loadMode: "raw",
             load: (values) => {
@@ -120,82 +95,140 @@
                 return deferred.promise();
             },
         });
+       
 
-        function loadData(dataSource) {
+        $(function () {
+            loadData();
+        });
+        var loadData = () => {
             $("#container").dxDataGrid({
                 height: heightScreen,
-                dataSource: dataSource,
-                remoteOperations: {
-                    filtering: true, //////// truyền tham số pagging
-                    sorting: true,
-                    grouping: false
-                },
-                //rootValue: 0, parentIdExpr: "parentId", keyExpr: "id",
-                showBorders: false, showColumnHeaders: true, showColumnLines: false, hoverStateEnabled: true,
-                showRowLines: true, columnAutoWidth: true, wordWrapEnabled: true, rowAlternationEnabled: true,
+                dataSource: customStore(),
+                repaintChangesOnly: true,
+                remoteOperations: true,
+                scrolling: { mode: "standard" },
+                showBorders: false,
+                showColumnHeaders: true,
+                showColumnLines: false,
+                hoverStateEnabled: true,
+                showRowLines: true,
+                columnAutoWidth: true,
+                wordWrapEnabled: true,
+                rowAlternationEnabled: true,
                 columns: [
                     {
-                        dataField: "groupId",
+                        dataField: "code",
                         dataType: "string",
-                        caption: "Nhóm ",
-                        groupIndex: 0,
-                        lookup: {
-                            dataSource: customStore_Groups,
-                            valueExpr: "id", displayExpr: "title",
-                        },
-                        editorType: "dxSelectBox",
-                        editorOptions: {
-                            dataSource: customStore_Groups,
-                            valueExpr: "id", displayExpr: "title",
-                            noDataText: "Không tìm thấy dữ liệu",
-                            placeholder: "Vui lòng chọn...",
-                            searchEnabled: true,
-                            itemTemplate: function (data) {
-                                return $("<div>").append($("<b>").append(data.title).addClass("mr-1"), $("<em>").append(data.descriptions));
-                            },
-                        }
+                        caption: "Mã ",
+                        width: 100,
+                        //groupIndex: 0,
+                        //lookup: {
+                        //    dataSource: customStore_Groups,
+                        //    valueExpr: "id", displayExpr: "title",
+                        //},
+                        //editorType: "dxSelectBox",
+                        //editorOptions: {
+                        //    dataSource: customStore_Groups,
+                        //    valueExpr: "id", displayExpr: "title",
+                        //    noDataText: "Không tìm thấy dữ liệu",
+                        //    placeholder: "Vui lòng chọn...",
+                        //    searchEnabled: true,
+                        //    itemTemplate: function (data) {
+                        //        return $("<div>").append($("<b>").append(data.title).addClass("mr-1"), $("<em>").append(data.descriptions));
+                        //    },
+                        //}
                     },
                     {
-                        dataField: "actionId",
+                        dataField: "title",
                         dataType: "string",
-                        caption: "Hoạt động ",
-                        groupIndex: 1,
-                        lookup: {
-                            dataSource: customStore_Actions,
-                            valueExpr: "id", displayExpr: "title",
-                        },
-                        editorType: "dxSelectBox",
-                        editorOptions: {
-                            dataSource: customStore_Actions,
-                            valueExpr: "id", displayExpr: "title",
-                            noDataText: "Không tìm thấy dữ liệu",
-                            placeholder: "Vui lòng chọn...",
-                            searchEnabled: true,
-                            itemTemplate: function (data) {
-                                return $("<div>").append($("<b>").append(data.title).addClass("mr-1"), $("<em>").append(data.descriptions));
-                            },
-                        }
+                        caption: "Tên quy trình",
+                        width: 250,
+                        //groupIndex: 1,
+                        //lookup: {
+                        //    dataSource: customStore_Actions,
+                        //    valueExpr: "id", displayExpr: "title",
+                        //},
+                        //editorType: "dxSelectBox",
+                        //editorOptions: {
+                        //    dataSource: customStore_Actions,
+                        //    valueExpr: "id", displayExpr: "title",
+                        //    noDataText: "Không tìm thấy dữ liệu",
+                        //    placeholder: "Vui lòng chọn...",
+                        //    searchEnabled: true,
+                        //    itemTemplate: function (data) {
+                        //        return $("<div>").append($("<b>").append(data.title).addClass("mr-1"), $("<em>").append(data.descriptions));
+                        //    },
+                        //}
                     },
                     {
-                        dataField: "permistionId",
+                        dataField: "description",
                         dataType: "string",
-                        caption: "Quyền ",
-                        lookup: {
-                            dataSource: customStore_Permistions,
-                            valueExpr: "id", displayExpr: "title",
-                        },
-                        editorType: "dxSelectBox",
-                        editorOptions: {
-                            dataSource: customStore_Permistions,
-                            valueExpr: "id", displayExpr: "title",
-                            noDataText: "Không tìm thấy dữ liệu",
-                            placeholder: "Vui lòng chọn...",
-                            searchEnabled: true,
-                            itemTemplate: function (data) {
-                                return $("<div>").append($("<b>").append(data.title).addClass("mr-1"), $("<em>").append(data.descriptions));
-                            },
-                        }
+                        caption: "Mô tả ",
+                        //width: 250,
+                        //lookup: {
+                        //    dataSource: customStore_Permistions,
+                        //    valueExpr: "id", displayExpr: "title",
+                        //},
+                        //editorType: "dxSelectBox",
+                        //editorOptions: {
+                        //    dataSource: customStore_Permistions,
+                        //    valueExpr: "id", displayExpr: "title",
+                        //    noDataText: "Không tìm thấy dữ liệu",
+                        //    placeholder: "Vui lòng chọn...",
+                        //    searchEnabled: true,
+                        //    itemTemplate: function (data) {
+                        //        return $("<div>").append($("<b>").append(data.title).addClass("mr-1"), $("<em>").append(data.descriptions));
+                        //    },
+                        //}
                     },
+                    {
+                        dataField: "createBy",
+                        width: 150,
+                        caption: "Người tạo",
+                        //dataType: "number",
+                        allowEditing: false,
+                        allowFiltering: true,
+                        alignment: "canter",
+                        editorType: "dxLookup",
+                        lookup: {
+                            dataSource: customStore_AccountInfo(2).store(),
+                            valueExpr: "accountId",
+                            displayExpr: "avatarImg",
+                        },
+                        editorOptions: {
+                            dataSource: customStore_AccountInfo(2),
+                            valueExpr: "accountId",
+                            displayExpr: "userName",
+                            placeholder: "Vui lòng chọn...",
+                            searchExpr: ['accountName', 'userName'],
+                            searchEnabled: true,
+                            showClearButton: true,
+                            itemTemplate: function (data) {
+                                return $("<div>").append($("<b>").append(data.userName).addClass("mr-1"));
+                            },
+                        },
+                        cellTemplate: (c, o) => {
+                            $("<img />")
+                                .attr('id', "popover-target-" + o.key)
+                                .attr("src", "data:image/png;base64," + o.text)
+                                .addClass("img-circle elevation-2 img-size-30")
+                                .attr("onerror", "this.onerror=null;this.src='https://qlcv.tayho.com.vn/Content/user-avartar/avartar-default.jpg';")
+                                .appendTo(c);
+                            $("<div />")
+                                .attr('id', "popover-detail-" + o.key)
+                                .append("<div>( " + ' Đã tạo ' + moment(o.data.createDate).locale("vi").fromNow() + ")" + "</div>")
+                                .appendTo(c);
+                            $("#popover-detail-" + o.key).dxPopover({
+                                target: "#popover-target-" + o.key,
+                                showEvent: "mouseenter", hideEvent: "mouseleave",
+                                position: "bottom",
+                                animation: {
+                                    show: { type: "pop", from: { scale: 0 }, to: { scale: 1 } },
+                                    hide: { type: "fade", from: 1, to: 0 },
+                                }
+                            });
+                        },
+                    },//account
                     {
                         dataField: "isActive", width: 100,
                         editorType: "dxSwitch",

@@ -8,6 +8,7 @@ namespace ProjectManager.Read.Sql.DTOs.DTO
         public string OwnerByTable { get; set; }
         public string Code { get; set; }
         public string FileName { get; set; }
+        public string DisplayName { get; set; }
         public string Tail { get; set; }
         public string Url { get; set; }
         public string Host { get; set; }

@@ -1,6 +1,10 @@
-﻿using AppWFGenProject.Extensions;
+﻿using AppWFGenProject.Entities;
+using AppWFGenProject.Extensions;
 using AppWFGenProject.FrameWork;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
+using Serilog;
+using Services.Common.Options;
 using System;
 using System.Windows.Forms;
 
@@ -8,10 +12,11 @@ namespace AppWFGenProject
 {
     public partial class GenProject : Form
     {
-        public IConfiguration _configuration;
-        public GenProject(IConfiguration configuration)
+
+        private readonly Common _common;
+        public GenProject( IOptionsSnapshot<Common> commonAccessor)
         {
-            _configuration = configuration;
+            _common = commonAccessor.Value;
             InitializeComponent();
             Environment.GetEnvironmentVariable("Content");
             txtPass.PasswordChar = '*';
@@ -20,14 +25,22 @@ namespace AppWFGenProject
             txtDB.Text = "QuanLyDuAn";
             btnGen.Enabled = false;
         }
-
+        //public GenProject(IConfiguration configuration)
+        //{
+        //    _configuration = configuration;
+        //    InitializeComponent();
+        //    Environment.GetEnvironmentVariable("Content");
+        //    txtPass.PasswordChar = '*';
+        //    txtServer.Text = "db.tayho.net.vn";
+        //    txtUser.Text = "trienpc";
+        //    txtDB.Text = "QuanLyDuAn";
+        //    btnGen.Enabled = false;
+        //}
         private void GenProject_Load(object sender, EventArgs e)
         {
             clbFunction.Items.Add("CMD", false);
             clbFunction.Items.Add("READ", false);
             clbFunction.Items.Add("HTML", false);
-            //Appointment newapp = new Appointment();
-            //newapp.AllDayEventExample();
         }
 
         private void btnTestConnec_Click(object sender, EventArgs e)
@@ -73,13 +86,11 @@ namespace AppWFGenProject
                     //ReadTemplate readTemplate = new ReadTemplate();
 
                     // Set rootDir
-                    genOB.rootDir = txtDir.Text == "" ? @"F:\Test\" : txtDir.Text;
+                    genOB.rootDir = txtDir.Text == "" ? _common.DirectDefault.ToString() : txtDir.Text;
                     // Set common
-                    genOB.common = _configuration.GetValue<string>("Common", "CmdEF").ToString();// "Services.Common.APIs.Cmd.EF;"; // config setting tạo sau
-                                                                                                 // Set db
-                    genOB.db = "QuanLyDuAn"; // config setting tạo sau
-                                             // Set version 
-                    genOB.version = _configuration.GetValue<string>("Common", "Version").ToString();//"v1"; // config setting tạo sau
+                    genOB.common = _common.CmdEF.ToString();
+                    genOB.db = _common.DB.ToString();
+                    genOB.version = _common.Version.ToString();
 
                     if (chlTable.GetItemChecked(i))
                     {
@@ -150,6 +161,29 @@ namespace AppWFGenProject
         {
             cbkCreateNew.Checked = false;
             cbkOverWrite.Checked = false;
+        }
+
+        private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
+        }
+        private void AutoSendMail_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+
+        private void sub11GenNetApi_Click(object sender, EventArgs e)
+        {
+            gbGenCode.Visible = true;
+            gbAutoSendMail.Visible = false;
+        }
+
+     
+        private void sub12SendMail_Click(object sender, EventArgs e)
+        {
+            gbGenCode.Visible = false;
+            gbAutoSendMail.Visible = true;
         }
     }
 }

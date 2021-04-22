@@ -40,7 +40,7 @@ namespace ProjectManager.CMD.Api.Application.Commands
             {
                 var newPlanSchedule = new PlanSchedule(request.PlanMasterId, request.PlanJobId, request.Title, request.Note, request.Remind, request.Repead, request.RepeadType, request.StartDate, request.EndDate, request.ModifyTimes);
                 newPlanSchedule.SetCreate(_user);
-                newPlanSchedule.Status = request.Status.HasValue ? request.Status : newPlanSchedule.Status;
+                newPlanSchedule.Status = request.Status.HasValue ? request.Status : 0;
                 newPlanSchedule.IsActive = request.IsActive.HasValue ? request.IsActive : true;
                 newPlanSchedule.IsVisible = request.IsVisible.HasValue ? request.IsVisible : true;
                 await _planScheduleRepository.AddAsync(newPlanSchedule).ConfigureAwait(false);

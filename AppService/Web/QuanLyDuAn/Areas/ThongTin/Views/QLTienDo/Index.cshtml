@@ -8,12 +8,6 @@
 <div id="popup-register"></div>
 <div id="popup-main"></div>
 <div id="popup-detail"></div>
-@*<div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <div id="container" class="elevation-2 col-lg-8 col-md-8 col-sm-12 col-xs-12"></div>
-            <div id="container_detail" class="elevation-2 col-lg-4 col-md-4 col-sm-12 col-xs-12" ></div>
-        </div>
-    </div>*@
 <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="div_container">
         <div id="container" class="elevation-2 col-lg-12 col-md-12 col-sm-12 col-xs-12"></div>
@@ -41,8 +35,10 @@
 @section script{
     <script src="~/Scripts/page/thongtin.js"></script>
     <script>
+        //------------------- Parameter ------------------------
         var NAMECOVNER = "Conversation";
         var NAMEPLANMASTER = "PlanMasterAccount";
+        var WIDTH_CONTAINER = $("#container").width();
         //--------------------READ------------------------------
         const ACTION = "/PlanMaster/GetWithAccountProgress";
         const ACTION_DETAIL = "/PlanJob";
@@ -53,9 +49,10 @@
         const ACTION_PLAN_REPORT = "/PlanReport";
         const ACTION_FILEGET = "/FilesAttachment/getBy";
         const ACTION_CONVERSATION = "/Conversation";
+        const ACTION_CMD_DETAILACC = "/PlanJobAccount";
 
 
-        //--------------------CMD------------------------------
+        //-------------------- CMD ------------------------------
         const ACTION_CMD = "/PlanMaster";
         const ACTION_CMD_DETAIL = "/PlanJob";
         const ACTION_CMD_SCHEDULE = "/PlanSchedule";
@@ -66,11 +63,8 @@
             GROUPOWNERID = 0;
             localStorage.setItem('groupOwnerIdCurrent', GROUPOWNERID);
         }
-        var WIDTH_CONTAINER = $("#container").width();
 
-      
-
-        //var customStore = (id) => customStore_CMD_READ_PLANPROJECTID(ACTION_CMD, ACTION, id);
+        //-------------------- CustomStore -------------------------
         let customStore = (id,gid) => {
             var fillterCustomStore = [["createBy", "=", UserCurrentInfo.accountId]];
             if (id > 0) {
@@ -90,10 +84,22 @@
                 filter: fillterCustomStore,
             })
         };
-        let customStore_DETAIL = (id) => customStore_CMD_READ_FILTER_ID(ACTION_CMD_DETAIL, ACTION_DETAIL, 'planMasterId,' + id);
+        let customStore_DETAIL = (id) => new DevExpress.data.DataSource({
+            store: new DevExpress.data.CustomStore({
+                key: "id",
+                load: (values) => ajax_read(ACTION_CMD_DETAILACC, values),
+                insert: (values) => ajax_insert(URL_API_PM_CMD + ACTION_CMD_DETAIL, values),
+                update: (key, values) => ajax_update(URL_API_PM_CMD + ACTION_CMD_DETAIL, key, values),
+                remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION_CMD_DETAIL, key),
+            }),
+            filter: [["planMasterId", "=", id], "and", ["createBy", "=", UserCurrentInfo.accountId]],
+            //sort: {
+            //    selector: "createDate",
+            //    desc: 1,
+            //}
+        });
         let customStore_SCHEDULE = (id) => customStore_CMD_READ_FILTER_ID(ACTION_CMD_SCHEDULE, ACTION_SCHEDULE, 'planMasterId,' + id);
         let customStore_PLANJOB_ACCOUNT = (id) => customStore_CMD_READ_FILTER_ID_KEYWORD(ACTION_CMD_PLAN_ACCOUNT, ACTION_PLAN_ACCOUNT, 'ownerById,' + id, 'PlanJob');
-        //let customStore_PLANMASTER_ACCOUNT = (id) => customStore_CMD_READ_FILTER_ID_KEYWORD(ACTION_CMD_PLAN_ACCOUNT, ACTION_PLAN_ACCOUNT, 'ownerById,' + id, 'PlanMaster');
         let customStore_PLANMASTER_ACCOUNT = (id) => customStore_CMD_READ_FILTER_ID(ACTION_CMD_PLAN_ACCOUNT, ACTION_PLAN_ACCOUNT, "ownerById," + id + ";OwnerTable,'PlanMaster'");
         let customStore_Conver = (id) => new DevExpress.data.DataSource({
             store: new DevExpress.data.CustomStore({
@@ -106,27 +112,7 @@
             filter: [["topicId", "=", id], "and", ["OwnerTable", "=", "PlanMaster"]],
         });
         let customStore_ItemDetail = (item) => customStore_READDATASOURCE(item);
-
-        let customStore_AccountInfo = new DevExpress.data.CustomStore({
-            key: "accountId",
-            load: (values) => {
-                var deferred = $.Deferred();
-                $.ajax({
-                    headers: header, dataType: "json",
-                    url: URL_API_PM_READ + ACTION_ACCOUNTINFO,
-                    success: function (data) {
-                        var list = data.result.items;
-                        deferred.resolve(list);
-                    },
-                    error: function (xhr, textStatus, errorThrown) {
-                        console.log(xhr.responseJSON);
-                        deferred.reject("Có lỗi xảy ra trong quá trình lấy danh sách 'Giai Đoạn'. Mở Console để xem chi tiết.");
-                    },
-                    timeout: 10000
-                });
-                return deferred.promise();
-            },
-        });
+       
         let customStore_Groups = new DevExpress.data.CustomStore({
             key: "id",
             load: (values) => {
@@ -185,10 +171,12 @@
 
         });
 
+        //-------------------- Function ----------------------------
         $(function () {
             loadData(PROJECTID, GROUPOWNERID);
         });
 
+        //-------------------- Load --------------------------------
         var loadData = (proId, gid) => {
             $("#container").dxDataGrid({
                 height: heightScreen,
@@ -294,8 +282,9 @@
                         caption: "Người tạo",
                         dataType: "number",
                         lookup: {
-                            dataSource: customStore_AccountInfo,
-                            valueExpr: "accountId", displayExpr: "userName",
+                            dataSource: customStore_AccountInfo().store(),
+                            valueExpr: "accountId",
+                            displayExpr: "userName",
                         },
                         editorOptions: {
                             readOnly: true,
@@ -350,7 +339,8 @@
                                 editorOptions: {
                                     //value: "importantLevel",
                                     dataSource: important,
-                                    valueExpr: "ID", displayExpr: "Name",
+                                    valueExpr: "ID",
+                                    displayExpr: "Name",
                                 },
                             },
                             {
@@ -485,23 +475,15 @@
                     e.data.isVisible = true;
                     //e.data.ProjectId = PROJECTID;
                 },
+                onRowUpdating: (e) => {
+                    e.newData['isVisible'] = e.newData['pmIsVisible'];
+                    e.newData['id'] = e.oldData['id'];
+                },
                 onCellPrepared: (e) => {
                     if (e.rowType == "data" && e.columnIndex == 1)
                         e.cellElement.find('.dx-treelist-empty-space').toggleClass("dx-treelist-collapsed", e.data.chilCount > 0)
                 },
-                //onRowClick: function (e) {
-                //    console.log(e);
-                //    var container = document.getElementById("div_container");
-                //    container.classList.replace("col-lg-12", "col-lg-8");
-                //    container.classList.replace("col-md-12", "col-md-8");
-                //    //var container_sub = document.getElementById("container_sub");
-                //    //container_sub.classList.replace("col-lg-12", "col-lg-4");
-                //    //container_sub.classList.replace("col-md-12", "col-md-4");
-                //    e.component.refresh();
-                //    loadData_detail(e.data.id);
-                //},
                 onRowDblClick: function (e) {
-                    //var container = e.component;
                     console.log(e.data);
                     loadItem_Detail(e.data);
                 },
@@ -546,7 +528,7 @@
                     container.classList.replace("col-lg-12", "col-lg-8");
                     container.classList.replace("col-md-12", "col-md-8");
                     e.component.refresh();
-                    loadData_detail(selectedRowData.paId);
+                    loadData_detail(selectedRowData.id);
                     loadAttach(selectedRowData);
                     loadComversation(selectedRowData.paId);
                     //loadSchedule(selectedRowData.id);
@@ -609,15 +591,6 @@
                 wordWrapEnabled: true,
                 rowAlternationEnabled: false,
                 columns: [
-                    //{
-                    //    dataField: "isDone",
-                    //    caption: "",
-                    //    dataType: "boolean",
-                    //    editorType: "dxCheckBox",
-                    //    editorOptions: {
-                    //        readOnly:true,
-                    //    }
-                    //},
                     {
                         dataField: "title",
                         caption: "Lịch trình",
@@ -629,15 +602,7 @@
                         caption: "MT đề ra",
                         dataType: "number",
                         alignment: "center",
-                        //editorOptions: {
-                        //    readOnly: true,
-                        //}
                     },
-                    //{
-                    //    dataField: "unit",
-                    //    caption: "Đơn vị",
-                    //    dataType: "string",
-                    //},
                     {
                         dataField: "endDate",
                         caption: "Hạn HT",
@@ -649,31 +614,28 @@
                         width: 120, alignment: "center",
                         buttons: ["edit",
                             "delete",
-                            //{
-                            //    hint: "Người nhận",
-                            //    icon: "user",
-                            //    onClick: function (e) {
-                            //        loadAccount(e.row.data);
-                            //    },
-                            //},
                             {
                                 hint: "Báo cáo",
                                 text: "Báo cáo",
                                 visible: function (e) {
-                                    if (e.row.data.status > 0 || e.row.data.status !== null) {
+                                
+                                    if (e.row.data.pjStatus > 0 || e.row.data.pjStatus === null) {
                                         return false;
                                     } else if (e.row.data.endDate < moment()) {
                                         return false;
                                     }
-                                    else {
+                                    else if (e.row.data.paPermistionId === 7 || e.row.data.paPermistionId === 9) {
                                         return true;
+                                    }
+                                    else {
+                                        return false;
                                     }
                                 },
                                 onClick: function (e) {
                                     var container = e.component;
                                     callpopup(
                                         "Báo cáo tiến độ thực tế",
-                                        "/ThongTin/QLTienDo/_TienDoReport/" + e.row.data.id,
+                                        "/ThongTin/QLTienDo/_TienDoReport/" + e.row.data.id + "?unit=" + encodeURIComponent( e.row.data.unit),
                                         ($(window).width() > 767 ? "50%" : "80%"),
                                         container
                                     );
@@ -691,12 +653,6 @@
                     allowedPageSizes: [10, 20, 40],
                     showInfo: true,
                 },
-                //searchPanel: {
-                //    highlightCaseSensitive: true,
-                //    highlightSearchText: true,
-                //    searchVisibleColumnsOnly: true,
-                //    visible: WIDTH_CONTAINER > 350
-                //},
                 editing: {
                     allowAdding: true,
                     allowUpdating: true,
@@ -712,7 +668,21 @@
                             location: "after",
                             widget: "dxButton",
                             options: {
-                                icon: "refresh", tylingMode: "filled", type: "default",
+                                text: "Tải báo cáo",
+                                stylingMode: "filled",
+                                type: "default",
+                                onClick: () => {
+                                    console.log(id);
+                                    window.open('https://api-pm-read.tayho.com.vn/api/read/v1/PlanMaster/GetReport?planMasterId=' + id, '_blank');
+                                }
+                            },
+
+                        },
+                        {
+                            location: "after",
+                            widget: "dxButton",
+                            options: {
+                                icon: "refresh", stylingMode: "filled", type: "default",
                                 onClick: () => container.refresh()
                             },
 
@@ -725,25 +695,12 @@
                     e.data.isVisible = true;
                     e.data.planMasterId = id;
                     e.data.isDone = false;
-                    //e.data.ProjectId = PROJECTID;
                 },
                 onCellPrepared: (e) => {
                     if (e.rowType == "data" && e.columnIndex == 1)
                         e.cellElement.find('.dx-treelist-empty-space').toggleClass("dx-treelist-collapsed", e.data.chilCount > 0)
                 },
-                onRowClick: function (e) {
-
-
-                },
-                onRowDblClick: function (e) {
-                    var container = e.component;
-                    //CALLPOPUP(
-                    //    "Tạo văn bản theo mẫu:",
-                    //    "/ThongTin/VanBanMau/_VanBanChiTiet/" + e.data.id,
-                    //    ($(window).width() > 767 ? "50%" : "80%"),
-                    //    container
-                    //);
-                },
+            
             });
         };
         let loadAttach = (item) => {
@@ -813,7 +770,7 @@
                         dataType: "string",
                         width: "30%",
                         lookup: {
-                            dataSource: customStore_AccountInfo,
+                            dataSource: customStore_AccountInfo().store(),
                             valueExpr: "accountId", displayExpr: "userName",
                         },
                         editorOptions: {
@@ -830,12 +787,6 @@
                     allowedPageSizes: [10, 20, 40],
                     showInfo: true,
                 },
-                //searchPanel: {
-                //    highlightCaseSensitive: true,
-                //    highlightSearchText: true,
-                //    searchVisibleColumnsOnly: true,
-                //    visible: WIDTH_CONTAINER > 350
-                //},
                 editing: {
                     allowAdding: true,
                     allowUpdating: false,
@@ -844,42 +795,21 @@
                     useIcons: false,
                     confirmDelete: true,
                 },
-                onToolbarPreparing: function (e) {
-                    //e.toolbarOptions.items.unshift(
-                    //    {
-                    //        text: "Phản hồi",
-                    //        location: "before",
-                    //    },
-                    //)
-                },
                 onInitNewRow: (e) => {
                     console.log(id)
                     e.data.isActive = true;
                     e.data.isVisible = true;
                     e.data.TopicId = id;
                     e.data.OwnerTable = 'PlanMaster';
-                    //e.data.ProjectId = PROJECTID;
                 },
                 onCellPrepared: (e) => {
                     if (e.rowType == "data" && e.columnIndex == 1)
                         e.cellElement.find('.dx-treelist-empty-space').toggleClass("dx-treelist-collapsed", e.data.chilCount > 0)
                 },
-                onRowClick: function (e) {
-
-
-                },
-                onRowDblClick: function (e) {
-                    var container = e.component;
-                    //CALLPOPUP(
-                    //    "Tạo văn bản theo mẫu:",
-                    //    "/ThongTin/VanBanMau/_VanBanChiTiet/" + e.data.id,
-                    //    ($(window).width() > 767 ? "50%" : "80%"),
-                    //    container
-                    //);
-                },
             });
         };
-        /// Load Popup
+
+        //-------------------- Load PopUp --------------------------
         let loadItem_Detail = (item) => $("#popup-detail").dxPopup({
             width: "60%", height: "95%",
             fullScreen: false,
@@ -1088,6 +1018,7 @@
                         {
                             caption: "File",
                             dataType: "string",
+                            width: '10%',
                             cellTemplate: (c, o) => {
                                 var x = (o.data.host + "\\" + o.data.url + "\\" + o.data.fileName).replaceAll('/', '\\');
                                 if (!x.includes('null'))
@@ -1102,6 +1033,24 @@
                                     }
                             },
                         }, //url
+                        {
+                            caption: "Loại",
+                            dataType: "string",
+                            dataField: "tail",
+                            width: '10%',
+                        }, //url
+                        {
+                            type: "buttons",
+                            caption: "Tải xuống",
+                            width: '10%',
+                            alignment: "center",
+                            buttons: [{
+                                icon: "download",
+                                onClick: function (e) {
+                                    window.open('https://api-pm-read.tayho.com.vn/api/read/v1/FilesAttachment/down?id=' + e.row.data.id, '_blank');
+                                }
+                            }]
+                        },
                     ],
                     editing: {
                         mode: "batch",
@@ -1175,7 +1124,6 @@
             //    $("#dxDataGrid_detail").dxDataGrid('instance').refresh();
             //},
         }).addClass("popup-priority-2");
-
         let loadAccountPlanMaster = (item) => $("#popup-main-upload").dxPopup({
             width: "50%",
             height: "50%",
@@ -1229,7 +1177,7 @@
                             alignment: "center",
                             //dataType: "number",
                             lookup: {
-                                dataSource: customStore_AccountInfo,
+                                dataSource: customStore_AccountInfo().store(),
                                 valueExpr: "accountId", displayExpr: "userName",
                             },
 
@@ -1424,7 +1372,7 @@
                             alignment: "center",
                             //dataType: "number",
                             lookup: {
-                                dataSource: customStore_AccountInfo,
+                                dataSource: customStore_AccountInfo().store(),
                                 valueExpr: "accountId", displayExpr: "userName",
                             },
 

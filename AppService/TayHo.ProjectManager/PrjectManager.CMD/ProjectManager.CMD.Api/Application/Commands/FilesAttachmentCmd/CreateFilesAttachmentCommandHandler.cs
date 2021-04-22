@@ -36,6 +36,7 @@ namespace ProjectManager.CMD.Api.Application.Commands
                                                             request.OwnerByTable,
                                                             request.Code,
                                                             result.Item1,
+                                                            result.Item6,
                                                             result.Item5,
                                                             result.Item3,
                                                             result.Item2,

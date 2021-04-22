@@ -15,18 +15,14 @@ var listActiveStatus = [
 ]
 
 
-const AccountType = [
-    {
-        ID: 1,
-        Name: "Cty Tây Hồ",
-    },
-    {
-        ID: 2,
-        Name: "Nhà thầu",
-    },
-    {
-        ID: 3,
-        Name: "Cty Tây Hồ 2",
-    },
-];
+let customStore_AccountInfo = (type) => new DevExpress.data.DataSource({
+    store: new DevExpress.data.CustomStore({
+        key: "id",
+        loadMode: "raw",
+        load: (values) => ajax_read(ACTION_ACCOUNT_INFO, values),
+    }),
+    //filter: [["type", "=", type]]
+});
+
+
  

@@ -11,13 +11,13 @@ using Services.Common.Utilities;
 using ProjectManager.CMD.Domain;
 using ProjectManager.Common;
 
-namespace  ProjectManager.CMD.Api.Application.Commands
+namespace ProjectManager.CMD.Api.Application.Commands
 {
     public class CreateDocumentReleasedCommandHandler : DocumentReleasedCommandHandler, IRequestHandler<CreateDocumentReleasedCommand, MethodResult<CreateDocumentReleasedCommandResponse>>
     {
         private readonly IMediaService _mediaService;
         private readonly IFilesAttachmentRepository _filesAttachmentRepository;
-        public CreateDocumentReleasedCommandHandler(IMapper mapper, IDocumentReleasedRepository DocumentReleasedRepository,IHttpContextAccessor httpContextAccessor, IFilesAttachmentRepository filesAttachmentRepository, IMediaService mediaService) : base(mapper, DocumentReleasedRepository,httpContextAccessor)
+        public CreateDocumentReleasedCommandHandler(IMapper mapper, IDocumentReleasedRepository DocumentReleasedRepository, IHttpContextAccessor httpContextAccessor, IFilesAttachmentRepository filesAttachmentRepository, IMediaService mediaService) : base(mapper, DocumentReleasedRepository, httpContextAccessor)
         {
             _filesAttachmentRepository = filesAttachmentRepository;
             _mediaService = mediaService;
@@ -33,7 +33,7 @@ namespace  ProjectManager.CMD.Api.Application.Commands
         {
             string tableName = QuanLyDuAnConstants.DocumentReleased_TABLENAME;
             var methodResult = new MethodResult<CreateDocumentReleasedCommandResponse>();
-            request.Code = (await _documentReleasedRepository.IsGetTitleDocumentReleasedAsync(request.ProjectId?? 0, request.WorkItemId?? 0, request.DocumentTypeId ?? 0).ConfigureAwait(false));
+            request.Code = (await _documentReleasedRepository.IsGetTitleDocumentReleasedAsync(request.ProjectId ?? 0, request.WorkItemId ?? 0, request.DocumentTypeId ?? 0).ConfigureAwait(false));
             var newDocumentReleased = new DocumentReleased(request.Code,
                                                             request.Title,
                                                             request.Description,
@@ -62,6 +62,7 @@ namespace  ProjectManager.CMD.Api.Application.Commands
                                                           tableName,
                                                           newDocumentReleased.Code,
                                                           result.Item1,
+                                                          result.Item6,
                                                           result.Item5,
                                                           result.Item3,
                                                           result.Item2,

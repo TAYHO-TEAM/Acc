@@ -35,7 +35,10 @@ namespace ProjectManager.Read.Sql.Repositories
         {
             List<int?> getActionId = _dbContext.Functions
                                                 .Where(c => c.TableName == nameEF
-                                                        && c.ActionId != null && (c.IsDelete == false || !c.IsDelete.HasValue)).Select(x => x.ActionId).ToList();
+                                                        && c.Type == 1
+                                                        && c.ActionId != null 
+                                                        && (c.IsDelete == false || !c.IsDelete.HasValue))
+                                                .Select(x => x.ActionId).ToList();
 
             bool checkPermit = _dbContext.GroupAccount
                                         .Join(_dbContext.GroupActionPermistion, x => x.GroupId, y => y.GroupId, (y, x) => new { y, x })
@@ -44,6 +47,7 @@ namespace ProjectManager.Read.Sql.Repositories
                                             && getActionId.Contains(c.x.ActionId)
                                             && (c.x.IsDelete == false || !c.x.IsDelete.HasValue)
                                             && (c.y.IsDelete == false || !c.y.IsDelete.HasValue));
+
             dynamic objEF = ConvertEF(nameEF);
             if (objEF != null)
             {
@@ -351,6 +355,9 @@ namespace ProjectManager.Read.Sql.Repositories
                 case nameof(_dbContext.DocumentReleasedLogDetail):
                     orders = _dbContext.DocumentReleasedLogDetail;
                     break;
+                case nameof(_dbContext.TemplateMail):
+                    orders = _dbContext.TemplateMail;
+                    break;
                 case nameof(_dbContext.NotifyAccountDetail):
                     orders = _dbContext.NotifyAccountDetail;
                     break;
@@ -360,6 +367,31 @@ namespace ProjectManager.Read.Sql.Repositories
                 case nameof(_dbContext.PlanMasterAccount):
                     orders = _dbContext.PlanMasterAccount;
                     break;
+                case nameof(_dbContext.NotifyConfig):
+                    orders = _dbContext.NotifyConfig;
+                    break;
+                case nameof(_dbContext.NotifyConfigLog):
+                    orders = _dbContext.PlanMasterAccount;
+                    break;
+                case nameof(_dbContext.SysAutoSendMail):
+                    orders = _dbContext.SysAutoSendMail;
+                    break;
+                case nameof(_dbContext.SysJob):
+                    orders = _dbContext.SysJob;
+                    break;
+                case nameof(_dbContext.SysJobColum):
+                    orders = _dbContext.SysJobColum;
+                    break;
+                case nameof(_dbContext.SysJobParameter):
+                    orders = _dbContext.SysJobParameter;
+                    break;
+                case nameof(_dbContext.SysJobTable):
+                    orders = _dbContext.SysJobTable;
+                    break;
+                case nameof(_dbContext.SysMailAccount):
+                    orders = _dbContext.SysMailAccount;
+                    break;
+
                 default:
                     orders = null;
                     break;

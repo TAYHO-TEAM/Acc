@@ -52,6 +52,7 @@ namespace ProjectManager.CMD.Api.Application.Commands
                                                           tableName,
                                                           code,
                                                           result.Item1,
+                                                          result.Item6,
                                                           result.Item5,
                                                           result.Item3,
                                                           result.Item2,
