@@ -11,6 +11,7 @@ namespace ProjectManager.Read.Api.ViewModels
         public int? ProjectId { get; set; }
         public string TenNhomCongViec { get; set; }
         public string DienGiai { get; set; }
+        public int? SortIndex { get; set; }
     }
 
     public class NS_NhomCongViec_NhomCongViecDetailResponseViewModel : NS_NhomCongViecResponseViewModel

@@ -10,6 +10,7 @@ namespace ProjectManager.Read.Api.ViewModels
         public string TenCongViec { get; set; }
         public string DienGiai { get; set; }
         public string DonViTinh { get; set; }
+        public int? SortIndex { get; set; }
     }
 
     public class NS_CongViec_CongViecDetailResponseViewModel : NS_CongViecResponseViewModel

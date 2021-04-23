@@ -40,6 +40,7 @@ namespace  ProjectManager.CMD.Api.Application.Commands
             existingNS_NhomChiPhi.Status = request.Status.HasValue ? request.Status : existingNS_NhomChiPhi.Status;
             existingNS_NhomChiPhi.SetTenNhomChiPhi(request.TenNhomChiPhi);
             existingNS_NhomChiPhi.SetDienGiai(request.DienGiai);
+            existingNS_NhomChiPhi.SetSortIndex(request.SortIndex);
             existingNS_NhomChiPhi.SetUpdate(_user,0);
             _NS_NhomChiPhiRepository.Update(existingNS_NhomChiPhi);
             await _NS_NhomChiPhiRepository.UnitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);

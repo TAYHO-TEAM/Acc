@@ -26,7 +26,8 @@ namespace  ProjectManager.CMD.Api.Application.Commands
             var methodResult = new MethodResult<CreateNS_NhomCongViecDetailCommandResponse>();
             var newNS_NhomCongViecDetail = new NS_NhomCongViecDetail(request.NhomCongViecId,
 request.GiaiDoanId,
-request.GiaTri);
+request.GiaTri,
+request.SortIndex);
             newNS_NhomCongViecDetail.SetCreate(_user);
             newNS_NhomCongViecDetail.Status = request.Status.HasValue ? request.Status : newNS_NhomCongViecDetail.Status;
             newNS_NhomCongViecDetail.IsActive = request.IsActive.HasValue ? request.IsActive : newNS_NhomCongViecDetail.IsActive;

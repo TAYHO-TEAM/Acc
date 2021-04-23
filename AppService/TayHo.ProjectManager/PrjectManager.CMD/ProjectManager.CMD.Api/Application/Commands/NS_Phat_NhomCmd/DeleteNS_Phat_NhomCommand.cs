@@ -1,4 +1,4 @@
-﻿using MediatR;
+using MediatR;
 using Services.Common.DomainObjects;
 using System.Collections.Generic;
 

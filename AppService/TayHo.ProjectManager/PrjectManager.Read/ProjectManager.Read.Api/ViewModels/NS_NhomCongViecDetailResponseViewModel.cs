@@ -7,5 +7,6 @@ namespace ProjectManager.Read.Api.ViewModels
         public int? NhomCongViecId { get; set; }
         public int? GiaiDoanId { get; set; }
         public decimal? GiaTri { get; set; }
+        public int? SortIndex { get; set; }
     }
 }

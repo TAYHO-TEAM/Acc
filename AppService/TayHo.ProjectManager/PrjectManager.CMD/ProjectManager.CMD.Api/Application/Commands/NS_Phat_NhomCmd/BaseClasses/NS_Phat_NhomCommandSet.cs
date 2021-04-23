@@ -5,5 +5,6 @@ namespace ProjectManager.CMD.Api.Application.Commands
     {
         public string TenNhomPhat { get; set; }
         public string DienGiai { get; set; }
+        public int? SortIndex { get; set; }
     }
 }

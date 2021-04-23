@@ -14,6 +14,7 @@ namespace ProjectManager.Read.Sql.DTOs.DTO
         public int? ProjectId { get; set; }
         public string TenNhomCongViec { get; set; }
         public string DienGiai { get; set; }
+        public int? SortIndex { get; set; }
     }
     public class NS_NhomCongViec_NhomCongViecDetailDTO : NS_NhomCongViecDTO
     {

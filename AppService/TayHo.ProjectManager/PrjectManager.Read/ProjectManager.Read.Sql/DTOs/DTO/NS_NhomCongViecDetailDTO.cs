@@ -10,5 +10,6 @@ namespace ProjectManager.Read.Sql.DTOs.DTO
         public int? NhomCongViecId { get; set; }
         public int? GiaiDoanId { get; set; }
         public decimal? GiaTri { get; set; }
+        public int? SortIndex { get; set; }
     }
 }

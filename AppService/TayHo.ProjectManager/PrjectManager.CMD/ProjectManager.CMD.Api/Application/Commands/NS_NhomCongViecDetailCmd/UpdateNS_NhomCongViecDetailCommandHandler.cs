@@ -41,6 +41,7 @@ namespace  ProjectManager.CMD.Api.Application.Commands
             existingNS_NhomCongViecDetail.SetNhomCongViecId(request.NhomCongViecId);
             existingNS_NhomCongViecDetail.SetGiaiDoanId(request.GiaiDoanId);
             existingNS_NhomCongViecDetail.SetGiaTri(request.GiaTri);
+            existingNS_NhomCongViecDetail.SetSortIndex(request.SortIndex);
             existingNS_NhomCongViecDetail.SetUpdate(_user,0);
             _NS_NhomCongViecDetailRepository.Update(existingNS_NhomCongViecDetail);
             await _NS_NhomCongViecDetailRepository.UnitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);

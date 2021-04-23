@@ -1,11 +1,11 @@
-﻿using AutoMapper;
 using ProjectManager.CMD.Api.Application.Commands;
 using ProjectManager.CMD.Domain.DomainObjects;
+using AutoMapper;
 
 
 namespace ProjectManager.CMD.Api.Infrastructure.Mappings
 {
-    public class NS_Phat_NhomProfile : Profile
+    public class NS_Phat_NhomProfile : Profile 
     {
         public NS_Phat_NhomProfile()
         {

@@ -42,6 +42,7 @@ namespace  ProjectManager.CMD.Api.Application.Commands
             existingNS_LoaiCongViec.SetDienGiai(request.DienGiai);
             existingNS_LoaiCongViec.SetKyHieu(request.KyHieu);
             existingNS_LoaiCongViec.SetProjectId(request.ProjectId);
+            existingNS_LoaiCongViec.SetSortIndex(request.SortIndex);
             existingNS_LoaiCongViec.SetUpdate(_user,0);
             _NS_LoaiCongViecRepository.Update(existingNS_LoaiCongViec);
             await _NS_LoaiCongViecRepository.UnitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);

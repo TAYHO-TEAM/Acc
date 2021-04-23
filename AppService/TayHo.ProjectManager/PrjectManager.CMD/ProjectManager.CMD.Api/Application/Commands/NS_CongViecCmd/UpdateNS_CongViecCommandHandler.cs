@@ -44,6 +44,7 @@ namespace  ProjectManager.CMD.Api.Application.Commands
             existingNS_CongViec.SetTenCongViec(request.TenCongViec);
             existingNS_CongViec.SetDienGiai(request.DienGiai);
             existingNS_CongViec.SetDonViTinh(request.DonViTinh);
+            existingNS_CongViec.SetSortIndex(request.SortIndex);
             existingNS_CongViec.SetUpdate(_user,0);
             _NS_CongViecRepository.Update(existingNS_CongViec);
             await _NS_CongViecRepository.UnitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);

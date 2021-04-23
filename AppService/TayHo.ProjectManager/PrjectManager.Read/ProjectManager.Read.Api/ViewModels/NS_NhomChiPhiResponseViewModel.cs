@@ -6,5 +6,6 @@ namespace ProjectManager.Read.Api.ViewModels
     {
         public string TenNhomChiPhi { get; set; }
         public string DienGiai { get; set; }
+        public int? SortIndex { get; set; }
     }
 }

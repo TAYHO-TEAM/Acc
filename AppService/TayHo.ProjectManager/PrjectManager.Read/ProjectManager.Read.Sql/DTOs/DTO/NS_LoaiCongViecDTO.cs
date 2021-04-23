@@ -11,5 +11,6 @@ namespace ProjectManager.Read.Sql.DTOs.DTO
         public string DienGiai { get; set; }
         public string KyHieu { get; set; }
         public int? ProjectId { get; set; }
+        public int? SortIndex { get; set; }
     }
 }

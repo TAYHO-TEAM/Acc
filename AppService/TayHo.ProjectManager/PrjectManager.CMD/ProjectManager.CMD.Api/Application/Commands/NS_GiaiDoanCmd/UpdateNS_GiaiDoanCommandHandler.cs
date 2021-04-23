@@ -43,6 +43,7 @@ namespace  ProjectManager.CMD.Api.Application.Commands
             existingNS_GiaiDoan.SetProjectId(request.ProjectId);
             existingNS_GiaiDoan.SetGroupId(request.GroupId);
             existingNS_GiaiDoan.SetCapDo(request.CapDo);
+            existingNS_GiaiDoan.SetSortIndex(request.SortIndex);
             existingNS_GiaiDoan.SetUpdate(_user, 0);
             _NS_GiaiDoanRepository.Update(existingNS_GiaiDoan);
             await _NS_GiaiDoanRepository.UnitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);

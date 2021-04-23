@@ -9,5 +9,6 @@ namespace ProjectManager.Read.Sql.DTOs.DTO
     {
         public string TenNhomChiPhi { get; set; }
         public string DienGiai { get; set; }
+        public int? SortIndex { get; set; }
     }
 }

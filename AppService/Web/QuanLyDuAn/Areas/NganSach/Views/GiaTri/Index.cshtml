@@ -35,7 +35,7 @@
             key: "id",
             load: (values) => {
                 values['filter'] = [["projectId", "=", PROJECTID], 'and', ["isActive", "=", 1]];
-                values['sort'] = [{ selector: "status", desc: false }];
+                values['sort'] = [{ selector: "sortIndex", desc: false }];
                 return ajax_read(ACTION_GIAIDOAN, values);
             },
             byKey: (key) => {
@@ -410,7 +410,7 @@
                     dataField: "hangMucDetailId", dataType: "number", visible: false,
                 },
                 {
-                    dataField: "status", dataType: "number", sortOrder: "desc", visible: false,
+                    dataField: "sortIndex", dataType: "number", sortOrder: "desc", visible: false,
                 },
             ],
             onRowUpdating: (e) => {
@@ -689,8 +689,8 @@
                                 {
                                     location: "after", widget: "dxButton",
                                     options: {
-                                        icon: "xlsxfile", tylingMode: "filled", type: "default",
-                                        onClick: () => genFormImport(data)
+                                        icon: "xlsxfile", tylingMode: "filled", type: "default", 
+                                        onClick: () => genFormImport(data, container)
                                     }
                                 },
                                 {
@@ -755,10 +755,8 @@
                         "dienGiai": ""
                     } :
                         {
-                            "id": data.id,
-                            //"hangMucId": data.hangMucId,
-                            "loaiCongViecId": data.loaiCongViecId,
-                            //"projectId": data.projectId,
+                            "id": data.id, 
+                            "loaiCongViecId": data.loaiCongViecId, 
                             "tenNhomCongViec": data.tenNhomCongViec,
                             "dienGiai": data.dienGiai
                         },
@@ -965,13 +963,12 @@
             }
             return deferred.promise();
         });
-
-        var listImport = [];
-        var genFormImport = (data) => $("#popup-main").dxPopup({
+         
+        var genFormImport = (data, con) => $("#popup-main").dxPopup({
             fullScreen: true, showTitle: true, title: ("Import công việc vào nhóm " + data.tenNhomCongViec).toUpperCase(),
             visible: true, showCloseButton: true, closeOnOutsideClick: false,
-            contentTemplate: (c) => {
-                var scrollView = $("<div id='scrollView'></div>");
+            contentTemplate: (c) => { 
+                var scrollView = $("<div id='scrollView' data-id='"+data.id+"'></div>");
                 var content = $("<div />");
                 content.dxDataGrid({ 
                     elementAttr: { id: "container-sub3" },
@@ -980,24 +977,25 @@
                     paging: { enabled: false},
                     columns: [
                         {
-                            dataField: "nhom",
-                            caption: "Nhóm"
+                            dataField: "nhomCongViecId", visible:false
                         },
                         {
-                            dataField: "tenCongViec",
-                            caption: "Tên công việc"
+                            dataField: "giaiDoanId", visible:false
                         },
                         {
-                            dataField: "dienGiai",
-                            caption: "Diễn giải"
+                            dataField: "nhom", caption: "Nhóm"
                         },
                         {
-                            dataField: "dvt",
-                            caption: "Đơn vị tính"
+                            dataField: "tenCongViec", caption: "Tên công việc"
                         },
                         {
-                            dataField: "khoiLuong",
-                            caption: "Khối lượng",
+                            dataField: "dienGiai", caption: "Diễn giải"
+                        },
+                        {
+                            dataField: "dvt", caption: "Đơn vị tính"
+                        },
+                        {
+                            dataField: "khoiLuong", caption: "Khối lượng",
                             dataType: "number",
                             format: {
                                 type: "fixedPoint",
@@ -1027,7 +1025,7 @@
                                 return (data.khoiLuong > 0 || data.donGia > 0) ? data.khoiLuong * data.donGia : 0;
                             }
                         },
-                    ],
+                    ], 
                     summary: {
                         totalItems: [
                             {
@@ -1037,7 +1035,7 @@
                                 displayFormat: "{0}",
                             },
                         ], 
-                    },
+                    }, 
                     selection: { allowSelectAll: true,  mode: "multiple", selectAllMode: "allPages", showCheckBoxesMode: "always" },
                     editing: {
                         mode: "cell", useIcons: false, confirmDelete: false,
@@ -1048,20 +1046,31 @@
                         var container = e.component;
                         e.toolbarOptions.items.unshift(
                             {
-                                location: "before", widget: "dxButton",
+                                location: "before", widget: "dxButton", 
                                 options: {
                                     text:"IMPORT", icon: "add", stylingMode: "filled", type: "default",
-                                    disabled: true, elementAttr: { id :"btnSelectImport"},
+                                    disabled: true, elementAttr: { id: "btnSelectImport" },
                                     onClick: () => {
                                         var dataSelected = $("#container-sub3").dxDataGrid('instance').getSelectedRowsData();
                                         if (dataSelected.length > 0) {
                                             DevExpress.ui.dialog.confirm("Đã chọn <b>" + dataSelected.length + " dòng dữ liệu</b> để import!<br/>Bạn có muốn import vào nhóm <b>" + data.tenNhomCongViec+"</b> không?", "XÁC NHẬN THÔNG TIN").done(function (dialogResult) {
-                                                if (dialogResult) {
-                                                    //var deferred = $.Deferred();
-                                                     
-                                                    //return deferred.promise();
+                                                if (dialogResult) { 
+                                                    var deferred = $.Deferred();
+                                                    var formData = new FormData();
+                                                    formData.append('congViecOBJs', JSON.stringify(dataSelected));
+                                                    formData.append('token', UserCurrentInfo.accessToken);
+                                                    $.ajax({
+                                                        type: "POST", url: "/ngansach/giatri/imports", data: formData,
+                                                        enctype: 'multipart/form-data', processData: false, contentType: false, cache: false
+                                                    }).done(function (rs) {
+                                                        con.refresh()
+                                                        $("#popup-main").dxPopup('instance').hide();
+                                                        DevExpress.ui.notify("IMPORT THÀNH CÔNG", "SUCCESS", 5000);
+                                                    }).fail(function (xhr) { 
+                                                        DevExpress.ui.notify((xhr.responseJSON ? xhr.responseJSON.result : xhr.statusText), "error", 5000);
+                                                    });
+                                                    return deferred.promise();
 
-                                                    console.log(dataSelected);
                                                 }
                                             });
                                         } else {
@@ -1122,7 +1131,9 @@
                 var item = {};
                 for (j = 0; j < clipRows[i].length; j++) {
                     if (clipRows[i][j] != '\r') {
-                        if (clipRows[i][j].length !== 0) { 
+                        if (clipRows[i][j].length !== 0) {
+                            item.nhomCongViecId = $("#scrollView").data('id');  
+                            item.giaiDoanId = giaidoan.id;  
                             item.nhom = clipRows[i][0];
                             item.tenCongViec = clipRows[i][1];
                             item.dienGiai = clipRows[i][2];
@@ -1134,9 +1145,9 @@
                 }
                 jsonObj.push(item);
             }
-            var temp = $("#container-sub3").dxDataGrid("instance");
-            temp.option("dataSource", jsonObj);
-            temp.refresh(true);
+            var container = $("#container-sub3");
+            container.dxDataGrid("instance").option("dataSource", jsonObj);
+            container.dxDataGrid("instance").refresh(true);
         });
     </script>
 }

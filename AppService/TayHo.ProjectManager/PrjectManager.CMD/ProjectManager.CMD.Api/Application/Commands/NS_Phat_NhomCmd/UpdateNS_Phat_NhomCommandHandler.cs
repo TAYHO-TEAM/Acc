@@ -41,6 +41,7 @@ namespace  ProjectManager.CMD.Api.Application.Commands
             existingNS_Phat_Nhom.Status = request.Status.HasValue ? request.Status : existingNS_Phat_Nhom.Status;
             existingNS_Phat_Nhom.SetTenNhomPhat(request.TenNhomPhat);
             existingNS_Phat_Nhom.SetDienGiai(request.DienGiai);
+            existingNS_Phat_Nhom.SetSortIndex(request.SortIndex);
             existingNS_Phat_Nhom.SetUpdate(_user,0);
             _NS_Phat_NhomRepository.Update(existingNS_Phat_Nhom);
             await _NS_Phat_NhomRepository.UnitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);

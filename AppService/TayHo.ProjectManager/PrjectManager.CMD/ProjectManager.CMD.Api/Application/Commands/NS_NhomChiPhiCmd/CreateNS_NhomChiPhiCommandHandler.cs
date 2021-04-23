@@ -24,7 +24,7 @@ namespace  ProjectManager.CMD.Api.Application.Commands
         public async Task<MethodResult<CreateNS_NhomChiPhiCommandResponse>> Handle(CreateNS_NhomChiPhiCommand request, CancellationToken cancellationToken)
         {
             var methodResult = new MethodResult<CreateNS_NhomChiPhiCommandResponse>();
-            var newNS_NhomChiPhi = new NS_NhomChiPhi(request.TenNhomChiPhi, request.DienGiai);
+            var newNS_NhomChiPhi = new NS_NhomChiPhi(request.TenNhomChiPhi, request.DienGiai, request.SortIndex);
             newNS_NhomChiPhi.SetCreate(_user);
             newNS_NhomChiPhi.Status = request.Status.HasValue ? request.Status : newNS_NhomChiPhi.Status;
             newNS_NhomChiPhi.IsActive = request.IsActive.HasValue ? request.IsActive : newNS_NhomChiPhi.IsActive;

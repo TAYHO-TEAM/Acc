@@ -15,43 +15,7 @@
 
 @section script{
     <script src="~/Scripts/page/ngansach.js"></script>
-    <script> 
-        //var customStore2 = new DevExpress.data.DataSource({
-        //    store: new DevExpress.data.CustomStore({
-        //        key: "id",
-        //        load: (loadOptions) => {
-        //            let deferred = $.Deferred();
-        //            console.log(loadOptions);
-        //            var data = {
-        //                'nameEF': 'NS_GiaiDoan',
-        //                'devRequestLoadOptionsViewModel': loadOptions
-        //            };
-        //            console.log(data);
-        //            $.ajax({
-        //                headers: header,
-        //                url: "https://api-pm-read.tayho.com.vn/api/read/v1/ProjectManager",
-        //                dataType: "json",
-        //                method: "POST",
-        //                data: JSON.stringify(data),
-        //                success: function (result) {
-        //                    deferred.resolve(result.data, {
-        //                        totalCount: result.totalCount,
-        //                        summary: result.summary,
-        //                        groupCount: result.groupCount
-        //                    });
-        //                },
-        //                error: function (xhr) {
-        //                    console.log(xhr.responseJSON ? xhr.responseJSON.Message : xhr.statusText);
-        //                    deferred.reject("Đã có lỗi xảy ra trong quá trình này. Mở Console để xem chi tiết hoặc liên hệ Quản trị viên.");
-        //                },
-        //            });
-        //            return deferred.promise();
-        //        },
-        //    }),
-        //    filter: ["projectId", "=", PROJECTID],
-        //    sort: [{ selector: "caoDo", desc: true }]
-        //});
-        
+    <script>  
         var ds_main = new DevExpress.data.CustomStore({
             key: "id",
             load: (values) => {

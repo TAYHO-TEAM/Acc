@@ -4,5 +4,6 @@
     {
         public string DienGiai { get; set; }
         public string TenNhomChiPhi { get; set; }
+        public int? SortIndex { get; set; }
     }
 }

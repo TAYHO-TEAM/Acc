@@ -28,7 +28,8 @@ namespace  ProjectManager.CMD.Api.Application.Commands
                 request.Nhom,
                 request.TenCongViec,
                 request.DienGiai,
-                request.DonViTinh);
+                request.DonViTinh,
+                request.SortIndex);
             newNS_CongViec.SetCreate(_user);
             newNS_CongViec.Status = request.Status.HasValue ? request.Status : newNS_CongViec.Status;
             newNS_CongViec.IsActive = request.IsActive.HasValue ? request.IsActive : newNS_CongViec.IsActive;
