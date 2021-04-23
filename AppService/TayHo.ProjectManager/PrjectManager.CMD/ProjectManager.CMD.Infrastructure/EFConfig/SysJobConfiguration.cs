@@ -26,7 +26,7 @@ namespace ProjectManager.CMD.Infrastructure.EFConfig
             builder.Property(x => x.Times).HasField("_times").UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.Unit).HasField("_unit").UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.StepTime).HasField("_stepTime").UsePropertyAccessMode(PropertyAccessMode.Field);
-
+            builder.Property(x => x.IsTemplate).HasField("_isTemplate").UsePropertyAccessMode(PropertyAccessMode.Field);
         }
     }
 }

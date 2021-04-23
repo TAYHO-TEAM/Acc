@@ -29,6 +29,7 @@ namespace ProjectManager.CMD.Domain.DomainObjects
         private int? _times;
         private byte? _unit;
         private int? _stepTime;
+        private bool? _isTemplate;
 
 
         #endregion Fields
@@ -39,7 +40,7 @@ namespace ProjectManager.CMD.Domain.DomainObjects
             _salt = Helpers.RandomSecretKey();
         }
 
-        public SysJob(string JobName, string NameDataBase, string NameStoreProce, string ConnStringHash, TimeSpan? StartTime, TimeSpan? EndTime, DateTime? StartDate, DateTime? EndDate, DateTime? FirstDate, DateTime? LastDate, DateTime? NextDate, int? Times, byte? Unit, int? StepTime) : this()
+        public SysJob(string JobName, string NameDataBase, string NameStoreProce, string ConnStringHash, TimeSpan? StartTime, TimeSpan? EndTime, DateTime? StartDate, DateTime? EndDate, DateTime? FirstDate, DateTime? LastDate, DateTime? NextDate, int? Times, byte? Unit, int? StepTime, bool? IsTemplate) : this()
         {
             _jobName = JobName;
             _nameDataBase = NameDataBase;
@@ -55,8 +56,9 @@ namespace ProjectManager.CMD.Domain.DomainObjects
             _times = Times;
             _unit = Unit;
             _stepTime = StepTime;
+            _isTemplate = IsTemplate;
             if (!string.IsNullOrEmpty(ConnStringHash)) _connStringHash = Hash.Create(ConnStringHash, _salt);
-            ValidatePassword(_connStringHash);
+            ValidateConnection(_connStringHash);
             if (!IsValid()) throw new DomainException(_errorMessages);
 
         }
@@ -79,7 +81,7 @@ namespace ProjectManager.CMD.Domain.DomainObjects
         public int? Times { get => _times; }
         public byte? Unit { get => _unit; }
         public int? StepTime { get => _stepTime; }
-
+        public bool? IsTemplate { get => _isTemplate; }
 
         #endregion Properties
         #region Behaviours
@@ -116,13 +118,16 @@ namespace ProjectManager.CMD.Domain.DomainObjects
 
         }
         public void SetSalt(string Salt) { _salt = string.IsNullOrEmpty(Salt) ? _salt : Salt; if (!IsValid()) throw new DomainException(_errorMessages); }
+        public void SetIsTemplate(bool? IsTemplate)
+        { _isTemplate = !IsTemplate.HasValue ? _isTemplate : false ; if (!IsValid()) throw new DomainException(_errorMessages); }
+
         public sealed override bool IsValid()
         {
             return base.IsValid();
         }
-        public void ValidatePassword(string password)
+        public void ValidateConnection(string connection)
         {
-            if (string.IsNullOrEmpty(password))
+            if (string.IsNullOrEmpty(connection))
             {
                 _errorMessages.Add(new ErrorResult
                 {
@@ -130,7 +135,7 @@ namespace ProjectManager.CMD.Domain.DomainObjects
                     ErrorMessage = nameof(ErrorCodeInsert.IErr000),
                     ErrorValues = new List<string>
                     {
-                        ErrorHelpers.GenerateErrorResult(nameof(password),password)
+                        ErrorHelpers.GenerateErrorResult(nameof(connection),connection)
                     }
                 });
             }

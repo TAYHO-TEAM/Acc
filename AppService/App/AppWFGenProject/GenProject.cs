@@ -88,9 +88,9 @@ namespace AppWFGenProject
                     // Set rootDir
                     genOB.rootDir = txtDir.Text == "" ? _common.DirectDefault.ToString() : txtDir.Text;
                     // Set common
-                    genOB.common = _common.CmdEF.ToString();
-                    genOB.db = _common.DB.ToString();
-                    genOB.version = _common.Version.ToString();
+                    genOB.common = "Services.Common.APIs.Cmd.EF;";//_common.CmdEF.ToString();
+                    genOB.db = "QuanLyDuAn";//_common.DB.ToString();
+                    genOB.version = "QuanLyDuAn";//_common.Version.ToString();
 
                     if (chlTable.GetItemChecked(i))
                     {
@@ -184,6 +184,10 @@ namespace AppWFGenProject
         {
             gbGenCode.Visible = false;
             gbAutoSendMail.Visible = true;
+        }
+        private void LoadSendMailConfig()
+        {
+
         }
     }
 }
