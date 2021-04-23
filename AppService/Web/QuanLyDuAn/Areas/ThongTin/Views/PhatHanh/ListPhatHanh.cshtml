@@ -32,7 +32,6 @@
         const ACTION_DOCUMENTLOG = "/DocumentReleasedLog";
         const ACTION_FILEGET = "/FilesAttachment/getBy";
         const ACTION_GROUPS = "/Groups";
-        const ACTION_ACCOUNTINFO = "/AccountInfo";
         const ACTION_PROJECT = "/Projects";
         const ACTION_HANGMUC = "/WorkItems";
         var PROJECTID = isNullOrEmpty(localStorage.getItem("projectIdCurrent")) ? parseInt(localStorage.getItem("projectIdCurrent")) : 0;
@@ -200,14 +199,7 @@
                 return deferred.promise();
             },
         });
-        let customStore_AccountInfo = (type) => new DevExpress.data.DataSource({
-            store: new DevExpress.data.CustomStore({
-                key: "id",
-                loadMode: "raw",
-                load: (values) => ajax_read(ACTION_ACCOUNTINFO, values),
-            }),
-            //filter: [["isDelete", "><", true]]
-        });
+     
         //..........................  Load View -------------------------------------------------------------
         $(function () {
             loadData();
