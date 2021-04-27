@@ -6,6 +6,7 @@ using Microsoft.Extensions.Options;
 using Serilog;
 using Services.Common.Options;
 using System;
+using System.DirectoryServices;
 using System.Windows.Forms;
 
 namespace AppWFGenProject
@@ -181,7 +182,7 @@ namespace AppWFGenProject
             gbAutoSendMail.Visible = false;
         }
 
-     
+
         private void sub12SendMail_Click(object sender, EventArgs e)
         {
             gbGenCode.Visible = false;
@@ -190,6 +191,33 @@ namespace AppWFGenProject
         private void LoadSendMailConfig()
         {
 
+        }
+
+        private void btnLoginLDAP_Click(object sender, EventArgs e)
+        {
+            string _user = txtLDAPUser.Text;
+            string _pass = txtLDAPPass.Text;
+            if (string.IsNullOrEmpty(_user) || string.IsNullOrEmpty(_pass))
+            {
+                MessageBox.Show("Vui lòng nhập tên đăng nhập và mật khẩu!", "Thông báo!");
+            }
+            else
+            {
+                try
+                {
+                    DirectoryEntry entry = new DirectoryEntry(_lDAPConfig.DomainIP, _user, _pass);
+                    UserAccount _userAccount = new UserAccount();
+                    _userAccount.CommonName = txtCreLDAPUser.Text.Trim();
+                    _userAccount.PassWord = txtLDAPPass.Text.Trim();
+                    _userAccount.FirstName = txtLDAPFirstName.Text.Trim();
+                    _userAccount.LastName = txtLDAPLastName.Text.Trim();
+                    _userAccount.ObjCategory = cbxObjCategory.SelectedItem.ToString();
+                }
+                catch (DirectoryServicesCOMException cex)
+                {
+                    MessageBox.Show("Lỗi Đăng nhập!" + cex.ExtendedErrorMessage.ToString(), "Thông báo!");
+                }
+            }
         }
     }
 }
