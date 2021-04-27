@@ -77,12 +77,12 @@ namespace AppWFGenProject
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.menuMain = new System.Windows.Forms.MenuStrip();
             this.mnfile = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sub11GenNetApi = new System.Windows.Forms.ToolStripMenuItem();
             this.sub12SendMail = new System.Windows.Forms.ToolStripMenuItem();
+            this.sub13LDAP = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -110,6 +110,26 @@ namespace AppWFGenProject
             this.searchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.grbLDAP = new System.Windows.Forms.GroupBox();
+            this.tabLDAP = new System.Windows.Forms.TabControl();
+            this.tbpLDAP1 = new System.Windows.Forms.TabPage();
+            this.btnCreateLDAP = new System.Windows.Forms.Button();
+            this.cbxObjCategory = new System.Windows.Forms.ComboBox();
+            this.txtLDAPLastName = new System.Windows.Forms.TextBox();
+            this.txtLDAPFirstName = new System.Windows.Forms.TextBox();
+            this.txtCreLDAPPass = new System.Windows.Forms.TextBox();
+            this.txtCreLDAPUser = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.btnLoginLDAP = new System.Windows.Forms.Button();
+            this.txtLDAPPass = new System.Windows.Forms.TextBox();
+            this.txtLDAPUser = new System.Windows.Forms.TextBox();
+            this.lblLDAPPass = new System.Windows.Forms.Label();
+            this.lblLDAPUser = new System.Windows.Forms.Label();
             this.gbGenCode.SuspendLayout();
             this.tbcConfigGen.SuspendLayout();
             this.tbpCUDR.SuspendLayout();
@@ -118,6 +138,9 @@ namespace AppWFGenProject
             this.tbpSMJob.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSMSysAutoSendMail)).BeginInit();
             this.menuMain.SuspendLayout();
+            this.grbLDAP.SuspendLayout();
+            this.tabLDAP.SuspendLayout();
+            this.tbpLDAP1.SuspendLayout();
             this.SuspendLayout();
             // 
             // gbGenCode
@@ -457,7 +480,7 @@ namespace AppWFGenProject
             // dgvSMSysAutoSendMail
             // 
             this.dgvSMSysAutoSendMail.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvSMSysAutoSendMail.Location = new System.Drawing.Point(29, 95);
+            this.dgvSMSysAutoSendMail.Location = new System.Drawing.Point(27, 110);
             this.dgvSMSysAutoSendMail.Name = "dgvSMSysAutoSendMail";
             this.dgvSMSysAutoSendMail.RowTemplate.Height = 25;
             this.dgvSMSysAutoSendMail.Size = new System.Drawing.Size(891, 243);
@@ -616,6 +639,7 @@ namespace AppWFGenProject
             this.newToolStripMenuItem,
             this.sub11GenNetApi,
             this.sub12SendMail,
+            this.sub13LDAP,
             this.openToolStripMenuItem,
             this.toolStripSeparator,
             this.saveToolStripMenuItem,
@@ -651,6 +675,12 @@ namespace AppWFGenProject
             this.sub12SendMail.Size = new System.Drawing.Size(190, 22);
             this.sub12SendMail.Text = "Setting Send Mail";
             this.sub12SendMail.Click += new System.EventHandler(this.sub12SendMail_Click);
+            // 
+            // sub13LDAP
+            // 
+            this.sub13LDAP.Name = "sub13LDAP";
+            this.sub13LDAP.Size = new System.Drawing.Size(190, 22);
+            this.sub13LDAP.Text = "LDAP Manger";
             // 
             // openToolStripMenuItem
             // 
@@ -848,10 +878,202 @@ namespace AppWFGenProject
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
             this.aboutToolStripMenuItem.Text = "&About...";
             // 
+            // grbLDAP
+            // 
+            this.grbLDAP.Controls.Add(this.tabLDAP);
+            this.grbLDAP.Controls.Add(this.btnLoginLDAP);
+            this.grbLDAP.Controls.Add(this.txtLDAPPass);
+            this.grbLDAP.Controls.Add(this.txtLDAPUser);
+            this.grbLDAP.Controls.Add(this.lblLDAPPass);
+            this.grbLDAP.Controls.Add(this.lblLDAPUser);
+            this.grbLDAP.Location = new System.Drawing.Point(834, 118);
+            this.grbLDAP.Name = "grbLDAP";
+            this.grbLDAP.Size = new System.Drawing.Size(583, 407);
+            this.grbLDAP.TabIndex = 25;
+            this.grbLDAP.TabStop = false;
+            this.grbLDAP.Text = "LDAP Manager";
+            // 
+            // tabLDAP
+            // 
+            this.tabLDAP.Controls.Add(this.tbpLDAP1);
+            this.tabLDAP.Controls.Add(this.tabPage2);
+            this.tabLDAP.Location = new System.Drawing.Point(23, 120);
+            this.tabLDAP.Name = "tabLDAP";
+            this.tabLDAP.SelectedIndex = 0;
+            this.tabLDAP.Size = new System.Drawing.Size(542, 242);
+            this.tabLDAP.TabIndex = 5;
+            // 
+            // tbpLDAP1
+            // 
+            this.tbpLDAP1.Controls.Add(this.btnCreateLDAP);
+            this.tbpLDAP1.Controls.Add(this.cbxObjCategory);
+            this.tbpLDAP1.Controls.Add(this.txtLDAPLastName);
+            this.tbpLDAP1.Controls.Add(this.txtLDAPFirstName);
+            this.tbpLDAP1.Controls.Add(this.txtCreLDAPPass);
+            this.tbpLDAP1.Controls.Add(this.txtCreLDAPUser);
+            this.tbpLDAP1.Controls.Add(this.label10);
+            this.tbpLDAP1.Controls.Add(this.label9);
+            this.tbpLDAP1.Controls.Add(this.label8);
+            this.tbpLDAP1.Controls.Add(this.label7);
+            this.tbpLDAP1.Controls.Add(this.label6);
+            this.tbpLDAP1.Location = new System.Drawing.Point(4, 24);
+            this.tbpLDAP1.Name = "tbpLDAP1";
+            this.tbpLDAP1.Padding = new System.Windows.Forms.Padding(3);
+            this.tbpLDAP1.Size = new System.Drawing.Size(534, 214);
+            this.tbpLDAP1.TabIndex = 0;
+            this.tbpLDAP1.Text = "Create Account";
+            this.tbpLDAP1.UseVisualStyleBackColor = true;
+            // 
+            // btnCreateLDAP
+            // 
+            this.btnCreateLDAP.Location = new System.Drawing.Point(178, 173);
+            this.btnCreateLDAP.Name = "btnCreateLDAP";
+            this.btnCreateLDAP.Size = new System.Drawing.Size(221, 23);
+            this.btnCreateLDAP.TabIndex = 10;
+            this.btnCreateLDAP.Text = "Create";
+            this.btnCreateLDAP.UseVisualStyleBackColor = true;
+            // 
+            // cbxObjCategory
+            // 
+            this.cbxObjCategory.FormattingEnabled = true;
+            this.cbxObjCategory.Location = new System.Drawing.Point(206, 131);
+            this.cbxObjCategory.Name = "cbxObjCategory";
+            this.cbxObjCategory.Size = new System.Drawing.Size(218, 23);
+            this.cbxObjCategory.TabIndex = 9;
+            // 
+            // txtLDAPLastName
+            // 
+            this.txtLDAPLastName.Location = new System.Drawing.Point(206, 102);
+            this.txtLDAPLastName.Name = "txtLDAPLastName";
+            this.txtLDAPLastName.Size = new System.Drawing.Size(218, 23);
+            this.txtLDAPLastName.TabIndex = 8;
+            // 
+            // txtLDAPFirstName
+            // 
+            this.txtLDAPFirstName.Location = new System.Drawing.Point(206, 72);
+            this.txtLDAPFirstName.Name = "txtLDAPFirstName";
+            this.txtLDAPFirstName.Size = new System.Drawing.Size(218, 23);
+            this.txtLDAPFirstName.TabIndex = 7;
+            // 
+            // txtCreLDAPPass
+            // 
+            this.txtCreLDAPPass.Location = new System.Drawing.Point(206, 43);
+            this.txtCreLDAPPass.Name = "txtCreLDAPPass";
+            this.txtCreLDAPPass.Size = new System.Drawing.Size(218, 23);
+            this.txtCreLDAPPass.TabIndex = 6;
+            // 
+            // txtCreLDAPUser
+            // 
+            this.txtCreLDAPUser.Location = new System.Drawing.Point(206, 15);
+            this.txtCreLDAPUser.Name = "txtCreLDAPUser";
+            this.txtCreLDAPUser.Size = new System.Drawing.Size(218, 23);
+            this.txtCreLDAPUser.TabIndex = 5;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(134, 46);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(66, 15);
+            this.label10.TabIndex = 4;
+            this.label10.Text = "Pass word :";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(130, 75);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(70, 15);
+            this.label9.TabIndex = 3;
+            this.label9.Text = "First Name :";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(131, 105);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(69, 15);
+            this.label8.TabIndex = 2;
+            this.label8.Text = "Last Name :";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(101, 134);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(99, 15);
+            this.label7.TabIndex = 1;
+            this.label7.Text = "Object Category :";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(129, 18);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(71, 15);
+            this.label6.TabIndex = 0;
+            this.label6.Text = "User Name :";
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Location = new System.Drawing.Point(4, 24);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(534, 214);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "tabPage2";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // btnLoginLDAP
+            // 
+            this.btnLoginLDAP.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.btnLoginLDAP.ForeColor = System.Drawing.Color.Blue;
+            this.btnLoginLDAP.Location = new System.Drawing.Point(302, 45);
+            this.btnLoginLDAP.Name = "btnLoginLDAP";
+            this.btnLoginLDAP.Size = new System.Drawing.Size(75, 44);
+            this.btnLoginLDAP.TabIndex = 4;
+            this.btnLoginLDAP.Text = "Login";
+            this.btnLoginLDAP.UseVisualStyleBackColor = true;
+            this.btnLoginLDAP.Click += new System.EventHandler(this.btnLoginLDAP_Click);
+            // 
+            // txtLDAPPass
+            // 
+            this.txtLDAPPass.Location = new System.Drawing.Point(95, 70);
+            this.txtLDAPPass.Name = "txtLDAPPass";
+            this.txtLDAPPass.PasswordChar = '*';
+            this.txtLDAPPass.Size = new System.Drawing.Size(184, 23);
+            this.txtLDAPPass.TabIndex = 3;
+            // 
+            // txtLDAPUser
+            // 
+            this.txtLDAPUser.Location = new System.Drawing.Point(95, 43);
+            this.txtLDAPUser.Name = "txtLDAPUser";
+            this.txtLDAPUser.Size = new System.Drawing.Size(184, 23);
+            this.txtLDAPUser.TabIndex = 2;
+            // 
+            // lblLDAPPass
+            // 
+            this.lblLDAPPass.AutoSize = true;
+            this.lblLDAPPass.Location = new System.Drawing.Point(23, 74);
+            this.lblLDAPPass.Name = "lblLDAPPass";
+            this.lblLDAPPass.Size = new System.Drawing.Size(65, 15);
+            this.lblLDAPPass.TabIndex = 1;
+            this.lblLDAPPass.Text = "LDAP Pass:";
+            // 
+            // lblLDAPUser
+            // 
+            this.lblLDAPUser.AutoSize = true;
+            this.lblLDAPUser.Location = new System.Drawing.Point(23, 49);
+            this.lblLDAPUser.Name = "lblLDAPUser";
+            this.lblLDAPUser.Size = new System.Drawing.Size(65, 15);
+            this.lblLDAPUser.TabIndex = 0;
+            this.lblLDAPUser.Text = "LDAP User:";
+            // 
             // GenProject
             // 
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(1280, 624);
+            this.ClientSize = new System.Drawing.Size(1762, 473);
+            this.Controls.Add(this.grbLDAP);
             this.Controls.Add(this.gbAutoSendMail);
             this.Controls.Add(this.gbGenCode);
             this.Controls.Add(this.menuMain);
@@ -871,6 +1093,11 @@ namespace AppWFGenProject
             ((System.ComponentModel.ISupportInitialize)(this.dgvSMSysAutoSendMail)).EndInit();
             this.menuMain.ResumeLayout(false);
             this.menuMain.PerformLayout();
+            this.grbLDAP.ResumeLayout(false);
+            this.grbLDAP.PerformLayout();
+            this.tabLDAP.ResumeLayout(false);
+            this.tbpLDAP1.ResumeLayout(false);
+            this.tbpLDAP1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -898,7 +1125,6 @@ namespace AppWFGenProject
         private System.Windows.Forms.Label lblDir;
         private System.Windows.Forms.TextBox txtDir;
         private System.Windows.Forms.Button btnBrowser;
-        private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private System.Windows.Forms.TextBox tbl;
         private System.Windows.Forms.Label lblNameProject;
         private System.Windows.Forms.TextBox txtNameProject;
@@ -959,6 +1185,27 @@ namespace AppWFGenProject
         private System.Windows.Forms.TabPage tbpSetting;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.Label lblListStore;
+        private System.Windows.Forms.ToolStripMenuItem sub13LDAP;
+        private System.Windows.Forms.GroupBox grbLDAP;
+        private System.Windows.Forms.TabControl tabLDAP;
+        private System.Windows.Forms.TabPage tbpLDAP1;
+        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.Button btnLoginLDAP;
+        private System.Windows.Forms.TextBox txtLDAPPass;
+        private System.Windows.Forms.TextBox txtLDAPUser;
+        private System.Windows.Forms.Label lblLDAPPass;
+        private System.Windows.Forms.Label lblLDAPUser;
+        private System.Windows.Forms.Button btnCreateLDAP;
+        private System.Windows.Forms.ComboBox cbxObjCategory;
+        private System.Windows.Forms.TextBox txtLDAPLastName;
+        private System.Windows.Forms.TextBox txtLDAPFirstName;
+        private System.Windows.Forms.TextBox txtCreLDAPPass;
+        private System.Windows.Forms.TextBox txtCreLDAPUser;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label6;
     }
 }
 

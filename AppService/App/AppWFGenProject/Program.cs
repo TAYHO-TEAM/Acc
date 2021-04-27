@@ -53,7 +53,7 @@ namespace AppWFGenProject
                 try
                 {
                     Log.Information("Application Starting.");
-                    DevExpress.UserSkins.BonusSkins.Register();
+                    //DevExpress.UserSkins.BonusSkins.Register();
                     //DevExpress.LookAndFeel.UserLookAndFeel.Default.SetSkinStyle("TayHoDevApp");
                     var form1 = services.GetRequiredService<GenProject>();
                     Application.Run(form1);
@@ -89,6 +89,7 @@ namespace AppWFGenProject
                    IConfiguration configuration = hostContext.Configuration;
                    services.Configure<ProfileMailOptions>(configuration.GetSection("ProfileMailOptions"));
                    services.Configure<Common>(configuration.GetSection("Common"));
+                   services.Configure<LDAPConfig>(configuration.GetSection("LDAPConfig"));
                    services.AddDbContext<ProjectManagerBaseContext>(opt => opt.UseSqlServer(configuration.GetConnectionString("TayHoConnection")));
                    services.AddScoped<GenProject>();
                    //services.AddScoped<TayHoDevApp>(); 

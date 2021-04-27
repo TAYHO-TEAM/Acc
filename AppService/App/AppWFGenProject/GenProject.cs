@@ -6,6 +6,7 @@ using Microsoft.Extensions.Options;
 using Serilog;
 using Services.Common.Options;
 using System;
+using System.DirectoryServices;
 using System.Windows.Forms;
 
 namespace AppWFGenProject
@@ -13,10 +14,12 @@ namespace AppWFGenProject
     public partial class GenProject : Form
     {
 
-        private readonly Common _common;
-        public GenProject( IOptionsSnapshot<Common> commonAccessor)
+        protected readonly Common _common;
+        protected readonly LDAPConfig _lDAPConfig;
+        public GenProject(IOptionsSnapshot<Common> commonAccessor, IOptionsSnapshot<LDAPConfig> LDAPConfig)
         {
             _common = commonAccessor.Value;
+            _lDAPConfig = LDAPConfig.Value;
             InitializeComponent();
             Environment.GetEnvironmentVariable("Content");
             txtPass.PasswordChar = '*';
@@ -88,9 +91,9 @@ namespace AppWFGenProject
                     // Set rootDir
                     genOB.rootDir = txtDir.Text == "" ? _common.DirectDefault.ToString() : txtDir.Text;
                     // Set common
-                    genOB.common = "Services.Common.APIs.Cmd.EF;";//_common.CmdEF.ToString();
-                    genOB.db = "QuanLyDuAn";//_common.DB.ToString();
-                    genOB.version = "QuanLyDuAn";//_common.Version.ToString();
+                    genOB.common = _common.CmdEF.ToString();//"Services.Common.APIs.Cmd.EF";//_common.CmdEF.ToString();
+                    genOB.db = _common.DB.ToString(); //"QuanLyDuAn";//_common.DB.ToString();
+                    genOB.version = _common.Version.ToString(); //"QuanLyDuAn";//_common.Version.ToString();
 
                     if (chlTable.GetItemChecked(i))
                     {
@@ -179,7 +182,7 @@ namespace AppWFGenProject
             gbAutoSendMail.Visible = false;
         }
 
-     
+
         private void sub12SendMail_Click(object sender, EventArgs e)
         {
             gbGenCode.Visible = false;
@@ -188,6 +191,33 @@ namespace AppWFGenProject
         private void LoadSendMailConfig()
         {
 
+        }
+
+        private void btnLoginLDAP_Click(object sender, EventArgs e)
+        {
+            string _user = txtLDAPUser.Text;
+            string _pass = txtLDAPPass.Text;
+            if (string.IsNullOrEmpty(_user) || string.IsNullOrEmpty(_pass))
+            {
+                MessageBox.Show("Vui lòng nhập tên đăng nhập và mật khẩu!", "Thông báo!");
+            }
+            else
+            {
+                try
+                {
+                    DirectoryEntry entry = new DirectoryEntry(_lDAPConfig.DomainIP, _user, _pass);
+                    UserAccount _userAccount = new UserAccount();
+                    _userAccount.CommonName = txtCreLDAPUser.Text.Trim();
+                    _userAccount.PassWord = txtLDAPPass.Text.Trim();
+                    _userAccount.FirstName = txtLDAPFirstName.Text.Trim();
+                    _userAccount.LastName = txtLDAPLastName.Text.Trim();
+                    _userAccount.ObjCategory = cbxObjCategory.SelectedItem.ToString();
+                }
+                catch (DirectoryServicesCOMException cex)
+                {
+                    MessageBox.Show("Lỗi Đăng nhập!" + cex.ExtendedErrorMessage.ToString(), "Thông báo!");
+                }
+            }
         }
     }
 }
