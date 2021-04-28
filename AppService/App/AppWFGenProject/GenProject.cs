@@ -18,17 +18,18 @@ namespace AppWFGenProject
         protected static PrincipalContext _principalContext = null;
         protected readonly Common _common;
         protected readonly LDAPConfig _lDAPConfig;
+        /// <summary>
+        /// Load Form
+        /// </summary>
+        /// <param name="commonAccessor"></param>
+        /// <param name="lDAPConfig"></param>
         public GenProject(IOptionsSnapshot<Common> commonAccessor, IOptionsSnapshot<LDAPConfig> lDAPConfig)
         {
             _common = commonAccessor.Value;
             _lDAPConfig = lDAPConfig.Value;
             InitializeComponent();
             Environment.GetEnvironmentVariable("Content");
-            txtPass.PasswordChar = '*';
-            txtServer.Text = "db.tayho.net.vn";
-            txtUser.Text = "trienpc";
-            txtDB.Text = "QuanLyDuAn";
-            btnGen.Enabled = false;
+          
         }
         //public GenProject(IConfiguration configuration)
         //{
@@ -47,6 +48,11 @@ namespace AppWFGenProject
             clbFunction.Items.Add("READ", false);
             clbFunction.Items.Add("HTML", false);
         }
+        /// <summary>
+        /// Menu
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         #region menuTooolBar
         private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
@@ -64,15 +70,32 @@ namespace AppWFGenProject
         {
             SwitchGroup(nameof(gbLDAP));
         }
-        #region 
+        #region menuTooolBar function
         private void SwitchGroup(string nameGroup)
         {
             gbGenCode.Visible = (nameGroup == nameof(gbGenCode) ? true : false);
             gbAutoSendMail.Visible = (nameGroup == nameof(gbAutoSendMail) ? true : false);
             gbLDAP.Visible = (nameGroup == nameof(gbLDAP) ? true : false);
+            if(nameGroup == nameof(gbGenCode))
+            {
+                loadGBGenCode();
+            }
+            else if (nameGroup == nameof(gbAutoSendMail))
+            {
+                LoadSendMailConfig();
+            }
+            else if (nameGroup == nameof(gbLDAP))
+            {
+                loadGBLDAP();
+            }
         }
         #endregion menuTooolBar function
         #endregion menuTooolBar
+        /// <summary>
+        /// Group GenCode
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         #region Group GenCode
         private void btnTestConnec_Click(object sender, EventArgs e)
         {
@@ -98,8 +121,6 @@ namespace AppWFGenProject
         }
         private void btnGen_Click(object sender, EventArgs e)
         {
-
-
             int typeCreate = cbkOverWrite.Checked ? 1 : cbkCreateNew.Checked ? 2 : cbkBackUp.Checked ? 3 : -1;
             if (typeCreate <= 0)
             {
@@ -113,7 +134,6 @@ namespace AppWFGenProject
                     GenCode genCode = new GenCode();
 
                     //ReadTemplate readTemplate = new ReadTemplate();
-
                     // Set rootDir
                     genOB.rootDir = txtDir.Text == "" ? _common.DirectDefault.ToString() : txtDir.Text;
                     // Set common
@@ -188,23 +208,40 @@ namespace AppWFGenProject
             cbkOverWrite.Checked = false;
         }
         #region Group GenCode Function
+        private void loadGBGenCode()
+        {
+            txtPass.PasswordChar = '*';
+            txtServer.Text = "db.tayho.net.vn";
+            txtUser.Text = "trienpc";
+            txtDB.Text = "QuanLyDuAn";
+            btnGen.Enabled = false;
+        }
         #endregion Group GenCode Function
         #endregion Group GenCode
-
-
-
-
+        /// <summary>
+        /// Group SendMailAuto
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        #region Group SendMailAuto
         private void AutoSendMail_Enter(object sender, EventArgs e)
         {
 
         }
 
-
-
+        #region Group SendMailAuto Function
         private void LoadSendMailConfig()
         {
 
         }
+        #endregion Group SendMailAuto Function
+        #endregion Group SendMailAuto
+
+        /// <summary>
+        /// Group LDAP 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         #region Group LDAP 
         private void btnLoginLDAP_Click(object sender, EventArgs e)
         {
@@ -235,6 +272,10 @@ namespace AppWFGenProject
             }
         }
         #region Grouyp LDAP function
+        private void loadGBLDAP()
+        {
+
+        }
         private void EnableInputCreLDAP(bool isTrue)
         {
             txtCreLDAPUser.Enabled = isTrue;
