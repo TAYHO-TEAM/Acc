@@ -29,7 +29,7 @@ namespace AppWFGenProject
             _lDAPConfig = lDAPConfig.Value;
             InitializeComponent();
             Environment.GetEnvironmentVariable("Content");
-          
+            SwitchGroup("");
         }
         //public GenProject(IConfiguration configuration)
         //{
@@ -73,6 +73,9 @@ namespace AppWFGenProject
         #region menuTooolBar function
         private void SwitchGroup(string nameGroup)
         {
+            gbGenCode.Visible = false;
+            gbAutoSendMail.Visible = false;
+            gbLDAP.Visible = false;
             gbGenCode.Visible = (nameGroup == nameof(gbGenCode) ? true : false);
             gbAutoSendMail.Visible = (nameGroup == nameof(gbAutoSendMail) ? true : false);
             gbLDAP.Visible = (nameGroup == nameof(gbLDAP) ? true : false);
@@ -247,7 +250,7 @@ namespace AppWFGenProject
         {
             LoginLDAP loginLDAP = new LoginLDAP();
             loginLDAP.UserName = txtLDAPUser.Text;
-            loginLDAP.PassWord = txtCreLDAPPass.Text;
+            loginLDAP.PassWord = txtLDAPPass.Text;
             if (string.IsNullOrEmpty(loginLDAP.UserName) || string.IsNullOrEmpty(loginLDAP.PassWord))
             {
                 MessageBox.Show("Vui lòng nhập tên đăng nhập và mật khẩu!", "Thông báo!");
@@ -257,8 +260,19 @@ namespace AppWFGenProject
                 try
                 {
                     _principalContext = new PrincipalContext(ContextType.Domain, _lDAPConfig.DomainIP, loginLDAP.UserName, loginLDAP.PassWord);
-                    EnableInputCreLDAP(true);
-                  
+                   
+                    if (!_principalContext.ValidateCredentials(loginLDAP.UserName, loginLDAP.PassWord))
+                    {
+                        MessageBox.Show("Lỗi Đăng nhập!", "Thông báo!");
+                    }
+                    else
+                    {
+                        EnableInputCreLDAP(true);
+                      
+                    }    
+
+
+
                 }
                 catch (DirectoryServicesCOMException cex)
                 {
@@ -268,10 +282,10 @@ namespace AppWFGenProject
         }
         private void btnCreateLDAP_Click(object sender, EventArgs e)
         {
-            LDAPHelper lDAPHelper = new LDAPHelper();
+            LDAPHelper lDAPHelper = new LDAPHelper(_principalContext);
             if(_principalContext != null)
             {
-                if(LDAPHelper.CreateUser(GetInputCreLDAP(), _principalContext))
+                if(LDAPHelper.CreateUser(GetInputCreLDAP()))
                 {
                     ClearInputCreLDAP();
                 }    
@@ -284,21 +298,34 @@ namespace AppWFGenProject
         #region Grouyp LDAP function
         private void loadGBLDAP()
         {
+            txtCreLDAPUser.Enabled = true;
+            txtCreLDAPPass.Enabled = true;
             EnableInputCreLDAP(_principalContext == null ? false: true);
         }
         private void EnableInputCreLDAP(bool isTrue)
         {
             txtCreLDAPUser.Enabled = isTrue;
-            txtLDAPPass.Enabled = isTrue;
+            txtCreLDAPPass.Enabled = isTrue;
             txtLDAPFirstName.Enabled = isTrue;
             txtLDAPLastName.Enabled = isTrue;
             txtLDAPLastName.Enabled = isTrue;
+            cbxObjCategory.Enabled = isTrue;
             btnCreateLDAP.Enabled = isTrue;
+            if(isTrue)
+            {
+                LDAPHelper lDAPHelper = new LDAPHelper(_principalContext);
+                foreach(var group in  lDAPHelper.GetAllGroup())
+                {
+                    cbxObjCategory.Items.Add(group.DistinguishedName);
+                }    
+               
+            }    
+           
         }
         private void ClearInputCreLDAP()
         {
             txtCreLDAPUser.Text = "";
-            txtLDAPPass.Text = "";
+            txtCreLDAPPass.Text = "";
             txtLDAPFirstName.Text = "";
             txtLDAPLastName.Text = "";
             txtLDAPLastName.Text = "";
@@ -313,6 +340,7 @@ namespace AppWFGenProject
             _userAccount.ObjCategory = cbxObjCategory.SelectedItem.ToString();
             return _userAccount;
         }
+        
         #endregion Grouyp LDAP function
 
         #endregion Grouyp LDAP

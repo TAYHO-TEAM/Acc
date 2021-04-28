@@ -12,31 +12,36 @@ namespace AppWFGenProject.FrameWork
 {
     public class LDAPHelper
     {
+        private static PrincipalContext _prinContext = null;
+        public LDAPHelper(PrincipalContext principalContext)
+        {
+            _prinContext = principalContext;
+        }
         public bool CreateAccount()
         {
             return true;
         }
-        public static bool CreateUser(UserAccount userAccount, PrincipalContext principalContext)
+        public static bool CreateUser(UserAccount userAccount)
         {
             string firstName = userAccount.FirstName;
             string lastName = userAccount.LastName;
             string userLogonName = userAccount.CommonName;
             string employeeID = userAccount.EmployeeID;
             string emailAddress = userAccount.EmailAddress;
-            string telephone = userAccount.Telephone; 
+            string telephone = userAccount.Telephone;
             string address = userAccount.Address;
             string pwdOfNewlyCreatedUser = userAccount.PassWord;
 
             // Check if user object already exists in the store
-            UserPrincipal usr = UserPrincipal.FindByIdentity(principalContext, userLogonName);
+            UserPrincipal usr = UserPrincipal.FindByIdentity(_prinContext, userLogonName);
             if (usr != null)
             {
-                MessageBox.Show(userLogonName + " already exists. Please use a different User Logon Name.");
+                MessageBox.Show(userLogonName + " này đã tồn tại.", "Thông báo");
                 return false;
             }
 
             // Create the new UserPrincipal object
-            UserPrincipal userPrincipal = new UserPrincipal(principalContext);
+            UserPrincipal userPrincipal = new UserPrincipal(_prinContext);
 
             if (lastName != null && lastName.Length > 0)
                 userPrincipal.Surname = lastName;
@@ -92,6 +97,16 @@ namespace AppWFGenProject.FrameWork
                 }
             }
             return true;
+        }
+        private void GetListObjCategory()
+        {
+
+        }
+        public PrincipalSearchResult<Principal> GetAllGroup()
+        {
+            GroupPrincipal findAllGroups = new GroupPrincipal(_prinContext, "*");
+            PrincipalSearcher ps = new PrincipalSearcher(findAllGroups);
+            return ps.FindAll();
         }
     }
 }

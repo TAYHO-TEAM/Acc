@@ -164,7 +164,7 @@ namespace AppWFGenProject
             this.gbGenCode.Controls.Add(this.lbl3);
             this.gbGenCode.Controls.Add(this.lbl4);
             this.gbGenCode.Controls.Add(this.lbl1);
-            this.gbGenCode.Location = new System.Drawing.Point(12, 81);
+            this.gbGenCode.Location = new System.Drawing.Point(28, 81);
             this.gbGenCode.Name = "gbGenCode";
             this.gbGenCode.Size = new System.Drawing.Size(954, 425);
             this.gbGenCode.TabIndex = 0;
@@ -887,7 +887,7 @@ namespace AppWFGenProject
             this.gbLDAP.Controls.Add(this.txtLDAPUser);
             this.gbLDAP.Controls.Add(this.lblLDAPPass);
             this.gbLDAP.Controls.Add(this.lblLDAPUser);
-            this.gbLDAP.Location = new System.Drawing.Point(834, 118);
+            this.gbLDAP.Location = new System.Drawing.Point(850, 118);
             this.gbLDAP.Name = "gbLDAP";
             this.gbLDAP.Size = new System.Drawing.Size(583, 407);
             this.gbLDAP.TabIndex = 25;
@@ -961,6 +961,7 @@ namespace AppWFGenProject
             // 
             this.txtCreLDAPPass.Location = new System.Drawing.Point(206, 43);
             this.txtCreLDAPPass.Name = "txtCreLDAPPass";
+            this.txtCreLDAPPass.PasswordChar = '*';
             this.txtCreLDAPPass.Size = new System.Drawing.Size(218, 23);
             this.txtCreLDAPPass.TabIndex = 6;
             // 
@@ -1074,7 +1075,7 @@ namespace AppWFGenProject
             // GenProject
             // 
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(1762, 473);
+            this.ClientSize = new System.Drawing.Size(1813, 524);
             this.Controls.Add(this.gbLDAP);
             this.Controls.Add(this.gbAutoSendMail);
             this.Controls.Add(this.gbGenCode);
