@@ -79,7 +79,7 @@ namespace AppWFGenProject
             gbGenCode.Visible = (nameGroup == nameof(gbGenCode) ? true : false);
             gbAutoSendMail.Visible = (nameGroup == nameof(gbAutoSendMail) ? true : false);
             gbLDAP.Visible = (nameGroup == nameof(gbLDAP) ? true : false);
-            if(nameGroup == nameof(gbGenCode))
+            if (nameGroup == nameof(gbGenCode))
             {
                 loadGBGenCode();
             }
@@ -259,8 +259,7 @@ namespace AppWFGenProject
             {
                 try
                 {
-                    _principalContext = new PrincipalContext(ContextType.Domain, _lDAPConfig.DomainIP, loginLDAP.UserName, loginLDAP.PassWord);
-                   
+                    SetPrincipalContext();
                     if (!_principalContext.ValidateCredentials(loginLDAP.UserName, loginLDAP.PassWord))
                     {
                         MessageBox.Show("Lỗi Đăng nhập!", "Thông báo!");
@@ -268,11 +267,8 @@ namespace AppWFGenProject
                     else
                     {
                         EnableInputCreLDAP(true);
-                      
-                    }    
-
-
-
+                        LoadTreeViewObjCate(loginLDAP);
+                    }
                 }
                 catch (DirectoryServicesCOMException cex)
                 {
@@ -283,24 +279,31 @@ namespace AppWFGenProject
         private void btnCreateLDAP_Click(object sender, EventArgs e)
         {
             LDAPHelper lDAPHelper = new LDAPHelper(_principalContext);
-            if(_principalContext != null)
+            if (_principalContext != null)
             {
-                if(LDAPHelper.CreateUser(GetInputCreLDAP()))
+                if (LDAPHelper.CreateUser(GetInputCreLDAP()))
                 {
                     ClearInputCreLDAP();
-                }    
-            }    
+                }
+            }
             else
             {
                 MessageBox.Show("Lỗi Đăng nhập. Không tồn tại phiên đăng nhập LDAP vui lòng đăng nhập trước khi tạo tài khoản!", "Thông báo!");
             }
+        }
+        private void trvLDAPObjCategory_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            txtLDAPObjCategory.Text = "";
+            txtLDAPObjCategory.Text = e.Node.Text.Substring(e.Node.Text.IndexOf('(')+1, e.Node.Text.IndexOf(')') - e.Node.Text.IndexOf('(') -1);
+            SetPrincipalContext();
+            //txtLDAPObjCategory.Text = e.Node.Text.Substring(0,e.Node.Text.IndexOf('('));
         }
         #region Grouyp LDAP function
         private void loadGBLDAP()
         {
             txtCreLDAPUser.Enabled = true;
             txtCreLDAPPass.Enabled = true;
-            EnableInputCreLDAP(_principalContext == null ? false: true);
+            EnableInputCreLDAP(_principalContext == null ? false : true);
         }
         private void EnableInputCreLDAP(bool isTrue)
         {
@@ -309,18 +312,17 @@ namespace AppWFGenProject
             txtLDAPFirstName.Enabled = isTrue;
             txtLDAPLastName.Enabled = isTrue;
             txtLDAPLastName.Enabled = isTrue;
-            cbxObjCategory.Enabled = isTrue;
+            txtLDAPObjCategory.Enabled = isTrue;
+            txtLDAPObjCategory.ReadOnly = true;
             btnCreateLDAP.Enabled = isTrue;
-            if(isTrue)
+            if (isTrue)
             {
-                LDAPHelper lDAPHelper = new LDAPHelper(_principalContext);
-                foreach(var group in  lDAPHelper.GetAllGroup())
-                {
-                    cbxObjCategory.Items.Add(group.DistinguishedName);
-                }    
-               
-            }    
-           
+                //LDAPHelper lDAPHelper = new LDAPHelper(_principalContext);
+                //foreach (var group in lDAPHelper.GetAllUser())
+                //{
+                //    cbxObjCategory.Items.Add(group.DistinguishedName);
+                //}
+            }
         }
         private void ClearInputCreLDAP()
         {
@@ -329,22 +331,64 @@ namespace AppWFGenProject
             txtLDAPFirstName.Text = "";
             txtLDAPLastName.Text = "";
             txtLDAPLastName.Text = "";
+            txtLDAPObjCategory.Text = "";
         }
         private UserAccount GetInputCreLDAP()
         {
             UserAccount _userAccount = new UserAccount();
             _userAccount.CommonName = txtCreLDAPUser.Text.Trim();
-            _userAccount.PassWord = txtLDAPPass.Text.Trim();
+            _userAccount.PassWord = txtCreLDAPPass.Text.Trim();
             _userAccount.FirstName = txtLDAPFirstName.Text.Trim();
             _userAccount.LastName = txtLDAPLastName.Text.Trim();
-            _userAccount.ObjCategory = cbxObjCategory.SelectedItem.ToString();
+            _userAccount.ObjCategory = txtLDAPObjCategory.Text.Trim();
             return _userAccount;
         }
-        
+        private void LoadTreeViewObjCate(LoginLDAP loginLDAP)
+        {
+            DirectoryEntry ADentry = new DirectoryEntry("LDAP://"+ _lDAPConfig.DomainIP + "/DC=tayho,DC=vn", loginLDAP.UserName, loginLDAP.PassWord, AuthenticationTypes.Secure);
+            DirectorySearcher Searcher = new DirectorySearcher(ADentry);
+            Searcher.Filter = ("(objectClass=*)");  // Search all.
+
+            // The first item in the results is always the domain. Therefore, we just get that and retrieve its children.
+            foreach (DirectoryEntry entry in Searcher.FindOne().GetDirectoryEntry().Children)
+            {
+                if (ShouldAddNode(entry.SchemaClassName))
+                    trvLDAPObjCategory.Nodes.Add(GetChildNode(entry));
+            }
+        }
+        private TreeNode GetChildNode(DirectoryEntry entry)
+        {
+            TreeNode node = new TreeNode(entry.Name.Substring(entry.Name.IndexOf('=') + 1) + "("+ entry.Path.Substring(entry.Path.LastIndexOf('/')+1, entry.Path.Length - entry.Path.LastIndexOf('/') -1) + ")");
+            foreach (DirectoryEntry childEntry in entry.Children)
+            {
+                if (ShouldAddNode(childEntry.SchemaClassName))
+                    node.Nodes.Add(GetChildNode(childEntry));
+            }
+            return node;
+        }
+        private bool ShouldAddNode(string note)
+        {
+            //if (note == "organizationalUnit" || note == "group" || note == "computer" || note == "user" || note == "contact")
+            if ( note == "user")
+                return false;
+            else
+                return true;
+        }
+        private void SetPrincipalContext()
+        {
+            LoginLDAP loginLDAP = new LoginLDAP();
+            loginLDAP.UserName = txtLDAPUser.Text;
+            loginLDAP.PassWord = txtLDAPPass.Text;
+            loginLDAP.ObjCategory = txtLDAPObjCategory.Text == null ? "": txtLDAPObjCategory.Text ;
+            if(string.IsNullOrEmpty(loginLDAP.ObjCategory))
+                _principalContext = new PrincipalContext(ContextType.Domain, _lDAPConfig.DomainIP, loginLDAP.UserName, loginLDAP.PassWord);
+            else
+                _principalContext = new PrincipalContext(ContextType.Domain, _lDAPConfig.DomainIP, loginLDAP.ObjCategory, loginLDAP.UserName, loginLDAP.PassWord);
+        }
         #endregion Grouyp LDAP function
 
         #endregion Grouyp LDAP
 
-
+       
     }
 }

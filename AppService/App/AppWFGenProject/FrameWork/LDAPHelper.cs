@@ -36,10 +36,9 @@ namespace AppWFGenProject.FrameWork
             UserPrincipal usr = UserPrincipal.FindByIdentity(_prinContext, userLogonName);
             if (usr != null)
             {
-                MessageBox.Show(userLogonName + " này đã tồn tại.", "Thông báo");
+                MessageBox.Show(userLogonName + " này đã tồn tại.", "Thông báo!");
                 return false;
             }
-
             // Create the new UserPrincipal object
             UserPrincipal userPrincipal = new UserPrincipal(_prinContext);
 
@@ -68,11 +67,11 @@ namespace AppWFGenProject.FrameWork
 
             try
             {
-                userPrincipal.Save();
+                userPrincipal.Save();  
             }
             catch (Exception e)
             {
-                MessageBox.Show("Exception creating user object. " + e);
+                MessageBox.Show("Lỗi quá trình tạo tài khoản mới: " + e,"Thông báo!");
                 return false;
             }
 
@@ -102,11 +101,58 @@ namespace AppWFGenProject.FrameWork
         {
 
         }
-        public PrincipalSearchResult<Principal> GetAllGroup()
+        public PrincipalSearchResult<Principal> GetAllGroup(string groupName)
         {
-            GroupPrincipal findAllGroups = new GroupPrincipal(_prinContext, "*");
+            if (string.IsNullOrEmpty(groupName))
+                groupName = "*";
+            GroupPrincipal findAllGroups = new GroupPrincipal(_prinContext, groupName);
             PrincipalSearcher ps = new PrincipalSearcher(findAllGroups);
             return ps.FindAll();
+        }
+        public PrincipalSearchResult<Principal> GetAllUser()
+        {
+            UserPrincipal findAllUsers = new UserPrincipal(_prinContext);
+            PrincipalSearcher ps = new PrincipalSearcher(findAllUsers);
+            return ps.FindAll();
+        }
+        public PrincipalSearchResult<Principal> GetAllOU()
+        {
+            GroupPrincipal findAllUsers = new GroupPrincipal(_prinContext);
+            PrincipalSearcher ps = new PrincipalSearcher(findAllUsers);
+            return ps.FindAll();
+        }
+        public void AddUserToGroup(string userId, string groupName)
+        {
+            try
+            {
+                using (PrincipalContext pc = _prinContext)
+                {
+                    GroupPrincipal group = GroupPrincipal.FindByIdentity(pc, groupName);
+                    group.Members.Add(pc, IdentityType.UserPrincipalName, userId);
+                    group.Save();
+                }
+            }
+            catch (DirectoryServicesCOMException E)
+            {
+                MessageBox.Show("Lỗi trong quá trình thêm vào nhóm." + E,"Thông Báo!");
+            }
+        }
+
+        public void RemoveUserFromGroup(string userId, string groupName)
+        {
+            try
+            {
+                using (PrincipalContext pc = _prinContext)
+                {
+                    GroupPrincipal group = GroupPrincipal.FindByIdentity(pc, groupName);
+                    group.Members.Remove(pc, IdentityType.UserPrincipalName, userId);
+                    group.Save();
+                }
+            }
+            catch (DirectoryServicesCOMException E)
+            {
+                MessageBox.Show("Lỗi trong quá trình xoá khỏi nhóm." + E, "Thông Báo!");
+            }
         }
     }
 }
