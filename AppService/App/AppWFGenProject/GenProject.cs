@@ -294,15 +294,24 @@ namespace AppWFGenProject
         private void trvLDAPObjCategory_AfterSelect(object sender, TreeViewEventArgs e)
         {
             txtLDAPObjCategory.Text = "";
-            txtLDAPObjCategory.Text = e.Node.Text.Substring(e.Node.Text.IndexOf('(')+1, e.Node.Text.IndexOf(')') - e.Node.Text.IndexOf('(') -1);
+            txtLDAPObjCategory.Text = e.Node.Text.Substring(e.Node.Text.IndexOf('(') + 1, e.Node.Text.IndexOf(')') - e.Node.Text.IndexOf('(') - 1);
             SetPrincipalContext();
             //txtLDAPObjCategory.Text = e.Node.Text.Substring(0,e.Node.Text.IndexOf('('));
         }
+        private void txtLDAPPass_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                btnLoginLDAP_Click(sender,e);
+            }
+        }
+ 
         #region Grouyp LDAP function
         private void loadGBLDAP()
         {
-            txtCreLDAPUser.Enabled = true;
-            txtCreLDAPPass.Enabled = true;
+            txtLDAPUser.Focus();
+            txtLDAPUser.Enabled = true;
+            txtLDAPPass.Enabled = true;
             EnableInputCreLDAP(_principalContext == null ? false : true);
         }
         private void EnableInputCreLDAP(bool isTrue)
@@ -345,7 +354,7 @@ namespace AppWFGenProject
         }
         private void LoadTreeViewObjCate(LoginLDAP loginLDAP)
         {
-            DirectoryEntry ADentry = new DirectoryEntry("LDAP://"+ _lDAPConfig.DomainIP + "/DC=tayho,DC=vn", loginLDAP.UserName, loginLDAP.PassWord, AuthenticationTypes.Secure);
+            DirectoryEntry ADentry = new DirectoryEntry("LDAP://" + _lDAPConfig.DomainIP + "/DC=tayho,DC=vn", loginLDAP.UserName, loginLDAP.PassWord, AuthenticationTypes.Secure);
             DirectorySearcher Searcher = new DirectorySearcher(ADentry);
             Searcher.Filter = ("(objectClass=*)");  // Search all.
 
@@ -358,7 +367,7 @@ namespace AppWFGenProject
         }
         private TreeNode GetChildNode(DirectoryEntry entry)
         {
-            TreeNode node = new TreeNode(entry.Name.Substring(entry.Name.IndexOf('=') + 1) + "("+ entry.Path.Substring(entry.Path.LastIndexOf('/')+1, entry.Path.Length - entry.Path.LastIndexOf('/') -1) + ")");
+            TreeNode node = new TreeNode(entry.Name.Substring(entry.Name.IndexOf('=') + 1) + "(" + entry.Path.Substring(entry.Path.LastIndexOf('/') + 1, entry.Path.Length - entry.Path.LastIndexOf('/') - 1) + ")");
             foreach (DirectoryEntry childEntry in entry.Children)
             {
                 if (ShouldAddNode(childEntry.SchemaClassName))
@@ -369,7 +378,7 @@ namespace AppWFGenProject
         private bool ShouldAddNode(string note)
         {
             //if (note == "organizationalUnit" || note == "group" || note == "computer" || note == "user" || note == "contact")
-            if ( note == "user")
+            if (note == "user")
                 return false;
             else
                 return true;
@@ -379,16 +388,25 @@ namespace AppWFGenProject
             LoginLDAP loginLDAP = new LoginLDAP();
             loginLDAP.UserName = txtLDAPUser.Text;
             loginLDAP.PassWord = txtLDAPPass.Text;
-            loginLDAP.ObjCategory = txtLDAPObjCategory.Text == null ? "": txtLDAPObjCategory.Text ;
-            if(string.IsNullOrEmpty(loginLDAP.ObjCategory))
-                _principalContext = new PrincipalContext(ContextType.Domain, _lDAPConfig.DomainIP, loginLDAP.UserName, loginLDAP.PassWord);
-            else
-                _principalContext = new PrincipalContext(ContextType.Domain, _lDAPConfig.DomainIP, loginLDAP.ObjCategory, loginLDAP.UserName, loginLDAP.PassWord);
+            loginLDAP.ObjCategory = txtLDAPObjCategory.Text == null ? "" : txtLDAPObjCategory.Text;
+            try
+            {
+                if (string.IsNullOrEmpty(loginLDAP.ObjCategory))
+                    _principalContext = new PrincipalContext(ContextType.Domain, _lDAPConfig.DomainIP, loginLDAP.UserName, loginLDAP.PassWord);
+                else
+                    _principalContext = new PrincipalContext(ContextType.Domain, _lDAPConfig.DomainIP, loginLDAP.ObjCategory, loginLDAP.UserName, loginLDAP.PassWord);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Bạn không có quyền thao tác trong nhóm này. Vui lòng chọn lại nhóm khác.", "Thông báo!");
+            }
         }
+
+
         #endregion Grouyp LDAP function
 
         #endregion Grouyp LDAP
 
-       
+     
     }
 }

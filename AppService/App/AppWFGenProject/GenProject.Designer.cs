@@ -114,6 +114,7 @@ namespace AppWFGenProject
             this.trvLDAPObjCategory = new System.Windows.Forms.TreeView();
             this.tabLDAP = new System.Windows.Forms.TabControl();
             this.tbpLDAP1 = new System.Windows.Forms.TabPage();
+            this.txtLDAPObjCategory = new System.Windows.Forms.TextBox();
             this.btnCreateLDAP = new System.Windows.Forms.Button();
             this.txtLDAPLastName = new System.Windows.Forms.TextBox();
             this.txtLDAPFirstName = new System.Windows.Forms.TextBox();
@@ -130,7 +131,6 @@ namespace AppWFGenProject
             this.txtLDAPUser = new System.Windows.Forms.TextBox();
             this.lblLDAPPass = new System.Windows.Forms.Label();
             this.lblLDAPUser = new System.Windows.Forms.Label();
-            this.txtLDAPObjCategory = new System.Windows.Forms.TextBox();
             this.gbGenCode.SuspendLayout();
             this.tbcConfigGen.SuspendLayout();
             this.tbpCUDR.SuspendLayout();
@@ -935,6 +935,13 @@ namespace AppWFGenProject
             this.tbpLDAP1.Text = "Create Account";
             this.tbpLDAP1.UseVisualStyleBackColor = true;
             // 
+            // txtLDAPObjCategory
+            // 
+            this.txtLDAPObjCategory.Location = new System.Drawing.Point(136, 131);
+            this.txtLDAPObjCategory.Name = "txtLDAPObjCategory";
+            this.txtLDAPObjCategory.Size = new System.Drawing.Size(317, 23);
+            this.txtLDAPObjCategory.TabIndex = 11;
+            // 
             // btnCreateLDAP
             // 
             this.btnCreateLDAP.Location = new System.Drawing.Point(178, 173);
@@ -1048,6 +1055,7 @@ namespace AppWFGenProject
             this.txtLDAPPass.PasswordChar = '*';
             this.txtLDAPPass.Size = new System.Drawing.Size(184, 23);
             this.txtLDAPPass.TabIndex = 3;
+            this.txtLDAPPass.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtLDAPPass_KeyDown);
             // 
             // txtLDAPUser
             // 
@@ -1073,13 +1081,6 @@ namespace AppWFGenProject
             this.lblLDAPUser.Size = new System.Drawing.Size(65, 15);
             this.lblLDAPUser.TabIndex = 0;
             this.lblLDAPUser.Text = "LDAP User:";
-            // 
-            // txtLDAPObjCategory
-            // 
-            this.txtLDAPObjCategory.Location = new System.Drawing.Point(136, 131);
-            this.txtLDAPObjCategory.Name = "txtLDAPObjCategory";
-            this.txtLDAPObjCategory.Size = new System.Drawing.Size(317, 23);
-            this.txtLDAPObjCategory.TabIndex = 11;
             // 
             // GenProject
             // 
