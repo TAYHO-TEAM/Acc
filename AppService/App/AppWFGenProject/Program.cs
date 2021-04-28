@@ -1,4 +1,3 @@
-using AppWFGenProject.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration.Json;
 //using Microsoft.Extensions.Configuration.FileExtensions;
@@ -13,7 +12,7 @@ using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
 using Serilog.Events;
-using AppWFGenProject.Entities;
+using AppWFGenProject.Commons;
 //using System.Configuration;
 
 namespace AppWFGenProject
@@ -88,7 +87,7 @@ namespace AppWFGenProject
                {
                    IConfiguration configuration = hostContext.Configuration;
                    services.Configure<ProfileMailOptions>(configuration.GetSection("ProfileMailOptions"));
-                   services.Configure<Common>(configuration.GetSection("Common"));
+                   _ = services.Configure<Common>(configuration.GetSection("Common"));
                    services.Configure<LDAPConfig>(configuration.GetSection("LDAPConfig"));
                    services.AddDbContext<ProjectManagerBaseContext>(opt => opt.UseSqlServer(configuration.GetConnectionString("TayHoConnection")));
                    services.AddScoped<GenProject>();

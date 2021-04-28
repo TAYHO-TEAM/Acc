@@ -36,7 +36,7 @@ namespace AppWFGenProject.FrameWork
                 }    
             }    
         }
-        public void CreateGenOBRed(string Server, string User, string Pass, string DB, string NameTable, GenOB GenOB, int typeCreate)
+        public void CreateGenOBRead(string Server, string User, string Pass, string DB, string NameTable, GenOB GenOB, int typeCreate)
         {
             Connection connection = new Connection();
             ReadTemplate readTemplate = new ReadTemplate();

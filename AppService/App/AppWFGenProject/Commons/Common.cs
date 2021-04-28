@@ -1,4 +1,4 @@
-﻿namespace AppWFGenProject.Entities
+﻿namespace AppWFGenProject.Commons
 {
     public class Common
     {

@@ -110,7 +110,7 @@ namespace AppWFGenProject
             this.searchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.grbLDAP = new System.Windows.Forms.GroupBox();
+            this.gbLDAP = new System.Windows.Forms.GroupBox();
             this.tabLDAP = new System.Windows.Forms.TabControl();
             this.tbpLDAP1 = new System.Windows.Forms.TabPage();
             this.btnCreateLDAP = new System.Windows.Forms.Button();
@@ -138,7 +138,7 @@ namespace AppWFGenProject
             this.tbpSMJob.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSMSysAutoSendMail)).BeginInit();
             this.menuMain.SuspendLayout();
-            this.grbLDAP.SuspendLayout();
+            this.gbLDAP.SuspendLayout();
             this.tabLDAP.SuspendLayout();
             this.tbpLDAP1.SuspendLayout();
             this.SuspendLayout();
@@ -681,6 +681,7 @@ namespace AppWFGenProject
             this.sub13LDAP.Name = "sub13LDAP";
             this.sub13LDAP.Size = new System.Drawing.Size(190, 22);
             this.sub13LDAP.Text = "LDAP Manger";
+            this.sub13LDAP.Click += new System.EventHandler(this.sub13LDAP_Click);
             // 
             // openToolStripMenuItem
             // 
@@ -878,20 +879,20 @@ namespace AppWFGenProject
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
             this.aboutToolStripMenuItem.Text = "&About...";
             // 
-            // grbLDAP
+            // gbLDAP
             // 
-            this.grbLDAP.Controls.Add(this.tabLDAP);
-            this.grbLDAP.Controls.Add(this.btnLoginLDAP);
-            this.grbLDAP.Controls.Add(this.txtLDAPPass);
-            this.grbLDAP.Controls.Add(this.txtLDAPUser);
-            this.grbLDAP.Controls.Add(this.lblLDAPPass);
-            this.grbLDAP.Controls.Add(this.lblLDAPUser);
-            this.grbLDAP.Location = new System.Drawing.Point(834, 118);
-            this.grbLDAP.Name = "grbLDAP";
-            this.grbLDAP.Size = new System.Drawing.Size(583, 407);
-            this.grbLDAP.TabIndex = 25;
-            this.grbLDAP.TabStop = false;
-            this.grbLDAP.Text = "LDAP Manager";
+            this.gbLDAP.Controls.Add(this.tabLDAP);
+            this.gbLDAP.Controls.Add(this.btnLoginLDAP);
+            this.gbLDAP.Controls.Add(this.txtLDAPPass);
+            this.gbLDAP.Controls.Add(this.txtLDAPUser);
+            this.gbLDAP.Controls.Add(this.lblLDAPPass);
+            this.gbLDAP.Controls.Add(this.lblLDAPUser);
+            this.gbLDAP.Location = new System.Drawing.Point(834, 118);
+            this.gbLDAP.Name = "gbLDAP";
+            this.gbLDAP.Size = new System.Drawing.Size(583, 407);
+            this.gbLDAP.TabIndex = 25;
+            this.gbLDAP.TabStop = false;
+            this.gbLDAP.Text = "LDAP Manager";
             // 
             // tabLDAP
             // 
@@ -1073,7 +1074,7 @@ namespace AppWFGenProject
             // 
             this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(1762, 473);
-            this.Controls.Add(this.grbLDAP);
+            this.Controls.Add(this.gbLDAP);
             this.Controls.Add(this.gbAutoSendMail);
             this.Controls.Add(this.gbGenCode);
             this.Controls.Add(this.menuMain);
@@ -1093,8 +1094,8 @@ namespace AppWFGenProject
             ((System.ComponentModel.ISupportInitialize)(this.dgvSMSysAutoSendMail)).EndInit();
             this.menuMain.ResumeLayout(false);
             this.menuMain.PerformLayout();
-            this.grbLDAP.ResumeLayout(false);
-            this.grbLDAP.PerformLayout();
+            this.gbLDAP.ResumeLayout(false);
+            this.gbLDAP.PerformLayout();
             this.tabLDAP.ResumeLayout(false);
             this.tbpLDAP1.ResumeLayout(false);
             this.tbpLDAP1.PerformLayout();
@@ -1186,7 +1187,7 @@ namespace AppWFGenProject
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.Label lblListStore;
         private System.Windows.Forms.ToolStripMenuItem sub13LDAP;
-        private System.Windows.Forms.GroupBox grbLDAP;
+        private System.Windows.Forms.GroupBox gbLDAP;
         private System.Windows.Forms.TabControl tabLDAP;
         private System.Windows.Forms.TabPage tbpLDAP1;
         private System.Windows.Forms.TabPage tabPage2;

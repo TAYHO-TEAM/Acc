@@ -1,4 +1,5 @@
-﻿using AppWFGenProject.Entities;
+﻿using AppWFGenProject.Commons;
+using AppWFGenProject.Entities;
 using AppWFGenProject.Extensions;
 using AppWFGenProject.FrameWork;
 using Microsoft.Extensions.Configuration;
@@ -7,19 +8,20 @@ using Serilog;
 using Services.Common.Options;
 using System;
 using System.DirectoryServices;
+using System.DirectoryServices.AccountManagement;
 using System.Windows.Forms;
 
 namespace AppWFGenProject
 {
     public partial class GenProject : Form
     {
-
+        protected static PrincipalContext _principalContext = null;
         protected readonly Common _common;
         protected readonly LDAPConfig _lDAPConfig;
-        public GenProject(IOptionsSnapshot<Common> commonAccessor, IOptionsSnapshot<LDAPConfig> LDAPConfig)
+        public GenProject(IOptionsSnapshot<Common> commonAccessor, IOptionsSnapshot<LDAPConfig> lDAPConfig)
         {
             _common = commonAccessor.Value;
-            _lDAPConfig = LDAPConfig.Value;
+            _lDAPConfig = lDAPConfig.Value;
             InitializeComponent();
             Environment.GetEnvironmentVariable("Content");
             txtPass.PasswordChar = '*';
@@ -45,7 +47,33 @@ namespace AppWFGenProject
             clbFunction.Items.Add("READ", false);
             clbFunction.Items.Add("HTML", false);
         }
+        #region menuTooolBar
+        private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
 
+        }
+        private void sub11GenNetApi_Click(object sender, EventArgs e)
+        {
+            SwitchGroup(nameof(gbGenCode));
+        }
+        private void sub12SendMail_Click(object sender, EventArgs e)
+        {
+            SwitchGroup(nameof(gbAutoSendMail));
+        }
+        private void sub13LDAP_Click(object sender, EventArgs e)
+        {
+            SwitchGroup(nameof(gbLDAP));
+        }
+        #region 
+        private void SwitchGroup(string nameGroup)
+        {
+            gbGenCode.Visible = (nameGroup == nameof(gbGenCode) ? true : false);
+            gbAutoSendMail.Visible = (nameGroup == nameof(gbAutoSendMail) ? true : false);
+            gbLDAP.Visible = (nameGroup == nameof(gbLDAP) ? true : false);
+        }
+        #endregion menuTooolBar function
+        #endregion menuTooolBar
+        #region Group GenCode
         private void btnTestConnec_Click(object sender, EventArgs e)
         {
             Connection newConn = new Connection();
@@ -59,7 +87,6 @@ namespace AppWFGenProject
             }
 
         }
-
         private void btnLoadTable_Click(object sender, EventArgs e)
         {
             Connection newConn = new Connection();
@@ -69,7 +96,6 @@ namespace AppWFGenProject
                 chlTable.Items.Add(TB, false);
             }
         }
-
         private void btnGen_Click(object sender, EventArgs e)
         {
 
@@ -119,7 +145,7 @@ namespace AppWFGenProject
                         {
                             // Set nameproject
                             genOB.nameproject = (txtNameProject.Text == "" ? "Test" : txtNameProject.Text) + ".READ";
-                            genCode.CreateGenOBRed(txtServer.Text, txtUser.Text, txtPass.Text, txtDB.Text, (string)chlTable.Items[i], genOB, typeCreate);
+                            genCode.CreateGenOBRead(txtServer.Text, txtUser.Text, txtPass.Text, txtDB.Text, (string)chlTable.Items[i], genOB, typeCreate);
                         }
                         if (clbFunction.CheckedItems.Contains("HTML"))
                         {
@@ -133,7 +159,6 @@ namespace AppWFGenProject
             //FileHelper fileHelper = new FileHelper();
             //fileHelper.ChangeTxtToCS(@"C:\Users\poka\Desktop\testChange.txt");
         }
-
         private void btnBrowser_Click(object sender, EventArgs e)
         {
             using (var fbd = new FolderBrowserDialog())
@@ -147,57 +172,46 @@ namespace AppWFGenProject
                 }
             }
         }
-
         private void cbkOverWrite_CheckedChanged(object sender, EventArgs e)
         {
             cbkBackUp.Checked = false;
             cbkCreateNew.Checked = false;
         }
-
         private void cbkCreateNew_CheckedChanged(object sender, EventArgs e)
         {
             cbkBackUp.Checked = false;
             cbkOverWrite.Checked = false;
         }
-
         private void cbkBackUp_CheckedChanged(object sender, EventArgs e)
         {
             cbkCreateNew.Checked = false;
             cbkOverWrite.Checked = false;
         }
+        #region Group GenCode Function
+        #endregion Group GenCode Function
+        #endregion Group GenCode
 
-        private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
-        {
 
-        }
+
+
         private void AutoSendMail_Enter(object sender, EventArgs e)
         {
 
         }
 
 
-        private void sub11GenNetApi_Click(object sender, EventArgs e)
-        {
-            gbGenCode.Visible = true;
-            gbAutoSendMail.Visible = false;
-        }
 
-
-        private void sub12SendMail_Click(object sender, EventArgs e)
-        {
-            gbGenCode.Visible = false;
-            gbAutoSendMail.Visible = true;
-        }
         private void LoadSendMailConfig()
         {
 
         }
-
+        #region Group LDAP 
         private void btnLoginLDAP_Click(object sender, EventArgs e)
         {
-            string _user = txtLDAPUser.Text;
-            string _pass = txtLDAPPass.Text;
-            if (string.IsNullOrEmpty(_user) || string.IsNullOrEmpty(_pass))
+            LoginLDAP loginLDAP = new LoginLDAP();
+            loginLDAP.UserName = txtLDAPUser.Text;
+            loginLDAP.PassWord = txtCreLDAPPass.Text;
+            if (string.IsNullOrEmpty(loginLDAP.UserName) || string.IsNullOrEmpty(loginLDAP.PassWord))
             {
                 MessageBox.Show("Vui lòng nhập tên đăng nhập và mật khẩu!", "Thông báo!");
             }
@@ -205,7 +219,8 @@ namespace AppWFGenProject
             {
                 try
                 {
-                    DirectoryEntry entry = new DirectoryEntry(_lDAPConfig.DomainIP, _user, _pass);
+                    _principalContext = new PrincipalContext(ContextType.Domain, _lDAPConfig.DomainIP, loginLDAP.UserName, loginLDAP.PassWord);
+                    EnableInputCreLDAP(true);
                     UserAccount _userAccount = new UserAccount();
                     _userAccount.CommonName = txtCreLDAPUser.Text.Trim();
                     _userAccount.PassWord = txtLDAPPass.Text.Trim();
@@ -219,5 +234,21 @@ namespace AppWFGenProject
                 }
             }
         }
+        #region Grouyp LDAP function
+        private void EnableInputCreLDAP(bool isTrue)
+        {
+            txtCreLDAPUser.Enabled = isTrue;
+            txtLDAPPass.Enabled = isTrue;
+            txtLDAPFirstName.Enabled = isTrue;
+            txtLDAPLastName.Enabled = isTrue;
+            txtLDAPLastName.Enabled = isTrue;
+            btnCreateLDAP.Enabled = isTrue;
+        }
+        #endregion Grouyp LDAP function
+
+        #endregion Grouyp LDAP
+
+
+
     }
 }

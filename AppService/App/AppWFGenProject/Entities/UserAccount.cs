@@ -13,5 +13,9 @@ namespace AppWFGenProject.Entities
         public string LastName { get; set; }
         public string PassWord { get; set; }
         public string ObjCategory { get; set; }
+        public string EmployeeID { get; set; }
+        public string EmailAddress { get; set; }
+        public string Telephone { get; set; }
+        public string Address { get; set; }
     }
 }

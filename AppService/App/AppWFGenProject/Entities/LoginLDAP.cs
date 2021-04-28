@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace AppWFGenProject.Entities
 {
-    public class LDAPConfig
+    public class LoginLDAP
     {
-        public string DomainIP { get; set; }
-        public string DomainName { get; set; }
+        public string UserName { get; set; }
+        public string PassWord { get; set; }
+        public string ObjCategory { get; set; }
     }
 }
