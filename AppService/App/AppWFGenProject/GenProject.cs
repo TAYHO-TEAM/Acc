@@ -258,12 +258,7 @@ namespace AppWFGenProject
                 {
                     _principalContext = new PrincipalContext(ContextType.Domain, _lDAPConfig.DomainIP, loginLDAP.UserName, loginLDAP.PassWord);
                     EnableInputCreLDAP(true);
-                    UserAccount _userAccount = new UserAccount();
-                    _userAccount.CommonName = txtCreLDAPUser.Text.Trim();
-                    _userAccount.PassWord = txtLDAPPass.Text.Trim();
-                    _userAccount.FirstName = txtLDAPFirstName.Text.Trim();
-                    _userAccount.LastName = txtLDAPLastName.Text.Trim();
-                    _userAccount.ObjCategory = cbxObjCategory.SelectedItem.ToString();
+                  
                 }
                 catch (DirectoryServicesCOMException cex)
                 {
@@ -271,10 +266,25 @@ namespace AppWFGenProject
                 }
             }
         }
+        private void btnCreateLDAP_Click(object sender, EventArgs e)
+        {
+            LDAPHelper lDAPHelper = new LDAPHelper();
+            if(_principalContext != null)
+            {
+                if(LDAPHelper.CreateUser(GetInputCreLDAP(), _principalContext))
+                {
+                    ClearInputCreLDAP();
+                }    
+            }    
+            else
+            {
+                MessageBox.Show("Lỗi Đăng nhập. Không tồn tại phiên đăng nhập LDAP vui lòng đăng nhập trước khi tạo tài khoản!", "Thông báo!");
+            }
+        }
         #region Grouyp LDAP function
         private void loadGBLDAP()
         {
-
+            EnableInputCreLDAP(_principalContext == null ? false: true);
         }
         private void EnableInputCreLDAP(bool isTrue)
         {
@@ -285,10 +295,27 @@ namespace AppWFGenProject
             txtLDAPLastName.Enabled = isTrue;
             btnCreateLDAP.Enabled = isTrue;
         }
+        private void ClearInputCreLDAP()
+        {
+            txtCreLDAPUser.Text = "";
+            txtLDAPPass.Text = "";
+            txtLDAPFirstName.Text = "";
+            txtLDAPLastName.Text = "";
+            txtLDAPLastName.Text = "";
+        }
+        private UserAccount GetInputCreLDAP()
+        {
+            UserAccount _userAccount = new UserAccount();
+            _userAccount.CommonName = txtCreLDAPUser.Text.Trim();
+            _userAccount.PassWord = txtLDAPPass.Text.Trim();
+            _userAccount.FirstName = txtLDAPFirstName.Text.Trim();
+            _userAccount.LastName = txtLDAPLastName.Text.Trim();
+            _userAccount.ObjCategory = cbxObjCategory.SelectedItem.ToString();
+            return _userAccount;
+        }
         #endregion Grouyp LDAP function
 
         #endregion Grouyp LDAP
-
 
 
     }

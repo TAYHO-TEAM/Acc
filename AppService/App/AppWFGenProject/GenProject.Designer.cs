@@ -933,6 +933,7 @@ namespace AppWFGenProject
             this.btnCreateLDAP.TabIndex = 10;
             this.btnCreateLDAP.Text = "Create";
             this.btnCreateLDAP.UseVisualStyleBackColor = true;
+            this.btnCreateLDAP.Click += new System.EventHandler(this.btnCreateLDAP_Click);
             // 
             // cbxObjCategory
             // 

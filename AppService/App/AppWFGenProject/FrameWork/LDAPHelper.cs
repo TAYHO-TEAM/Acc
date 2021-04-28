@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AppWFGenProject.Entities;
+using System;
 using System.Collections.Generic;
 using System.DirectoryServices;
 using System.DirectoryServices.AccountManagement;
@@ -15,19 +16,16 @@ namespace AppWFGenProject.FrameWork
         {
             return true;
         }
-        public static bool CreateUser(string firstName, string lastName, string userLogonName, string employeeID, string emailAddress, string telephone, string address, string pwdOfNewlyCreatedUser)
+        public static bool CreateUser(UserAccount userAccount, PrincipalContext principalContext)
         {
-            // Creating the PrincipalContext
-            PrincipalContext principalContext = null;
-            try
-            {
-                principalContext = new PrincipalContext(ContextType.Domain, "fabrikam", "DC=fabrikam,DC=com");
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show("Failed to create PrincipalContext. Exception: " + e);
-                Application.Exit();
-            }
+            string firstName = userAccount.FirstName;
+            string lastName = userAccount.LastName;
+            string userLogonName = userAccount.CommonName;
+            string employeeID = userAccount.EmployeeID;
+            string emailAddress = userAccount.EmailAddress;
+            string telephone = userAccount.Telephone; 
+            string address = userAccount.Address;
+            string pwdOfNewlyCreatedUser = userAccount.PassWord;
 
             // Check if user object already exists in the store
             UserPrincipal usr = UserPrincipal.FindByIdentity(principalContext, userLogonName);
@@ -58,7 +56,6 @@ namespace AppWFGenProject.FrameWork
             if (userLogonName != null && userLogonName.Length > 0)
                 userPrincipal.SamAccountName = userLogonName;
 
-            pwdOfNewlyCreatedUser = "abcde@@12345!~";
             userPrincipal.SetPassword(pwdOfNewlyCreatedUser);
 
             userPrincipal.Enabled = true;
