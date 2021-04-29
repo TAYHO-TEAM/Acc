@@ -2,6 +2,7 @@
 using AppWFGenProject.Entities;
 using AppWFGenProject.Extensions;
 using AppWFGenProject.FrameWork;
+using AppWFGenProject.Properties;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Serilog;
@@ -9,6 +10,7 @@ using Services.Common.Options;
 using System;
 using System.DirectoryServices;
 using System.DirectoryServices.AccountManagement;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace AppWFGenProject
@@ -293,19 +295,22 @@ namespace AppWFGenProject
         }
         private void trvLDAPObjCategory_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            txtLDAPObjCategory.Text = "";
-            txtLDAPObjCategory.Text = e.Node.Text.Substring(e.Node.Text.IndexOf('(') + 1, e.Node.Text.IndexOf(')') - e.Node.Text.IndexOf('(') - 1);
             SetPrincipalContext();
+            if (tabLDAP.SelectedIndex == 0)
+            {
+                txtLDAPObjCategory.Text = "";
+                txtLDAPObjCategory.Text = e.Node.Text.Substring(e.Node.Text.IndexOf('(') + 1, e.Node.Text.IndexOf(')') - e.Node.Text.IndexOf('(') - 1);
+            }
             //txtLDAPObjCategory.Text = e.Node.Text.Substring(0,e.Node.Text.IndexOf('('));
         }
         private void txtLDAPPass_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
-                btnLoginLDAP_Click(sender,e);
+                btnLoginLDAP_Click(sender, e);
             }
         }
- 
+
         #region Grouyp LDAP function
         private void loadGBLDAP()
         {
@@ -356,8 +361,18 @@ namespace AppWFGenProject
         {
             DirectoryEntry ADentry = new DirectoryEntry("LDAP://" + _lDAPConfig.DomainIP + "/DC=tayho,DC=vn", loginLDAP.UserName, loginLDAP.PassWord, AuthenticationTypes.Secure);
             DirectorySearcher Searcher = new DirectorySearcher(ADentry);
-            Searcher.Filter = ("(objectClass=*)");  // Search all.
 
+            Searcher.Filter = ("(objectClass=*)");  // Search all.
+            ImageList myImageList = new ImageList();
+            myImageList.Images.Add(Resources.icons8_computer_16);
+            myImageList.Images.Add(Resources.icons8_dns_16);
+            myImageList.Images.Add(Resources.icons8_user_account_16);
+            myImageList.Images.Add(Resources.icons8_opened_folder_16);
+            myImageList.Images.Add(Resources.icons8_user_16);
+            myImageList.Images.Add(Resources.icons8_checked_16);
+
+
+            trvLDAPObjCategory.ImageList = myImageList;
             // The first item in the results is always the domain. Therefore, we just get that and retrieve its children.
             foreach (DirectoryEntry entry in Searcher.FindOne().GetDirectoryEntry().Children)
             {
@@ -368,6 +383,8 @@ namespace AppWFGenProject
         private TreeNode GetChildNode(DirectoryEntry entry)
         {
             TreeNode node = new TreeNode(entry.Name.Substring(entry.Name.IndexOf('=') + 1) + "(" + entry.Path.Substring(entry.Path.LastIndexOf('/') + 1, entry.Path.Length - entry.Path.LastIndexOf('/') - 1) + ")");
+            node.ImageIndex = AddIconNode(entry.SchemaClassName);
+            node.SelectedImageIndex = 5;
             foreach (DirectoryEntry childEntry in entry.Children)
             {
                 if (ShouldAddNode(childEntry.SchemaClassName))
@@ -375,13 +392,26 @@ namespace AppWFGenProject
             }
             return node;
         }
-        private bool ShouldAddNode(string note)
+        private bool ShouldAddNode(string nodeName)
         {
             //if (note == "organizationalUnit" || note == "group" || note == "computer" || note == "user" || note == "contact")
-            if (note == "user")
-                return false;
+            if (nodeName == "user")
+                return true;
             else
                 return true;
+        }
+        private int AddIconNode(string nodeName)
+        {
+            if (nodeName == "computer")
+                return 0;
+            else if (nodeName == "domain")
+                return 1;
+            else if (nodeName == "group" || nodeName == "organizationalUnit")
+                return 2;
+            else if (nodeName == "user")
+                return 4;
+            else
+                return 3;
         }
         private void SetPrincipalContext()
         {
@@ -406,6 +436,6 @@ namespace AppWFGenProject
         #endregion Grouyp LDAP function
         #endregion Grouyp LDAP
 
-     
+
     }
 }

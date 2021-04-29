@@ -63,486 +63,210 @@ namespace AppWFGenProject.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        public static byte[] appconfig {
+        public static byte[] appsettings {
             get {
-                object obj = ResourceManager.GetObject("appconfig", resourceCulture);
+                object obj = ResourceManager.GetObject("appsettings", resourceCulture);
                 return ((byte[])(obj));
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to using {nameproject}.Api.Application.Behaviors;
-        ///using {nameproject}.Domain.Repositories;
-        ///using {nameproject}.Domain.Services;
-        ///using {nameproject}.Infrastructure.Repositories;
-        ///using {nameproject}.Infrastructure.Services;
-        ///using Autofac;
-        ///using MediatR;
-        ///
-        ///namespace {nameproject}.Api.Infrastructure.AutofacModules
-        ///{
-        ///    public class ApplicationModule : Module
-        ///    {
-        ///        protected override void Load(ContainerBuilder builder)
-        ///        {
-        ///            // register services
-        ///            builder.RegisterGen [rest of string was truncated]&quot;;.
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static string ApplicationModule {
+        public static System.Drawing.Bitmap icon_search_human {
             get {
-                return ResourceManager.GetString("ApplicationModule", resourceCulture);
+                object obj = ResourceManager.GetObject("icon_search_human", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to using MediatR;
-        ///using Services.Common.DomainObjects;
-        ///using System;
-        ///
-        ///namespace  {nameproject}.Api.Application.Commands
-        ///{
-        ///    public class Create{Entity}Command : {Entity}CommandSet, IRequest&lt;MethodResult&lt;Create{Entity}CommandResponse&gt;&gt;
-        ///    {
-        ///       
-        ///    }
-        ///
-        ///    public class Create{Entity}CommandResponse : {Entity}CommandResponseDTO { }
-        ///}.
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static string CreateEntityCommand {
+        public static System.Drawing.Bitmap icon_search_human1 {
             get {
-                return ResourceManager.GetString("CreateEntityCommand", resourceCulture);
+                object obj = ResourceManager.GetObject("icon_search_human1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to using {nameproject}.Domain.DomainObjects;
-        ///using {nameproject}.Domain.Repositories;
-        ///using AutoMapper;using Microsoft.AspNetCore.Http;
-        ///using MediatR;
-        ///using Services.Common.DomainObjects;
-        ///using System.Threading;
-        ///using System.Threading.Tasks;
-        ///
-        ///namespace  {nameproject}.Api.Application.Commands
-        ///{
-        ///    public class Create{Entity}CommandHandler : {Entity}CommandHandler, IRequestHandler&lt;Create{Entity}Command, MethodResult&lt;Create{Entity}CommandResponse&gt;&gt;
-        ///    {
-        ///        public Create{Entity}CommandHandler(IM [rest of string was truncated]&quot;;.
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static string CreateEntityCommandHandler {
+        public static System.Drawing.Bitmap icons8_add_user_male_48 {
             get {
-                return ResourceManager.GetString("CreateEntityCommandHandler", resourceCulture);
+                object obj = ResourceManager.GetObject("icons8-add-user-male-48", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to using MediatR;
-        ///using Services.Common.DomainObjects;
-        ///using System.Collections.Generic;
-        ///
-        ///namespace  {nameproject}.Api.Application.Commands
-        ///{
-        ///    public class Delete{Entity}Command : IRequest&lt;MethodResult&lt;Delete{Entity}CommandResponse&gt;&gt;
-        ///    {
-        ///        public List&lt;int&gt; Ids { get; set; }
-        ///    }
-        ///
-        ///    public class Delete{Entity}CommandResponse
-        ///    {
-        ///        public Delete{Entity}CommandResponse(List&lt;{Entity}CommandResponseDTO&gt; {Entity})
-        ///        {
-        ///            _{Entity} = {Entity};
-        ///        }
-        ///
-        ///         [rest of string was truncated]&quot;;.
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static string DeleteEntityCommand {
+        public static System.Drawing.Bitmap icons8_add_user_male_481 {
             get {
-                return ResourceManager.GetString("DeleteEntityCommand", resourceCulture);
+                object obj = ResourceManager.GetObject("icons8-add-user-male-481", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to using {nameproject}.Domain;
-        ///using {nameproject}.Domain.Repositories;
-        ///using AutoMapper;
-        ///using MediatR;
-        ///using Services.Common.DomainObjects;
-        ///using Services.Common.DomainObjects.Exceptions;
-        ///using Services.Common.Utilities;
-        ///using System;
-        ///using System.Collections.Generic;
-        ///using System.Linq;
-        ///using System.Threading;
-        ///using System.Threading.Tasks;
-        ///using Microsoft.AspNetCore.Http;
-        ///
-        ///namespace {nameproject}.Api.Application.Commands
-        ///{
-        ///    public class Delete{Entity}CommandHandler : {Entity}CommandHandler [rest of string was truncated]&quot;;.
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static string DeleteEntityCommandHandler {
+        public static System.Drawing.Bitmap icons8_checked_16 {
             get {
-                return ResourceManager.GetString("DeleteEntityCommandHandler", resourceCulture);
+                object obj = ResourceManager.GetObject("icons8_checked_16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to using {nameproject}.Domain.DomainObjects.BaseClasses;
-        ///using Services.Common.DomainObjects.Exceptions;
-        ///using System.ComponentModel.DataAnnotations;
-        ///
-        ///
-        ///namespace {nameproject}.Domain.DomainObjects
-        ///{
-        ///    public class {Entity} : DOBase
-        ///    {
-        ///        #region Fields
-        ///        {builderFields}
-        ///        #endregion Fields
-        ///        #region Constructors
-        ///
-        ///        private {Entity}()
-        ///        {
-        ///        }
-        ///
-        ///        public {Entity}({paramCreate}) : this()
-        ///        {
-        ///           {functionCreate}
-        ///        }
-        ///       [rest of string was truncated]&quot;;.
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static string Entity {
+        public static System.Drawing.Bitmap icons8_computer_16 {
             get {
-                return ResourceManager.GetString("Entity", resourceCulture);
+                object obj = ResourceManager.GetObject("icons8_computer_16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to using System;
-        ///
-        ///namespace {nameproject}.Api.Application.Commands
-        ///{
-        ///    public class {Entity}CommandResponseDTO : {Entity}CommandSet
-        ///    {
-        ///     
-        ///    }
-        ///}.
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static string EntityCommand {
+        public static System.Drawing.Bitmap icons8_dns_16 {
             get {
-                return ResourceManager.GetString("EntityCommand", resourceCulture);
+                object obj = ResourceManager.GetObject("icons8_dns_16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to using {nameproject}.Domain.Repositories;
-        ///using AutoMapper;
-        ///using Microsoft.AspNetCore.Http;
-        ///using Services.Common.Security;
-        ///
-        ///namespace {nameproject}.Api.Application.Commands
-        ///{
-        ///    public class {Entity}CommandHandler : BaseCommandHandler
-        ///    {
-        ///        protected readonly IMapper _mapper;
-        ///        protected readonly IHttpContextAccessor _httpContextAccessor;
-        ///        protected readonly I{Entity}Repository {_entity}Repository;
-        ///
-        ///        public {Entity}CommandHandler(IMapper mapper, IHttpContextAccesso [rest of string was truncated]&quot;;.
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static string EntityCommandHandler {
+        public static System.Drawing.Bitmap icons8_lock_50 {
             get {
-                return ResourceManager.GetString("EntityCommandHandler", resourceCulture);
+                object obj = ResourceManager.GetObject("icons8-lock-50", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to using System;
-        ///
-        ///namespace {nameproject}.Api.Application.Commands
-        ///{
-        ///    public class {Entity}CommandSet: BaseCommandClasses
-        ///    {
-        ///        {builderPublic}
-        ///    }
-        ///}.
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static string EntityCommandSet {
+        public static System.Drawing.Bitmap icons8_lock_501 {
             get {
-                return ResourceManager.GetString("EntityCommandSet", resourceCulture);
+                object obj = ResourceManager.GetObject("icons8-lock-501", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to using {nameproject}.Domain.DomainObjects;
-        ///using {common};
-        ///using Microsoft.EntityFrameworkCore;
-        ///using Microsoft.EntityFrameworkCore.Metadata.Builders;
-        ///
-        ///namespace {nameproject}.Infrastructure.EFConfig
-        ///{
-        ///    public class {Entity}Configuration : IEntityTypeConfiguration&lt;{Entity}&gt;
-        ///    {
-        ///        public void Configure(EntityTypeBuilder&lt;{Entity}&gt; builder)
-        ///        {
-        ///            {builderConfig}
-        ///        }
-        ///    }
-        ///}.
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static string EntityConfiguration {
+        public static System.Drawing.Bitmap icons8_lock_64 {
             get {
-                return ResourceManager.GetString("EntityConfiguration", resourceCulture);
+                object obj = ResourceManager.GetObject("icons8-lock-64", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to using {common};
-        ///using {nameproject}.Api.Controllers.{version}.BaseClasses;
-        ///using {nameproject}.Api.ViewModels;
-        ///using {nameproject}.Api.ViewModels.BaseClasses;
-        ///using {nameproject}.Sql.DTOs;
-        ///using {nameproject}.Sql.Interfaces;
-        ///using {nameproject}.Sql.Parameters;
-        ///using AutoMapper;
-        ///using Microsoft.AspNetCore.Http;
-        ///using Microsoft.AspNetCore.Mvc;
-        ///using Services.Common.DomainObjects;
-        ///using Services.Common.Paging;
-        ///using System.Collections.Generic;
-        ///using System.Net;
-        ///using System.Threading.Tasks;
-        ///
-        ///na [rest of string was truncated]&quot;;.
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static string EntityController {
+        public static System.Drawing.Bitmap icons8_lock_641 {
             get {
-                return ResourceManager.GetString("EntityController", resourceCulture);
+                object obj = ResourceManager.GetObject("icons8-lock-641", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to using {nameproject}.Api.Application.Commands;
-        ///using {nameproject}.Api.Controllers.{version}.BaseClasses;
-        ///using MediatR;
-        ///using Microsoft.AspNetCore.Mvc;
-        ///using Services.Common.DomainObjects;
-        ///using System.Net;
-        ///using System.Threading.Tasks;
-        ///
-        ///namespace {nameproject}.Api.Controllers.{version}
-        ///{
-        ///    public class {Entity}Controller : APIControllerBase
-        ///    {
-        ///        public {Entity}Controller(IMediator mediator) : base(mediator)
-        ///        {
-        ///        }
-        ///
-        ///
-        ///        #region {Entity}
-        ///
-        ///        /// &lt;summary&gt;        /// [rest of string was truncated]&quot;;.
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static string EntityControllerCMD {
+        public static System.Drawing.Bitmap icons8_opened_folder_16 {
             get {
-                return ResourceManager.GetString("EntityControllerCMD", resourceCulture);
+                object obj = ResourceManager.GetObject("icons8-opened-folder-16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to using {nameproject}.Sql.DTOs.BaseClasses;
-        ///using System;
-        ///
-        ///namespace {nameproject}.Sql.DTOs
-        ///{
-        ///    public class {Entity}DTO : DTOBase
-        ///    {
-        ///        {builderPublic}
-        ///    }
-        ///}
-        ///.
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static string EntityDTO {
+        public static System.Drawing.Bitmap icons8_user_16 {
             get {
-                return ResourceManager.GetString("EntityDTO", resourceCulture);
+                object obj = ResourceManager.GetObject("icons8-user-16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to using {nameproject}.Api.ViewModels;
-        ///using {nameproject}.Sql.DTOs;
-        ///using AutoMapper;
-        ///
-        ///namespace {nameproject}.Api.Infrastructure.Mappings
-        ///{
-        ///   
-        ///    public class {Entity}Profile : Profile
-        ///    {
-        ///        public {Entity}Profile()
-        ///        { 
-        ///            CreateMap&lt;{Entity}DTO, {Entity}ResponseViewModel&gt;().ForMember(target =&gt; target.Id, m =&gt; m.MapFrom(source =&gt; source.Id));
-        ///        }
-        ///    }
-        ///}
-        ///.
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static string EntityProfile {
+        public static System.Drawing.Bitmap icons8_user_account_16 {
             get {
-                return ResourceManager.GetString("EntityProfile", resourceCulture);
+                object obj = ResourceManager.GetObject("icons8-user-account-16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to using {nameproject}.Api.Application.Commands;
-        ///using {nameproject}.Domain.DomainObjects;
-        ///using AutoMapper;
-        ///
-        ///
-        ///namespace {nameproject}.Api.Infrastructure.Mappings
-        ///{
-        ///    public class {Entity}Profile : Profile 
-        ///    {
-        ///        public {Entity}Profile()
-        ///        {
-        ///            CreateMap&lt;{Entity}, Create{Entity}CommandResponse&gt;().ForMember(x =&gt; x.Id, opt =&gt; opt.MapFrom(t =&gt; t.Id));
-        ///            CreateMap&lt;{Entity}, Update{Entity}CommandResponse&gt;().ForMember(x =&gt; x.Id, opt =&gt; opt.MapFrom(t =&gt; t.Id));
-        ///         [rest of string was truncated]&quot;;.
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static string EntityProfileCMD {
+        public static System.Drawing.Bitmap Search_icon {
             get {
-                return ResourceManager.GetString("EntityProfileCMD", resourceCulture);
+                object obj = ResourceManager.GetObject("Search_icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to using {nameproject}.Domain.DomainObjects;
-        ///using {nameproject}.Domain.Repositories;
-        ///using Services.Common.APIs.Cmd.EF;
-        ///
-        ///
-        ///namespace {nameproject}.Infrastructure.Repositories
-        ///{
-        ///    public class {Entity}Repository : BaseRepository&lt;{Entity}&gt;, I{Entity}Repository
-        ///    {
-        ///        public {Entity}Repository({db}Context dbContext) : base(dbContext)
-        ///        {
-        ///        }
-        ///    }
-        ///}
-        ///.
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static string EntityRepository {
+        public static System.Drawing.Bitmap Search_icon_25 {
             get {
-                return ResourceManager.GetString("EntityRepository", resourceCulture);
+                object obj = ResourceManager.GetObject("Search_icon_25", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to using {nameproject}.Api.ViewModels.BaseClasses;
-        ///
-        ///namespace {nameproject}.Api.ViewModels
-        ///{
-        ///    public class {Entity}ResponseViewModel : BaseResponseViewModel
-        ///    {
-        ///        {builderPublic}
-        ///    }
-        ///}
-        ///.
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static string EntityResponseViewModel {
+        public static System.Drawing.Bitmap Search_icon_251 {
             get {
-                return ResourceManager.GetString("EntityResponseViewModel", resourceCulture);
+                object obj = ResourceManager.GetObject("Search_icon_251", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to using {nameproject}.Domain.DomainObjects;
-        ///using Services.Common.DomainObjects.Interfaces;
-        ///
-        ///namespace {nameproject}.Domain.Repositories
-        ///{
-        ///    public interface I{Entity}Repository :  ICmdRepository&lt;{Entity}&gt;
-        ///    {
-        ///      
-        ///    }
-        ///}
-        ///    .
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static string IEntityRepository {
+        public static System.Drawing.Bitmap Search_icon_50_50 {
             get {
-                return ResourceManager.GetString("IEntityRepository", resourceCulture);
+                object obj = ResourceManager.GetObject("Search_icon_50_50", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {nameproject}
-        ///{common}
-        ///{db}
-        ///{Entity}
-        ///{entity}
-        ///{_entity}
-        ///{version}
-        ///{builderConfig}  -- EFConfig
-        ///{builderFields}  -- DomainObjects,Fields
-        ///{paramCreate}    -- DomainObjects,Fields
-        ///{functionCreate} -- DomainObjects,Fields
-        ///{builderProperties} -- DomainObjects,Properties
-        ///{builderBehaviours} -- DomainObjects,Behaviours
-        ///{biulderRegister} -- Infrastructure,AutofacModules
-        ///{builderRequestParam} -- Commands,CreateCommand
-        ///{builderSetUpdate} -- Commands,UpdateCommand
-        ///{builderPublic}  -- DTOs
-        ///.
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static string listReplace {
+        public static System.Drawing.Bitmap Search_icon_50_501 {
             get {
-                return ResourceManager.GetString("listReplace", resourceCulture);
+                object obj = ResourceManager.GetObject("Search_icon_50_501", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to using MediatR;
-        ///using Services.Common.DomainObjects;
-        ///
-        ///namespace {nameproject}.Api.Application.Commands
-        ///{
-        ///    public class Update{Entity}Command : {Entity}CommandSet,IRequest&lt;MethodResult&lt;Update{Entity}CommandResponse&gt;&gt;
-        ///    {
-        ///       
-        ///    }
-        ///
-        ///    public class Update{Entity}CommandResponse : {Entity}CommandResponseDTO
-        ///    {
-        ///    }
-        ///}.
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static string UpdateEntityCommand {
+        public static System.Drawing.Bitmap Search_icon1 {
             get {
-                return ResourceManager.GetString("UpdateEntityCommand", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to using {nameproject}.Domain;
-        ///using {nameproject}.Domain.Repositories;
-        ///using AutoMapper;
-        ///using MediatR;
-        ///using Services.Common.DomainObjects;
-        ///using Services.Common.DomainObjects.Exceptions;
-        ///using Services.Common.Utilities;
-        ///using System.Threading;
-        ///using System.Threading.Tasks;
-        ///using Microsoft.AspNetCore.Http;
-        ///
-        ///namespace  {nameproject}.Api.Application.Commands
-        ///{
-        ///    public class Update{Entity}CommandHandler : {Entity}CommandHandler,IRequestHandler&lt;Update{Entity}Command, MethodResult&lt;Update{Entity}Co [rest of string was truncated]&quot;;.
-        /// </summary>
-        public static string UpdateEntityCommandHandler {
-            get {
-                return ResourceManager.GetString("UpdateEntityCommandHandler", resourceCulture);
+                object obj = ResourceManager.GetObject("Search_icon1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
     }
