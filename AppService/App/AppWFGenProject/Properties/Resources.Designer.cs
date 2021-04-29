@@ -103,16 +103,6 @@ namespace AppWFGenProject.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap icons8_add_user_male_48 {
-            get {
-                object obj = ResourceManager.GetObject("icons8-add-user-male-48", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         public static System.Drawing.Bitmap icons8_add_user_male_481 {
             get {
                 object obj = ResourceManager.GetObject("icons8-add-user-male-481", resourceCulture);
@@ -183,9 +173,9 @@ namespace AppWFGenProject.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap icons8_lock_50 {
+        public static System.Drawing.Bitmap icons8_dns_161 {
             get {
-                object obj = ResourceManager.GetObject("icons8-lock-50", resourceCulture);
+                object obj = ResourceManager.GetObject("icons8_dns_161", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -203,16 +193,6 @@ namespace AppWFGenProject.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap icons8_lock_64 {
-            get {
-                object obj = ResourceManager.GetObject("icons8-lock-64", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         public static System.Drawing.Bitmap icons8_lock_641 {
             get {
                 object obj = ResourceManager.GetObject("icons8-lock-641", resourceCulture);
@@ -223,29 +203,9 @@ namespace AppWFGenProject.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap icons8_opened_folder_16 {
+        public static System.Drawing.Bitmap icons8_search_client_30 {
             get {
-                object obj = ResourceManager.GetObject("icons8-opened-folder-16", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap icons8_user_16 {
-            get {
-                object obj = ResourceManager.GetObject("icons8-user-16", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap icons8_user_account_16 {
-            get {
-                object obj = ResourceManager.GetObject("icons8-user-account-16", resourceCulture);
+                object obj = ResourceManager.GetObject("icons8_search_client_30", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
