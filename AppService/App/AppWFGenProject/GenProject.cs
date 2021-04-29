@@ -269,7 +269,7 @@ namespace AppWFGenProject
                     else
                     {
                         EnableInputCreLDAP(true);
-                        LoadTreeViewObjCate(loginLDAP);
+                        LoadTreeViewObjCate(loginLDAP, "*");
                     }
                 }
                 catch (DirectoryServicesCOMException cex)
@@ -310,7 +310,15 @@ namespace AppWFGenProject
                 btnLoginLDAP_Click(sender, e);
             }
         }
-
+        private void btnLDAPSearch_Click(object sender, EventArgs e)
+        {
+            LoadTreeViewObjCate();
+        }
+        private void btnLDAPClear_Click(object sender, EventArgs e)
+        {
+            txtLDAPFindUser.Text = "";
+            LoadTreeViewObjCate();
+        }
         #region Grouyp LDAP function
         private void loadGBLDAP()
         {
@@ -357,12 +365,23 @@ namespace AppWFGenProject
             _userAccount.ObjCategory = txtLDAPObjCategory.Text.Trim();
             return _userAccount;
         }
-        private void LoadTreeViewObjCate(LoginLDAP loginLDAP)
+        private void LoadTreeViewObjCate()
         {
+            LoginLDAP loginLDAP = new LoginLDAP();
+            loginLDAP.UserName = txtLDAPUser.Text;
+            loginLDAP.PassWord = txtLDAPPass.Text;
+            LDAPHelper lDAPHelper = new LDAPHelper(_principalContext);
+            LoadTreeViewObjCate(loginLDAP, string.IsNullOrEmpty(txtLDAPFindUser.Text) ? "*" : txtLDAPFindUser.Text);
+        }
+        private void LoadTreeViewObjCate(LoginLDAP loginLDAP, string userName = "*")
+        {
+            trvLDAPObjCategory.Nodes.Clear();
+
+            userName = (string.IsNullOrEmpty(userName) || userName == "*") ? "*" : "*" + userName + "*";
             DirectoryEntry ADentry = new DirectoryEntry("LDAP://" + _lDAPConfig.DomainIP + "/DC=tayho,DC=vn", loginLDAP.UserName, loginLDAP.PassWord, AuthenticationTypes.Secure);
             DirectorySearcher Searcher = new DirectorySearcher(ADentry);
 
-            Searcher.Filter = ("(objectClass=*)");  // Search all.
+            Searcher.Filter = string.Format("(&(objectClass=*)(|(cn={0})(name={0})))", userName);  // Search all.
             ImageList myImageList = new ImageList();
             myImageList.Images.Add(Resources.icons8_computer_16);
             myImageList.Images.Add(Resources.icons8_dns_16);
@@ -373,12 +392,19 @@ namespace AppWFGenProject
 
 
             trvLDAPObjCategory.ImageList = myImageList;
-            // The first item in the results is always the domain. Therefore, we just get that and retrieve its children.
-            foreach (DirectoryEntry entry in Searcher.FindOne().GetDirectoryEntry().Children)
-            {
-                if (ShouldAddNode(entry.SchemaClassName))
-                    trvLDAPObjCategory.Nodes.Add(GetChildNode(entry));
-            }
+            
+            if (userName != "*")
+                foreach (SearchResult i in Searcher.FindAll())
+                {
+                    trvLDAPObjCategory.Nodes.Add(GetChildNode(i.GetDirectoryEntry()));
+                }
+            else
+                // The first item in the results is always the domain. Therefore, we just get that and retrieve its children.
+                foreach (DirectoryEntry entry in Searcher.FindOne().GetDirectoryEntry().Children)
+                {
+                    if (ShouldAddNode(entry.SchemaClassName))
+                        trvLDAPObjCategory.Nodes.Add(GetChildNode(entry));
+                }
         }
         private TreeNode GetChildNode(DirectoryEntry entry)
         {
@@ -433,9 +459,11 @@ namespace AppWFGenProject
         }
 
 
+
         #endregion Grouyp LDAP function
+
         #endregion Grouyp LDAP
 
-
+       
     }
 }

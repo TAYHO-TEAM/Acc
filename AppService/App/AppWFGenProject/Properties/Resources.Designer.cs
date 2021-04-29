@@ -113,6 +113,16 @@ namespace AppWFGenProject.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap icons8_broom_30 {
+            get {
+                object obj = ResourceManager.GetObject("icons8_broom_30", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap icons8_checked_16 {
             get {
                 object obj = ResourceManager.GetObject("icons8_checked_16", resourceCulture);

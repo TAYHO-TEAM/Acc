@@ -172,6 +172,9 @@
   <data name="Search_icon_50_501" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Content\Images\Search_icon_50_50.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="icons8_broom_30" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\icons8-broom-30.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="icons8_checked_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons8-checked-16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
