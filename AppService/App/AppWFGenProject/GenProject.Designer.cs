@@ -29,6 +29,7 @@ namespace AppWFGenProject
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GenProject));
             this.gbGenCode = new System.Windows.Forms.GroupBox();
             this.clbFunction = new System.Windows.Forms.CheckedListBox();
@@ -126,6 +127,7 @@ namespace AppWFGenProject
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.tbpLDAPManagerAcc = new System.Windows.Forms.TabPage();
+            this.btnLDAPClear = new System.Windows.Forms.Button();
             this.rtbLDAPUserInfo = new System.Windows.Forms.RichTextBox();
             this.btnLDAPSearch = new System.Windows.Forms.Button();
             this.label11 = new System.Windows.Forms.Label();
@@ -135,7 +137,7 @@ namespace AppWFGenProject
             this.txtLDAPUser = new System.Windows.Forms.TextBox();
             this.lblLDAPPass = new System.Windows.Forms.Label();
             this.lblLDAPUser = new System.Windows.Forms.Label();
-            this.btnLDAPClear = new System.Windows.Forms.Button();
+            this.ttpApp = new System.Windows.Forms.ToolTip(this.components);
             this.gbGenCode.SuspendLayout();
             this.tbcConfigGen.SuspendLayout();
             this.tbpCUDR.SuspendLayout();
@@ -1047,6 +1049,21 @@ namespace AppWFGenProject
             this.tbpLDAPManagerAcc.Text = "Manager Account";
             this.tbpLDAPManagerAcc.UseVisualStyleBackColor = true;
             // 
+            // btnLDAPClear
+            // 
+            this.btnLDAPClear.BackColor = System.Drawing.Color.Transparent;
+            this.btnLDAPClear.Cursor = System.Windows.Forms.Cursors.AppStarting;
+            this.btnLDAPClear.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.btnLDAPClear.ForeColor = System.Drawing.Color.Blue;
+            this.btnLDAPClear.Image = global::AppWFGenProject.Properties.Resources.icons8_broom_30;
+            this.btnLDAPClear.Location = new System.Drawing.Point(443, 19);
+            this.btnLDAPClear.Name = "btnLDAPClear";
+            this.btnLDAPClear.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.btnLDAPClear.Size = new System.Drawing.Size(62, 35);
+            this.btnLDAPClear.TabIndex = 14;
+            this.btnLDAPClear.UseVisualStyleBackColor = false;
+            this.btnLDAPClear.Click += new System.EventHandler(this.btnLDAPClear_Click);
+            // 
             // rtbLDAPUserInfo
             // 
             this.rtbLDAPUserInfo.Location = new System.Drawing.Point(11, 67);
@@ -1131,21 +1148,6 @@ namespace AppWFGenProject
             this.lblLDAPUser.Size = new System.Drawing.Size(65, 15);
             this.lblLDAPUser.TabIndex = 0;
             this.lblLDAPUser.Text = "LDAP User:";
-            // 
-            // btnLDAPClear
-            // 
-            this.btnLDAPClear.BackColor = System.Drawing.Color.Transparent;
-            this.btnLDAPClear.Cursor = System.Windows.Forms.Cursors.AppStarting;
-            this.btnLDAPClear.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.btnLDAPClear.ForeColor = System.Drawing.Color.Blue;
-            this.btnLDAPClear.Image = global::AppWFGenProject.Properties.Resources.icons8_broom_30;
-            this.btnLDAPClear.Location = new System.Drawing.Point(443, 19);
-            this.btnLDAPClear.Name = "btnLDAPClear";
-            this.btnLDAPClear.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.btnLDAPClear.Size = new System.Drawing.Size(62, 35);
-            this.btnLDAPClear.TabIndex = 14;
-            this.btnLDAPClear.UseVisualStyleBackColor = false;
-            this.btnLDAPClear.Click += new System.EventHandler(this.btnLDAPClear_Click);
             // 
             // GenProject
             // 
@@ -1293,6 +1295,7 @@ namespace AppWFGenProject
         private System.Windows.Forms.TextBox txtLDAPFindUser;
         private System.Windows.Forms.RichTextBox rtbLDAPUserInfo;
         private System.Windows.Forms.Button btnLDAPClear;
+        private System.Windows.Forms.ToolTip ttpApp;
     }
 }
 

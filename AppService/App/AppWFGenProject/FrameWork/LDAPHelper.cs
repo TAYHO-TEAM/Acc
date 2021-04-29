@@ -109,12 +109,11 @@ namespace AppWFGenProject.FrameWork
             PrincipalSearcher ps = new PrincipalSearcher(findAllGroups);
             return ps.FindAll();
         }
-        public PrincipalSearchResult<Principal> SearchUser(string userName)
+        public Principal SearchUser(string userName)
         {
             UserPrincipal findAllUsers = UserPrincipal.FindByIdentity(_prinContext,userName);
-   
             PrincipalSearcher ps = new PrincipalSearcher(findAllUsers);
-            return ps.FindAll();
+            return ps.FindOne();
         }
         public PrincipalSearchResult<Principal> GetAllUser()
         {

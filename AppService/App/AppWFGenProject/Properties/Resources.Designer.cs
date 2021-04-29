@@ -93,6 +93,16 @@ namespace AppWFGenProject.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap icons8_add_user_group_man_man_30 {
+            get {
+                object obj = ResourceManager.GetObject("icons8_add_user_group_man_man_30", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap icons8_add_user_male_48 {
             get {
                 object obj = ResourceManager.GetObject("icons8-add-user-male-48", resourceCulture);
@@ -106,6 +116,16 @@ namespace AppWFGenProject.Properties {
         public static System.Drawing.Bitmap icons8_add_user_male_481 {
             get {
                 object obj = ResourceManager.GetObject("icons8-add-user-male-481", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap icons8_approval_30 {
+            get {
+                object obj = ResourceManager.GetObject("icons8_approval_30", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -136,6 +156,16 @@ namespace AppWFGenProject.Properties {
         public static System.Drawing.Bitmap icons8_computer_16 {
             get {
                 object obj = ResourceManager.GetObject("icons8_computer_16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap icons8_delete_document_30 {
+            get {
+                object obj = ResourceManager.GetObject("icons8_delete_document_30", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

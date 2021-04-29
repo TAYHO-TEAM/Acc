@@ -32,6 +32,7 @@ namespace AppWFGenProject
             InitializeComponent();
             Environment.GetEnvironmentVariable("Content");
             SwitchGroup("");
+            SetToolTip();
         }
         //public GenProject(IConfiguration configuration)
         //{
@@ -44,18 +45,22 @@ namespace AppWFGenProject
         //    txtDB.Text = "QuanLyDuAn";
         //    btnGen.Enabled = false;
         //}
-        private void GenProject_Load(object sender, EventArgs e)
+        #region menuToolTip
+        private void SetToolTip()
         {
-            clbFunction.Items.Add("CMD", false);
-            clbFunction.Items.Add("READ", false);
-            clbFunction.Items.Add("HTML", false);
+            ttpApp.SetToolTip(btnLDAPClear,"Xoá tìm kiếm");
+            ttpApp.SetToolTip(btnLoginLDAP, "Đăng nhập LDAP");
+            ttpApp.SetToolTip(btnCreateLDAP, "Tạo tài khoản mới");
+            ttpApp.SetToolTip(btnLDAPSearch, "Tìm kiếm");
+
         }
+        #endregion menuToolTip
         /// <summary>
         /// Menu
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        #region menuTooolBar
+        #region menuToolBar
         private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
 
@@ -72,7 +77,7 @@ namespace AppWFGenProject
         {
             SwitchGroup(nameof(gbLDAP));
         }
-        #region menuTooolBar function
+        #region menuToolBar function
         private void SwitchGroup(string nameGroup)
         {
             gbGenCode.Visible = false;
@@ -220,6 +225,12 @@ namespace AppWFGenProject
             txtUser.Text = "trienpc";
             txtDB.Text = "QuanLyDuAn";
             btnGen.Enabled = false;
+        }
+        private void GenProject_Load(object sender, EventArgs e)
+        {
+            clbFunction.Items.Add("CMD", false);
+            clbFunction.Items.Add("READ", false);
+            clbFunction.Items.Add("HTML", false);
         }
         #endregion Group GenCode Function
         #endregion Group GenCode
