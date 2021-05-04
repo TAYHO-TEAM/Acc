@@ -93,6 +93,26 @@ namespace AppWFGenProject.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap icons8_add_user_male_30 {
+            get {
+                object obj = ResourceManager.GetObject("icons8_add_user_male_30", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap icons8_add_user_male_40 {
+            get {
+                object obj = ResourceManager.GetObject("icons8_add_user_male_40", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap icons8_add_user_male_48 {
             get {
                 object obj = ResourceManager.GetObject("icons8_add_user_male_48", resourceCulture);
@@ -133,6 +153,16 @@ namespace AppWFGenProject.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap icons8_checkmark_30 {
+            get {
+                object obj = ResourceManager.GetObject("icons8_checkmark_30", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap icons8_computer_16 {
             get {
                 object obj = ResourceManager.GetObject("icons8_computer_16", resourceCulture);
@@ -143,9 +173,39 @@ namespace AppWFGenProject.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap icons8_delete_30 {
+            get {
+                object obj = ResourceManager.GetObject("icons8_delete_30", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap icons8_delete_document_30 {
             get {
                 object obj = ResourceManager.GetObject("icons8_delete_document_30", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap icons8_denied_30 {
+            get {
+                object obj = ResourceManager.GetObject("icons8_denied_30", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap icons8_denied_40 {
+            get {
+                object obj = ResourceManager.GetObject("icons8_denied_40", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -186,6 +246,26 @@ namespace AppWFGenProject.Properties {
         public static System.Drawing.Bitmap icons8_opened_folder_16 {
             get {
                 object obj = ResourceManager.GetObject("icons8_opened_folder_16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap icons8_registration_30 {
+            get {
+                object obj = ResourceManager.GetObject("icons8_registration_30", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap icons8_registration_40 {
+            get {
+                object obj = ResourceManager.GetObject("icons8_registration_40", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

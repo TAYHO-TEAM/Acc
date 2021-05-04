@@ -138,6 +138,12 @@ namespace AppWFGenProject
             this.lblLDAPPass = new System.Windows.Forms.Label();
             this.lblLDAPUser = new System.Windows.Forms.Label();
             this.ttpApp = new System.Windows.Forms.ToolTip(this.components);
+            this.lbxLDAPUsersGroup = new System.Windows.Forms.ListBox();
+            this.btnLDAPAddGroup = new System.Windows.Forms.Button();
+            this.btnLDAPRemoveGroup = new System.Windows.Forms.Button();
+            this.btnLDAPDUserDisable = new System.Windows.Forms.Button();
+            this.btnLDAPEditUser = new System.Windows.Forms.Button();
+            this.btnLDAPDone = new System.Windows.Forms.Button();
             this.gbGenCode.SuspendLayout();
             this.tbcConfigGen.SuspendLayout();
             this.tbpCUDR.SuspendLayout();
@@ -899,7 +905,7 @@ namespace AppWFGenProject
             this.gbLDAP.Controls.Add(this.lblLDAPUser);
             this.gbLDAP.Location = new System.Drawing.Point(59, 36);
             this.gbLDAP.Name = "gbLDAP";
-            this.gbLDAP.Size = new System.Drawing.Size(1016, 483);
+            this.gbLDAP.Size = new System.Drawing.Size(1016, 492);
             this.gbLDAP.TabIndex = 25;
             this.gbLDAP.TabStop = false;
             this.gbLDAP.Text = "LDAP Manager";
@@ -908,7 +914,7 @@ namespace AppWFGenProject
             // 
             this.trvLDAPObjCategory.Location = new System.Drawing.Point(655, 27);
             this.trvLDAPObjCategory.Name = "trvLDAPObjCategory";
-            this.trvLDAPObjCategory.Size = new System.Drawing.Size(333, 431);
+            this.trvLDAPObjCategory.Size = new System.Drawing.Size(333, 455);
             this.trvLDAPObjCategory.TabIndex = 11;
             this.trvLDAPObjCategory.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.trvLDAPObjCategory_AfterSelect);
             // 
@@ -919,7 +925,7 @@ namespace AppWFGenProject
             this.tabLDAP.Location = new System.Drawing.Point(23, 120);
             this.tabLDAP.Name = "tabLDAP";
             this.tabLDAP.SelectedIndex = 0;
-            this.tabLDAP.Size = new System.Drawing.Size(611, 342);
+            this.tabLDAP.Size = new System.Drawing.Size(611, 366);
             this.tabLDAP.TabIndex = 5;
             // 
             // tbpLDAPCreAccount
@@ -938,7 +944,7 @@ namespace AppWFGenProject
             this.tbpLDAPCreAccount.Location = new System.Drawing.Point(4, 24);
             this.tbpLDAPCreAccount.Name = "tbpLDAPCreAccount";
             this.tbpLDAPCreAccount.Padding = new System.Windows.Forms.Padding(3);
-            this.tbpLDAPCreAccount.Size = new System.Drawing.Size(603, 314);
+            this.tbpLDAPCreAccount.Size = new System.Drawing.Size(603, 338);
             this.tbpLDAPCreAccount.TabIndex = 0;
             this.tbpLDAPCreAccount.Text = "Create Account";
             this.tbpLDAPCreAccount.UseVisualStyleBackColor = true;
@@ -952,10 +958,10 @@ namespace AppWFGenProject
             // 
             // btnCreateLDAP
             // 
-            this.btnCreateLDAP.Image = global::AppWFGenProject.Properties.Resources.icons8_add_user_male_48;
-            this.btnCreateLDAP.Location = new System.Drawing.Point(259, 221);
+            this.btnCreateLDAP.Image = global::AppWFGenProject.Properties.Resources.icons8_add_user_male_30;
+            this.btnCreateLDAP.Location = new System.Drawing.Point(259, 222);
             this.btnCreateLDAP.Name = "btnCreateLDAP";
-            this.btnCreateLDAP.Size = new System.Drawing.Size(123, 57);
+            this.btnCreateLDAP.Size = new System.Drawing.Size(123, 45);
             this.btnCreateLDAP.TabIndex = 10;
             this.btnCreateLDAP.UseVisualStyleBackColor = true;
             this.btnCreateLDAP.Click += new System.EventHandler(this.btnCreateLDAP_Click);
@@ -1036,6 +1042,12 @@ namespace AppWFGenProject
             // 
             // tbpLDAPManagerAcc
             // 
+            this.tbpLDAPManagerAcc.Controls.Add(this.btnLDAPDone);
+            this.tbpLDAPManagerAcc.Controls.Add(this.btnLDAPEditUser);
+            this.tbpLDAPManagerAcc.Controls.Add(this.btnLDAPDUserDisable);
+            this.tbpLDAPManagerAcc.Controls.Add(this.btnLDAPRemoveGroup);
+            this.tbpLDAPManagerAcc.Controls.Add(this.btnLDAPAddGroup);
+            this.tbpLDAPManagerAcc.Controls.Add(this.lbxLDAPUsersGroup);
             this.tbpLDAPManagerAcc.Controls.Add(this.btnLDAPClear);
             this.tbpLDAPManagerAcc.Controls.Add(this.rtbLDAPUserInfo);
             this.tbpLDAPManagerAcc.Controls.Add(this.btnLDAPSearch);
@@ -1044,7 +1056,7 @@ namespace AppWFGenProject
             this.tbpLDAPManagerAcc.Location = new System.Drawing.Point(4, 24);
             this.tbpLDAPManagerAcc.Name = "tbpLDAPManagerAcc";
             this.tbpLDAPManagerAcc.Padding = new System.Windows.Forms.Padding(3);
-            this.tbpLDAPManagerAcc.Size = new System.Drawing.Size(603, 314);
+            this.tbpLDAPManagerAcc.Size = new System.Drawing.Size(603, 338);
             this.tbpLDAPManagerAcc.TabIndex = 1;
             this.tbpLDAPManagerAcc.Text = "Manager Account";
             this.tbpLDAPManagerAcc.UseVisualStyleBackColor = true;
@@ -1059,7 +1071,7 @@ namespace AppWFGenProject
             this.btnLDAPClear.Location = new System.Drawing.Point(443, 19);
             this.btnLDAPClear.Name = "btnLDAPClear";
             this.btnLDAPClear.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.btnLDAPClear.Size = new System.Drawing.Size(62, 35);
+            this.btnLDAPClear.Size = new System.Drawing.Size(62, 36);
             this.btnLDAPClear.TabIndex = 14;
             this.btnLDAPClear.UseVisualStyleBackColor = false;
             this.btnLDAPClear.Click += new System.EventHandler(this.btnLDAPClear_Click);
@@ -1068,7 +1080,7 @@ namespace AppWFGenProject
             // 
             this.rtbLDAPUserInfo.Location = new System.Drawing.Point(11, 67);
             this.rtbLDAPUserInfo.Name = "rtbLDAPUserInfo";
-            this.rtbLDAPUserInfo.Size = new System.Drawing.Size(250, 237);
+            this.rtbLDAPUserInfo.Size = new System.Drawing.Size(250, 200);
             this.rtbLDAPUserInfo.TabIndex = 13;
             this.rtbLDAPUserInfo.Text = "";
             // 
@@ -1148,6 +1160,85 @@ namespace AppWFGenProject
             this.lblLDAPUser.Size = new System.Drawing.Size(65, 15);
             this.lblLDAPUser.TabIndex = 0;
             this.lblLDAPUser.Text = "LDAP User:";
+            // 
+            // lbxLDAPUsersGroup
+            // 
+            this.lbxLDAPUsersGroup.FormattingEnabled = true;
+            this.lbxLDAPUsersGroup.ItemHeight = 15;
+            this.lbxLDAPUsersGroup.Location = new System.Drawing.Point(298, 80);
+            this.lbxLDAPUsersGroup.Name = "lbxLDAPUsersGroup";
+            this.lbxLDAPUsersGroup.Size = new System.Drawing.Size(170, 184);
+            this.lbxLDAPUsersGroup.TabIndex = 15;
+            // 
+            // btnLDAPAddGroup
+            // 
+            this.btnLDAPAddGroup.BackColor = System.Drawing.Color.Transparent;
+            this.btnLDAPAddGroup.Cursor = System.Windows.Forms.Cursors.AppStarting;
+            this.btnLDAPAddGroup.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.btnLDAPAddGroup.ForeColor = System.Drawing.Color.Blue;
+            this.btnLDAPAddGroup.Image = global::AppWFGenProject.Properties.Resources.icons8_add_user_group_man_man_30;
+            this.btnLDAPAddGroup.Location = new System.Drawing.Point(492, 105);
+            this.btnLDAPAddGroup.Name = "btnLDAPAddGroup";
+            this.btnLDAPAddGroup.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.btnLDAPAddGroup.Size = new System.Drawing.Size(70, 44);
+            this.btnLDAPAddGroup.TabIndex = 16;
+            this.btnLDAPAddGroup.UseVisualStyleBackColor = false;
+            // 
+            // btnLDAPRemoveGroup
+            // 
+            this.btnLDAPRemoveGroup.BackColor = System.Drawing.Color.Transparent;
+            this.btnLDAPRemoveGroup.Cursor = System.Windows.Forms.Cursors.AppStarting;
+            this.btnLDAPRemoveGroup.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.btnLDAPRemoveGroup.ForeColor = System.Drawing.Color.Blue;
+            this.btnLDAPRemoveGroup.Image = global::AppWFGenProject.Properties.Resources.icons8_delete_30;
+            this.btnLDAPRemoveGroup.Location = new System.Drawing.Point(492, 155);
+            this.btnLDAPRemoveGroup.Name = "btnLDAPRemoveGroup";
+            this.btnLDAPRemoveGroup.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.btnLDAPRemoveGroup.Size = new System.Drawing.Size(70, 44);
+            this.btnLDAPRemoveGroup.TabIndex = 17;
+            this.btnLDAPRemoveGroup.UseVisualStyleBackColor = false;
+            // 
+            // btnLDAPDUserDisable
+            // 
+            this.btnLDAPDUserDisable.BackColor = System.Drawing.Color.Transparent;
+            this.btnLDAPDUserDisable.Cursor = System.Windows.Forms.Cursors.AppStarting;
+            this.btnLDAPDUserDisable.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.btnLDAPDUserDisable.ForeColor = System.Drawing.Color.Blue;
+            this.btnLDAPDUserDisable.Image = global::AppWFGenProject.Properties.Resources.icons8_denied_30;
+            this.btnLDAPDUserDisable.Location = new System.Drawing.Point(55, 277);
+            this.btnLDAPDUserDisable.Name = "btnLDAPDUserDisable";
+            this.btnLDAPDUserDisable.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.btnLDAPDUserDisable.Size = new System.Drawing.Size(70, 44);
+            this.btnLDAPDUserDisable.TabIndex = 26;
+            this.btnLDAPDUserDisable.UseVisualStyleBackColor = false;
+            // 
+            // btnLDAPEditUser
+            // 
+            this.btnLDAPEditUser.BackColor = System.Drawing.Color.Transparent;
+            this.btnLDAPEditUser.Cursor = System.Windows.Forms.Cursors.AppStarting;
+            this.btnLDAPEditUser.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.btnLDAPEditUser.ForeColor = System.Drawing.Color.Blue;
+            this.btnLDAPEditUser.Image = global::AppWFGenProject.Properties.Resources.icons8_registration_30;
+            this.btnLDAPEditUser.Location = new System.Drawing.Point(132, 277);
+            this.btnLDAPEditUser.Name = "btnLDAPEditUser";
+            this.btnLDAPEditUser.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.btnLDAPEditUser.Size = new System.Drawing.Size(70, 44);
+            this.btnLDAPEditUser.TabIndex = 27;
+            this.btnLDAPEditUser.UseVisualStyleBackColor = false;
+            // 
+            // btnLDAPDone
+            // 
+            this.btnLDAPDone.BackColor = System.Drawing.Color.Transparent;
+            this.btnLDAPDone.Cursor = System.Windows.Forms.Cursors.AppStarting;
+            this.btnLDAPDone.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.btnLDAPDone.ForeColor = System.Drawing.Color.Blue;
+            this.btnLDAPDone.Image = global::AppWFGenProject.Properties.Resources.icons8_checkmark_30;
+            this.btnLDAPDone.Location = new System.Drawing.Point(492, 205);
+            this.btnLDAPDone.Name = "btnLDAPDone";
+            this.btnLDAPDone.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.btnLDAPDone.Size = new System.Drawing.Size(70, 44);
+            this.btnLDAPDone.TabIndex = 28;
+            this.btnLDAPDone.UseVisualStyleBackColor = false;
             // 
             // GenProject
             // 
@@ -1296,6 +1387,12 @@ namespace AppWFGenProject
         private System.Windows.Forms.RichTextBox rtbLDAPUserInfo;
         private System.Windows.Forms.Button btnLDAPClear;
         private System.Windows.Forms.ToolTip ttpApp;
+        private System.Windows.Forms.Button btnLDAPAddGroup;
+        private System.Windows.Forms.ListBox lbxLDAPUsersGroup;
+        private System.Windows.Forms.Button btnLDAPRemoveGroup;
+        private System.Windows.Forms.Button btnLDAPDUserDisable;
+        private System.Windows.Forms.Button btnLDAPEditUser;
+        private System.Windows.Forms.Button btnLDAPDone;
     }
 }
 

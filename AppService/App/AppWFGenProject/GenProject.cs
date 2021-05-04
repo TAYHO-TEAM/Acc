@@ -48,11 +48,16 @@ namespace AppWFGenProject
         #region menuToolTip
         private void SetToolTip()
         {
-            ttpApp.SetToolTip(btnLDAPClear,"Xoá tìm kiếm");
+            ttpApp.InitialDelay = 100;
+            ttpApp.SetToolTip(btnLDAPDone, "Hoàn thành");
+            ttpApp.SetToolTip(btnLDAPDUserDisable, "Khoá tài khoản");
+            ttpApp.SetToolTip(btnLDAPEditUser, "Chỉnh sửa tài khoản");
+            ttpApp.SetToolTip(btnLDAPRemoveGroup, "Xoá nhóm");
+            ttpApp.SetToolTip(btnLDAPAddGroup , "Thêm nhóm");
+            ttpApp.SetToolTip(btnLDAPClear, "Xoá tìm kiếm");
             ttpApp.SetToolTip(btnLoginLDAP, "Đăng nhập LDAP");
             ttpApp.SetToolTip(btnCreateLDAP, "Tạo tài khoản mới");
             ttpApp.SetToolTip(btnLDAPSearch, "Tìm kiếm");
-
         }
         #endregion menuToolTip
         /// <summary>
@@ -312,6 +317,22 @@ namespace AppWFGenProject
                 txtLDAPObjCategory.Text = "";
                 txtLDAPObjCategory.Text = e.Node.Text.Substring(e.Node.Text.IndexOf('(') + 1, e.Node.Text.IndexOf(')') - e.Node.Text.IndexOf('(') - 1);
             }
+            else if (tabLDAP.SelectedIndex == 1)
+            {
+                LDAPHelper lDAPHelper = new LDAPHelper(_principalContext);
+                lDAPHelper.GetAllUsersGroup(e.Node.Text.Substring(0, e.Node.Text.IndexOf('(')));
+                UserPrincipal a = lDAPHelper.SearchUser(e.Node.Text.Substring(0, e.Node.Text.IndexOf('(')));
+                rtbLDAPUserInfo.Text = "";
+                if (a != null)
+                {
+                    rtbLDAPUserInfo.AppendText("Tên : " +a.Name.ToString() +"\r\n");
+                    rtbLDAPUserInfo.AppendText("Mô tả : " + a.Description.ToString() + "\r\n");
+                    rtbLDAPUserInfo.AppendText("Email : " + a.UserPrincipalName.ToString() + "\r\n");
+                    rtbLDAPUserInfo.AppendText("Tài khoản : " + a.SamAccountName.ToString() + "\r\n");
+                    rtbLDAPUserInfo.AppendText("Mô tả : " + a.Description.ToString() + "\r\n");
+                }    
+                   
+            }
             //txtLDAPObjCategory.Text = e.Node.Text.Substring(0,e.Node.Text.IndexOf('('));
         }
         private void txtLDAPPass_KeyDown(object sender, KeyEventArgs e)
@@ -402,7 +423,7 @@ namespace AppWFGenProject
             myImageList.Images.Add(Resources.icons8_checked_16);
 
             trvLDAPObjCategory.ImageList = myImageList;
-            
+
             if (userName != "*")
                 foreach (SearchResult i in Searcher.FindAll())
                 {
@@ -464,16 +485,13 @@ namespace AppWFGenProject
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Bạn không có quyền thao tác trong nhóm này. Vui lòng chọn lại nhóm khác.", "Thông báo!");
+                MessageBox.Show("Bạn không có quyền thao tác trong nhóm này. Vui lòng chọn lại nhóm khác." + ex, "Thông báo!");
             }
         }
 
-
-
         #endregion Grouyp LDAP function
-
         #endregion Grouyp LDAP
 
-       
+
     }
 }

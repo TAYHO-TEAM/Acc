@@ -109,11 +109,39 @@ namespace AppWFGenProject.FrameWork
             PrincipalSearcher ps = new PrincipalSearcher(findAllGroups);
             return ps.FindAll();
         }
-        public Principal SearchUser(string userName)
+        public UserPrincipal SearchUser(string userName)
         {
-            UserPrincipal findAllUsers = UserPrincipal.FindByIdentity(_prinContext,userName);
+            UserPrincipal findAllUsers = UserPrincipal.FindByIdentity(_prinContext, userName);
+            //PrincipalSearcher ps = new PrincipalSearcher(findAllUsers);
+            return findAllUsers;
+            //using (UserPrincipal user = new UserPrincipal(_prinContext))
+            //{
+            //    //Specify the search parameters
+            //    user.Name = userName;
+
+            //    //Create the searcher
+            //    //pass (our) user object
+            //    using (PrincipalSearcher pS = new PrincipalSearcher())
+            //    {
+            //        pS.QueryFilter = user;
+
+            //        //Perform the search
+            //        using (PrincipalSearchResult<Principal> results = pS.FindAll())
+            //        {
+            //            //If necessary, request more details
+            //            return  results.ToList()[0];
+
+            //        }
+            //    }
+            //}
+        }
+        public bool DisableUser(string userName)
+        {
+            UserPrincipal findAllUsers = UserPrincipal.FindByIdentity(_prinContext, userName);
             PrincipalSearcher ps = new PrincipalSearcher(findAllUsers);
-            return ps.FindOne();
+            findAllUsers.Enabled = false;
+            findAllUsers.Save();
+            return true;
         }
         public PrincipalSearchResult<Principal> GetAllUser()
         {
@@ -158,6 +186,15 @@ namespace AppWFGenProject.FrameWork
             catch (DirectoryServicesCOMException E)
             {
                 MessageBox.Show("Lỗi trong quá trình xoá khỏi nhóm." + E, "Thông Báo!");
+            }
+        }
+        public void GetAllUsersGroup(string UserAccount)
+        {
+            GroupPrincipal qbeGroup = new GroupPrincipal(_prinContext,UserAccount);
+            PrincipalSearcher srch = new PrincipalSearcher(qbeGroup);
+            foreach (var found in srch.FindAll())
+            {
+                var a = found;
             }
         }
     }
