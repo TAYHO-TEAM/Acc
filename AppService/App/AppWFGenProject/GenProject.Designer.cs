@@ -60,6 +60,7 @@ namespace AppWFGenProject
             this.gbAutoSendMail = new System.Windows.Forms.GroupBox();
             this.tbcSM = new System.Windows.Forms.TabControl();
             this.tbpSMJob = new System.Windows.Forms.TabPage();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.lblListStore = new System.Windows.Forms.Label();
             this.dgvSMSysAutoSendMail = new System.Windows.Forms.DataGridView();
@@ -73,7 +74,6 @@ namespace AppWFGenProject
             this.txtSMUser = new System.Windows.Forms.TextBox();
             this.txtSMPass = new System.Windows.Forms.TextBox();
             this.txtSMServer = new System.Windows.Forms.TextBox();
-            this.btnSMTest = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
@@ -144,6 +144,13 @@ namespace AppWFGenProject
             this.lblLDAPPass = new System.Windows.Forms.Label();
             this.lblLDAPUser = new System.Windows.Forms.Label();
             this.ttpApp = new System.Windows.Forms.ToolTip(this.components);
+            this.btnFirst_tbpSMJob = new System.Windows.Forms.Button();
+            this.btnLast_tbpSMJob = new System.Windows.Forms.Button();
+            this.btnNext_tbpSMJob = new System.Windows.Forms.Button();
+            this.btnPrevious_tbpSMJob = new System.Windows.Forms.Button();
+            this.txtPage_tbpSMJob = new System.Windows.Forms.TextBox();
+            this.lblTotal_tbpSMJob = new System.Windows.Forms.Label();
+            this.btnSearch_tbpSMJob = new System.Windows.Forms.Button();
             this.gbGenCode.SuspendLayout();
             this.tbcConfigGen.SuspendLayout();
             this.tbpCUDR.SuspendLayout();
@@ -185,7 +192,6 @@ namespace AppWFGenProject
             this.gbGenCode.TabIndex = 0;
             this.gbGenCode.TabStop = false;
             this.gbGenCode.Text = "Gen Code";
-            this.gbGenCode.Enter += new System.EventHandler(this.gbGenCode_Enter);
             // 
             // clbFunction
             // 
@@ -435,14 +441,13 @@ namespace AppWFGenProject
             this.gbAutoSendMail.Controls.Add(this.txtSMUser);
             this.gbAutoSendMail.Controls.Add(this.txtSMPass);
             this.gbAutoSendMail.Controls.Add(this.txtSMServer);
-            this.gbAutoSendMail.Controls.Add(this.btnSMTest);
             this.gbAutoSendMail.Controls.Add(this.label3);
             this.gbAutoSendMail.Controls.Add(this.label4);
             this.gbAutoSendMail.Controls.Add(this.label5);
             this.gbAutoSendMail.Controls.Add(this.label2);
-            this.gbAutoSendMail.Location = new System.Drawing.Point(1053, 84);
+            this.gbAutoSendMail.Location = new System.Drawing.Point(1041, 27);
             this.gbAutoSendMail.Name = "gbAutoSendMail";
-            this.gbAutoSendMail.Size = new System.Drawing.Size(966, 470);
+            this.gbAutoSendMail.Size = new System.Drawing.Size(966, 506);
             this.gbAutoSendMail.TabIndex = 24;
             this.gbAutoSendMail.TabStop = false;
             this.gbAutoSendMail.Text = "Job";
@@ -457,11 +462,19 @@ namespace AppWFGenProject
             this.tbcSM.Location = new System.Drawing.Point(15, 67);
             this.tbcSM.Name = "tbcSM";
             this.tbcSM.SelectedIndex = 0;
-            this.tbcSM.Size = new System.Drawing.Size(945, 397);
+            this.tbcSM.Size = new System.Drawing.Size(945, 428);
             this.tbcSM.TabIndex = 27;
             // 
             // tbpSMJob
             // 
+            this.tbpSMJob.Controls.Add(this.btnSearch_tbpSMJob);
+            this.tbpSMJob.Controls.Add(this.lblTotal_tbpSMJob);
+            this.tbpSMJob.Controls.Add(this.txtPage_tbpSMJob);
+            this.tbpSMJob.Controls.Add(this.btnFirst_tbpSMJob);
+            this.tbpSMJob.Controls.Add(this.btnLast_tbpSMJob);
+            this.tbpSMJob.Controls.Add(this.btnNext_tbpSMJob);
+            this.tbpSMJob.Controls.Add(this.btnPrevious_tbpSMJob);
+            this.tbpSMJob.Controls.Add(this.textBox1);
             this.tbpSMJob.Controls.Add(this.comboBox1);
             this.tbpSMJob.Controls.Add(this.lblListStore);
             this.tbpSMJob.Controls.Add(this.dgvSMSysAutoSendMail);
@@ -470,10 +483,18 @@ namespace AppWFGenProject
             this.tbpSMJob.Location = new System.Drawing.Point(4, 24);
             this.tbpSMJob.Name = "tbpSMJob";
             this.tbpSMJob.Padding = new System.Windows.Forms.Padding(3);
-            this.tbpSMJob.Size = new System.Drawing.Size(937, 369);
+            this.tbpSMJob.Size = new System.Drawing.Size(937, 400);
             this.tbpSMJob.TabIndex = 0;
             this.tbpSMJob.Text = "Job";
             this.tbpSMJob.UseVisualStyleBackColor = true;
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(507, 22);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.PlaceholderText = "Nhập chữ ...";
+            this.textBox1.Size = new System.Drawing.Size(328, 23);
+            this.textBox1.TabIndex = 28;
             // 
             // comboBox1
             // 
@@ -496,10 +517,10 @@ namespace AppWFGenProject
             // dgvSMSysAutoSendMail
             // 
             this.dgvSMSysAutoSendMail.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvSMSysAutoSendMail.Location = new System.Drawing.Point(27, 110);
+            this.dgvSMSysAutoSendMail.Location = new System.Drawing.Point(27, 62);
             this.dgvSMSysAutoSendMail.Name = "dgvSMSysAutoSendMail";
             this.dgvSMSysAutoSendMail.RowTemplate.Height = 25;
-            this.dgvSMSysAutoSendMail.Size = new System.Drawing.Size(891, 243);
+            this.dgvSMSysAutoSendMail.Size = new System.Drawing.Size(891, 291);
             this.dgvSMSysAutoSendMail.TabIndex = 26;
             // 
             // lblSMListDB
@@ -559,11 +580,11 @@ namespace AppWFGenProject
             // 
             // btnSMLoad
             // 
-            this.btnSMLoad.Location = new System.Drawing.Point(878, 24);
+            this.btnSMLoad.Image = global::AppWFGenProject.Properties.Resources.icons8_data_encryption_30;
+            this.btnSMLoad.Location = new System.Drawing.Point(807, 14);
             this.btnSMLoad.Name = "btnSMLoad";
-            this.btnSMLoad.Size = new System.Drawing.Size(75, 23);
+            this.btnSMLoad.Size = new System.Drawing.Size(75, 43);
             this.btnSMLoad.TabIndex = 21;
-            this.btnSMLoad.Text = "Load Data";
             this.btnSMLoad.UseVisualStyleBackColor = false;
             // 
             // txtSMUser
@@ -589,15 +610,6 @@ namespace AppWFGenProject
             this.txtSMServer.PlaceholderText = "db.tayho.net.vn";
             this.txtSMServer.Size = new System.Drawing.Size(138, 23);
             this.txtSMServer.TabIndex = 18;
-            // 
-            // btnSMTest
-            // 
-            this.btnSMTest.Location = new System.Drawing.Point(797, 25);
-            this.btnSMTest.Name = "btnSMTest";
-            this.btnSMTest.Size = new System.Drawing.Size(75, 23);
-            this.btnSMTest.TabIndex = 17;
-            this.btnSMTest.Text = "Test Connect";
-            this.btnSMTest.UseVisualStyleBackColor = false;
             // 
             // label3
             // 
@@ -644,7 +656,7 @@ namespace AppWFGenProject
             this.mnHelp});
             this.menuMain.Location = new System.Drawing.Point(0, 0);
             this.menuMain.Name = "menuMain";
-            this.menuMain.Size = new System.Drawing.Size(2019, 24);
+            this.menuMain.Size = new System.Drawing.Size(2007, 24);
             this.menuMain.TabIndex = 1;
             this.menuMain.Text = "menuStrip1";
             // 
@@ -910,7 +922,6 @@ namespace AppWFGenProject
             this.gbLDAP.TabIndex = 25;
             this.gbLDAP.TabStop = false;
             this.gbLDAP.Text = "LDAP Manager";
-            this.gbLDAP.Enter += new System.EventHandler(this.gbLDAP_Enter);
             // 
             // trvLDAPObjCategory
             // 
@@ -955,6 +966,7 @@ namespace AppWFGenProject
             // 
             this.txtLDAPObjCategory.Location = new System.Drawing.Point(186, 179);
             this.txtLDAPObjCategory.Name = "txtLDAPObjCategory";
+            this.txtLDAPObjCategory.ReadOnly = true;
             this.txtLDAPObjCategory.Size = new System.Drawing.Size(317, 23);
             this.txtLDAPObjCategory.TabIndex = 11;
             // 
@@ -972,6 +984,7 @@ namespace AppWFGenProject
             // 
             this.txtLDAPLastName.Location = new System.Drawing.Point(186, 150);
             this.txtLDAPLastName.Name = "txtLDAPLastName";
+            this.txtLDAPLastName.PlaceholderText = "Tên đệm và tên ...";
             this.txtLDAPLastName.Size = new System.Drawing.Size(317, 23);
             this.txtLDAPLastName.TabIndex = 8;
             // 
@@ -979,6 +992,7 @@ namespace AppWFGenProject
             // 
             this.txtLDAPFirstName.Location = new System.Drawing.Point(186, 120);
             this.txtLDAPFirstName.Name = "txtLDAPFirstName";
+            this.txtLDAPFirstName.PlaceholderText = "Họ ...";
             this.txtLDAPFirstName.Size = new System.Drawing.Size(317, 23);
             this.txtLDAPFirstName.TabIndex = 7;
             // 
@@ -987,6 +1001,7 @@ namespace AppWFGenProject
             this.txtCreLDAPPass.Location = new System.Drawing.Point(186, 91);
             this.txtCreLDAPPass.Name = "txtCreLDAPPass";
             this.txtCreLDAPPass.PasswordChar = '*';
+            this.txtCreLDAPPass.PlaceholderText = "Mật khẩu ...";
             this.txtCreLDAPPass.Size = new System.Drawing.Size(317, 23);
             this.txtCreLDAPPass.TabIndex = 6;
             // 
@@ -994,6 +1009,7 @@ namespace AppWFGenProject
             // 
             this.txtCreLDAPUser.Location = new System.Drawing.Point(186, 63);
             this.txtCreLDAPUser.Name = "txtCreLDAPUser";
+            this.txtCreLDAPUser.PlaceholderText = "Tên tài khoản...";
             this.txtCreLDAPUser.Size = new System.Drawing.Size(317, 23);
             this.txtCreLDAPUser.TabIndex = 5;
             // 
@@ -1090,6 +1106,7 @@ namespace AppWFGenProject
             this.btnLDAPEditUser.Size = new System.Drawing.Size(70, 44);
             this.btnLDAPEditUser.TabIndex = 27;
             this.btnLDAPEditUser.UseVisualStyleBackColor = false;
+            this.btnLDAPEditUser.Click += new System.EventHandler(this.btnLDAPEditUser_Click);
             // 
             // btnLDAPDUserDisable
             // 
@@ -1194,6 +1211,7 @@ namespace AppWFGenProject
             // 
             this.txtLDAPFindUser.Location = new System.Drawing.Point(82, 27);
             this.txtLDAPFindUser.Name = "txtLDAPFindUser";
+            this.txtLDAPFindUser.PlaceholderText = "Tài khoản...";
             this.txtLDAPFindUser.Size = new System.Drawing.Size(278, 23);
             this.txtLDAPFindUser.TabIndex = 0;
             // 
@@ -1214,6 +1232,7 @@ namespace AppWFGenProject
             this.txtLDAPPass.Location = new System.Drawing.Point(159, 75);
             this.txtLDAPPass.Name = "txtLDAPPass";
             this.txtLDAPPass.PasswordChar = '*';
+            this.txtLDAPPass.PlaceholderText = "Mật khẩu...";
             this.txtLDAPPass.Size = new System.Drawing.Size(184, 23);
             this.txtLDAPPass.TabIndex = 3;
             this.txtLDAPPass.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtLDAPPass_KeyDown);
@@ -1222,6 +1241,7 @@ namespace AppWFGenProject
             // 
             this.txtLDAPUser.Location = new System.Drawing.Point(159, 48);
             this.txtLDAPUser.Name = "txtLDAPUser";
+            this.txtLDAPUser.PlaceholderText = "Tên đăng nhập...";
             this.txtLDAPUser.Size = new System.Drawing.Size(184, 23);
             this.txtLDAPUser.TabIndex = 2;
             // 
@@ -1243,13 +1263,75 @@ namespace AppWFGenProject
             this.lblLDAPUser.TabIndex = 0;
             this.lblLDAPUser.Text = "LDAP User:";
             // 
+            // btnFirst_tbpSMJob
+            // 
+            this.btnFirst_tbpSMJob.Image = global::AppWFGenProject.Properties.Resources.icons8_double_left_16;
+            this.btnFirst_tbpSMJob.Location = new System.Drawing.Point(323, 359);
+            this.btnFirst_tbpSMJob.Name = "btnFirst_tbpSMJob";
+            this.btnFirst_tbpSMJob.Size = new System.Drawing.Size(55, 30);
+            this.btnFirst_tbpSMJob.TabIndex = 28;
+            this.btnFirst_tbpSMJob.UseVisualStyleBackColor = false;
+            // 
+            // btnLast_tbpSMJob
+            // 
+            this.btnLast_tbpSMJob.Image = global::AppWFGenProject.Properties.Resources.icons8_back_16;
+            this.btnLast_tbpSMJob.Location = new System.Drawing.Point(384, 359);
+            this.btnLast_tbpSMJob.Name = "btnLast_tbpSMJob";
+            this.btnLast_tbpSMJob.Size = new System.Drawing.Size(55, 30);
+            this.btnLast_tbpSMJob.TabIndex = 29;
+            this.btnLast_tbpSMJob.UseVisualStyleBackColor = false;
+            // 
+            // btnNext_tbpSMJob
+            // 
+            this.btnNext_tbpSMJob.Image = global::AppWFGenProject.Properties.Resources.icons8_forward_16;
+            this.btnNext_tbpSMJob.Location = new System.Drawing.Point(543, 359);
+            this.btnNext_tbpSMJob.Name = "btnNext_tbpSMJob";
+            this.btnNext_tbpSMJob.Size = new System.Drawing.Size(55, 30);
+            this.btnNext_tbpSMJob.TabIndex = 30;
+            this.btnNext_tbpSMJob.UseVisualStyleBackColor = false;
+            // 
+            // btnPrevious_tbpSMJob
+            // 
+            this.btnPrevious_tbpSMJob.Image = global::AppWFGenProject.Properties.Resources.icons8_double_right_16;
+            this.btnPrevious_tbpSMJob.Location = new System.Drawing.Point(604, 359);
+            this.btnPrevious_tbpSMJob.Name = "btnPrevious_tbpSMJob";
+            this.btnPrevious_tbpSMJob.Size = new System.Drawing.Size(55, 30);
+            this.btnPrevious_tbpSMJob.TabIndex = 31;
+            this.btnPrevious_tbpSMJob.UseVisualStyleBackColor = false;
+            // 
+            // txtPage_tbpSMJob
+            // 
+            this.txtPage_tbpSMJob.Location = new System.Drawing.Point(459, 363);
+            this.txtPage_tbpSMJob.Name = "txtPage_tbpSMJob";
+            this.txtPage_tbpSMJob.PlaceholderText = "0";
+            this.txtPage_tbpSMJob.Size = new System.Drawing.Size(34, 23);
+            this.txtPage_tbpSMJob.TabIndex = 28;
+            // 
+            // lblTotal_tbpSMJob
+            // 
+            this.lblTotal_tbpSMJob.AutoSize = true;
+            this.lblTotal_tbpSMJob.Location = new System.Drawing.Point(495, 368);
+            this.lblTotal_tbpSMJob.Name = "lblTotal_tbpSMJob";
+            this.lblTotal_tbpSMJob.Size = new System.Drawing.Size(18, 15);
+            this.lblTotal_tbpSMJob.TabIndex = 28;
+            this.lblTotal_tbpSMJob.Text = "/0";
+            // 
+            // btnSearch_tbpSMJob
+            // 
+            this.btnSearch_tbpSMJob.Image = global::AppWFGenProject.Properties.Resources.icons8_search_16;
+            this.btnSearch_tbpSMJob.Location = new System.Drawing.Point(841, 20);
+            this.btnSearch_tbpSMJob.Name = "btnSearch_tbpSMJob";
+            this.btnSearch_tbpSMJob.Size = new System.Drawing.Size(38, 25);
+            this.btnSearch_tbpSMJob.TabIndex = 32;
+            this.btnSearch_tbpSMJob.UseVisualStyleBackColor = false;
+            // 
             // GenProject
             // 
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(1847, 558);
+            this.ClientSize = new System.Drawing.Size(1847, 575);
+            this.Controls.Add(this.gbAutoSendMail);
             this.Controls.Add(this.gbLDAP);
             this.Controls.Add(this.gbGenCode);
-            this.Controls.Add(this.gbAutoSendMail);
             this.Controls.Add(this.menuMain);
             this.Name = "GenProject";
             this.Text = "GenProjectNetCore";
@@ -1347,7 +1429,6 @@ namespace AppWFGenProject
         private System.Windows.Forms.TextBox txtSMUser;
         private System.Windows.Forms.TextBox txtSMPass;
         private System.Windows.Forms.TextBox txtSMServer;
-        private System.Windows.Forms.Button btnSMTest;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
@@ -1396,6 +1477,14 @@ namespace AppWFGenProject
         private System.Windows.Forms.Button btnLDAPDUserDisable;
         private System.Windows.Forms.Button btnLDAPEditUser;
         private System.Windows.Forms.Button btnLDAPDone;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Button btnFirst_tbpSMJob;
+        private System.Windows.Forms.Button btnLast_tbpSMJob;
+        private System.Windows.Forms.Button btnNext_tbpSMJob;
+        private System.Windows.Forms.Button btnPrevious_tbpSMJob;
+        private System.Windows.Forms.Label lblTotal_tbpSMJob;
+        private System.Windows.Forms.TextBox txtPage_tbpSMJob;
+        private System.Windows.Forms.Button btnSearch_tbpSMJob;
     }
 }
 

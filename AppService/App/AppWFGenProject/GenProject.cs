@@ -58,6 +58,7 @@ namespace AppWFGenProject
             ttpApp.SetToolTip(btnLoginLDAP, "Đăng nhập LDAP");
             ttpApp.SetToolTip(btnCreateLDAP, "Tạo tài khoản mới");
             ttpApp.SetToolTip(btnLDAPSearch, "Tìm kiếm");
+            ttpApp.SetToolTip(btnSMLoad,"Đăng nhập CSDL");
         }
         #endregion menuToolTip
         /// <summary>
@@ -312,6 +313,7 @@ namespace AppWFGenProject
         private void trvLDAPObjCategory_AfterSelect(object sender, TreeViewEventArgs e)
         {
             SetPrincipalContext();
+            EnableEditOldLDAP(false);
             if (tabLDAP.SelectedIndex == 0)
             {
                 txtLDAPObjCategory.Text = "";
@@ -338,7 +340,7 @@ namespace AppWFGenProject
                     rtbLDAPUserInfo.AppendText("Tên : " + (userCurrent.Name == null ? "" : userCurrent.Name.ToString()) + "\r\n");
                     rtbLDAPUserInfo.AppendText("Email : " + ((userCurrent.UserPrincipalName == null) ? "" : userCurrent.UserPrincipalName.ToString()) + "\r\n");
                     rtbLDAPUserInfo.AppendText("Mô tả : " + ((userCurrent.Description == null) ? "" : userCurrent.Description.ToString()) + "\r\n");
-                    rtbLDAPUserInfo.AppendText("Trạng thái : " + ((userCurrent.Enabled == null) ? (userCurrent.Enabled == true ? "Hoạt động" : "Khoá") : "") + "\r\n");
+                    rtbLDAPUserInfo.AppendText("Trạng thái : " + ((userCurrent.Enabled == null) ? "": (userCurrent.Enabled == true ? "Hoạt động" : "Khoá")) + "\r\n");
                     EnableEditCurentLDAP(true);
                 }
                 else
@@ -381,6 +383,10 @@ namespace AppWFGenProject
                 }
             }
         }
+        private void btnLDAPEditUser_Click(object sender, EventArgs e)
+        {
+            EnableEditOldLDAP(true);
+        }
         #region Grouyp LDAP function
         private void loadGBLDAP()
         {
@@ -388,6 +394,8 @@ namespace AppWFGenProject
             txtLDAPUser.Enabled = true;
             txtLDAPPass.Enabled = true;
             EnableInputCreLDAP(_principalContext == null ? false : true);
+            EnableEditCurentLDAP(false);
+            EnableEditOldLDAP(false);
         }
         private void EnableInputCreLDAP(bool isTrue)
         {
@@ -539,14 +547,8 @@ namespace AppWFGenProject
 
         #endregion Grouyp LDAP
 
-        private void gbLDAP_Enter(object sender, EventArgs e)
-        {
+      
 
-        }
-
-        private void gbGenCode_Enter(object sender, EventArgs e)
-        {
-
-        }
+        
     }
 }
