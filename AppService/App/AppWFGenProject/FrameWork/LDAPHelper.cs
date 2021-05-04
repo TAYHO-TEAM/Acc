@@ -138,10 +138,18 @@ namespace AppWFGenProject.FrameWork
         public bool DisableUser(string userName)
         {
             UserPrincipal findAllUsers = UserPrincipal.FindByIdentity(_prinContext, userName);
-            PrincipalSearcher ps = new PrincipalSearcher(findAllUsers);
-            findAllUsers.Enabled = false;
-            findAllUsers.Save();
-            return true;
+            if(findAllUsers != null)
+            {
+                PrincipalSearcher ps = new PrincipalSearcher(findAllUsers);
+                findAllUsers.Enabled = false;
+                findAllUsers.Save();
+                return true;
+            }    
+            else
+            {
+                MessageBox.Show("Tài khoản không tồn tại.", "Thông Báo!");
+                return false;
+            }    
         }
         public PrincipalSearchResult<Principal> GetAllUser()
         {
@@ -188,14 +196,24 @@ namespace AppWFGenProject.FrameWork
                 MessageBox.Show("Lỗi trong quá trình xoá khỏi nhóm." + E, "Thông Báo!");
             }
         }
-        public void GetAllUsersGroup(string UserAccount)
+        public PrincipalSearchResult<Principal> GetAllUsersGroup(string UserAccount)
         {
-            GroupPrincipal qbeGroup = new GroupPrincipal(_prinContext,UserAccount);
-            PrincipalSearcher srch = new PrincipalSearcher(qbeGroup);
-            foreach (var found in srch.FindAll())
+            UserPrincipal up = UserPrincipal.FindByIdentity(_prinContext, UserAccount);
+
+            if (up != null)
             {
-                var a = found;
+                // get groups for that user
+                return up.GetAuthorizationGroups();
+
             }
+            else
+                return null;
+            //GroupPrincipal qbeGroup = new GroupPrincipal(_prinContext, UserAccount);
+            //PrincipalSearcher srch = new PrincipalSearcher(qbeGroup);
+            //foreach (var found in srch.FindAll())
+            //{
+            //    var a = found;
+            //}
         }
     }
 }

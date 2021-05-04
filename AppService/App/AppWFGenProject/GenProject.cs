@@ -53,7 +53,7 @@ namespace AppWFGenProject
             ttpApp.SetToolTip(btnLDAPDUserDisable, "Khoá tài khoản");
             ttpApp.SetToolTip(btnLDAPEditUser, "Chỉnh sửa tài khoản");
             ttpApp.SetToolTip(btnLDAPRemoveGroup, "Xoá nhóm");
-            ttpApp.SetToolTip(btnLDAPAddGroup , "Thêm nhóm");
+            ttpApp.SetToolTip(btnLDAPAddGroup, "Thêm nhóm");
             ttpApp.SetToolTip(btnLDAPClear, "Xoá tìm kiếm");
             ttpApp.SetToolTip(btnLoginLDAP, "Đăng nhập LDAP");
             ttpApp.SetToolTip(btnCreateLDAP, "Tạo tài khoản mới");
@@ -320,18 +320,25 @@ namespace AppWFGenProject
             else if (tabLDAP.SelectedIndex == 1)
             {
                 LDAPHelper lDAPHelper = new LDAPHelper(_principalContext);
-                lDAPHelper.GetAllUsersGroup(e.Node.Text.Substring(0, e.Node.Text.IndexOf('(')));
-                UserPrincipal a = lDAPHelper.SearchUser(e.Node.Text.Substring(0, e.Node.Text.IndexOf('(')));
+                UserPrincipal userCurrent = lDAPHelper.SearchUser(e.Node.Text.Substring(0, e.Node.Text.IndexOf('(')));
                 rtbLDAPUserInfo.Text = "";
-                if (a != null)
+                if (userCurrent != null)
                 {
-                    rtbLDAPUserInfo.AppendText("Tên : " +a.Name.ToString() +"\r\n");
-                    rtbLDAPUserInfo.AppendText("Mô tả : " + a.Description.ToString() + "\r\n");
-                    rtbLDAPUserInfo.AppendText("Email : " + a.UserPrincipalName.ToString() + "\r\n");
-                    rtbLDAPUserInfo.AppendText("Tài khoản : " + a.SamAccountName.ToString() + "\r\n");
-                    rtbLDAPUserInfo.AppendText("Mô tả : " + a.Description.ToString() + "\r\n");
-                }    
-                   
+                    var groupOfUser = lDAPHelper.GetAllUsersGroup(userCurrent.SamAccountName.ToString());
+                    if (groupOfUser != null)
+                    {
+                        foreach (var item in groupOfUser)
+                        {
+                            lbxLDAPUsersGroup.Items.Clear();
+                            lbxLDAPUsersGroup.Items.Add(item.Name.ToString());
+                        }
+                    }
+                    rtbLDAPUserInfo.AppendText("Tên : " + (userCurrent.Name == null ? "" : userCurrent.Name.ToString()) + "\r\n");
+                    rtbLDAPUserInfo.AppendText("Email : " + ((userCurrent.UserPrincipalName == null) ? "" : userCurrent.UserPrincipalName.ToString()) + "\r\n");
+                    rtbLDAPUserInfo.AppendText("Tài khoản : " + ((userCurrent.SamAccountName == null) ? "" : userCurrent.SamAccountName.ToString()) + "\r\n");
+                    rtbLDAPUserInfo.AppendText("Mô tả : " + ((userCurrent.Description == null) ? "" : userCurrent.Description.ToString()) + "\r\n");
+                }
+
             }
             //txtLDAPObjCategory.Text = e.Node.Text.Substring(0,e.Node.Text.IndexOf('('));
         }
@@ -425,17 +432,21 @@ namespace AppWFGenProject
             trvLDAPObjCategory.ImageList = myImageList;
 
             if (userName != "*")
+            {
                 foreach (SearchResult i in Searcher.FindAll())
                 {
                     trvLDAPObjCategory.Nodes.Add(GetChildNode(i.GetDirectoryEntry()));
                 }
+            }
             else
+            {
                 // The first item in the results is always the domain. Therefore, we just get that and retrieve its children.
                 foreach (DirectoryEntry entry in Searcher.FindOne().GetDirectoryEntry().Children)
                 {
                     if (ShouldAddNode(entry.SchemaClassName))
                         trvLDAPObjCategory.Nodes.Add(GetChildNode(entry));
                 }
+            }
         }
         private TreeNode GetChildNode(DirectoryEntry entry)
         {
