@@ -401,7 +401,6 @@ namespace AppWFGenProject
             myImageList.Images.Add(Resources.icons8_user_16);
             myImageList.Images.Add(Resources.icons8_checked_16);
 
-
             trvLDAPObjCategory.ImageList = myImageList;
             
             if (userName != "*")
