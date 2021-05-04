@@ -321,7 +321,7 @@ namespace AppWFGenProject
             {
                 LDAPHelper lDAPHelper = new LDAPHelper(_principalContext);
                 UserPrincipal userCurrent = lDAPHelper.SearchUser(e.Node.Text.Substring(0, e.Node.Text.IndexOf('(')));
-               
+
                 if (userCurrent != null)
                 {
                     rtbLDAPUserInfo.Text = "";
@@ -338,6 +338,12 @@ namespace AppWFGenProject
                     rtbLDAPUserInfo.AppendText("Tên : " + (userCurrent.Name == null ? "" : userCurrent.Name.ToString()) + "\r\n");
                     rtbLDAPUserInfo.AppendText("Email : " + ((userCurrent.UserPrincipalName == null) ? "" : userCurrent.UserPrincipalName.ToString()) + "\r\n");
                     rtbLDAPUserInfo.AppendText("Mô tả : " + ((userCurrent.Description == null) ? "" : userCurrent.Description.ToString()) + "\r\n");
+                    rtbLDAPUserInfo.AppendText("Trạng thái : " + ((userCurrent.Enabled == null) ? (userCurrent.Enabled == true ? "Hoạt động" : "Khoá") : "") + "\r\n");
+                    EnableEditCurentLDAP(true);
+                }
+                else
+                {
+                    EnableEditCurentLDAP(false);
                 }
 
             }
@@ -363,17 +369,17 @@ namespace AppWFGenProject
         {
             LDAPHelper lDAPHelper = new LDAPHelper(_principalContext);
             string username = rtbLDAPUserInfo.Lines[0].ToString().Replace("Tài khoản : ", "");
-            if(!string.IsNullOrEmpty(username))
+            if (!string.IsNullOrEmpty(username))
             {
-                if(lDAPHelper.DisableUser(username))
+                if (lDAPHelper.DisableUser(username))
                 {
-                    MessageBox.Show("Khoá tài khoản thành công." , "Thông Báo!");
-                }   
+                    MessageBox.Show("Khoá tài khoản thành công.", "Thông Báo!");
+                }
                 else
                 {
                     MessageBox.Show("Khoá tài khoản không thành công.", "Thông Báo!");
-                }    
-            }    
+                }
+            }
         }
         #region Grouyp LDAP function
         private void loadGBLDAP()
@@ -401,6 +407,17 @@ namespace AppWFGenProject
                 //    cbxObjCategory.Items.Add(group.DistinguishedName);
                 //}
             }
+        }
+        private void EnableEditCurentLDAP(bool isTrue)
+        {
+            btnLDAPDUserDisable.Enabled = isTrue;
+            btnLDAPEditUser.Enabled = isTrue;
+        }
+        private void EnableEditOldLDAP(bool isTrue)
+        {
+            btnLDAPAddGroup.Enabled = isTrue;
+            btnLDAPDone.Enabled = isTrue;
+            btnLDAPRemoveGroup.Enabled = isTrue;
         }
         private void ClearInputCreLDAP()
         {
@@ -517,10 +534,19 @@ namespace AppWFGenProject
             }
         }
 
+
         #endregion Grouyp LDAP function
 
         #endregion Grouyp LDAP
 
-     
+        private void gbLDAP_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void gbGenCode_Enter(object sender, EventArgs e)
+        {
+
+        }
     }
 }

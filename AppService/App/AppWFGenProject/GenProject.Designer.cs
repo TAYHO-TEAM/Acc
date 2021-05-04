@@ -185,6 +185,7 @@ namespace AppWFGenProject
             this.gbGenCode.TabIndex = 0;
             this.gbGenCode.TabStop = false;
             this.gbGenCode.Text = "Gen Code";
+            this.gbGenCode.Enter += new System.EventHandler(this.gbGenCode_Enter);
             // 
             // clbFunction
             // 
@@ -909,6 +910,7 @@ namespace AppWFGenProject
             this.gbLDAP.TabIndex = 25;
             this.gbLDAP.TabStop = false;
             this.gbLDAP.Text = "LDAP Manager";
+            this.gbLDAP.Enter += new System.EventHandler(this.gbLDAP_Enter);
             // 
             // trvLDAPObjCategory
             // 
