@@ -321,9 +321,10 @@ namespace AppWFGenProject
             {
                 LDAPHelper lDAPHelper = new LDAPHelper(_principalContext);
                 UserPrincipal userCurrent = lDAPHelper.SearchUser(e.Node.Text.Substring(0, e.Node.Text.IndexOf('(')));
-                rtbLDAPUserInfo.Text = "";
+               
                 if (userCurrent != null)
                 {
+                    rtbLDAPUserInfo.Text = "";
                     var groupOfUser = lDAPHelper.GetAllUsersGroup(userCurrent.SamAccountName.ToString());
                     if (groupOfUser != null)
                     {
@@ -333,9 +334,9 @@ namespace AppWFGenProject
                             lbxLDAPUsersGroup.Items.Add(item.Name.ToString());
                         }
                     }
+                    rtbLDAPUserInfo.AppendText("Tài khoản : " + ((userCurrent.SamAccountName == null) ? "" : userCurrent.SamAccountName.ToString()) + "\r\n");
                     rtbLDAPUserInfo.AppendText("Tên : " + (userCurrent.Name == null ? "" : userCurrent.Name.ToString()) + "\r\n");
                     rtbLDAPUserInfo.AppendText("Email : " + ((userCurrent.UserPrincipalName == null) ? "" : userCurrent.UserPrincipalName.ToString()) + "\r\n");
-                    rtbLDAPUserInfo.AppendText("Tài khoản : " + ((userCurrent.SamAccountName == null) ? "" : userCurrent.SamAccountName.ToString()) + "\r\n");
                     rtbLDAPUserInfo.AppendText("Mô tả : " + ((userCurrent.Description == null) ? "" : userCurrent.Description.ToString()) + "\r\n");
                 }
 
@@ -357,6 +358,22 @@ namespace AppWFGenProject
         {
             txtLDAPFindUser.Text = "";
             LoadTreeViewObjCate();
+        }
+        private void btnLDAPDUserDisable_Click(object sender, EventArgs e)
+        {
+            LDAPHelper lDAPHelper = new LDAPHelper(_principalContext);
+            string username = rtbLDAPUserInfo.Lines[0].ToString().Replace("Tài khoản : ", "");
+            if(!string.IsNullOrEmpty(username))
+            {
+                if(lDAPHelper.DisableUser(username))
+                {
+                    MessageBox.Show("Khoá tài khoản thành công." , "Thông Báo!");
+                }   
+                else
+                {
+                    MessageBox.Show("Khoá tài khoản không thành công.", "Thông Báo!");
+                }    
+            }    
         }
         #region Grouyp LDAP function
         private void loadGBLDAP()
@@ -501,8 +518,9 @@ namespace AppWFGenProject
         }
 
         #endregion Grouyp LDAP function
+
         #endregion Grouyp LDAP
 
-
+     
     }
 }

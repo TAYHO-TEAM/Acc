@@ -140,7 +140,6 @@ namespace AppWFGenProject.FrameWork
             UserPrincipal findAllUsers = UserPrincipal.FindByIdentity(_prinContext, userName);
             if(findAllUsers != null)
             {
-                PrincipalSearcher ps = new PrincipalSearcher(findAllUsers);
                 findAllUsers.Enabled = false;
                 findAllUsers.Save();
                 return true;
