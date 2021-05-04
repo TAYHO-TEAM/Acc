@@ -5,8 +5,10 @@ using AppWFGenProject.FrameWork;
 using AppWFGenProject.Properties;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
+using ProjectManager.CMD.Domain.DomainObjects;
 using Serilog;
 using Services.Common.Options;
+using Services.Common.Utilities;
 using System;
 using System.DirectoryServices;
 using System.DirectoryServices.AccountManagement;
@@ -250,11 +252,49 @@ namespace AppWFGenProject
         {
 
         }
+        private void btnSMLoad_Click(object sender, EventArgs e)
+        {
+            SysJobHelper sysJobHelper = new SysJobHelper();
+            dgvSMSysAutoSendMail.DataSource = sysJobHelper.GetAllSysJob(1).Items;
+            EnableButtonPaging(sysJobHelper.GetAllSysJob(1));
+        }
+        private void btnPrevious_tbpSMJob_Click(object sender, EventArgs e)
+        {
+            LoaddgvSMSysAutoSendMail();
+        }
+
+        private void btnNext_tbpSMJob_Click(object sender, EventArgs e)
+        {
+            LoaddgvSMSysAutoSendMail();
+        }
+
+        private void btnLast_tbpSMJob_Click(object sender, EventArgs e)
+        {
+            LoaddgvSMSysAutoSendMail();
+        }
+
+        private void btnFirst_tbpSMJob_Click(object sender, EventArgs e)
+        {
+            LoaddgvSMSysAutoSendMail();
+        }
 
         #region Group SendMailAuto Function
         private void LoadSendMailConfig()
         {
-
+           
+        }
+        private void LoaddgvSMSysAutoSendMail()
+        {
+            SysJobHelper sysJobHelper = new SysJobHelper();
+            dgvSMSysAutoSendMail.DataSource = sysJobHelper.GetAllSysJob(ConvertHelper.ConvertStringToInt(txtPage_tbpSMJob.ToString())).Items;
+            EnableButtonPaging(sysJobHelper.GetAllSysJob(ConvertHelper.ConvertStringToInt(txtPage_tbpSMJob.ToString())));
+        }
+        private void EnableButtonPaging(Paging<SysJob> paging)
+        {
+            btnFirst_tbpSMJob.Enabled = paging.Fist();
+            btnPrevious_tbpSMJob.Enabled = paging.Previous();
+            btnNext_tbpSMJob.Enabled = paging.Next();
+            btnLast_tbpSMJob.Enabled = paging.Last();
         }
         #endregion Group SendMailAuto Function
         #endregion Group SendMailAuto
@@ -543,12 +583,14 @@ namespace AppWFGenProject
         }
 
 
+
+
+
+
         #endregion Grouyp LDAP function
 
         #endregion Grouyp LDAP
 
-      
-
-        
+       
     }
 }

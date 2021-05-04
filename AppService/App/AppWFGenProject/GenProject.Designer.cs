@@ -145,9 +145,9 @@ namespace AppWFGenProject
             this.lblLDAPUser = new System.Windows.Forms.Label();
             this.ttpApp = new System.Windows.Forms.ToolTip(this.components);
             this.btnFirst_tbpSMJob = new System.Windows.Forms.Button();
-            this.btnLast_tbpSMJob = new System.Windows.Forms.Button();
-            this.btnNext_tbpSMJob = new System.Windows.Forms.Button();
             this.btnPrevious_tbpSMJob = new System.Windows.Forms.Button();
+            this.btnNext_tbpSMJob = new System.Windows.Forms.Button();
+            this.btnLast_tbpSMJob = new System.Windows.Forms.Button();
             this.txtPage_tbpSMJob = new System.Windows.Forms.TextBox();
             this.lblTotal_tbpSMJob = new System.Windows.Forms.Label();
             this.btnSearch_tbpSMJob = new System.Windows.Forms.Button();
@@ -445,7 +445,7 @@ namespace AppWFGenProject
             this.gbAutoSendMail.Controls.Add(this.label4);
             this.gbAutoSendMail.Controls.Add(this.label5);
             this.gbAutoSendMail.Controls.Add(this.label2);
-            this.gbAutoSendMail.Location = new System.Drawing.Point(1041, 27);
+            this.gbAutoSendMail.Location = new System.Drawing.Point(822, 27);
             this.gbAutoSendMail.Name = "gbAutoSendMail";
             this.gbAutoSendMail.Size = new System.Drawing.Size(966, 506);
             this.gbAutoSendMail.TabIndex = 24;
@@ -471,9 +471,9 @@ namespace AppWFGenProject
             this.tbpSMJob.Controls.Add(this.lblTotal_tbpSMJob);
             this.tbpSMJob.Controls.Add(this.txtPage_tbpSMJob);
             this.tbpSMJob.Controls.Add(this.btnFirst_tbpSMJob);
-            this.tbpSMJob.Controls.Add(this.btnLast_tbpSMJob);
-            this.tbpSMJob.Controls.Add(this.btnNext_tbpSMJob);
             this.tbpSMJob.Controls.Add(this.btnPrevious_tbpSMJob);
+            this.tbpSMJob.Controls.Add(this.btnNext_tbpSMJob);
+            this.tbpSMJob.Controls.Add(this.btnLast_tbpSMJob);
             this.tbpSMJob.Controls.Add(this.textBox1);
             this.tbpSMJob.Controls.Add(this.comboBox1);
             this.tbpSMJob.Controls.Add(this.lblListStore);
@@ -586,6 +586,7 @@ namespace AppWFGenProject
             this.btnSMLoad.Size = new System.Drawing.Size(75, 43);
             this.btnSMLoad.TabIndex = 21;
             this.btnSMLoad.UseVisualStyleBackColor = false;
+            this.btnSMLoad.Click += new System.EventHandler(this.btnSMLoad_Click);
             // 
             // txtSMUser
             // 
@@ -656,7 +657,7 @@ namespace AppWFGenProject
             this.mnHelp});
             this.menuMain.Location = new System.Drawing.Point(0, 0);
             this.menuMain.Name = "menuMain";
-            this.menuMain.Size = new System.Drawing.Size(2007, 24);
+            this.menuMain.Size = new System.Drawing.Size(1847, 24);
             this.menuMain.TabIndex = 1;
             this.menuMain.Text = "menuStrip1";
             // 
@@ -1268,40 +1269,44 @@ namespace AppWFGenProject
             this.btnFirst_tbpSMJob.Image = global::AppWFGenProject.Properties.Resources.icons8_double_left_16;
             this.btnFirst_tbpSMJob.Location = new System.Drawing.Point(323, 359);
             this.btnFirst_tbpSMJob.Name = "btnFirst_tbpSMJob";
-            this.btnFirst_tbpSMJob.Size = new System.Drawing.Size(55, 30);
+            this.btnFirst_tbpSMJob.Size = new System.Drawing.Size(55, 27);
             this.btnFirst_tbpSMJob.TabIndex = 28;
             this.btnFirst_tbpSMJob.UseVisualStyleBackColor = false;
+            this.btnFirst_tbpSMJob.Click += new System.EventHandler(this.btnFirst_tbpSMJob_Click);
             // 
-            // btnLast_tbpSMJob
+            // btnPrevious_tbpSMJob
             // 
-            this.btnLast_tbpSMJob.Image = global::AppWFGenProject.Properties.Resources.icons8_back_16;
-            this.btnLast_tbpSMJob.Location = new System.Drawing.Point(384, 359);
-            this.btnLast_tbpSMJob.Name = "btnLast_tbpSMJob";
-            this.btnLast_tbpSMJob.Size = new System.Drawing.Size(55, 30);
-            this.btnLast_tbpSMJob.TabIndex = 29;
-            this.btnLast_tbpSMJob.UseVisualStyleBackColor = false;
+            this.btnPrevious_tbpSMJob.Image = global::AppWFGenProject.Properties.Resources.icons8_back_16;
+            this.btnPrevious_tbpSMJob.Location = new System.Drawing.Point(384, 360);
+            this.btnPrevious_tbpSMJob.Name = "btnPrevious_tbpSMJob";
+            this.btnPrevious_tbpSMJob.Size = new System.Drawing.Size(55, 27);
+            this.btnPrevious_tbpSMJob.TabIndex = 29;
+            this.btnPrevious_tbpSMJob.UseVisualStyleBackColor = false;
+            this.btnPrevious_tbpSMJob.Click += new System.EventHandler(this.btnPrevious_tbpSMJob_Click);
             // 
             // btnNext_tbpSMJob
             // 
             this.btnNext_tbpSMJob.Image = global::AppWFGenProject.Properties.Resources.icons8_forward_16;
             this.btnNext_tbpSMJob.Location = new System.Drawing.Point(543, 359);
             this.btnNext_tbpSMJob.Name = "btnNext_tbpSMJob";
-            this.btnNext_tbpSMJob.Size = new System.Drawing.Size(55, 30);
+            this.btnNext_tbpSMJob.Size = new System.Drawing.Size(55, 27);
             this.btnNext_tbpSMJob.TabIndex = 30;
             this.btnNext_tbpSMJob.UseVisualStyleBackColor = false;
+            this.btnNext_tbpSMJob.Click += new System.EventHandler(this.btnNext_tbpSMJob_Click);
             // 
-            // btnPrevious_tbpSMJob
+            // btnLast_tbpSMJob
             // 
-            this.btnPrevious_tbpSMJob.Image = global::AppWFGenProject.Properties.Resources.icons8_double_right_16;
-            this.btnPrevious_tbpSMJob.Location = new System.Drawing.Point(604, 359);
-            this.btnPrevious_tbpSMJob.Name = "btnPrevious_tbpSMJob";
-            this.btnPrevious_tbpSMJob.Size = new System.Drawing.Size(55, 30);
-            this.btnPrevious_tbpSMJob.TabIndex = 31;
-            this.btnPrevious_tbpSMJob.UseVisualStyleBackColor = false;
+            this.btnLast_tbpSMJob.Image = global::AppWFGenProject.Properties.Resources.icons8_double_right_16;
+            this.btnLast_tbpSMJob.Location = new System.Drawing.Point(604, 359);
+            this.btnLast_tbpSMJob.Name = "btnLast_tbpSMJob";
+            this.btnLast_tbpSMJob.Size = new System.Drawing.Size(55, 27);
+            this.btnLast_tbpSMJob.TabIndex = 31;
+            this.btnLast_tbpSMJob.UseVisualStyleBackColor = false;
+            this.btnLast_tbpSMJob.Click += new System.EventHandler(this.btnLast_tbpSMJob_Click);
             // 
             // txtPage_tbpSMJob
             // 
-            this.txtPage_tbpSMJob.Location = new System.Drawing.Point(459, 363);
+            this.txtPage_tbpSMJob.Location = new System.Drawing.Point(467, 363);
             this.txtPage_tbpSMJob.Name = "txtPage_tbpSMJob";
             this.txtPage_tbpSMJob.PlaceholderText = "0";
             this.txtPage_tbpSMJob.Size = new System.Drawing.Size(34, 23);
@@ -1310,7 +1315,7 @@ namespace AppWFGenProject
             // lblTotal_tbpSMJob
             // 
             this.lblTotal_tbpSMJob.AutoSize = true;
-            this.lblTotal_tbpSMJob.Location = new System.Drawing.Point(495, 368);
+            this.lblTotal_tbpSMJob.Location = new System.Drawing.Point(503, 368);
             this.lblTotal_tbpSMJob.Name = "lblTotal_tbpSMJob";
             this.lblTotal_tbpSMJob.Size = new System.Drawing.Size(18, 15);
             this.lblTotal_tbpSMJob.TabIndex = 28;
@@ -1328,7 +1333,7 @@ namespace AppWFGenProject
             // GenProject
             // 
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(1847, 575);
+            this.ClientSize = new System.Drawing.Size(1847, 608);
             this.Controls.Add(this.gbAutoSendMail);
             this.Controls.Add(this.gbLDAP);
             this.Controls.Add(this.gbGenCode);
@@ -1479,9 +1484,9 @@ namespace AppWFGenProject
         private System.Windows.Forms.Button btnLDAPDone;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Button btnFirst_tbpSMJob;
-        private System.Windows.Forms.Button btnLast_tbpSMJob;
-        private System.Windows.Forms.Button btnNext_tbpSMJob;
         private System.Windows.Forms.Button btnPrevious_tbpSMJob;
+        private System.Windows.Forms.Button btnNext_tbpSMJob;
+        private System.Windows.Forms.Button btnLast_tbpSMJob;
         private System.Windows.Forms.Label lblTotal_tbpSMJob;
         private System.Windows.Forms.TextBox txtPage_tbpSMJob;
         private System.Windows.Forms.Button btnSearch_tbpSMJob;

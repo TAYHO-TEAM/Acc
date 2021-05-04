@@ -1,4 +1,5 @@
-﻿using ProjectManager.CMD.Domain.DomainObjects;
+﻿using AppWFGenProject.Entities;
+using ProjectManager.CMD.Domain.DomainObjects;
 using ProjectManager.CMD.Infrastructure;
 using System;
 using System.Collections.Generic;
@@ -12,19 +13,19 @@ namespace AppWFGenProject.FrameWork
     {
         //protected readonly ISysJobTableRepository _sysJobTableRepository;
         protected readonly ProjectManagerBaseContext _dbContext;
-        public void GetAllSysJob()
+        public Paging<SysJob> GetAllSysJob(int currentPage =1)
         {
             var totalRecord = _dbContext.SysJob
                                 .Where(x=>(x.IsDelete == null || x.IsDelete == false) && x.IsActive == true)
                                 .Select(x=>x.Id)
                                 .Count();
-            List<SysJob> sysJobs = _dbContext.SysJob
+            Paging<SysJob> paging = new Paging<SysJob>(currentPage,20,totalRecord);
+            paging.Items = _dbContext.SysJob
                                 .Where(x => (x.IsDelete == null || x.IsDelete == false) && x.IsActive == true)
-                                .Skip(1)
-                                .Take(50)
+                                .Skip(paging.Skip())
+                                .Take(paging.Take())
                                 .ToList();
-            //var list = await _sysJobTableRepository.GetAllListAsync(x=>x.Equals("*")).ConfigureAwait(false);
-
+            return paging;
         }    
     }
 }
