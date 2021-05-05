@@ -87,9 +87,11 @@ namespace AppWFGenProject
                {
                    IConfiguration configuration = hostContext.Configuration;
                    services.Configure<ProfileMailOptions>(configuration.GetSection("ProfileMailOptions"));
-                   _ = services.Configure<Common>(configuration.GetSection("Common"));
+                   services.Configure<Common>(configuration.GetSection("Common"));
                    services.Configure<LDAPConfig>(configuration.GetSection("LDAPConfig"));
-                   services.AddDbContext<ProjectManagerBaseContext>(opt => opt.UseSqlServer(configuration.GetConnectionString("TayHoConnection")));
+                   services.AddDbContext<ProjectManagerBaseContext>(opt => opt.UseSqlServer(configuration.GetConnectionString("TayHoConnection"))
+                                                                                .EnableSensitiveDataLogging()
+                                                                                .EnableDetailedErrors());
                    services.AddScoped<GenProject>();
                    //services.AddScoped<TayHoDevApp>(); 
                    //services.AddScoped<testApp>();

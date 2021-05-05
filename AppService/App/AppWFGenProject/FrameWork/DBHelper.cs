@@ -1,12 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using ProjectManager.CMD.Infrastructure;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace AppWFGenProject.Extensions
+namespace AppWFGenProject.FrameWork
 {
     public class DBHelper
     {
@@ -15,9 +10,9 @@ namespace AppWFGenProject.Extensions
         {
             _dbContext = ProjectManagerBaseContext.Value;
         }
-        public void DBGet<T>()
+        public ProjectManagerBaseContext DBGet<T>()
         {
-            var a = _dbContext;
+            return _dbContext;
         }
 
     }

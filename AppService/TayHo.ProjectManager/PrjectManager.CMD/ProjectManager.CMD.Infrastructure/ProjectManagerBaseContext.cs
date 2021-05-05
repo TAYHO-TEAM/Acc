@@ -7,8 +7,11 @@ using System.Reflection;
 
 namespace ProjectManager.CMD.Infrastructure
 {
-    public class ProjectManagerBaseContext : DbContext
+    public partial class ProjectManagerBaseContext : DbContext
     {
+        public ProjectManagerBaseContext()
+        {
+        }
         public ProjectManagerBaseContext(DbContextOptions<ProjectManagerBaseContext> options) : base(options)
         {
         }
@@ -105,5 +108,6 @@ namespace ProjectManager.CMD.Infrastructure
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
             //modelBuilder.Entity<NS_GiaiDoan>();
         }
+        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }

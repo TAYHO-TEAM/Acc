@@ -4,15 +4,19 @@ using AppWFGenProject.Extensions;
 using AppWFGenProject.FrameWork;
 using AppWFGenProject.Properties;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using ProjectManager.CMD.Domain.DomainObjects;
+using ProjectManager.CMD.Infrastructure;
 using Serilog;
 using Services.Common.Options;
 using Services.Common.Utilities;
 using System;
+using System.Collections.Generic;
 using System.DirectoryServices;
 using System.DirectoryServices.AccountManagement;
 using System.Drawing;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace AppWFGenProject
@@ -20,15 +24,20 @@ namespace AppWFGenProject
     public partial class GenProject : Form
     {
         protected static PrincipalContext _principalContext = null;
+        private readonly IServiceScopeFactory _serviceScopeFactory;
         protected readonly Common _common;
         protected readonly LDAPConfig _lDAPConfig;
+        private readonly ProjectManagerBaseContext _dbContext;
         /// <summary>
         /// Load Form
         /// </summary>
         /// <param name="commonAccessor"></param>
         /// <param name="lDAPConfig"></param>
-        public GenProject(IOptionsSnapshot<Common> commonAccessor, IOptionsSnapshot<LDAPConfig> lDAPConfig)
+        public GenProject(IOptionsSnapshot<Common> commonAccessor, IOptionsSnapshot<LDAPConfig> lDAPConfig, IServiceScopeFactory serviceScopeFactory)
         {
+            _serviceScopeFactory = serviceScopeFactory;
+            //using var scope = _serviceScopeFactory.CreateScope();
+            //_dbContext = scope.ServiceProvider.GetRequiredService<ProjectManagerBaseContext>();
             _common = commonAccessor.Value;
             _lDAPConfig = lDAPConfig.Value;
             InitializeComponent();
@@ -60,7 +69,7 @@ namespace AppWFGenProject
             ttpApp.SetToolTip(btnLoginLDAP, "Đăng nhập LDAP");
             ttpApp.SetToolTip(btnCreateLDAP, "Tạo tài khoản mới");
             ttpApp.SetToolTip(btnLDAPSearch, "Tìm kiếm");
-            ttpApp.SetToolTip(btnSMLoad,"Đăng nhập CSDL");
+            ttpApp.SetToolTip(btnSMLoad, "Đăng nhập CSDL");
         }
         #endregion menuToolTip
         /// <summary>
@@ -100,7 +109,7 @@ namespace AppWFGenProject
             }
             else if (nameGroup == nameof(gbAutoSendMail))
             {
-                LoadSendMailConfig();
+                LoadSendMailConfig().ConfigureAwait(false);
             }
             else if (nameGroup == nameof(gbLDAP))
             {
@@ -254,9 +263,7 @@ namespace AppWFGenProject
         }
         private void btnSMLoad_Click(object sender, EventArgs e)
         {
-            SysJobHelper sysJobHelper = new SysJobHelper();
-            dgvSMSysAutoSendMail.DataSource = sysJobHelper.GetAllSysJob(1).Items;
-            EnableButtonPaging(sysJobHelper.GetAllSysJob(1));
+            LoadSendMailConfig();
         }
         private void btnPrevious_tbpSMJob_Click(object sender, EventArgs e)
         {
@@ -279,15 +286,24 @@ namespace AppWFGenProject
         }
 
         #region Group SendMailAuto Function
-        private void LoadSendMailConfig()
+        private async Task LoadSendMailConfig()
         {
-           
+            try
+            {
+                SysJobHelper sysJobHelper = new SysJobHelper(_serviceScopeFactory);
+                var abc = await sysJobHelper.GetAllSysJob(1).ConfigureAwait(false);
+                dgvSMSysAutoSendMail.DataSource = abc.Items;
+                EnableButtonPaging(abc);
+            }
+           catch(Exception ex)
+            { }
         }
-        private void LoaddgvSMSysAutoSendMail()
+        private async Task LoaddgvSMSysAutoSendMail()
         {
-            SysJobHelper sysJobHelper = new SysJobHelper();
-            dgvSMSysAutoSendMail.DataSource = sysJobHelper.GetAllSysJob(ConvertHelper.ConvertStringToInt(txtPage_tbpSMJob.ToString())).Items;
-            EnableButtonPaging(sysJobHelper.GetAllSysJob(ConvertHelper.ConvertStringToInt(txtPage_tbpSMJob.ToString())));
+            SysJobHelper sysJobHelper = new SysJobHelper(_serviceScopeFactory);
+            var abc = await sysJobHelper.GetAllSysJob(ConvertHelper.ConvertStringToInt(txtPage_tbpSMJob.ToString())).ConfigureAwait(false);
+            dgvSMSysAutoSendMail.DataSource = abc.Items;
+            EnableButtonPaging(abc);
         }
         private void EnableButtonPaging(Paging<SysJob> paging)
         {
@@ -380,7 +396,7 @@ namespace AppWFGenProject
                     rtbLDAPUserInfo.AppendText("Tên : " + (userCurrent.Name == null ? "" : userCurrent.Name.ToString()) + "\r\n");
                     rtbLDAPUserInfo.AppendText("Email : " + ((userCurrent.UserPrincipalName == null) ? "" : userCurrent.UserPrincipalName.ToString()) + "\r\n");
                     rtbLDAPUserInfo.AppendText("Mô tả : " + ((userCurrent.Description == null) ? "" : userCurrent.Description.ToString()) + "\r\n");
-                    rtbLDAPUserInfo.AppendText("Trạng thái : " + ((userCurrent.Enabled == null) ? "": (userCurrent.Enabled == true ? "Hoạt động" : "Khoá")) + "\r\n");
+                    rtbLDAPUserInfo.AppendText("Trạng thái : " + ((userCurrent.Enabled == null) ? "" : (userCurrent.Enabled == true ? "Hoạt động" : "Khoá")) + "\r\n");
                     EnableEditCurentLDAP(true);
                 }
                 else
@@ -591,6 +607,6 @@ namespace AppWFGenProject
 
         #endregion Grouyp LDAP
 
-       
+
     }
 }
