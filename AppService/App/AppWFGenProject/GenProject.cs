@@ -33,11 +33,12 @@ namespace AppWFGenProject
         /// </summary>
         /// <param name="commonAccessor"></param>
         /// <param name="lDAPConfig"></param>
-        public GenProject(IOptionsSnapshot<Common> commonAccessor, IOptionsSnapshot<LDAPConfig> lDAPConfig, IServiceScopeFactory serviceScopeFactory)
+        public GenProject(IOptionsSnapshot<Common> commonAccessor, IOptionsSnapshot<LDAPConfig> lDAPConfig, IServiceScopeFactory serviceScopeFactory, ProjectManagerBaseContext dbContext)
         {
             _serviceScopeFactory = serviceScopeFactory;
             //using var scope = _serviceScopeFactory.CreateScope();
             //_dbContext = scope.ServiceProvider.GetRequiredService<ProjectManagerBaseContext>();
+            _dbContext = dbContext;
             _common = commonAccessor.Value;
             _lDAPConfig = lDAPConfig.Value;
             InitializeComponent();
@@ -263,26 +264,26 @@ namespace AppWFGenProject
         }
         private void btnSMLoad_Click(object sender, EventArgs e)
         {
-            LoadSendMailConfig();
+            LoadSendMailConfig().ConfigureAwait(false);
         }
         private void btnPrevious_tbpSMJob_Click(object sender, EventArgs e)
         {
-            LoaddgvSMSysAutoSendMail();
+            LoaddgvSMSysAutoSendMail().ConfigureAwait(false);
         }
 
         private void btnNext_tbpSMJob_Click(object sender, EventArgs e)
         {
-            LoaddgvSMSysAutoSendMail();
+            LoaddgvSMSysAutoSendMail().ConfigureAwait(false);
         }
 
         private void btnLast_tbpSMJob_Click(object sender, EventArgs e)
         {
-            LoaddgvSMSysAutoSendMail();
+            LoaddgvSMSysAutoSendMail().ConfigureAwait(false);
         }
 
         private void btnFirst_tbpSMJob_Click(object sender, EventArgs e)
         {
-            LoaddgvSMSysAutoSendMail();
+            LoaddgvSMSysAutoSendMail().ConfigureAwait(false);
         }
 
         #region Group SendMailAuto Function
@@ -290,20 +291,21 @@ namespace AppWFGenProject
         {
             try
             {
-                SysJobHelper sysJobHelper = new SysJobHelper(_serviceScopeFactory);
-                var abc = await sysJobHelper.GetAllSysJob(1).ConfigureAwait(false);
-                dgvSMSysAutoSendMail.DataSource = abc.Items;
-                EnableButtonPaging(abc);
+                SysJobHelper sysJobHelper = new SysJobHelper(_dbContext); //_serviceScopeFactory
+                var result = await sysJobHelper.GetAllSysJob(1).ConfigureAwait(false);
+                dgvSMSysAutoSendMail.DataSource = result.Items;
+                EnableButtonPaging(result);
             }
-           catch(Exception ex)
-            { }
+            catch (Exception ex)
+            {
+            }
         }
         private async Task LoaddgvSMSysAutoSendMail()
         {
-            SysJobHelper sysJobHelper = new SysJobHelper(_serviceScopeFactory);
-            var abc = await sysJobHelper.GetAllSysJob(ConvertHelper.ConvertStringToInt(txtPage_tbpSMJob.ToString())).ConfigureAwait(false);
-            dgvSMSysAutoSendMail.DataSource = abc.Items;
-            EnableButtonPaging(abc);
+            SysJobHelper sysJobHelper = new SysJobHelper(_dbContext);
+            var result = await sysJobHelper.GetAllSysJob(ConvertHelper.ConvertStringToInt(txtPage_tbpSMJob.ToString())).ConfigureAwait(false);
+            dgvSMSysAutoSendMail.DataSource = result.Items;
+            EnableButtonPaging(result);
         }
         private void EnableButtonPaging(Paging<SysJob> paging)
         {
