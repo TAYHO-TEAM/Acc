@@ -13,15 +13,18 @@ using Services.Common.Options;
 using Services.Common.Utilities;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
 using System.DirectoryServices;
 using System.DirectoryServices.AccountManagement;
 using System.Drawing;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace AppWFGenProject
 {
-    public partial class GenProject : Form
+    public partial class MainProject : Form
     {
         protected static PrincipalContext _principalContext = null;
         private readonly IServiceScopeFactory _serviceScopeFactory;
@@ -33,7 +36,7 @@ namespace AppWFGenProject
         /// </summary>
         /// <param name="commonAccessor"></param>
         /// <param name="lDAPConfig"></param>
-        public GenProject(IOptionsSnapshot<Common> commonAccessor, IOptionsSnapshot<LDAPConfig> lDAPConfig, IServiceScopeFactory serviceScopeFactory, ProjectManagerBaseContext dbContext)
+        public MainProject(IOptionsSnapshot<Common> commonAccessor, IOptionsSnapshot<LDAPConfig> lDAPConfig, IServiceScopeFactory serviceScopeFactory, ProjectManagerBaseContext dbContext)
         {
             _serviceScopeFactory = serviceScopeFactory;
             //using var scope = _serviceScopeFactory.CreateScope();
@@ -286,6 +289,23 @@ namespace AppWFGenProject
             LoaddgvSMSysAutoSendMail().ConfigureAwait(false);
         }
 
+        private void dgvSMSysAutoSendMail_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                cmsRightClick_dgvSM.Show(Cursor.Position.X, Cursor.Position.Y);
+            }
+
+        }
+        private void dgvSMSysAutoSendMail_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+        private void cmsMenuNew_Click(object sender, EventArgs e)
+        {
+           
+
+        }
         #region Group SendMailAuto Function
         private async Task LoadSendMailConfig()
         {
@@ -293,7 +313,11 @@ namespace AppWFGenProject
             {
                 SysJobHelper sysJobHelper = new SysJobHelper(_dbContext); //_serviceScopeFactory
                 var result = await sysJobHelper.GetAllSysJob(1).ConfigureAwait(false);
-                dgvSMSysAutoSendMail.DataSource = result.Items;
+                BindingSource bs = new BindingSource();
+                bs.DataSource = result.Items.ToList();
+                bs.AllowNew = true;
+
+                dgvSMSysAutoSendMail.DataSource = bs;
                 EnableButtonPaging(result);
             }
             catch (Exception ex)
@@ -605,10 +629,12 @@ namespace AppWFGenProject
 
 
 
+
+
         #endregion Grouyp LDAP function
 
         #endregion Grouyp LDAP
 
-
+      
     }
 }

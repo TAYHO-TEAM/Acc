@@ -1,7 +1,7 @@
 ﻿
 namespace AppWFGenProject
 {
-    partial class GenProject
+    partial class MainProject
     {
         /// <summary>
         ///  Required designer variable.
@@ -30,7 +30,7 @@ namespace AppWFGenProject
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GenProject));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainProject));
             this.gbGenCode = new System.Windows.Forms.GroupBox();
             this.clbFunction = new System.Windows.Forms.CheckedListBox();
             this.btnBrowser = new System.Windows.Forms.Button();
@@ -60,6 +60,13 @@ namespace AppWFGenProject
             this.gbAutoSendMail = new System.Windows.Forms.GroupBox();
             this.tbcSM = new System.Windows.Forms.TabControl();
             this.tbpSMJob = new System.Windows.Forms.TabPage();
+            this.btnSearch_tbpSMJob = new System.Windows.Forms.Button();
+            this.lblTotal_tbpSMJob = new System.Windows.Forms.Label();
+            this.txtPage_tbpSMJob = new System.Windows.Forms.TextBox();
+            this.btnFirst_tbpSMJob = new System.Windows.Forms.Button();
+            this.btnPrevious_tbpSMJob = new System.Windows.Forms.Button();
+            this.btnNext_tbpSMJob = new System.Windows.Forms.Button();
+            this.btnLast_tbpSMJob = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.lblListStore = new System.Windows.Forms.Label();
@@ -144,13 +151,13 @@ namespace AppWFGenProject
             this.lblLDAPPass = new System.Windows.Forms.Label();
             this.lblLDAPUser = new System.Windows.Forms.Label();
             this.ttpApp = new System.Windows.Forms.ToolTip(this.components);
-            this.btnFirst_tbpSMJob = new System.Windows.Forms.Button();
-            this.btnPrevious_tbpSMJob = new System.Windows.Forms.Button();
-            this.btnNext_tbpSMJob = new System.Windows.Forms.Button();
-            this.btnLast_tbpSMJob = new System.Windows.Forms.Button();
-            this.txtPage_tbpSMJob = new System.Windows.Forms.TextBox();
-            this.lblTotal_tbpSMJob = new System.Windows.Forms.Label();
-            this.btnSearch_tbpSMJob = new System.Windows.Forms.Button();
+            this.cmsRightClick_dgvSM = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.cmsMenuNew = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsMenuEdit = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsMenuDelete = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsMenuCopy = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsMenuPaste = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsMenuClone = new System.Windows.Forms.ToolStripMenuItem();
             this.gbGenCode.SuspendLayout();
             this.tbcConfigGen.SuspendLayout();
             this.tbpCUDR.SuspendLayout();
@@ -163,6 +170,7 @@ namespace AppWFGenProject
             this.tabLDAP.SuspendLayout();
             this.tbpLDAPCreAccount.SuspendLayout();
             this.tbpLDAPManagerAcc.SuspendLayout();
+            this.cmsRightClick_dgvSM.SuspendLayout();
             this.SuspendLayout();
             // 
             // gbGenCode
@@ -488,6 +496,72 @@ namespace AppWFGenProject
             this.tbpSMJob.Text = "Job";
             this.tbpSMJob.UseVisualStyleBackColor = true;
             // 
+            // btnSearch_tbpSMJob
+            // 
+            this.btnSearch_tbpSMJob.Image = global::AppWFGenProject.Properties.Resources.icons8_search_16;
+            this.btnSearch_tbpSMJob.Location = new System.Drawing.Point(841, 20);
+            this.btnSearch_tbpSMJob.Name = "btnSearch_tbpSMJob";
+            this.btnSearch_tbpSMJob.Size = new System.Drawing.Size(38, 25);
+            this.btnSearch_tbpSMJob.TabIndex = 32;
+            this.btnSearch_tbpSMJob.UseVisualStyleBackColor = false;
+            // 
+            // lblTotal_tbpSMJob
+            // 
+            this.lblTotal_tbpSMJob.AutoSize = true;
+            this.lblTotal_tbpSMJob.Location = new System.Drawing.Point(503, 368);
+            this.lblTotal_tbpSMJob.Name = "lblTotal_tbpSMJob";
+            this.lblTotal_tbpSMJob.Size = new System.Drawing.Size(18, 15);
+            this.lblTotal_tbpSMJob.TabIndex = 28;
+            this.lblTotal_tbpSMJob.Text = "/0";
+            // 
+            // txtPage_tbpSMJob
+            // 
+            this.txtPage_tbpSMJob.Location = new System.Drawing.Point(467, 363);
+            this.txtPage_tbpSMJob.Name = "txtPage_tbpSMJob";
+            this.txtPage_tbpSMJob.PlaceholderText = "0";
+            this.txtPage_tbpSMJob.Size = new System.Drawing.Size(34, 23);
+            this.txtPage_tbpSMJob.TabIndex = 28;
+            // 
+            // btnFirst_tbpSMJob
+            // 
+            this.btnFirst_tbpSMJob.Image = global::AppWFGenProject.Properties.Resources.icons8_double_left_16;
+            this.btnFirst_tbpSMJob.Location = new System.Drawing.Point(323, 360);
+            this.btnFirst_tbpSMJob.Name = "btnFirst_tbpSMJob";
+            this.btnFirst_tbpSMJob.Size = new System.Drawing.Size(55, 27);
+            this.btnFirst_tbpSMJob.TabIndex = 28;
+            this.btnFirst_tbpSMJob.UseVisualStyleBackColor = false;
+            this.btnFirst_tbpSMJob.Click += new System.EventHandler(this.btnFirst_tbpSMJob_Click);
+            // 
+            // btnPrevious_tbpSMJob
+            // 
+            this.btnPrevious_tbpSMJob.Image = global::AppWFGenProject.Properties.Resources.icons8_back_16;
+            this.btnPrevious_tbpSMJob.Location = new System.Drawing.Point(384, 360);
+            this.btnPrevious_tbpSMJob.Name = "btnPrevious_tbpSMJob";
+            this.btnPrevious_tbpSMJob.Size = new System.Drawing.Size(55, 27);
+            this.btnPrevious_tbpSMJob.TabIndex = 29;
+            this.btnPrevious_tbpSMJob.UseVisualStyleBackColor = false;
+            this.btnPrevious_tbpSMJob.Click += new System.EventHandler(this.btnPrevious_tbpSMJob_Click);
+            // 
+            // btnNext_tbpSMJob
+            // 
+            this.btnNext_tbpSMJob.Image = global::AppWFGenProject.Properties.Resources.icons8_forward_16;
+            this.btnNext_tbpSMJob.Location = new System.Drawing.Point(543, 359);
+            this.btnNext_tbpSMJob.Name = "btnNext_tbpSMJob";
+            this.btnNext_tbpSMJob.Size = new System.Drawing.Size(55, 27);
+            this.btnNext_tbpSMJob.TabIndex = 30;
+            this.btnNext_tbpSMJob.UseVisualStyleBackColor = false;
+            this.btnNext_tbpSMJob.Click += new System.EventHandler(this.btnNext_tbpSMJob_Click);
+            // 
+            // btnLast_tbpSMJob
+            // 
+            this.btnLast_tbpSMJob.Image = global::AppWFGenProject.Properties.Resources.icons8_double_right_16;
+            this.btnLast_tbpSMJob.Location = new System.Drawing.Point(604, 359);
+            this.btnLast_tbpSMJob.Name = "btnLast_tbpSMJob";
+            this.btnLast_tbpSMJob.Size = new System.Drawing.Size(55, 27);
+            this.btnLast_tbpSMJob.TabIndex = 31;
+            this.btnLast_tbpSMJob.UseVisualStyleBackColor = false;
+            this.btnLast_tbpSMJob.Click += new System.EventHandler(this.btnLast_tbpSMJob_Click);
+            // 
             // textBox1
             // 
             this.textBox1.Location = new System.Drawing.Point(507, 22);
@@ -522,6 +596,8 @@ namespace AppWFGenProject
             this.dgvSMSysAutoSendMail.RowTemplate.Height = 25;
             this.dgvSMSysAutoSendMail.Size = new System.Drawing.Size(891, 291);
             this.dgvSMSysAutoSendMail.TabIndex = 26;
+            this.dgvSMSysAutoSendMail.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvSMSysAutoSendMail_CellContentClick);
+            this.dgvSMSysAutoSendMail.MouseClick += new System.Windows.Forms.MouseEventHandler(this.dgvSMSysAutoSendMail_MouseClick);
             // 
             // lblSMListDB
             // 
@@ -546,7 +622,7 @@ namespace AppWFGenProject
             this.tbpSMSendMail.Location = new System.Drawing.Point(4, 24);
             this.tbpSMSendMail.Name = "tbpSMSendMail";
             this.tbpSMSendMail.Padding = new System.Windows.Forms.Padding(3);
-            this.tbpSMSendMail.Size = new System.Drawing.Size(937, 369);
+            this.tbpSMSendMail.Size = new System.Drawing.Size(937, 400);
             this.tbpSMSendMail.TabIndex = 1;
             this.tbpSMSendMail.Text = "Send Mail";
             this.tbpSMSendMail.UseVisualStyleBackColor = true;
@@ -556,7 +632,7 @@ namespace AppWFGenProject
             this.tbpSetting.Location = new System.Drawing.Point(4, 24);
             this.tbpSetting.Name = "tbpSetting";
             this.tbpSetting.Padding = new System.Windows.Forms.Padding(3);
-            this.tbpSetting.Size = new System.Drawing.Size(937, 369);
+            this.tbpSetting.Size = new System.Drawing.Size(937, 400);
             this.tbpSetting.TabIndex = 2;
             this.tbpSetting.Text = "Setting";
             this.tbpSetting.UseVisualStyleBackColor = true;
@@ -693,6 +769,7 @@ namespace AppWFGenProject
             // 
             // sub11GenNetApi
             // 
+            this.sub11GenNetApi.Image = global::AppWFGenProject.Properties.Resources.icons8_piston_16;
             this.sub11GenNetApi.Name = "sub11GenNetApi";
             this.sub11GenNetApi.Size = new System.Drawing.Size(190, 22);
             this.sub11GenNetApi.Text = "Gen CURD API Net 3.1";
@@ -700,6 +777,7 @@ namespace AppWFGenProject
             // 
             // sub12SendMail
             // 
+            this.sub12SendMail.Image = global::AppWFGenProject.Properties.Resources.icons8_system_task_16;
             this.sub12SendMail.Name = "sub12SendMail";
             this.sub12SendMail.Size = new System.Drawing.Size(190, 22);
             this.sub12SendMail.Text = "Setting Send Mail";
@@ -707,6 +785,7 @@ namespace AppWFGenProject
             // 
             // sub13LDAP
             // 
+            this.sub13LDAP.Image = global::AppWFGenProject.Properties.Resources.icons8_active_directory_16;
             this.sub13LDAP.Name = "sub13LDAP";
             this.sub13LDAP.Size = new System.Drawing.Size(190, 22);
             this.sub13LDAP.Text = "LDAP Manger";
@@ -1264,73 +1343,62 @@ namespace AppWFGenProject
             this.lblLDAPUser.TabIndex = 0;
             this.lblLDAPUser.Text = "LDAP User:";
             // 
-            // btnFirst_tbpSMJob
+            // cmsRightClick_dgvSM
             // 
-            this.btnFirst_tbpSMJob.Image = global::AppWFGenProject.Properties.Resources.icons8_double_left_16;
-            this.btnFirst_tbpSMJob.Location = new System.Drawing.Point(323, 359);
-            this.btnFirst_tbpSMJob.Name = "btnFirst_tbpSMJob";
-            this.btnFirst_tbpSMJob.Size = new System.Drawing.Size(55, 27);
-            this.btnFirst_tbpSMJob.TabIndex = 28;
-            this.btnFirst_tbpSMJob.UseVisualStyleBackColor = false;
-            this.btnFirst_tbpSMJob.Click += new System.EventHandler(this.btnFirst_tbpSMJob_Click);
+            this.cmsRightClick_dgvSM.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cmsMenuNew,
+            this.cmsMenuEdit,
+            this.cmsMenuDelete,
+            this.cmsMenuCopy,
+            this.cmsMenuPaste,
+            this.cmsMenuClone});
+            this.cmsRightClick_dgvSM.Name = "cmsRightClick_dgvSM";
+            this.cmsRightClick_dgvSM.Size = new System.Drawing.Size(108, 136);
             // 
-            // btnPrevious_tbpSMJob
+            // cmsMenuNew
             // 
-            this.btnPrevious_tbpSMJob.Image = global::AppWFGenProject.Properties.Resources.icons8_back_16;
-            this.btnPrevious_tbpSMJob.Location = new System.Drawing.Point(384, 360);
-            this.btnPrevious_tbpSMJob.Name = "btnPrevious_tbpSMJob";
-            this.btnPrevious_tbpSMJob.Size = new System.Drawing.Size(55, 27);
-            this.btnPrevious_tbpSMJob.TabIndex = 29;
-            this.btnPrevious_tbpSMJob.UseVisualStyleBackColor = false;
-            this.btnPrevious_tbpSMJob.Click += new System.EventHandler(this.btnPrevious_tbpSMJob_Click);
+            this.cmsMenuNew.Image = global::AppWFGenProject.Properties.Resources.icons8_add_new_16;
+            this.cmsMenuNew.Name = "cmsMenuNew";
+            this.cmsMenuNew.Size = new System.Drawing.Size(107, 22);
+            this.cmsMenuNew.Text = "New";
+            this.cmsMenuNew.Click += new System.EventHandler(this.cmsMenuNew_Click);
             // 
-            // btnNext_tbpSMJob
+            // cmsMenuEdit
             // 
-            this.btnNext_tbpSMJob.Image = global::AppWFGenProject.Properties.Resources.icons8_forward_16;
-            this.btnNext_tbpSMJob.Location = new System.Drawing.Point(543, 359);
-            this.btnNext_tbpSMJob.Name = "btnNext_tbpSMJob";
-            this.btnNext_tbpSMJob.Size = new System.Drawing.Size(55, 27);
-            this.btnNext_tbpSMJob.TabIndex = 30;
-            this.btnNext_tbpSMJob.UseVisualStyleBackColor = false;
-            this.btnNext_tbpSMJob.Click += new System.EventHandler(this.btnNext_tbpSMJob_Click);
+            this.cmsMenuEdit.Image = global::AppWFGenProject.Properties.Resources.icons8_edit_row_16;
+            this.cmsMenuEdit.Name = "cmsMenuEdit";
+            this.cmsMenuEdit.Size = new System.Drawing.Size(107, 22);
+            this.cmsMenuEdit.Text = "Edit";
             // 
-            // btnLast_tbpSMJob
+            // cmsMenuDelete
             // 
-            this.btnLast_tbpSMJob.Image = global::AppWFGenProject.Properties.Resources.icons8_double_right_16;
-            this.btnLast_tbpSMJob.Location = new System.Drawing.Point(604, 359);
-            this.btnLast_tbpSMJob.Name = "btnLast_tbpSMJob";
-            this.btnLast_tbpSMJob.Size = new System.Drawing.Size(55, 27);
-            this.btnLast_tbpSMJob.TabIndex = 31;
-            this.btnLast_tbpSMJob.UseVisualStyleBackColor = false;
-            this.btnLast_tbpSMJob.Click += new System.EventHandler(this.btnLast_tbpSMJob_Click);
+            this.cmsMenuDelete.Image = global::AppWFGenProject.Properties.Resources.icons8_delete_16;
+            this.cmsMenuDelete.Name = "cmsMenuDelete";
+            this.cmsMenuDelete.Size = new System.Drawing.Size(107, 22);
+            this.cmsMenuDelete.Text = "Delete";
             // 
-            // txtPage_tbpSMJob
+            // cmsMenuCopy
             // 
-            this.txtPage_tbpSMJob.Location = new System.Drawing.Point(467, 363);
-            this.txtPage_tbpSMJob.Name = "txtPage_tbpSMJob";
-            this.txtPage_tbpSMJob.PlaceholderText = "0";
-            this.txtPage_tbpSMJob.Size = new System.Drawing.Size(34, 23);
-            this.txtPage_tbpSMJob.TabIndex = 28;
+            this.cmsMenuCopy.Image = global::AppWFGenProject.Properties.Resources.icons8_copy_16;
+            this.cmsMenuCopy.Name = "cmsMenuCopy";
+            this.cmsMenuCopy.Size = new System.Drawing.Size(107, 22);
+            this.cmsMenuCopy.Text = "Copy";
             // 
-            // lblTotal_tbpSMJob
+            // cmsMenuPaste
             // 
-            this.lblTotal_tbpSMJob.AutoSize = true;
-            this.lblTotal_tbpSMJob.Location = new System.Drawing.Point(503, 368);
-            this.lblTotal_tbpSMJob.Name = "lblTotal_tbpSMJob";
-            this.lblTotal_tbpSMJob.Size = new System.Drawing.Size(18, 15);
-            this.lblTotal_tbpSMJob.TabIndex = 28;
-            this.lblTotal_tbpSMJob.Text = "/0";
+            this.cmsMenuPaste.Image = global::AppWFGenProject.Properties.Resources.icons8_paste_16;
+            this.cmsMenuPaste.Name = "cmsMenuPaste";
+            this.cmsMenuPaste.Size = new System.Drawing.Size(107, 22);
+            this.cmsMenuPaste.Text = "Paste";
             // 
-            // btnSearch_tbpSMJob
+            // cmsMenuClone
             // 
-            this.btnSearch_tbpSMJob.Image = global::AppWFGenProject.Properties.Resources.icons8_search_16;
-            this.btnSearch_tbpSMJob.Location = new System.Drawing.Point(841, 20);
-            this.btnSearch_tbpSMJob.Name = "btnSearch_tbpSMJob";
-            this.btnSearch_tbpSMJob.Size = new System.Drawing.Size(38, 25);
-            this.btnSearch_tbpSMJob.TabIndex = 32;
-            this.btnSearch_tbpSMJob.UseVisualStyleBackColor = false;
+            this.cmsMenuClone.Image = global::AppWFGenProject.Properties.Resources.icons8_clone_16;
+            this.cmsMenuClone.Name = "cmsMenuClone";
+            this.cmsMenuClone.Size = new System.Drawing.Size(107, 22);
+            this.cmsMenuClone.Text = "Clone";
             // 
-            // GenProject
+            // MainProject
             // 
             this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(1847, 608);
@@ -1338,8 +1406,9 @@ namespace AppWFGenProject
             this.Controls.Add(this.gbLDAP);
             this.Controls.Add(this.gbGenCode);
             this.Controls.Add(this.menuMain);
-            this.Name = "GenProject";
-            this.Text = "GenProjectNetCore";
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Name = "MainProject";
+            this.Text = "AppSysTayHo";
             this.Load += new System.EventHandler(this.GenProject_Load);
             this.gbGenCode.ResumeLayout(false);
             this.gbGenCode.PerformLayout();
@@ -1361,6 +1430,7 @@ namespace AppWFGenProject
             this.tbpLDAPCreAccount.PerformLayout();
             this.tbpLDAPManagerAcc.ResumeLayout(false);
             this.tbpLDAPManagerAcc.PerformLayout();
+            this.cmsRightClick_dgvSM.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1490,6 +1560,13 @@ namespace AppWFGenProject
         private System.Windows.Forms.Label lblTotal_tbpSMJob;
         private System.Windows.Forms.TextBox txtPage_tbpSMJob;
         private System.Windows.Forms.Button btnSearch_tbpSMJob;
+        private System.Windows.Forms.ContextMenuStrip cmsRightClick_dgvSM;
+        private System.Windows.Forms.ToolStripMenuItem cmsMenuNew;
+        private System.Windows.Forms.ToolStripMenuItem cmsMenuEdit;
+        private System.Windows.Forms.ToolStripMenuItem cmsMenuDelete;
+        private System.Windows.Forms.ToolStripMenuItem cmsMenuCopy;
+        private System.Windows.Forms.ToolStripMenuItem cmsMenuClone;
+        private System.Windows.Forms.ToolStripMenuItem cmsMenuPaste;
     }
 }
 
