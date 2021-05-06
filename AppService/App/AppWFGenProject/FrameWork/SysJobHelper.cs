@@ -49,5 +49,17 @@ namespace AppWFGenProject.FrameWork
             }
 
         }
+        public void CreateNewSysJob (SysJob sysJob)
+        {
+            if(_dbContext.SysJob.Any(x=>x.JobName == sysJob.JobName))
+            {
+
+            }  
+            else
+            {
+                //_dbContext.SysJob.Add(sysJob);
+                //_dbContext.SaveChanges();
+            }    
+        }
     }
 }

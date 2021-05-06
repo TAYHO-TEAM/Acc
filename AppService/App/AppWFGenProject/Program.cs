@@ -13,13 +13,21 @@ using System.Reflection;
 using System.Windows.Forms;
 using Serilog.Events;
 using AppWFGenProject.Commons;
+using System.Runtime.InteropServices;
 //using System.Configuration;
 
 namespace AppWFGenProject
 {
     static class Program
     {
-        
+        [DllImport("user32.dll")]
+        internal static extern bool OpenClipboard(IntPtr hWndNewOwner);
+
+        [DllImport("user32.dll")]
+        internal static extern bool CloseClipboard();
+
+        [DllImport("user32.dll")]
+        internal static extern bool SetClipboardData(uint uFormat, IntPtr data);
         //public static IConfiguration _configuration;
         /// <summary>
         ///  The main entry point for the application.
@@ -28,6 +36,12 @@ namespace AppWFGenProject
         static void Main(string[] args)
         {
             //var provider = new PhysicalFileProvider(@"\Content\Config");
+            OpenClipboard(IntPtr.Zero);
+            var yourString = "H";
+            var ptr = Marshal.StringToHGlobalUni(yourString);
+            SetClipboardData(13, ptr);
+            CloseClipboard();
+            Marshal.FreeHGlobal(ptr);
             var currentDirectory = Directory.GetCurrentDirectory();
 
             //_configuration = new ConfigurationBuilder()
@@ -89,9 +103,7 @@ namespace AppWFGenProject
                    services.Configure<ProfileMailOptions>(configuration.GetSection("ProfileMailOptions"));
                    services.Configure<Common>(configuration.GetSection("Common"));
                    services.Configure<LDAPConfig>(configuration.GetSection("LDAPConfig"));
-                   services.AddDbContext<ProjectManagerBaseContext>(opt => opt.UseSqlServer(configuration.GetConnectionString("TayHoConnection"))
-                                                                                .EnableSensitiveDataLogging()
-                                                                                .EnableDetailedErrors());
+                   services.AddDbContext<ProjectManagerBaseContext>(opt => opt.UseSqlServer(configuration.GetConnectionString("TayHoConnection")));
                    services.AddScoped<MainProject>();
                    //services.AddScoped<TayHoDevApp>(); 
                    //services.AddScoped<testApp>();

@@ -35,7 +35,7 @@ namespace ProjectManager.CMD.Domain.DomainObjects
         #endregion Fields
         #region Constructors
 
-        private SysJob()
+        public SysJob()
         {
             _salt = Helpers.RandomSecretKey();
         }
@@ -66,22 +66,22 @@ namespace ProjectManager.CMD.Domain.DomainObjects
         #endregion Constructors
         #region Properties
 
-        [MaxLength(256, ErrorMessage = nameof(ErrorCodeInsert.IErr256))] public string JobName { get => _jobName; }
-        [MaxLength(256, ErrorMessage = nameof(ErrorCodeInsert.IErr256))] public string NameDataBase { get => _nameDataBase; }
-        [MaxLength(512, ErrorMessage = nameof(ErrorCodeInsert.IErr512))] public string NameStoreProce { get => _nameStoreProce; }
-        [MaxLength(512, ErrorMessage = nameof(ErrorCodeInsert.IErr512))] public string ConnStringHash { get => _connStringHash; }
+        [MaxLength(256, ErrorMessage = nameof(ErrorCodeInsert.IErr256))] public string JobName { get => _jobName; set { _jobName = value; } }
+        [MaxLength(256, ErrorMessage = nameof(ErrorCodeInsert.IErr256))] public string NameDataBase { get => _nameDataBase; set { _nameDataBase = value; } }
+        [MaxLength(512, ErrorMessage = nameof(ErrorCodeInsert.IErr512))] public string NameStoreProce { get => _nameStoreProce; set { _nameStoreProce = value; } }
+        [MaxLength(512, ErrorMessage = nameof(ErrorCodeInsert.IErr512))] public string ConnStringHash { get => _connStringHash; set { _connStringHash = value; } }
         [MaxLength(512, ErrorMessage = nameof(ErrorCodeInsert.IErr512))] public string Salt { get => _salt; }
-        public TimeSpan? StartTime { get => _startTime; }
-        public TimeSpan? EndTime { get => _endTime; }
-        public DateTime? StartDate { get => _startDate; }
-        public DateTime? EndDate { get => _endDate; }
-        public DateTime? FirstDate { get => _firstDate; }
-        public DateTime? LastDate { get => _lastDate; }
-        public DateTime? NextDate { get => _nextDate; }
-        public int? Times { get => _times; }
-        public byte? Unit { get => _unit; }
-        public int? StepTime { get => _stepTime; }
-        public bool? IsTemplate { get => _isTemplate; }
+        public TimeSpan? StartTime { get => _startTime; set { _startTime = value; } }
+        public TimeSpan? EndTime { get => _endTime; set { _endTime = value; } }
+        public DateTime? StartDate { get => _startDate; set { _startDate = value; } }
+        public DateTime? EndDate { get => _endDate; set { _endDate = value; } }
+        public DateTime? FirstDate { get => _firstDate; set { _firstDate = value; } }
+        public DateTime? LastDate { get => _lastDate; set { _lastDate = value; } }
+        public DateTime? NextDate { get => _nextDate; set { _nextDate = value; } }
+        public int? Times { get => _times; set { _times = value; } }
+        public byte? Unit { get => _unit; set { _unit = value; } }
+        public int? StepTime { get => _stepTime; set { _stepTime = value; } }
+        public bool? IsTemplate { get => _isTemplate; set { _isTemplate = value; } }
 
         #endregion Properties
         #region Behaviours

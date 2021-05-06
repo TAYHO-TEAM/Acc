@@ -596,7 +596,7 @@ namespace AppWFGenProject
             this.dgvSMSysAutoSendMail.RowTemplate.Height = 25;
             this.dgvSMSysAutoSendMail.Size = new System.Drawing.Size(891, 291);
             this.dgvSMSysAutoSendMail.TabIndex = 26;
-            this.dgvSMSysAutoSendMail.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvSMSysAutoSendMail_CellContentClick);
+            this.dgvSMSysAutoSendMail.AllowUserToAddRowsChanged += new System.EventHandler(this.dgvSMSysAutoSendMail_AllowUserToAddRowsChanged);
             this.dgvSMSysAutoSendMail.MouseClick += new System.Windows.Forms.MouseEventHandler(this.dgvSMSysAutoSendMail_MouseClick);
             // 
             // lblSMListDB
@@ -1410,6 +1410,7 @@ namespace AppWFGenProject
             this.Name = "MainProject";
             this.Text = "AppSysTayHo";
             this.Load += new System.EventHandler(this.GenProject_Load);
+            this.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.MainProject_PreviewKeyDown);
             this.gbGenCode.ResumeLayout(false);
             this.gbGenCode.PerformLayout();
             this.tbcConfigGen.ResumeLayout(false);

@@ -15,12 +15,15 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.Entity;
 using System.DirectoryServices;
 using System.DirectoryServices.AccountManagement;
 using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+
+
 
 namespace AppWFGenProject
 {
@@ -60,6 +63,33 @@ namespace AppWFGenProject
         //    txtDB.Text = "QuanLyDuAn";
         //    btnGen.Enabled = false;
         //}
+
+        private void MainProject_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            //if ((Control.ModifierKeys & Keys.Control) == Keys.Control)
+            //{
+            //    switch (e.KeyValue)
+            //    {
+            //        case (int)Keys.C:
+            //            WebBrowser.Document.ExecCommand("Copy", true, null);
+            //            break;
+            //        case (int)Keys.V:
+            //            IDataObject iData = Clipboard.GetDataObject();
+            //            if (iData.GetDataPresent(DataFormats.Text))
+            //            {
+            //                WebBrowser.Document.ExecCommand("Paste", true, (String)iData.GetData(DataFormats.Text));
+            //            }
+            //            break;
+            //        case (int)Keys.X:
+            //            WebBrowser.Document.ExecCommand("Cut", true, null);
+            //            break;
+            //        case (int)Keys.A:
+            //            WebBrowser.Document.ExecCommand("SelectAll", true, null);
+            //            break;
+            //    }
+            //}
+
+        }
         #region menuToolTip
         private void SetToolTip()
         {
@@ -297,32 +327,40 @@ namespace AppWFGenProject
             }
 
         }
-        private void dgvSMSysAutoSendMail_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
 
-        }
         private void cmsMenuNew_Click(object sender, EventArgs e)
         {
-           
 
+
+        }
+        private void dgvSMSysAutoSendMail_AllowUserToAddRowsChanged(object sender, EventArgs e)
+        {
+            var a = "";
         }
         #region Group SendMailAuto Function
         private async Task LoadSendMailConfig()
         {
             try
             {
-                SysJobHelper sysJobHelper = new SysJobHelper(_dbContext); //_serviceScopeFactory
+                SysJobHelper sysJobHelper = new SysJobHelper(_dbContext);
                 var result = await sysJobHelper.GetAllSysJob(1).ConfigureAwait(false);
                 BindingSource bs = new BindingSource();
-                bs.DataSource = result.Items.ToList();
                 bs.AllowNew = true;
-
-                dgvSMSysAutoSendMail.DataSource = bs;
+                bs.DataSource = result.Items;
+                bs.AddingNew += new AddingNewEventHandler(InsertSysJob);
+                dgvSMSysAutoSendMail.DataSource = bs; result.Items.ToList();
                 EnableButtonPaging(result);
             }
             catch (Exception ex)
             {
             }
+        }
+        private void InsertSysJob(object sender, AddingNewEventArgs e)
+        {
+            e.NewObject = new SysJob();
+            ///new SysJob("test1", "test1", "test1", "tayho", DateTime.Now.TimeOfDay, DateTime.Now.TimeOfDay, DateTime.Now, DateTime.Now, DateTime.Now, DateTime.Now, DateTime.Now, 1, 1, 1, false);
+            //SysJobHelper sysJobHelper = new SysJobHelper(_dbContext);
+            //sysJobHelper.CreateNewSysJob( new SysJob("test1","test1","test1","tayho", DateTime.Now.TimeOfDay, DateTime.Now.TimeOfDay, DateTime.Now, DateTime.Now, DateTime.Now, DateTime.Now,DateTime.Now, 1,1,1,false));
         }
         private async Task LoaddgvSMSysAutoSendMail()
         {
@@ -631,10 +669,13 @@ namespace AppWFGenProject
 
 
 
+
+
+
         #endregion Grouyp LDAP function
 
         #endregion Grouyp LDAP
 
-      
+
     }
 }
