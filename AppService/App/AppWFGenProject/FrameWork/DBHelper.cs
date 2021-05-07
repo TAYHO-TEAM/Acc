@@ -1,5 +1,9 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using ProjectManager.CMD.Infrastructure;
+using System.Collections;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 
 namespace AppWFGenProject.FrameWork
 {
@@ -14,6 +18,17 @@ namespace AppWFGenProject.FrameWork
         {
             return _dbContext;
         }
+        public class ObservableListSource<T> : ObservableCollection<T>, IListSource
+           where T : class
+        {
+            private IBindingList _bindingList;
 
+            bool IListSource.ContainsListCollection { get { return false; } }
+
+            IList IListSource.GetList()
+            {
+                return _bindingList ?? (_bindingList = this.ToBindingList());
+            }
+        }
     }
 }

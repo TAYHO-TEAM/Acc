@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -52,9 +53,35 @@ namespace AppWFGenProject.Entities
         {
             return (CurrentPage - 1) * PageSize;
         }
+
         public int Take()
         {
-            return (CurrentPage * PageSize) - 1;
+            return PageSize;
+        }
+    }
+    public class PageOffsetList : IListSource
+    {
+        public bool ContainsListCollection
+        {
+            get;
+            protected set;
+        }
+        private int TotalRecords = 0;
+        private int PageSize = 0;
+        public PageOffsetList(int? pageSize = 20, int? total = 0)
+        {
+            this.TotalRecords = (int)total;
+            this.PageSize = (int)pageSize;
+        }
+        public System.Collections.IList GetList()
+        {
+            // Return a list of page offsets based on "totalRecords" and "pageSize"   
+            var pageOffsets = new List<int>();
+            for (int offset = 0; offset <= TotalRecords; offset = offset + PageSize)
+            {
+                pageOffsets.Add(offset);
+            }
+            return pageOffsets;
         }
     }
 }

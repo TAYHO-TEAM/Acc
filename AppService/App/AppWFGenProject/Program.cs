@@ -105,7 +105,7 @@ namespace AppWFGenProject
                    services.Configure<LDAPConfig>(configuration.GetSection("LDAPConfig"));
                    services.AddDbContext<ProjectManagerBaseContext>(opt => opt.UseSqlServer(configuration.GetConnectionString("TayHoConnection")));
                    services.AddScoped<MainProject>();
-                   //services.AddScoped<TayHoDevApp>(); 
+                   services.AddScoped<SysJobForm>(); 
                    //services.AddScoped<testApp>();
                })
                .UseSerilog();

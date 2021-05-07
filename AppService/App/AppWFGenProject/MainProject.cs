@@ -22,8 +22,7 @@ using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
-
+using static AppWFGenProject.FrameWork.DBHelper;
 
 namespace AppWFGenProject
 {
@@ -34,6 +33,8 @@ namespace AppWFGenProject
         protected readonly Common _common;
         protected readonly LDAPConfig _lDAPConfig;
         private readonly ProjectManagerBaseContext _dbContext;
+
+        private BindingSource bs = new BindingSource();
         /// <summary>
         /// Load Form
         /// </summary>
@@ -90,6 +91,19 @@ namespace AppWFGenProject
             //}
 
         }
+        #region function Main
+        private void SetPositionMenu()
+        {
+            this.bindingNavigatorMain.AddStandardItems();
+            this.bindingNavigatorMain.Dock = DockStyle.Bottom;
+            this.Controls.Add(this.bindingNavigatorMain);
+            this.menuMain.BringToFront();
+            this.tspNavigator.BringToFront();
+            this.bindingNavigatorMain.BringToFront();
+        }
+
+        #endregion function Main
+
         #region menuToolTip
         private void SetToolTip()
         {
@@ -335,8 +349,27 @@ namespace AppWFGenProject
         }
         private void dgvSMSysAutoSendMail_AllowUserToAddRowsChanged(object sender, EventArgs e)
         {
-            var a = "";
+
         }
+        private void bs_CurrentChanged(object sender, EventArgs e)
+        {
+            // The desired page has changed, so fetch the page of records using the "Current" offset   
+            int offset = (int)bs.Count;
+            SysJobHelper sysJobHelper = new SysJobHelper(_dbContext);
+            Paging<SysJob> result = sysJobHelper.GetAllSysJobSkip(offset);
+            bs.DataSource = result.Items;
+            //dgvSMSysAutoSendMail.DataSource = bs;
+        }
+        private void bindingNavigatorMain_TextChanged(object sender, EventArgs e)
+        {
+            // The desired page has changed, so fetch the page of records using the "Current" offset   
+            int offset = (int)bs.Count;
+            SysJobHelper sysJobHelper = new SysJobHelper(_dbContext);
+            Paging<SysJob> result = sysJobHelper.GetAllSysJobSkip(offset);
+            bs.DataSource = result.Items;
+            dgvSMSysAutoSendMail.DataSource = bs;
+        }
+
         #region Group SendMailAuto Function
         private async Task LoadSendMailConfig()
         {
@@ -344,17 +377,26 @@ namespace AppWFGenProject
             {
                 SysJobHelper sysJobHelper = new SysJobHelper(_dbContext);
                 var result = await sysJobHelper.GetAllSysJob(1).ConfigureAwait(false);
-                BindingSource bs = new BindingSource();
+                
                 bs.AllowNew = true;
                 bs.DataSource = result.Items;
+                //bs.DataSource = new PageOffsetList();
                 bs.AddingNew += new AddingNewEventHandler(InsertSysJob);
-                dgvSMSysAutoSendMail.DataSource = bs; result.Items.ToList();
+               // bs.CurrentItemChanged += new EventHandler(bs_CurrentChanged);
+                this.bindingNavigatorMain.BindingSource = bs;
+                bindingNavigatorMain.PositionItem.TextChanged += new EventHandler(bindingNavigatorMain_TextChanged);
+
+
+                SetPositionMenu();
+
+                dgvSMSysAutoSendMail.DataSource = bs;// result.Items.ToList();
                 EnableButtonPaging(result);
             }
             catch (Exception ex)
             {
             }
         }
+       
         private void InsertSysJob(object sender, AddingNewEventArgs e)
         {
             e.NewObject = new SysJob();
@@ -377,6 +419,12 @@ namespace AppWFGenProject
             btnLast_tbpSMJob.Enabled = paging.Last();
         }
         #endregion Group SendMailAuto Function
+        private void SetBindingnavigator()
+        {
+           
+        }
+        
+       
         #endregion Group SendMailAuto
 
         /// <summary>

@@ -49,6 +49,28 @@ namespace AppWFGenProject.FrameWork
             }
 
         }
+        public Paging<SysJob> GetAllSysJobSkip(int skip = 1)
+        {
+            try
+            {
+                var totalRecord = _dbContext.SysJob
+                                    .Where(x => (x.IsDelete == null || x.IsDelete == false) && x.IsActive == true)
+                                    .Select(x => x.Id)
+                                    .Count();
+                Paging<SysJob> paging = new Paging<SysJob>(skip, 20, 0);
+                paging.Items = _dbContext.SysJob
+                                    .Where(x => (x.IsDelete == null || x.IsDelete == false) && x.IsActive == true)
+                                    .Skip(skip)
+                                    .Take(paging.Take())
+                                    .ToList();
+                return paging;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+
+        }
         public void CreateNewSysJob (SysJob sysJob)
         {
             if(_dbContext.SysJob.Any(x=>x.JobName == sysJob.JobName))
