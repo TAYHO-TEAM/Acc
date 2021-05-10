@@ -13,14 +13,14 @@ namespace ProjectManager.CMD.Domain.DomainObjects
     public class SysJob : DOBase
     {
         #region Fields
-
+        private int? _templateId;
         private string _jobName;
         private string _nameDataBase;
         private string _nameStoreProce;
         private string _connStringHash;
         private string _salt;
-        private TimeSpan? _startTime;
-        private TimeSpan? _endTime;
+        private DateTime? _startTime;
+        private DateTime? _endTime;
         private DateTime? _startDate;
         private DateTime? _endDate;
         private DateTime? _firstDate;
@@ -40,8 +40,9 @@ namespace ProjectManager.CMD.Domain.DomainObjects
             _salt = Helpers.RandomSecretKey();
         }
 
-        public SysJob(string JobName, string NameDataBase, string NameStoreProce, string ConnStringHash, TimeSpan? StartTime, TimeSpan? EndTime, DateTime? StartDate, DateTime? EndDate, DateTime? FirstDate, DateTime? LastDate, DateTime? NextDate, int? Times, byte? Unit, int? StepTime, bool? IsTemplate) : this()
+        public SysJob(int TemplateId,string JobName, string NameDataBase, string NameStoreProce, string ConnStringHash, DateTime? StartTime, DateTime? EndTime, DateTime? StartDate, DateTime? EndDate, DateTime? FirstDate, DateTime? LastDate, DateTime? NextDate, int? Times, byte? Unit, int? StepTime, bool? IsTemplate) : this()
         {
+            _templateId= TemplateId;
             _jobName = JobName;
             _nameDataBase = NameDataBase;
             _nameStoreProce = NameStoreProce;
@@ -65,14 +66,14 @@ namespace ProjectManager.CMD.Domain.DomainObjects
 
         #endregion Constructors
         #region Properties
-
+        public int? TemplateId { get => _templateId; set { _templateId = value; } }
         [MaxLength(256, ErrorMessage = nameof(ErrorCodeInsert.IErr256))] public string JobName { get => _jobName; set { _jobName = value; } }
         [MaxLength(256, ErrorMessage = nameof(ErrorCodeInsert.IErr256))] public string NameDataBase { get => _nameDataBase; set { _nameDataBase = value; } }
         [MaxLength(512, ErrorMessage = nameof(ErrorCodeInsert.IErr512))] public string NameStoreProce { get => _nameStoreProce; set { _nameStoreProce = value; } }
         [MaxLength(512, ErrorMessage = nameof(ErrorCodeInsert.IErr512))] public string ConnStringHash { get => _connStringHash; set { _connStringHash = value; } }
         [MaxLength(512, ErrorMessage = nameof(ErrorCodeInsert.IErr512))] public string Salt { get => _salt; }
-        public TimeSpan? StartTime { get => _startTime; set { _startTime = value; } }
-        public TimeSpan? EndTime { get => _endTime; set { _endTime = value; } }
+        public DateTime? StartTime { get => _startTime; set { _startTime = value; } }
+        public DateTime? EndTime { get => _endTime; set { _endTime = value; } }
         public DateTime? StartDate { get => _startDate; set { _startDate = value; } }
         public DateTime? EndDate { get => _endDate; set { _endDate = value; } }
         public DateTime? FirstDate { get => _firstDate; set { _firstDate = value; } }
@@ -85,6 +86,8 @@ namespace ProjectManager.CMD.Domain.DomainObjects
 
         #endregion Properties
         #region Behaviours
+        public void SetTemplateId(int? TemplateId)
+        { _templateId = !TemplateId.HasValue? _templateId : TemplateId ; if (!IsValid()) throw new DomainException(_errorMessages); }
 
         public void SetJobName(string JobName)
         { _jobName = JobName == null ? _jobName : JobName; if (!IsValid()) throw new DomainException(_errorMessages); }
@@ -92,9 +95,9 @@ namespace ProjectManager.CMD.Domain.DomainObjects
         { _nameDataBase = NameDataBase == null ? _nameDataBase : NameDataBase; if (!IsValid()) throw new DomainException(_errorMessages); }
         public void SetNameStoreProce(string NameStoreProce)
         { _nameStoreProce = NameStoreProce == null ? _nameStoreProce : NameStoreProce; if (!IsValid()) throw new DomainException(_errorMessages); }
-        public void SetStartTime(TimeSpan? StartTime)
+        public void SetStartTime(DateTime? StartTime)
         { _startTime = !StartTime.HasValue ? _startTime : StartTime; if (!IsValid()) throw new DomainException(_errorMessages); }
-        public void SetEndTime(TimeSpan? EndTime)
+        public void SetEndTime(DateTime? EndTime)
         { _endTime = !EndTime.HasValue ? _endTime : EndTime; if (!IsValid()) throw new DomainException(_errorMessages); }
         public void SetStartDate(DateTime? StartDate)
         { _startDate = !StartDate.HasValue ? _startDate : StartDate; if (!IsValid()) throw new DomainException(_errorMessages); }

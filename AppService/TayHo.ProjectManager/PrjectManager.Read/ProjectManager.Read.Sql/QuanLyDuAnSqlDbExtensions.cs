@@ -124,6 +124,8 @@ namespace ProjectManager.Read.Sql
             services.AddScoped<IPlanMasterRepository<PlanMasterAccountPermitDTO>, PlanMasterRepository<PlanMasterAccountPermitDTO>>();
             services.AddScoped<IPlanJobRepository<PlanJobAccountPermitDTO>, PlanJobRepository<PlanJobAccountPermitDTO>>();
             services.AddScoped<IProjectManagerRepository, ProjectManagerRepository>();
+            services.AddScoped<ISysJobRepository<SysJobDTO>, SysJobRepository<SysJobDTO>>();
+            services.AddScoped<IDOBaseRepository<SysJobDTO>, DOBaseRepository<SysJobDTO>>();
 
             return services;
         }

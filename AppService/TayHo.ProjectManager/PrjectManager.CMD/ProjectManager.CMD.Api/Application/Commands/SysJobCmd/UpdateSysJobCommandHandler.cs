@@ -39,6 +39,7 @@ namespace ProjectManager.CMD.Api.Application.Commands
             existingSysJob.IsVisible = request.IsVisible.HasValue ? request.IsVisible : existingSysJob.IsVisible;
             existingSysJob.Status = request.Status.HasValue ? request.Status : existingSysJob.Status;
 
+            existingSysJob.SetTemplateId(request.TemplateId);
             existingSysJob.SetJobName(request.JobName);
             existingSysJob.SetNameDataBase(request.NameDataBase);
             existingSysJob.SetNameStoreProce(request.NameStoreProce);

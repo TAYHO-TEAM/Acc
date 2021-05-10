@@ -11,6 +11,7 @@ namespace ProjectManager.CMD.Infrastructure.EFConfig
         public void Configure(EntityTypeBuilder<SysJob> builder)
         {
             builder.ToTable(QuanLyDuAnConstants.SysJob_TABLENAME);
+            builder.Property(x => x.TemplateId).HasField("_templateId").HasMaxLength(256).UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.JobName).HasField("_jobName").HasMaxLength(256).UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.NameDataBase).HasField("_nameDataBase").HasMaxLength(256).UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.NameStoreProce).HasField("_nameStoreProce").HasMaxLength(512).UsePropertyAccessMode(PropertyAccessMode.Field);

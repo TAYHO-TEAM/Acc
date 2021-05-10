@@ -1,0 +1,506 @@
+2021-05-10 13:35:17.371 +07:00 [INF] Application Starting.
+2021-05-10 13:35:42.037 +07:00 [INF] User profile is available. Using 'C:\Users\CongTrien\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2021-05-10 13:35:43.026 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2021-05-10 13:35:43.026 +07:00 [INF] Hosting environment: Development
+2021-05-10 13:35:43.026 +07:00 [INF] Content root path: D:\TayHo_project\TayHo.SystemCore\AppService\TayHo.ProjectManager\PrjectManager.Read\ProjectManager.Read.Api
+2021-05-10 13:35:43.082 +07:00 [INF] Request starting HTTP/2.0 GET https://localhost:44376/swagger  
+2021-05-10 13:35:43.262 +07:00 [INF] Request finished in 184.7827ms 301 
+2021-05-10 13:35:43.287 +07:00 [INF] Request starting HTTP/2.0 GET https://localhost:44376/swagger/index.html  
+2021-05-10 13:35:43.347 +07:00 [INF] Request finished in 64.2003ms 200 text/html;charset=utf-8
+2021-05-10 13:35:43.367 +07:00 [INF] Request starting HTTP/2.0 GET https://localhost:44376/swagger/swagger-ui.css  
+2021-05-10 13:35:43.367 +07:00 [INF] Request starting HTTP/2.0 GET https://localhost:44376/swagger/swagger-ui-bundle.js  
+2021-05-10 13:35:43.369 +07:00 [INF] Request starting HTTP/2.0 GET https://localhost:44376/swagger/swagger-ui-standalone-preset.js  
+2021-05-10 13:35:43.460 +07:00 [INF] Sending file. Request path: '/swagger-ui-standalone-preset.js'. Physical path: 'N/A'
+2021-05-10 13:35:43.460 +07:00 [INF] Sending file. Request path: '/swagger-ui.css'. Physical path: 'N/A'
+2021-05-10 13:35:43.460 +07:00 [INF] Sending file. Request path: '/swagger-ui-bundle.js'. Physical path: 'N/A'
+2021-05-10 13:35:43.462 +07:00 [INF] Request finished in 94.9669ms 200 text/css
+2021-05-10 13:35:43.462 +07:00 [INF] Request finished in 94.8278ms 200 application/javascript
+2021-05-10 13:35:43.462 +07:00 [INF] Request finished in 92.7959ms 200 application/javascript
+2021-05-10 13:35:43.700 +07:00 [INF] Request starting HTTP/2.0 GET https://localhost:44376/swagger/v1/swagger.json  
+2021-05-10 13:35:43.742 +07:00 [INF] Request starting HTTP/2.0 GET https://localhost:44376/swagger/favicon-32x32.png  
+2021-05-10 13:35:43.743 +07:00 [INF] Sending file. Request path: '/favicon-32x32.png'. Physical path: 'N/A'
+2021-05-10 13:35:43.743 +07:00 [INF] Request finished in 1.5651ms 200 image/png
+2021-05-10 13:35:44.137 +07:00 [INF] Request finished in 436.9984ms 200 application/json;charset=utf-8
+2021-05-10 13:36:55.037 +07:00 [INF] Request starting HTTP/2.0 POST https://localhost:44376/api/read/v1/ProjectManager application/json 184
+2021-05-10 13:36:55.060 +07:00 [INF] CORS policy execution successful.
+2021-05-10 13:36:55.071 +07:00 [INF] Executing endpoint 'ProjectManager.Read.Api.Controllers.v1.ProjectManagerController.PostProjectManager (ProjectManager.Read.Api)'
+2021-05-10 13:36:55.119 +07:00 [INF] Route matched with {action = "PostProjectManager", controller = "ProjectManager"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] PostProjectManager(ProjectManager.Read.Api.ViewModels.DevExpressClasses.DevRequestViewModel) on controller ProjectManager.Read.Api.Controllers.v1.ProjectManagerController (ProjectManager.Read.Api).
+2021-05-10 13:36:56.484 +07:00 [WRN] No type was specified for the decimal column 'DonGia' on entity type 'NS_CongViecDetail'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2021-05-10 13:36:56.484 +07:00 [WRN] No type was specified for the decimal column 'KhoiLuong' on entity type 'NS_CongViecDetail'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2021-05-10 13:36:56.484 +07:00 [WRN] No type was specified for the decimal column 'GiaTri' on entity type 'NS_DuChi'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2021-05-10 13:36:56.484 +07:00 [WRN] No type was specified for the decimal column 'GiaTri' on entity type 'NS_GoiThau'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2021-05-10 13:36:56.485 +07:00 [WRN] No type was specified for the decimal column 'GiaTri' on entity type 'NS_HangMucDetail'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2021-05-10 13:36:56.485 +07:00 [WRN] No type was specified for the decimal column 'GiaTri' on entity type 'NS_KhauTru'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2021-05-10 13:36:56.485 +07:00 [WRN] No type was specified for the decimal column 'GiaTriCon' on entity type 'NS_KhauTru'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2021-05-10 13:36:56.485 +07:00 [WRN] No type was specified for the decimal column 'GiaTri' on entity type 'NS_KhauTru_TheoDoi'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2021-05-10 13:36:56.485 +07:00 [WRN] No type was specified for the decimal column 'GiaTri' on entity type 'NS_NhomCongViecDetail'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2021-05-10 13:36:56.485 +07:00 [WRN] No type was specified for the decimal column 'GiaTri' on entity type 'NS_Phat'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2021-05-10 13:36:56.485 +07:00 [WRN] No type was specified for the decimal column 'GiaTriCon' on entity type 'NS_Phat'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2021-05-10 13:36:56.485 +07:00 [WRN] No type was specified for the decimal column 'GiaTri' on entity type 'NS_Phat_TheoDoi'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2021-05-10 13:36:56.485 +07:00 [WRN] No type was specified for the decimal column 'GiaTri' on entity type 'NS_TamUng'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2021-05-10 13:36:56.485 +07:00 [WRN] No type was specified for the decimal column 'GiaTriCon' on entity type 'NS_TamUng'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2021-05-10 13:36:56.485 +07:00 [WRN] No type was specified for the decimal column 'GiaTri' on entity type 'NS_TamUng_TheoDoi'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2021-05-10 13:36:56.485 +07:00 [WRN] No type was specified for the decimal column 'GiaTri' on entity type 'NS_ThucChi'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values using 'HasColumnType()'.
+2021-05-10 13:36:56.525 +07:00 [INF] Entity Framework Core 3.1.8 initialized 'ProjectManagerBaseContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2021-05-10 13:37:01.116 +07:00 [INF] Executing ObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ValidationProblemDetails'.
+2021-05-10 13:37:01.126 +07:00 [INF] Executed action ProjectManager.Read.Api.Controllers.v1.ProjectManagerController.PostProjectManager (ProjectManager.Read.Api) in 6001.5129ms
+2021-05-10 13:37:01.128 +07:00 [INF] Executed endpoint 'ProjectManager.Read.Api.Controllers.v1.ProjectManagerController.PostProjectManager (ProjectManager.Read.Api)'
+2021-05-10 13:37:01.132 +07:00 [INF] Request finished in 6104.1367ms 400 application/problem+json; charset=utf-8
+2021-05-10 13:37:25.250 +07:00 [INF] Request starting HTTP/2.0 POST https://localhost:44376/api/read/v1/ProjectManager application/json 184
+2021-05-10 13:37:25.262 +07:00 [INF] CORS policy execution successful.
+2021-05-10 13:37:25.263 +07:00 [INF] Executing endpoint 'ProjectManager.Read.Api.Controllers.v1.ProjectManagerController.PostProjectManager (ProjectManager.Read.Api)'
+2021-05-10 13:37:25.264 +07:00 [INF] Route matched with {action = "PostProjectManager", controller = "ProjectManager"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] PostProjectManager(ProjectManager.Read.Api.ViewModels.DevExpressClasses.DevRequestViewModel) on controller ProjectManager.Read.Api.Controllers.v1.ProjectManagerController (ProjectManager.Read.Api).
+2021-05-10 13:37:25.268 +07:00 [INF] Entity Framework Core 3.1.8 initialized 'ProjectManagerBaseContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2021-05-10 13:37:27.340 +07:00 [INF] Executing ObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ValidationProblemDetails'.
+2021-05-10 13:37:27.341 +07:00 [INF] Executed action ProjectManager.Read.Api.Controllers.v1.ProjectManagerController.PostProjectManager (ProjectManager.Read.Api) in 2076.8446ms
+2021-05-10 13:37:27.341 +07:00 [INF] Executed endpoint 'ProjectManager.Read.Api.Controllers.v1.ProjectManagerController.PostProjectManager (ProjectManager.Read.Api)'
+2021-05-10 13:37:27.341 +07:00 [INF] Request finished in 2091.3232ms 400 application/problem+json; charset=utf-8
+2021-05-10 13:37:58.148 +07:00 [INF] Request starting HTTP/2.0 POST https://localhost:44376/api/read/v1/ProjectManager application/json 185
+2021-05-10 13:37:58.150 +07:00 [INF] CORS policy execution successful.
+2021-05-10 13:37:58.152 +07:00 [INF] Executing endpoint 'ProjectManager.Read.Api.Controllers.v1.ProjectManagerController.PostProjectManager (ProjectManager.Read.Api)'
+2021-05-10 13:37:58.159 +07:00 [INF] Route matched with {action = "PostProjectManager", controller = "ProjectManager"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] PostProjectManager(ProjectManager.Read.Api.ViewModels.DevExpressClasses.DevRequestViewModel) on controller ProjectManager.Read.Api.Controllers.v1.ProjectManagerController (ProjectManager.Read.Api).
+2021-05-10 13:37:58.196 +07:00 [INF] Entity Framework Core 3.1.8 initialized 'ProjectManagerBaseContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2021-05-10 13:38:05.799 +07:00 [INF] Executed DbCommand (42ms) [Parameters=[@__nameEF_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT [f].[ActionId]
+FROM [Functions] AS [f]
+WHERE ((([f].[TableName] = @__nameEF_0) AND ([f].[Type] = 1)) AND [f].[ActionId] IS NOT NULL) AND (([f].[IsDelete] = CAST(0 AS bit)) OR [f].[IsDelete] IS NULL)
+2021-05-10 13:38:09.533 +07:00 [INF] Executed DbCommand (8ms) [Parameters=[@__user_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [GroupAccount] AS [g]
+        INNER JOIN [GroupActionPermistion] AS [g0] ON [g].[GroupId] = [g0].[GroupId]
+        WHERE (((([g].[AccountId] = @__user_0) AND ([g0].[PermistionId] = 6)) AND (CAST(1 AS bit) = CAST(0 AS bit))) AND (([g0].[IsDelete] = CAST(0 AS bit)) OR [g0].[IsDelete] IS NULL)) AND (([g].[IsDelete] = CAST(0 AS bit)) OR [g].[IsDelete] IS NULL)) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2021-05-10 13:38:19.547 +07:00 [INF] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [SysJob] AS [s]
+2021-05-10 13:38:19.551 +07:00 [INF] Executing ObjectResult, writing value of type 'DevExtreme.AspNet.Data.ResponseModel.LoadResult'.
+2021-05-10 13:38:19.587 +07:00 [INF] Executed DbCommand (8ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(@__p_0) [s].[Id], [s].[ConnStringHash], [s].[CreateBy], [s].[CreateDate], [s].[CreateDateUTC], [s].[EndDate], [s].[EndTime], [s].[FirstDate], [s].[IsActive], [s].[IsDelete], [s].[IsModify], [s].[IsTemplate], [s].[IsVisible], [s].[JobName], [s].[LastDate], [s].[ModifyBy], [s].[NameDataBase], [s].[NameStoreProce], [s].[NextDate], [s].[Salt], [s].[StartDate], [s].[StartTime], [s].[Status], [s].[StepTime], [s].[TemplateId], [s].[Times], [s].[Unit], [s].[UpdateDate], [s].[UpdateDateUTC]
+FROM [SysJob] AS [s]
+ORDER BY [s].[Id]
+2021-05-10 13:38:19.694 +07:00 [INF] Executed action ProjectManager.Read.Api.Controllers.v1.ProjectManagerController.PostProjectManager (ProjectManager.Read.Api) in 21533.9612ms
+2021-05-10 13:38:19.694 +07:00 [INF] Executed endpoint 'ProjectManager.Read.Api.Controllers.v1.ProjectManagerController.PostProjectManager (ProjectManager.Read.Api)'
+2021-05-10 13:38:19.695 +07:00 [INF] Request finished in 21547.0367ms 200 application/json; charset=utf-8
+2021-05-10 16:48:33.703 +07:00 [INF] Application Starting.
+2021-05-10 16:48:35.545 +07:00 [INF] User profile is available. Using 'C:\Users\CongTrien\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2021-05-10 16:48:35.877 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2021-05-10 16:48:35.877 +07:00 [INF] Hosting environment: Development
+2021-05-10 16:48:35.877 +07:00 [INF] Content root path: D:\TayHo_project\TayHo.SystemCore\AppService\TayHo.ProjectManager\PrjectManager.Read\ProjectManager.Read.Api
+2021-05-10 16:48:35.916 +07:00 [INF] Request starting HTTP/2.0 GET https://localhost:44376/swagger  
+2021-05-10 16:48:36.046 +07:00 [INF] Request starting HTTP/2.0 GET https://localhost:44376/swagger/index.html  
+2021-05-10 16:48:36.048 +07:00 [INF] Request finished in 135.6616ms 301 
+2021-05-10 16:48:36.096 +07:00 [INF] Request finished in 50.8131ms 200 text/html;charset=utf-8
+2021-05-10 16:48:36.114 +07:00 [INF] Request starting HTTP/2.0 GET https://localhost:44376/swagger/swagger-ui.css  
+2021-05-10 16:48:36.114 +07:00 [INF] Request starting HTTP/2.0 GET https://localhost:44376/swagger/swagger-ui-bundle.js  
+2021-05-10 16:48:36.114 +07:00 [INF] Request starting HTTP/2.0 GET https://localhost:44376/swagger/swagger-ui-standalone-preset.js  
+2021-05-10 16:48:36.157 +07:00 [INF] Sending file. Request path: '/swagger-ui.css'. Physical path: 'N/A'
+2021-05-10 16:48:36.157 +07:00 [INF] Sending file. Request path: '/swagger-ui-standalone-preset.js'. Physical path: 'N/A'
+2021-05-10 16:48:36.157 +07:00 [INF] Sending file. Request path: '/swagger-ui-bundle.js'. Physical path: 'N/A'
+2021-05-10 16:48:36.158 +07:00 [INF] Request finished in 44.3295ms 200 text/css
+2021-05-10 16:48:36.158 +07:00 [INF] Request finished in 44.103ms 200 application/javascript
+2021-05-10 16:48:36.158 +07:00 [INF] Request finished in 44.3453ms 200 application/javascript
+2021-05-10 16:48:36.303 +07:00 [INF] Request starting HTTP/2.0 GET https://localhost:44376/swagger/v1/swagger.json  
+2021-05-10 16:48:36.666 +07:00 [ERR] Connection ID "18374686494167138397", Request ID "8000005e-0003-ff00-b63f-84710c7967bb": An unhandled exception was thrown by the application.
+System.NotSupportedException: Conflicting method/path combination "GET api/read/v{version}/SysJob" for actions - ProjectManager.Read.Api.Controllers.v1.SysJobController.GetSysJobAsync (ProjectManager.Read.Api),ProjectManager.Read.Api.Controllers.v1.SysJobController.GetSysJobDataBaseAsync (ProjectManager.Read.Api),ProjectManager.Read.Api.Controllers.v1.SysJobController.GetSysJobStoreProcedureAsync (ProjectManager.Read.Api),ProjectManager.Read.Api.Controllers.v1.SysJobController.GetSysJobParameterAsync (ProjectManager.Read.Api). Actions require a unique method/path combination for Swagger/OpenAPI 3.0. Use ConflictingActionsResolver as a workaround
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperations(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePaths(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwagger(String documentName, String host, String basePath)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Server.IIS.Core.IISHttpContextOfT`1.ProcessRequestAsync()
+2021-05-10 16:48:36.760 +07:00 [INF] Request finished in 456.0905ms 500 
+2021-05-10 16:49:48.165 +07:00 [INF] Application Starting.
+2021-05-10 16:50:03.133 +07:00 [INF] User profile is available. Using 'C:\Users\CongTrien\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2021-05-10 16:50:03.461 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2021-05-10 16:50:03.461 +07:00 [INF] Hosting environment: Development
+2021-05-10 16:50:03.461 +07:00 [INF] Content root path: D:\TayHo_project\TayHo.SystemCore\AppService\TayHo.ProjectManager\PrjectManager.Read\ProjectManager.Read.Api
+2021-05-10 16:50:03.501 +07:00 [INF] Request starting HTTP/2.0 GET https://localhost:44376/swagger/index.html  
+2021-05-10 16:50:03.661 +07:00 [INF] Request finished in 163.2532ms 200 text/html;charset=utf-8
+2021-05-10 16:50:03.873 +07:00 [INF] Request starting HTTP/2.0 GET https://localhost:44376/swagger/v1/swagger.json  
+2021-05-10 16:53:47.512 +07:00 [INF] Application Starting.
+2021-05-10 16:54:02.400 +07:00 [INF] User profile is available. Using 'C:\Users\CongTrien\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2021-05-10 16:54:02.727 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2021-05-10 16:54:02.727 +07:00 [INF] Hosting environment: Development
+2021-05-10 16:54:02.727 +07:00 [INF] Content root path: D:\TayHo_project\TayHo.SystemCore\AppService\TayHo.ProjectManager\PrjectManager.Read\ProjectManager.Read.Api
+2021-05-10 16:54:02.765 +07:00 [INF] Request starting HTTP/2.0 GET https://localhost:44376/swagger/index.html  
+2021-05-10 16:54:02.909 +07:00 [INF] Request finished in 147.0757ms 200 text/html;charset=utf-8
+2021-05-10 16:54:03.073 +07:00 [INF] Request starting HTTP/2.0 GET https://localhost:44376/swagger/v1/swagger.json  
+2021-05-10 16:54:03.519 +07:00 [INF] Request finished in 445.7369ms 200 application/json;charset=utf-8
+2021-05-10 16:54:25.388 +07:00 [INF] Request starting HTTP/2.0 GET https://localhost:44376/api/read/v1/SysJob/SysJobStoreProc?AccountId=1&DBName=QuanLyDuAn&StoreName=sp_GetDataTableSS_WithPage_AccountID_FK&Type=1  
+2021-05-10 16:54:25.417 +07:00 [INF] Executing endpoint 'ProjectManager.Read.Api.Controllers.v1.SysJobController.GetSysJobStoreProcedureAsync (ProjectManager.Read.Api)'
+2021-05-10 16:54:25.457 +07:00 [INF] Route matched with {action = "GetSysJobStoreProcedure", controller = "SysJob"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetSysJobStoreProcedureAsync(ProjectManager.Read.Api.ViewModels.SysJobRequestViewModel) on controller ProjectManager.Read.Api.Controllers.v1.SysJobController (ProjectManager.Read.Api).
+2021-05-10 16:54:25.852 +07:00 [INF] Executed action ProjectManager.Read.Api.Controllers.v1.SysJobController.GetSysJobStoreProcedureAsync (ProjectManager.Read.Api) in 390.1479ms
+2021-05-10 16:54:25.854 +07:00 [INF] Executed endpoint 'ProjectManager.Read.Api.Controllers.v1.SysJobController.GetSysJobStoreProcedureAsync (ProjectManager.Read.Api)'
+2021-05-10 16:54:25.991 +07:00 [ERR] Unable to resolve service for type 'ProjectManager.Read.Sql.Interfaces.IDOBaseRepository`1[ProjectManager.Read.Sql.DTOs.DTO.SysJobDTO]' while attempting to activate 'ProjectManager.Read.Api.Controllers.v1.SysJobController'.
+System.InvalidOperationException: Unable to resolve service for type 'ProjectManager.Read.Sql.Interfaces.IDOBaseRepository`1[ProjectManager.Read.Sql.DTOs.DTO.SysJobDTO]' while attempting to activate 'ProjectManager.Read.Api.Controllers.v1.SysJobController'.
+   at Microsoft.Extensions.DependencyInjection.ActivatorUtilities.GetService(IServiceProvider sp, Type type, Type requiredBy, Boolean isDefaultParameterRequired)
+   at lambda_method(Closure , IServiceProvider , Object[] )
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerActivatorProvider.<>c__DisplayClass4_0.<CreateActivator>b__0(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerFactoryProvider.<>c__DisplayClass5_0.<CreateControllerFactory>g__CreateController|0(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Services.Common.APIs.Infrastructure.CustomJwtMiddleware.Invoke(HttpContext context) in D:\TayHo_project\TayHo.SystemCore\CoreService\01.Services.Common\Services.Common.APIs\Infrastructure\Middlewares\CustomJwtMiddleware.cs:line 27
+   at Microsoft.AspNetCore.Localization.RequestLocalizationMiddleware.Invoke(HttpContext context)
+   at Services.Common.APIs.Infrastructure.CustomExceptionHandler.InvokeAsync(HttpContext httpContext) in D:\TayHo_project\TayHo.SystemCore\CoreService\01.Services.Common\Services.Common.APIs\Infrastructure\Middlewares\CustomExceptionHandlerMiddleware.cs:line 36
+2021-05-10 16:54:26.057 +07:00 [ERR] Unable to resolve service for type 'ProjectManager.Read.Sql.Interfaces.IDOBaseRepository`1[ProjectManager.Read.Sql.DTOs.DTO.SysJobDTO]' while attempting to activate 'ProjectManager.Read.Api.Controllers.v1.SysJobController'.
+System.InvalidOperationException: Unable to resolve service for type 'ProjectManager.Read.Sql.Interfaces.IDOBaseRepository`1[ProjectManager.Read.Sql.DTOs.DTO.SysJobDTO]' while attempting to activate 'ProjectManager.Read.Api.Controllers.v1.SysJobController'.
+   at Microsoft.Extensions.DependencyInjection.ActivatorUtilities.GetService(IServiceProvider sp, Type type, Type requiredBy, Boolean isDefaultParameterRequired)
+   at lambda_method(Closure , IServiceProvider , Object[] )
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerActivatorProvider.<>c__DisplayClass4_0.<CreateActivator>b__0(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerFactoryProvider.<>c__DisplayClass5_0.<CreateControllerFactory>g__CreateController|0(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Services.Common.APIs.Infrastructure.CustomJwtMiddleware.Invoke(HttpContext context) in D:\TayHo_project\TayHo.SystemCore\CoreService\01.Services.Common\Services.Common.APIs\Infrastructure\Middlewares\CustomJwtMiddleware.cs:line 27
+   at Microsoft.AspNetCore.Localization.RequestLocalizationMiddleware.Invoke(HttpContext context)
+   at Services.Common.APIs.Infrastructure.CustomExceptionHandler.InvokeAsync(HttpContext httpContext) in D:\TayHo_project\TayHo.SystemCore\CoreService\01.Services.Common\Services.Common.APIs\Infrastructure\Middlewares\CustomExceptionHandlerMiddleware.cs:line 36
+2021-05-10 16:54:26.065 +07:00 [INF] Request finished in 676.782ms 500 application/json
+2021-05-10 16:56:35.402 +07:00 [INF] Application Starting.
+2021-05-10 16:56:50.245 +07:00 [INF] User profile is available. Using 'C:\Users\CongTrien\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2021-05-10 16:56:50.563 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2021-05-10 16:56:50.563 +07:00 [INF] Hosting environment: Development
+2021-05-10 16:56:50.563 +07:00 [INF] Content root path: D:\TayHo_project\TayHo.SystemCore\AppService\TayHo.ProjectManager\PrjectManager.Read\ProjectManager.Read.Api
+2021-05-10 16:56:50.602 +07:00 [INF] Request starting HTTP/2.0 GET https://localhost:44376/swagger/index.html  
+2021-05-10 16:56:50.749 +07:00 [INF] Request finished in 150.4521ms 200 text/html;charset=utf-8
+2021-05-10 16:56:50.865 +07:00 [INF] Request starting HTTP/2.0 GET https://localhost:44376/swagger/v1/swagger.json  
+2021-05-10 16:56:51.284 +07:00 [INF] Request finished in 419.5119ms 200 application/json;charset=utf-8
+2021-05-10 16:57:28.337 +07:00 [INF] Request starting HTTP/2.0 GET https://localhost:44376/api/read/v1/SysJob/SysJobStoreProc?AccountId=1&DBName=QuanLyDuAn&StoreName=sp_GetDataTableSS_WithPage_AccountID_FK&Type=1  
+2021-05-10 16:57:28.366 +07:00 [INF] Executing endpoint 'ProjectManager.Read.Api.Controllers.v1.SysJobController.GetSysJobStoreProcedureAsync (ProjectManager.Read.Api)'
+2021-05-10 16:57:28.407 +07:00 [INF] Route matched with {action = "GetSysJobStoreProcedure", controller = "SysJob"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetSysJobStoreProcedureAsync(ProjectManager.Read.Api.ViewModels.SysJobRequestViewModel) on controller ProjectManager.Read.Api.Controllers.v1.SysJobController (ProjectManager.Read.Api).
+2021-05-10 16:57:28.808 +07:00 [INF] Executed action ProjectManager.Read.Api.Controllers.v1.SysJobController.GetSysJobStoreProcedureAsync (ProjectManager.Read.Api) in 396.6176ms
+2021-05-10 16:57:28.810 +07:00 [INF] Executed endpoint 'ProjectManager.Read.Api.Controllers.v1.SysJobController.GetSysJobStoreProcedureAsync (ProjectManager.Read.Api)'
+2021-05-10 16:57:28.939 +07:00 [ERR] Unable to resolve service for type 'ProjectManager.Read.Sql.Interfaces.IDOBaseRepository`1[ProjectManager.Read.Sql.DTOs.DTO.SysJobDTO]' while attempting to activate 'ProjectManager.Read.Api.Controllers.v1.SysJobController'.
+System.InvalidOperationException: Unable to resolve service for type 'ProjectManager.Read.Sql.Interfaces.IDOBaseRepository`1[ProjectManager.Read.Sql.DTOs.DTO.SysJobDTO]' while attempting to activate 'ProjectManager.Read.Api.Controllers.v1.SysJobController'.
+   at Microsoft.Extensions.DependencyInjection.ActivatorUtilities.GetService(IServiceProvider sp, Type type, Type requiredBy, Boolean isDefaultParameterRequired)
+   at lambda_method(Closure , IServiceProvider , Object[] )
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerActivatorProvider.<>c__DisplayClass4_0.<CreateActivator>b__0(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerFactoryProvider.<>c__DisplayClass5_0.<CreateControllerFactory>g__CreateController|0(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Services.Common.APIs.Infrastructure.CustomJwtMiddleware.Invoke(HttpContext context) in D:\TayHo_project\TayHo.SystemCore\CoreService\01.Services.Common\Services.Common.APIs\Infrastructure\Middlewares\CustomJwtMiddleware.cs:line 27
+   at Microsoft.AspNetCore.Localization.RequestLocalizationMiddleware.Invoke(HttpContext context)
+   at Services.Common.APIs.Infrastructure.CustomExceptionHandler.InvokeAsync(HttpContext httpContext) in D:\TayHo_project\TayHo.SystemCore\CoreService\01.Services.Common\Services.Common.APIs\Infrastructure\Middlewares\CustomExceptionHandlerMiddleware.cs:line 36
+2021-05-10 16:57:28.991 +07:00 [ERR] Unable to resolve service for type 'ProjectManager.Read.Sql.Interfaces.IDOBaseRepository`1[ProjectManager.Read.Sql.DTOs.DTO.SysJobDTO]' while attempting to activate 'ProjectManager.Read.Api.Controllers.v1.SysJobController'.
+System.InvalidOperationException: Unable to resolve service for type 'ProjectManager.Read.Sql.Interfaces.IDOBaseRepository`1[ProjectManager.Read.Sql.DTOs.DTO.SysJobDTO]' while attempting to activate 'ProjectManager.Read.Api.Controllers.v1.SysJobController'.
+   at Microsoft.Extensions.DependencyInjection.ActivatorUtilities.GetService(IServiceProvider sp, Type type, Type requiredBy, Boolean isDefaultParameterRequired)
+   at lambda_method(Closure , IServiceProvider , Object[] )
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerActivatorProvider.<>c__DisplayClass4_0.<CreateActivator>b__0(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerFactoryProvider.<>c__DisplayClass5_0.<CreateControllerFactory>g__CreateController|0(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Services.Common.APIs.Infrastructure.CustomJwtMiddleware.Invoke(HttpContext context) in D:\TayHo_project\TayHo.SystemCore\CoreService\01.Services.Common\Services.Common.APIs\Infrastructure\Middlewares\CustomJwtMiddleware.cs:line 27
+   at Microsoft.AspNetCore.Localization.RequestLocalizationMiddleware.Invoke(HttpContext context)
+   at Services.Common.APIs.Infrastructure.CustomExceptionHandler.InvokeAsync(HttpContext httpContext) in D:\TayHo_project\TayHo.SystemCore\CoreService\01.Services.Common\Services.Common.APIs\Infrastructure\Middlewares\CustomExceptionHandlerMiddleware.cs:line 36
+2021-05-10 16:57:29.000 +07:00 [INF] Request finished in 663.0899ms 500 application/json
+2021-05-10 16:58:42.879 +07:00 [INF] Application Starting.
+2021-05-10 16:59:54.058 +07:00 [INF] Application Starting.
+2021-05-10 17:01:02.890 +07:00 [INF] Application Starting.
+2021-05-10 17:01:17.698 +07:00 [INF] User profile is available. Using 'C:\Users\CongTrien\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2021-05-10 17:01:18.034 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2021-05-10 17:01:18.035 +07:00 [INF] Hosting environment: Development
+2021-05-10 17:01:18.035 +07:00 [INF] Content root path: D:\TayHo_project\TayHo.SystemCore\AppService\TayHo.ProjectManager\PrjectManager.Read\ProjectManager.Read.Api
+2021-05-10 17:01:18.071 +07:00 [INF] Request starting HTTP/2.0 GET https://localhost:44376/swagger/index.html  
+2021-05-10 17:01:18.217 +07:00 [INF] Request finished in 149.1413ms 200 text/html;charset=utf-8
+2021-05-10 17:01:18.317 +07:00 [INF] Request starting HTTP/2.0 GET https://localhost:44376/swagger/v1/swagger.json  
+2021-05-10 17:01:18.750 +07:00 [INF] Request finished in 432.4437ms 200 application/json;charset=utf-8
+2021-05-10 17:01:48.132 +07:00 [INF] Request starting HTTP/2.0 GET https://localhost:44376/api/read/v1/SysJob/SysJobStoreProc?AccountId=1&DBName=QuanLyDuAn&StoreName=sp_GetDataTableSS_WithPage_AccountID_FK&Type=1  
+2021-05-10 17:01:48.170 +07:00 [INF] Executing endpoint 'ProjectManager.Read.Api.Controllers.v1.SysJobController.GetSysJobStoreProcedureAsync (ProjectManager.Read.Api)'
+2021-05-10 17:01:48.207 +07:00 [INF] Route matched with {action = "GetSysJobStoreProcedure", controller = "SysJob"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetSysJobStoreProcedureAsync(ProjectManager.Read.Api.ViewModels.SysJobRequestViewModel) on controller ProjectManager.Read.Api.Controllers.v1.SysJobController (ProjectManager.Read.Api).
+2021-05-10 17:01:48.628 +07:00 [INF] Executed action ProjectManager.Read.Api.Controllers.v1.SysJobController.GetSysJobStoreProcedureAsync (ProjectManager.Read.Api) in 416.6619ms
+2021-05-10 17:01:48.630 +07:00 [INF] Executed endpoint 'ProjectManager.Read.Api.Controllers.v1.SysJobController.GetSysJobStoreProcedureAsync (ProjectManager.Read.Api)'
+2021-05-10 17:01:48.757 +07:00 [ERR] Unable to resolve service for type 'ProjectManager.Read.Sql.Interfaces.ISysJobRepository`1[ProjectManager.Read.Sql.DTOs.DTO.SysJobDTO]' while attempting to activate 'ProjectManager.Read.Api.Controllers.v1.SysJobController'.
+System.InvalidOperationException: Unable to resolve service for type 'ProjectManager.Read.Sql.Interfaces.ISysJobRepository`1[ProjectManager.Read.Sql.DTOs.DTO.SysJobDTO]' while attempting to activate 'ProjectManager.Read.Api.Controllers.v1.SysJobController'.
+   at Microsoft.Extensions.DependencyInjection.ActivatorUtilities.GetService(IServiceProvider sp, Type type, Type requiredBy, Boolean isDefaultParameterRequired)
+   at lambda_method(Closure , IServiceProvider , Object[] )
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerActivatorProvider.<>c__DisplayClass4_0.<CreateActivator>b__0(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerFactoryProvider.<>c__DisplayClass5_0.<CreateControllerFactory>g__CreateController|0(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Services.Common.APIs.Infrastructure.CustomJwtMiddleware.Invoke(HttpContext context) in D:\TayHo_project\TayHo.SystemCore\CoreService\01.Services.Common\Services.Common.APIs\Infrastructure\Middlewares\CustomJwtMiddleware.cs:line 27
+   at Microsoft.AspNetCore.Localization.RequestLocalizationMiddleware.Invoke(HttpContext context)
+   at Services.Common.APIs.Infrastructure.CustomExceptionHandler.InvokeAsync(HttpContext httpContext) in D:\TayHo_project\TayHo.SystemCore\CoreService\01.Services.Common\Services.Common.APIs\Infrastructure\Middlewares\CustomExceptionHandlerMiddleware.cs:line 36
+2021-05-10 17:01:48.805 +07:00 [ERR] Unable to resolve service for type 'ProjectManager.Read.Sql.Interfaces.ISysJobRepository`1[ProjectManager.Read.Sql.DTOs.DTO.SysJobDTO]' while attempting to activate 'ProjectManager.Read.Api.Controllers.v1.SysJobController'.
+System.InvalidOperationException: Unable to resolve service for type 'ProjectManager.Read.Sql.Interfaces.ISysJobRepository`1[ProjectManager.Read.Sql.DTOs.DTO.SysJobDTO]' while attempting to activate 'ProjectManager.Read.Api.Controllers.v1.SysJobController'.
+   at Microsoft.Extensions.DependencyInjection.ActivatorUtilities.GetService(IServiceProvider sp, Type type, Type requiredBy, Boolean isDefaultParameterRequired)
+   at lambda_method(Closure , IServiceProvider , Object[] )
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerActivatorProvider.<>c__DisplayClass4_0.<CreateActivator>b__0(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerFactoryProvider.<>c__DisplayClass5_0.<CreateControllerFactory>g__CreateController|0(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Services.Common.APIs.Infrastructure.CustomJwtMiddleware.Invoke(HttpContext context) in D:\TayHo_project\TayHo.SystemCore\CoreService\01.Services.Common\Services.Common.APIs\Infrastructure\Middlewares\CustomJwtMiddleware.cs:line 27
+   at Microsoft.AspNetCore.Localization.RequestLocalizationMiddleware.Invoke(HttpContext context)
+   at Services.Common.APIs.Infrastructure.CustomExceptionHandler.InvokeAsync(HttpContext httpContext) in D:\TayHo_project\TayHo.SystemCore\CoreService\01.Services.Common\Services.Common.APIs\Infrastructure\Middlewares\CustomExceptionHandlerMiddleware.cs:line 36
+2021-05-10 17:01:48.814 +07:00 [INF] Request finished in 681.7938ms 500 application/json
+2021-05-10 17:03:22.980 +07:00 [INF] Application Starting.
+2021-05-10 17:03:25.280 +07:00 [INF] User profile is available. Using 'C:\Users\CongTrien\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2021-05-10 17:03:25.656 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2021-05-10 17:03:25.656 +07:00 [INF] Hosting environment: Development
+2021-05-10 17:03:25.656 +07:00 [INF] Content root path: D:\TayHo_project\TayHo.SystemCore\AppService\TayHo.ProjectManager\PrjectManager.Read\ProjectManager.Read.Api
+2021-05-10 17:03:25.694 +07:00 [INF] Request starting HTTP/2.0 GET https://localhost:44376/swagger/index.html  
+2021-05-10 17:03:25.854 +07:00 [INF] Request finished in 162.6827ms 200 text/html;charset=utf-8
+2021-05-10 17:03:26.003 +07:00 [INF] Request starting HTTP/2.0 GET https://localhost:44376/swagger/v1/swagger.json  
+2021-05-10 17:03:26.518 +07:00 [INF] Request finished in 514.4316ms 200 application/json;charset=utf-8
+2021-05-10 17:03:55.646 +07:00 [INF] Request starting HTTP/2.0 GET https://localhost:44376/api/read/v1/SysJob/SysJobParameter?AccountId=1&DBName=QuanLyDuAn&StoreName=sp_GetDataTableSS_WithPage_AccountID_FK&Type=1  
+2021-05-10 17:03:55.674 +07:00 [INF] Executing endpoint 'ProjectManager.Read.Api.Controllers.v1.SysJobController.GetSysJobParameterAsync (ProjectManager.Read.Api)'
+2021-05-10 17:03:55.710 +07:00 [INF] Route matched with {action = "GetSysJobParameter", controller = "SysJob"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetSysJobParameterAsync(ProjectManager.Read.Api.ViewModels.SysJobRequestViewModel) on controller ProjectManager.Read.Api.Controllers.v1.SysJobController (ProjectManager.Read.Api).
+2021-05-10 17:04:01.262 +07:00 [INF] Executing action method ProjectManager.Read.Api.Controllers.v1.SysJobController.GetSysJobParameterAsync (ProjectManager.Read.Api) - Validation state: "Valid"
+2021-05-10 17:04:01.330 +07:00 [INF] Executed action ProjectManager.Read.Api.Controllers.v1.SysJobController.GetSysJobParameterAsync (ProjectManager.Read.Api) in 5616.0737ms
+2021-05-10 17:04:01.331 +07:00 [INF] Executed endpoint 'ProjectManager.Read.Api.Controllers.v1.SysJobController.GetSysJobParameterAsync (ProjectManager.Read.Api)'
+2021-05-10 17:04:01.424 +07:00 [ERR] Missing type map configuration or unsupported mapping.
+
+Mapping types:
+Object -> RequestSysJobFilterParam
+System.Object -> ProjectManager.Read.Sql.Parameters.RequestSysJobFilterParam
+AutoMapper.AutoMapperMappingException: Missing type map configuration or unsupported mapping.
+
+Mapping types:
+Object -> RequestSysJobFilterParam
+System.Object -> ProjectManager.Read.Sql.Parameters.RequestSysJobFilterParam
+   at lambda_method(Closure , Object , RequestSysJobFilterParam , ResolutionContext )
+   at ProjectManager.Read.Api.Controllers.v1.SysJobController.GetSysJobParameterAsync(SysJobRequestViewModel request) in D:\TayHo_project\TayHo.SystemCore\AppService\TayHo.ProjectManager\PrjectManager.Read\ProjectManager.Read.Api\Controllers\SysJobController.cs:line 109
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Services.Common.APIs.Infrastructure.CustomJwtMiddleware.Invoke(HttpContext context) in D:\TayHo_project\TayHo.SystemCore\CoreService\01.Services.Common\Services.Common.APIs\Infrastructure\Middlewares\CustomJwtMiddleware.cs:line 27
+   at Microsoft.AspNetCore.Localization.RequestLocalizationMiddleware.Invoke(HttpContext context)
+   at Services.Common.APIs.Infrastructure.CustomExceptionHandler.InvokeAsync(HttpContext httpContext) in D:\TayHo_project\TayHo.SystemCore\CoreService\01.Services.Common\Services.Common.APIs\Infrastructure\Middlewares\CustomExceptionHandlerMiddleware.cs:line 36
+2021-05-10 17:04:01.475 +07:00 [ERR] Missing type map configuration or unsupported mapping.
+
+Mapping types:
+Object -> RequestSysJobFilterParam
+System.Object -> ProjectManager.Read.Sql.Parameters.RequestSysJobFilterParam
+AutoMapper.AutoMapperMappingException: Missing type map configuration or unsupported mapping.
+
+Mapping types:
+Object -> RequestSysJobFilterParam
+System.Object -> ProjectManager.Read.Sql.Parameters.RequestSysJobFilterParam
+   at lambda_method(Closure , Object , RequestSysJobFilterParam , ResolutionContext )
+   at ProjectManager.Read.Api.Controllers.v1.SysJobController.GetSysJobParameterAsync(SysJobRequestViewModel request) in D:\TayHo_project\TayHo.SystemCore\AppService\TayHo.ProjectManager\PrjectManager.Read\ProjectManager.Read.Api\Controllers\SysJobController.cs:line 109
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Services.Common.APIs.Infrastructure.CustomJwtMiddleware.Invoke(HttpContext context) in D:\TayHo_project\TayHo.SystemCore\CoreService\01.Services.Common\Services.Common.APIs\Infrastructure\Middlewares\CustomJwtMiddleware.cs:line 27
+   at Microsoft.AspNetCore.Localization.RequestLocalizationMiddleware.Invoke(HttpContext context)
+   at Services.Common.APIs.Infrastructure.CustomExceptionHandler.InvokeAsync(HttpContext httpContext) in D:\TayHo_project\TayHo.SystemCore\CoreService\01.Services.Common\Services.Common.APIs\Infrastructure\Middlewares\CustomExceptionHandlerMiddleware.cs:line 36
+2021-05-10 17:04:01.487 +07:00 [INF] Request finished in 5841.3006ms 500 application/json
+2021-05-10 17:07:15.194 +07:00 [INF] Application Starting.
+2021-05-10 17:07:17.122 +07:00 [INF] User profile is available. Using 'C:\Users\CongTrien\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2021-05-10 17:07:17.534 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2021-05-10 17:07:17.534 +07:00 [INF] Hosting environment: Development
+2021-05-10 17:07:17.534 +07:00 [INF] Content root path: D:\TayHo_project\TayHo.SystemCore\AppService\TayHo.ProjectManager\PrjectManager.Read\ProjectManager.Read.Api
+2021-05-10 17:07:17.570 +07:00 [INF] Request starting HTTP/2.0 GET https://localhost:44376/swagger/index.html  
+2021-05-10 17:07:17.713 +07:00 [INF] Request finished in 146.2313ms 200 text/html;charset=utf-8
+2021-05-10 17:07:17.855 +07:00 [INF] Request starting HTTP/2.0 GET https://localhost:44376/swagger/v1/swagger.json  
+2021-05-10 17:07:18.295 +07:00 [INF] Request finished in 440.5575ms 200 application/json;charset=utf-8
+2021-05-10 17:07:38.956 +07:00 [INF] Request starting HTTP/2.0 GET https://localhost:44376/api/read/v1/SysJob/SysJobParameter?AccountId=1&DBName=QuanLyDuAn&StoreName=sp_GetDataTableSS_WithPage_AccountID_FK&Type=1  
+2021-05-10 17:07:38.996 +07:00 [INF] Executing endpoint 'ProjectManager.Read.Api.Controllers.v1.SysJobController.GetSysJobParameterAsync (ProjectManager.Read.Api)'
+2021-05-10 17:07:39.033 +07:00 [INF] Route matched with {action = "GetSysJobParameter", controller = "SysJob"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetSysJobParameterAsync(ProjectManager.Read.Api.ViewModels.SysJobRequestViewModel) on controller ProjectManager.Read.Api.Controllers.v1.SysJobController (ProjectManager.Read.Api).
+2021-05-10 17:07:41.366 +07:00 [INF] Executing action method ProjectManager.Read.Api.Controllers.v1.SysJobController.GetSysJobParameterAsync (ProjectManager.Read.Api) - Validation state: "Valid"
+2021-05-10 17:07:41.828 +07:00 [INF] Executed action ProjectManager.Read.Api.Controllers.v1.SysJobController.GetSysJobParameterAsync (ProjectManager.Read.Api) in 2790.6424ms
+2021-05-10 17:07:41.829 +07:00 [INF] Executed endpoint 'ProjectManager.Read.Api.Controllers.v1.SysJobController.GetSysJobParameterAsync (ProjectManager.Read.Api)'
+2021-05-10 17:07:42.034 +07:00 [ERR] One or more errors occurred. (Procedure or function sp_Sys_GetDataBase has too many arguments specified.)
+System.AggregateException: One or more errors occurred. (Procedure or function sp_Sys_GetDataBase has too many arguments specified.)
+ ---> System.Data.SqlClient.SqlException (0x80131904): Procedure or function sp_Sys_GetDataBase has too many arguments specified.
+   at System.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__126_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.Tasks.Task.<>c.<.cctor>b__274_0(Object obj)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location where exception was thrown ---
+   at Dapper.SqlMapper.QueryMultipleAsync(IDbConnection cnn, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 1050
+ClientConnectionId:bdfec0a6-00a0-4aa0-88aa-104d2b0128d6
+Error Number:8144,State:2,Class:16
+   --- End of inner exception stack trace ---
+   at System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   at System.Threading.Tasks.Task`1.GetResultCore(Boolean waitCompletionNotification)
+   at System.Threading.Tasks.Task`1.get_Result()
+   at ProjectManager.Read.Sql.Repositories.SysJobRepository`1.GetDataBaseAsync(RequestSysJobFilterParam requestBaseFilterParam) in D:\TayHo_project\TayHo.SystemCore\AppService\TayHo.ProjectManager\PrjectManager.Read\ProjectManager.Read.Sql\Repositories\SysJobRepository.cs:line 53
+   at ProjectManager.Read.Api.Controllers.v1.SysJobController.GetSysJobParameterAsync(SysJobRequestViewModel request) in D:\TayHo_project\TayHo.SystemCore\AppService\TayHo.ProjectManager\PrjectManager.Read\ProjectManager.Read.Api\Controllers\SysJobController.cs:line 110
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Services.Common.APIs.Infrastructure.CustomJwtMiddleware.Invoke(HttpContext context) in D:\TayHo_project\TayHo.SystemCore\CoreService\01.Services.Common\Services.Common.APIs\Infrastructure\Middlewares\CustomJwtMiddleware.cs:line 27
+   at Microsoft.AspNetCore.Localization.RequestLocalizationMiddleware.Invoke(HttpContext context)
+   at Services.Common.APIs.Infrastructure.CustomExceptionHandler.InvokeAsync(HttpContext httpContext) in D:\TayHo_project\TayHo.SystemCore\CoreService\01.Services.Common\Services.Common.APIs\Infrastructure\Middlewares\CustomExceptionHandlerMiddleware.cs:line 36
+2021-05-10 17:07:42.166 +07:00 [ERR] One or more errors occurred. (Procedure or function sp_Sys_GetDataBase has too many arguments specified.)
+System.AggregateException: One or more errors occurred. (Procedure or function sp_Sys_GetDataBase has too many arguments specified.)
+ ---> System.Data.SqlClient.SqlException (0x80131904): Procedure or function sp_Sys_GetDataBase has too many arguments specified.
+   at System.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__126_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.Tasks.Task.<>c.<.cctor>b__274_0(Object obj)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location where exception was thrown ---
+   at Dapper.SqlMapper.QueryMultipleAsync(IDbConnection cnn, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 1050
+ClientConnectionId:bdfec0a6-00a0-4aa0-88aa-104d2b0128d6
+Error Number:8144,State:2,Class:16
+   --- End of inner exception stack trace ---
+   at System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   at System.Threading.Tasks.Task`1.GetResultCore(Boolean waitCompletionNotification)
+   at System.Threading.Tasks.Task`1.get_Result()
+   at ProjectManager.Read.Sql.Repositories.SysJobRepository`1.GetDataBaseAsync(RequestSysJobFilterParam requestBaseFilterParam) in D:\TayHo_project\TayHo.SystemCore\AppService\TayHo.ProjectManager\PrjectManager.Read\ProjectManager.Read.Sql\Repositories\SysJobRepository.cs:line 53
+   at ProjectManager.Read.Api.Controllers.v1.SysJobController.GetSysJobParameterAsync(SysJobRequestViewModel request) in D:\TayHo_project\TayHo.SystemCore\AppService\TayHo.ProjectManager\PrjectManager.Read\ProjectManager.Read.Api\Controllers\SysJobController.cs:line 110
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Services.Common.APIs.Infrastructure.CustomJwtMiddleware.Invoke(HttpContext context) in D:\TayHo_project\TayHo.SystemCore\CoreService\01.Services.Common\Services.Common.APIs\Infrastructure\Middlewares\CustomJwtMiddleware.cs:line 27
+   at Microsoft.AspNetCore.Localization.RequestLocalizationMiddleware.Invoke(HttpContext context)
+   at Services.Common.APIs.Infrastructure.CustomExceptionHandler.InvokeAsync(HttpContext httpContext) in D:\TayHo_project\TayHo.SystemCore\CoreService\01.Services.Common\Services.Common.APIs\Infrastructure\Middlewares\CustomExceptionHandlerMiddleware.cs:line 36
+2021-05-10 17:07:42.183 +07:00 [INF] Request finished in 3227.3224ms 500 application/json
+2021-05-10 17:09:22.641 +07:00 [INF] Application Starting.
+2021-05-10 17:09:24.858 +07:00 [INF] User profile is available. Using 'C:\Users\CongTrien\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2021-05-10 17:09:25.190 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2021-05-10 17:09:25.190 +07:00 [INF] Hosting environment: Development
+2021-05-10 17:09:25.190 +07:00 [INF] Content root path: D:\TayHo_project\TayHo.SystemCore\AppService\TayHo.ProjectManager\PrjectManager.Read\ProjectManager.Read.Api
+2021-05-10 17:09:25.228 +07:00 [INF] Request starting HTTP/2.0 GET https://localhost:44376/swagger/index.html  
+2021-05-10 17:09:25.370 +07:00 [INF] Request finished in 145.6791ms 200 text/html;charset=utf-8
+2021-05-10 17:09:25.530 +07:00 [INF] Request starting HTTP/2.0 GET https://localhost:44376/swagger/v1/swagger.json  
+2021-05-10 17:09:25.984 +07:00 [INF] Request finished in 460.7896ms 200 application/json;charset=utf-8
+2021-05-10 17:09:57.198 +07:00 [INF] Request starting HTTP/2.0 GET https://localhost:44376/api/read/v1/SysJob/SysJobParameter?AccountId=1&DBName=QuanLyDuAn&StoreName=sp_GetDataTableSS_WithPage_AccountID_FK&Type=1  
+2021-05-10 17:09:57.223 +07:00 [INF] Executing endpoint 'ProjectManager.Read.Api.Controllers.v1.SysJobController.GetSysJobParameterAsync (ProjectManager.Read.Api)'
+2021-05-10 17:09:57.257 +07:00 [INF] Route matched with {action = "GetSysJobParameter", controller = "SysJob"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetSysJobParameterAsync(ProjectManager.Read.Api.ViewModels.SysJobRequestViewModel) on controller ProjectManager.Read.Api.Controllers.v1.SysJobController (ProjectManager.Read.Api).
+2021-05-10 17:10:09.879 +07:00 [INF] Executing action method ProjectManager.Read.Api.Controllers.v1.SysJobController.GetSysJobParameterAsync (ProjectManager.Read.Api) - Validation state: "Valid"
+2021-05-10 17:10:11.837 +07:00 [INF] Executed action ProjectManager.Read.Api.Controllers.v1.SysJobController.GetSysJobParameterAsync (ProjectManager.Read.Api) in 14575.8541ms
+2021-05-10 17:10:11.838 +07:00 [INF] Executed endpoint 'ProjectManager.Read.Api.Controllers.v1.SysJobController.GetSysJobParameterAsync (ProjectManager.Read.Api)'
+2021-05-10 17:10:12.014 +07:00 [ERR] One or more errors occurred. (Procedure or function sp_Sys_GetParameter has too many arguments specified.)
+System.AggregateException: One or more errors occurred. (Procedure or function sp_Sys_GetParameter has too many arguments specified.)
+ ---> System.Data.SqlClient.SqlException (0x80131904): Procedure or function sp_Sys_GetParameter has too many arguments specified.
+   at System.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__126_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.Tasks.Task.<>c.<.cctor>b__274_0(Object obj)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location where exception was thrown ---
+   at Dapper.SqlMapper.QueryMultipleAsync(IDbConnection cnn, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 1050
+ClientConnectionId:3d907b91-88be-4a19-b9a5-056177176c59
+Error Number:8144,State:2,Class:16
+   --- End of inner exception stack trace ---
+   at System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   at System.Threading.Tasks.Task`1.GetResultCore(Boolean waitCompletionNotification)
+   at System.Threading.Tasks.Task`1.get_Result()
+   at ProjectManager.Read.Sql.Repositories.SysJobRepository`1.GetParameterAsync(RequestSysJobFilterParam requestBaseFilterParam) in D:\TayHo_project\TayHo.SystemCore\AppService\TayHo.ProjectManager\PrjectManager.Read\ProjectManager.Read.Sql\Repositories\SysJobRepository.cs:line 85
+   at ProjectManager.Read.Api.Controllers.v1.SysJobController.GetSysJobParameterAsync(SysJobRequestViewModel request) in D:\TayHo_project\TayHo.SystemCore\AppService\TayHo.ProjectManager\PrjectManager.Read\ProjectManager.Read.Api\Controllers\SysJobController.cs:line 110
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Services.Common.APIs.Infrastructure.CustomJwtMiddleware.Invoke(HttpContext context) in D:\TayHo_project\TayHo.SystemCore\CoreService\01.Services.Common\Services.Common.APIs\Infrastructure\Middlewares\CustomJwtMiddleware.cs:line 27
+   at Microsoft.AspNetCore.Localization.RequestLocalizationMiddleware.Invoke(HttpContext context)
+   at Services.Common.APIs.Infrastructure.CustomExceptionHandler.InvokeAsync(HttpContext httpContext) in D:\TayHo_project\TayHo.SystemCore\CoreService\01.Services.Common\Services.Common.APIs\Infrastructure\Middlewares\CustomExceptionHandlerMiddleware.cs:line 36
+2021-05-10 17:10:12.080 +07:00 [ERR] One or more errors occurred. (Procedure or function sp_Sys_GetParameter has too many arguments specified.)
+System.AggregateException: One or more errors occurred. (Procedure or function sp_Sys_GetParameter has too many arguments specified.)
+ ---> System.Data.SqlClient.SqlException (0x80131904): Procedure or function sp_Sys_GetParameter has too many arguments specified.
+   at System.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__126_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.Tasks.Task.<>c.<.cctor>b__274_0(Object obj)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location where exception was thrown ---
+   at Dapper.SqlMapper.QueryMultipleAsync(IDbConnection cnn, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 1050
+ClientConnectionId:3d907b91-88be-4a19-b9a5-056177176c59
+Error Number:8144,State:2,Class:16
+   --- End of inner exception stack trace ---
+   at System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   at System.Threading.Tasks.Task`1.GetResultCore(Boolean waitCompletionNotification)
+   at System.Threading.Tasks.Task`1.get_Result()
+   at ProjectManager.Read.Sql.Repositories.SysJobRepository`1.GetParameterAsync(RequestSysJobFilterParam requestBaseFilterParam) in D:\TayHo_project\TayHo.SystemCore\AppService\TayHo.ProjectManager\PrjectManager.Read\ProjectManager.Read.Sql\Repositories\SysJobRepository.cs:line 85
+   at ProjectManager.Read.Api.Controllers.v1.SysJobController.GetSysJobParameterAsync(SysJobRequestViewModel request) in D:\TayHo_project\TayHo.SystemCore\AppService\TayHo.ProjectManager\PrjectManager.Read\ProjectManager.Read.Api\Controllers\SysJobController.cs:line 110
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Services.Common.APIs.Infrastructure.CustomJwtMiddleware.Invoke(HttpContext context) in D:\TayHo_project\TayHo.SystemCore\CoreService\01.Services.Common\Services.Common.APIs\Infrastructure\Middlewares\CustomJwtMiddleware.cs:line 27
+   at Microsoft.AspNetCore.Localization.RequestLocalizationMiddleware.Invoke(HttpContext context)
+   at Services.Common.APIs.Infrastructure.CustomExceptionHandler.InvokeAsync(HttpContext httpContext) in D:\TayHo_project\TayHo.SystemCore\CoreService\01.Services.Common\Services.Common.APIs\Infrastructure\Middlewares\CustomExceptionHandlerMiddleware.cs:line 36
+2021-05-10 17:10:12.093 +07:00 [INF] Request finished in 14895.7186ms 500 application/json
+2021-05-10 17:10:17.491 +07:00 [INF] Request starting HTTP/2.0 GET https://localhost:44376/api/read/v1/SysJob/SysJobParameter?AccountId=1&DBName=QuanLyDuAn&StoreName=sp_GetDataTableSS_WithPage_AccountID_FK&Type=1  
+2021-05-10 17:10:17.503 +07:00 [INF] Executing endpoint 'ProjectManager.Read.Api.Controllers.v1.SysJobController.GetSysJobParameterAsync (ProjectManager.Read.Api)'
+2021-05-10 17:10:17.505 +07:00 [INF] Route matched with {action = "GetSysJobParameter", controller = "SysJob"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetSysJobParameterAsync(ProjectManager.Read.Api.ViewModels.SysJobRequestViewModel) on controller ProjectManager.Read.Api.Controllers.v1.SysJobController (ProjectManager.Read.Api).
+2021-05-10 17:10:19.758 +07:00 [INF] Executing action method ProjectManager.Read.Api.Controllers.v1.SysJobController.GetSysJobParameterAsync (ProjectManager.Read.Api) - Validation state: "Valid"
+2021-05-10 17:14:13.110 +07:00 [INF] Application Starting.
+2021-05-10 17:14:15.470 +07:00 [INF] User profile is available. Using 'C:\Users\CongTrien\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2021-05-10 17:14:15.934 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2021-05-10 17:14:15.934 +07:00 [INF] Hosting environment: Development
+2021-05-10 17:14:15.934 +07:00 [INF] Content root path: D:\TayHo_project\TayHo.SystemCore\AppService\TayHo.ProjectManager\PrjectManager.Read\ProjectManager.Read.Api
+2021-05-10 17:14:15.969 +07:00 [INF] Request starting HTTP/2.0 GET https://localhost:44376/swagger/index.html  
+2021-05-10 17:14:16.133 +07:00 [INF] Request finished in 166.7247ms 200 text/html;charset=utf-8
+2021-05-10 17:14:16.234 +07:00 [INF] Request starting HTTP/2.0 GET https://localhost:44376/swagger/v1/swagger.json  
+2021-05-10 17:14:16.726 +07:00 [INF] Request finished in 491.9431ms 200 application/json;charset=utf-8
+2021-05-10 17:14:33.605 +07:00 [INF] Request starting HTTP/2.0 GET https://localhost:44376/api/read/v1/SysJob/SysJobParameter?AccountId=1&DBName=QuanLyDuAn&StoreName=sp_GetDataTableSS_WithPage_AccountID_FK&Type=1  
+2021-05-10 17:14:33.633 +07:00 [INF] Executing endpoint 'ProjectManager.Read.Api.Controllers.v1.SysJobController.GetSysJobParameterAsync (ProjectManager.Read.Api)'
+2021-05-10 17:14:33.671 +07:00 [INF] Route matched with {action = "GetSysJobParameter", controller = "SysJob"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetSysJobParameterAsync(ProjectManager.Read.Api.ViewModels.SysJobRequestViewModel) on controller ProjectManager.Read.Api.Controllers.v1.SysJobController (ProjectManager.Read.Api).
+2021-05-10 17:14:37.348 +07:00 [INF] Executing action method ProjectManager.Read.Api.Controllers.v1.SysJobController.GetSysJobParameterAsync (ProjectManager.Read.Api) - Validation state: "Valid"
+2021-05-10 17:14:38.867 +07:00 [INF] Executed action method ProjectManager.Read.Api.Controllers.v1.SysJobController.GetSysJobParameterAsync (ProjectManager.Read.Api), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 1514.4171ms.
+2021-05-10 17:14:38.876 +07:00 [INF] Executing ObjectResult, writing value of type 'Services.Common.DomainObjects.MethodResult`1[[Services.Common.Paging.PagingItems`1[[ProjectManager.Read.Api.ViewModels.SysJobParameterResponseViewModel, ProjectManager.Read.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], Services.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2021-05-10 17:14:38.890 +07:00 [INF] Executed action ProjectManager.Read.Api.Controllers.v1.SysJobController.GetSysJobParameterAsync (ProjectManager.Read.Api) in 5213.8913ms
+2021-05-10 17:14:38.891 +07:00 [INF] Executed endpoint 'ProjectManager.Read.Api.Controllers.v1.SysJobController.GetSysJobParameterAsync (ProjectManager.Read.Api)'
+2021-05-10 17:14:38.892 +07:00 [INF] Request finished in 5287.8588ms 200 application/json; charset=utf-8

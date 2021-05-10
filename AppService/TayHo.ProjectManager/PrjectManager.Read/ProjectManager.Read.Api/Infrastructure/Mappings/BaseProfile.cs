@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ProjectManager.Read.Api.ViewModels;
 using ProjectManager.Read.Api.ViewModels.BaseClasses;
 using ProjectManager.Read.Sql.Parameters;
 
@@ -13,6 +14,7 @@ namespace ProjectManager.Read.Api.Infrastructure.Mappings
             CreateMap<BaseRequestViewModel, RequestHasAccountIdFilterParam>();
             CreateMap<BaseTreeRequestViewModel, RequestTreeListBaseFilterParam>();
             CreateMap<BasePermitRequestViewModel, RequestHasAccountPermitFilterParam>();
+            CreateMap<SysJobRequestViewModel, RequestSysJobFilterParam>();
         }
     }
 }

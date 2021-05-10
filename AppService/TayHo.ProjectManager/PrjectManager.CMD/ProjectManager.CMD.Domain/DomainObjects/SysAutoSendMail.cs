@@ -15,8 +15,8 @@ namespace ProjectManager.CMD.Domain.DomainObjects
         private string _subMail;
         private string _titleMail;
         private string _bodyMail;
-        private TimeSpan? _startTime;
-        private TimeSpan? _endTime;
+        private DateTime? _startTime;
+        private DateTime? _endTime;
         private DateTime? _startDate;
         private DateTime? _endDate;
         private DateTime? _firstDate;
@@ -34,7 +34,7 @@ namespace ProjectManager.CMD.Domain.DomainObjects
         {
         }
 
-        public SysAutoSendMail(int? SysJobId, int? TemplateMailId, string SubMail, string TitleMail, string BodyMail, TimeSpan? StartTime, TimeSpan? EndTime, DateTime? StartDate, DateTime? EndDate, DateTime? FirstDate, DateTime? LastDate, DateTime? NextDate, int? Times, byte? Unit, int? StepTime) : this()
+        public SysAutoSendMail(int? SysJobId, int? TemplateMailId, string SubMail, string TitleMail, string BodyMail, DateTime? StartTime, DateTime? EndTime, DateTime? StartDate, DateTime? EndDate, DateTime? FirstDate, DateTime? LastDate, DateTime? NextDate, int? Times, byte? Unit, int? StepTime) : this()
         {
             _sysJobId = SysJobId;
             _templateMailId = TemplateMailId;
@@ -62,8 +62,8 @@ namespace ProjectManager.CMD.Domain.DomainObjects
         [MaxLength(1024, ErrorMessage = nameof(ErrorCodeInsert.IErr1024))] public string SubMail { get => _subMail; }
         [MaxLength(1024, ErrorMessage = nameof(ErrorCodeInsert.IErr1024))] public string TitleMail { get => _titleMail; }
         public string BodyMail { get => _bodyMail; }
-        public TimeSpan? StartTime { get => _startTime; }
-        public TimeSpan? EndTime { get => _endTime; }
+        public DateTime? StartTime { get => _startTime; }
+        public DateTime? EndTime { get => _endTime; }
         public DateTime? StartDate { get => _startDate; }
         public DateTime? EndDate { get => _endDate; }
         public DateTime? FirstDate { get => _firstDate; }
@@ -87,9 +87,9 @@ namespace ProjectManager.CMD.Domain.DomainObjects
         { _titleMail = TitleMail == null ? _titleMail : TitleMail; if (!IsValid()) throw new DomainException(_errorMessages); }
         public void SetBodyMail(string BodyMail)
         { _bodyMail = BodyMail == null ? _bodyMail : BodyMail; if (!IsValid()) throw new DomainException(_errorMessages); }
-        public void SetStartTime(TimeSpan? StartTime)
+        public void SetStartTime(DateTime? StartTime)
         { _startTime = !StartTime.HasValue ? _startTime : StartTime; if (!IsValid()) throw new DomainException(_errorMessages); }
-        public void SetEndTime(TimeSpan? EndTime)
+        public void SetEndTime(DateTime? EndTime)
         { _endTime = !EndTime.HasValue ? _endTime : EndTime; if (!IsValid()) throw new DomainException(_errorMessages); }
         public void SetStartDate(DateTime? StartDate)
         { _startDate = !StartDate.HasValue ? _startDate : StartDate; if (!IsValid()) throw new DomainException(_errorMessages); }
@@ -107,7 +107,6 @@ namespace ProjectManager.CMD.Domain.DomainObjects
         { _unit = !Unit.HasValue ? _unit : Unit; if (!IsValid()) throw new DomainException(_errorMessages); }
         public void SetStepTime(int? StepTime)
         { _stepTime = !StepTime.HasValue ? _stepTime : StepTime; if (!IsValid()) throw new DomainException(_errorMessages); }
-
 
         public sealed override bool IsValid()
         {

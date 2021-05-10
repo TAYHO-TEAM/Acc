@@ -369,7 +369,26 @@ namespace AppWFGenProject
             bs.DataSource = result.Items;
             dgvSMSysAutoSendMail.DataSource = bs;
         }
-
+        private void dgvSMSysAutoSendMail_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.ColumnIndex == 0)
+            {
+                //Loop and uncheck all other CheckBoxes.
+                foreach (DataGridViewRow row in dgvSMSysAutoSendMail.Rows)
+                {
+                    if (row.Index == e.RowIndex)
+                    {
+                        row.Cells["checkBoxColumn"].Value = !Convert.ToBoolean(row.Cells["checkBoxColumn"].EditedFormattedValue);
+                    }
+                    else
+                    {
+                        row.Cells["checkBoxColumn"].Value = false;
+                    }
+                }
+            }
+            //if (e.RowIndex >= 0)
+            //    this.dgvSMSysAutoSendMail.Rows[e.RowIndex].Cells["colSelect"].Value = true;
+        }
         #region Group SendMailAuto Function
         private async Task LoadSendMailConfig()
         {
@@ -384,13 +403,22 @@ namespace AppWFGenProject
                 bs.AddingNew += new AddingNewEventHandler(InsertSysJob);
                // bs.CurrentItemChanged += new EventHandler(bs_CurrentChanged);
                 this.bindingNavigatorMain.BindingSource = bs;
-                bindingNavigatorMain.PositionItem.TextChanged += new EventHandler(bindingNavigatorMain_TextChanged);
+                //bindingNavigatorMain.PositionItem.TextChanged += new EventHandler(bindingNavigatorMain_TextChanged);
 
 
                 SetPositionMenu();
 
                 dgvSMSysAutoSendMail.DataSource = bs;// result.Items.ToList();
                 EnableButtonPaging(result);
+                //Add a CheckBox Column to the DataGridView at the first position.
+                DataGridViewCheckBoxColumn checkBoxColumn = new DataGridViewCheckBoxColumn();
+                checkBoxColumn.HeaderText = "";
+                checkBoxColumn.Width = 30;
+                checkBoxColumn.Name = "checkBoxColumn";
+                dgvSMSysAutoSendMail.Columns.Insert(0, checkBoxColumn);
+
+                //Assign Click event to the DataGridView Cell.
+                dgvSMSysAutoSendMail.CellContentClick += new DataGridViewCellEventHandler(dgvSMSysAutoSendMail_CellClick);
             }
             catch (Exception ex)
             {
@@ -720,10 +748,11 @@ namespace AppWFGenProject
 
 
 
+
         #endregion Grouyp LDAP function
 
         #endregion Grouyp LDAP
 
-
+      
     }
 }

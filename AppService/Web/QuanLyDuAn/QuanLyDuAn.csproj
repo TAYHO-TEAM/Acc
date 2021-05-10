@@ -2500,6 +2500,8 @@
     <Content Include="Areas\Admin\Views\SystemConfig\_ContractorInfoAdd.cshtml" />
     <Content Include="Areas\ThongTin\Views\QLCongViec\_PhanHoi.cshtml" />
     <Content Include="Areas\ThongTin\Views\CauHinh\TemplateMail.cshtml" />
+    <Content Include="Areas\Admin\Views\SystemConfig\SysJob.cshtml" />
+    <Content Include="Areas\Admin\Views\SystemConfig\_SysJobAdd.cshtml" />
     <None Include="packages.config" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Home\About.cshtml" />

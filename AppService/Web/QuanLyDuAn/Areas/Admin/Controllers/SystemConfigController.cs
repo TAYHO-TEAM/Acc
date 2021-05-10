@@ -113,5 +113,18 @@ namespace QuanLyDuAn.Areas.Admin.Controllers
             }
             return Json(new { status = "success", result = "Đã lưu thông tin yêu cầu thành công" });
         }
+
+        public ActionResult SysJob()
+        {
+            return View();
+        }
+        public ActionResult _SysJobCreate()
+        {
+            return View();
+        }
+        public ActionResult _SysJobAdd()
+        {
+            return PartialView();
+        }
     }
 }

@@ -1,10 +1,11 @@
+﻿using ProjectManager.Read.Sql.DTOs.BaseClasses;
 using System;
 
-namespace ProjectManager.CMD.Api.Application.Commands
+namespace ProjectManager.Read.Sql.DTOs.DTO
 {
-    public class SysJobCommandSet : BaseCommandClasses
+    public class SysJobDTO : DTOBase
     {
-        public int TemplateId { get; set; }
+        public int? TemplateId { get; set; }
         public string JobName { get; set; }
         public string NameDataBase { get; set; }
         public string NameStoreProce { get; set; }
@@ -21,6 +22,26 @@ namespace ProjectManager.CMD.Api.Application.Commands
         public byte? Unit { get; set; }
         public int? StepTime { get; set; }
         public bool? IsTemplate { get; set; }
+    }
+
+    public class SysJobDataBaseDTO
+    {
+        public string name { get; set; }
+    }
+    public class SysJobStoreProcedureDTO
+    {
+        public string name { get; set; }
+    }
+    public class SysJobParameterDTO
+    {
+        public string ParameterName { get; set; }
+        public string Type { get; set; }
+        public int Length { get; set; }
+        public int Prec { get; set; }
+        public int Scale { get; set; }
+        public int ParamOrder { get; set; }
+        public string Collation { get; set; }
 
     }
+
 }

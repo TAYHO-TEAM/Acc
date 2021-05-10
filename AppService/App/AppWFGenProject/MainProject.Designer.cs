@@ -613,6 +613,7 @@ namespace AppWFGenProject
             this.dgvSMSysAutoSendMail.Size = new System.Drawing.Size(891, 291);
             this.dgvSMSysAutoSendMail.TabIndex = 26;
             this.dgvSMSysAutoSendMail.AllowUserToAddRowsChanged += new System.EventHandler(this.dgvSMSysAutoSendMail_AllowUserToAddRowsChanged);
+            this.dgvSMSysAutoSendMail.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvSMSysAutoSendMail_CellClick);
             this.dgvSMSysAutoSendMail.MouseClick += new System.Windows.Forms.MouseEventHandler(this.dgvSMSysAutoSendMail_MouseClick);
             // 
             // lblSMListDB
