@@ -121,9 +121,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{0941A9D1-9858-4960-A38A-72DDBE1F6784}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebQuanLyDuAn", "WebQuanLyDuAn", "{853C4433-8F4E-42B0-85C4-C4446A74985D}"
-	ProjectSection(SolutionItems) = preProject
-		\\192.168.1.26\d\duan\Web.config.rar = \\192.168.1.26\d\duan\Web.config.rar
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ThongTin", "ThongTin", "{DAC9C7D5-0BB2-451E-8B22-CCEB750E8F0D}"
 EndProject
