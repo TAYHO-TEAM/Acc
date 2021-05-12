@@ -55,6 +55,7 @@ namespace OperationManager.CRUD.Api.Controllers.v1
         [ProducesResponseType(typeof(VoidMethodResult), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Insert(FormDataCollection form)
         {
+            var methodResult = new MethodResult<object>();
             HttpRequestMessage request = new HttpRequestMessage();
             try
             {
@@ -62,7 +63,7 @@ namespace OperationManager.CRUD.Api.Controllers.v1
                 var model = new DocumentReleased();
                 JsonConvert.PopulateObject(values, model);
               
-                if (!ModelState.IsValid) throw new CommandHandlerException( new ErrorResult(new List<string>().Add("ValidateDistricts Model Error")));
+                if (!ModelState.IsValid) throw new CommandHandlerException( new ErrorResult());
 
                 var result = _dbContext.DocumentReleased.Add(model);
                 await _dbContext.SaveChangesAsync();
@@ -71,7 +72,7 @@ namespace OperationManager.CRUD.Api.Controllers.v1
             }
             catch (Exception ex)
             {
-                return new OkObjectResult(new object { HttpStatusCode.BadRequest, ex });
+                return new OkObjectResult(HttpStatusCode.BadRequest);
             }
         }
         /// <summary>

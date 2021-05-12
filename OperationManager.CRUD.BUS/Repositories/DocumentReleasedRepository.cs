@@ -6,7 +6,7 @@ using System.Text;
 
 namespace OperationManager.CRUD.BLL.Repositories
 {
-    public class DocumentReleasedRepository: IDocumentReleasedRepositories
+    public class DocumentReleasedRepository: IDocumentReleasedRepository
     {
         protected readonly QuanLyVanHanhContext _dbContext;
         public DocumentReleasedRepository(QuanLyVanHanhContext dbContext)

@@ -1,7 +1,10 @@
 ﻿using DevExtreme.AspNet.Data;
+using Newtonsoft.Json;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json;
 
 namespace Services.Common.DevExpress
 {
@@ -147,5 +150,89 @@ namespace Services.Common.DevExpress
     //"allowAsyncOverSync": true
     //            }
     //        }
+    public static class DevexpressHelperFunction
+    {
+        public static IList ConvertFilter(IList filter)
+        {
+            IList newList = new List<object>();
+            foreach (var item in filter)
+            {
+                if (item != null)
+                {
+                    if (item.ToString().Length > 0)
+                    {
 
+                        if (item.ToString().Substring(0, 1) == "[")
+                        {
+                            IList lString = ConvertFilter(JsonConvert.DeserializeObject<IList>(item.ToString()));
+                            newList.Add(lString);
+                        }
+                        else
+                        {
+                            //newList.Add(JsonConvert.DeserializeObject < ((JsonElement)item).ValueKind > (item.ToString()))
+
+                            //newList.Add(((JsonElement)item));///JsonConvert.DeserializeObject<IList>(item.ToString()));
+                            string valueKid = "";
+                            try
+                            {
+                                valueKid = ((JsonElement)item).ValueKind.ToString();
+                            }
+                            catch
+                            {
+
+                            }
+                            if (valueKid == "String")
+                            {
+                                newList.Add(item.ToString());
+                            }
+                            else if (valueKid == "Number")
+                            {
+
+                                newList.Add(Convert.ToInt32(item.ToString()));
+                            }
+                            else
+                            {
+                                newList.Add(item);
+                            }
+
+                        }
+                    }
+                    else
+                    {
+                        newList.Add(item);
+                    }
+                }
+                else
+                {
+                    newList.Add(item);
+                }
+                //newList.Add(item);
+            }
+            return newList;
+        }
+        public static IList ConvertSearch(string searchOperation, string searchValue, List<string> searchExpr)
+        {
+            IList newList = new List<object>();
+            if (searchExpr.Count > 0 && !string.IsNullOrEmpty(searchValue))
+            {
+                int i = 1;
+                foreach (var searchItem in searchExpr)
+                {
+
+                    IList item = new List<string>();
+                    item.Add(searchItem);
+                    item.Add(searchOperation);
+                    item.Add(searchValue);
+                    newList.Add(item);
+                    if (i < searchExpr.Count)
+                    {
+                        newList.Add("or");
+                    }
+                    i++;
+                }
+            }
+            return newList;
+        }
+    }
+       
 }

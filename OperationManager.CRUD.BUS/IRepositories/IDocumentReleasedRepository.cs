@@ -1,6 +1,6 @@
 ﻿namespace OperationManager.CRUD.BLL.IRepositories
 {
-    public interface IDocumentReleasedRepositories 
+    public interface IDocumentReleasedRepository 
     {
 
     }

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace OperationManager.CRUD.BLL.IRepositories.BaseClasses
 {
-    public interface IQuanLyVanHanhRepositories
+    public interface IQuanLyVanHanhRepository
     {
     }
 }
