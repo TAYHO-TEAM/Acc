@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using AspNetCore.RouteAnalyzer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 
 namespace Services.Common.APIs.Infrastructure
@@ -15,12 +16,16 @@ namespace Services.Common.APIs.Infrastructure
             app.UseCustomExceptionHandler();
             app.UseCustomLocalization(configuration);
             //app.UseCustomHealthChecks();
-            app.UseMiddleware<CustomJwtMiddleware>();
+            //app.UseMiddleware<CustomJwtMiddleware>();
             //app.UseMiddleware<CustomUserBlackListMiddleware>();
+            //app.UseMvc(routes =>
+            //{
+            //    routes.MapRouteAnalyzer("/routes");
+            //});
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapDefaultControllerRoute();
+                //endpoints.MapDefaultControllerRoute();
             });
             //app.UseConsul();
             return app;

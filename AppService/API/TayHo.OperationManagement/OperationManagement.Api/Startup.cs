@@ -1,36 +1,35 @@
-using Autofac;
-using Microsoft.AspNetCore.Builder;
+using ProjectManager.Read.Sql;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using ProjectManager.CMD.Infrastructure;
 using Services.Common.APIs;
 using Services.Common.APIs.Infrastructure.Configuration;
 using Services.Common.APIs.Infrastructure.DIServiceConfigurations;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using ProjectManager.CMD.Infrastructure;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace OperationManagement.Api
 {
     public class Startup : APIStartupBase
     {
+
         public Startup(IConfiguration configuration, IWebHostEnvironment webHostEnvironment) : base(configuration, webHostEnvironment)
         {
         }
 
         public override void ConfigureServices(IServiceCollection services)
         {
-            #region Custom DbContext
-            services.AddDbContext<QuanLyDuAnContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("TayHoConnection")));
-            #endregion Custom DbContext
+            #region Register repositories
+            services.AddDbContext<ProjectManagerBaseContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("TayHoConnection")));
+            services.AddQuanLyDuAnServices(Configuration);
+
+            #endregion Register repositories
 
             #region Custom Swagger
+
             services.AddCustomMvc(Configuration, null, new List<SwaggerDocModel>
             {
                 new SwaggerDocModel
@@ -44,13 +43,8 @@ namespace OperationManagement.Api
                     }
                 }
             });
-            #endregion Custom Swagger
-        }
 
-        public override void ConfigureContainer(ContainerBuilder builder)
-        {
-            base.ConfigureContainer(builder);
-            //builder.RegisterModule(new ApplicationModule());
+            #endregion Custom Swagger
         }
     }
 }

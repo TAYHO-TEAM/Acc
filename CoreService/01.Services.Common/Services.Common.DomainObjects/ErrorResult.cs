@@ -5,7 +5,7 @@ namespace Services.Common.DomainObjects
 {
     public class ErrorResult
     {
-        public ErrorResult()
+        public ErrorResult(void v)
         {
             ErrorValues = new List<string>();
         }

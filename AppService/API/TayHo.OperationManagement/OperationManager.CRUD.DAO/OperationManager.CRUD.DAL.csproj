@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\CoreService\01.Services.Common\Services.Common.APIs.Cmd.EF\Services.Common.APIs.Cmd.EF.csproj" />
+    <ProjectReference Include="..\..\..\TayHo.ProjectManager\ProjectManager.Shared\ProjectManager.Common\ProjectManager.Common.csproj" />
+  </ItemGroup>
+
+</Project>
