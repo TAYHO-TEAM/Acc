@@ -14,13 +14,11 @@ namespace OperationManager.CRUD.Api.Controllers.v1.BaseClasses
     [ApiController]
     public class APIControllerBase : ControllerBase
     {
-        protected readonly QuanLyVanHanhContext _dbContext;
         protected readonly IMapper _mapper;
         protected readonly IHttpContextAccessor _httpContextAccessor;
         protected int _user { get; }
         public APIControllerBase(IMapper mapper, IHttpContextAccessor httpContextAccessor, QuanLyVanHanhContext dbContext)
         {
-            _dbContext = dbContext;
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(mapper));
             try

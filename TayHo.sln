@@ -126,11 +126,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppTayHo", "AppService\App\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TayHo.OperationManagement", "TayHo.OperationManagement", "{68D523C9-1DCA-4DBB-ACD0-CD4E310BDAC6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OperationManager.CRUD.Api", "AppService\API\TayHo.OperationManagement\OperationManager.CRUD.Api\OperationManager.CRUD.Api.csproj", "{ECFC1F4F-4E6F-4E32-AC7B-8B5651DEEF2E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OperationManager.CRUD.Api", "AppService\API\TayHo.OperationManagement\OperationManager.CRUD.Api\OperationManager.CRUD.Api.csproj", "{ECFC1F4F-4E6F-4E32-AC7B-8B5651DEEF2E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OperationManager.CRUD.DAL", "AppService\API\TayHo.OperationManagement\OperationManager.CRUD.DAO\OperationManager.CRUD.DAL.csproj", "{1695E238-ABC2-4ECF-8D1E-2FDFFBA73875}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OperationManager.CRUD.DAL", "AppService\API\TayHo.OperationManagement\OperationManager.CRUD.DAO\OperationManager.CRUD.DAL.csproj", "{1695E238-ABC2-4ECF-8D1E-2FDFFBA73875}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OperationManager.CRUD.BLL", "OperationManager.CRUD.BUS\OperationManager.CRUD.BLL.csproj", "{66498FCD-7E5E-4744-9DC4-D6C35CE6BA8D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OperationManager.CRUD.BLL", "OperationManager.CRUD.BUS\OperationManager.CRUD.BLL.csproj", "{66498FCD-7E5E-4744-9DC4-D6C35CE6BA8D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Operationmanager.Common", "Operationmanager.Common\Operationmanager.Common.csproj", "{24437CF1-8BBB-4751-81D2-5837E4B7281F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -262,6 +264,10 @@ Global
 		{66498FCD-7E5E-4744-9DC4-D6C35CE6BA8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{66498FCD-7E5E-4744-9DC4-D6C35CE6BA8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{66498FCD-7E5E-4744-9DC4-D6C35CE6BA8D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24437CF1-8BBB-4751-81D2-5837E4B7281F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24437CF1-8BBB-4751-81D2-5837E4B7281F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24437CF1-8BBB-4751-81D2-5837E4B7281F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24437CF1-8BBB-4751-81D2-5837E4B7281F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -327,6 +333,7 @@ Global
 		{ECFC1F4F-4E6F-4E32-AC7B-8B5651DEEF2E} = {68D523C9-1DCA-4DBB-ACD0-CD4E310BDAC6}
 		{1695E238-ABC2-4ECF-8D1E-2FDFFBA73875} = {68D523C9-1DCA-4DBB-ACD0-CD4E310BDAC6}
 		{66498FCD-7E5E-4744-9DC4-D6C35CE6BA8D} = {68D523C9-1DCA-4DBB-ACD0-CD4E310BDAC6}
+		{24437CF1-8BBB-4751-81D2-5837E4B7281F} = {68D523C9-1DCA-4DBB-ACD0-CD4E310BDAC6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0E689A5F-8FE0-4508-A363-46C906F8284A}

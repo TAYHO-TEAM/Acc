@@ -4,7 +4,12 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using OperationManager.CRUD.BLL.IRepositories.BaseClasses;
 using OperationManager.CRUD.DAL.DBContext;
+using OperationManager.CRUD.DAL.DTO;
 using Services.Common.DevExpress;
+using Services.Common.DomainObjects;
+using Services.Common.DomainObjects.Exceptions;
+using Services.Common.Utilities;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -19,10 +24,76 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
             _dbContext = dbContext;
             _dbContext.ChangeTracker.AutoDetectChangesEnabled = false;
         }
+        public async Task<LoadResult> GetAll(int user, string nameEF, DataSourceLoadOptions dataSourceLoadOptionsBase)
+        {
+            int actionType = 1; //// 1 : Read 
+            //var abc = _dbContext.Database.ExecuteSqlCommand("CreateStudents @p0, @p1", parameters: new[] { "Bill", "Gates" });
+            List<int?> getActionId = new List<int?>();
+            getActionId.Add(1);
+            //List<int?> getActionId = _dbContext.Functions
+            //.Where(c => c.TableName == nameEF
+            //        && c.Type == 1
+            //        && c.ActionId != null
+            //        && (c.IsDelete == false || !c.IsDelete.HasValue))
+            //.Select(x => x.ActionId).ToList();
+
+            bool checkPermit = true;// _dbContext.GroupAccount
+                                    //.Join(_dbContext.GroupActionPermistion, x => x.GroupId, y => y.GroupId, (y, x) => new { y, x })
+                                    //.Any(c => c.y.AccountId == user
+                                    //    && c.x.PermistionId == 6
+                                    //    && getActionId.Contains(c.x.ActionId)
+                                    //    && (c.x.IsDelete == false || !c.x.IsDelete.HasValue)
+                                    //    && (c.y.IsDelete == false || !c.y.IsDelete.HasValue));
+
+            dynamic objEF = ConvertEF(nameEF);
+            if (objEF != null)
+            {
+                if (dataSourceLoadOptionsBase.Filter != null)
+                {
+                    if (dataSourceLoadOptionsBase.Filter.Count > 1)
+                    {
+                        dataSourceLoadOptionsBase.Filter = DevexpressHelperFunction.ConvertFilter(dataSourceLoadOptionsBase.Filter);
+                    }
+                    //else
+                    //{
+                    //    dataSourceLoadOptionsBase.Filter = JsonConvert.DeserializeObject<IList>(dataSourceLoadOptionsBase.Filter[0].ToString());
+                    //}
+                }
+
+
+                if (!checkPermit && getActionId.Count > 0)
+                {
+                    IList filterOwnerBy = DevexpressHelperFunction.ConvertFilter(JsonConvert.DeserializeObject<IList>(@"[""createBy"",""=""," + user.ToString() + @"]"));
+                    IList filterDeleteNull = DevexpressHelperFunction.ConvertFilter(JsonConvert.DeserializeObject<IList>(@"[""isDelete"",""IS NULL""]"));
+                    IList filterDeleteFalse = DevexpressHelperFunction.ConvertFilter(JsonConvert.DeserializeObject<IList>(@"[""isDelete"",""=""," + 0 + @"]"));
+                    IList filterIsDelete = new List<object>();
+                    filterIsDelete.Add(filterDeleteNull);
+                    filterIsDelete.Add("or");
+                    filterIsDelete.Add(filterDeleteFalse);
+                    IList filter = new List<object>();
+                    filter.Add(filterOwnerBy);
+                    filter.Add("and");
+                    filter.Add(filterDeleteFalse);
+                    if (dataSourceLoadOptionsBase.Filter.Count > 0)
+                    {
+                        filter.Add("and");
+                        filter.Add(dataSourceLoadOptionsBase.Filter);
+                    }
+                    dataSourceLoadOptionsBase.Filter = filter;
+                }
+                return DataSourceLoader.Load(objEF, dataSourceLoadOptionsBase);
+            }
+            else
+            {
+                return new LoadResult();
+            }
+
+        }
         public async Task<LoadResult> GetAll(int user, string nameEF, DataSourceLoadOptions dataSourceLoadOptionsBase, string searchOperation, string searchValue, List<string> searchExpr)
         {
+            //var abc = _dbContext.Database.ExecuteSqlCommand("CreateStudents @p0, @p1", parameters: new[] { "Bill", "Gates" });
             List<int?> getActionId = new List<int?>();
-            var abc = _dbContext.Database.ExecuteSqlCommand("CreateStudents @p0, @p1", parameters: new[] { "Bill", "Gates" });
+
             getActionId.Add(1);
             /// _dbContext.Functions
             //.Where(c => c.TableName == nameEF
@@ -32,12 +103,12 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
             //.Select(x => x.ActionId).ToList();
 
             bool checkPermit = true;// _dbContext.GroupAccount
-                                        //.Join(_dbContext.GroupActionPermistion, x => x.GroupId, y => y.GroupId, (y, x) => new { y, x })
-                                        //.Any(c => c.y.AccountId == user
-                                        //    && c.x.PermistionId == 6
-                                        //    && getActionId.Contains(c.x.ActionId)
-                                        //    && (c.x.IsDelete == false || !c.x.IsDelete.HasValue)
-                                        //    && (c.y.IsDelete == false || !c.y.IsDelete.HasValue));
+                                    //.Join(_dbContext.GroupActionPermistion, x => x.GroupId, y => y.GroupId, (y, x) => new { y, x })
+                                    //.Any(c => c.y.AccountId == user
+                                    //    && c.x.PermistionId == 6
+                                    //    && getActionId.Contains(c.x.ActionId)
+                                    //    && (c.x.IsDelete == false || !c.x.IsDelete.HasValue)
+                                    //    && (c.y.IsDelete == false || !c.y.IsDelete.HasValue));
 
             dynamic objEF = ConvertEF(nameEF);
             if (objEF != null)
@@ -89,12 +160,37 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
             }
 
         }
+        public async Task<MethodResult<dynamic>> Insert(string nameEF ,dynamic Model)
+        {
+            int _function = 2;
+            //if ((await _ContractorInfoRepository.BaseCheckPermistion(0, _user, _actionId, _tableName, _function)) < 1)
+            //{
+            //    methodResult.AddAPIErrorMessage(nameof(ErrorCodeInsert.IErrN101), new[]
+            //   {
+            //        ErrorHelpers.GenerateErrorResult(nameof(request.Id),request.Id)
+            //    });
+            //}
+            var methodResult = new MethodResult<dynamic>();
+            try
+            {
+                DbSet<dynamic> objEF = ConvertEF(nameEF);
+                objEF.Add(Model);
+                await _dbContext.SaveChangesAsync();
+            }
+            catch(Exception ex)
+            {
+                methodResult.AddErrorMessage("Lỗi xứ lý");
+            }
+            if (!methodResult.IsOk) throw new CommandHandlerException(methodResult.ErrorMessages);
+            methodResult.Result = Model;
+            return methodResult;
+        }
         private dynamic ConvertEF(string nameEntity)
         {
             dynamic orders = null;
             switch (nameEntity)
             {
-               
+
                 case nameof(_dbContext.DocumentReleased):
                     orders = _dbContext.DocumentReleased;
                     break;

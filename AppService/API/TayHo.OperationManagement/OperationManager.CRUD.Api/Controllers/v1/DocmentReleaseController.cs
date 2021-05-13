@@ -18,16 +18,19 @@ using Services.Common.DomainObjects.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using OperationManager.CRUD.DAL.DBContext;
 using OperationManager.CRUD.DAL.DTO;
+using OperationManager.CRUD.Api.Common;
+using OperationManager.CRUD.BLL.IRepositories.BaseClasses;
 
 namespace OperationManager.CRUD.Api.Controllers.v1
 {
     public class DocmentReleaseController : APIControllerBase
     {
-        protected readonly QuanLyVanHanhContext  _dbContext;
         const string VALIDATION_ERROR = "The request failed due to a validation error";
-        public DocmentReleaseController(IMapper mapper, IHttpContextAccessor httpContextAccessor, QuanLyVanHanhContext dbContext) : base(mapper, httpContextAccessor, dbContext)
+        public string nameEF = OperationManagerConstants.DocumentReleased_TABLENAME;
+        IQuanLyVanHanhRepository _quanLyVanHanhRepository;
+        public DocmentReleaseController(IMapper mapper, IHttpContextAccessor httpContextAccessor, QuanLyVanHanhContext dbContext, IQuanLyVanHanhRepository quanLyVanHanhRepository) : base(mapper, httpContextAccessor, dbContext)
         {
-            _dbContext = dbContext;
+            _quanLyVanHanhRepository = quanLyVanHanhRepository;
         }
         /// <summary>
         /// Get List of DocmentRelease.
@@ -38,13 +41,7 @@ namespace OperationManager.CRUD.Api.Controllers.v1
         [ProducesResponseType(typeof(VoidMethodResult), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> GetAll([FromQuery]DataSourceLoadOptions loadOptions)
         {
-            var list = from x in _dbContext.DocumentReleased
-                       where x.IsDelete == false
-                       orderby x.Id
-                       select new { x.Code, x.Description, x.Id, x, x.IsDelete, x.IsModify, x.Location };
-            //var methodResult = new MethodResult<PagingItems<DocumentReleased>>();
-            var abc = new LoadResult();
-            return Ok(await DataSourceLoader.LoadAsync(list, loadOptions));
+           return Ok(await _quanLyVanHanhRepository.GetAll(_user,nameEF,loadOptions));
         }
         /// <summary>
         /// Create  of DocmentRelease.
@@ -62,13 +59,9 @@ namespace OperationManager.CRUD.Api.Controllers.v1
                 var values = form.Get("values");
                 var model = new DocumentReleased();
                 JsonConvert.PopulateObject(values, model);
-              
                 if (!ModelState.IsValid) throw new CommandHandlerException( new ErrorResult());
 
-                var result = _dbContext.DocumentReleased.Add(model);
-                await _dbContext.SaveChangesAsync();
-
-                return Ok(new { result.Entity.Id });
+                return Ok(await _quanLyVanHanhRepository.Insert( nameEF, model));
             }
             catch (Exception ex)
             {
@@ -82,21 +75,39 @@ namespace OperationManager.CRUD.Api.Controllers.v1
         /// <returns></returns>
         [HttpPut]
         [ProducesResponseType(typeof(VoidMethodResult), (int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Put(int key, string values)
+        public async Task<IActionResult> Put(FormDataCollection form)
         {
             try
             {
-                var order = await _dbContext.DocumentReleased.FirstOrDefaultAsync(item => item.Id == key);
-                if (!TryValidateModel(order))
-                    return BadRequest(VALIDATION_ERROR);
+                var key = Convert.ToInt32(form.Get("key"));
+                var values = form.Get("values");
+                var model = dbContext.Districts.FirstOrDefault(x => x.ID == key);
 
-                await _dbContext.SaveChangesAsync();
-                return Ok();
+                JsonConvert.PopulateObject(values, model);
+
+                if (!ModelState.IsValid) throw new CommandHandlerException(new ErrorResult());
+
+                await dbContext.SaveChangesAsync();
+
+                return Request.CreateResponse(HttpStatusCode.OK);
             }
             catch (Exception ex)
             {
-                return Ok();
+                return Ok(HttpStatusCode.BadRequest);
             }
+            //try
+            //{
+            //    var order = await _dbContext.DocumentReleased.FirstOrDefaultAsync(item => item.Id == key);
+            //    if (!TryValidateModel(order))
+            //        return BadRequest(VALIDATION_ERROR);
+
+            //    await _dbContext.SaveChangesAsync();
+            //    return Ok();
+            //}
+            //catch (Exception ex)
+            //{
+            //    return Ok();
+            //}
 
         }
 

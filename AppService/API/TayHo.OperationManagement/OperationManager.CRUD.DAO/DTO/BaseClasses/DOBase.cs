@@ -1,5 +1,4 @@
-﻿
-using Services.Common.DomainObjects;
+﻿using Services.Common.DomainObjects;
 using Services.Common.DomainObjects.Interfaces;
 
 namespace OperationManager.CRUD.DAL.DTO.BaseClasses

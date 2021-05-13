@@ -8,6 +8,7 @@ using Services.Common.APIs.Infrastructure.DIServiceConfigurations;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using OperationManager.CRUD.DAL.DBContext;
+using OperationManager.CRUD.BLL.Extensions;
 
 namespace OperationManager.CRUD.Api
 {
@@ -21,7 +22,7 @@ namespace OperationManager.CRUD.Api
         {
             #region Custom DbContext
             services.AddDbContext<QuanLyVanHanhContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("TayHoConnection")));
-            //services.AddQuanLyDuAnServices(Configuration);
+            services.AddOperationManagerServices(Configuration);
             #endregion Custom DbContext
 
             #region Custom Swagger

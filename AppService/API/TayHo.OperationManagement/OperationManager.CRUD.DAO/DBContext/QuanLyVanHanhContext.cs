@@ -12,6 +12,7 @@ namespace OperationManager.CRUD.DAL.DBContext
         {
         }
         public DbSet<DocumentReleased> DocumentReleased { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
