@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
 {
-    public class QuanLyVanHanhRepository<T> : IQuanLyVanHanhRepository <T> where T : DOBase
+    public class QuanLyVanHanhRepository<T> : IQuanLyVanHanhRepository<T> where T : DOBase
     {
         protected readonly QuanLyVanHanhContext _dbContext;
         public QuanLyVanHanhRepository(QuanLyVanHanhContext dbContext)
@@ -161,7 +161,7 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
             }
 
         }
-        public async Task<MethodResult<T>> Insert(int user, string nameEF ,T Model)
+        public async Task<MethodResult<T>> Insert(int user, string nameEF, T Model)
         {
             int _function = 2;
             //if ((await _ContractorInfoRepository.BaseCheckPermistion(0, _user, _actionId, _tableName, _function)) < 1)
@@ -174,12 +174,12 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
             var methodResult = new MethodResult<T>();
             try
             {
-                DbSet<T> objEF = ConvertEF(nameEF); 
+                DbSet<T> objEF = ConvertEF(nameEF);
                 objEF.Add(Model);
-                 //var a =_dbContext.Add(Model).Entity;
+                //var a =_dbContext.Add(Model).Entity;
                 await _dbContext.SaveChangesAsync();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 methodResult.AddErrorMessage("Lỗi xứ lý");
             }
@@ -189,8 +189,8 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
         }
         public async Task<MethodResult<T>> Update(string nameEF, string values, int key)
         {
-            
-            var methodResult = new MethodResult<dynamic>();
+
+            var methodResult = new MethodResult<T>();
             var model = JsonConvert.DeserializeObject<T>(values);
             DbSet<T> objEF = ConvertEF(nameEF);
             objEF.Update(model);
@@ -199,7 +199,7 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
             //if (await objEF.AnyAsync(x => x.Id == key && x.IsDelete == false).ConfigureAwait(false))
             return methodResult;
         }
-            private dynamic ConvertEF(string nameEntity)
+        private dynamic ConvertEF(string nameEntity)
         {
             dynamic orders = null;
             switch (nameEntity)
