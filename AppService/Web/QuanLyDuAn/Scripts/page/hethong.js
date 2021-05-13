@@ -23,6 +23,3 @@ let customStore_AccountInfo = (type) => new DevExpress.data.DataSource({
     }),
     //filter: [["type", "=", type]]
 });
-
-
- 

@@ -1,0 +1,32 @@
+﻿{
+  "IErr000": "Dữ liệu không được để trống!",
+  "IErr001": "Dự liệu thêm mới đã bị trùng khoá chính!",
+  "IErr002": "Dự liệu thêm mới thiếu trường dữ liệu!",
+  "IErr10": "Chiều dài kỹ tự vượt quá 10!",
+  "IErr50": "Chiều dài kỹ tự vượt quá 50!",
+  "IErr100": "Chiều dài kỹ tự vượt quá 100!",
+  "IErr128": "Chiều dài kỹ tự vượt quá 128!",
+  "IErr200": "Chiều dài kỹ tự vượt quá 200!",
+  "IErr256": "Chiều dài kỹ tự vượt quá 256!",
+  "IErr500": "Chiều dài kỹ tự vượt quá 500!",
+  "IErr512": "Chiều dài kỹ tự vượt quá 512!",
+  "IErr1000": "Chiều dài kỹ tự vượt quá 1000!",
+  "IErr1024": "Chiều dài kỹ tự vượt quá 1024!",
+  "IErr1028": "Chiều dài kỹ tự vượt quá 1028!",
+  "IErr2048": "Chiều dài kỹ tự vượt quá 2048!",
+  "IErr4000": "Chiều dài kỹ tự vượt quá 4000!",
+  "IErrN0": "Dự liệu không phải kiểu số!",
+  "IErrN1": "Dự liệu không được chứa kỹ tự số!",
+  "IErrN2": "Dự liệu không được chứa ký tự đặc biệt!",
+  "IErrN3": "Dự liệu không tồn tại dữ liệu cha!",
+  "IErrN4": "Dự liệu không thêm được do thiếu dữ liệu liên kết!",
+  "IErrN5": "Không có file đính kèm!",
+  "IErrN101": "Không có quyền ghi dữ liệu!",
+
+  "UErr01": "Dữ liệu không tông tại!",
+  "UErr02": "Không được phép cập nhật dòng dữ liệu này!",
+  "UErr03": "Không tồn tại liên kết phụ!",
+
+  "DErr001": "Dữ liệu không tông tại!",
+  "DErr002": "Không được phép xoá dòng dữ liệu này!"
+}

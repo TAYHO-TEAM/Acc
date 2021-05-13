@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OperationManager.CRUD.BLL.IRepositories.BaseClasses;
 using OperationManager.CRUD.BLL.Repositories.BaseClasses;
+using OperationManager.CRUD.DAL.DTO;
 
 namespace OperationManager.CRUD.BLL.Extensions
 {
@@ -24,7 +25,7 @@ namespace OperationManager.CRUD.BLL.Extensions
 
         private static IServiceCollection AddSqlRepositories(this IServiceCollection services)
         {
-            services.AddScoped<IQuanLyVanHanhRepository, QuanLyVanHanhRepository>();
+            services.AddScoped<IQuanLyVanHanhRepository<TestApi>, QuanLyVanHanhRepository<TestApi>>();
             return services;
         }
         #endregion private functions

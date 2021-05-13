@@ -2,6 +2,7 @@
 using DevExtreme.AspNet.Data.ResponseModel;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using OperationManager.CRUD.BLL.Extensions;
 using OperationManager.CRUD.BLL.IRepositories.BaseClasses;
 using OperationManager.CRUD.DAL.DBContext;
 using OperationManager.CRUD.DAL.DTO;
@@ -14,6 +15,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+
 
 namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
 {
@@ -187,16 +189,56 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
             methodResult.Result = Model;
             return methodResult;
         }
-        public async Task<MethodResult<T>> Update(string nameEF, string values, int key)
+        public async Task<MethodResult<T>> Update(int user, string nameEF, T model)
         {
 
             var methodResult = new MethodResult<T>();
-            var model = JsonConvert.DeserializeObject<T>(values);
             DbSet<T> objEF = ConvertEF(nameEF);
-            objEF.Update(model);
-            //DbSet<dynamic> objEF = ConvertEF(nameEF);
-            //dynamic model = await objEF.SingleOrDefaultAsync(x => x.Id == key && x.IsDelete == false).ConfigureAwait(false);
-            //if (await objEF.AnyAsync(x => x.Id == key && x.IsDelete == false).ConfigureAwait(false))
+            if (await objEF.AnyAsync(x => x.Id == model.Id && model.IsDelete != true).ConfigureAwait(false))
+            {
+                model.IsModify = true;
+                model.ModifyBy = user;
+                model.UpdateDate = DateTime.Now;
+                model.UpdateDateUTC = DateTime.UtcNow;
+                objEF.Update(model);
+                await _dbContext.SaveChangesAsync();
+                methodResult.Result = model;
+            }
+            else
+            {
+                methodResult.AddAPIErrorMessage(nameof(ErrorCodeUpdate.UErr01), new[]
+                {
+                    ErrorHelpers.GenerateErrorResult(nameof(model.Id),model.Id)
+                });
+            }
+
+            return methodResult;
+        }
+        public async Task<MethodResult<T>> Delete(int user, string nameEF, int key)
+        {
+
+            var methodResult = new MethodResult<T>();
+            DbSet<T> objEF = ConvertEF(nameEF);
+            var model = await objEF.SingleOrDefaultAsync(x => x.Id == key ).ConfigureAwait(false);
+            if (model != null && model.IsDelete != true)
+            {
+
+                model.IsModify = true;
+                model.ModifyBy = user;
+                model.UpdateDate = DateTime.Now;
+                model.UpdateDateUTC = DateTime.UtcNow;
+                model.IsDelete = true;
+                objEF.Update(model);
+                await _dbContext.SaveChangesAsync();
+                methodResult.Result = model;
+            }
+            else
+            {
+                methodResult.AddAPIErrorMessage(nameof(ErrorCodeDelete.DErr001), new[]
+              {
+                    ErrorHelpers.GenerateErrorResult(nameof(model.Id),model.Id)
+                });
+            }
             return methodResult;
         }
 
@@ -206,8 +248,8 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
             switch (nameEntity)
             {
 
-                case nameof(_dbContext.DocumentReleased):
-                    orders = _dbContext.DocumentReleased;
+                case nameof(_dbContext.TestApi):
+                    orders = _dbContext.TestApi;
                     break;
                 default:
                     orders = null;

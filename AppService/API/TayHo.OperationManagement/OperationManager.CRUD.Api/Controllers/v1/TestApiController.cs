@@ -26,7 +26,7 @@ namespace OperationManager.CRUD.Api.Controllers.v1
     public class TestApiController : APIControllerBase
     {
         const string VALIDATION_ERROR = "The request failed due to a validation error";
-        public string nameEF = OperationManagerConstants.DocumentReleased_TABLENAME;
+        public string nameEF = OperationManagerConstants.TestApi_TABLENAME;
         protected readonly IQuanLyVanHanhRepository<TestApi> _quanLyVanHanhRepository;
         public TestApiController(IMapper mapper, IHttpContextAccessor httpContextAccessor, IQuanLyVanHanhRepository<TestApi> quanLyVanHanhRepository) : base(mapper, httpContextAccessor)
         {
@@ -39,9 +39,9 @@ namespace OperationManager.CRUD.Api.Controllers.v1
         /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(typeof(VoidMethodResult), (int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> GetAll([FromQuery]DataSourceLoadOptions loadOptions)
+        public async Task<IActionResult> GetAll([FromQuery] DataSourceLoadOptions loadOptions)
         {
-           return Ok(await _quanLyVanHanhRepository.GetAll(_user,nameEF,loadOptions));
+            return Ok(await _quanLyVanHanhRepository.GetAll(_user, nameEF, loadOptions));
         }
         /// <summary>
         /// Create  of TestApi.
@@ -50,17 +50,16 @@ namespace OperationManager.CRUD.Api.Controllers.v1
         /// <returns></returns>
         [HttpPost]
         [ProducesResponseType(typeof(VoidMethodResult), (int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Insert(FormDataCollection form)
-        {
+        //public async Task<IActionResult> Insert([FromBody] FormDataCollection form)
+        public async Task<IActionResult> Post(string values)
+      {
             var methodResult = new MethodResult<object>();
-            HttpRequestMessage request = new HttpRequestMessage();
             try
             {
-                var values = form.Get("values");
+                if (!ModelState.IsValid) throw new CommandHandlerException(new ErrorResult());
                 var model = new TestApi();
                 JsonConvert.PopulateObject(values, model);
-                if (!ModelState.IsValid) throw new CommandHandlerException( new ErrorResult());
-                return Ok(await _quanLyVanHanhRepository.Insert(_user,nameEF,model));
+                return Ok(await _quanLyVanHanhRepository.Insert(_user, nameEF, model));
             }
             catch (Exception ex)
             {
@@ -74,41 +73,19 @@ namespace OperationManager.CRUD.Api.Controllers.v1
         /// <returns></returns>
         [HttpPut]
         [ProducesResponseType(typeof(VoidMethodResult), (int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Put(FormDataCollection form)
+        public async Task<IActionResult> Put(int key, string values)
         {
             try
             {
-                //var key = Convert.ToInt32(form.Get("key"));
-                //string values = form.Get("values");
-                //var model = dbContext.Districts.FirstOrDefault(x => x.ID == key);
-
-                //JsonConvert.PopulateObject(values, model);
-
-                //if (!ModelState.IsValid) throw new CommandHandlerException(new ErrorResult());
-
-                //await dbContext.SaveChangesAsync();
-
-                //return Request.CreateResponse(HttpStatusCode.OK);
+                TestApi model = new TestApi();
+                JsonConvert.PopulateObject(values, model);
+                model.Id = key;
+                return Ok(await _quanLyVanHanhRepository.Update(_user, nameEF, model));
             }
             catch (Exception ex)
             {
-                //return Ok(HttpStatusCode.BadRequest);
+                return new OkObjectResult(HttpStatusCode.BadRequest);
             }
-            return Ok(HttpStatusCode.BadRequest);
-            //try
-            //{
-            //    var order = await _dbContext.DocumentReleased.FirstOrDefaultAsync(item => item.Id == key);
-            //    if (!TryValidateModel(order))
-            //        return BadRequest(VALIDATION_ERROR);
-
-            //    await _dbContext.SaveChangesAsync();
-            //    return Ok();
-            //}
-            //catch (Exception ex)
-            //{
-            //    return Ok();
-            //}
-
         }
 
         /// <summary>
@@ -122,16 +99,13 @@ namespace OperationManager.CRUD.Api.Controllers.v1
         {
             try
             {
-                //var moldel = await _dbContext.DocumentReleased.FirstOrDefaultAsync(item => item.Id == key);
-                //_dbContext.DocumentReleased.Remove(moldel);
-                //await _dbContext.SaveChangesAsync();
-                return Ok();
+                return Ok(await _quanLyVanHanhRepository.Delete(_user, nameEF, key));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                return Ok();
+                return new OkObjectResult(HttpStatusCode.BadRequest);
             }
-            
+
         }
 
     }

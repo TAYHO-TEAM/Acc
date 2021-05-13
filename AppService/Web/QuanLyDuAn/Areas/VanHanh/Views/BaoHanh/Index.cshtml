@@ -1,0 +1,87 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section style{   }
+<div id="popup-main-upload"></div>
+<div id="popup-register"></div>
+<div class="row">
+    <div class="col-12">
+        <div id="container" class="elevation-2"></div>
+        <div id="container-detail" class="elevation-2"></div>
+    </div>
+</div>
+
+@section script{
+    <script src="~/Scripts/page/vanhanh.js"></script>
+    <script>
+        var id = 1;
+        ///-----------------------------READ ------------------------
+        var HOST = "http://192.168.1.26:8688/api/read/v1";
+        var ACTION_READ = "/TestApi";
+        var KEY = "id";
+        var WIDTH_CONTAINER = $("#container").width();
+        //..........................Get data -------------------------------------------------------------
+
+        let customStore = $DATASOURCE(HOST, ACTION_READ, KEY);
+        //..........................  Load View -------------------------------------------------------------
+        $(function () {
+            loadData();
+        });
+        let loadData = () => {
+            $("#container").dxDataGrid({
+                height: heightScreen,
+                dataSource: customStore,
+                paging: {
+                    pageSize: 10
+                },
+                pager: {
+                    showPageSizeSelector: true,
+                    allowedPageSizes: [10, 25, 50, 100]
+                },
+                remoteOperations: false,
+                searchPanel: {
+                    visible: true,
+                    highlightCaseSensitive: true
+                },
+                groupPanel: { visible: true },
+                grouping: {
+                    autoExpandAll: false
+                },
+                allowColumnReordering: true,
+                rowAlternationEnabled: true,
+                showBorders: true,
+                columns: [
+                    {
+                        dataField: "name",
+                        caption: "Tiêu đề",
+                        dataType: "string",
+                        editorOptions: {
+                            stylingMode: "filled",
+                            placeholder: "Vui lòng nhập...",
+                        }
+                    },
+                ],
+                editing: {
+                    mode: "cell",
+                    useIcons: true,
+                    confirmDelete: true,
+                    popup: {
+                        width: 600, height: "auto",
+                        showTitle: true, title: "Tạo thông báo mới",
+                        closeOnOutsideClick: false, showCloseButton: true,
+                    },
+                },
+
+                selection: {
+                    mode: "single"
+                },
+          
+
+
+            });
+        };
+
+    </script>
+}

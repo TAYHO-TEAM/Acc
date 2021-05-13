@@ -11,7 +11,8 @@ namespace OperationManager.CRUD.DAL.DBContext
         public QuanLyVanHanhContext(DbContextOptions<QuanLyVanHanhContext> options, IMediator mediator) : base(options, mediator)
         {
         }
-        public DbSet<DocumentReleased> DocumentReleased { get; set; }
+        //public DbSet<DocumentReleased> DocumentReleased { get; set; }
+        public DbSet<TestApi> TestApi { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

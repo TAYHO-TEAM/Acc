@@ -194,6 +194,9 @@
     <Compile Include="Areas\ThongTin\Controllers\ThongBaoController.cs" />
     <Compile Include="Areas\ThongTin\Controllers\VanBanMauController.cs" />
     <Compile Include="Areas\ThongTin\ThongTinAreaRegistration.cs" />
+    <Compile Include="Areas\VanHanh\Controllers\BaoHanhController.cs" />
+    <Compile Include="Areas\VanHanh\Controllers\HomeController.cs" />
+    <Compile Include="Areas\VanHanh\VanHanhAreaRegistration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -2307,6 +2310,7 @@
     <Content Include="Scripts\localization\dx.messages.vi.js" />
     <Content Include="Scripts\localization\dx.messages.zh.js" />
     <Content Include="Scripts\page\hethong.js" />
+    <Content Include="Scripts\page\vanhanh.js" />
     <Content Include="Scripts\page\thongtin.js" />
     <Content Include="Scripts\page\ngansach.js" />
     <Content Include="Scripts\page\main.js" />
@@ -2502,6 +2506,9 @@
     <Content Include="Areas\ThongTin\Views\CauHinh\TemplateMail.cshtml" />
     <Content Include="Areas\Admin\Views\SystemConfig\SysJob.cshtml" />
     <Content Include="Areas\Admin\Views\SystemConfig\_SysJobAdd.cshtml" />
+    <Content Include="Areas\VanHanh\Views\web.config" />
+    <Content Include="Areas\VanHanh\Views\Home\Index.cshtml" />
+    <Content Include="Areas\VanHanh\Views\BaoHanh\Index.cshtml" />
     <None Include="packages.config" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
@@ -2520,7 +2527,11 @@
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Areas\VanHanh\Data\" />
+    <Folder Include="Areas\VanHanh\Views\Shared\" />
+    <Folder Include="Views\VanHanh\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
