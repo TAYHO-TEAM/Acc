@@ -199,6 +199,7 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
             //if (await objEF.AnyAsync(x => x.Id == key && x.IsDelete == false).ConfigureAwait(false))
             return methodResult;
         }
+
         private dynamic ConvertEF(string nameEntity)
         {
             dynamic orders = null;

@@ -78,22 +78,23 @@ namespace OperationManager.CRUD.Api.Controllers.v1
         {
             try
             {
-                var key = Convert.ToInt32(form.Get("key"));
-                string values = form.Get("values");
-                var model = dbContext.Districts.FirstOrDefault(x => x.ID == key);
+                //var key = Convert.ToInt32(form.Get("key"));
+                //string values = form.Get("values");
+                //var model = dbContext.Districts.FirstOrDefault(x => x.ID == key);
 
-                JsonConvert.PopulateObject(values, model);
+                //JsonConvert.PopulateObject(values, model);
 
-                if (!ModelState.IsValid) throw new CommandHandlerException(new ErrorResult());
+                //if (!ModelState.IsValid) throw new CommandHandlerException(new ErrorResult());
 
-                await dbContext.SaveChangesAsync();
+                //await dbContext.SaveChangesAsync();
 
-                return Request.CreateResponse(HttpStatusCode.OK);
+                //return Request.CreateResponse(HttpStatusCode.OK);
             }
             catch (Exception ex)
             {
-                return Ok(HttpStatusCode.BadRequest);
+                //return Ok(HttpStatusCode.BadRequest);
             }
+            return Ok(HttpStatusCode.BadRequest);
             //try
             //{
             //    var order = await _dbContext.DocumentReleased.FirstOrDefaultAsync(item => item.Id == key);
@@ -121,9 +122,9 @@ namespace OperationManager.CRUD.Api.Controllers.v1
         {
             try
             {
-                var moldel = await _dbContext.DocumentReleased.FirstOrDefaultAsync(item => item.Id == key);
-                _dbContext.DocumentReleased.Remove(moldel);
-                await _dbContext.SaveChangesAsync();
+                //var moldel = await _dbContext.DocumentReleased.FirstOrDefaultAsync(item => item.Id == key);
+                //_dbContext.DocumentReleased.Remove(moldel);
+                //await _dbContext.SaveChangesAsync();
                 return Ok();
             }
             catch(Exception ex)
