@@ -18,22 +18,22 @@ using Services.Common.DomainObjects.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using OperationManager.CRUD.DAL.DBContext;
 using OperationManager.CRUD.DAL.DTO;
-using OperationManager.CRUD.Api.Common;
 using OperationManager.CRUD.BLL.IRepositories.BaseClasses;
+using Operationmanager.Common;
 
 namespace OperationManager.CRUD.Api.Controllers.v1
 {
-    public class DocmentReleaseController : APIControllerBase
+    public class TestApiController : APIControllerBase
     {
         const string VALIDATION_ERROR = "The request failed due to a validation error";
         public string nameEF = OperationManagerConstants.DocumentReleased_TABLENAME;
-        IQuanLyVanHanhRepository _quanLyVanHanhRepository;
-        public DocmentReleaseController(IMapper mapper, IHttpContextAccessor httpContextAccessor, QuanLyVanHanhContext dbContext, IQuanLyVanHanhRepository quanLyVanHanhRepository) : base(mapper, httpContextAccessor, dbContext)
+        protected readonly IQuanLyVanHanhRepository<TestApi> _quanLyVanHanhRepository;
+        public TestApiController(IMapper mapper, IHttpContextAccessor httpContextAccessor, IQuanLyVanHanhRepository<TestApi> quanLyVanHanhRepository) : base(mapper, httpContextAccessor)
         {
             _quanLyVanHanhRepository = quanLyVanHanhRepository;
         }
         /// <summary>
-        /// Get List of DocmentRelease.
+        /// Get List of TestApi.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
@@ -44,7 +44,7 @@ namespace OperationManager.CRUD.Api.Controllers.v1
            return Ok(await _quanLyVanHanhRepository.GetAll(_user,nameEF,loadOptions));
         }
         /// <summary>
-        /// Create  of DocmentRelease.
+        /// Create  of TestApi.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
@@ -57,11 +57,10 @@ namespace OperationManager.CRUD.Api.Controllers.v1
             try
             {
                 var values = form.Get("values");
-                var model = new DocumentReleased();
+                var model = new TestApi();
                 JsonConvert.PopulateObject(values, model);
                 if (!ModelState.IsValid) throw new CommandHandlerException( new ErrorResult());
-
-                return Ok(await _quanLyVanHanhRepository.Insert( nameEF, model));
+                return Ok(await _quanLyVanHanhRepository.Insert(_user,nameEF,model));
             }
             catch (Exception ex)
             {
@@ -69,7 +68,7 @@ namespace OperationManager.CRUD.Api.Controllers.v1
             }
         }
         /// <summary>
-        /// Update  of DocmentRelease.
+        /// Update  of TestApi.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
@@ -112,9 +111,9 @@ namespace OperationManager.CRUD.Api.Controllers.v1
         }
 
         /// <summary>
-        /// Delete  of DocmentRelease.
+        /// Delete  of TestApi.
         /// </summary>
-        /// <param name="DocmentRelease"></param>
+        /// <param name="TestApi"></param>
         /// <returns></returns>
         [HttpDelete]
         [ProducesResponseType(typeof(VoidMethodResult), (int)HttpStatusCode.BadRequest)]

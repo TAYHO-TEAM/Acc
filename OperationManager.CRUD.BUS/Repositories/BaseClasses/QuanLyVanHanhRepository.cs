@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using OperationManager.CRUD.BLL.IRepositories.BaseClasses;
 using OperationManager.CRUD.DAL.DBContext;
 using OperationManager.CRUD.DAL.DTO;
+using OperationManager.CRUD.DAL.DTO.BaseClasses;
 using Services.Common.DevExpress;
 using Services.Common.DomainObjects;
 using Services.Common.DomainObjects.Exceptions;
@@ -16,13 +17,13 @@ using System.Threading.Tasks;
 
 namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
 {
-    public class QuanLyVanHanhRepository : IQuanLyVanHanhRepository
+    public class QuanLyVanHanhRepository<T> : IQuanLyVanHanhRepository <T> where T : DOBase
     {
         protected readonly QuanLyVanHanhContext _dbContext;
         public QuanLyVanHanhRepository(QuanLyVanHanhContext dbContext)
         {
             _dbContext = dbContext;
-            _dbContext.ChangeTracker.AutoDetectChangesEnabled = false;
+            //_dbContext.ChangeTracker.AutoDetectChangesEnabled = false;
         }
         public async Task<LoadResult> GetAll(int user, string nameEF, DataSourceLoadOptions dataSourceLoadOptionsBase)
         {
@@ -160,7 +161,7 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
             }
 
         }
-        public async Task<MethodResult<dynamic>> Insert(string nameEF ,dynamic Model)
+        public async Task<MethodResult<T>> Insert(int user, string nameEF ,T Model)
         {
             int _function = 2;
             //if ((await _ContractorInfoRepository.BaseCheckPermistion(0, _user, _actionId, _tableName, _function)) < 1)
@@ -170,11 +171,12 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
             //        ErrorHelpers.GenerateErrorResult(nameof(request.Id),request.Id)
             //    });
             //}
-            var methodResult = new MethodResult<dynamic>();
+            var methodResult = new MethodResult<T>();
             try
             {
-                DbSet<dynamic> objEF = ConvertEF(nameEF);
+                DbSet<T> objEF = ConvertEF(nameEF); 
                 objEF.Add(Model);
+                 //var a =_dbContext.Add(Model).Entity;
                 await _dbContext.SaveChangesAsync();
             }
             catch(Exception ex)
@@ -185,7 +187,19 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
             methodResult.Result = Model;
             return methodResult;
         }
-        private dynamic ConvertEF(string nameEntity)
+        public async Task<MethodResult<T>> Update(string nameEF, string values, int key)
+        {
+            
+            var methodResult = new MethodResult<dynamic>();
+            var model = JsonConvert.DeserializeObject<T>(values);
+            DbSet<T> objEF = ConvertEF(nameEF);
+            objEF.Update(model);
+            //DbSet<dynamic> objEF = ConvertEF(nameEF);
+            //dynamic model = await objEF.SingleOrDefaultAsync(x => x.Id == key && x.IsDelete == false).ConfigureAwait(false);
+            //if (await objEF.AnyAsync(x => x.Id == key && x.IsDelete == false).ConfigureAwait(false))
+            return methodResult;
+        }
+            private dynamic ConvertEF(string nameEntity)
         {
             dynamic orders = null;
             switch (nameEntity)

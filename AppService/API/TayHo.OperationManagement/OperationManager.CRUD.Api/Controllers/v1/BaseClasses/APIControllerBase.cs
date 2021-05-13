@@ -17,7 +17,7 @@ namespace OperationManager.CRUD.Api.Controllers.v1.BaseClasses
         protected readonly IMapper _mapper;
         protected readonly IHttpContextAccessor _httpContextAccessor;
         protected int _user { get; }
-        public APIControllerBase(IMapper mapper, IHttpContextAccessor httpContextAccessor, QuanLyVanHanhContext dbContext)
+        public APIControllerBase(IMapper mapper, IHttpContextAccessor httpContextAccessor)
         {
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(mapper));
