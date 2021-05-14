@@ -28,5 +28,7 @@
   "UErr03": "Không tồn tại liên kết phụ!",
 
   "DErr001": "Dữ liệu không tông tại!",
-  "DErr002": "Không được phép xoá dòng dữ liệu này!"
+  "DErr002": "Không được phép xoá dòng dữ liệu này!",
+
+  "PErr101": "Không có quyền!"
 }

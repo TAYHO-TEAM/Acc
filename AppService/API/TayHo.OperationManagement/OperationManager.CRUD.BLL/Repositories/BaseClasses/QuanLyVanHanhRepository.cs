@@ -5,7 +5,6 @@ using Newtonsoft.Json;
 using OperationManager.CRUD.BLL.Extensions;
 using OperationManager.CRUD.BLL.IRepositories.BaseClasses;
 using OperationManager.CRUD.DAL.DBContext;
-using OperationManager.CRUD.DAL.DTO;
 using OperationManager.CRUD.DAL.DTO.BaseClasses;
 using Services.Common.DevExpress;
 using Services.Common.DomainObjects;
@@ -166,18 +165,18 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
         public async Task<MethodResult<T>> Insert(int user, string nameEF, T Model)
         {
             int _function = 2;
-            //if ((await _ContractorInfoRepository.BaseCheckPermistion(0, _user, _actionId, _tableName, _function)) < 1)
-            //{
-            //    methodResult.AddAPIErrorMessage(nameof(ErrorCodeInsert.IErrN101), new[]
-            //   {
-            //        ErrorHelpers.GenerateErrorResult(nameof(request.Id),request.Id)
-            //    });
-            //}
             var methodResult = new MethodResult<T>();
+            if (!await CheckPermission(user, 1))
+            {
+                methodResult.AddAPIErrorMessage(nameof(ErrorCodePermission.PErr101), new[]
+                {
+                    ErrorHelpers.GenerateErrorResult(nameof(Model.Id),Model.Id)
+                });
+            }
             try
             {
                 DbSet<T> objEF = ConvertEF(nameEF);
-                Model.CreateBy = user;        
+                Model.CreateBy = user;
                 objEF.Add(Model);
                 //var a =_dbContext.Add(Model).Entity;
                 await _dbContext.SaveChangesAsync();
@@ -195,7 +194,14 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
 
             var methodResult = new MethodResult<T>();
             DbSet<T> objEF = ConvertEF(nameEF);
-            if (await objEF.AnyAsync(x => x.Id == model.Id && model.IsDelete != true).ConfigureAwait(false))
+            if (!await CheckPermission(user, 2))
+            {
+                methodResult.AddAPIErrorMessage(nameof(ErrorCodePermission.PErr101), new[]
+                {
+                    ErrorHelpers.GenerateErrorResult(nameof(model.Id),model.Id)
+                });
+            }
+            else if (await objEF.AnyAsync(x => x.Id == model.Id && model.IsDelete != true).ConfigureAwait(false))
             {
                 model.IsModify = true;
                 model.ModifyBy = user;
@@ -217,11 +223,17 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
         }
         public async Task<MethodResult<T>> Delete(int user, string nameEF, int key)
         {
-
             var methodResult = new MethodResult<T>();
             DbSet<T> objEF = ConvertEF(nameEF);
-            var model = await objEF.SingleOrDefaultAsync(x => x.Id == key ).ConfigureAwait(false);
-            if (model != null && model.IsDelete != true)
+            var model = await objEF.SingleOrDefaultAsync(x => x.Id == key).ConfigureAwait(false);
+            if (!await CheckPermission(user,3))
+            {
+                methodResult.AddAPIErrorMessage(nameof(ErrorCodePermission.PErr101), new[]
+                {
+                    ErrorHelpers.GenerateErrorResult(nameof(model.Id),model.Id)
+                });
+            }
+            else if (model != null && model.IsDelete != true)
             {
 
                 model.IsModify = true;
@@ -241,6 +253,10 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
                 });
             }
             return methodResult;
+        }
+        private async Task<bool> CheckPermission(int user, int action)
+        {
+            return true;
         }
 
         private dynamic ConvertEF(string nameEntity)

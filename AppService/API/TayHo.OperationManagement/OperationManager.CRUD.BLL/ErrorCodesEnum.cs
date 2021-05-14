@@ -45,4 +45,8 @@ namespace OperationManager.CRUD.BLL
         DErr002,
 
     }
+    public enum ErrorCodePermission
+    {
+        PErr101,
+    }
 }
