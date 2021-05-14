@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using Services.Common.APIs.Cmd.EF.Extensions;
 using Services.Common.DomainObjects;
 using Services.Common.DomainObjects.Interfaces;
@@ -45,6 +46,10 @@ namespace Services.Common.APIs.Cmd.EF
             try
             {
                 await _dbSet.AddRangeAsync(newEntities);
+                await LogEventSQL((int)newEntities.First().CreateBy, 
+                            string.IsNullOrEmpty(typeof(T).FullName)?"": (string)(typeof(T).FullName),
+                            nameof(AddRangeAsync),
+                            JsonConvert.SerializeObject(newEntities).ToString()).ConfigureAwait(false);
             }
             catch (Exception)
             {
@@ -56,7 +61,12 @@ namespace Services.Common.APIs.Cmd.EF
         {
             try
             {
+                LogEventSQL((int)newEntity.CreateBy,
+                           string.IsNullOrEmpty(typeof(T).FullName) ? "" : (string)(typeof(T).FullName),
+                           nameof(Add),
+                           JsonConvert.SerializeObject(newEntity).ToString()).ConfigureAwait(false);
                 return _dbContext.Add(newEntity).Entity;
+
             }
             catch (Exception)
             {
@@ -68,6 +78,10 @@ namespace Services.Common.APIs.Cmd.EF
         {
             try
             {
+                await LogEventSQL((int)newEntity.CreateBy,
+                           string.IsNullOrEmpty(typeof(T).FullName) ? "" : (string)(typeof(T).FullName),
+                           nameof(AddAsync),
+                           JsonConvert.SerializeObject(newEntity).ToString()).ConfigureAwait(false);
                 return (await _dbContext.AddAsync(newEntity)).Entity;
             }
             catch (Exception)
@@ -83,6 +97,10 @@ namespace Services.Common.APIs.Cmd.EF
         {
             try
             {
+                LogEventSQL((int)existsEntities.First().CreateBy,
+                          string.IsNullOrEmpty(typeof(T).FullName) ? "" : (string)(typeof(T).FullName),
+                          nameof(UpdateRange),
+                          JsonConvert.SerializeObject(existsEntities).ToString()).ConfigureAwait(false);
                 _dbSet.UpdateRange(existsEntities);
             }
             catch (Exception)
@@ -94,6 +112,10 @@ namespace Services.Common.APIs.Cmd.EF
         {
             try
             {
+                LogEventSQL((int)updateEntity.CreateBy,
+                          string.IsNullOrEmpty(typeof(T).FullName) ? "" : (string)(typeof(T).FullName),
+                          nameof(Update),
+                          JsonConvert.SerializeObject(updateEntity).ToString()).ConfigureAwait(false);
                 return _dbContext.Update(updateEntity).Entity;
             }
             catch (Exception)
@@ -150,6 +172,10 @@ namespace Services.Common.APIs.Cmd.EF
         {
             try
             {
+                LogEventSQL((int)deleteEntity.CreateBy,
+                          string.IsNullOrEmpty(typeof(T).FullName) ? "" : (string)(typeof(T).FullName),
+                          nameof(Remove),
+                          JsonConvert.SerializeObject(deleteEntity).ToString()).ConfigureAwait(false);
                 return _dbContext.Remove(deleteEntity).Entity;
             }
             catch (Exception)
@@ -286,14 +312,23 @@ namespace Services.Common.APIs.Cmd.EF
                 throw;
             }
         }
-        public virtual async Task<int> BaseCheckPermistion(int RecordId = 0 , int AccountId =0 , int ActionId = 0, string TableName ="", int @FunctionCUD = 0)
+        public virtual async Task<int> BaseCheckPermistion(int RecordId = 0 , int AccountId =0 , int ActionId = 0, string TableName ="", int FunctionCUD = 0)
         {
-            (string, object)[] parameter = new (string, object)[] { ("@RecordId", RecordId), ("@AccountId", AccountId), ("@ActionsId", ActionId), ("@TableName", TableName), ("@FunctionCUD", @FunctionCUD) };
+            (string, object)[] parameter = new (string, object)[] { ("@RecordId", RecordId), ("@AccountId", AccountId), ("@ActionsId", ActionId), ("@TableName", TableName), ("@FunctionCUD", FunctionCUD) };
             SprocRepository _sprocRepository = new SprocRepository(_dbContext);
             IList<ResultCheck>  result = await _sprocRepository.GetStoredProcedure("sp_DataBase_Check_CUD")
                         .WithSqlParams(parameter)
                         .ExecuteStoredProcedureAsync<ResultCheck>();
             return result.Count >0? (result[0].resultCheck != null ? result[0].resultCheck: 0):0;
+        }
+        public async Task LogEventSQL(int AccountId = 0, string Action = "", string Event = "", string Infomation = "")
+        {
+            (string, object)[] parameter = new (string, object)[] { ("@AccountId", AccountId), ("@Action", Action), ("@Event", Event), ("@Infomation", Infomation) };
+            SprocRepository _sprocRepository = new SprocRepository(_dbContext);
+            IList<ResultCheck> result = await _sprocRepository.GetStoredProcedure("sp_DataBase_Log_CMD")
+                        .WithSqlParams(parameter)
+                        .ExecuteStoredProcedureAsync<ResultCheck>();
+           
         }
         #endregion Helpers
     }

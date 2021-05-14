@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Operationmanager.Common;
+using Operationmanager.CRUD.Common;
 using OperationManager.CRUD.DAL.DTO;
 namespace OperationManager.CRUD.DAL.EFConfig
 {
@@ -9,6 +9,7 @@ namespace OperationManager.CRUD.DAL.EFConfig
         public void Configure(EntityTypeBuilder<TestApi> builder)
         {
             builder.ToTable(OperationManagerConstants.TestApi_TABLENAME);
+            builder.Property(x => x.Name).HasColumnName("Name").UsePropertyAccessMode(PropertyAccessMode.Field);
         }
     }
 }

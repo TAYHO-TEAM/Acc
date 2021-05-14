@@ -1,7 +1,7 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using OperationManager.CRUD.Api.Controllers.v1.BaseClasses;
+using {nameproject}.Api.Controllers.v1.BaseClasses;
 using Services.Common.DevExpress;
 using Services.Common.DomainObjects;
 using System.Net;
@@ -9,23 +9,23 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System;
 using Services.Common.DomainObjects.Exceptions;
-using OperationManager.CRUD.DAL.DTO;
-using OperationManager.CRUD.BLL.IRepositories.BaseClasses;
-using Operationmanager.CRUD.Common;
+using {nameproject}.DAL.DTO;
+using {nameproject}.BLL.IRepositories.BaseClasses;
+using {nameproject}.Common;
 
-namespace OperationManager.CRUD.Api.Controllers.v1
+namespace {nameproject}.Api.Controllers.v1
 {
-    public class TestApiController : APIControllerBase
+    public class {Entity}Controller : APIControllerBase
     {
         const string VALIDATION_ERROR = "The request failed due to a validation error";
-        public string nameEF = OperationManagerConstants.TestApi_TABLENAME;
-        protected readonly IQuanLyVanHanhRepository<TestApi> _quanLyVanHanhRepository;
-        public TestApiController(IMapper mapper, IHttpContextAccessor httpContextAccessor, IQuanLyVanHanhRepository<TestApi> quanLyVanHanhRepository) : base(mapper, httpContextAccessor)
+        public string nameEF = QuanLyVanHanhConstants.{Entity}_TABLENAME;
+        protected readonly IQuanLyVanHanhRepository<{Entity}> _quanLyVanHanhRepository;
+        public {Entity}Controller(IMapper mapper, IHttpContextAccessor httpContextAccessor, IQuanLyVanHanhRepository<{Entity}> quanLyVanHanhRepository) : base(mapper, httpContextAccessor)
         {
             _quanLyVanHanhRepository = quanLyVanHanhRepository;
         }
         /// <summary>
-        /// Get List of TestApi.
+        /// Get List of {Entity}.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
@@ -36,7 +36,7 @@ namespace OperationManager.CRUD.Api.Controllers.v1
             return Ok(await _quanLyVanHanhRepository.GetAll(_user, nameEF, loadOptions));
         }
         /// <summary>
-        /// Create  of TestApi.
+        /// Create  of {Entity}.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
@@ -49,7 +49,7 @@ namespace OperationManager.CRUD.Api.Controllers.v1
             try
             {
                 if (!ModelState.IsValid) throw new CommandHandlerException(new ErrorResult());
-                var model = new TestApi();
+                var model = new {Entity}();
                 JsonConvert.PopulateObject(values, model);
                 return Ok(await _quanLyVanHanhRepository.Insert(_user, nameEF, model));
             }
@@ -59,7 +59,7 @@ namespace OperationManager.CRUD.Api.Controllers.v1
             }
         }
         /// <summary>
-        /// Update  of TestApi.
+        /// Update of {Entity}.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
@@ -69,7 +69,7 @@ namespace OperationManager.CRUD.Api.Controllers.v1
         {
             try
             {
-                TestApi model = new TestApi();
+                {Entity} model = new {Entity}();
                 JsonConvert.PopulateObject(values, model);
                 model.Id = key;
                 return Ok(await _quanLyVanHanhRepository.Update(_user, nameEF, model));
@@ -81,9 +81,9 @@ namespace OperationManager.CRUD.Api.Controllers.v1
         }
 
         /// <summary>
-        /// Delete  of TestApi.
+        /// Delete of {Entity}.
         /// </summary>
-        /// <param name="TestApi"></param>
+        /// <param name="{Entity}"></param>
         /// <returns></returns>
         [HttpDelete]
         [ProducesResponseType(typeof(VoidMethodResult), (int)HttpStatusCode.BadRequest)]

@@ -59,6 +59,32 @@ namespace AppWFGenProject.FrameWork
                 }
             }
         }
+        public void CreateGenOBCRUD(string Server, string User, string Pass, string DB, string NameTable, GenOB GenOB, int typeCreate)
+        {
+            Connection connection = new Connection();
+            ReadTemplate readTemplate = new ReadTemplate();
+            DataSet ds = connection.GetAllCode(Server, User, Pass, DB, NameTable);
+            FileHelper fileHelper = new FileHelper();
+
+
+            /// gen entity 
+            DataTable dtEntity = ds.Tables[ConstTable.Entity];
+            //Gen domain entity
+            GenCRUD genCRUD = new GenCRUD();
+            genCRUD.GenEntity(dtEntity, GenOB);
+            genCRUD.GenIRespositories(GenOB);
+            genCRUD.GenEntityConfig(ds.Tables[ConstTable.EFConfigColum], GenOB);
+            genCRUD.GenController(GenOB);
+
+            IEnumerable<string> filesTxt = fileHelper.getEnumAllFilesTail(GenOB.rootDir, "txt", true);
+            if (1 == 1)
+            {
+                foreach (var i in filesTxt)
+                {
+                    fileHelper.ChangeTxtToCS(i, typeCreate);
+                }
+            }
+        }
         public GenOB CreateGenOBHTML(string NameTable)
         {
             GenOB genOB = new GenOB();

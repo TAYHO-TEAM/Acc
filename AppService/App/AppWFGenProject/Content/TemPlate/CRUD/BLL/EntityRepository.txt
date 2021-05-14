@@ -1,0 +1,31 @@
+﻿using DevExtreme.AspNet.Data;
+using DevExtreme.AspNet.Data.ResponseModel;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using {nameproject}.BLL.Extensions;
+using {nameproject}.BLL.IRepositories.BaseClasses;
+using {nameproject}.DAL.DBContext;
+using {nameproject}.DAL.DTO;
+using {nameproject}.DAL.DTO.BaseClasses;
+using Services.Common.DevExpress;
+using Services.Common.DomainObjects;
+using Services.Common.DomainObjects.Exceptions;
+using Services.Common.Utilities;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+
+namespace {nameproject}.BLL.Repositories.BaseClasses
+{
+    public class {Entity}Repository<T> : I{Entity}Repository<T> where T : DOBase
+    {
+        protected readonly QuanLyVanHanhContext _dbContext;
+        public QuanLyVanHanhRepository(QuanLyVanHanhContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
+       
+    }
+}

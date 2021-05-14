@@ -3,26 +3,17 @@ using AppWFGenProject.Entities;
 using AppWFGenProject.Extensions;
 using AppWFGenProject.FrameWork;
 using AppWFGenProject.Properties;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using ProjectManager.CMD.Domain.DomainObjects;
 using ProjectManager.CMD.Infrastructure;
-using Serilog;
-using Services.Common.Options;
 using Services.Common.Utilities;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Data.Entity;
 using System.DirectoryServices;
 using System.DirectoryServices.AccountManagement;
-using System.Drawing;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static AppWFGenProject.FrameWork.DBHelper;
 
 namespace AppWFGenProject
 {
@@ -242,6 +233,12 @@ namespace AppWFGenProject
                             genOB.nameproject = (txtNameProject.Text == "" ? "Test" : txtNameProject.Text) + ".READ";
                             genCode.CreateGenOBRead(txtServer.Text, txtUser.Text, txtPass.Text, txtDB.Text, (string)chlTable.Items[i], genOB, typeCreate);
                         }
+                        if (clbFunction.CheckedItems.Contains("CRUD"))
+                        {
+                            // Set nameproject
+                            genOB.nameproject = (txtNameProject.Text == "" ? "Test" : txtNameProject.Text) + ".CRUD";
+                            genCode.CreateGenOBCRUD(txtServer.Text, txtUser.Text, txtPass.Text, txtDB.Text, (string)chlTable.Items[i], genOB, typeCreate);
+                        }
                         if (clbFunction.CheckedItems.Contains("HTML"))
                         {
 
@@ -296,6 +293,7 @@ namespace AppWFGenProject
             clbFunction.Items.Add("CMD", false);
             clbFunction.Items.Add("READ", false);
             clbFunction.Items.Add("HTML", false);
+            clbFunction.Items.Add("CRUD", false);
         }
         #endregion Group GenCode Function
         #endregion Group GenCode

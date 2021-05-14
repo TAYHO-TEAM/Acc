@@ -1,0 +1,16 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using {nameproject}.Common;
+using {nameproject}.DAL.DTO;
+
+namespace {nameproject}.DAL.EFConfig
+{
+    public class {Entity}Configuration
+    {
+        public void Configure(EntityTypeBuilder<{Entity}> builder)
+        {
+            builder.ToTable(OperationManagerConstants.{Entity}_TABLENAME);
+           {builderConfigColum}
+        }
+    }
+}

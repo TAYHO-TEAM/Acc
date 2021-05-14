@@ -14,6 +14,7 @@ namespace AppWFGenProject.Extensions
         public static string version = "{version}";
         public static string builderConfig = "{builderConfig}";
         public static string builderFields = "{builderFields}";
+        public static string builderConfigColum = "{builderConfigColum}";
         public static string paramCreate = "{paramCreate}";
         public static string functionCreate = "{functionCreate}";
         public static string builderProperties = "{builderProperties}";
@@ -22,10 +23,13 @@ namespace AppWFGenProject.Extensions
         public static string builderRequestParam = "{builderRequestParam}";
         public static string builderSetUpdate = "{builderSetUpdate}";
         public static string builderPublic = "{builderPublic}";
+        public static string entityDTO = "{entityDTO}";
+        
     }
     public class ConstDirect
     {
 
+        // CMD
         private string _command = @"\Application\Commands\{Entity}Cmd\";
         private string _commandBaseClasses = @"\Application\Commands\{Entity}Cmd\BaseClasses\";
         private string _controllers = @"\Controllers\{version}\";
@@ -36,6 +40,12 @@ namespace AppWFGenProject.Extensions
         private string _repositories = @"\Repositories\";
         private string _viewModels = @"\ViewModels\";
         private string _dTOs = @"\DTOs\DTO\";
+        //CRUD 
+        private string _bLLRepos = @"\Repositories\";
+        private string _bLLIRepos = @"\IRepositories\";
+        private string _dLLDTO = @"\DTO\";
+        private string _dLLEFConfig = @"\EFConfig\";
+        #region CMD
         // CMD
         ////Controller
         public string Command { get; }
@@ -57,6 +67,17 @@ namespace AppWFGenProject.Extensions
         public string ViewModels { get; }
         //// DTO
         public string DTOs { get; }
+        #endregion CMD
+        #region READ
+        #endregion READ
+        #region CRUD
+
+        public string BLLRepos { get; }
+        public string BLLIRepos { get; }
+        public string DLLDTO { get; }
+        public string DLLEFConfig { get; }
+        #endregion CRUD
+
         public ConstDirect(string nameproject, string rootDir)
         {
             Command = rootDir + @"\" + nameproject + ".Api" + _command;
@@ -71,6 +92,10 @@ namespace AppWFGenProject.Extensions
             ReadMappings = rootDir + @"\" + nameproject + ".Api" + _mappings;
             ViewModels = rootDir + @"\" + nameproject + ".Api" + _viewModels;
             DTOs = rootDir + @"\" + nameproject + ".Sql" + _dTOs;
+            BLLRepos = rootDir + @"\" + nameproject + ".BLL" + _bLLRepos;
+            BLLIRepos = rootDir + @"\" + nameproject + ".BLL" + _bLLIRepos;
+            DLLDTO = rootDir + @"\" + nameproject + ".DLL" + _dLLDTO;
+            DLLEFConfig = rootDir + @"\" + nameproject + ".DLL" + _dLLEFConfig;
         }
     }
     public static class ConstTable
@@ -78,16 +103,18 @@ namespace AppWFGenProject.Extensions
         public static int DomainOB = 0;
         public static int EFConfig = 1;
         public static int Command = 2;
-        public static int Reister = 3;
-        public static int TableConst = 4;
-        public static int SetConstTable = 5;
-        public static int ServiceCollection = 6;
-        public static int MappingCMD = 7;
-        public static int DbSet = 8;
+        //public static int Reister = 3;
+        public static int TableConst = 3;
+        public static int SetConstTable = 4;
+        public static int ServiceCollection = 5;
+        public static int MappingCMD = 6;
+        public static int DbSet = 7;
+        public static int Entity = 8;
+        public static int EFConfigColum = 9;
     }
     public static class ConstPath
     {
-        public static string localDisk = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)+@"\Content\TemPlate\";///@"D:\TayHo_project\TayHo.SystemCore\AppService\App\AppWFGenProject\Content\TemPlate";//@"D:\Github\SystemCore\AppService\App\AppWFGenProject\Content\TemPlate";//@"D:\TayHo_project\TayHo.SystemCore\AppService\App\AppWFGenProject\Content\TemPlate\";//D:\Github\SystemCore\AppService\App\AppWFGenProject\Content\TemPlate
+        public static string localDisk = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\Content\TemPlate\";///@"D:\TayHo_project\TayHo.SystemCore\AppService\App\AppWFGenProject\Content\TemPlate";//@"D:\Github\SystemCore\AppService\App\AppWFGenProject\Content\TemPlate";//@"D:\TayHo_project\TayHo.SystemCore\AppService\App\AppWFGenProject\Content\TemPlate\";//D:\Github\SystemCore\AppService\App\AppWFGenProject\Content\TemPlate
         public static string CMDCommandBase = localDisk + @"CMD\Api\Application\Command\BaseClasses\";
         public static string CMDCommand = localDisk + @"CMD\Api\Application\Command\";
         public static string CMDControllers = localDisk + @"CMD\Api\Controllers\";
@@ -99,6 +126,10 @@ namespace AppWFGenProject.Extensions
         public static string ReadMappings = localDisk + @"READ\Api\Infrastructure\Mappings\";
         public static string ReadViewModels = localDisk + @"READ\Api\ViewModels\";
         public static string ReadDTOs = localDisk + @"READ\Sql\DTOs\";
+        public static string CRUDEntity = localDisk + @"CRUD\DLL\DTO\";
+        public static string CRUDController = localDisk + @"CRUD\API\Controllers\";
+        public static string CRUDRepos = localDisk + @"CRUD\BLL\";
+        public static string CRUDConfig = localDisk + @"CRUD\DLL\EFConfig\";
     }
     public static class ConstFileNameTxt
     {
@@ -122,7 +153,7 @@ namespace AppWFGenProject.Extensions
         public static string ReadEntityProfile = "EntityProfile.txt";
         public static string EntityResponseViewModel = "EntityResponseViewModel.txt";
         public static string EntityDTO = "EntityDTO.txt";
-
+        public static string EntityController = "EntityController.txt";
     }
     public class SetConfig
     {
