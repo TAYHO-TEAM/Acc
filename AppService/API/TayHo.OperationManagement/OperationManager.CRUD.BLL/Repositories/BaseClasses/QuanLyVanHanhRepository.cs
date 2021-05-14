@@ -46,7 +46,6 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
                                     //    && getActionId.Contains(c.x.ActionId)
                                     //    && (c.x.IsDelete == false || !c.x.IsDelete.HasValue)
                                     //    && (c.y.IsDelete == false || !c.y.IsDelete.HasValue));
-
             dynamic objEF = ConvertEF(nameEF);
             if (objEF != null)
             {
@@ -166,7 +165,7 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
         {
             int _function = 2;
             var methodResult = new MethodResult<T>();
-            if (!await CheckPermission(user, 1))
+            if (!await CheckPermission(user, 2))
             {
                 methodResult.AddAPIErrorMessage(nameof(ErrorCodePermission.PErr101), new[]
                 {
@@ -194,7 +193,7 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
 
             var methodResult = new MethodResult<T>();
             DbSet<T> objEF = ConvertEF(nameEF);
-            if (!await CheckPermission(user, 2))
+            if (!await CheckPermission(user, 3))
             {
                 methodResult.AddAPIErrorMessage(nameof(ErrorCodePermission.PErr101), new[]
                 {
@@ -226,7 +225,7 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
             var methodResult = new MethodResult<T>();
             DbSet<T> objEF = ConvertEF(nameEF);
             var model = await objEF.SingleOrDefaultAsync(x => x.Id == key).ConfigureAwait(false);
-            if (!await CheckPermission(user,3))
+            if (!await CheckPermission(user,4))
             {
                 methodResult.AddAPIErrorMessage(nameof(ErrorCodePermission.PErr101), new[]
                 {
