@@ -25,14 +25,13 @@
     <script>
         var id = 1;
         ///-----------------------------READ ------------------------
-        const ACTION = "/DocumentReleasedLog/GetListDetail";
+        var ACTION = "/DocumentReleasedLog/GetListDetail";
         var NAMEDOCUMENT = "DocumentReleasedLogDetail";
         const ACTION_DOCUMENTTYPE = "/DocumentType";
         const ACTION_DOCUMENTACC = "/DocumentReleasedAccount";
         const ACTION_DOCUMENTLOG = "/DocumentReleasedLog";
         const ACTION_FILEGET = "/FilesAttachment/getBy";
         const ACTION_GROUPS = "/Groups";
-        const ACTION_ACCOUNTINFO = "/ACCOUNTINFO";
         const ACTION_PROJECT = "/Projects";
         const ACTION_HANGMUC = "/WorkItems";
         var PROJECTID = isNullOrEmpty(localStorage.getItem("projectIdCurrent")) ? parseInt(localStorage.getItem("projectIdCurrent")) : 0;
@@ -60,7 +59,7 @@
         //customStore_CMD_READ_WITHPROJECTID(ACTION_CMD, ACTION);
 
         let customStore_DocumetnType = customStore_READ_ALL(ACTION_DOCUMENTTYPE);
-        let customStore_File = (table, item) => new DevExpress.data.CustomStore({
+        let customStore_File = (table, id) => new DevExpress.data.CustomStore({
             key: "id",
             load: (values) => {
                 var deferred = $.Deferred();
@@ -68,7 +67,7 @@
                     'PageSize': isNullOrEmpty(values.take) ? values.take : 0,
                     'PageNumber': (isNullOrEmpty(values.take) && isNullOrEmpty(values.skip)) ? ((values.skip / values.take) + 1) : 0,
                     'FindParentId': table,
-                    'FindId': item.documentReleasedId,
+                    'FindId': id,
                 };
                 if (values.sort) {
                     params['SortCol'] = values.sort[0].selector;
@@ -156,7 +155,8 @@
             },
         });
         let customStore_HangMuc = new DevExpress.data.CustomStore({
-            key: "id", loadMode: "raw",
+            key: "id",
+            loadMode: "raw",
             load: (values) => {
                 var deferred = $.Deferred();
                 $.ajax({
@@ -199,6 +199,7 @@
                 return deferred.promise();
             },
         });
+     
         //..........................  Load View -------------------------------------------------------------
         $(function () {
             loadData();
@@ -213,7 +214,7 @@
                 hoverStateEnabled: true,
                 showRowLines: true,
                 columnAutoWidth: true,
-                wordWrapEnabled: true, 
+                wordWrapEnabled: true,
                 rowAlternationEnabled: true,
                 repaintChangesOnly: true,
                 remoteOperations: true,
@@ -235,9 +236,11 @@
                         editorType: "dxLookup",
                         editorOptions: {
                             dataSource: customStore_DocumetnType,
-                            valueExpr: "id", displayExpr: "title",
+                            valueExpr: "id",
+                            displayExpr: "title",
                             placeholder: "Vui lòng chọn...",
-                            searchEnabled: true, showClearButton: true,
+                            searchEnabled: true,
+                            showClearButton: true,
                             itemTemplate: function (data) {
                                 return $("<div>").append($("<b>").append(data.code).addClass("mr-1"), $("<em>").append(data.title));
                             },
@@ -358,21 +361,20 @@
                 },
                 onContentReady: (e) => {
                     e.component;
+
                     if (getParamInUrl('id', location.href) !== null && getParamInUrl('id', location.href) > 0) {
-                        customStore_Detail(getParamInUrl('id', location.href)).load().then((rs) => {
+                        customStore_Detail(getParamInUrl('id', location.href)).load().done((rs) => {
                             if (rs.length > 0) {
                                 loadDetail(rs[0]);
                             }
                         });
                     }
-
-
                 },
                 onRowDblClick: function (e) {
                     e.component;
-                    console.log(e.data);
                     loadDetail(e.data);
                 },
+
             });
         };
         /// Load Popup
@@ -435,9 +437,14 @@
                                 },//tenphathanh
                                 {
                                     colSpan: 12,
-                                    dataField: "accountName",
-                                    label: { text: "Người phát hành" },
+                                    dataField: "createBy",
+                                    dataType: "number",
+                                    label: { text: "Người phát hành 3" },
+                                    editorType: 'dxLookup',
                                     editorOptions: {
+                                        dataSource: customStore_AccountInfo(2).store(),
+                                        valueExpr: "accountId",
+                                        displayExpr: "userName",
                                         stylingMode: "filled",
                                         readOnly: true,
                                     }
@@ -486,8 +493,18 @@
                     }).appendTo(content_main);
                 }, d.reject);
                 ////////////////-------- List file--------------------------------
+                var itemId = item.drId;
+                if (itemId !== null) {
+                }
+                else {
+                    if (getParamInUrl('id', location.href) !== null && getParamInUrl('id', location.href) > 0) {
+                        console.log(item);
+                        console.log(getParamInUrl('id', location.href));
+                        itemId = item.id;
+                    }
+                }
                 content_sub.dxDataGrid({
-                    dataSource: customStore_File(table, item),
+                    dataSource: customStore_File(table, itemId),
                     remoteOperations: {
                         paging: true,
                         sorting: true,
@@ -557,9 +574,9 @@
                 c.append(scrollView);
                 return c;
             },
-            onHidden: function () {
-                loadData(PROJECTID);
-            }
+            //onHidden: function () {
+            //    loadData(PROJECTID);
+            //}
         }).addClass("popup-priority-1");
 
         function callPopup(title, url, width, container) {

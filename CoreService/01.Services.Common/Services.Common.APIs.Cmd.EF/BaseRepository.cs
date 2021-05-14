@@ -1,10 +1,12 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Services.Common.APIs.Cmd.EF.Extensions;
 using Services.Common.DomainObjects;
 using Services.Common.DomainObjects.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -229,6 +231,19 @@ namespace Services.Common.APIs.Cmd.EF
         }
         #endregion Get
         #region Store Procedure
+        public DbCommand GetStoredProcedure(
+           string name,
+           params (string, object)[] nameValueParams)
+        {
+            return _dbContext
+                .LoadStoredProcedure(name)
+                .WithSqlParams(nameValueParams);
+        }
+        public DbCommand GetStoredProcedure(string name)
+        {
+            return _dbContext.LoadStoredProcedure(name);
+        }
+       
         //public virtual Task<Object> ExecuteSQLDefaultAsync(string StoreProcedure, List<SqlParameter> Parameters)
         //{
         //    var cmd = _dbContext.Database.GetDbConnection().CreateCommand());
@@ -271,7 +286,15 @@ namespace Services.Common.APIs.Cmd.EF
                 throw;
             }
         }
-
+        public virtual async Task<int> BaseCheckPermistion(int RecordId = 0 , int AccountId =0 , int ActionId = 0, string TableName ="", int @FunctionCUD = 0)
+        {
+            (string, object)[] parameter = new (string, object)[] { ("@RecordId", RecordId), ("@AccountId", AccountId), ("@ActionsId", ActionId), ("@TableName", TableName), ("@FunctionCUD", @FunctionCUD) };
+            SprocRepository _sprocRepository = new SprocRepository(_dbContext);
+            IList<ResultCheck>  result = await _sprocRepository.GetStoredProcedure("sp_DataBase_Check_CUD")
+                        .WithSqlParams(parameter)
+                        .ExecuteStoredProcedureAsync<ResultCheck>();
+            return result.Count >0? (result[0].resultCheck != null ? result[0].resultCheck: 0):0;
+        }
         #endregion Helpers
     }
 }

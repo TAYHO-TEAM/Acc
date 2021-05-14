@@ -1,19 +1,34 @@
-using AppWFGenProject.Extensions;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration.Json;
+//using Microsoft.Extensions.Configuration.FileExtensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
+using ProjectManager.CMD.Infrastructure;
+using Serilog;
+using Services.Common.Options;
 using System;
 using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
+using Serilog.Events;
+using AppWFGenProject.Commons;
+using System.Runtime.InteropServices;
 //using System.Configuration;
 
 namespace AppWFGenProject
 {
     static class Program
     {
-        public static IConfiguration _configuration;
+        [DllImport("user32.dll")]
+        internal static extern bool OpenClipboard(IntPtr hWndNewOwner);
+
+        [DllImport("user32.dll")]
+        internal static extern bool CloseClipboard();
+
+        [DllImport("user32.dll")]
+        internal static extern bool SetClipboardData(uint uFormat, IntPtr data);
+        //public static IConfiguration _configuration;
         /// <summary>
         ///  The main entry point for the application.
         /// </summary>
@@ -21,43 +36,79 @@ namespace AppWFGenProject
         static void Main(string[] args)
         {
             //var provider = new PhysicalFileProvider(@"\Content\Config");
+            OpenClipboard(IntPtr.Zero);
+            var yourString = "H";
+            var ptr = Marshal.StringToHGlobalUni(yourString);
+            SetClipboardData(13, ptr);
+            CloseClipboard();
+            Marshal.FreeHGlobal(ptr);
             var currentDirectory = Directory.GetCurrentDirectory();
-            _configuration = new ConfigurationBuilder()
-                            .SetBasePath(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location))
-                            .AddJsonFile(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\Content\Config\appconfig.json", true, true)
-                            .Build();
-            //var hostBuilder = Host.CreateDefaultBuilder()
-            //                        .ConfigureAppConfiguration((context, builder) =>
-            //                        {
-            //                            builder.AddJsonFile("/Content/Config/appconfig.json", optional: true);
-            //                        })
-            //                        .ConfigureServices((hostContext, services) => { 
-            //                            services.AddTransient<MyApplication>();
-            //                        }).UseConsoleLifetime();
 
-            //var builderDefault = hostBuilder.Build();
-
-            //using (var serviceScope = builderDefault.Services.CreateScope())
-            //{
-            //    var services = serviceScope.ServiceProvider;
-            //    try
-            //    {
-            //        var myService = services.GetRequiredService<MyApplication>();
-            //    }
-            //    catch(Exception ex)
-            //    {
-
-            //    }
-            //}
-
+            //_configuration = new ConfigurationBuilder()
+            //                .SetBasePath(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location))
+            //                .AddJsonFile(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\Content\Config\appsettings.json", true, true)
+            //                .Build();
 
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new GenProject(_configuration));
+            //Application.Run(new GenProject(_configuration));
+            var host = CreateHostBuilder(args).Build();
+            using (var serviceScope = host.Services.CreateScope())
+            {
+                var services = serviceScope.ServiceProvider;
+                Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+               .Enrich.FromLogContext()
+               .WriteTo.File("logs\\log.txt", rollingInterval: RollingInterval.Day)
+               .CreateLogger();
+                try
+                {
+                    Log.Information("Application Starting.");
+                    //DevExpress.UserSkins.BonusSkins.Register();
+                    //DevExpress.LookAndFeel.UserLookAndFeel.Default.SetSkinStyle("TayHoDevApp");
+                    var form1 = services.GetRequiredService<MainProject>();
+                    Application.Run(form1);
+                    return;
+                }
+                catch (Exception ex)
+                {
+                    Console.ReadLine();
+                    Log.Fatal(ex, "The Application failed to start.");
+                }
+                finally
+                {
+                    Log.CloseAndFlush();
+                }
+            }
 
         }
 
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+           Host.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration((hostContext, config) =>
+                {
+                    // Configure the app here.
+                    config
+                       .SetBasePath(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location))
+                       .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                       .AddJsonFile(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + $"\\Content\\Config\\appsettings.{hostContext.HostingEnvironment.EnvironmentName}.json", optional: true)
+                       .AddJsonFile(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\Content\Config\appsettings.json", true, true);
+                    config.AddEnvironmentVariables();
+                })
+               .ConfigureServices((hostContext, services) =>
+               {
+                   IConfiguration configuration = hostContext.Configuration;
+                   services.Configure<ProfileMailOptions>(configuration.GetSection("ProfileMailOptions"));
+                   services.Configure<Common>(configuration.GetSection("Common"));
+                   services.Configure<LDAPConfig>(configuration.GetSection("LDAPConfig"));
+                   services.AddDbContext<ProjectManagerBaseContext>(opt => opt.UseSqlServer(configuration.GetConnectionString("TayHoConnection")));
+                   services.AddScoped<MainProject>();
+                   services.AddScoped<SysJobForm>(); 
+                   //services.AddScoped<testApp>();
+               })
+               .UseSerilog();
     }
     public static class ConfigExtenstions
     {

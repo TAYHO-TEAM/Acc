@@ -1,15 +1,14 @@
 ﻿using QuanLyDuAn.Utilities;
 using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 
 namespace QuanLyDuAn.Areas.ThongTin.Controllers
 {
@@ -58,7 +57,6 @@ namespace QuanLyDuAn.Areas.ThongTin.Controllers
         [HttpPost, ValidateInput(false)]
         public async Task<JsonResult> Create(DocumentReleasedOBJ requestOBJ)
         {
-
             MultipartFormDataContent mFormData = new MultipartFormDataContent();
             HttpFileCollectionBase listFile = HttpContext.Request.Files;
             string token = requestOBJ.token;
@@ -67,7 +65,7 @@ namespace QuanLyDuAn.Areas.ThongTin.Controllers
             if (!string.IsNullOrEmpty(requestOBJ.Description)) mFormData.Add(new StringContent(requestOBJ.Description), nameof(requestOBJ.Description));
             if (!string.IsNullOrEmpty(requestOBJ.TagWorkItem)) mFormData.Add(new StringContent(requestOBJ.TagWorkItem), nameof(requestOBJ.TagWorkItem));
             if (!string.IsNullOrEmpty(requestOBJ.Title)) mFormData.Add(new StringContent(requestOBJ.Title), nameof(requestOBJ.Title));
-            if(!string.IsNullOrEmpty(requestOBJ.Location )) mFormData.Add(new StringContent(requestOBJ.Location), nameof(requestOBJ.Location));
+            if (!string.IsNullOrEmpty(requestOBJ.Location )) mFormData.Add(new StringContent(requestOBJ.Location), nameof(requestOBJ.Location));
             if (requestOBJ.Calendar.HasValue) mFormData.Add(new StringContent(requestOBJ.Calendar.Value.ToString("yyyy-MM-dd HH:mm:ss")), nameof(requestOBJ.Calendar));
             if (requestOBJ.WorkItemId.HasValue) mFormData.Add(new StringContent(((int)requestOBJ.WorkItemId).ToString()), nameof(requestOBJ.WorkItemId).ToString());
             if (listFile.Count > 0)
@@ -88,12 +86,13 @@ namespace QuanLyDuAn.Areas.ThongTin.Controllers
                 }
 
             }
+            int id = 0;
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(ConfigurationSettings.AppSettings["pmCMD"].ToString()); //http://localhost:50999/,https://api-pm-cmd.tayho.com.vn/
                 client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
+                
                 using (HttpResponseMessage response =  client.PostAsync("api/cmd/v1/DocumentReleased", mFormData).Result)
                 {
                     if (response.StatusCode != HttpStatusCode.OK)
@@ -101,9 +100,14 @@ namespace QuanLyDuAn.Areas.ThongTin.Controllers
                         var err = response.Content.ReadAsStringAsync().Result;
                         return Json(new { status = "error", result = err });
                     }
+                    else
+                    {
+                        var json = new JavaScriptSerializer().Deserialize<dynamic>(response.Content.ReadAsStringAsync().Result.ToString());
+                        id = Convert.ToInt32(json["result"]["id"].ToString());
+                    }    
                 }
             }
-            return Json(new { status = "success", result = "Đã lưu thông tin yêu cầu thành công" });
+            return Json(new { status = "success", result = "Tập tin đã được tải lên thành công. Vui lòng đóng cửa sổ này để quay lại giao diện đệ trình" , id= id});
         }
       
 

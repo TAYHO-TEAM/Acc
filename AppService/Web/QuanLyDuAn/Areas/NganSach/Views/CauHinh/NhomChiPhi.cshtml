@@ -34,7 +34,7 @@
                 onUpdated: (key, values) => ajax_log_insert("Update", ACTION_NHOMCHIPHI, key, values),
                 onRemoved: (key) => ajax_log_insert("Delete", ACTION_NHOMCHIPHI, key, null),
             }), 
-            sort: [{ selector: "status", desc: false }]
+            sort: [{ selector: "sortIndex", desc: false }]
         });
 
         $(function () {
@@ -49,7 +49,7 @@
             showRowLines: true, columnAutoWidth: true, wordWrapEnabled: true, rowAlternationEnabled: true,
             columns: [
                 {
-                    dataField: "status", caption: "STT",
+                    dataField: "sortIndex", caption: "STT",
                     dataType: "number", width: 100, alignment: "center",
                     editorType: "dxNumberBox",
                     editorOptions: {
@@ -144,7 +144,7 @@
                     var target = e.component.getVisibleRows()[e.toIndex].data;
                     var deferred = $.Deferred();
                     if (source.id != target.id) {
-                        ds_main.store().update(source.id, { status: target.status }).then(() => {
+                        ds_main.store().update(source.id, { sortIndex: target.sortIndex }).then(() => {
                             e.component.refresh().then(deferred.resolve, deferred.reject);
                         }, deferred.reject);
                     }

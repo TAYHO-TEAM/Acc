@@ -1,0 +1,129 @@
+﻿@model int
+<form id="form-regist" action="#" method="POST" enctype="application/json">
+</form>
+<script>
+
+    var formData = {
+        "ownerTable": "",
+        "topicId": @Model,
+        "parentId": 0,
+        "content": "",
+        "noAttachment": "",
+        "isActive": true,
+        "isVisible": true,
+        "status": 0
+    };
+
+    $(document).ready(function () {
+        var formInstance = $("#form-regist").dxForm({
+            formData: formData,
+            colCount: 4,
+            labelLocation: "top",
+            items: [
+                {
+                    dataField: "content",
+                    colSpan: 4,
+                    label: { text: "Nội dung" },
+                    validationRules: [{ type: "required" }],
+                    editorType: "dxTextArea",
+                    editorOptions: {
+                        stylingMode: "filled",
+                        placeholder: "Vui lòng nhập...",
+                    }
+                },
+                {
+                    colSpan: 4,
+                    template: '<span class="dx-field-item-label-text font-bold">Các tập tin đính kèm</span><div class="file-uploader"></div>',
+                },
+                {
+                    colSpan: 4,
+                    itemType: "button",
+                    horizontalAlignment: "center",
+                    buttonOptions: {
+                        text: "Lưu lại",
+                        icon: "fa fa-save",
+                        type: "success",
+                        useSubmitBehavior: true,
+                        elementAttr: {
+                            id: "submit",
+                        }
+                    }
+                },
+            ],
+            onFieldDataChanged: function (e) {
+                var newFormData = e.component.option("formData");
+            }
+        }).dxForm("instance");
+
+        $(".file-uploader").dxFileUploader({
+            selectButtonText: "Chọn tập tin...",
+            labelText: "Hoặc kéo thả vào đây",
+            showFileList: true,
+            multiple: true,
+            uploadMode: "useForm",
+            allowedFileExtensions: [".jpg", ".jpeg", ".png", ".pdf", ".doc", ".docx"],
+            maxFileSize: 10000000,
+        });
+        $("#form-regist").on("submit", function (e) {
+            loadingPanel.show();
+            $(this).prop("disabled", true);
+            var fdata = new FormData();
+            var i = 10;
+            $.each(formData, function (key, value) {
+                if (key === 'startDate' || key === 'endDate') {
+                    fdata.append(key, moment(value).format('YYYY-MM-DD HH:mm:ss'));
+                }
+                else {
+                    fdata.append(key, value);
+                }
+
+            });
+
+            fdata.append('token', UserCurrentInfo.accessToken);
+            //for (var pair of fdata.entries()) {
+            //    console.log(pair[0] + ', ' + pair[1]);
+            //}
+            var files = $(".file-uploader").dxFileUploader("instance").option("value");
+            if (files.length > 0) {
+                $.each(files, function (key, value) {
+                    fdata.append(files[key].name, files[key]);
+                });
+            }
+            //else {
+            //    DevExpress.ui.notify("Vui lòng chọn file đính kèm", "error", 3000);
+            //    e.preventDefault();
+            //    return false;
+            //};
+            e.preventDefault();
+
+            $.ajax({
+                type: "POST",
+                enctype: 'multipart/form-data',
+                url: "/ThongTin/QLCongViec/_PhanHoiCreate",
+                data: fdata,
+                processData: false,
+                contentType: false,
+                cache: false,
+                timeout: 600000,
+                success: function (rs) {
+                    loadingPanel.hide();
+                    DevExpress.ui.notify(rs.result, rs.status, 3000);
+                    if (rs.status == "success") {
+                        $("#popup-main").dxPopup('instance').hide();
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    loadingPanel.hide();
+                    console.log(errorThrown);
+                    DevExpress.ui.notify("Có lỗi xảy ra vui lòng liên hệ Hệ Thống ", "error", 3000);
+                }
+            });
+            e.preventDefault();
+            //return deferred.promise();
+        });
+
+    });
+
+
+</script>
+

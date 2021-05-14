@@ -82,7 +82,7 @@
                 //},
                 {
                     dataField: "importantLevel",
-                    caption: "Mức độ quan trọng",
+                    label: { text: "Mức độ quan trọng" },
                     dataType: "number",
                     lookup: {
                         dataSource: important,
@@ -128,12 +128,16 @@
                     colSpan: 2,
                     dataField: "endDate",
                     label: { text: "Ngày hoàn thành" },
+                    //dataType: "datetime",
                     editorType: "dxDateBox",
                     editorOptions: {
+                        showClearButton: true,
                         stylingMode: "filled",
                         placeholder: "Vui lòng nhập...",
                         pickerType: "rollers",
                         type: "datetime",
+                        displayFormat: "dd/MM/yyyy",
+                       
                     },
                 },
                 //{

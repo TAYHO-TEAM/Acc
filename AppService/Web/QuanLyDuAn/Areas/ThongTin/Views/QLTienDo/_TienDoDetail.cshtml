@@ -41,89 +41,42 @@
                 {
                     dataField: "code",
                     label: { text: "Mã CV" },
+                    editorOptions: {
+                        stylingMode: "filled",
+                    },
                 },
                 {
                     colSpan: 2,
                     dataField: "title",
                     label: { text: "Kế hoạch CV" },
+                    editorOptions: {
+                        stylingMode: "filled",
+                    },
                     validationRules: [{ type: "required" }],
                 },
-                //{
-                //    dataField: "reportPeriodicalType",
-                //    label: { text: "Báo cáo định kỳ" },
-                //    //lookup: {
-                //    //    dataSource: reportPeriodicalType,
-                //    //    valueExpr: "Name",
-                //    //    displayExpr: "Name",
-                //    //},
-                //    editorType: "dxSelectBox",
-                //    editorOptions: {
-                //        value: "reportPeriodicalType",
-                //        dataSource: reportPeriodicalType,
-                //        //searchEnabled: true,
-                //        //showClearButton: true,
-                //        valueExpr: "Name",
-                //        displayExpr: "Name",
-                //        elementAttr: {
-                //            id: "reportPeriodicalTypeSelect",
-                //        },
-                //    },
-                //    //validationRules: [{
-                //    //    type: "async",
-                //    //    message: "Đã có thông tin tần suất",
-                //    //    validationCallback: function (params) {
-                //    //        var d = $.Deferred();
-                //    //        d.resolve(!(typeof $('#reportFrequencySelect').dxSelectBox('instance').option('value') === 'number'));
-                //    //        return  d.promise();
-                //    //    }
-                //    //}]
-                //},
+
                 {
                     dataField: "reportFrequency",
                     label: { text: "Tần suất báo cáo" },
                     editorType: "dxNumberBox",
                     editorOptions: {
+                        stylingMode: "filled",
                         elementAttr: {
                             id: "reportFrequencySelect",
                         },
                     },
                     validationRules: [{ type: "required" }],
-                    //validationRules: [{
-                    //    type: "async",
-                    //    message: "Đã có thông tin báo cáo định kỳ",
-                    //    validationCallback: function (params) {
-                    //        var d = $.Deferred();
-                    //        d.resolve(!(typeof $('#reportPeriodicalTypeSelect').dxSelectBox('instance').option('value') === 'number'));
-                    //        return d.promise();
-                    //    }
-                    //}]
+
                 },
-                //{
-                //    dataField: "priority",
-                //    label: { text: "Độ ưu tiên" },
-                //    editorType: "dxNumberBox",
-                //},
-                //{
-                //    dataField: "importantLevel",
-                //    caption: "Mức độ quan trọng",
-                //    dataType: "number",
-                //    lookup: {
-                //        dataSource: important,
-                //        valueExpr: "ID",
-                //        displayExpr: "Name",
-                //    },
-                //    editorType: "dxSelectBox",
-                //    editorOptions: {
-                //        value: "importantLevel",
-                //        dataSource: important,
-                //        valueExpr: "ID", displayExpr: "Name",
-                //    },
-                //},
+             
                 {
                     colSpan: 4,
                     dataField: "description",
                     label: { text: "Mô tả CV" },
                     editorType: "dxTextArea",
+                    editorOptions: {
+                        stylingMode: "filled",
+                    },
                 },
                 {
                     colSpan: 4,
@@ -134,20 +87,24 @@
                 {
                     dataField: "startDate",
                     label: { text: "Ngày bắt đầu" },
+                    format: "dd/MM/yyyy",
                     editorType: "dxDateBox",
                     editorOptions: {
+                        stylingMode: "filled",
                         pickerType: "rollers",
-                        type: "datetime",
+                        type: "date",
                     },
                     validationRules: [{ type: "required" }],
                 },
                 {
                     dataField: "endDate",
                     label: { text: "Ngày hoàn thành" },
+                    format: "dd/MM/yyyy",
                     editorType: "dxDateBox",
                     editorOptions: {
+                        stylingMode: "filled",
                         pickerType: "rollers",
-                        type: "datetime",
+                        type: "date",
                     },
                     validationRules: [{ type: "required" }],
                 },
@@ -155,6 +112,9 @@
                     dataField: "amount",
                     label: { text: "Khối lượng" },
                     editorType: "dxNumberBox",
+                    editorOptions: {
+                        stylingMode: "filled",
+                    },
                     validationRules: [{ type: "required" }],
                 },
                 {
@@ -167,6 +127,7 @@
                     },
                     editorType: "dxSelectBox",
                     editorOptions: {
+                        stylingMode: "filled",
                         value: "unit",
                         dataSource: unit,
                         valueExpr: "ID", displayExpr: "Name",

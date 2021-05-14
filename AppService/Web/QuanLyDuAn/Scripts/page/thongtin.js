@@ -374,6 +374,14 @@ let customStore_CMD_READ_WITHPROJECTID_PAGGING = (CMD, READ) => new DevExpress.d
     remove: (key) => ajax_delete(URL_API_PM_CMD + CMD, key),
 });
 ////---------------------------READ--------------------------- 
+let customStore_AccountInfo = (type) => new DevExpress.data.DataSource({
+    store: new DevExpress.data.CustomStore({
+        key: "id",
+        loadMode: "raw",
+        load: (values) => ajax_read(ACTION_READ_ACCOUNTINFO, values),
+    }),
+    //filter: [["type", "=", type]]
+});
 let customStore_READ_ALL_ACC = (READ) => new DevExpress.data.CustomStore({
     key: "id",
     loadMode: "raw",
@@ -666,31 +674,23 @@ const unit = [
     {
         ID: 'm2',
         Name: 'm2'
+    },
+    {
+        ID: 'Khác',
+        Name: 'Khác'
     }
 ];
 const important = [
     {
         ID: 0,
-        Name: 'Không quan tâm'
-    },
-    {
-        ID: 1,
-        Name: 'Có thể đợi'
-    },
-    {
-        ID: 2,
         Name: 'Trung bình'
     },
     {
-        ID: 3,
-        Name: 'Cần thiết'
+        ID: 1,
+        Name: 'Quan trọng'
     },
     {
-        ID: 4,
-        Name: 'Cần gấp'
-    },
-    {
-        ID: 5,
+        ID: 2,
         Name: 'Cấp bách'
     }
 ];
@@ -860,5 +860,9 @@ const SetPermit = [
     {
         ID: 8,
         Name: 'Quyền thực hiện',
+    },
+    {
+        ID: 9,
+        Name: 'Quyền sở hữu',
     },
 ];

@@ -13,10 +13,10 @@
     <script src="~/Scripts/page/thongtin.js"></script>
     <script>
         //--------------------READ------------------------------
-        const ACTION = "/CustomTable";
+        var ACTION = "/CustomTable";
 
         //--------------------CMD------------------------------
-        const ACTION_CMD = "/CustomTable";
+        var ACTION_CMD = "/CustomTable";
 
         var WIDTH_CONTAINER = $("#container").width();
 
@@ -44,8 +44,9 @@
                 columns: [
                     {
                         dataField: "code",
-                        caption: "Ký Hiệu",
+                        caption: "Kiểu dữ liệu",
                         dataType: "string",
+                        alignment: "center",
                         lookup: {
                             dataSource: parameterType,
                             valueExpr: "ID",
@@ -53,8 +54,11 @@
                         },
                         editorType: "dxSelectBox",
                         editorOptions: {
+                            stylingMode: "filled",
                             dataSource: parameterType,
-                            valueExpr: "ID", displayExpr: "Name",
+                            valueExpr: "ID",
+                            displayExpr: "Name",
+                            placeholder: "Vui lòng chọn...",
                         },
                         validationRules: [{ type: "required" }],
                     },
@@ -62,48 +66,98 @@
                         dataField: "title",
                         caption: "Tên trường dữ liệu",
                         dataType: "string",
+                        alignment: "center",
+                        editorOptions: {
+                            placeholder: "Vui lòng nhập...",
+                            stylingMode: "filled",
+                        }
                     },
                     {
                         dataField: "noColum",
                         caption: "Vị trí cột",
                         dataType: "number",
+                        alignment: "center",
+                        editorOptions: {
+                            stylingMode: "filled",
+                            placeholder: "Vui lòng nhập...",
+                        }
                     },
                     {
                         dataField: "noRown",
                         caption: "Giới hạn dòng",
                         dataType: "number",
+                        alignment: "center",
+                        editorOptions: {
+                            stylingMode: "filled",
+                            placeholder: "Vui lòng nhập...",
+                        }
                     },
                     {
                         dataField: "style",
                         caption: "Định dạng CSS",
                         dataType: "number",
+                        alignment: "center",
+                        editorOptions: {
+                            stylingMode: "filled",
+                            placeholder: "Vui lòng nhập...",
+                        }
                     },
+                    {
+                        dataField: "createBy",
+                        width: 150,
+                        caption: "Người tạo",
+                        //dataType: "number",
+                        allowEditing: false,
+                        allowFiltering: true,
+                        readOnly: true,
+                        alignment: "center",
+                        editorType: "dxLookup",
+                        lookup: {
+                            dataSource: customStore_AccountInfo(2).store(),
+                            valueExpr: "accountId",
+                            displayExpr: "avatarImg",
+                        },
+                        editorOptions: {
+                            dataSource: customStore_AccountInfo(2),
+                            valueExpr: "accountId",
+                            displayExpr: "userName",
+                            placeholder: "Vui lòng chọn...",
+                            searchExpr: ['accountName', 'userName'],
+                            searchEnabled: true,
+                            showClearButton: true,
+                            stylingMode: "filled",
+                            //visible: false,
+                            itemTemplate: function (data) {
+                                return $("<div>").append($("<b>").append(data.userName).addClass("mr-1"));
+                            },
+                        },
+                        cellTemplate: (c, o) => {
+                            $("<img />")
+                                .attr('id', "popover-target-" + o.key)
+                                .attr("src", "data:image/png;base64," + o.text)
+                                .addClass("img-circle elevation-2 img-size-30")
+                                .attr("onerror", "this.onerror=null;this.src='https://qlcv.tayho.com.vn/Content/user-avartar/avartar-default.jpg';")
+                                .appendTo(c);
+                            $("<div />")
+                                .attr('id', "popover-detail-" + o.key)
+                                .append("<div>( " + ' Đã tạo ' + moment(o.data.createDate).locale("vi").fromNow() + ")" + "</div>")
+                                .appendTo(c);
+                            $("#popover-detail-" + o.key).dxPopover({
+                                target: "#popover-target-" + o.key,
+                                showEvent: "mouseenter", hideEvent: "mouseleave",
+                                position: "bottom",
+                                animation: {
+                                    show: { type: "pop", from: { scale: 0 }, to: { scale: 1 } },
+                                    hide: { type: "fade", from: 1, to: 0 },
+                                }
+                            });
+                        },
+                    },//account
                     //{
-                    //    dataField: "priority",
-                    //    caption: "Vị trí",
-                    //    dataType: "number",
-                    //    width: 110,
-                    //    alignment: "center",
-                    //    editorType: "dxNumberBox",
-                    //    editorOptions: {
-                    //        min: 1, step: 1,
-                    //        showSpinButtons: true,
-                    //    },
-                    //    sortOrder: "desc",
+                    //    dataField: "createDate",
+                    //    caption: "Ngày phát hành",
+                    //    dataType: "date",
                     //},
-                    //{
-                    //    dataField: "isActive", width: 100, alignment: "center",
-                    //    editorType: "dxSwitch",
-                    //},
-                    //{
-                    //    dataField: "isVisible", width: 100, alignment: "center",
-                    //    editorType: "dxSwitch",
-                    //},
-                    //{
-                    //    type: "buttons", caption: "Tác vụ",
-                    //    width: 120, alignment: "center",
-                    //    buttons: ["add", "edit", "delete"]
-                    //}
                 ],
                 //rowDragging: {
                 //    allowDropInsideItem: true,
@@ -140,6 +194,11 @@
                     mode: "popup",
                     useIcons: false,
                     confirmDelete: true,
+                    popup: {
+                        width: 600, height: "auto",
+                        showTitle: true, title: "Trình duyệt",
+                        closeOnOutsideClick: false, showCloseButton: true,
+                    },
                 },
                 onToolbarPreparing: function (e) {
                     var container = e.component;
@@ -207,7 +266,7 @@
                         }).dxSpeedDialAction("instance");
 
                         $("#action-log").dxSpeedDialAction({
-                            index: 4, icon: "fas fa-list", label: "Cài đặt chi tiết",
+                            index: 4, icon: "fas fa-list", label: "Cài đặt dữ liệu con",
                             onClick: () => {
                                 var container = e.component;
                                 var model = { id: e.selectedRowsData[0].id, noRown: e.selectedRowsData[0].noRown };

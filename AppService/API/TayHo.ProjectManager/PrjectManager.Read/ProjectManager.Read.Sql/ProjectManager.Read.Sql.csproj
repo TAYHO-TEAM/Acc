@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\CoreService\01.Services.Common\Services.Common.DomainObjects\Services.Common.DomainObjects.csproj" />
+    <ProjectReference Include="..\..\..\..\..\CoreService\01.Services.Common\Services.Common\Services.Common.csproj" />
+    <ProjectReference Include="..\..\..\..\..\CoreService\05.Database.Common\Dapper.Common\Dapper.Common.csproj" />
+    <ProjectReference Include="..\..\PrjectManager.CMD\ProjectManager.CMD.Infrastructure\ProjectManager.CMD.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="DevExtreme.AspNet.Data">
+      <HintPath>..\..\..\..\packages\devextreme.aspnet.data\2.8.2\lib\net452\DevExtreme.AspNet.Data.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

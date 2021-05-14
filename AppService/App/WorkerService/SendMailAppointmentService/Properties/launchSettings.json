@@ -1,0 +1,10 @@
+﻿{
+  "profiles": {
+    "SendMailAppointmentService": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

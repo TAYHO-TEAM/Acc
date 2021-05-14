@@ -17,10 +17,10 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-lg-5">
+    <div class="col-lg-4">
         <div id="container-main" class="elevation-2"></div>
     </div>
-    <div class="col-lg-7">
+    <div class="col-lg-8">
         <div id="container-sub" class="elevation-2"></div>
     </div>
 </div>
@@ -29,15 +29,15 @@
     <script src="~/Scripts/page/ngansach.js"></script>
     <script>
         var giaidoan;
-        var quyen; 
+        var quyen;
 
         var ds_giaidoan = new DevExpress.data.CustomStore({
             key: "id",
             load: (values) => {
                 values['filter'] = [["projectId", "=", PROJECTID], 'and', ["isActive", "=", 1]];
-                values['sort'] = [{ selector: "status", desc: false }];
+                values['sort'] = [{ selector: "sortIndex", desc: false }];
                 return ajax_read(ACTION_GIAIDOAN, values);
-            }, 
+            },
             byKey: (key) => {
                 var deferred = $.Deferred();
                 ds_giaidoan.load().done((rs) => {
@@ -54,7 +54,7 @@
             },
             byKey: (key) => {
                 var deferred = $.Deferred();
-                ds_loaicongviec.load().done((rs) => {
+                ds_loaicongviec(projectId).load().done((rs) => {
                     deferred.resolve(rs.find(x => x.id == key));
                 });
                 return deferred.promise();
@@ -82,7 +82,6 @@
                 return deferred.promise();
             },
         });
-
         var ds_hangmuc = new DevExpress.data.CustomStore({
             key: "id",
             load: (values) => {
@@ -121,6 +120,7 @@
                 if (values.giaTri != null && values.giaTri > 0) {
                     if (values.hangMucDetailId != null) {
                         ds_hangmuc_detail.update(values.hangMucDetailId, { giaTri: values.giaTri }).then(() => {
+                            ajax_log_insert("Update", ACTION_HANGMUC, key, values);
                             $("#container-main").dxTreeList('instance').refresh();
                         }, deferred.reject);
                     } else {
@@ -147,9 +147,11 @@
             insert: (values) => ajax_insert(URL_API_PM_CMD + ACTION_HANGMUCDETAIL, values),
             update: (key, values) => ajax_update(URL_API_PM_CMD + ACTION_HANGMUCDETAIL, key, values),
             remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION_HANGMUCDETAIL, key),
+            /*
             onInserted: (key, values) => ajax_log_insert("Insert", ACTION_HANGMUCDETAIL, values, key),
             onUpdated: (key, values) => ajax_log_insert("Update", ACTION_HANGMUCDETAIL, key, values),
             onRemoved: (key) => ajax_log_insert("Delete", ACTION_HANGMUCDETAIL, key, null),
+            */
             reshapeOnPush: true,
         });
         var ds_nhomcongviec = (hangMucId) => new DevExpress.data.CustomStore({
@@ -184,7 +186,7 @@
             update: (key, values) => {
                 var deferred = $.Deferred();
                 if (values.giaTri != null) {
-                    if (values.giaTri > 0) {
+                    if (values.giaTri != 0) {
                         if (values.nhomCongViecDetailId != null) {
                             ds_nhomcongviec_detail.update(values.nhomCongViecDetailId, { giaTri: values.giaTri }).then(() => {
                                 $("#container-sub").dxDataGrid('instance').refresh();
@@ -222,7 +224,7 @@
             onUpdated: (key, values) => ajax_log_insert("Update", ACTION_NHOMCONGVIECDETAIL, key, values),
             onRemoved: (key) => ajax_log_insert("Delete", ACTION_NHOMCONGVIECDETAIL, key, null),
             reshapeOnPush: true,
-        });        
+        });
         var ds_congviec = (nhomCongViecId) => new DevExpress.data.CustomStore({
             key: "id",
             load: (values) => {
@@ -255,7 +257,7 @@
             update: (key, values) => {
                 var deferred = $.Deferred();
                 if (values.khoiLuong != null || values.donGia != null) {
-                    if (values.donGia > 0 || values.khoiLuong > 0) {
+                    if (values.donGia != 0) {
                         if (values.congViecDetailId != null) {
                             ds_congviec_detail.update(values.congViecDetailId, { donGia: values.donGia, khoiLuong: values.khoiLuong }).then(() => {
                                 $("#container-sub2").dxDataGrid('instance').refresh(true);
@@ -295,7 +297,7 @@
             reshapeOnPush: true,
         });
 
-        $(function () { 
+        $(function () {
             loadFilter();
         });
 
@@ -321,7 +323,7 @@
                                 value: PROJECTID,
                                 onValueChanged: (data) => {
                                     localStorage.setItem('projectIdCurrent', data.value);
-                                    localStorage.setItem('giaiDoanIdCurrent', 0); 
+                                    localStorage.setItem('giaiDoanIdCurrent', 0);
                                     location.reload();
                                 },
                             },
@@ -335,7 +337,7 @@
                                 dataSource: ds_giaidoan,
                                 searchEnabled: true, searchMode: "contains", searchExpr: ["tenGiaiDoan", "dienGiai"],
                                 valueExpr: "id", displayExpr: "tenGiaiDoan",
-                                placeholder: "Vui lòng chọn...", 
+                                placeholder: "Vui lòng chọn...",
                                 value: GIAIDOANID,
                                 itemTemplate: (data) => {
                                     return $("<div>").append($("<b>").append(data.tenGiaiDoan).addClass("mr-1"), $("<em>").append(data.dienGiai));
@@ -343,7 +345,7 @@
                                 onValueChanged: (data) => {
                                     $("#container-sub").fadeOut();
                                     GIAIDOANID = data.value;
-                                    localStorage.setItem('giaiDoanIdCurrent', GIAIDOANID); 
+                                    localStorage.setItem('giaiDoanIdCurrent', GIAIDOANID);
                                 },
                             },
                             validationRules: [{ type: "required" }]
@@ -381,18 +383,19 @@
             filterMode: "matchOnly",
             rootValue: 0, parentIdExpr: "parentId", keyExpr: "id",
             showBorders: true, showColumnHeaders: true, showColumnLines: false, hoverStateEnabled: true,
-            showRowLines: true, columnAutoWidth: true, wordWrapEnabled: true, rowAlternationEnabled: false,
+            showRowLines: true, columnAutoWidth: true, wordWrapEnabled: false, rowAlternationEnabled: false,
             columns: [
                 {
-                    dataField: "tenHangMuc", caption: "Thông tin", dataType: "string", width: "50%",
+                    dataField: "tenHangMuc", caption: "Thông tin", dataType: "string", //width: "50%",
                     cellTemplate: (c, o) => {
                         if (o.data.chilCount > 0) c.parent().parent().attr("style", "background-color: #cccccc; font-weight: bold");
-                        $("<div/>").append(o.value, $("<em />").addClass("small").append(" (" + o.data.kyHieu+")")).appendTo(c);
+                        $("<div/>").append(o.data.kyHieu,'. ',o.value).appendTo(c);
                     },
                     allowEditing: false,
                 },
                 {
-                    width: "30%", allowFiltering:false,
+                    allowFiltering: false,
+                    //width: "30%", 
                     dataField: "giaTri", caption: "Giá trị", dataType: "number", alignment: "right",
                     format: { type: "currency", currency: "VND" },
                     editorType: "dxNumberBox",
@@ -407,7 +410,7 @@
                     dataField: "hangMucDetailId", dataType: "number", visible: false,
                 },
                 {
-                    dataField: "status", dataType: "number", sortOrder: "desc", visible: false,
+                    dataField: "sortIndex", dataType: "number", sortOrder: "desc", visible: false,
                 },
             ],
             onRowUpdating: (e) => {
@@ -446,9 +449,22 @@
                 mode: giaidoan.capDo.toUpperCase() == "HM" ? "none" : "single"
             },
             onSelectionChanged: (e) => {
-                var data = e.selectedRowsData[0]; 
+                var data = e.selectedRowsData[0];
                 if (data != null && data.chilCount == 0 && GIAIDOANID != 0) {
                     loadSubData(data);
+                }
+            },
+            onContextMenuPreparing: (e) => {
+                var container = e.component;
+                if (e.row !== "undefined" && e.target == "content" && e.row.rowType == "data") {
+                    var data = e.row.data; if (!e.items) e.items = [];
+					e.items.push({
+                        icon: "clock", text: "Xem lịch sử",
+                        onItemClick: () => {
+                            console.log(data)
+                            callLogEvent(data.id, ACTION_HANGMUCDETAIL)
+                        }
+					});
                 }
             },
         });
@@ -475,7 +491,7 @@
                 {
                     caption: "#", width: 50, alignment: "center",
                     cellTemplate: (c, o) => c.append(o.row.dataIndex + 1),
-                    allowEditing: false,
+                    allowEditing: false, visible:false,
                 },
                 {
                     dataField: "tenNhomCongViec", caption: "Thông tin", dataType: "string",
@@ -508,7 +524,7 @@
                     },
                 },
                 {
-                    dataField: "nhomCongViecDetailId", dataType: "number", visible: false,
+                    dataField: "nhomCongViecDetailId", dataType: "number", visible: false, 
                 },
             ],
             editing: {
@@ -536,14 +552,14 @@
                     {
                         location: "after", widget: "dxButton",
                         options: {
-                            icon: "add", stylingMode: "filled", type: "default",
+                            icon: "add", type: "default",
                             onClick: () => genFormNCV({ "hangMucId": item.id }, true)
                         }
                     },
                     {
                         location: "after", widget: "dxButton",
                         options: {
-                            icon: "refresh", tylingMode: "filled", type: "default",
+                            icon: "refresh", type: "default",
                             onClick: () => container.refresh()
                         }
                     }
@@ -593,12 +609,11 @@
                                 }, "delete"]
                             },
                             {
-                                caption: "#", width: 50, alignment: "center",
-                                cellTemplate: (c, o) => c.append(o.row.dataIndex + 1),
-                                allowEditing: false,
+                                caption: "id", width: 50, alignment: "center", 
+                                allowEditing: false, 
                             },
                             {
-                                dataField: "tenCongViec", caption: "Nội dung công việc", dataType: "string",
+                                dataField: "tenCongViec", caption: "Nội dung công việc", dataType: "string", width: ($("#container-sub2").width() > 860 ? null : 250),
                                 cellTemplate: (c, o) => c.append(
                                     $("<b>").addClass("font-weight-bold").append(o.value),
                                     (o.data.dienGiai != null && o.data.dienGiai.length > 0) ? $("<em />").addClass("mt-1 ml-1").append("- " + o.data.dienGiai) : null
@@ -607,33 +622,35 @@
                             },
                             {
                                 dataField: "nhom", caption: "Nhóm",
-                                allowEditing: false,
+                                allowEditing: false, groupIndex:0,
                             },
                             {
                                 dataField: "donViTinh", caption: "ĐVT",
-                                width: 120, alignment: "center",
+                                width: 100, alignment: "center",
                                 allowEditing: false,
                             },
                             {
-                                dataField: "khoiLuong", caption: "Khối lượng", dataType: "number",
+                                dataField: "khoiLuong", caption: "Khối lượng", 
                                 width: 120, alignment: "center",
+                                dataType: "number",
+                                format: {
+                                    type: "fixedPoint",
+                                    precision: 1
+                                },
                                 editorType: "dxNumberBox",
                                 editorOptions: {
                                     placeholder: "Vui lòng nhập giá trị...",
-                                    showClearButton: true,
-                                    min: 0, step: 1, showSpinButtons: true,
+                                    showClearButton: true, min:0
                                 },
                                 validationRules: [{ type: "required" }]
                             },
                             {
-                                dataField: "donGia", caption: "Đơn giá", dataType: "number", alignment: "right", width: 150,
-                                format: { type: "currency", currency: "VND" },
+                                dataField: "donGia", caption: "Đơn giá",  alignment: "right", width: 150,
+                                format: { type: "currency", currency: "VND" }, dataType: "number",
                                 editorType: "dxNumberBox",
                                 editorOptions: {
                                     placeholder: "Vui lòng nhập giá trị...",
-                                    showClearButton: true,
-                                    format: "#,##0 đ",
-                                    min: 0, step: 1000000000, showSpinButtons: true,
+                                    showClearButton: true, format: "#,##0 đ", 
                                 },
                                 validationRules: [{ type: "required" }]
                             },
@@ -642,7 +659,7 @@
                                 format: { type: "currency", currency: "VND" },
                                 allowEditing: false,
                                 calculateCellValue: function (data) {
-                                    return (data.donGia > 0 && data.khoiLuong > 0) ? data.donGia * data.khoiLuong : null;
+                                    return (data.khoiLuong > 0) ? data.donGia * data.khoiLuong : null;
                                 }
                             },
                         ],
@@ -669,13 +686,13 @@
                                     location: "before",
                                     template: "<h6 class='mb-0 mt-0 text-muted'>GIÁ TRỊ CÔNG VIỆC</h5><em class='text-muted'>Nhóm " + data.tenNhomCongViec + "</em>"
                                 },
-                                //{
-                                //    location: "after", widget: "dxButton",
-                                //    options: {
-                                //        icon: "xlsxfile", tylingMode: "filled", type: "default",
-                                //        onClick: () => genFormImportCV(data.id)
-                                //    }
-                                //},
+                                {
+                                    location: "after", widget: "dxButton",
+                                    options: {
+                                        icon: "xlsxfile", tylingMode: "filled", type: "default", 
+                                        onClick: () => genFormImport(data, container)
+                                    }
+                                },
                                 {
                                     location: "after", widget: "dxButton",
                                     options: {
@@ -695,11 +712,20 @@
                         summary: {
                             totalItems: [
                                 {
-                                    column: "giaTri",
+                                    column: "thanhTien",
                                     summaryType: "sum",
                                     valueFormat: { type: "currency", currency: "VND" },
+                                    displayFormat: "{0}",
                                 },
                             ],
+                            groupItems: [
+                                {
+                                    column: "thanhTien",
+                                    summaryType: "sum", alignByColumn: true,
+                                    valueFormat: { type: "currency", currency: "VND" },
+                                    displayFormat: "{0}",
+                                },
+                            ]
                         },
                     }).appendTo(container);
                 }
@@ -729,10 +755,8 @@
                         "dienGiai": ""
                     } :
                         {
-                            "id": data.id,
-                            //"hangMucId": data.hangMucId,
-                            "loaiCongViecId": data.loaiCongViecId,
-                            //"projectId": data.projectId,
+                            "id": data.id, 
+                            "loaiCongViecId": data.loaiCongViecId, 
                             "tenNhomCongViec": data.tenNhomCongViec,
                             "dienGiai": data.dienGiai
                         },
@@ -880,7 +904,7 @@
                 c.append(scrollView);
                 return c;
             }
-        }).dxPopup('instance'); 
+        }).dxPopup('instance');
 
         $(document).on('submit', '#form-ncv', function (e) {
             var form = $(this);
@@ -939,50 +963,82 @@
             }
             return deferred.promise();
         });
-
-        @*
-        var listImport = [];
-        var genFormImportCV = (id) => $("#popup-main").dxPopup({
-            position: { of: $(document) },
-            width: 800, height: 500,
-            fullScreen: $(window).width() <= 800,
-            dragEnabled: true, resizeEnabled: false,
-            showTitle: true, title:"Import dữ liệu công việc", visible: true,
-            showCloseButton: true, closeOnOutsideClick: false,
-            contentTemplate: (c) => {
-                var scrollView = $("<div id='scrollView'></div>");
+         
+        var genFormImport = (data, con) => $("#popup-main").dxPopup({
+            fullScreen: true, showTitle: true, title: ("Import công việc vào nhóm " + data.tenNhomCongViec).toUpperCase(),
+            visible: true, showCloseButton: true, closeOnOutsideClick: false,
+            contentTemplate: (c) => { 
+                var scrollView = $("<div id='scrollView' data-id='"+data.id+"'></div>");
                 var content = $("<div />");
-                content.dxDataGrid({
+                content.dxDataGrid({ 
                     elementAttr: { id: "container-sub3" },
                     showBorders: true, showColumnHeaders: true, showColumnLines: false, hoverStateEnabled: true,
-                    showRowLines: true, columnAutoWidth: true, wordWrapEnabled: true, rowAlternationEnabled: false,
+                    showRowLines: true, columnAutoWidth: true, wordWrapEnabled: false, rowAlternationEnabled: false,
                     paging: { enabled: false},
                     columns: [
                         {
-                            dataField: "0",
-                            caption: "Tên công việc"
+                            dataField: "nhomCongViecId", visible:false
                         },
                         {
-                            dataField: "1",
-                            caption: "Nhóm"
+                            dataField: "giaiDoanId", visible:false
                         },
                         {
-                            dataField: "2",
-                            caption: "Diễn giải"
+                            dataField: "nhom", caption: "Nhóm"
                         },
                         {
-                            dataField: "3",
-                            caption: "Đơn vị tính"
+                            dataField: "tenCongViec", caption: "Tên công việc"
                         },
-                    ],
-                    selection: {
-                        allowSelectAll: true,
-                        mode: "multiple",
-                        selectAllMode: "allPages",
-                        showCheckBoxesMode: "always"
-                    },
+                        {
+                            dataField: "dienGiai", caption: "Diễn giải"
+                        },
+                        {
+                            dataField: "dvt", caption: "Đơn vị tính"
+                        },
+                        {
+                            dataField: "khoiLuong", caption: "Khối lượng",
+                            dataType: "number",
+                            format: {
+                                type: "fixedPoint",
+                                precision: 1
+                            },
+                            editorType: "dxNumberBox",
+                            editorOptions: {
+                                placeholder: "Vui lòng nhập giá trị...",
+                                showClearButton: true, min: 0
+                            },
+                        },
+                        {
+                            dataField: "donGia",
+                            caption: "Đơn giá",
+                            format: { type: "currency", currency: "VND" }, dataType: "number",
+                            editorType: "dxNumberBox",
+                            editorOptions: {
+                                placeholder: "Vui lòng nhập giá trị...",
+                                showClearButton: true, format: "#,##0 đ",
+                            },
+                        },
+                        {
+                            dataField:"thanhTien", caption: "Thành tiền", dataType: "number", alignment: "right", width: 150,
+                            format: { type: "currency", currency: "VND" },
+                            allowEditing: false,
+                            calculateCellValue: function (data) {
+                                return (data.khoiLuong > 0 || data.donGia > 0) ? data.khoiLuong * data.donGia : 0;
+                            }
+                        },
+                    ], 
+                    summary: {
+                        totalItems: [
+                            {
+                                column: "thanhTien",
+                                summaryType: "sum",
+                                valueFormat: { type: "currency", currency: "VND" },
+                                displayFormat: "{0}",
+                            },
+                        ], 
+                    }, 
+                    selection: { allowSelectAll: true,  mode: "multiple", selectAllMode: "allPages", showCheckBoxesMode: "always" },
                     editing: {
-                        mode: "batch", useIcons: false, confirmDelete: false,
+                        mode: "cell", useIcons: false, confirmDelete: false,
                         allowUpdating: true,
                         allowDeleting: true,
                     },
@@ -990,27 +1046,31 @@
                         var container = e.component;
                         e.toolbarOptions.items.unshift(
                             {
-                                location: "before", widget: "dxButton",
+                                location: "before", widget: "dxButton", 
                                 options: {
-                                    text:"CHỌN",
-                                    icon: "add", stylingMode: "filled", type: "default",
-                                    disabled: true, elementAttr: { id :"btnSelectImport"},
+                                    text:"IMPORT", icon: "add", stylingMode: "filled", type: "default",
+                                    disabled: true, elementAttr: { id: "btnSelectImport" },
                                     onClick: () => {
                                         var dataSelected = $("#container-sub3").dxDataGrid('instance').getSelectedRowsData();
                                         if (dataSelected.length > 0) {
-                                            DevExpress.ui.dialog.confirm("Đã tìm thấy " + dataSelected.length+" dòng dữ liệu!<br/>Bạn có muốn lưu lại không?", "XÁC NHẬN THÔNG TIN").done(function (dialogResult) {
-                                                if (dialogResult) {
+                                            DevExpress.ui.dialog.confirm("Đã chọn <b>" + dataSelected.length + " dòng dữ liệu</b> để import!<br/>Bạn có muốn import vào nhóm <b>" + data.tenNhomCongViec+"</b> không?", "XÁC NHẬN THÔNG TIN").done(function (dialogResult) {
+                                                if (dialogResult) { 
                                                     var deferred = $.Deferred();
-                                                    dataSelected.forEach(async function (item) {
-                                                        await ds_congviec(id).insert({
-                                                            nhomCongViecId: id,
-                                                            tenCongViec: item[0],
-                                                            nhom: item[1],
-                                                            dienGiai: item[2],
-                                                            donViTinh: item[3],
-                                                        }).then(deferred.resolve, deferred.reject);
+                                                    var formData = new FormData();
+                                                    formData.append('congViecOBJs', JSON.stringify(dataSelected));
+                                                    formData.append('token', UserCurrentInfo.accessToken);
+                                                    $.ajax({
+                                                        type: "POST", url: "/ngansach/giatri/imports", data: formData,
+                                                        enctype: 'multipart/form-data', processData: false, contentType: false, cache: false
+                                                    }).done(function (rs) {
+                                                        con.refresh()
+                                                        $("#popup-main").dxPopup('instance').hide();
+                                                        DevExpress.ui.notify("IMPORT THÀNH CÔNG", "SUCCESS", 5000);
+                                                    }).fail(function (xhr) { 
+                                                        DevExpress.ui.notify((xhr.responseJSON ? xhr.responseJSON.result : xhr.statusText), "error", 5000);
                                                     });
                                                     return deferred.promise();
+
                                                 }
                                             });
                                         } else {
@@ -1030,7 +1090,14 @@
                     },
                     onSelectionChanged: function (selectedItems) {
                         var data = selectedItems.selectedRowsData;
-                        $("#btnSelectImport").dxButton("instance").option("disabled", !(data.length > 0));
+                        if (data.length > 0) {
+                            $("#btnSelectImport").dxButton("instance").option("disabled", false);
+                            $("#btnSelectImport").dxButton("instance").option("text", "IMPORT (" + data.length + ")");
+                        } else {
+                            $("#btnSelectImport").dxButton("instance").option("disabled", true);
+                            $("#btnSelectImport").dxButton("instance").option("text", "IMPORT");
+                        }
+                        
                     }
                 }).dxDataGrid("instance");
 
@@ -1040,7 +1107,7 @@
                 return c;
             }
         }).dxPopup('instance');
-
+        
         $(document).on('paste', '#scrollView', function (e) {
             e.preventDefault();
             var cb;
@@ -1054,9 +1121,7 @@
             } else {
                 cb = e.originalEvent.clipboardData;
                 clipText = cb.getData('text/plain');
-            }
-            console.log(cb);
-            console.log(clipText);
+            } 
             var clipRows = clipText.split('\n');
             for (i = 0; i < clipRows.length; i++) {
                 clipRows[i] = clipRows[i].split('\t');
@@ -1067,16 +1132,22 @@
                 for (j = 0; j < clipRows[i].length; j++) {
                     if (clipRows[i][j] != '\r') {
                         if (clipRows[i][j].length !== 0) {
-                            item[j] = clipRows[i][j];
+                            item.nhomCongViecId = $("#scrollView").data('id');  
+                            item.giaiDoanId = giaidoan.id;  
+                            item.nhom = clipRows[i][0];
+                            item.tenCongViec = clipRows[i][1];
+                            item.dienGiai = clipRows[i][2];
+                            item.dvt = clipRows[i][3];
+                            item.khoiLuong = clipRows[i][4] * 1.0;
+                            item.donGia = clipRows[i][5] * 1.0;
                         }
                     }
                 }
                 jsonObj.push(item);
             }
-            var temp = $("#container-sub3").dxDataGrid("instance");
-            temp.option("dataSource", jsonObj);
-            temp.refresh(true);
+            var container = $("#container-sub3");
+            container.dxDataGrid("instance").option("dataSource", jsonObj);
+            container.dxDataGrid("instance").refresh(true);
         });
-            *@
     </script>
 }

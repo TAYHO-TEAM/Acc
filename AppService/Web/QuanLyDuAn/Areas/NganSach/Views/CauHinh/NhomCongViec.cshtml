@@ -245,7 +245,7 @@
             }, 
             columns: [
                 {
-                    dataField: "status", sortOrder: "desc", visible: false,
+                    dataField: "sortIndex", sortOrder: "desc", visible: false,
                 },//status
                 {
                     dataField: "tenNhomCongViec", caption: "Thông tin nhóm", dataType: "string",
@@ -523,7 +523,7 @@
                         target = e.component.getVisibleRows()[e.toIndex].data,
                         d = $.Deferred();
                     if (source.id != target.id) {
-                        customStore.update(source.id, { status: target.status }).then(() => {
+                        customStore.update(source.id, { sortIndex: target.sortIndex }).then(() => {
                             e.component.refresh().then(d.resolve, d.reject);
                         }, d.reject);
                     }
@@ -581,8 +581,7 @@
                     paging: { enabled: false, },
                     columns: [
                         {
-                            dataField: "status", caption: "STT", alignment: "center", width: 80,
-                            sortOrder: "desc"
+                            dataField: "sortIndex", caption: "STT", alignment: "center", width: 80, sortOrder: "desc"
                         },
                         {
                             dataField: "nhom", caption: "Nhóm", groupIndex: 0, showWhenGrouped: true

@@ -5,13 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Core\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Dapper" Version="2.0.35" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="3.1.8" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
+    <PackageReference Include="Z.BulkOperations" Version="3.0.34" />
+    <PackageReference Include="Z.Dapper.Plus" Version="4.0.1" />
   </ItemGroup>
 
 </Project>

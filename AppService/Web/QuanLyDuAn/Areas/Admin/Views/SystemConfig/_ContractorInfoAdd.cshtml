@@ -1,0 +1,183 @@
+﻿<form id="form-regist" action="#" method="POST" enctype="application/json">
+</form>
+<script>
+    var formData = {
+        "id": ""
+        , "code": ""
+        , "taxCode": ""
+        , "avatarImg": ""
+        , "name": ""
+        , "descriptions": ""
+        , "businessAreas": ""
+        , "country": ""
+        , "city": ""
+        , "district": ""
+        , "address": ""
+        , "phone": ""
+        , "email": ""
+        , "status": ""
+    };
+    $(document).ready(function () {
+        var formInstance = $("#form-regist").dxForm({
+            formData: formData,
+            labelLocation: "top",
+            items: [
+                {
+                    itemType: "group",
+                    colCount: 12,
+                    items: [
+                        {
+                            colSpan: 6,
+                            dataField: "code",
+                            label: { text: "Mã nhà thầu" },
+                            validationRules: [{ type: "required" }],
+                        },
+                        {
+                            colSpan: 6,
+                            dataField: "taxCode",
+                            label: { text: "Mã số thuế" },
+                        },
+                        {
+                            colSpan: 6,
+                            dataField: "name",
+                            label: { text: "Nhà thầu" },
+                        },
+                        {
+                            colSpan: 6,
+                            dataField: "descriptions",
+                            label: { text: "Mô tổ" },
+                        },
+                        {
+                            colSpan: 6,
+                            dataField: "businessAreas",
+                            label: { text: "Lĩnh vực kinh doanh" },
+                        },
+                        {
+                            colSpan: 6,
+                            dataField: "phone",
+                            label: { text: "Số điện thoại" },
+                        },
+                        {
+                            colSpan: 6,
+                            dataField: "address",
+                            label: { text: "Địa chỉ" },
+                        },
+                        {
+                            colSpan: 6,
+                            dataField: "district",
+                            label: { text: "Quận" },
+                        },
+                        {
+                            colSpan: 6,
+                            dataField: "city",
+                            label: { text: "Thành phố" },
+                        },
+                        {
+                            colSpan: 6,
+                            dataField: "email",
+                            label: { text: "Email" },
+                        },
+                        {
+                            colSpan: 6,
+                            dataField: "country",
+                            label: { text: "Nước" },
+                        },
+                    ]
+                },
+                {
+                    itemType: "button",
+                    horizontalAlignment: "center",
+                    buttonOptions: {
+                        text: "Lưu lại",
+                        icon: "fa fa-save",
+                        type: "success",
+                        useSubmitBehavior: true,
+                        elementAttr: {
+                            id: "submit",
+                        }
+                    }
+                },
+            ],
+            onFieldDataChanged: function (e) {
+                var newFormData = e.component.option("formData");
+            }
+        }).dxForm("instance");
+        //fileUploader();
+    });
+    $(document).on('submit', '#form-regist', function (e) {
+        //$(this).prop("disabled", true);
+        e.preventDefault();
+        //var fileWrappers = fileUploader()._files;
+        var resValid = true
+
+          // ảnh đại diện sau này sẽ update
+        //for (var i = 0; i < fileWrappers.length; i++) {
+        //    if (fileWrappers[i].isValid() === false) {
+        //        resValid = false;
+        //    }
+        //}
+        if (!resValid) {
+            DevExpress.ui.notify("Vui lòng kiểm tra lại file đính kèm!", "error", 3000);
+        }
+        else {
+            loadingPanel.show();
+            var fdata = new FormData();
+            var i = 10;
+            fdata.append('token', UserCurrentInfo.accessToken);
+            $.each(formData, function (key, value) {
+                fdata.append(key, value);
+            });
+
+            // ảnh đại diện sau này sẽ update
+            //var files = $("#file-uploader").dxFileUploader("instance").option("value");
+            //if (files.length > 0) {
+            //    $.each(files, function (key, value) {
+            //        fdata.append(files[key].name, files[key]);
+            //    });
+            //}
+
+            for (var pair of fdata.entries()) {
+                console.log(pair[0] + ', ' + pair[1]);
+            }
+
+            var deferred = $.Deferred();
+            $.ajax({
+                type: "POST",
+                enctype: 'multipart/form-data',
+                url: "/Admin/SystemConfig/_ContractorInfoCreate",
+                data: fdata,
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function (rs) {
+                    deferred.resolve(true);
+                    loadingPanel.hide();
+                    DevExpress.ui.notify(rs.result, rs.status, 3000);
+                    if (rs.status == "success") {
+                        $("#popup-register").dxPopup('instance').hide();
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    loadingPanel.hide();
+                    DevExpress.ui.notify("Có lỗi xảy ra: " + errorThrown, "error", 3000);
+
+                }
+            });
+            //e.preventDefault();
+            return deferred.promise();
+        }
+
+
+    });
+    var fileUploader = () => $("#file-uploader").dxFileUploader({
+        selectButtonText: "Chọn tập tin...",
+        labelText: "Hoặc kéo thả vào đây",
+        showFileList: true,
+        multiple: true,
+        uploadMode: "useForm",
+        accept: ".jpg,.jpeg,.gif,.png,.pdf",
+        allowedFileExtensions: [".jpg", ".jpeg", ".png", ".pdf"],
+        maxFileSize: 52428800,
+    }).dxFileUploader("instance");
+
+</script>

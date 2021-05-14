@@ -36,7 +36,6 @@ namespace AppWFGenProject.FrameWork
             ConstDirect direct = new ConstDirect(GenOB.nameproject, GenOB.rootDir);
             /// get repos  
             string pathRepository = ConstPath.CMDDomain + ConstFileNameTxt.IEntityRepository;
-
             fileHelper.CreateFileFrom(pathRepository, fileHelper.ReplaceFileName((direct.IRepositories + ConstFileNameTxt.IEntityRepository), GenOB), GenOB.getDictionatyChange());
         }
         /// <summary>
@@ -83,7 +82,6 @@ namespace AppWFGenProject.FrameWork
                 i++;
                 GenOB.builderPublic += row[0].ToString() + "\r\n\t" + (i > 1 ? "\t\t" : "");
             }
-
             fileHelper.CreateFileFrom(pathEntityConfig, fileHelper.ReplaceFileName((direct.CommandBaseClasses + ConstFileNameTxt.EntityCommand), GenOB), GenOB.getDictionatyChange());
             fileHelper.CreateFileFrom(pathEntityCommandHandler, fileHelper.ReplaceFileName((direct.CommandBaseClasses + ConstFileNameTxt.EntityCommandHandler), GenOB), GenOB.getDictionatyChange());
             fileHelper.CreateFileFrom(pathEntityCommandSet, fileHelper.ReplaceFileName((direct.CommandBaseClasses + ConstFileNameTxt.EntityCommandSet), GenOB), GenOB.getDictionatyChange());

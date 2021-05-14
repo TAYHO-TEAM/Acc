@@ -21,4 +21,19 @@ const typeApprove = [
     { value: 3, text: "Từ chối" },
     { value: 4, text: "Trả lại" },
 ]; 
+
+const AccountType = [
+    {
+        ID: 1,
+        Name: "Cty Tây Hồ",
+    },
+    {
+        ID: 2,
+        Name: "Nhà thầu",
+    },
+    {
+        ID: 3,
+        Name: "Cty Tây Hồ 2",
+    },
+];
  

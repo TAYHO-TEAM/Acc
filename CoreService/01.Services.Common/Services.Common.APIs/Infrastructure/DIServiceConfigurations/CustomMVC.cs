@@ -38,7 +38,7 @@ namespace Services.Common.APIs.Infrastructure.DIServiceConfigurations
             var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
 
             services
-                //.AddCustomConfiguration(configuration)
+                .AddCustomConfiguration(configuration)
                 .AddOptionsBuilder(configuration)
                 .AddHttpContextAccessor()
                 .AddCustomApiVersion(apiVersionOptions)

@@ -68,7 +68,7 @@
                 onRemoved: (key) => ajax_log_insert("Delete", ACTION_GIAIDOAN, key, null),
             }),
             filter: ["projectId", "=", formData.projectId],
-            sort: [{ selector: "status", desc: false }]
+            sort: [{ selector: "sortIndex", desc: false }]
         });
          
         $(function () {
@@ -117,9 +117,8 @@
             showRowLines: true, columnAutoWidth: true, wordWrapEnabled: false, rowAlternationEnabled: true,
             columns: [
                 {
-                    caption: "STT", dataField: "status",
-                    dataType: "number", width: 100, alignment: "center",
-                    cellTemplate: (c, o) => c.append(o.rowIndex + 1)
+                    caption: "STT", dataField: "sortIndex",
+                    dataType: "number", width: 100, alignment: "center", 
                 },
                 {
                     dataField: "tenGiaiDoan", caption: "Tên giai đoạn",
@@ -228,23 +227,7 @@
                 e.data.isVisible = true;
                 e.data.status = 0;
                 e.data.projectId = PROJECTID;
-            },
-            rowDragging: {
-                allowReordering: PermitInAction["update"],
-                showDragIcons: true,
-                dropFeedbackMode: "push",
-                dragDirection: "vertical",
-                onDragEnd: function (e) {
-                    var source = e.itemData,
-                        target = e.component.getVisibleRows()[e.toIndex].data,
-                        d = $.Deferred();
-                    if (source.id != target.id) {
-                        ds_giaidoan.store().update(source.id, { status: target.status }).then(() => {
-                            e.component.refresh().then(d.resolve, d.reject);
-                        }, d.reject);
-                    }
-                },
-            },
+            }, 
         });
     </script>
 }

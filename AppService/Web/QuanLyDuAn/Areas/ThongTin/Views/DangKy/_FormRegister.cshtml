@@ -52,6 +52,9 @@
                                 elementAttr: {
                                     id: "elementDocumentTypeId",
                                 },
+                                itemTemplate: function (data) {
+                                    return $("<div>").append($("<b>").append(data.code).addClass("mr-1"), $("<em>").append(data.title));
+                                },
                                 onValueChanged: function (e) {
                                     var selTarget = $('#elementPlanRegisterId').dxSelectBox('instance');
                                     docmentFilter = e.value;
@@ -284,6 +287,7 @@
                 }
                 else {
                     DevExpress.ui.notify("Vui lòng chọn file đính kèm", "error", 3000);
+                    loadingPanel.hide();
                     e.preventDefault();
                     return false;
                 };
