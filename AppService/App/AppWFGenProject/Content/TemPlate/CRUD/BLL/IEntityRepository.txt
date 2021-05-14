@@ -1,0 +1,14 @@
+﻿using DevExtreme.AspNet.Data.ResponseModel;
+using {nameproject}.DAL.DTO.BaseClasses;
+using Services.Common.DevExpress;
+using Services.Common.DomainObjects;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace {nameproject}.BLL.IRepositories.BaseClasses
+{
+    public interface I{Entity}Repository<T> where T : DOBase
+    {
+
+    }
+}

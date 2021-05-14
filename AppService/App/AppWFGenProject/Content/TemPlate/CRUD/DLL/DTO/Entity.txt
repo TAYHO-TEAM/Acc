@@ -1,0 +1,12 @@
+using {nameproject}.DAL.DTO.BaseClasses;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace {nameproject}.DAL.DTO
+{
+    public class {Entity} : DOBase
+    {
+       {entityDTO}
+    }
+}

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Operationmanager.Common
+﻿namespace Operationmanager.CRUD.Common
 {
     public class OperationManagerConstants
     {

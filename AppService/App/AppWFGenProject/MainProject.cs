@@ -242,6 +242,12 @@ namespace AppWFGenProject
                             genOB.nameproject = (txtNameProject.Text == "" ? "Test" : txtNameProject.Text) + ".READ";
                             genCode.CreateGenOBRead(txtServer.Text, txtUser.Text, txtPass.Text, txtDB.Text, (string)chlTable.Items[i], genOB, typeCreate);
                         }
+                        if (clbFunction.CheckedItems.Contains("CRUD"))
+                        {
+                            // Set nameproject
+                            genOB.nameproject = (txtNameProject.Text == "" ? "Test" : txtNameProject.Text) + ".CRUD";
+                            genCode.CreateGenOBCRUD(txtServer.Text, txtUser.Text, txtPass.Text, txtDB.Text, (string)chlTable.Items[i], genOB, typeCreate);
+                        }
                         if (clbFunction.CheckedItems.Contains("HTML"))
                         {
 
@@ -296,6 +302,7 @@ namespace AppWFGenProject
             clbFunction.Items.Add("CMD", false);
             clbFunction.Items.Add("READ", false);
             clbFunction.Items.Add("HTML", false);
+            clbFunction.Items.Add("CRUD", false);
         }
         #endregion Group GenCode Function
         #endregion Group GenCode

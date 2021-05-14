@@ -24,6 +24,8 @@ namespace AppWFGenProject.Extensions
         public string builderRequestParam { get; set; }
         public string builderSetUpdate { get; set; }
         public string builderPublic { get; set; }
+        public string entityDTO { get; set; }
+        public string builderConfigColum { get; set; }
         public Dictionary<string, string> getDictionatyChange() 
         {
             Dictionary<string, string> _dictionary = new Dictionary<string, string>();
@@ -44,6 +46,8 @@ namespace AppWFGenProject.Extensions
             _dictionary.Add(EnumClass.builderRequestParam, builderRequestParam);
             _dictionary.Add(EnumClass.builderSetUpdate, builderSetUpdate);
             _dictionary.Add(EnumClass.builderPublic, builderPublic);
+            _dictionary.Add(EnumClass.entityDTO, entityDTO);
+            _dictionary.Add(EnumClass.builderConfigColum, builderConfigColum);
             return _dictionary;
         }
     }

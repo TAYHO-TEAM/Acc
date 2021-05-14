@@ -120,7 +120,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OperationManager.CRUD.DAL",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OperationManager.CRUD.BLL", "AppService\API\TayHo.OperationManagement\OperationManager.CRUD.BLL\OperationManager.CRUD.BLL.csproj", "{F2A5761A-4EEA-45D7-8FAF-3EBD32920264}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Operationmanager.Common", "AppService\API\TayHo.OperationManagement\Operationmanager.Common\Operationmanager.Common.csproj", "{CAA18DCB-6D58-4B58-84BB-7C52892AF7F6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Operationmanager.CRUD.Common", "AppService\API\TayHo.OperationManagement\Operationmanager.Common\Operationmanager.CRUD.Common.csproj", "{CAA18DCB-6D58-4B58-84BB-7C52892AF7F6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectManager.CMD.Api", "AppService\API\TayHo.ProjectManager\PrjectManager.CMD\ProjectManager.CMD.Api\ProjectManager.CMD.Api.csproj", "{D68AAE6F-6FDE-4B89-A50F-D082A33527E2}"
 EndProject
