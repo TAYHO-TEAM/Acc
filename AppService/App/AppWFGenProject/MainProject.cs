@@ -3,26 +3,17 @@ using AppWFGenProject.Entities;
 using AppWFGenProject.Extensions;
 using AppWFGenProject.FrameWork;
 using AppWFGenProject.Properties;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using ProjectManager.CMD.Domain.DomainObjects;
 using ProjectManager.CMD.Infrastructure;
-using Serilog;
-using Services.Common.Options;
 using Services.Common.Utilities;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Data.Entity;
 using System.DirectoryServices;
 using System.DirectoryServices.AccountManagement;
-using System.Drawing;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static AppWFGenProject.FrameWork.DBHelper;
 
 namespace AppWFGenProject
 {
