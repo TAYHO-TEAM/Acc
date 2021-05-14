@@ -14,7 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\CoreService\01.Services.Common\Services.Common\Services.Common.csproj" />
-    <ProjectReference Include="..\..\..\TayHo.ProjectManager\PrjectManager.CMD\ProjectManager.CMD.Infrastructure\ProjectManager.CMD.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\..\API\TayHo.ProjectManager\PrjectManager.CMD\ProjectManager.CMD.Infrastructure\ProjectManager.CMD.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

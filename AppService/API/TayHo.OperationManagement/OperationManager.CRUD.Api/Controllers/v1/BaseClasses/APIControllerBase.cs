@@ -9,7 +9,7 @@ using System;
 namespace OperationManager.CRUD.Api.Controllers.v1.BaseClasses
 {
     [ApiVersion("1")]
-    [Route(Settings.ReadAPIDefaultRoute)]
+    [Route(Settings.APIDefaultRoute)]
     [ApiExplorerSettings(GroupName = "v1")]
     [ApiController]
     public class APIControllerBase : ControllerBase

@@ -8,6 +8,7 @@ namespace Services.Common.APIs.Infrastructure
     {
         public static IApplicationBuilder UseCustomMvc(this IApplicationBuilder app, IConfiguration configuration, bool requireAuthentication = false)
         {
+            app.UseHttpsRedirection();
             app.UseRouting();
             app.UseCors("EnableCORS");
             app.UseAuthentication();
@@ -16,7 +17,7 @@ namespace Services.Common.APIs.Infrastructure
             app.UseCustomExceptionHandler();
             app.UseCustomLocalization(configuration);
             //app.UseCustomHealthChecks();
-            //app.UseMiddleware<CustomJwtMiddleware>();
+            app.UseMiddleware<CustomJwtMiddleware>();
             //app.UseMiddleware<CustomUserBlackListMiddleware>();
             //app.UseMvc(routes =>
             //{

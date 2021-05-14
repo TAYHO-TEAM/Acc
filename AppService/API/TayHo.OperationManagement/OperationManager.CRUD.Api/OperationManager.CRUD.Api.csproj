@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -23,9 +23,8 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\CoreService\01.Services.Common\Services.Common.APIs\Services.Common.APIs.csproj" />
     <ProjectReference Include="..\..\..\..\CoreService\01.Services.Common\Services.Common\Services.Common.csproj" />
-    <ProjectReference Include="..\..\..\..\OperationManager.CRUD.BUS\OperationManager.CRUD.BLL.csproj" />
-    <ProjectReference Include="..\..\..\TayHo.ProjectManager\PrjectManager.CMD\ProjectManager.CMD.Infrastructure\ProjectManager.CMD.Infrastructure.csproj" />
-    <ProjectReference Include="..\OperationManager.CRUD.DAO\OperationManager.CRUD.DAL.csproj" />
+    <ProjectReference Include="..\OperationManager.CRUD.BLL\OperationManager.CRUD.BLL.csproj" />
+    <ProjectReference Include="..\OperationManager.CRUD.DLL\OperationManager.CRUD.DAL.csproj" />
   </ItemGroup>
 
   <ItemGroup>

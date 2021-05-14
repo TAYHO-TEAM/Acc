@@ -12,9 +12,10 @@ const ACTION_READ_ACCOUNTINFO = "/AccountInfo";
 const ACTION_CMD_REQUESTREGIST = "/RequestRegist";
 const ACTION_CMD_RESPONSEREGIST = "/ResponseRegist";
 var GROUPOWNERID = isNullOrEmpty(localStorage.getItem("groupOwnerIdCurrent")) ? parseInt(localStorage.getItem("groupOwnerIdCurrent")) : 0;
+var HOST ='http://192.168.1.26:8688/api/v1/'
 
-var $DATASOURCE = (host, link, key) => {
-    var url = host + link;
+var $DATASOURCE = (link, key) => {
+    var url = HOST + link;
     return new DevExpress.data.AspNet.createStore({
         key: key ?? "id",
         loadUrl: url,
@@ -23,7 +24,7 @@ var $DATASOURCE = (host, link, key) => {
         deleteUrl: url,
         onBeforeSend: (method, options) => {
             options.headers = {
-                "Authorization": "Bearer " + UserCurrentInfo.accessToken,
+                'Authorization': 'Bearer ' + UserCurrentInfo.accessToken,
             };
         }
     });

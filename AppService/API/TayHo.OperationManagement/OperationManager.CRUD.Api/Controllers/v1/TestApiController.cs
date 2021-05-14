@@ -1,22 +1,14 @@
 ﻿using AutoMapper;
-using DevExtreme.AspNet.Data.ResponseModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OperationManager.CRUD.Api.Controllers.v1.BaseClasses;
 using Services.Common.DevExpress;
 using Services.Common.DomainObjects;
-using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
-using System.Linq;
-using DevExtreme.AspNet.Data;
-using System.Net.Http;
-using System.Net.Http.Formatting;
 using Newtonsoft.Json;
 using System;
 using Services.Common.DomainObjects.Exceptions;
-using Microsoft.EntityFrameworkCore;
-using OperationManager.CRUD.DAL.DBContext;
 using OperationManager.CRUD.DAL.DTO;
 using OperationManager.CRUD.BLL.IRepositories.BaseClasses;
 using Operationmanager.Common;
@@ -51,7 +43,7 @@ namespace OperationManager.CRUD.Api.Controllers.v1
         [HttpPost]
         [ProducesResponseType(typeof(VoidMethodResult), (int)HttpStatusCode.BadRequest)]
         //public async Task<IActionResult> Insert([FromBody] FormDataCollection form)
-        public async Task<IActionResult> Post(string values)
+        public async Task<IActionResult> Post([FromForm]string values)
       {
             var methodResult = new MethodResult<object>();
             try
@@ -73,7 +65,7 @@ namespace OperationManager.CRUD.Api.Controllers.v1
         /// <returns></returns>
         [HttpPut]
         [ProducesResponseType(typeof(VoidMethodResult), (int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Put(int key, string values)
+        public async Task<IActionResult> Put([FromForm] int key, [FromForm] string values)
         {
             try
             {
@@ -95,7 +87,7 @@ namespace OperationManager.CRUD.Api.Controllers.v1
         /// <returns></returns>
         [HttpDelete]
         [ProducesResponseType(typeof(VoidMethodResult), (int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Delete(int key)
+        public async Task<IActionResult> Delete([FromForm] int key)
         {
             try
             {

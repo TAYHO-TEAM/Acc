@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\ErrorMessages-en.json" />
+    <None Remove="Resources\ErrorMessages-vn.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\ErrorMessages-en.json" />
+    <EmbeddedResource Include="Resources\ErrorMessages-vn.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OperationManager.CRUD.DLL\OperationManager.CRUD.DAL.csproj" />
+  </ItemGroup>
+
+</Project>

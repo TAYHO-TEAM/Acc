@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+    <UserSecretsId>17e158a9-fa79-4f66-83ca-8c165e322cf4</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controllers\v1\ActionsController.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DevExtreme.AspNet.Data" Version="2.8.2" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.15.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\CoreService\01.Services.Common\Services.Common.APIs\Services.Common.APIs.csproj" />
+    <ProjectReference Include="..\..\..\..\..\CoreService\01.Services.Common\Services.Common\Services.Common.csproj" />
+    <ProjectReference Include="..\..\PrjectManager.CMD\ProjectManager.CMD.Infrastructure\ProjectManager.CMD.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\ProjectManager.Shared\ProjectManager.Common\ProjectManager.Common.csproj" />
+    <ProjectReference Include="..\ProjectManager.Read.Sql\ProjectManager.Read.Sql.csproj" />
+  </ItemGroup>
+
+
+</Project>
