@@ -165,7 +165,7 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
         {
             int _function = 2;
             var methodResult = new MethodResult<T>();
-            if (!await CheckPermission(user, 2))
+            if (!await CheckPermission(user, _function))
             {
                 methodResult.AddAPIErrorMessage(nameof(ErrorCodePermission.PErr101), new[]
                 {
@@ -190,10 +190,10 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
         }
         public async Task<MethodResult<T>> Update(int user, string nameEF, T model)
         {
-
+            int _function = 3;
             var methodResult = new MethodResult<T>();
             DbSet<T> objEF = ConvertEF(nameEF);
-            if (!await CheckPermission(user, 3))
+            if (!await CheckPermission(user, _function))
             {
                 methodResult.AddAPIErrorMessage(nameof(ErrorCodePermission.PErr101), new[]
                 {
@@ -222,10 +222,11 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
         }
         public async Task<MethodResult<T>> Delete(int user, string nameEF, int key)
         {
+            int _function = 4;
             var methodResult = new MethodResult<T>();
             DbSet<T> objEF = ConvertEF(nameEF);
             var model = await objEF.SingleOrDefaultAsync(x => x.Id == key).ConfigureAwait(false);
-            if (!await CheckPermission(user,4))
+            if (!await CheckPermission(user, _function))
             {
                 methodResult.AddAPIErrorMessage(nameof(ErrorCodePermission.PErr101), new[]
                 {
@@ -256,6 +257,10 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
         private async Task<bool> CheckPermission(int user, int action)
         {
             return true;
+        }
+        private async Task LogEvent(int user, int action)
+        {
+            
         }
 
         private dynamic ConvertEF(string nameEntity)

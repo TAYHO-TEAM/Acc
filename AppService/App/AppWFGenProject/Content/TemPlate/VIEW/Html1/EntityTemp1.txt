@@ -1,4 +1,4 @@
-﻿@{
+@{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -18,7 +18,7 @@
         var id = 1;
         ///-----------------------------READ ------------------------
        
-        var ACTION_READ = "TestApi/";
+        var ACTION_READ = "{Entity}/";
         var KEY = "id";
         var WIDTH_CONTAINER = $("#container").width();
         //..........................Get data -------------------------------------------------------------
@@ -70,30 +70,12 @@
                     var container = e.component;
                     e.toolbarOptions.items.unshift(
                         {
-                            location: "before",
-                            widget: "dxSelectBox",
-                            options: {
-                                dataSource: groupOwner,
-                                valueExpr: "ID",
-                                displayExpr: "Name",
-                                width: "100%",
-                                searchEnabled: true,
-                                searchMode: "contains",
-                                showClearButton: false,
-                                stylingMode: "filled",
-                                value: GROUPOWNERID,
-                                onValueChanged: function (data) {
-                                    GROUPOWNERID = data.value;
-                                    localStorage.setItem('groupOwnerIdCurrent', GROUPOWNERID);
-                                    loadData(GROUPOWNERID);
-                                },
-                            },
-                        },
-                        {
                             location: "after",
                             widget: "dxButton",
                             options: {
-                                icon: "refresh", tylingMode: "filled", type: "default",
+                                icon: "refresh", 
+								tylingMode: "filled", 
+								type: "default",
                                 onClick: () => container.refresh()
                             },
 
@@ -128,8 +110,8 @@
                         visible: PermitInAction["insert"],
                         onClick: () => {
                             CALLPOPUP(
-                                "Tạo công việc",
-                                "/ThongTin/QLCongViec/_CongViecDetail",
+                                "{TitleEntityCreate}",
+                                "{LinkEntityCreate}",
                                 ($(window).width() > 767 ? "50%" : "80%"),
                                 container
                             );
@@ -169,7 +151,6 @@
                             visible: PermitInAction["update"] && (selectedRowData.paPermistionId == 9 || selectedRowData.paPermistionId == 7),
                             onClick: () => e.component.editRow(data)
                         }).dxSpeedDialAction("instance");
-
                         $("#action-delete").dxSpeedDialAction({
                             index: 3,
                             icon: "fas fa-trash",
@@ -188,16 +169,6 @@
                                 });
                             }
                         }).dxSpeedDialAction("instance");
-                        $("#action-log").dxSpeedDialAction({
-                            index: 4,
-                            icon: "fas fa-user",
-                            label: "Phân công",
-                            visible: (selectedRowData.pmCreateBy === UserCurrentInfo.accountId || selectedRowData.paPermistionId === 7),
-                            onClick: () => {
-                                console.log(selectedRowData);
-                                loadAccountPlanMaster(selectedRowData);
-                            }
-                        }).dxSpeedDialAction("instance");
                     }
                 },
                 onCellClick: function (e) {
@@ -207,17 +178,10 @@
                             loadUpload("PlanMaster", e.row.data, false);
                         }
                     }
-
                 },
                 columns: [
                     {
-                        dataField: "name",
-                        caption: "Tiêu đề",
-                        dataType: "string",
-                        editorOptions: {
-                            stylingMode: "filled",
-                            placeholder: "Vui lòng nhập...",
-                        }
+                       {EntityField}
                     },
                 ],
                 editing: {
@@ -243,19 +207,12 @@
                         requiredMark: "(*)",
                         items: [
                             {
-                                colSpan: 3,
-                                dataField: "name",
-                                label: { text: "Mã " },
-                                editorOptions: {
-                                    stylingMode: "filled",
-                                    placeholder: "Vui lòng nhập...",
-                                },
+                                {EntityFieldEditing}
                             },
                         ],
                     },
                 },
             });
         };
-
     </script>
 }
