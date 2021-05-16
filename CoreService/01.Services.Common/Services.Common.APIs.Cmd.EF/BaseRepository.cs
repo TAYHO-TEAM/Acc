@@ -323,12 +323,20 @@ namespace Services.Common.APIs.Cmd.EF
         }
         public async Task LogEventSQL(int AccountId = 0, string Action = "", string Event = "", string Infomation = "")
         {
-            (string, object)[] parameter = new (string, object)[] { ("@AccountId", AccountId), ("@Action", Action), ("@Event", Event), ("@Infomation", Infomation) };
-            SprocRepository _sprocRepository = new SprocRepository(_dbContext);
-            IList<ResultCheck> result = await _sprocRepository.GetStoredProcedure("sp_DataBase_Log_CMD")
-                        .WithSqlParams(parameter)
-                        .ExecuteStoredProcedureAsync<ResultCheck>();
-           
+            try
+            {
+                (string, object)[] parameter = new (string, object)[] { ("@AccountId", AccountId), ("@Action", Action), ("@Event", Event), ("@Infomation", Infomation) };
+                SprocRepository _sprocRepository = new SprocRepository(_dbContext);
+                IList<ResultCheck> result = await _sprocRepository.GetStoredProcedure("sp_DataBase_Log_CMD")
+                            .WithSqlParams(parameter)
+                            .ExecuteStoredProcedureAsync<ResultCheck>();
+
+            }
+            catch
+            {
+
+            }
+     
         }
         #endregion Helpers
     }
