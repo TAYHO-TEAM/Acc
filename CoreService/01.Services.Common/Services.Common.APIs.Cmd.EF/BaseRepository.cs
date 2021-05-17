@@ -46,7 +46,7 @@ namespace Services.Common.APIs.Cmd.EF
             try
             {
                 await _dbSet.AddRangeAsync(newEntities);
-                await LogEventSQL((int)newEntities.First().CreateBy, 
+                await LogEventSQL((newEntities.First().CreateBy.HasValue? (int)newEntities.First().CreateBy:0 ), 
                             string.IsNullOrEmpty(typeof(T).FullName)?"": (string)(typeof(T).FullName),
                             nameof(AddRangeAsync),
                             JsonConvert.SerializeObject(newEntities).ToString()).ConfigureAwait(false);
@@ -97,7 +97,7 @@ namespace Services.Common.APIs.Cmd.EF
         {
             try
             {
-                LogEventSQL((int)existsEntities.First().CreateBy,
+                LogEventSQL((existsEntities.First().ModifyBy.HasValue? (int)existsEntities.First().ModifyBy:0),
                           string.IsNullOrEmpty(typeof(T).FullName) ? "" : (string)(typeof(T).FullName),
                           nameof(UpdateRange),
                           JsonConvert.SerializeObject(existsEntities).ToString()).ConfigureAwait(false);
