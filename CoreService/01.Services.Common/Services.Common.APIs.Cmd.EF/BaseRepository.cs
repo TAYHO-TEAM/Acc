@@ -112,7 +112,7 @@ namespace Services.Common.APIs.Cmd.EF
         {
             try
             {
-                LogEventSQL((int)updateEntity.CreateBy,
+                LogEventSQL((updateEntity.ModifyBy.HasValue ? (int)updateEntity.ModifyBy : 0),
                           string.IsNullOrEmpty(typeof(T).FullName) ? "" : (string)(typeof(T).FullName),
                           nameof(Update),
                           JsonConvert.SerializeObject(updateEntity).ToString()).ConfigureAwait(false);
