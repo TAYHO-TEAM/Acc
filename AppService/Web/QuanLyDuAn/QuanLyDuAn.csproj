@@ -2280,6 +2280,8 @@
     <Content Include="Scripts\dx.viz.js" />
     <Content Include="Scripts\dx.web.debug.js" />
     <Content Include="Scripts\dx.web.js" />
+    <Content Include="Scripts\exceljs.min.js" />
+    <Content Include="Scripts\fileSaver.min.js" />
     <Content Include="Scripts\globalize.js" />
     <Content Include="Scripts\globalize.min.js" />
     <Content Include="Scripts\globalize\currency.js" />
@@ -2509,6 +2511,7 @@
     <Content Include="Areas\VanHanh\Views\web.config" />
     <Content Include="Areas\VanHanh\Views\Home\Index.cshtml" />
     <Content Include="Areas\VanHanh\Views\BaoHanh\Index.cshtml" />
+    <Content Include="Content\Template\NS_CongViec\NSCongViecImport.xlsx" />
     <None Include="packages.config" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Home\About.cshtml" />

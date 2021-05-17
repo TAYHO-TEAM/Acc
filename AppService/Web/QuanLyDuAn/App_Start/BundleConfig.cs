@@ -39,8 +39,10 @@ namespace QuanLyDuAn
                 //"~/Scripts/jszip.js",
                 //"~/Scripts/dx.all.js",
                 "~/Scripts/localization/dx.messages.vi.js",
-                //"~/Scripts/aspnet/dx.aspnet.mvc.js",
-                "~/Scripts/aspnet/dx.aspnet.data.js");
+                "~/Scripts/exceljs.min.js",
+                "~/Scripts/fileSaver.min.js",
+            //"~/Scripts/aspnet/dx.aspnet.mvc.js",
+            "~/Scripts/aspnet/dx.aspnet.data.js");
 
             bundles.Add(scriptBundle);
             bundles.Add(styleBundle);
