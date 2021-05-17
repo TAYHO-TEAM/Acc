@@ -61,7 +61,7 @@ namespace Services.Common.APIs.Cmd.EF
         {
             try
             {
-                LogEventSQL((int)newEntity.CreateBy,
+                LogEventSQL((newEntity.CreateBy.HasValue? (int)newEntity.CreateBy:0),
                            string.IsNullOrEmpty(typeof(T).FullName) ? "" : (string)(typeof(T).FullName),
                            nameof(Add),
                            JsonConvert.SerializeObject(newEntity).ToString()).ConfigureAwait(false);
@@ -78,7 +78,7 @@ namespace Services.Common.APIs.Cmd.EF
         {
             try
             {
-                await LogEventSQL((int)newEntity.CreateBy,
+                await LogEventSQL((newEntity.CreateBy.HasValue ? (int)newEntity.CreateBy : 0),
                            string.IsNullOrEmpty(typeof(T).FullName) ? "" : (string)(typeof(T).FullName),
                            nameof(AddAsync),
                            JsonConvert.SerializeObject(newEntity).ToString()).ConfigureAwait(false);

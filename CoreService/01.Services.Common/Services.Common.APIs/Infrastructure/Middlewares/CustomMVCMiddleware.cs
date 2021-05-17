@@ -8,7 +8,7 @@ namespace Services.Common.APIs.Infrastructure
     {
         public static IApplicationBuilder UseCustomMvc(this IApplicationBuilder app, IConfiguration configuration, bool requireAuthentication = false)
         {
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseRouting();
             app.UseCors("EnableCORS");
             app.UseAuthentication();
