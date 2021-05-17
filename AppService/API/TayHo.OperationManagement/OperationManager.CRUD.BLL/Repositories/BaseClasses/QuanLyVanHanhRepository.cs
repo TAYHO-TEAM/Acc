@@ -6,6 +6,8 @@ using OperationManager.CRUD.BLL.Extensions;
 using OperationManager.CRUD.BLL.IRepositories.BaseClasses;
 using OperationManager.CRUD.DAL.DBContext;
 using OperationManager.CRUD.DAL.DTO.BaseClasses;
+using Services.Common.APIs.Cmd.EF;
+using Services.Common.APIs.Cmd.EF.Extensions;
 using Services.Common.DevExpress;
 using Services.Common.DomainObjects;
 using Services.Common.DomainObjects.Exceptions;
@@ -258,9 +260,22 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
         {
             return true;
         }
-        private async Task LogEvent(int user, int action)
+        public async Task LogEventSQL(int AccountId = 0, string Action = "", string Event = "", string Infomation = "")
         {
-            
+            try
+            {
+                (string, object)[] parameter = new (string, object)[] { ("@AccountId", AccountId), ("@Action", Action), ("@Event", Event), ("@Infomation", Infomation) };
+                SprocRepository _sprocRepository = new SprocRepository(_dbContext);
+                IList<ResultCheck> result = await _sprocRepository.GetStoredProcedure("sp_DataBase_Log_CMD")
+                            .WithSqlParams(parameter)
+                            .ExecuteStoredProcedureAsync<ResultCheck>();
+
+            }
+            catch
+            {
+
+            }
+
         }
 
         private dynamic ConvertEF(string nameEntity)
