@@ -22,8 +22,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="GenProject.cs">
+    <Compile Update="MainProject.cs">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Update="Properties\Settings.Designer.cs">
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -47,6 +52,7 @@
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="5.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
+    <PackageReference Include="System.DirectoryServices.AccountManagement" Version="5.0.0" />
     <PackageReference Include="System.Reflection.Emit" Version="4.7.0" />
   </ItemGroup>
 
@@ -74,55 +80,36 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\CoreService\01.Services.Common\Services.Common\Services.Common.csproj" />
-    <ProjectReference Include="..\..\TayHo.ProjectManager\PrjectManager.CMD\ProjectManager.CMD.Infrastructure\ProjectManager.CMD.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\API\TayHo.ProjectManager\PrjectManager.CMD\ProjectManager.CMD.Infrastructure\ProjectManager.CMD.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="DevExpress.BonusSkins.v20.1">
-      <HintPath>C:\Program Files (x86)\DevExpress 20.1\Components\Bin\Framework\DevExpress.BonusSkins.v20.1.dll</HintPath>
+    <Reference Include="DevExpress.BonusSkins.v20.2">
+      <HintPath>C:\Program Files (x86)\DevExpress 20.2\Components\Bin\NetCore\DevExpress.BonusSkins.v20.2.dll</HintPath>
       <Private>true</Private>
     </Reference>
-    <Reference Include="DevExpress.Data.Desktop.v20.1">
-      <HintPath>C:\Program Files (x86)\DevExpress 20.1\Components\Bin\Framework\DevExpress.Data.Desktop.v20.1.dll</HintPath>
-      <Private>true</Private>
-    </Reference>
-    <Reference Include="DevExpress.Data.v20.1">
-      <HintPath>C:\Program Files (x86)\DevExpress 20.1\Components\Bin\Framework\DevExpress.Data.v20.1.dll</HintPath>
+    <Reference Include="DevExpress.Data.Desktop.v20.2">
+      <HintPath>C:\Program Files (x86)\DevExpress 20.2\Components\Bin\NetCore\DevExpress.Data.Desktop.v20.2.dll</HintPath>
       <Private>true</Private>
     </Reference>
     <Reference Include="DevExpress.Data.v20.2">
       <HintPath>C:\Program Files (x86)\DevExpress 20.2\Components\Bin\NetCore\DevExpress.Data.v20.2.dll</HintPath>
-    </Reference>
-    <Reference Include="DevExpress.Images.v20.1">
-      <HintPath>C:\Program Files (x86)\DevExpress 20.1\Components\Bin\Framework\DevExpress.Images.v20.1.dll</HintPath>
       <Private>true</Private>
     </Reference>
-    <Reference Include="DevExpress.PivotGrid.v20.1.Core">
-      <HintPath>C:\Program Files (x86)\DevExpress 20.1\Components\Bin\Framework\DevExpress.PivotGrid.v20.1.Core.dll</HintPath>
+    <Reference Include="DevExpress.Printing.v20.2.Core">
+      <HintPath>C:\Program Files (x86)\DevExpress 20.2\Components\Bin\Framework\DevExpress.Printing.v20.2.Core.dll</HintPath>
       <Private>true</Private>
     </Reference>
-    <Reference Include="DevExpress.Printing.v20.1.Core">
-      <HintPath>C:\Program Files (x86)\DevExpress 20.1\Components\Bin\Framework\DevExpress.Printing.v20.1.Core.dll</HintPath>
+    <Reference Include="DevExpress.Utils.v20.2">
+      <HintPath>C:\Program Files (x86)\DevExpress 20.2\Components\Bin\NetCore\DevExpress.Utils.v20.2.dll</HintPath>
       <Private>true</Private>
     </Reference>
-    <Reference Include="DevExpress.Snap.v20.1">
-      <HintPath>C:\Program Files (x86)\DevExpress 20.1\Components\Bin\Framework\DevExpress.Snap.v20.1.dll</HintPath>
+    <Reference Include="DevExpress.XtraBars.v20.2">
+      <HintPath>C:\Program Files (x86)\DevExpress 20.2\Components\Bin\NetCore\DevExpress.XtraBars.v20.2.dll</HintPath>
       <Private>true</Private>
     </Reference>
-    <Reference Include="DevExpress.Sparkline.v20.1.Core">
-      <HintPath>C:\Program Files (x86)\DevExpress 20.1\Components\Bin\Framework\DevExpress.Sparkline.v20.1.Core.dll</HintPath>
-      <Private>true</Private>
-    </Reference>
-    <Reference Include="DevExpress.Utils.v20.1">
-      <HintPath>C:\Program Files (x86)\DevExpress 20.1\Components\Bin\Framework\DevExpress.Utils.v20.1.dll</HintPath>
-      <Private>true</Private>
-    </Reference>
-    <Reference Include="DevExpress.XtraBars.v20.1">
-      <HintPath>C:\Program Files (x86)\DevExpress 20.1\Components\Bin\Framework\DevExpress.XtraBars.v20.1.dll</HintPath>
-      <Private>true</Private>
-    </Reference>
-    <Reference Include="DevExpress.XtraEditors.v20.1">
-      <HintPath>C:\Program Files (x86)\DevExpress 20.1\Components\Bin\Framework\DevExpress.XtraEditors.v20.1.dll</HintPath>
+    <Reference Include="DevExpress.XtraEditors.v20.2">
+      <HintPath>C:\Program Files (x86)\DevExpress 20.2\Components\Bin\NetCore\DevExpress.XtraEditors.v20.2.dll</HintPath>
       <Private>true</Private>
     </Reference>
   </ItemGroup>
@@ -193,6 +180,8 @@
   <ItemGroup>
     <EmbeddedResource Update="Properties\Resources.resx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 
