@@ -9,12 +9,12 @@ namespace OperationManager.CRUD.DAL.EFConfig
     {
         public void Configure(EntityTypeBuilder<Conversation> builder)
         {
-           builder.Property(x => x.OwnerTable).HasColumnName("OwnerTable").HasMaxLength(128).UsePropertyAccessMode(PropertyAccessMode.Field);
-	builder.Property(x => x.TopicId).HasColumnName("TopicId").UsePropertyAccessMode(PropertyAccessMode.Field);
-			builder.Property(x => x.ParentId).HasColumnName("ParentId").UsePropertyAccessMode(PropertyAccessMode.Field);
-			builder.Property(x => x.Content).HasColumnName("Content").UsePropertyAccessMode(PropertyAccessMode.Field);
-			builder.Property(x => x.NoAttachment).HasColumnName("NoAttachment").UsePropertyAccessMode(PropertyAccessMode.Field);
-			
+            builder.ToTable(OperationManagerConstants.Conversation_TABLENAME);
+            builder.Property(x => x.OwnerTable).HasColumnName("OwnerTable").HasMaxLength(128).UsePropertyAccessMode(PropertyAccessMode.Field);
+            builder.Property(x => x.TopicId).HasColumnName("TopicId").UsePropertyAccessMode(PropertyAccessMode.Field);
+            builder.Property(x => x.ParentId).HasColumnName("ParentId").UsePropertyAccessMode(PropertyAccessMode.Field);
+            builder.Property(x => x.Content).HasColumnName("Content").UsePropertyAccessMode(PropertyAccessMode.Field);
+            builder.Property(x => x.NoAttachment).HasColumnName("NoAttachment").UsePropertyAccessMode(PropertyAccessMode.Field);
         }
     }
 }

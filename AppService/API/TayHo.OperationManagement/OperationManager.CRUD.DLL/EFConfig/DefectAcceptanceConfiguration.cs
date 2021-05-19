@@ -9,11 +9,11 @@ namespace OperationManager.CRUD.DAL.EFConfig
     {
         public void Configure(EntityTypeBuilder<DefectAcceptance> builder)
         {
-           builder.Property(x => x.DefectFixId).HasColumnName("DefectFixId").UsePropertyAccessMode(PropertyAccessMode.Field);
-	builder.Property(x => x.CustomerInfoId).HasColumnName("CustomerInfoId").UsePropertyAccessMode(PropertyAccessMode.Field);
-			builder.Property(x => x.Note).HasColumnName("Note").UsePropertyAccessMode(PropertyAccessMode.Field);
-			builder.Property(x => x.NoAttachment).HasColumnName("NoAttachment").UsePropertyAccessMode(PropertyAccessMode.Field);
-			
+            builder.ToTable(OperationManagerConstants.DefectAcceptance_TABLENAME);
+            builder.Property(x => x.DefectFixId).HasColumnName("DefectFixId").UsePropertyAccessMode(PropertyAccessMode.Field);
+            builder.Property(x => x.CustomerInfoId).HasColumnName("CustomerInfoId").UsePropertyAccessMode(PropertyAccessMode.Field);
+            builder.Property(x => x.Note).HasColumnName("Note").UsePropertyAccessMode(PropertyAccessMode.Field);
+            builder.Property(x => x.NoAttachment).HasColumnName("NoAttachment").UsePropertyAccessMode(PropertyAccessMode.Field);
         }
     }
 }

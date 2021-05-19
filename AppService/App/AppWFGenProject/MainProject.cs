@@ -306,7 +306,8 @@ namespace AppWFGenProject
             {
                 try
                 {
-                    byte[] image = File.ReadAllBytes(txtDir.Text);
+                    byte[] image =null;
+                    image =File.ReadAllBytes(txtDir.Text);
                     //string abc = Encoding.ASCII.GetString(image);
                     StringBuilder builder = new StringBuilder();
                     for (int i = 0; i < image.Length; i++)
@@ -318,7 +319,7 @@ namespace AppWFGenProject
                     string asciiString = Encoding.ASCII.GetString(image, 0, image.Length);
                     string base64 = Convert.ToBase64String(image);
                     genCode.UpdateImage(txtServer.Text, txtUser.Text, txtPass.Text, txtDB.Text, Convert.ToInt32(txtContractorId.Text), image); ;
-                    MessageBox.Show(base64.ToString());
+                    //MessageBox.Show(base64.ToString());
                 }
                 catch
                 {

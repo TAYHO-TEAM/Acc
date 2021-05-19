@@ -9,10 +9,10 @@ namespace OperationManager.CRUD.DAL.EFConfig
     {
         public void Configure(EntityTypeBuilder<CustomerRealEstate> builder)
         {
-           builder.Property(x => x.RealEstateId).HasColumnName("RealEstateId").UsePropertyAccessMode(PropertyAccessMode.Field);
-	builder.Property(x => x.CustomerInfoId).HasColumnName("CustomerInfoId").UsePropertyAccessMode(PropertyAccessMode.Field);
-			builder.Property(x => x.OwnerType).HasColumnName("OwnerType").UsePropertyAccessMode(PropertyAccessMode.Field);
-			
+            builder.ToTable(OperationManagerConstants.CustomerRealEstate_TABLENAME);
+            builder.Property(x => x.RealEstateId).HasColumnName("RealEstateId").UsePropertyAccessMode(PropertyAccessMode.Field);
+            builder.Property(x => x.CustomerInfoId).HasColumnName("CustomerInfoId").UsePropertyAccessMode(PropertyAccessMode.Field);
+            builder.Property(x => x.OwnerType).HasColumnName("OwnerType").UsePropertyAccessMode(PropertyAccessMode.Field);
         }
     }
 }
