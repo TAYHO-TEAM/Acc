@@ -34,7 +34,8 @@ namespace  Acc.Cmd.Api.Application.Commands
                                                         request.District,
                                                         request.Address,
                                                         request.Phone,
-                                                        request.Email);
+                                                        request.Email,
+                                                        request.Image);
             newContractorInfo.SetCreate(_user);
             newContractorInfo.Status = request.Status.HasValue ? request.Status : newContractorInfo.Status;
             newContractorInfo.IsActive = request.IsActive.HasValue ? request.IsActive : newContractorInfo.IsActive;

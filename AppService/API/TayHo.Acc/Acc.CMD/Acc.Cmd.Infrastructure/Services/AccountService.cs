@@ -31,17 +31,19 @@ namespace Acc.Cmd.Infrastructure.Services
         private readonly IAccountsRepository _accountRepository;
         private readonly IStaffTayHoRepository _staffTayHoRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IContractorInfoRepository _contractorInfoRepository;
         //private readonly IUserBlackListCacheManager _userBlackListCacheManager;
 
         #endregion fields
 
         #region constructors
-        public AccountService(IAccountsRepository accountRepository , IStaffTayHoRepository staffTayHoRepository, ITokenManager tokenManager, IOptionsSnapshot<JwtOptions> jwtOptionsSnapshot, IHttpContextAccessor httpContextAccessor, IDeviceAccountRepository deviceAccountRepository)//, IUserBlackListCacheManager userBlackListCacheManager)
+        public AccountService(IAccountsRepository accountRepository , IStaffTayHoRepository staffTayHoRepository,IContractorInfoRepository contractorInfoRepository, ITokenManager tokenManager, IOptionsSnapshot<JwtOptions> jwtOptionsSnapshot, IHttpContextAccessor httpContextAccessor, IDeviceAccountRepository deviceAccountRepository)//, IUserBlackListCacheManager userBlackListCacheManager)
         {
             _accountRepository = accountRepository;
             _staffTayHoRepository = staffTayHoRepository;
             _tokenManager = tokenManager;
             _httpContextAccessor = httpContextAccessor;
+            _contractorInfoRepository = contractorInfoRepository;
             //_userBlackListCacheManager = userBlackListCacheManager;
             _jwtOptions = jwtOptionsSnapshot.Value;
             _deviceAccountRepository = deviceAccountRepository;
@@ -134,6 +136,18 @@ namespace Acc.Cmd.Infrastructure.Services
                     tokenResult.UserName = existingStaffTaHo.UserName;
                 }
             }
+            else if(existingAccount.Type == 2)
+            {
+                ContractorInfo existContractorInfo = await _contractorInfoRepository.SingleOrDefaultAsync(x=>x.Id == existingAccount.UserId).ConfigureAwait(false);
+                if (existContractorInfo != null)
+                {
+                    if(existContractorInfo.Image != null)
+                    {
+                        tokenResult.AvatarImg = existContractorInfo.Image;
+                    }
+                    tokenResult.UserName = existContractorInfo.Name;
+                }
+            }    
             DeviceAccount existDeviceAccount = await _deviceAccountRepository.SingleOrDefaultAsync(x => x.DeviceToken == deviceToken && (x.IsDelete == false || !x.IsDelete.HasValue)) ;// new DeviceAccount(device, existingAccount.Id, deviceToken, browser);
             if (existDeviceAccount != null )
             {

@@ -50,7 +50,9 @@ namespace  Acc.Cmd.Api.Application.Commands
             existingContractorInfo.SetAddress(request.Address);
             existingContractorInfo.SetPhone(request.Phone);
             existingContractorInfo.SetEmail(request.Email);
+            existingContractorInfo.SetImage(request.Image);
             existingContractorInfo.SetUpdate(_user,null);
+            
             _ContractorInfoRepository.Update(existingContractorInfo);
             await _ContractorInfoRepository.UnitOfWork.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
             methodResult.Result = _mapper.Map<UpdateContractorInfoCommandResponse>(existingContractorInfo);

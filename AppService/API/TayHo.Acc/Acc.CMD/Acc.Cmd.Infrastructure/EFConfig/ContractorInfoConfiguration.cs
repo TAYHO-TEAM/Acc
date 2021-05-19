@@ -22,6 +22,7 @@ namespace Acc.Cmd.Infrastructure.EFConfig
             builder.Property(x => x.Address).HasField("_address").HasMaxLength(512).UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.Phone).HasField("_phone").HasMaxLength(32).UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.Email).HasField("_email").HasMaxLength(128).UsePropertyAccessMode(PropertyAccessMode.Field);
+            builder.Property(x => x.Image).HasField("_image").UsePropertyAccessMode(PropertyAccessMode.Field);
         }
     }
 }
