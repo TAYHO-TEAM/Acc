@@ -1,8 +1,294 @@
-﻿
-@{
-    ViewBag.Title = "KhachHang";
+﻿@{
+    ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@section style{   }
+<div id="popup-main-upload"></div>
+<div id="popup-register"></div>
+<div class="row">
+    <div class="col-12">
+        <div id="container" class="elevation-2"></div>
+        <div id="container-detail" class="elevation-2"></div>
+    </div>
+</div>
 
-<h2>KhachHang</h2>
+@section script{
+    <script src="~/Scripts/page/vanhanh.js"></script>
+    <script>
+        var id = 1;
+        ///-----------------------------READ ------------------------
 
+        var ACTION_READ = "CustomerInfo/";
+        var KEY = "id";
+        var WIDTH_CONTAINER = $("#container").width();
+        //..........................Get data -------------------------------------------------------------
+
+        let customStore = $DATASOURCE( ACTION_READ, KEY);
+        //..........................  Load View -------------------------------------------------------------
+        $(function () {
+            loadData();
+        });
+        let loadData = () => {
+            $("#container").dxDataGrid({
+                height: heightScreen,
+                dataSource: customStore,
+                repaintChangesOnly: true,
+                remoteOperations: true,
+                scrolling: { mode: "standard" },
+                showBorders: false,
+                showColumnHeaders: true,
+                showColumnLines: false,
+                hoverStateEnabled: true,
+                showRowLines: true,
+                columnAutoWidth: true,
+                wordWrapEnabled: true,
+                rowAlternationEnabled: true,
+                filterRow: { visible: true },
+                summary: {
+                    groupItems: [{
+                        column: "pmIsVisible",
+                        summaryType: "count"
+                    },
+                    ]
+                },
+                paging: {
+                    enabled: true,
+                    pageSize: 20
+                },
+                pager: {
+                    showPageSizeSelector: true,
+                    allowedPageSizes: [10, 20, 40],
+                    showInfo: true,
+                },
+                searchPanel: {
+                    highlightCaseSensitive: true,
+                    highlightSearchText: true,
+                    searchVisibleColumnsOnly: true,
+                    visible: WIDTH_CONTAINER > 350
+                },
+                onToolbarPreparing: function (e) {
+                    var container = e.component;
+                    e.toolbarOptions.items.unshift(
+                        {
+                            location: "before",
+                            widget: "dxSelectBox",
+                            options: {
+                                dataSource: groupOwner,
+                                valueExpr: "ID",
+                                displayExpr: "Name",
+                                width: "100%",
+                                searchEnabled: true,
+                                searchMode: "contains",
+                                showClearButton: false,
+                                stylingMode: "filled",
+                                value: GROUPOWNERID,
+                                onValueChanged: function (data) {
+                                    GROUPOWNERID = data.value;
+                                    localStorage.setItem('groupOwnerIdCurrent', GROUPOWNERID);
+                                    loadData(GROUPOWNERID);
+                                },
+                            },
+                        },
+                        {
+                            location: "after",
+                            widget: "dxButton",
+                            options: {
+                                icon: "refresh", tylingMode: "filled", type: "default",
+                                onClick: () => container.refresh()
+                            },
+
+                        },
+
+                    )
+                },
+                onInitNewRow: (e) => {
+                    e.data.isActive = true;
+                    e.data.isVisible = true;
+                },
+                onRowUpdating: (e) => {
+                    console.log(e);
+                    e.newData['isVisible'] = e.newData['pmIsVisible'];
+                    e.newData['id'] = e.oldData['id'];
+                },
+                onCellPrepared: (e) => {
+                    if (e.rowType == "data" && e.columnIndex == 1)
+                        e.cellElement.find('.dx-treelist-empty-space').toggleClass("dx-treelist-collapsed", e.data.chilCount > 0)
+                },
+                onRowDblClick: function (e) {
+                    var container = e.component;
+                },
+                selection: {
+                    mode: "single"
+                },
+                onContentReady: (e) => {
+                    var container = e.component;
+                    $("#action-add").dxSpeedDialAction({
+                        index: 1, icon: "fas fa-plus",
+                        label: "Thêm mới",
+                        visible: PermitInAction["insert"],
+                        onClick: () => {
+                            CALLPOPUP(
+                                "Tạo công việc",
+                                "/ThongTin/QLCongViec/_CongViecDetail",
+                                ($(window).width() > 767 ? "50%" : "80%"),
+                                container
+                            );
+                        }
+                    }).dxSpeedDialAction("instance");
+                    DevExpress.config({
+                        floatingActionButtonConfig: {
+                            icon: "rowfield",
+                            label: "Tác vụ",
+                            shading: true,
+                            position: {
+                                of: e.element,
+                                my: "right bottom",
+                                at: "right bottom",
+                                offset: e.component.pageCount() > 1 ? "-15 -60" : "-15 -15"
+                            }
+                        }
+                    });
+                    DevExpress.ui.repaintFloatingActionButton();
+                },
+                onSelectionChanged: (e) => {
+                    var selectedRowData = e.selectedRowsData[0];
+                    var selectedRowKey = e.selectedRowKeys[0];
+                    var container = document.getElementById("div_container");
+                    container.classList.replace("col-lg-12", "col-lg-8");
+                    container.classList.replace("col-md-12", "col-md-8");
+                    var pemistionKey = (selectedRowData.paPermistionId == 9);
+                    e.component.refresh();
+                    loadData_detail(selectedRowData.id, pemistionKey);
+                    //loadAttach(selectedRowData);
+                    loadConversation(selectedRowData.id, pemistionKey);
+                    loadSchedule(selectedRowData.id);
+                    if (selectedRowData != null && selectedRowKey != null) {
+                        var data = e.component.getRowIndexByKey(selectedRowData.paId);
+                        $("#action-update").dxSpeedDialAction({
+                            index: 2, icon: "fas fa-edit", label: "Cập nhật thông tin",
+                            visible: PermitInAction["update"] && (selectedRowData.paPermistionId == 9 || selectedRowData.paPermistionId == 7),
+                            onClick: () => e.component.editRow(data)
+                        }).dxSpeedDialAction("instance");
+
+                        $("#action-delete").dxSpeedDialAction({
+                            index: 3,
+                            icon: "fas fa-trash",
+                            label: "Xoá",
+                            visible: (selectedRowData.paId != null && PermitInAction["delete"] && selectedRowData.pmCreateBy == UserCurrentInfo.accountId),
+                            onClick: () => {
+                                DevExpress.ui.dialog.confirm("Bạn có chắc là muốn hủy bỏ giá trị của hạng mục?", "XÁC NHẬN THÔNG TIN").done(function (dialogResult) {
+                                    if (dialogResult) {
+                                        var deferred = $.Deferred();
+                                        customStore(0).store().remove(selectedRowData.id).then(() => {
+                                            DevExpress.ui.notify("Xoá thành công", "success", 3000);
+                                            e.component.refresh();
+                                        }, deferred.reject);
+                                        return deferred.promise();
+                                    }
+                                });
+                            }
+                        }).dxSpeedDialAction("instance");
+                        $("#action-log").dxSpeedDialAction({
+                            index: 4,
+                            icon: "fas fa-user",
+                            label: "Phân công",
+                            visible: (selectedRowData.pmCreateBy === UserCurrentInfo.accountId || selectedRowData.paPermistionId === 7),
+                            onClick: () => {
+                                console.log(selectedRowData);
+                                loadAccountPlanMaster(selectedRowData);
+                            }
+                        }).dxSpeedDialAction("instance");
+                    }
+                },
+                onCellClick: function (e) {
+
+                    if (typeof e.column !== "undefined") {
+                        if (e.column.dataField === "noAttachment") {
+                            loadUpload("PlanMaster", e.row.data, false);
+                        }
+                    }
+
+                },
+                columns: [
+                    {
+                        dataField: "firstName",
+                        allowFiltering: true,
+                        caption: "Họ",
+                        dataType: "string",
+                        alignment: "center",
+                    },// firstName
+                    {
+                        dataField: "lastName",
+                        allowFiltering: true,
+                        caption: "Tên",
+                        dataType: "string",
+                        alignment: "center",
+                    },// LastName
+                    {
+                        dataField: "birthday",
+                        allowFiltering: false,
+                        caption: "Ngày sinh",
+                        dataType: "date",
+                        alignment: "center",
+                    },// birthday
+                    {
+                        dataField: "phone",
+                        allowFiltering: true,
+                        caption: "SĐT",
+                        dataType: "string",
+                        alignment: "center",
+                    },// phone
+                    {
+                        dataField: "email",
+                        allowFiltering: true,
+                        caption: "Email",
+                        dataType: "string",
+                        alignment: "center",
+                    },// email
+                    {
+                        dataField: "iDCard",
+                        allowFiltering: true,
+                        caption: "CMND-IDCard",
+                        dataType: "string",
+                        alignment: "center",
+                    },// IDCard
+                ],
+                editing: {
+                    allowAdding: true,
+                    allowUpdating: true,
+                    allowDeleting: true,
+                    mode: "batch",
+                    useIcons: true,
+                    confirmDelete: true,
+                    popup: {
+                        width: "50%",
+                        height: "50%",
+                        showTitle: true,
+                        title: "kế hoạch công việc",
+                        closeOnOutsideClick: false,
+                        showCloseButton: true,
+                    },
+                    form: {
+                        labelLocation: "left",
+                        itemType: "group",
+                        colCount: 12,
+                        showRequiredMark: true,
+                        requiredMark: "(*)",
+                        items: [
+                            {
+                                colSpan: 3,
+                                dataField: "name",
+                                label: { text: "Mã " },
+                                editorOptions: {
+                                    stylingMode: "filled",
+                                    placeholder: "Vui lòng nhập...",
+                                },
+                            },
+                        ],
+                    },
+                },
+            });
+        };
+
+    </script>
+}

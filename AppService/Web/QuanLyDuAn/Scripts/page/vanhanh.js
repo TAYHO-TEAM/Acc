@@ -12,7 +12,7 @@ const ACTION_READ_ACCOUNTINFO = "/AccountInfo";
 const ACTION_CMD_REQUESTREGIST = "/RequestRegist";
 const ACTION_CMD_RESPONSEREGIST = "/ResponseRegist";
 var GROUPOWNERID = isNullOrEmpty(localStorage.getItem("groupOwnerIdCurrent")) ? parseInt(localStorage.getItem("groupOwnerIdCurrent")) : 0;
-var HOST ='http://192.168.1.26:8688/api/v1/'
+var HOST ='https://api-om-crud.tayho.com.vn/api/v1/'
 
 var $DATASOURCE = (link, key) => {
     var url = HOST + link;

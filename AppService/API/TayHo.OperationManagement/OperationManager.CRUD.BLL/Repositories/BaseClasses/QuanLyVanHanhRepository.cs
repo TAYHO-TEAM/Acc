@@ -283,7 +283,42 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
             dynamic orders = null;
             switch (nameEntity)
             {
-
+                case nameof(_dbContext.ConstructionCategory):
+                    orders = _dbContext.ConstructionCategory;
+                    break;
+                case nameof(_dbContext.Conversation):
+                    orders = _dbContext.Conversation;
+                    break;
+                case nameof(_dbContext.CustomerInfo):
+                    orders = _dbContext.CustomerInfo;
+                    break;
+                case nameof(_dbContext.CustomerRealEstate):
+                    orders = _dbContext.CustomerRealEstate;
+                    break;
+                case nameof(_dbContext.DefectAcceptance):
+                    orders = _dbContext.DefectAcceptance;
+                    break;
+                case nameof(_dbContext.DefectFeedback):
+                    orders = _dbContext.DefectFeedback;
+                    break;
+                case nameof(_dbContext.DefectFix):
+                    orders = _dbContext.DefectFix;
+                    break;
+                case nameof(_dbContext.Defective):
+                    orders = _dbContext.Defective;
+                    break;
+                case nameof(_dbContext.Items):
+                    orders = _dbContext.Items;
+                    break;
+                case nameof(_dbContext.LogEvent):
+                    orders = _dbContext.LogEvent;
+                    break;
+                case nameof(_dbContext.Project):
+                    orders = _dbContext.Project;
+                    break;
+                case nameof(_dbContext.RealEstate):
+                    orders = _dbContext.RealEstate;
+                    break;
                 case nameof(_dbContext.TestApi):
                     orders = _dbContext.TestApi;
                     break;

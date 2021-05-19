@@ -12,6 +12,18 @@ namespace OperationManager.CRUD.DAL.DBContext
         {
         }
         //public DbSet<DocumentReleased> DocumentReleased { get; set; }
+        public DbSet<ConstructionCategory> ConstructionCategory { get; set; }
+        public DbSet<Conversation> Conversation { get; set; }
+        public DbSet<CustomerInfo> CustomerInfo { get; set; }
+        public DbSet<CustomerRealEstate> CustomerRealEstate { get; set; }
+        public DbSet<DefectAcceptance> DefectAcceptance { get; set; }
+        public DbSet<DefectFeedback> DefectFeedback { get; set; }
+        public DbSet<DefectFix> DefectFix { get; set; }
+        public DbSet<Defective> Defective { get; set; }
+        public DbSet<Items> Items { get; set; }
+        public DbSet<LogEvent> LogEvent { get; set; }
+        public DbSet<Project> Project { get; set; }
+        public DbSet<RealEstate> RealEstate { get; set; }
         public DbSet<TestApi> TestApi { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

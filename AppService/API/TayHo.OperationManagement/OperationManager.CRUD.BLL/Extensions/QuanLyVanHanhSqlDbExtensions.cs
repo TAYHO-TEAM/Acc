@@ -25,6 +25,18 @@ namespace OperationManager.CRUD.BLL.Extensions
 
         private static IServiceCollection AddSqlRepositories(this IServiceCollection services)
         {
+            services.AddScoped<IQuanLyVanHanhRepository<ConstructionCategory>, QuanLyVanHanhRepository<ConstructionCategory>>();
+            services.AddScoped<IQuanLyVanHanhRepository<Construction>, QuanLyVanHanhRepository<Construction>>();
+            services.AddScoped<IQuanLyVanHanhRepository<Conversation>, QuanLyVanHanhRepository<Conversation>>();
+            services.AddScoped<IQuanLyVanHanhRepository<CustomerInfo>, QuanLyVanHanhRepository<CustomerInfo>>();
+            services.AddScoped<IQuanLyVanHanhRepository<CustomerRealEstate>, QuanLyVanHanhRepository<CustomerRealEstate>>();
+            services.AddScoped<IQuanLyVanHanhRepository<DefectAcceptance>, QuanLyVanHanhRepository<DefectAcceptance>>();
+            services.AddScoped<IQuanLyVanHanhRepository<DefectFeedback>, QuanLyVanHanhRepository<DefectFeedback>>();
+            services.AddScoped<IQuanLyVanHanhRepository<DefectFix>, QuanLyVanHanhRepository<DefectFix>>();
+            services.AddScoped<IQuanLyVanHanhRepository<Defective>, QuanLyVanHanhRepository<Defective>>();
+            services.AddScoped<IQuanLyVanHanhRepository<Items>, QuanLyVanHanhRepository<Items>>();
+            services.AddScoped<IQuanLyVanHanhRepository<LogEvent>, QuanLyVanHanhRepository<LogEvent>>();
+            services.AddScoped<IQuanLyVanHanhRepository<Project>, QuanLyVanHanhRepository<Project>>();
             services.AddScoped<IQuanLyVanHanhRepository<TestApi>, QuanLyVanHanhRepository<TestApi>>();
             return services;
         }
