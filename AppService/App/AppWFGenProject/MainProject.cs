@@ -12,6 +12,9 @@ using System;
 using System.ComponentModel;
 using System.DirectoryServices;
 using System.DirectoryServices.AccountManagement;
+using System.Drawing;
+using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -264,6 +267,24 @@ namespace AppWFGenProject
                 }
             }
         }
+        private void btnOpenFile_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog dlg = new OpenFileDialog())
+            {
+                dlg.Title = "Open Image";
+                dlg.Filter = "Image Files (*.bmp;*.jpg;*.jpeg,*.png)|*.BMP;*.JPG;*.JPEG;*.PNG";
+
+                if (dlg.ShowDialog() == DialogResult.OK)
+                {
+                    //PictureBox PictureBox1 = new PictureBox();
+                    //// Create a new Bitmap object from the picture file on disk,
+                    //// and assign that to the PictureBox.Image property
+                    //PictureBox1.Image = new Bitmap(dlg.FileName);
+                    txtDir.Text = dlg.FileName.ToString();
+
+                }
+            }
+        }
         private void cbkOverWrite_CheckedChanged(object sender, EventArgs e)
         {
             cbkBackUp.Checked = false;
@@ -279,6 +300,34 @@ namespace AppWFGenProject
             cbkCreateNew.Checked = false;
             cbkOverWrite.Checked = false;
         }
+        private void btnConvertToBinary_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(txtDir.Text))
+            {
+                try
+                {
+                    byte[] image = File.ReadAllBytes(txtDir.Text);
+                    //string abc = Encoding.ASCII.GetString(image);
+                    StringBuilder builder = new StringBuilder();
+                    for (int i = 0; i < image.Length; i++)
+                    {
+                        builder.Append(image[i].ToString("x2"));
+                    }
+                    GenCode genCode = new GenCode();
+                    string utfString = Encoding.UTF8.GetString(image, 0, image.Length);
+                    string asciiString = Encoding.ASCII.GetString(image, 0, image.Length);
+                    string base64 = Convert.ToBase64String(image);
+                    genCode.UpdateImage(txtServer.Text, txtUser.Text, txtPass.Text, txtDB.Text, Convert.ToInt32(txtContractorId.Text), image); ;
+                    MessageBox.Show(base64.ToString());
+                }
+                catch
+                {
+
+                }
+
+            }
+        }
+
         #region Group GenCode Function
         private void loadGBGenCode()
         {
@@ -394,12 +443,12 @@ namespace AppWFGenProject
             {
                 SysJobHelper sysJobHelper = new SysJobHelper(_dbContext);
                 var result = await sysJobHelper.GetAllSysJob(1).ConfigureAwait(false);
-                
+
                 bs.AllowNew = true;
                 bs.DataSource = result.Items;
                 //bs.DataSource = new PageOffsetList();
                 bs.AddingNew += new AddingNewEventHandler(InsertSysJob);
-               // bs.CurrentItemChanged += new EventHandler(bs_CurrentChanged);
+                // bs.CurrentItemChanged += new EventHandler(bs_CurrentChanged);
                 this.bindingNavigatorMain.BindingSource = bs;
                 //bindingNavigatorMain.PositionItem.TextChanged += new EventHandler(bindingNavigatorMain_TextChanged);
 
@@ -422,7 +471,7 @@ namespace AppWFGenProject
             {
             }
         }
-       
+
         private void InsertSysJob(object sender, AddingNewEventArgs e)
         {
             e.NewObject = new SysJob();
@@ -447,10 +496,10 @@ namespace AppWFGenProject
         #endregion Group SendMailAuto Function
         private void SetBindingnavigator()
         {
-           
+
         }
-        
-       
+
+
         #endregion Group SendMailAuto
 
         /// <summary>
@@ -747,10 +796,12 @@ namespace AppWFGenProject
 
 
 
+
         #endregion Grouyp LDAP function
 
         #endregion Grouyp LDAP
 
-      
+
+
     }
 }

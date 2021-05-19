@@ -1,0 +1,43 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+
+namespace QuanLyDuAn.Areas.VanHanh.Controllers
+{
+    public class QuanTriController : Controller
+    {
+        // GET: VanHanh/QuanTri
+        public ActionResult Index()
+        {
+            return View();
+        }
+        // GET: VanHanh/QuanTri
+        public ActionResult KhachHang()
+        {
+            return View();
+        }
+        public ActionResult _KhachHangCreate()
+        {
+            return PartialView();
+        }
+        // GET: VanHanh/QuanTri
+        public ActionResult CanHo()
+        {
+            return View();
+        }
+        public ActionResult _CanHoCreate()
+        {
+            return PartialView();
+        }
+        public ActionResult Defect()
+        {
+            return View();
+        }
+        public ActionResult _DefectCreate()
+        {
+            return PartialView();
+        }
+    }
+}

@@ -193,6 +193,7 @@
     <Compile Include="Areas\ThongTin\ThongTinAreaRegistration.cs" />
     <Compile Include="Areas\VanHanh\Controllers\BaoHanhController.cs" />
     <Compile Include="Areas\VanHanh\Controllers\HomeController.cs" />
+    <Compile Include="Areas\VanHanh\Controllers\QuanTriController.cs" />
     <Compile Include="Areas\VanHanh\VanHanhAreaRegistration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
@@ -2509,6 +2510,9 @@
     <Content Include="Areas\VanHanh\Views\Home\Index.cshtml" />
     <Content Include="Areas\VanHanh\Views\BaoHanh\Index.cshtml" />
     <Content Include="Content\Template\NS_CongViec\NSCongViecImport.xlsx" />
+    <Content Include="Areas\VanHanh\Views\QuanTri\KhachHang.cshtml" />
+    <Content Include="Areas\VanHanh\Views\QuanTri\CanHo.cshtml" />
+    <Content Include="Areas\VanHanh\Views\QuanTri\Defect.cshtml" />
     <None Include="packages.config" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Home\About.cshtml" />

@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Operationmanager.CRUD.Common;
+using OperationManager.CRUD.Common;
 using OperationManager.CRUD.DAL.DTO;
 namespace OperationManager.CRUD.DAL.EFConfig
 {

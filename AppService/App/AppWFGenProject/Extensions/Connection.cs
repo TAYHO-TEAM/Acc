@@ -160,6 +160,33 @@ namespace AppWFGenProject.Extensions
             }
             return ds;
         }
+        public void UpdateIamgeContractor(string server, string user, string pass, string db,int ContractorId, byte[] image)
+        {
+
+            using (SqlConnection cnn = new SqlConnection(Connect(server, user, pass, db).ConnectionString))
+            {
+                try
+                {
+                    SqlDataAdapter da = new SqlDataAdapter();
+                    string _storeproce = "sp_DataBase_ImportImage_Contractor";// ConfigurationSettings.AppSettings["SPGetALLEntry"].ToString();
+
+                    using (SqlCommand cmd = new SqlCommand(_storeproce, cnn))
+                    {
+                        cmd.Parameters.Add(new SqlParameter("@Id", ContractorId));
+                        cmd.Parameters.Add(new SqlParameter("@Image", image));
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cnn.Open();
+                        SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                        cmd.ExecuteNonQuery();
+                        cnn.Close();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Can not open connection ! ");
+                }
+            }
+        }
         public HashSet<string> ConvertDTRowsToList(DataTable dt, string colname)
         {
             HashSet<string> _newList = new HashSet<string>();

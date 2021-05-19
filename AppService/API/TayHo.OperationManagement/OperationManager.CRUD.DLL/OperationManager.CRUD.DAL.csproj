@@ -7,7 +7,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\CoreService\01.Services.Common\Services.Common.APIs.Cmd.EF\Services.Common.APIs.Cmd.EF.csproj" />
     <ProjectReference Include="..\..\..\..\CoreService\05.Database.Common\Dapper.Common\Dapper.Common.csproj" />
-    <ProjectReference Include="..\Operationmanager.Common\Operationmanager.CRUD.Common.csproj" />
+    <ProjectReference Include="..\Operationmanager.Common\OperationManager.CRUD.Common.csproj" />
   </ItemGroup>
 
 </Project>

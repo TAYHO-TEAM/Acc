@@ -19,6 +19,7 @@ namespace ProjectManager.CMD.Domain.DomainObjects
         private string _address;
         private string _phone;
         private string _email;
+        private byte[] _image;
         #endregion Fields
         #region Constructors
 
@@ -37,7 +38,8 @@ namespace ProjectManager.CMD.Domain.DomainObjects
                                 string District,
                                 string Address,
                                 string Phone,
-                                string Email) : this()
+                                string Email,
+                                byte[] Image) : this()
         {
             _code = Code;
             _taxCode = TaxCode;
@@ -51,6 +53,7 @@ namespace ProjectManager.CMD.Domain.DomainObjects
             _address = Address;
             _phone = Phone;
             _email = Email;
+            _image = Image;
         }
         #endregion Constructors
         #region Properties
@@ -66,6 +69,7 @@ namespace ProjectManager.CMD.Domain.DomainObjects
         [MaxLength(512, ErrorMessage = nameof(ErrorCodeInsert.IErr512))] public string Address { get => _address; }
         [MaxLength(15, ErrorMessage = nameof(ErrorCodeInsert.IErr32))] public string Phone { get => _phone; }
         [MaxLength(128, ErrorMessage = nameof(ErrorCodeInsert.IErr128))] public string Email { get => _email; }
+        public byte[]? Image { get => _image; }
         #endregion Properties
 
         #region Behaviours
@@ -81,6 +85,7 @@ namespace ProjectManager.CMD.Domain.DomainObjects
         public void SetAddress(string Address) { _address = string.IsNullOrEmpty(Address) ? _address : Address; if (!IsValid()) throw new DomainException(_errorMessages); }
         public void SetPhone(string Phone) { _phone = string.IsNullOrEmpty(Phone) ? _phone : Phone; if (!IsValid()) throw new DomainException(_errorMessages); }
         public void SetEmail(string Email) { _email = string.IsNullOrEmpty(Email) ? _email : Email; if (!IsValid()) throw new DomainException(_errorMessages); }
+        public void SetImage(byte[] Image) { _image = (Image == null)? _image : Image; if (!IsValid()) throw new DomainException(_errorMessages); }
         public sealed override bool IsValid()
         {
             return base.IsValid();

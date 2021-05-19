@@ -32,6 +32,9 @@ namespace AppWFGenProject
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainProject));
             this.gbGenCode = new System.Windows.Forms.GroupBox();
+            this.txtContractorId = new System.Windows.Forms.TextBox();
+            this.btnOpenFile = new System.Windows.Forms.Button();
+            this.btnConvertToBinary = new System.Windows.Forms.Button();
             this.clbFunction = new System.Windows.Forms.CheckedListBox();
             this.btnBrowser = new System.Windows.Forms.Button();
             this.txtDir = new System.Windows.Forms.TextBox();
@@ -192,6 +195,9 @@ namespace AppWFGenProject
             // gbGenCode
             // 
             this.gbGenCode.AutoSize = true;
+            this.gbGenCode.Controls.Add(this.txtContractorId);
+            this.gbGenCode.Controls.Add(this.btnOpenFile);
+            this.gbGenCode.Controls.Add(this.btnConvertToBinary);
             this.gbGenCode.Controls.Add(this.clbFunction);
             this.gbGenCode.Controls.Add(this.btnBrowser);
             this.gbGenCode.Controls.Add(this.txtDir);
@@ -216,6 +222,34 @@ namespace AppWFGenProject
             this.gbGenCode.TabIndex = 0;
             this.gbGenCode.TabStop = false;
             this.gbGenCode.Text = "Gen Code";
+            // 
+            // txtContractorId
+            // 
+            this.txtContractorId.Location = new System.Drawing.Point(845, 199);
+            this.txtContractorId.Name = "txtContractorId";
+            this.txtContractorId.PlaceholderText = "ID Contractor";
+            this.txtContractorId.Size = new System.Drawing.Size(56, 23);
+            this.txtContractorId.TabIndex = 26;
+            // 
+            // btnOpenFile
+            // 
+            this.btnOpenFile.Location = new System.Drawing.Point(824, 82);
+            this.btnOpenFile.Name = "btnOpenFile";
+            this.btnOpenFile.Size = new System.Drawing.Size(75, 23);
+            this.btnOpenFile.TabIndex = 25;
+            this.btnOpenFile.Text = "Ảnh ...";
+            this.btnOpenFile.UseVisualStyleBackColor = false;
+            this.btnOpenFile.Click += new System.EventHandler(this.btnOpenFile_Click);
+            // 
+            // btnConvertToBinary
+            // 
+            this.btnConvertToBinary.Location = new System.Drawing.Point(824, 233);
+            this.btnConvertToBinary.Name = "btnConvertToBinary";
+            this.btnConvertToBinary.Size = new System.Drawing.Size(117, 52);
+            this.btnConvertToBinary.TabIndex = 24;
+            this.btnConvertToBinary.Text = "Convert Binary";
+            this.btnConvertToBinary.UseVisualStyleBackColor = true;
+            this.btnConvertToBinary.Click += new System.EventHandler(this.btnConvertToBinary_Click);
             // 
             // clbFunction
             // 
@@ -1551,10 +1585,10 @@ namespace AppWFGenProject
             // 
             this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(1847, 608);
+            this.Controls.Add(this.gbGenCode);
             this.Controls.Add(this.tspNavigator);
             this.Controls.Add(this.gbAutoSendMail);
             this.Controls.Add(this.gbLDAP);
-            this.Controls.Add(this.gbGenCode);
             this.Controls.Add(this.menuMain);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainProject";
@@ -1735,6 +1769,9 @@ namespace AppWFGenProject
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.MenuStrip menuMain;
         private System.Windows.Forms.BindingNavigator bindingNavigatorMain;
+        private System.Windows.Forms.Button btnConvertToBinary;
+        private System.Windows.Forms.Button btnOpenFile;
+        private System.Windows.Forms.TextBox txtContractorId;
     }
 }
 

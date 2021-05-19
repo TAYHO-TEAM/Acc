@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OperationManager.CRUD.Api.Controllers.v1.BaseClasses;
@@ -15,17 +15,17 @@ using OperationManager.CRUD.Common;
 
 namespace OperationManager.CRUD.Api.Controllers.v1
 {
-    public class TestApiController : APIControllerBase
+    public class CustomerRealEstateController : APIControllerBase
     {
         const string VALIDATION_ERROR = "The request failed due to a validation error";
-        public string nameEF = OperationManagerConstants.TestApi_TABLENAME;
-        protected readonly IQuanLyVanHanhRepository<TestApi> _quanLyVanHanhRepository;
-        public TestApiController(IMapper mapper, IHttpContextAccessor httpContextAccessor, IQuanLyVanHanhRepository<TestApi> quanLyVanHanhRepository) : base(mapper, httpContextAccessor)
+        public string nameEF = OperationManagerConstants.CustomerRealEstate_TABLENAME;
+        protected readonly IQuanLyVanHanhRepository<CustomerRealEstate> _quanLyVanHanhRepository;
+        public CustomerRealEstateController(IMapper mapper, IHttpContextAccessor httpContextAccessor, IQuanLyVanHanhRepository<CustomerRealEstate> quanLyVanHanhRepository) : base(mapper, httpContextAccessor)
         {
             _quanLyVanHanhRepository = quanLyVanHanhRepository;
         }
         /// <summary>
-        /// Get List of TestApi.
+        /// Get List of CustomerRealEstate.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
@@ -36,7 +36,7 @@ namespace OperationManager.CRUD.Api.Controllers.v1
             return Ok(await _quanLyVanHanhRepository.GetAll(_user, nameEF, loadOptions));
         }
         /// <summary>
-        /// Create  of TestApi.
+        /// Create  of CustomerRealEstate.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
@@ -49,7 +49,7 @@ namespace OperationManager.CRUD.Api.Controllers.v1
             try
             {
                 if (!ModelState.IsValid) throw new CommandHandlerException(new ErrorResult());
-                var model = new TestApi();
+                var model = new CustomerRealEstate();
                 JsonConvert.PopulateObject(values, model);
                 return Ok(await _quanLyVanHanhRepository.Insert(_user, nameEF, model));
             }
@@ -59,7 +59,7 @@ namespace OperationManager.CRUD.Api.Controllers.v1
             }
         }
         /// <summary>
-        /// Update  of TestApi.
+        /// Update of CustomerRealEstate.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
@@ -69,7 +69,7 @@ namespace OperationManager.CRUD.Api.Controllers.v1
         {
             try
             {
-                TestApi model = new TestApi();
+                CustomerRealEstate model = new CustomerRealEstate();
                 JsonConvert.PopulateObject(values, model);
                 model.Id = key;
                 return Ok(await _quanLyVanHanhRepository.Update(_user, nameEF, model));
@@ -81,9 +81,9 @@ namespace OperationManager.CRUD.Api.Controllers.v1
         }
 
         /// <summary>
-        /// Delete  of TestApi.
+        /// Delete of CustomerRealEstate.
         /// </summary>
-        /// <param name="TestApi"></param>
+        /// <param name="CustomerRealEstate"></param>
         /// <returns></returns>
         [HttpDelete]
         [ProducesResponseType(typeof(VoidMethodResult), (int)HttpStatusCode.BadRequest)]
