@@ -12,7 +12,7 @@ const ACTION_READ_ACCOUNTINFO = "/AccountInfo";
 const ACTION_CMD_REQUESTREGIST = "/RequestRegist";
 const ACTION_CMD_RESPONSEREGIST = "/ResponseRegist";
 var GROUPOWNERID = isNullOrEmpty(localStorage.getItem("groupOwnerIdCurrent")) ? parseInt(localStorage.getItem("groupOwnerIdCurrent")) : 0;
-var HOST ='https://api-om-crud.tayho.com.vn/api/v1/'
+var HOST = 'https://api-om-crud.tayho.com.vn/api/v1/'
 
 var $DATASOURCE = (link, key) => {
     var url = HOST + link;
@@ -139,7 +139,7 @@ let customStore_CMD_READ_WITHGROUPOWNERID = (CMD, READ) => new DevExpress.data.C
     update: (key, values) => ajax_update(URL_API_PM_CMD + CMD, key, values),
     remove: (key) => ajax_delete(URL_API_PM_CMD + CMD, key),
 });
-var customStore_CMD_READ_PLANPROJECTID = (CMD, READ, ID ) => new DevExpress.data.CustomStore({
+var customStore_CMD_READ_PLANPROJECTID = (CMD, READ, ID) => new DevExpress.data.CustomStore({
     key: "id",
     load: (values) => {
         let deferred = $.Deferred(), params = { 'Type': GROUPOWNERID };
@@ -533,7 +533,7 @@ let customStore_READDATASOURCE = (DATASOURCE) => new DevExpress.data.CustomStore
         return deferred.promise();
     },
 });
-let customStore_READ_FILTER_KEYWORD = (READ,KEYWORD) => new DevExpress.data.CustomStore({
+let customStore_READ_FILTER_KEYWORD = (READ, KEYWORD) => new DevExpress.data.CustomStore({
     key: "id", loadMode: "raw",
     load: (values) => {
         var deferred = $.Deferred();
@@ -808,7 +808,7 @@ const parameterType = [
     {
         ID: 'dxTextBox',
         Name: 'TextBox',
-        Type:'string'
+        Type: 'string'
     },
     {
         ID: 'dxDateBox',
@@ -872,7 +872,7 @@ const Approve = [
         ID: 2,
         Name: 'Từ chối duyệt',
     },
-    
+
 ];
 const SetPermit = [
     {
@@ -909,4 +909,8 @@ const Sex = [
         ID: 3,
         Name: 'Khác',
     },
-]
+];
+var listActiveStatus = [
+    { value: true, text: "Hoạt động", color: "success", icon: 'fa fa-check-circle' },
+    { value: false, text: "Tạm dừng", color: "danger", icon: 'fa fa-minus-circle' },
+];

@@ -7,8 +7,8 @@
 <div id="popup-register"></div>
 <div class="row">
     <div class="col-12">
-        <div id="container" class="elevation-2"></div>
-        <div id="container-detail" class="elevation-2"></div>
+        <div id="container" class="col-8"></div>
+        <div id="container-detail" class="col-4"></div>
     </div>
 </div>
 
@@ -18,7 +18,7 @@
         var id = 1;
         ///-----------------------------READ ------------------------
 
-        var ACTION_READ = "TestApi/";
+        var ACTION_READ = "RealEstate/";
         var KEY = "id";
         var WIDTH_CONTAINER = $("#container").width();
         //..........................Get data -------------------------------------------------------------
@@ -151,87 +151,92 @@
                     DevExpress.ui.repaintFloatingActionButton();
                 },
                 onSelectionChanged: (e) => {
+                    var container = e.component;
+                    console.log("abc");
+                    console.log(container);
                     var selectedRowData = e.selectedRowsData[0];
                     var selectedRowKey = e.selectedRowKeys[0];
-                    var container = document.getElementById("div_container");
-                    container.classList.replace("col-lg-12", "col-lg-8");
-                    container.classList.replace("col-md-12", "col-md-8");
-                    var pemistionKey = (selectedRowData.paPermistionId == 9);
-                    e.component.refresh();
-                    loadData_detail(selectedRowData.id, pemistionKey);
-                    //loadAttach(selectedRowData);
-                    loadConversation(selectedRowData.id, pemistionKey);
-                    loadSchedule(selectedRowData.id);
                     if (selectedRowData != null && selectedRowKey != null) {
-                        var data = e.component.getRowIndexByKey(selectedRowData.paId);
+                        var data = e.component.getRowIndexByKey(selectedRowKey);
+                        console.log("abc");
                         $("#action-update").dxSpeedDialAction({
                             index: 2, icon: "fas fa-edit", label: "Cập nhật thông tin",
-                            visible: PermitInAction["update"] && (selectedRowData.paPermistionId == 9 || selectedRowData.paPermistionId == 7),
+                            visible: PermitInAction["update"],
                             onClick: () => e.component.editRow(data)
                         }).dxSpeedDialAction("instance");
 
                         $("#action-delete").dxSpeedDialAction({
-                            index: 3,
-                            icon: "fas fa-trash",
-                            label: "Xoá",
-                            visible: (selectedRowData.paId != null && PermitInAction["delete"] && selectedRowData.pmCreateBy == UserCurrentInfo.accountId),
-                            onClick: () => {
-                                DevExpress.ui.dialog.confirm("Bạn có chắc là muốn hủy bỏ giá trị của hạng mục?", "XÁC NHẬN THÔNG TIN").done(function (dialogResult) {
-                                    if (dialogResult) {
-                                        var deferred = $.Deferred();
-                                        customStore(0).store().remove(selectedRowData.id).then(() => {
-                                            DevExpress.ui.notify("Xoá thành công", "success", 3000);
-                                            e.component.refresh();
-                                        }, deferred.reject);
-                                        return deferred.promise();
-                                    }
-                                });
-                            }
+                            index: 3, icon: "fas fa-trash", label: "Xóa",
+                            visible: PermitInAction["delete"],
+                            onClick: (e) => e.component.deleteRow(data)
                         }).dxSpeedDialAction("instance");
+
                         $("#action-log").dxSpeedDialAction({
-                            index: 4,
-                            icon: "fas fa-user",
-                            label: "Phân công",
-                            visible: (selectedRowData.pmCreateBy === UserCurrentInfo.accountId || selectedRowData.paPermistionId === 7),
+                            index: 4, icon: "fas fa-user", label: "Thêm nhà thầu",
                             onClick: () => {
-                                console.log(selectedRowData);
-                                loadAccountPlanMaster(selectedRowData);
+                                callPopup(
+                                    "THÊM NHÀ THẦU",
+                                    "/Admin/SystemConfig/_ContractorInfoAdd",
+                                    ($(window).width() > 767 ? "50%" : "80%"),
+                                    e.component
+                                );
                             }
                         }).dxSpeedDialAction("instance");
                     }
                 },
-                onCellClick: function (e) {
+                //onCellClick: function (e) {
 
-                    if (typeof e.column !== "undefined") {
-                        if (e.column.dataField === "noAttachment") {
-                            loadUpload("PlanMaster", e.row.data, false);
-                        }
-                    }
+                //    if (typeof e.column !== "undefined") {
+                //        if (e.column.dataField === "noAttachment") {
+                //            loadUpload("PlanMaster", e.row.data, false);
+                //        }
+                //    }
 
-                },
+                //},
                 columns: [
                     {
-                        dataField: "name",
-                        caption: "Tiêu đề",
+                        dataField: "barCode",
+                        allowFiltering: true,
+                        caption: "Mã căn hộ",
                         dataType: "string",
-                        editorOptions: {
-                            stylingMode: "filled",
-                            placeholder: "Vui lòng nhập...",
+                        alignment: "center",
+                    },// barCode
+                    {
+                        dataField: "address",
+                        allowFiltering: true,
+                        caption: "Địa chỉ",
+                        dataType: "string",
+                        alignment: "center",
+                    },// address
+                    {
+                        dataField: "isActive",
+                        allowFiltering: true,
+                        caption: "Trạng thái",
+                        alignment: "center",
+                        editorType: "dxSwitch",
+                        lookup: {
+                            dataSource: listActiveStatus,
+                            valueExpr: "value", displayExpr: "text",
+                        },
+                        cellTemplate: (c, o) => {
+                            $("<span />").addClass("badge badge-" + listActiveStatus.find(x => x.value == o.value).color).append(
+                                $("<i />").addClass("mr-1 " + listActiveStatus.find(x => x.value == o.value).icon), o.text
+                            ).appendTo(c);
                         }
-                    },
+                    },// Trạng thái
                 ],
                 editing: {
-                    allowAdding: true,
-                    allowUpdating: true,
-                    allowDeleting: true,
-                    mode: "batch",
+                    //allowAdding: true,
+                    //allowUpdating: true,
+                    //allowDeleting: true,
+                    mode: "popup",
                     useIcons: true,
                     confirmDelete: true,
                     popup: {
-                        width: "50%",
-                        height: "50%",
+                        width: "30%",
+                        height: "45%",
                         showTitle: true,
-                        title: "kế hoạch công việc",
+                        title: "Thêm căn hộ mới",
                         closeOnOutsideClick: false,
                         showCloseButton: true,
                     },
@@ -243,12 +248,32 @@
                         requiredMark: "(*)",
                         items: [
                             {
-                                colSpan: 3,
-                                dataField: "name",
-                                label: { text: "Mã " },
+                                colSpan: 12,
+                                dataField: "barCode",
+                                label: { text: "Mã cắn hộ" },
                                 editorOptions: {
                                     stylingMode: "filled",
                                     placeholder: "Vui lòng nhập...",
+                                },
+                            },
+                            {
+                                colSpan: 12,
+                                dataField: "address",
+                                label: { text: "Địa chỉ" },
+                                editorOptions: {
+                                    stylingMode: "filled",
+                                    placeholder: "Vui lòng nhập...",
+                                },
+                            },
+                            {
+                                colSpan: 12,
+                                dataField: "isActive",
+                                label: { text: "Trạng thái" },
+                                editorType: "dxSwitch",
+                                editorOptions: {
+                                    dataSource: listActiveStatus,
+                                    valueExpr: "value",
+                                    displayExpr: "text",
                                 },
                             },
                         ],
