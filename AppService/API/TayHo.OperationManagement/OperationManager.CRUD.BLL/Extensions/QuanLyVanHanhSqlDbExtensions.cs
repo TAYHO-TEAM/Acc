@@ -34,7 +34,7 @@ namespace OperationManager.CRUD.BLL.Extensions
             services.AddScoped<IQuanLyVanHanhRepository<DefectFeedback>, QuanLyVanHanhRepository<DefectFeedback>>();
             services.AddScoped<IQuanLyVanHanhRepository<DefectFix>, QuanLyVanHanhRepository<DefectFix>>();
             services.AddScoped<IQuanLyVanHanhRepository<Defective>, QuanLyVanHanhRepository<Defective>>();
-            services.AddScoped<IQuanLyVanHanhRepository<Items>, QuanLyVanHanhRepository<Items>>();
+            services.AddScoped<IQuanLyVanHanhRepository<ConstructionItems>, QuanLyVanHanhRepository<ConstructionItems>>();
             services.AddScoped<IQuanLyVanHanhRepository<LogEvent>, QuanLyVanHanhRepository<LogEvent>>();
             services.AddScoped<IQuanLyVanHanhRepository<Project>, QuanLyVanHanhRepository<Project>>();
             services.AddScoped<IQuanLyVanHanhRepository<RealEstate>, QuanLyVanHanhRepository<RealEstate>>();

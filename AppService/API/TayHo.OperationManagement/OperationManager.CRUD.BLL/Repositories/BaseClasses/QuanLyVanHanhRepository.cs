@@ -311,8 +311,8 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
                 case nameof(_dbContext.Defective):
                     orders = _dbContext.Defective;
                     break;
-                case nameof(_dbContext.Items):
-                    orders = _dbContext.Items;
+                case nameof(_dbContext.ConstructionItems):
+                    orders = _dbContext.ConstructionItems;
                     break;
                 case nameof(_dbContext.LogEvent):
                     orders = _dbContext.LogEvent;

@@ -20,7 +20,7 @@ namespace OperationManager.CRUD.DAL.DBContext
         public DbSet<DefectFeedback> DefectFeedback { get; set; }
         public DbSet<DefectFix> DefectFix { get; set; }
         public DbSet<Defective> Defective { get; set; }
-        public DbSet<Items> Items { get; set; }
+        public DbSet<ConstructionItems> ConstructionItems { get; set; }
         public DbSet<LogEvent> LogEvent { get; set; }
         public DbSet<Project> Project { get; set; }
         public DbSet<RealEstate> RealEstate { get; set; }

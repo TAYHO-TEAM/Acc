@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OperationManager.CRUD.BLL.IRepositories.BaseClasses
 {
-    public interface IItemsRepository<T> where T : DOBase
+    public interface IConstructionItemsRepository<T> where T : DOBase
     {
 
     }

@@ -12,7 +12,7 @@
         public const string DefectFeedback_TABLENAME = "DefectFeedback";
         public const string DefectFix_TABLENAME = "DefectFix";
         public const string Defective_TABLENAME = "Defective";
-        public const string Items_TABLENAME = "Items";
+        public const string ConstructionItems_TABLENAME = "ConstructionItems";
         public const string LogEvent_TABLENAME = "LogEvent";
         public const string Project_TABLENAME = "Project";
         public const string RealEstate_TABLENAME = "RealEstate";

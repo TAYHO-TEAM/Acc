@@ -39,5 +39,9 @@ namespace QuanLyDuAn.Areas.VanHanh.Controllers
         {
             return PartialView();
         }
+        public ActionResult HeThongVH()
+        {
+            return View();
+        }
     }
 }

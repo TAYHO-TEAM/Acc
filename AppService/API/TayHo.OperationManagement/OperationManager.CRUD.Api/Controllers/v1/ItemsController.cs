@@ -18,9 +18,9 @@ namespace OperationManager.CRUD.Api.Controllers.v1
     public class ItemsController : APIControllerBase
     {
         const string VALIDATION_ERROR = "The request failed due to a validation error";
-        public string nameEF = OperationManagerConstants.Items_TABLENAME;
-        protected readonly IQuanLyVanHanhRepository<Items> _quanLyVanHanhRepository;
-        public ItemsController(IMapper mapper, IHttpContextAccessor httpContextAccessor, IQuanLyVanHanhRepository<Items> quanLyVanHanhRepository) : base(mapper, httpContextAccessor)
+        public string nameEF = OperationManagerConstants.ConstructionItems_TABLENAME;
+        protected readonly IQuanLyVanHanhRepository<ConstructionItems> _quanLyVanHanhRepository;
+        public ItemsController(IMapper mapper, IHttpContextAccessor httpContextAccessor, IQuanLyVanHanhRepository<ConstructionItems> quanLyVanHanhRepository) : base(mapper, httpContextAccessor)
         {
             _quanLyVanHanhRepository = quanLyVanHanhRepository;
         }
@@ -49,7 +49,7 @@ namespace OperationManager.CRUD.Api.Controllers.v1
             try
             {
                 if (!ModelState.IsValid) throw new CommandHandlerException(new ErrorResult());
-                var model = new Items();
+                var model = new ConstructionItems();
                 JsonConvert.PopulateObject(values, model);
                 return Ok(await _quanLyVanHanhRepository.Insert(_user, nameEF, model));
             }
@@ -69,7 +69,7 @@ namespace OperationManager.CRUD.Api.Controllers.v1
         {
             try
             {
-                Items model = new Items();
+                ConstructionItems model = new ConstructionItems();
                 JsonConvert.PopulateObject(values, model);
                 model.Id = key;
                 return Ok(await _quanLyVanHanhRepository.Update(_user, nameEF, model));

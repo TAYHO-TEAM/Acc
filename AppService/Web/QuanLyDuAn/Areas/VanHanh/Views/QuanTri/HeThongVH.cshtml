@@ -20,7 +20,7 @@
 
         var ACTION_READ = "Defective/";
         var KEY = "id";
-        var WIDTH_CONTAINER = $("#container").width();
+        var WIDTH_CONTAINER = $("#container").width()/3;
         //..........................Get data -------------------------------------------------------------
 
         let customStore = $DATASOURCE(ACTION_READ, KEY);
@@ -120,7 +120,7 @@
                 selection: {
                     mode: "single"
                 },
-             
+
                 onCellClick: function (e) {
                 },
                 columns: [
