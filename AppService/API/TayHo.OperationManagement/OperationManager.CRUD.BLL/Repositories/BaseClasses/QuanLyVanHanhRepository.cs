@@ -1,4 +1,5 @@
-﻿using DevExtreme.AspNet.Data;
+﻿using AutoMapper;
+using DevExtreme.AspNet.Data;
 using DevExtreme.AspNet.Data.ResponseModel;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -15,6 +16,8 @@ using Services.Common.Utilities;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 
@@ -195,6 +198,7 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
             int _function = 3;
             var methodResult = new MethodResult<T>();
             DbSet<T> objEF = ConvertEF(nameEF);
+            dynamic existsModel = await objEF.FirstOrDefaultAsync(x => x.Id == model.Id && model.IsDelete != true).ConfigureAwait(false);
             if (!await CheckPermission(user, _function))
             {
                 methodResult.AddAPIErrorMessage(nameof(ErrorCodePermission.PErr101), new[]
@@ -202,15 +206,16 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
                     ErrorHelpers.GenerateErrorResult(nameof(model.Id),model.Id)
                 });
             }
-            else if (await objEF.AnyAsync(x => x.Id == model.Id && model.IsDelete != true).ConfigureAwait(false))
+            else if (existsModel != null)
             {
-                model.IsModify = true;
-                model.ModifyBy = user;
-                model.UpdateDate = DateTime.Now;
-                model.UpdateDateUTC = DateTime.UtcNow;
-                objEF.Update(model);
+                ConvertHelper.CopyNonNullProperties(model,existsModel);
+                existsModel.IsModify = true;
+                existsModel.ModifyBy = user;
+                existsModel.UpdateDate = DateTime.Now;
+                existsModel.UpdateDateUTC = DateTime.UtcNow;
+                objEF.Update(existsModel);
                 await _dbContext.SaveChangesAsync();
-                methodResult.Result = model;
+                methodResult.Result = existsModel;
             }
             else
             {
@@ -219,7 +224,6 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
                     ErrorHelpers.GenerateErrorResult(nameof(model.Id),model.Id)
                 });
             }
-
             return methodResult;
         }
         public async Task<MethodResult<T>> Delete(int user, string nameEF, int key)
@@ -277,7 +281,7 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
             }
 
         }
-
+     
         private dynamic ConvertEF(string nameEntity)
         {
             dynamic orders = null;

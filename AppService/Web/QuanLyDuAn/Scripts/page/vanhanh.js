@@ -29,6 +29,19 @@ var $DATASOURCE = (link, key) => {
         }
     });
 };
+var $DATASOURCEGET = (link, key) => {
+    var url = HOST + link;
+    return new DevExpress.data.AspNet.createStore({
+        key: key ?? "id",
+        loadUrl: url,
+        insertUrl: url,
+        onBeforeSend: (method, options) => {
+            options.headers = {
+                'Authorization': 'Bearer ' + UserCurrentInfo.accessToken,
+            };
+        }
+    });
+};
 ////---------------------------CMD--------------------------- 
 let customStore_CMD_READ = (CMD, READ) => new DevExpress.data.CustomStore({
     key: "id",
@@ -883,3 +896,17 @@ const SetPermit = [
         Name: 'Quyền sở hữu',
     },
 ];
+const Sex = [
+    {
+        ID: 0,
+        Name: 'Nam',
+    },
+    {
+        ID: 2,
+        Name: 'Nữ',
+    },
+    {
+        ID: 3,
+        Name: 'Khác',
+    },
+]

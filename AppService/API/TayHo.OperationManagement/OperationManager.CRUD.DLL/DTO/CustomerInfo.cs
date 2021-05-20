@@ -9,6 +9,7 @@ namespace OperationManager.CRUD.DAL.DTO
     {
         public string Code { get; set; }
         public string BarCode { get; set; }
+        public string SignCode { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTime? Birthday { get; set; }
@@ -16,6 +17,7 @@ namespace OperationManager.CRUD.DAL.DTO
         public string Email { get; set; }
         public byte? Sex { get; set; }
         public string IDCard { get; set; }
+        public int NoAttachment { get; set; }
 
     }
 }

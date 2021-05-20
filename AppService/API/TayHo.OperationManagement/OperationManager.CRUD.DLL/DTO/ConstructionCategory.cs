@@ -1,7 +1,4 @@
 using OperationManager.CRUD.DAL.DTO.BaseClasses;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace OperationManager.CRUD.DAL.DTO
 {
@@ -15,6 +12,5 @@ namespace OperationManager.CRUD.DAL.DTO
         public int? Type { get; set; }
         public string Descriptions { get; set; }
         public int? Priority { get; set; }
-
     }
 }
