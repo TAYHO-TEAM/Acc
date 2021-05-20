@@ -51,6 +51,7 @@ namespace OperationManager.CRUD.Api.Controllers.v1
                 if (!ModelState.IsValid) throw new CommandHandlerException(new ErrorResult());
                 var model = new CustomerInfo();
                 JsonConvert.PopulateObject(values, model);
+                model.SetSignCode();
                 return Ok(await _quanLyVanHanhRepository.Insert(_user, nameEF, model));
             }
             catch (Exception ex)

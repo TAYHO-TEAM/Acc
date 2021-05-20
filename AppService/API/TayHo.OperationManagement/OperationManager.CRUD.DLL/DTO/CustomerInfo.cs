@@ -1,4 +1,5 @@
 using OperationManager.CRUD.DAL.DTO.BaseClasses;
+using Services.Common.Security;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -17,7 +18,14 @@ namespace OperationManager.CRUD.DAL.DTO
         public string Email { get; set; }
         public byte? Sex { get; set; }
         public string IDCard { get; set; }
-        public int NoAttachment { get; set; }
-
+        public int? NoAttachment { get; set; }
+        public CustomerInfo()
+        {
+            
+        }
+        public void SetSignCode()
+        {
+            SignCode = GenerateHelper.GenCode(8);
+        }
     }
 }

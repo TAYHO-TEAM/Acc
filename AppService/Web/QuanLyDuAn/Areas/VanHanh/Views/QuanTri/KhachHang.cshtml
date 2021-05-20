@@ -169,7 +169,6 @@
                             visible: PermitInAction["update"] && (selectedRowData.paPermistionId == 9 || selectedRowData.paPermistionId == 7),
                             onClick: () => e.component.editRow(data)
                         }).dxSpeedDialAction("instance");
-
                         $("#action-delete").dxSpeedDialAction({
                             index: 3,
                             icon: "fas fa-trash",
@@ -210,6 +209,13 @@
 
                 },
                 columns: [
+                    {
+                        dataField: "signCode",
+                        allowFiltering: true,
+                        caption: "Mã chữ ký",
+                        dataType: "string",
+                        alignment: "center",
+                    },// firstName
                     {
                         dataField: "firstName",
                         allowFiltering: true,

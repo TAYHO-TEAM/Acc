@@ -54,17 +54,17 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
             dynamic objEF = ConvertEF(nameEF);
             if (objEF != null)
             {
-                if (dataSourceLoadOptionsBase.Filter != null)
-                {
-                    if (dataSourceLoadOptionsBase.Filter.Count > 1)
-                    {
-                        dataSourceLoadOptionsBase.Filter = DevexpressHelperFunction.ConvertFilter(dataSourceLoadOptionsBase.Filter);
-                    }
-                    //else
-                    //{
-                    //    dataSourceLoadOptionsBase.Filter = JsonConvert.DeserializeObject<IList>(dataSourceLoadOptionsBase.Filter[0].ToString());
-                    //}
-                }
+                //if (dataSourceLoadOptionsBase.Filter != null)
+                //{
+                //    if (dataSourceLoadOptionsBase.Filter.Count > 1)
+                //    {
+                //        dataSourceLoadOptionsBase.Filter = DevexpressHelperFunction.ConvertFilter(dataSourceLoadOptionsBase.Filter);
+                //    }
+                //    //else
+                //    //{
+                //    //    dataSourceLoadOptionsBase.Filter = JsonConvert.DeserializeObject<IList>(dataSourceLoadOptionsBase.Filter[0].ToString());
+                //    //}
+                //}
 
 
                 if (!checkPermit && getActionId.Count > 0)
