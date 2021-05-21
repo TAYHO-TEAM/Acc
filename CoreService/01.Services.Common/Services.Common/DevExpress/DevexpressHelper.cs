@@ -1,4 +1,5 @@
 ﻿using DevExtreme.AspNet.Data;
+using DevExtreme.AspNet.Mvc;
 using Newtonsoft.Json;
 using System;
 using System.Collections;
@@ -26,7 +27,7 @@ namespace Services.Common.DevExpress
             devRequestLoadOptionsViewModel = new DevRequestLoadOptionsViewModel();
         }
     }
-    public class DataSourceLoadOptions : DataSourceLoadOptionsBase
+    public class DataSourceLoadOptionsHelper : DataSourceLoadOptionsBase
     {
     }
     public class DevRequestLoadOptionsViewModel : DataSourceLoadOptionsBase
@@ -170,7 +171,6 @@ namespace Services.Common.DevExpress
                         else
                         {
                             //newList.Add(JsonConvert.DeserializeObject < ((JsonElement)item).ValueKind > (item.ToString()))
-
                             //newList.Add(((JsonElement)item));///JsonConvert.DeserializeObject<IList>(item.ToString()));
                             string valueKid = "";
                             try

@@ -31,7 +31,7 @@ namespace OperationManager.CRUD.Api.Controllers.v1
         /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(typeof(VoidMethodResult), (int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> GetAll([FromQuery] DataSourceLoadOptions loadOptions)
+        public async Task<IActionResult> GetAll([FromQuery] DataSourceLoadOptionsHelper loadOptions)
         {
             return Ok(await _quanLyVanHanhRepository.GetAll(_user, nameEF, loadOptions));
         }

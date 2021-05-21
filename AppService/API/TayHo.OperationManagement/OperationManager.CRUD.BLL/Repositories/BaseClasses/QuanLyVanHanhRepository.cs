@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DevExtreme.AspNet.Data;
 using DevExtreme.AspNet.Data.ResponseModel;
+using DevExtreme.AspNet.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using OperationManager.CRUD.BLL.Extensions;
@@ -31,10 +32,9 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
             _dbContext = dbContext;
             //_dbContext.ChangeTracker.AutoDetectChangesEnabled = false;
         }
-        public async Task<LoadResult> GetAll(int user, string nameEF, DataSourceLoadOptions dataSourceLoadOptionsBase)
+        public async Task<LoadResult> GetAll(int user, string nameEF, DataSourceLoadOptionsHelper dataSourceLoadOptionsBase)
         {
             int actionType = 1; //// 1 : Read 
-            //var abc = _dbContext.Database.ExecuteSqlCommand("CreateStudents @p0, @p1", parameters: new[] { "Bill", "Gates" });
             List<int?> getActionId = new List<int?>();
             getActionId.Add(1);
             //List<int?> getActionId = _dbContext.Functions
@@ -43,6 +43,14 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
             //        && c.ActionId != null
             //        && (c.IsDelete == false || !c.IsDelete.HasValue))
             //.Select(x => x.ActionId).ToList();
+            //ConvertHelper.CopyNonNullProperties(loadOptions, dataSourceLoadOptionsBase);
+            var configuration = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<DataSourceLoadOptions,DataSourceLoadOptionsHelper > ();
+            });
+            configuration.AssertConfigurationIsValid();
+            var mapper = configuration.CreateMapper();
+            var loadOptions = mapper.Map<DataSourceLoadOptions>(dataSourceLoadOptionsBase);
 
             bool checkPermit = true;// _dbContext.GroupAccount
                                     //.Join(_dbContext.GroupActionPermistion, x => x.GroupId, y => y.GroupId, (y, x) => new { y, x })
@@ -54,19 +62,19 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
             dynamic objEF = ConvertEF(nameEF);
             if (objEF != null)
             {
-                //if (dataSourceLoadOptionsBase.Filter != null)
-                //{
-                //    if (dataSourceLoadOptionsBase.Filter.Count > 1)
-                //    {
-                //        dataSourceLoadOptionsBase.Filter = DevexpressHelperFunction.ConvertFilter(dataSourceLoadOptionsBase.Filter);
-                //    }
-                //    //else
-                //    //{
-                //    //    dataSourceLoadOptionsBase.Filter = JsonConvert.DeserializeObject<IList>(dataSourceLoadOptionsBase.Filter[0].ToString());
-                //    //}
-                //}
-
-
+                if (loadOptions.Filter != null)
+                {
+                    if (loadOptions.Filter.Count > 0)
+                    {
+                        var _filter= DevexpressHelperFunction.ConvertFilter(loadOptions.Filter);
+                        loadOptions.Filter.Clear();
+                        loadOptions.Filter = _filter;
+                    }
+                    //else
+                    //{
+                    //    dataSourceLoadOptionsBase.Filter = JsonConvert.DeserializeObject<IList>(dataSourceLoadOptionsBase.Filter[0].ToString());
+                    //}
+                }
                 if (!checkPermit && getActionId.Count > 0)
                 {
                     IList filterOwnerBy = DevexpressHelperFunction.ConvertFilter(JsonConvert.DeserializeObject<IList>(@"[""createBy"",""=""," + user.ToString() + @"]"));
@@ -80,14 +88,15 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
                     filter.Add(filterOwnerBy);
                     filter.Add("and");
                     filter.Add(filterDeleteFalse);
-                    if (dataSourceLoadOptionsBase.Filter.Count > 0)
+                    if (loadOptions.Filter.Count > 0)
                     {
                         filter.Add("and");
-                        filter.Add(dataSourceLoadOptionsBase.Filter);
+                        filter.Add(loadOptions.Filter);
                     }
-                    dataSourceLoadOptionsBase.Filter = filter;
+                    loadOptions.Filter.Clear();
+                    loadOptions.Filter = filter;
                 }
-                return DataSourceLoader.Load(objEF, dataSourceLoadOptionsBase);
+                return await DataSourceLoader.Load(objEF, loadOptions);
             }
             else
             {
@@ -95,11 +104,11 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
             }
 
         }
-        public async Task<LoadResult> GetAll(int user, string nameEF, DataSourceLoadOptions dataSourceLoadOptionsBase, string searchOperation, string searchValue, List<string> searchExpr)
+        public async Task<LoadResult> GetAll(int user, string nameEF, DataSourceLoadOptionsHelper dataSourceLoadOptionsBase, string searchOperation, string searchValue, List<string> searchExpr)
         {
             //var abc = _dbContext.Database.ExecuteSqlCommand("CreateStudents @p0, @p1", parameters: new[] { "Bill", "Gates" });
             List<int?> getActionId = new List<int?>();
-
+            DataSourceLoadOptionsBase loadOptions = new DataSourceLoadOptionsBase();
             getActionId.Add(1);
             /// _dbContext.Functions
             //.Where(c => c.TableName == nameEF
@@ -119,9 +128,9 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
             dynamic objEF = ConvertEF(nameEF);
             if (objEF != null)
             {
-                if (dataSourceLoadOptionsBase.Filter.Count > 1)
+                if (loadOptions.Filter.Count > 1)
                 {
-                    dataSourceLoadOptionsBase.Filter = DevexpressHelperFunction.ConvertFilter(dataSourceLoadOptionsBase.Filter);
+                    loadOptions.Filter = DevexpressHelperFunction.ConvertFilter(loadOptions.Filter);
                 }
                 //else
                 //{
@@ -140,25 +149,25 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
                     filter.Add(filterOwnerBy);
                     filter.Add("and");
                     filter.Add(filterDeleteFalse);
-                    if (dataSourceLoadOptionsBase.Filter.Count > 0)
+                    if (loadOptions.Filter.Count > 0)
                     {
                         filter.Add("and");
-                        filter.Add(dataSourceLoadOptionsBase.Filter);
+                        filter.Add(loadOptions.Filter);
                     }
-                    dataSourceLoadOptionsBase.Filter = filter;
+                    loadOptions.Filter = filter;
                 }
                 if (searchExpr.Count > 0 && searchExpr != null && !string.IsNullOrEmpty(searchValue))
                 {
-                    if (dataSourceLoadOptionsBase.Filter.Count > 0)
+                    if (loadOptions.Filter.Count > 0)
                     {
                         IList newList = new List<object>();
-                        newList.Add(dataSourceLoadOptionsBase.Filter);
+                        newList.Add(loadOptions.Filter);
                         newList.Add("and");
-                        dataSourceLoadOptionsBase.Filter = newList;
+                        loadOptions.Filter = newList;
                     }
-                    dataSourceLoadOptionsBase.Filter.Add(DevexpressHelperFunction.ConvertSearch(searchOperation, searchValue, searchExpr));
+                    loadOptions.Filter.Add(DevexpressHelperFunction.ConvertSearch(searchOperation, searchValue, searchExpr));
                 }
-                return DataSourceLoader.Load(objEF, dataSourceLoadOptionsBase);
+                return DataSourceLoader.Load(objEF, loadOptions);
             }
             else
             {

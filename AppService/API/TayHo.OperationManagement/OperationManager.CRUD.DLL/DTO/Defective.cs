@@ -7,7 +7,7 @@ namespace OperationManager.CRUD.DAL.DTO
 {
     public class Defective : DOBase
     {
-        public int? ItemsId { get; set; }
+        public int? ConstructionItemsId { get; set; }
         public string Code { get; set; }
         public string Name { get; set; }
         public int? Type { get; set; }

@@ -13,14 +13,16 @@ using OperationManager.CRUD.DAL.DTO;
 using OperationManager.CRUD.BLL.IRepositories.BaseClasses;
 using OperationManager.CRUD.Common;
 
+
 namespace OperationManager.CRUD.Api.Controllers.v1
 {
-    public class ItemsController : APIControllerBase
+    public class ConstructionItemsController : APIControllerBase
     {
         const string VALIDATION_ERROR = "The request failed due to a validation error";
         public string nameEF = OperationManagerConstants.ConstructionItems_TABLENAME;
+        const string Get = nameof(Get); 
         protected readonly IQuanLyVanHanhRepository<ConstructionItems> _quanLyVanHanhRepository;
-        public ItemsController(IMapper mapper, IHttpContextAccessor httpContextAccessor, IQuanLyVanHanhRepository<ConstructionItems> quanLyVanHanhRepository) : base(mapper, httpContextAccessor)
+        public ConstructionItemsController(IMapper mapper, IHttpContextAccessor httpContextAccessor, IQuanLyVanHanhRepository<ConstructionItems> quanLyVanHanhRepository) : base(mapper, httpContextAccessor)
         {
             _quanLyVanHanhRepository = quanLyVanHanhRepository;
         }
@@ -29,9 +31,10 @@ namespace OperationManager.CRUD.Api.Controllers.v1
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        [HttpGet]
+        [HttpPost]
+        [Route(Get)]
         [ProducesResponseType(typeof(VoidMethodResult), (int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> GetAll([FromQuery] DataSourceLoadOptions loadOptions)
+        public async Task<IActionResult> GetAll([FromForm]DataSourceLoadOptionsHelper loadOptions)
         {
             return Ok(await _quanLyVanHanhRepository.GetAll(_user, nameEF, loadOptions));
         }
@@ -40,7 +43,7 @@ namespace OperationManager.CRUD.Api.Controllers.v1
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        [HttpPost]
+        [Microsoft.AspNetCore.Mvc.HttpPost]
         [ProducesResponseType(typeof(VoidMethodResult), (int)HttpStatusCode.BadRequest)]
         //public async Task<IActionResult> Insert([FromBody] FormDataCollection form)
         public async Task<IActionResult> Post([FromForm]string values)
@@ -63,7 +66,7 @@ namespace OperationManager.CRUD.Api.Controllers.v1
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        [HttpPut]
+        [Microsoft.AspNetCore.Mvc.HttpPut]
         [ProducesResponseType(typeof(VoidMethodResult), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Put([FromForm] int key, [FromForm] string values)
         {
@@ -85,7 +88,7 @@ namespace OperationManager.CRUD.Api.Controllers.v1
         /// </summary>
         /// <param name="Items"></param>
         /// <returns></returns>
-        [HttpDelete]
+        [Microsoft.AspNetCore.Mvc.HttpDelete]
         [ProducesResponseType(typeof(VoidMethodResult), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Delete([FromForm] int key)
         {

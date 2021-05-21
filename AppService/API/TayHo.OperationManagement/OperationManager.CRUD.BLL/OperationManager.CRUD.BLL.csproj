@@ -22,4 +22,10 @@
     <ProjectReference Include="..\OperationManager.CRUD.DLL\OperationManager.CRUD.DAL.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="DevExtreme.AspNet.Mvc">
+      <HintPath>..\..\..\Web\lib\DevExtreme\DevExtreme.AspNet.Mvc.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

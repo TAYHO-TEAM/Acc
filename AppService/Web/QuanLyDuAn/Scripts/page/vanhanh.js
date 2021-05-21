@@ -12,17 +12,43 @@ const ACTION_READ_ACCOUNTINFO = "/AccountInfo";
 const ACTION_CMD_REQUESTREGIST = "/RequestRegist";
 const ACTION_CMD_RESPONSEREGIST = "/ResponseRegist";
 var GROUPOWNERID = isNullOrEmpty(localStorage.getItem("groupOwnerIdCurrent")) ? parseInt(localStorage.getItem("groupOwnerIdCurrent")) : 0;
-var HOST = 'https://api-om-crud.tayho.com.vn/api/v1/'
+var HOST = 'http://localhost:54323/api/v1/'; ///'https://api-om-crud.tayho.com.vn/api/v1/''http://localhost:54323/api/v1/
 
 var $DATASOURCE = (link, key) => {
     var url = HOST + link;
     return new DevExpress.data.AspNet.createStore({
         key: key ?? "id",
-        loadUrl: url,
+        loadUrl: url+'Get/',
+        //loadUrl: function (loadOptions) {
+        //    console.load(loadOptions);
+        //    var deferred = $.Deferred();
+        //    $.ajax({
+        //        headers: header, url: url, dataType: "json", type: "POST",
+        //        data: JSON.stringify(data),
+        //        success: function (result) {
+        //            deferred.resolve(result.data, {
+        //                totalCount: result.totalCount,
+        //                summary: result.summary,
+        //                groupCount: result.groupCount
+        //            });
+        //        },
+        //        error: function (xhr) {
+        //            console.log(xhr.responseJSON ? xhr.responseJSON.Message : xhr.statusText);
+        //            if (!xhr.responseJSON.isOk) {
+        //                deferred.reject("Đã có lỗi xảy ra trong quá trình này. " + xhr.responseJSON.errorMessages[0].errorMessage);
+        //            }
+        //            else
+        //                deferred.reject("Đã có lỗi xảy ra trong quá trình này. Mở Console để xem chi tiết hoặc liên hệ Quản trị viên.");
+        //        },
+        //    });
+        //    return deferred.promise();
+        //},
         insertUrl: url,
         updateUrl: url,
         deleteUrl: url,
+        loadMethod: 'POST',
         onBeforeSend: (method, options) => {
+            //options.xhrFields = { withCredentials: true };
             options.headers = {
                 'Authorization': 'Bearer ' + UserCurrentInfo.accessToken,
             };

@@ -10,16 +10,16 @@ namespace OperationManager.CRUD.DAL.EFConfig
         public void Configure(EntityTypeBuilder<ConstructionItems> builder)
         {
             builder.ToTable(OperationManagerConstants.ConstructionItems_TABLENAME);
-            builder.Property(x => x.ParentId).HasField("_parentId").UsePropertyAccessMode(PropertyAccessMode.Field);
-            builder.Property(x => x.ProjectId).HasField("_projectId").UsePropertyAccessMode(PropertyAccessMode.Field);
-            builder.Property(x => x.Code).HasField("_code").HasMaxLength(128).UsePropertyAccessMode(PropertyAccessMode.Field);
-            builder.Property(x => x.Barcode).HasField("_barcode").HasMaxLength(256).UsePropertyAccessMode(PropertyAccessMode.Field);
-            builder.Property(x => x.Icon).HasField("_icon").HasMaxLength(1024).UsePropertyAccessMode(PropertyAccessMode.Field);
-            builder.Property(x => x.Thumbnail).HasField("_thumbnail").HasMaxLength(1024).UsePropertyAccessMode(PropertyAccessMode.Field);
-            builder.Property(x => x.Title).HasField("_title").HasMaxLength(128).UsePropertyAccessMode(PropertyAccessMode.Field);
-            builder.Property(x => x.Descriptions).HasField("_descriptions").HasMaxLength(1024).UsePropertyAccessMode(PropertyAccessMode.Field);
-            builder.Property(x => x.NoAttachment).HasField("_noAttachment").UsePropertyAccessMode(PropertyAccessMode.Field);
-            builder.Property(x => x.Priority).HasField("_priority").UsePropertyAccessMode(PropertyAccessMode.Field);
+            builder.Property(x => x.ParentId).HasColumnName("ParentId").UsePropertyAccessMode(PropertyAccessMode.Field);
+            builder.Property(x => x.ProjectId).HasColumnName("ProjectId").UsePropertyAccessMode(PropertyAccessMode.Field);
+            builder.Property(x => x.Code).HasColumnName("Code").HasMaxLength(128).UsePropertyAccessMode(PropertyAccessMode.Field);
+            builder.Property(x => x.Barcode).HasColumnName("Barcode").HasMaxLength(256).UsePropertyAccessMode(PropertyAccessMode.Field);
+            builder.Property(x => x.Icon).HasColumnName("Icon").HasMaxLength(1024).UsePropertyAccessMode(PropertyAccessMode.Field);
+            builder.Property(x => x.Thumbnail).HasColumnName("Thumbnail").HasMaxLength(1024).UsePropertyAccessMode(PropertyAccessMode.Field);
+            builder.Property(x => x.Title).HasColumnName("Title").HasMaxLength(128).UsePropertyAccessMode(PropertyAccessMode.Field);
+            builder.Property(x => x.Descriptions).HasColumnName("Descriptions").HasMaxLength(1024).UsePropertyAccessMode(PropertyAccessMode.Field);
+            builder.Property(x => x.NoAttachment).HasColumnName("NoAttachment").UsePropertyAccessMode(PropertyAccessMode.Field);
+            builder.Property(x => x.Priority).HasColumnName("Priority").UsePropertyAccessMode(PropertyAccessMode.Field);
 
         }
     }

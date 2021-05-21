@@ -8,7 +8,7 @@ namespace OperationManager.CRUD.BLL.Infrastructure.Maps.BaseClasses
     {
         public QuanLyVanHanhProfile()
         {
-            CreateMap<DataSourceLoadOptionsBase, DataSourceLoadOptions>();
+            CreateMap<DataSourceLoadOptionsHelper, DataSourceLoadOptionsBase>();
             CreateMap<dynamic, dynamic>().ForAllMembers(opt => opt.Condition(srs => !srs.IsSourceValueNull));
         }
     }

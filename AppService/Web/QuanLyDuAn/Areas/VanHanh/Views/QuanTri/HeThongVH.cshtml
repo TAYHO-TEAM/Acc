@@ -6,9 +6,14 @@
 <div id="popup-main-upload"></div>
 <div id="popup-register"></div>
 <div class="row">
-    <div class="col-12">
+    <div class="col-4">
         <div id="container" class="elevation-2"></div>
-        <div id="container-detail" class="elevation-2"></div>
+    </div>
+    <div class="col-4">
+        <div id="container-defect" class="elevation-2"></div>
+    </div>
+    <div class="col-4">
+        <div id="container-maintenance" class="elevation-2"></div>
     </div>
 </div>
 
@@ -18,21 +23,212 @@
         var id = 1;
         ///-----------------------------READ ------------------------
 
-        var ACTION_READ = "Defective/";
+        var ACTION_ITEMS = "ConstructionItems/";
+        var ACTION_DEFECTIVE = "Defective/";
         var KEY = "id";
-        var WIDTH_CONTAINER = $("#container").width()/3;
+        var WIDTH_CONTAINER = $("#container").width() ;
         //..........................Get data -------------------------------------------------------------
 
-        let customStore = $DATASOURCE(ACTION_READ, KEY);
+        var customStore = $DATASOURCE(ACTION_ITEMS, KEY);
+        var customStore_Defect =(id)=> new DevExpress.data.DataSource({
+            store: $DATASOURCE(ACTION_DEFECTIVE, KEY),
+            filter: ["constructionItemsId", "=", 5]
+        });
+        var customStore_Check = $DATASOURCE(ACTION_ITEMS, KEY);
+
         //..........................  Load View -------------------------------------------------------------
         $(function () {
             loadData();
         });
-        let loadData = () => {
-            $("#container").dxDataGrid({
+        var loadData = () => $("#container").dxTreeList({
+            dataSource: customStore,
+            remoteOperations: true,
+            height: heightScreen,
+            rootValue: 0, parentIdExpr: "parentId", keyExpr: "id",
+            showBorders: false,
+            showColumnHeaders: false,
+            showColumnLines: false,
+            hoverStateEnabled: true,
+            showRowLines: true,
+            columnAutoWidth: true,
+            wordWrapEnabled: true,
+            rowAlternationEnabled: true,
+            autoExpandAll: false,
+            searchPanel: {
+                //highlightCaseSensitive: true,
+                //highlightSearchText: true,
+                //searchVisibleColumnsOnly: true,
+                visible: true
+            },
+            paging: { enabled: false },
+            onToolbarPreparing: function (e) {
+                var container = e.component;
+                e.toolbarOptions.items.unshift(
+                    {
+                        location: "before", widget: "dxButton",
+                        options: {
+                            icon: "refresh", type: "default",
+                            onClick: () => container.refresh()
+                        }
+                    })
+            },
+            onSelectionChanged: (e) => {
+                var $id = e.selectedRowKeys[0];
+                loadData_Defective($id);
+            },
+            selection: {
+                mode: "single"
+            },
+            columns: [
+               
+                {
+                    dataField: "title",
+                    dataType: "string",
+                    cellTemplate: (c, o) => {
+                        var rs = "<div class='d-flex'>\
+                                    <i style='margin: auto 0;' class='fa "+ o.data.icon + "' />\
+                                    <div class='ml-2 text-left'><b>"+ o.value + "</b>\
+                                    <em class='small ml-1 text-muted'>"+ o.data.descriptions + "</em></div><div>";
+                        c.append(rs);
+                    }
+                },
+                {
+                    dataField: "code",
+                    allowFiltering: true,
+                    caption: "Mã hạng muc",
+                    dataType: "string",
+                    alignment: "center",
+                    visible: false,
+                },// code
+                {
+                    dataField: "icon",
+                    allowFiltering: true,
+                    caption: "Biểu tượng",
+                    dataType: "string",
+                    alignment: "center",
+                    visible: false,
+                    lookup: {
+                        dataSource: listIcon,
+                        valueExpr: "value",
+                        //displayExpr: (e) => {
+                        //    var rs = "<div class='d-flex' >\<a><i class='fa " + e.text + "'></i></a>" + e.text +"</div>";
+                        //    return rs;
+                        //},
+                        displayExpr:"text",
+                    },
+                    cellTemplate: (c, o) => {
+                        c.append((o.value != null) ? o.text : null)
+                    },
+                    editorType: "dxSelectBox",
+                    editorOptions: {
+                        placeholder: "Vui lòng chọn...",
+                        itemTemplate: function (e) {
+                            var rs = "<div class=''><i class= 'fa " + e.value + "'></i> " + e.value + "</div>";
+                            return rs
+                        },
+                        //fieldTemplate: (e, c) => {
+                        //    var rs = "<div class='d-flex' >\<a><i class='fa " + e.text + "'></i></a>" + e.text + "</div>";
+                        //    c.append(rs);
+                        //},
+                    },
+                },// icon
+                {
+                    dataField: "descriptions",
+                    allowFiltering: true,
+                    caption: "Mô tả",
+                    dataType: "string",
+                    alignment: "center",
+                    visible: false,
+                },// descriptions
+                {
+                    dataField: "isActive",
+                    allowFiltering: true,
+                    caption: "Trạng thái",
+                    dataType: "string",
+                    alignment: "center",
+                    visible: false,
+                },// isActive
+                {
+                    dataField: "priority",
+                    visible: false,
+                    caption: "Ưu tiên",
+                    sortOrder: "asc"
+                },
+            ],
+            editing: {
+                allowAdding: true,
+                allowUpdating: true,
+                allowDeleting: true,
+                mode: "popup",
+                useIcons: true,
+                confirmDelete: true,
+                popup: {
+                    width: "30%",
+                    height: "45%",
+                    showTitle: true,
+                    title: "Thêm hạng mục vận hành",
+                    closeOnOutsideClick: false,
+                    showCloseButton: true,
+                },
+                form: {
+                    labelLocation: "left",
+                    itemType: "group",
+                    colCount: 12,
+                    showRequiredMark: true,
+                    requiredMark: "(*)",
+                    items: [
+                        {
+                            colSpan: 12,
+                            dataField: "code",
+                            label: { text: "Mã hạng mục" },
+                            editorOptions: {
+                                stylingMode: "filled",
+                                placeholder: "Vui lòng nhập...",
+                            },
+                        },
+                        {
+                            colSpan: 12,
+                            dataField: "icon",
+                            label: { text: "Biểu tượng" },
+                          
+                        },
+                        {
+                            colSpan: 12,
+                            dataField: "title",
+                            label: { text: "Tiêu đề" },
+                            editorOptions: {
+                                stylingMode: "filled",
+                                placeholder: "Vui lòng nhập...",
+                            },
+                        },
+                        {
+                            colSpan: 12,
+                            dataField: "descriptions",
+                            label: { text: "Mô tả" },
+                            editorOptions: {
+                                stylingMode: "filled",
+                                placeholder: "Vui lòng nhập...",
+                            },
+                        },
+                        {
+                            colSpan: 12,
+                            dataField: "isActive",
+                            label: { text: "Trạng thái" },
+                            editorType: "dxSwitch",
+                            editorOptions: {
+                                dataSource: listActiveStatus,
+                                valueExpr: "value",
+                                displayExpr: "text",
+                            },
+                        },
+                    ],
+                },
+            },
+        });
+        var loadData_Defective = (id) => {
+            $("#container-defect").dxDataGrid({
                 height: heightScreen,
-                dataSource: customStore,
-                repaintChangesOnly: true,
+                dataSource: customStore_Defect(id),
                 remoteOperations: true,
                 scrolling: { mode: "standard" },
                 showBorders: false,
@@ -42,18 +238,9 @@
                 showRowLines: true,
                 columnAutoWidth: true,
                 wordWrapEnabled: true,
-                rowAlternationEnabled: true,
-                filterRow: { visible: true },
-                summary: {
-                    groupItems: [{
-                        column: "pmIsVisible",
-                        summaryType: "count"
-                    },
-                    ]
-                },
                 paging: {
                     enabled: true,
-                    pageSize: 20
+                    pageSize: 10
                 },
                 pager: {
                     showPageSizeSelector: true,
@@ -61,34 +248,12 @@
                     showInfo: true,
                 },
                 searchPanel: {
-                    highlightCaseSensitive: true,
-                    highlightSearchText: true,
-                    searchVisibleColumnsOnly: true,
+                    //searchVisibleColumnsOnly: true,
                     visible: WIDTH_CONTAINER > 350
                 },
                 onToolbarPreparing: function (e) {
                     var container = e.component;
                     e.toolbarOptions.items.unshift(
-                        {
-                            location: "before",
-                            widget: "dxSelectBox",
-                            options: {
-                                dataSource: groupOwner,
-                                valueExpr: "ID",
-                                displayExpr: "Name",
-                                width: "100%",
-                                searchEnabled: true,
-                                searchMode: "contains",
-                                showClearButton: false,
-                                stylingMode: "filled",
-                                value: GROUPOWNERID,
-                                onValueChanged: function (data) {
-                                    GROUPOWNERID = data.value;
-                                    localStorage.setItem('groupOwnerIdCurrent', GROUPOWNERID);
-                                    loadData(GROUPOWNERID);
-                                },
-                            },
-                        },
                         {
                             location: "after",
                             widget: "dxButton",
@@ -104,6 +269,7 @@
                 onInitNewRow: (e) => {
                     e.data.isActive = true;
                     e.data.isVisible = true;
+                    e.data.constructionItemsId = id;
                 },
                 onRowUpdating: (e) => {
                     console.log(e);
@@ -120,22 +286,22 @@
                 selection: {
                     mode: "single"
                 },
-
                 onCellClick: function (e) {
                 },
                 columns: [
                     {
-                        dataField: "itemsId",
+                        dataField: "code",
                         allowFiltering: true,
                         allowEdit: false,
-                        caption: "Mã hạng mục",
+                        caption: "Mã lỗi",
                         dataType: "string",
                         alignment: "center",
                     },// SignCode
                     {
-                        dataField: "code",
+                        dataField: "constructionItemsId",
                         allowFiltering: true,
-                        caption: "Mã lỗi",
+                        visible : false,
+                        caption: "Hạng mục",
                         dataType: "string",
                         alignment: "center",
                     },// firstName
@@ -146,20 +312,21 @@
                         dataType: "string",
                         alignment: "center",
                     },// LastName
-                    {
-                        dataField: "type",
-                        allowFiltering: false,
-                        caption: "Kiểu lỗi",
-                        dataType: "string",
-                        alignment: "center",
-                    },// birthday
+                  
                     {
                         dataField: "description",
                         allowFiltering: true,
-                        caption: "Mô tả",
+                        caption: "Mô tả lỗi",
                         dataType: "string",
                         alignment: "center",
                     },// phone
+                    {
+                        dataField: "type",
+                        allowFiltering: true,
+                        caption: "Loại lỗi",
+                        dataType: "number",
+                        alignment: "center",
+                    },// birthday
                     {
                         dataField: "isActive",
                         allowFiltering: true,
@@ -211,8 +378,7 @@
                         ],
                     },
                 },
-            });
-        };
+            });};
 
     </script>
 }

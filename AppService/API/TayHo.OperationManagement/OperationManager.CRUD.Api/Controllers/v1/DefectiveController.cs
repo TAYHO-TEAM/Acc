@@ -18,6 +18,7 @@ namespace OperationManager.CRUD.Api.Controllers.v1
     public class DefectiveController : APIControllerBase
     {
         const string VALIDATION_ERROR = "The request failed due to a validation error";
+        const string Get = nameof(Get);
         public string nameEF = OperationManagerConstants.Defective_TABLENAME;
         protected readonly IQuanLyVanHanhRepository<Defective> _quanLyVanHanhRepository;
         public DefectiveController(IMapper mapper, IHttpContextAccessor httpContextAccessor, IQuanLyVanHanhRepository<Defective> quanLyVanHanhRepository) : base(mapper, httpContextAccessor)
@@ -29,9 +30,11 @@ namespace OperationManager.CRUD.Api.Controllers.v1
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        [HttpGet]
+        [HttpPost]
+        //[HttpGet]
+        [Route(Get)]
         [ProducesResponseType(typeof(VoidMethodResult), (int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> GetAll([FromQuery] DataSourceLoadOptions loadOptions)
+        public async Task<IActionResult> GetAll([FromForm] DataSourceLoadOptionsHelper loadOptions)
         {
             return Ok(await _quanLyVanHanhRepository.GetAll(_user, nameEF, loadOptions));
         }
@@ -40,7 +43,7 @@ namespace OperationManager.CRUD.Api.Controllers.v1
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        [HttpPost]
+        [Microsoft.AspNetCore.Mvc.HttpPost]
         [ProducesResponseType(typeof(VoidMethodResult), (int)HttpStatusCode.BadRequest)]
         //public async Task<IActionResult> Insert([FromBody] FormDataCollection form)
         public async Task<IActionResult> Post([FromForm]string values)
