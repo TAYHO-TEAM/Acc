@@ -31,12 +31,13 @@ namespace OperationManager.CRUD.Api.Controllers.v1
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        [HttpPost]
-        [Route(Get)]
+        //[HttpPost]
+        //[Route(Get)]
+        [HttpGet]
         [ProducesResponseType(typeof(VoidMethodResult), (int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> GetAll([FromForm]DataLoadOptionsHelper loadOptions)
+        public async Task<IActionResult> GetAll([FromQuery]DataLoadOptionsHelper loadOptions)
         {
-            return Ok(await _quanLyVanHanhRepository.GetAll(_user, nameEF, loadOptions));
+          return Ok(await _quanLyVanHanhRepository.GetAll(_user, nameEF, loadOptions));
         }
         /// <summary>
         /// Create  of Items.

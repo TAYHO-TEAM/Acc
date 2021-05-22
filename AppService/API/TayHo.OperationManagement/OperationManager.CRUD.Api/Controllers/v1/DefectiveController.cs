@@ -30,11 +30,11 @@ namespace OperationManager.CRUD.Api.Controllers.v1
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        [HttpPost]
-        //[HttpGet]
-        [Route(Get)]
+        //[HttpPost]
+        [HttpGet]
+        //[Route(Get)]
         [ProducesResponseType(typeof(VoidMethodResult), (int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> GetAll([FromForm] DataLoadOptionsHelper loadOptions)
+        public async Task<IActionResult> GetAll([FromQuery] DataLoadOptionsHelper loadOptions)
         {
             return Ok(await _quanLyVanHanhRepository.GetAll(_user, nameEF, loadOptions));
         }
@@ -43,7 +43,7 @@ namespace OperationManager.CRUD.Api.Controllers.v1
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        [Microsoft.AspNetCore.Mvc.HttpPost]
+        [HttpPost]
         [ProducesResponseType(typeof(VoidMethodResult), (int)HttpStatusCode.BadRequest)]
         //public async Task<IActionResult> Insert([FromBody] FormDataCollection form)
         public async Task<IActionResult> Post([FromForm]string values)

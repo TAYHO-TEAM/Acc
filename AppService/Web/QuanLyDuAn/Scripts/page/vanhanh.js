@@ -12,13 +12,13 @@ const ACTION_READ_ACCOUNTINFO = "/AccountInfo";
 const ACTION_CMD_REQUESTREGIST = "/RequestRegist";
 const ACTION_CMD_RESPONSEREGIST = "/ResponseRegist";
 var GROUPOWNERID = isNullOrEmpty(localStorage.getItem("groupOwnerIdCurrent")) ? parseInt(localStorage.getItem("groupOwnerIdCurrent")) : 0;
-var HOST = 'http://localhost:54323/api/v1/'; ///'https://api-om-crud.tayho.com.vn/api/v1/''http://localhost:54323/api/v1/
+var HOST = 'http://localhost:8088/api/v1/'; ///'https://api-om-crud.tayho.com.vn/api/v1/''http://localhost:54323/api/v1/
 
 var $DATASOURCE = (link, key) => {
     var url = HOST + link;
     return new DevExpress.data.AspNet.createStore({
         key: key ?? "id",
-        loadUrl: url+'Get/',
+        loadUrl: url,
         //loadUrl: function (loadOptions) {
         //    console.load(loadOptions);
         //    var deferred = $.Deferred();
@@ -46,7 +46,6 @@ var $DATASOURCE = (link, key) => {
         insertUrl: url,
         updateUrl: url,
         deleteUrl: url,
-        loadMethod: 'POST',
         onBeforeSend: (method, options) => {
             //options.xhrFields = { withCredentials: true };
             options.headers = {

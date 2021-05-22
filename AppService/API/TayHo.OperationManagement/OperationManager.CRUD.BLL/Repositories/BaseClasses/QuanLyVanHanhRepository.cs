@@ -91,7 +91,7 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
                     loadOptions.Filter.Clear();
                     loadOptions.Filter = filter;
                 }
-                return await DataSourceLoader.Load(objEF, loadOptions);
+                return await DataSourceLoader.LoadAsync(objEF, loadOptions);
             }
             else
             {
