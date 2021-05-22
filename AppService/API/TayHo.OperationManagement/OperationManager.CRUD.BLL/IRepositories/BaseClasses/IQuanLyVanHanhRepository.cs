@@ -9,7 +9,7 @@ namespace OperationManager.CRUD.BLL.IRepositories.BaseClasses
 {
     public interface IQuanLyVanHanhRepository<T> where T : DOBase
     {
-        Task<LoadResult> GetAll(int user, string nameEF, DataSourceLoadOptionsHelper dataSourceLoadOptionsBase);
+        Task<LoadResult> GetAll(int user, string nameEF, DataLoadOptionsHelper dataSourceLoadOptionsBase);
         Task<LoadResult> GetAll(int user, string nameEF, DataSourceLoadOptionsHelper dataSourceLoadOptionsBase, string searchOperation, string searchValue, List<string> searchExpr);
         Task<MethodResult<T>> Insert(int user, string nameEF, T Model);
         Task<MethodResult<T>> Update(int user, string nameEF, T model);

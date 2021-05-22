@@ -1,4 +1,5 @@
-﻿using DevExtreme.AspNet.Data;
+﻿using AutoMapper;
+using DevExtreme.AspNet.Data;
 using DevExtreme.AspNet.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -265,35 +266,47 @@ namespace Services.Common.DevExpress
         public static DataSourceLoadOptionsBase ConvertFromDataLoadOptionsHelper(DataLoadOptionsHelper dataLoadOptionsHelper)
         {
             DataSourceLoadOptionsBase dataSourceLoadOptionsBase = new DataSourceLoadOptionsBase();
-            dataSourceLoadOptionsBase.RequireTotalCount = dataLoadOptionsHelper.RequireTotalCount.HasValue ? (bool)dataLoadOptionsHelper.RequireTotalCount : false;
-            dataSourceLoadOptionsBase.RequireGroupCount = dataLoadOptionsHelper.RequireGroupCount.HasValue ? (bool)dataLoadOptionsHelper.RequireGroupCount : false;
-            dataSourceLoadOptionsBase.AllowAsyncOverSync = dataLoadOptionsHelper.AllowAsyncOverSync.HasValue ? (bool)dataLoadOptionsHelper.AllowAsyncOverSync : false;
-            dataSourceLoadOptionsBase.SortByPrimaryKey = dataLoadOptionsHelper.SortByPrimaryKey.HasValue ? (bool)dataLoadOptionsHelper.SortByPrimaryKey : false;
-            dataSourceLoadOptionsBase.IsCountQuery = dataLoadOptionsHelper.IsCountQuery.HasValue ? (bool)dataLoadOptionsHelper.IsCountQuery : false;
-            dataSourceLoadOptionsBase.IsSummaryQuery = dataLoadOptionsHelper.IsSummaryQuery.HasValue ? (bool)dataLoadOptionsHelper.IsSummaryQuery : false;
-            dataSourceLoadOptionsBase.RemoteSelect = dataLoadOptionsHelper.RemoteSelect.HasValue ? (bool)dataLoadOptionsHelper.RemoteSelect : false;
-            dataSourceLoadOptionsBase.RemoteGrouping = dataLoadOptionsHelper.RemoteGrouping.HasValue ? (bool)dataLoadOptionsHelper.RemoteGrouping : false;
-            dataSourceLoadOptionsBase.ExpandLinqSumType = dataLoadOptionsHelper.ExpandLinqSumType.HasValue ? (bool)dataLoadOptionsHelper.ExpandLinqSumType : false;
-            dataSourceLoadOptionsBase.StringToLower = dataLoadOptionsHelper.StringToLower.HasValue ? (bool)dataLoadOptionsHelper.StringToLower : false;
-            dataSourceLoadOptionsBase.PaginateViaPrimaryKey = dataLoadOptionsHelper.PaginateViaPrimaryKey.HasValue ? (bool)dataLoadOptionsHelper.PaginateViaPrimaryKey : false;
-            //dataSourceLoadOptionsBase.StringToLowerDefault = dataLoadOptionsHelper.StringToLowerDefault.HasValue ? (bool)dataLoadOptionsHelper.StringToLowerDefault : false;
-            dataSourceLoadOptionsBase.DefaultSort = dataLoadOptionsHelper.DefaultSort;
-            //dataSourceLoadOptionsBase.PrimaryKey = JsonConvert.DeserializeObject<string[]>(dataLoadOptionsHelper.PrimaryKey);
-            //dataSourceLoadOptionsBase.PreSelect = JsonConvert.DeserializeObject<string[]>(dataLoadOptionsHelper.PreSelect);
-            //dataSourceLoadOptionsBase.Select = JsonConvert.DeserializeObject<string[]>(dataLoadOptionsHelper.Select);
-            //dataSourceLoadOptionsBase.GroupSummary = JsonConvert.DeserializeObject<SummaryInfo[]>(dataLoadOptionsHelper.GroupSummary);
-            //dataSourceLoadOptionsBase.TotalSummary = JsonConvert.DeserializeObject<SummaryInfo[]>(dataLoadOptionsHelper.GroupSummary);
-            JsonConvert.PopulateObject(dataLoadOptionsHelper.PrimaryKey, dataSourceLoadOptionsBase.PrimaryKey);
-            JsonConvert.PopulateObject(dataLoadOptionsHelper.PreSelect, dataSourceLoadOptionsBase.PreSelect);
-            JsonConvert.PopulateObject(dataLoadOptionsHelper.Select, dataSourceLoadOptionsBase.Select);
-            JsonConvert.PopulateObject(dataLoadOptionsHelper.GroupSummary, dataSourceLoadOptionsBase.GroupSummary);
-            JsonConvert.PopulateObject(dataLoadOptionsHelper.TotalSummary, dataSourceLoadOptionsBase.TotalSummary);
-            JsonConvert.PopulateObject(dataLoadOptionsHelper.Group, dataSourceLoadOptionsBase.Group);
-            JsonConvert.PopulateObject(dataLoadOptionsHelper.Sort, dataSourceLoadOptionsBase.Sort);
-            JsonConvert.PopulateObject(dataLoadOptionsHelper.Filter, dataSourceLoadOptionsBase.Filter);
-            JsonConvert.PopulateObject(dataLoadOptionsHelper.Filter, dataSourceLoadOptionsBase.Filter);
+            var temp = JsonConvert.SerializeObject(dataLoadOptionsHelper);
+            JsonConvert.PopulateObject(temp, dataSourceLoadOptionsBase);
+            //dataSourceLoadOptionsBase.RequireTotalCount = dataLoadOptionsHelper.RequireTotalCount.HasValue ? (bool)dataLoadOptionsHelper.RequireTotalCount : false;
+            //dataSourceLoadOptionsBase.RequireGroupCount = dataLoadOptionsHelper.RequireGroupCount.HasValue ? (bool)dataLoadOptionsHelper.RequireGroupCount : false;
+            //dataSourceLoadOptionsBase.AllowAsyncOverSync = dataLoadOptionsHelper.AllowAsyncOverSync.HasValue ? (bool)dataLoadOptionsHelper.AllowAsyncOverSync : false;
+            //dataSourceLoadOptionsBase.SortByPrimaryKey = dataLoadOptionsHelper.SortByPrimaryKey.HasValue ? (bool)dataLoadOptionsHelper.SortByPrimaryKey : false;
+            //dataSourceLoadOptionsBase.IsCountQuery = dataLoadOptionsHelper.IsCountQuery.HasValue ? (bool)dataLoadOptionsHelper.IsCountQuery : false;
+            //dataSourceLoadOptionsBase.IsSummaryQuery = dataLoadOptionsHelper.IsSummaryQuery.HasValue ? (bool)dataLoadOptionsHelper.IsSummaryQuery : false;
+            //dataSourceLoadOptionsBase.RemoteSelect = dataLoadOptionsHelper.RemoteSelect.HasValue ? (bool)dataLoadOptionsHelper.RemoteSelect : false;
+            //dataSourceLoadOptionsBase.RemoteGrouping = dataLoadOptionsHelper.RemoteGrouping.HasValue ? (bool)dataLoadOptionsHelper.RemoteGrouping : false;
+            //dataSourceLoadOptionsBase.ExpandLinqSumType = dataLoadOptionsHelper.ExpandLinqSumType.HasValue ? (bool)dataLoadOptionsHelper.ExpandLinqSumType : false;
+            //dataSourceLoadOptionsBase.StringToLower = dataLoadOptionsHelper.StringToLower.HasValue ? (bool)dataLoadOptionsHelper.StringToLower : false;
+            //dataSourceLoadOptionsBase.PaginateViaPrimaryKey = dataLoadOptionsHelper.PaginateViaPrimaryKey.HasValue ? (bool)dataLoadOptionsHelper.PaginateViaPrimaryKey : false;
+            ////dataSourceLoadOptionsBase.StringToLowerDefault = dataLoadOptionsHelper.StringToLowerDefault.HasValue ? (bool)dataLoadOptionsHelper.StringToLowerDefault : false;
+            //dataSourceLoadOptionsBase.DefaultSort = dataLoadOptionsHelper.DefaultSort;
+            ////dataSourceLoadOptionsBase.PrimaryKey = JsonConvert.DeserializeObject<string[]>(dataLoadOptionsHelper.PrimaryKey);
+            ////dataSourceLoadOptionsBase.PreSelect = JsonConvert.DeserializeObject<string[]>(dataLoadOptionsHelper.PreSelect);
+            ////dataSourceLoadOptionsBase.Select = JsonConvert.DeserializeObject<string[]>(dataLoadOptionsHelper.Select);
+            ////dataSourceLoadOptionsBase.GroupSummary = JsonConvert.DeserializeObject<SummaryInfo[]>(dataLoadOptionsHelper.GroupSummary);
+            ////dataSourceLoadOptionsBase.TotalSummary = JsonConvert.DeserializeObject<SummaryInfo[]>(dataLoadOptionsHelper.GroupSummary);
+            //JsonConvert.PopulateObject(dataLoadOptionsHelper.PrimaryKey, dataSourceLoadOptionsBase.PrimaryKey);
+            //JsonConvert.PopulateObject(dataLoadOptionsHelper.PreSelect, dataSourceLoadOptionsBase.PreSelect);
+            //JsonConvert.PopulateObject(dataLoadOptionsHelper.Select, dataSourceLoadOptionsBase.Select);
+            //JsonConvert.PopulateObject(dataLoadOptionsHelper.GroupSummary, dataSourceLoadOptionsBase.GroupSummary);
+            //JsonConvert.PopulateObject(dataLoadOptionsHelper.TotalSummary, dataSourceLoadOptionsBase.TotalSummary);
+            //JsonConvert.PopulateObject(dataLoadOptionsHelper.Group, dataSourceLoadOptionsBase.Group);
+            //JsonConvert.PopulateObject(dataLoadOptionsHelper.Sort, dataSourceLoadOptionsBase.Sort);
+            //JsonConvert.PopulateObject(dataLoadOptionsHelper.Filter, dataSourceLoadOptionsBase.Filter);
+            //JsonConvert.PopulateObject(dataLoadOptionsHelper.Filter, dataSourceLoadOptionsBase.Filter);
 
             return dataSourceLoadOptionsBase;
+        }
+        public static void mappingDataSourceLoading(DataLoadOptionsHelper dataSourceLoadOptionsBase)
+        {
+            var configuration = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<DataSourceLoadOptions, DataSourceLoadOptionsHelper>();
+            });
+            configuration.AssertConfigurationIsValid();
+            var mapper = configuration.CreateMapper();
+            var loadOptions = mapper.Map<DataSourceLoadOptions>(dataSourceLoadOptionsBase);
         }
     }
 

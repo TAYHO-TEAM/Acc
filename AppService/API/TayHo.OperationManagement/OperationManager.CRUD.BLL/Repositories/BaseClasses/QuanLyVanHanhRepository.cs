@@ -32,7 +32,7 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
             _dbContext = dbContext;
             //_dbContext.ChangeTracker.AutoDetectChangesEnabled = false;
         }
-        public async Task<LoadResult> GetAll(int user, string nameEF, DataSourceLoadOptionsHelper dataSourceLoadOptionsBase)
+        public async Task<LoadResult> GetAll(int user, string nameEF, DataLoadOptionsHelper dataSourceLoadOptionsBase)
         {
             int actionType = 1; //// 1 : Read 
             List<int?> getActionId = new List<int?>();
@@ -44,13 +44,8 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
             //        && (c.IsDelete == false || !c.IsDelete.HasValue))
             //.Select(x => x.ActionId).ToList();
             //ConvertHelper.CopyNonNullProperties(loadOptions, dataSourceLoadOptionsBase);
-            var configuration = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<DataSourceLoadOptions,DataSourceLoadOptionsHelper > ();
-            });
-            configuration.AssertConfigurationIsValid();
-            var mapper = configuration.CreateMapper();
-            var loadOptions = mapper.Map<DataSourceLoadOptions>(dataSourceLoadOptionsBase);
+
+            var loadOptions = DevexpressHelperFunction.ConvertFromDataLoadOptionsHelper(dataSourceLoadOptionsBase);
 
             bool checkPermit = true;// _dbContext.GroupAccount
                                     //.Join(_dbContext.GroupActionPermistion, x => x.GroupId, y => y.GroupId, (y, x) => new { y, x })
