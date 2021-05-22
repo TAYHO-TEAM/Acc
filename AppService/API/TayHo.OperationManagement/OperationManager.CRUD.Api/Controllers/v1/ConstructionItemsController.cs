@@ -43,7 +43,7 @@ namespace OperationManager.CRUD.Api.Controllers.v1
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        [Microsoft.AspNetCore.Mvc.HttpPost]
+        [HttpPost]
         [ProducesResponseType(typeof(VoidMethodResult), (int)HttpStatusCode.BadRequest)]
         //public async Task<IActionResult> Insert([FromBody] FormDataCollection form)
         public async Task<IActionResult> Post([FromForm]string values)
@@ -66,7 +66,7 @@ namespace OperationManager.CRUD.Api.Controllers.v1
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        [Microsoft.AspNetCore.Mvc.HttpPut]
+        [HttpPut]
         [ProducesResponseType(typeof(VoidMethodResult), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Put([FromForm] int key, [FromForm] string values)
         {
@@ -88,7 +88,7 @@ namespace OperationManager.CRUD.Api.Controllers.v1
         /// </summary>
         /// <param name="Items"></param>
         /// <returns></returns>
-        [Microsoft.AspNetCore.Mvc.HttpDelete]
+        [HttpDelete]
         [ProducesResponseType(typeof(VoidMethodResult), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Delete([FromForm] int key)
         {
