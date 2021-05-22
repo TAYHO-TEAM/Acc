@@ -13,5 +13,9 @@ namespace QuanLyDuAn.Areas.VanHanh.Controllers
         {
             return View();
         }
+        public ActionResult YeuCau()
+        {
+            return View();
+        }
     }
 }

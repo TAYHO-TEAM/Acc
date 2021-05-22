@@ -17,7 +17,7 @@
     <script>
         var id = 1;
         ///-----------------------------READ ------------------------
-       
+
         var ACTION_FEEDBACK = "DefectFeedback/";
         var ACTION_REALESTATE = "RealEstate/";
         var ACTION_DEFECTIVE = "Defective/";
@@ -25,7 +25,7 @@
         var WIDTH_CONTAINER = $("#container").width();
         //..........................Get data -------------------------------------------------------------
 
-        let customStore = $DATASOURCE(ACTION_READ, KEY);
+        let customStore = $DATASOURCE(ACTION_FEEDBACK, KEY);
         let customStore_Defective = $DATASOURCEGET(ACTION_DEFECTIVE, KEY);
         let customStore_RealEstate = $DATASOURCEGET(ACTION_REALESTATE, KEY);
         //..........................  Load View -------------------------------------------------------------
@@ -54,7 +54,7 @@
                         summaryType: "count"
                     },
                     ]
-                }, 
+                },
                 paging: {
                     enabled: true,
                     pageSize: 20
@@ -220,7 +220,7 @@
                         dataType: "string",
                         alignment: "center",
                         visible: true,
-                       
+
                     },// realEstateId
                     {
                         dataField: "customerId",
@@ -256,11 +256,11 @@
                             valueExpr: "id",
                             displayExpr: "name",
                             placeholder: "Vui lòng chọn...",
-                            searchExpr: ['name', 'sescription'],
+                            searchExpr: ['name', 'description'],
                             searchEnabled: true,
                             showClearButton: true,
                             itemTemplate: function (data) {
-                                return $("<div>").append($("<b>").append(data.userName).addClass("mr-1"));
+                                return $("<div>").append($("<b>").append(data.name).addClass("mr-1").append($("<em>").append(data.code).addClass("small ml-1 text-muted")));
                             },
                         },
                     },// defectiveId
@@ -296,7 +296,7 @@
                         alignment: "center",
                         visible: true,
                     },// code
-                   
+
                 ],
                 editing: {
                     allowAdding: true,

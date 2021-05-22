@@ -2515,6 +2515,7 @@
     <Content Include="Areas\VanHanh\Views\QuanTri\Defect.cshtml" />
     <Content Include="Areas\VanHanh\Views\QuanTri\_CanHoKhachHang.cshtml" />
     <Content Include="Areas\VanHanh\Views\QuanTri\HeThongVH.cshtml" />
+    <Content Include="Areas\VanHanh\Views\BaoHanh\YeuCau.cshtml" />
     <None Include="packages.config" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
