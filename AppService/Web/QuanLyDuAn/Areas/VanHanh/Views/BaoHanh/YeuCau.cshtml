@@ -21,6 +21,7 @@
         var ACTION_FEEDBACK = "DefectFeedback/";
         var ACTION_REALESTATE = "RealEstate/";
         var ACTION_DEFECTIVE = "Defective/";
+        var ACTION_CUSTOMERINFO = "CustomerInfo/";
         var KEY = "id";
         var WIDTH_CONTAINER = $("#container").width();
         //..........................Get data -------------------------------------------------------------
@@ -28,6 +29,7 @@
         let customStore = $DATASOURCE(ACTION_FEEDBACK, KEY);
         let customStore_Defective = $DATASOURCEGET(ACTION_DEFECTIVE, KEY);
         let customStore_RealEstate = $DATASOURCEGET(ACTION_REALESTATE, KEY);
+        let customStore_CustomerInfo = $DATASOURCEGET(ACTION_CUSTOMERINFO, KEY);
         //..........................  Load View -------------------------------------------------------------
         $(function () {
             loadData();
@@ -220,7 +222,23 @@
                         dataType: "string",
                         alignment: "center",
                         visible: true,
-
+                        lookup: {
+                            dataSource: customStore_RealEstate,
+                            valueExpr: "id",
+                            displayExpr: "name",
+                        },
+                        editorOptions: {
+                            dataSource: customStore_RealEstate,
+                            valueExpr: "id",
+                            displayExpr: "name",
+                            placeholder: "Vui lòng chọn...",
+                            searchExpr: ['name', 'description'],
+                            searchEnabled: true,
+                            showClearButton: true,
+                            itemTemplate: function (data) {
+                                return $("<div>").append($("<b>").append(data.code).addClass("mr-1"));
+                            },
+                        },
                     },// realEstateId
                     {
                         dataField: "customerId",
@@ -229,6 +247,23 @@
                         dataType: "string",
                         alignment: "center",
                         visible: true,
+                        lookup: {
+                            dataSource: customStore_CustomerInfo,
+                            valueExpr: "id",
+                            displayExpr: "name",
+                        },
+                        editorOptions: {
+                            dataSource: customStore_CustomerInfo,
+                            valueExpr: "id",
+                            displayExpr: "name",
+                            placeholder: "Vui lòng chọn...",
+                            searchExpr: ['name', 'description'],
+                            searchEnabled: true,
+                            showClearButton: true,
+                            itemTemplate: function (data) {
+                                return $("<div>").append($("<b>").append(data.code).addClass("mr-1"));
+                            },
+                        },
                     },// customerId
                     {
                         dataField: "fullName",
@@ -281,7 +316,7 @@
                         visible: true,
                     },// code
                     {
-                        dataField: "NoAttachment",
+                        dataField: "noAttachment",
                         allowFiltering: true,
                         caption: "Căn hộ",
                         dataType: "string",
