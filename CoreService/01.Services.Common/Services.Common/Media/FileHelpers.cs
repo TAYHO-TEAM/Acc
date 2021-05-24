@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Net.Http.Headers;
+using Services.Common.Options;
 
 namespace Services.Common.Media
 {
@@ -826,5 +827,38 @@ namespace Services.Common.Media
                 {".zip", "application/x-zip-compressed"},
             };
         }
+
+        public static async Task<Tuple<string, string, string, string, string, string>> SaveFile(IFormFile file, string Folder, string filename, MediaOptions _mediaOptions)
+        {
+            if (file == null) return default;
+            var fileType = new FileType();
+            try
+            {
+                //var uploadPath = Path.Combine(_env.ContentRootPath, "/Uploads");
+                //Directory.CreateDirectory(uploadPath);
+                //var provider = new MultipartFormDataStreamProvider(uploadPath);
+                var target = Path.Combine(_mediaOptions.LocalUploadUrl + _mediaOptions.FolderForWeb + Folder);
+                Directory.CreateDirectory(target);
+                filename = string.Format("{0}-{1}{2}"
+                                , Path.GetFileNameWithoutExtension(filename)
+                                , Guid.NewGuid().ToString("N")
+                                , (Path.GetExtension(ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName).ToString().Trim('"')));
+                var fileTypeVerifyResult = await fileType.ProcessFormFile(file, _mediaOptions.PermittedExtensions, _mediaOptions.SizeLimit);
+                if (fileTypeVerifyResult.Error.HasValue)
+                    throw new Exception("Error Files:" + filename.ToString());
+                if (file.Length <= 0) return default;
+                var filePath = Path.Combine(target, filename);
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+                return new Tuple<string, string, string, string, string, string>(filename, _mediaOptions.Host, _mediaOptions.FolderForWeb + Folder, filePath,(Path.GetExtension(ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName).ToString().Trim('"')), file.FileName);
+            }
+            catch
+            {
+                return default;
+            }
+        }
+  
     }
 }

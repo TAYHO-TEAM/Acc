@@ -48,10 +48,17 @@ namespace OperationManager.CRUD.Api.Controllers.v1
             var methodResult = new MethodResult<object>();
             try
             {
+                
                 if (!ModelState.IsValid) throw new CommandHandlerException(new ErrorResult());
                 var model = new DefectFeedback();
                 JsonConvert.PopulateObject(values, model);
-                return Ok(await _quanLyVanHanhRepository.Insert(_user, nameEF, model));
+                IFormFileCollection files = Request.Form.Files;
+                //if (files != null)
+                //{
+                //    model.setFile(files);
+                //}
+
+                return Ok(await _quanLyVanHanhRepository.Insert(_user, nameEF, model, files));
             }
             catch (Exception ex)
             {

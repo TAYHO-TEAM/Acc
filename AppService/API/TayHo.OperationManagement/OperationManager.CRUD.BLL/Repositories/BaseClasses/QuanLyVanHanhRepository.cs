@@ -2,17 +2,21 @@
 using DevExtreme.AspNet.Data;
 using DevExtreme.AspNet.Data.ResponseModel;
 using DevExtreme.AspNet.Mvc;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using OperationManager.CRUD.BLL.Extensions;
 using OperationManager.CRUD.BLL.IRepositories.BaseClasses;
 using OperationManager.CRUD.DAL.DBContext;
+using OperationManager.CRUD.DAL.DTO;
 using OperationManager.CRUD.DAL.DTO.BaseClasses;
 using Services.Common.APIs.Cmd.EF;
 using Services.Common.APIs.Cmd.EF.Extensions;
 using Services.Common.DevExpress;
 using Services.Common.DomainObjects;
 using Services.Common.DomainObjects.Exceptions;
+using Services.Common.Media;
+using Services.Common.Options;
 using Services.Common.Utilities;
 using System;
 using System.Collections;
@@ -61,7 +65,7 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
                 {
                     if (loadOptions.Filter.Count > 0)
                     {
-                        var _filter= DevexpressHelperFunction.ConvertFilter(loadOptions.Filter);
+                        var _filter = DevexpressHelperFunction.ConvertFilter(loadOptions.Filter);
                         loadOptions.Filter.Clear();
                         loadOptions.Filter = _filter;
                     }
@@ -97,7 +101,6 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
             {
                 return new LoadResult();
             }
-
         }
         public async Task<LoadResult> GetAll(int user, string nameEF, DataSourceLoadOptionsHelper dataSourceLoadOptionsBase, string searchOperation, string searchValue, List<string> searchExpr)
         {
@@ -170,8 +173,9 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
             }
 
         }
-        public async Task<MethodResult<T>> Insert(int user, string nameEF, T Model)
+        public async Task<MethodResult<T>> Insert(int user, string nameEF, T Model, IFormFileCollection formFiles = null)
         {
+
             int _function = 2;
             var methodResult = new MethodResult<T>();
             if (!await CheckPermission(user, _function))
@@ -188,6 +192,13 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
                 objEF.Add(Model);
                 //var a =_dbContext.Add(Model).Entity;
                 await _dbContext.SaveChangesAsync();
+                if (formFiles != null)
+                {
+                    if (formFiles.Count > 0)
+                    {
+                        UploadFile(formFiles, Model.Id, nameEF, "",user);
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -212,7 +223,7 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
             }
             else if (existsModel != null)
             {
-                ConvertHelper.CopyNonNullProperties(model,existsModel);
+                ConvertHelper.CopyNonNullProperties(model, existsModel);
                 existsModel.IsModify = true;
                 existsModel.ModifyBy = user;
                 existsModel.UpdateDate = DateTime.Now;
@@ -285,7 +296,6 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
             }
 
         }
-     
         private dynamic ConvertEF(string nameEntity)
         {
             dynamic orders = null;
@@ -327,6 +337,9 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
                 case nameof(_dbContext.RealEstate):
                     orders = _dbContext.RealEstate;
                     break;
+                case nameof(_dbContext.FilesAttachment):
+                    orders = _dbContext.FilesAttachment;
+                    break;
                 case nameof(_dbContext.TestApi):
                     orders = _dbContext.TestApi;
                     break;
@@ -336,5 +349,40 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
             }
             return orders;
         }
+        public async void UploadFile(IFormFileCollection request, int ownerById = 0, string tableName = "", string code = "", int userid = 0)
+        {
+            var methodResult = new MethodResult<FilesAttachment>();
+            MediaOptions _mediaOptions = new MediaOptions();
+            // ghi file vào server và lưu log file dữ liệu
+            if (request != null && request.Count > 0)
+            {
+                foreach (var i in request)
+                {
+                    var result = await FileHelpers.SaveFile(i, tableName, code, _mediaOptions);
+                    FilesAttachment filesAttachment = new FilesAttachment();
+                    filesAttachment.OwnerById = ownerById;
+                    filesAttachment.OwnerByTable = tableName;
+                    filesAttachment.Code = code;
+                    filesAttachment.FileName = result.Item1;
+                    filesAttachment.Host = result.Item2;
+                    filesAttachment.Url = result.Item3;
+                    filesAttachment.Direct = result.Item4;
+                    filesAttachment.Tail = result.Item5;
+                    filesAttachment.DisplayName = result.Item6;
+                    filesAttachment.CreateBy = userid;
+                    filesAttachment.Status = 0;
+                    filesAttachment.IsActive = true;
+                    filesAttachment.IsVisible = true;
+                    filesAttachment.IsDelete = false;
+                    await _dbContext.FilesAttachment.AddAsync(filesAttachment).ConfigureAwait(false);
+                    await _dbContext.SaveChangesAsync();
+                }
+            }
+            else
+            {
+                methodResult.AddErrorMessage("Lỗi xứ lý");
+            }
+        }
     }
+
 }

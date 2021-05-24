@@ -24,6 +24,7 @@ namespace OperationManager.CRUD.DAL.DBContext
         public DbSet<LogEvent> LogEvent { get; set; }
         public DbSet<Project> Project { get; set; }
         public DbSet<RealEstate> RealEstate { get; set; }
+        public DbSet<FilesAttachment> FilesAttachment { get; set; }
         public DbSet<TestApi> TestApi { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

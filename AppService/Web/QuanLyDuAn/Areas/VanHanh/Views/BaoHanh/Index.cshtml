@@ -21,13 +21,15 @@
         var ACTION_FEEDBACK = "DefectFeedback/";
         var ACTION_REALESTATE = "RealEstate/";
         var ACTION_DEFECTIVE = "Defective/";
+        var ACTION_CUSTOMERINFO = "CustomerInfo/";
         var KEY = "id";
         var WIDTH_CONTAINER = $("#container").width();
         //..........................Get data -------------------------------------------------------------
 
-        let customStore = $DATASOURCE(ACTION_READ, KEY);
-        let customStore_Defective = $DATASOURCEGET(ACTION_DEFECTIVE, KEY);
-        let customStore_RealEstate = $DATASOURCEGET(ACTION_REALESTATE, KEY);
+        var customStore = $DATASOURCE(ACTION_READ, KEY);
+        var customStore_Defective = $DATASOURCEGET(ACTION_DEFECTIVE, KEY);
+        var customStore_RealEstate = $DATASOURCEGET(ACTION_REALESTATE, KEY);
+        var customStore_CustomerInfo = $DATASOURCEGET(ACTION_CUSTOMERINFO, KEY);
         //..........................  Load View -------------------------------------------------------------
         $(function () {
             loadData();

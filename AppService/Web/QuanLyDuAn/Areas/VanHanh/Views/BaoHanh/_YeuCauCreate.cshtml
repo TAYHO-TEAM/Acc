@@ -9,7 +9,6 @@
         , "phone": ""
         , "note": ""
         , "noAttachment": ""
-        , "calender": ""
     };
     var fdata = new FormData();
     $(document).ready(function () {
@@ -22,50 +21,49 @@
                     colCount: 12,
                     items: [
                         {
-                            colSpan: 6,
-                            dataField: "documentTypeId",
-                            label: { text: "Loại tài liệu" },
+                            colSpan: 4,
+                            dataField: "realEstateId",
+                            label: { text: "Mã căn hộ" },
                             lookup: {
-                                dataSource: customStore_DocumetnType,
+                                dataSource: customStore_RealEstate,
                                 valueExpr: "id",
-                                displayExpr: "title",
+                                displayExpr: "code",
                             },
                             editorType: "dxSelectBox",
                             editorOptions: {
                                 stylingMode: "filled",
                                 //value: formData["documentTypeId"],
-                                dataSource: customStore_DocumetnType,
+                                dataSource: customStore_RealEstate,
                                 valueExpr: "id",
-                                displayExpr: "title",
+                                displayExpr: "code",
                                 elementAttr: {
-                                    id: "elementDocumentTypeId",
+                                    id: "elementRealEstateId",
                                 },
                                 onValueChanged: function (e) {
+                                    //if (e.value === 7) {
+                                    //    formInstance.itemOption("address", "visible", false);
+                                    //    formInstance.itemOption("calen", "visible", false);
+                                    //}
+                                    //else {
 
-                                    if (e.value === 7) {
-                                        formInstance.itemOption("address", "visible", false);
-                                        formInstance.itemOption("calen", "visible", false);
-                                    }
-                                    else {
-
-                                        formInstance.itemOption("address", "visible", true);
-                                        formInstance.itemOption("calen", "visible", true);
-                                    }
-                                    fileUploader();
+                                    //    formInstance.itemOption("address", "visible", true);
+                                    //    formInstance.itemOption("calen", "visible", true);
+                                    //}
+                                    //fileUploader();
                                 },
                             },
                             validationRules: [{ type: "required" }],
                         },
                         {
-                            colSpan: 6,
-                            dataField: "title",
-                            label: { text: "Tiêu đề" },
+                            colSpan: 4,
+                            dataField: "customerId",
+                            label: { text: "mã khách hàng" },
                             editorType: "dxTextBox",
                             editorOptions: {
                                 stylingMode: "filled",
                                 value: formData["title"],
                                 placeholder: "Vui lòng nhập...",
-                                dataSource: customStore_HangMuc,
+                                dataSource: customStore_CustomerInfo,
                                 valueExpr: "id",
                                 displayExpr: "title",
                                 elementAttr: {
@@ -75,8 +73,42 @@
                             validationRules: [{ type: "required" }],
                         },
                         {
+                            colSpan: 4,
+                            dataField: "defectiveId",
+                            label: { text: "Mã lỗi" },
+                            lookup: {
+                                dataSource: customStore_Defective,
+                                valueExpr: "id",
+                                displayExpr: "code",
+                            },
+                            editorType: "dxSelectBox",
+                            editorOptions: {
+                                stylingMode: "filled",
+                                //value: formData["documentTypeId"],
+                                dataSource: customStore_Defective,
+                                valueExpr: "id",
+                                displayExpr: "code",
+                                elementAttr: {
+                                    id: "elementDefectiveId",
+                                },
+                                onValueChanged: function (e) {
+                                    //if (e.value === 7) {
+                                    //    formInstance.itemOption("address", "visible", false);
+                                    //    formInstance.itemOption("calen", "visible", false);
+                                    //}
+                                    //else {
+
+                                    //    formInstance.itemOption("address", "visible", true);
+                                    //    formInstance.itemOption("calen", "visible", true);
+                                    //}
+                                    //fileUploader();
+                                },
+                            },
+                            validationRules: [{ type: "required" }],
+                        },
+                        {
                             colSpan: 12,
-                            dataField: "description",
+                            dataField: "note",
                             label: { text: "Mô tả" },
                             editorType: "dxTextArea",
                             editorOptions: {
@@ -86,48 +118,7 @@
                             },
                         },
                         {
-                            colSpan: 6,
-                            dataField: "tagWorkItem",
-                            label: { text: "Nhóm hạng mục" },
-                            editorType: "dxTagBox",
-                            editorOptions: {
-                                stylingMode: "filled",
-                                dataSource: customStore_HangMuc,
-                                displayExpr: "title",
-                                valueExpr: "title",
-                                maxDisplayedTags: 3,
-                                showSelectionControls: true,
-                                itemTemplate: function (data) {
-                                    return "<div>" + data.title + "</div>";
-                                }
-                            },
-                        },
-                        {
-                            colSpan: 6,
-                            dataField: "location",
-                            name: "address",
-                            label: { text: "Địa điểm" },
-                            editorOptions: {
-                                stylingMode: "filled",
-                                placeholder: "Vui lòng nhập...",
-                            }
-                        },
-                        {
-                            colSpan: 6,
-                            dataField: "calendar",
-                            name: "calen",
-                            label: { text: "Lịch dự kiến" },
-                            editorType: "dxDateBox",
-                            editorOptions: {
-                                stylingMode: "filled",
-                                pickerType: "rollers",
-                                type: "datetime",
-                                invalidDateMessage: "Sai định dạng ngày tháng",
-                                placeholder: "Vui lòng chọn...",
-                            },
-                        },
-                        {
-                            colSpan: 6,
+                            colSpan: 12,
                             template: '<span class="dx-field-item-label-text font-bold">Các tập tin đính kèm</span><div class="file-uploader" id="file-uploader"></div>',
                         },
                     ]
@@ -197,28 +188,28 @@
             }
 
             var deferred = $.Deferred();
-            $.ajax({
-                type: "POST",
-                enctype: 'multipart/form-data',
-                url: "/ThongTin/PhatHanh/Create",
-                data: fdata,
-                processData: false,
-                contentType: false,
-                cache: false,
-                success: function (rs) {
-                    deferred.resolve(true);
-                    loadingPanel.hide();
-                    DevExpress.ui.notify(rs.result, rs.status, 3000);
-                    if (rs.status == "success") {
-                        $("#popup-register").dxPopup('instance').hide();
-                        loadAccount(rs.id);
-                    }
-                },
-                error: function (xhr, textStatus, errorThrown) {
-                    loadingPanel.hide();
-                    DevExpress.ui.notify("Có lỗi xảy ra: " + errorThrown, "error", 3000);
-                }
-            });
+            //$.ajax({
+            //    type: "POST",
+            //    enctype: 'multipart/form-data',
+            //    url: "/ThongTin/PhatHanh/Create",
+            //    data: fdata,
+            //    processData: false,
+            //    contentType: false,
+            //    cache: false,
+            //    success: function (rs) {
+            //        deferred.resolve(true);
+            //        loadingPanel.hide();
+            //        DevExpress.ui.notify(rs.result, rs.status, 3000);
+            //        if (rs.status == "success") {
+            //            $("#popup-register").dxPopup('instance').hide();
+            //            loadAccount(rs.id);
+            //        }
+            //    },
+            //    error: function (xhr, textStatus, errorThrown) {
+            //        loadingPanel.hide();
+            //        DevExpress.ui.notify("Có lỗi xảy ra: " + errorThrown, "error", 3000);
+            //    }
+            //});
             //e.preventDefault();
             return deferred.promise();
         }

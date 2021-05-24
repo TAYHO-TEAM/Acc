@@ -39,6 +39,7 @@ namespace OperationManager.CRUD.BLL.Extensions
             services.AddScoped<IQuanLyVanHanhRepository<Project>, QuanLyVanHanhRepository<Project>>();
             services.AddScoped<IQuanLyVanHanhRepository<RealEstate>, QuanLyVanHanhRepository<RealEstate>>();
             services.AddScoped<IQuanLyVanHanhRepository<TestApi>, QuanLyVanHanhRepository<TestApi>>();
+            services.AddScoped<IQuanLyVanHanhRepository<FilesAttachment>, QuanLyVanHanhRepository<FilesAttachment>>();
             return services;
         }
         #endregion private functions

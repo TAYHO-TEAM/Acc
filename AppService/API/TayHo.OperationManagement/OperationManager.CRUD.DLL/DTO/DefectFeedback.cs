@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http;
 using OperationManager.CRUD.DAL.DTO.BaseClasses;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,14 @@ namespace OperationManager.CRUD.DAL.DTO
         public string Phone { get; set; }
         public string Note { get; set; }
         public int? NoAttachment { get; set; }
-
+        private IFormFileCollection _formFiles { get; set; }
+        public void setFile(IFormFileCollection FormFiles)
+        {
+            _formFiles = FormFiles;
+        }
+        public IFormFileCollection getFile()
+        {
+            return _formFiles;
+        }
     }
 }
