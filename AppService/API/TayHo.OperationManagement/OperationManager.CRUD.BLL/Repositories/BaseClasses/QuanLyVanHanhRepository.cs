@@ -4,6 +4,7 @@ using DevExtreme.AspNet.Data.ResponseModel;
 using DevExtreme.AspNet.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using OperationManager.CRUD.BLL.Extensions;
 using OperationManager.CRUD.BLL.IRepositories.BaseClasses;
@@ -31,9 +32,11 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
     public class QuanLyVanHanhRepository<T> : IQuanLyVanHanhRepository<T> where T : DOBase
     {
         protected readonly QuanLyVanHanhContext _dbContext;
-        public QuanLyVanHanhRepository(QuanLyVanHanhContext dbContext)
+        protected readonly MediaOptions _mediaOptions;
+        public QuanLyVanHanhRepository(QuanLyVanHanhContext dbContext, IOptionsSnapshot<MediaOptions> snapshotOptionsAccessor)
         {
             _dbContext = dbContext;
+            _mediaOptions = snapshotOptionsAccessor.Value;
             //_dbContext.ChangeTracker.AutoDetectChangesEnabled = false;
         }
         public async Task<LoadResult> GetAll(int user, string nameEF, DataLoadOptionsHelper dataSourceLoadOptionsBase)
@@ -196,7 +199,7 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
                 {
                     if (formFiles.Count > 0)
                     {
-                        UploadFile(formFiles, Model.Id, nameEF, "",user);
+                        UploadFile(formFiles, Model.Id, nameEF, "", user);
                     }
                 }
             }
@@ -352,7 +355,6 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
         public async void UploadFile(IFormFileCollection request, int ownerById = 0, string tableName = "", string code = "", int userid = 0)
         {
             var methodResult = new MethodResult<FilesAttachment>();
-            MediaOptions _mediaOptions = new MediaOptions();
             // ghi file vào server và lưu log file dữ liệu
             if (request != null && request.Count > 0)
             {
@@ -369,13 +371,14 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
                     filesAttachment.Direct = result.Item4;
                     filesAttachment.Tail = result.Item5;
                     filesAttachment.DisplayName = result.Item6;
-                    filesAttachment.CreateBy = userid;
+                    filesAttachment.SetCreate(userid);
                     filesAttachment.Status = 0;
                     filesAttachment.IsActive = true;
                     filesAttachment.IsVisible = true;
                     filesAttachment.IsDelete = false;
-                    await _dbContext.FilesAttachment.AddAsync(filesAttachment).ConfigureAwait(false);
-                    await _dbContext.SaveChangesAsync();
+                    DbSet<FilesAttachment> objEF = ConvertEF("FilesAttachment");
+                    objEF.Add(filesAttachment);
+                    _dbContext.SaveChanges();
                 }
             }
             else

@@ -43,15 +43,16 @@ namespace OperationManager.CRUD.Api.Controllers.v1
         [HttpPost]
         [ProducesResponseType(typeof(VoidMethodResult), (int)HttpStatusCode.BadRequest)]
         //public async Task<IActionResult> Insert([FromBody] FormDataCollection form)
-        public async Task<IActionResult> Post([FromForm]string values)
-      {
+        public async Task<IActionResult> Post([FromForm] string values)
+        {
             var methodResult = new MethodResult<object>();
             try
             {
-                
+
                 if (!ModelState.IsValid) throw new CommandHandlerException(new ErrorResult());
                 var model = new DefectFeedback();
-                JsonConvert.PopulateObject(values, model);
+                if (!string.IsNullOrEmpty(values))
+                    JsonConvert.PopulateObject(values, model);
                 IFormFileCollection files = Request.Form.Files;
                 //if (files != null)
                 //{

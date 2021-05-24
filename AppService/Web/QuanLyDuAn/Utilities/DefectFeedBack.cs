@@ -1,13 +1,14 @@
-using Microsoft.AspNetCore.Http;
-using OperationManager.CRUD.DAL.DTO.BaseClasses;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
+using System.Web;
 
-namespace OperationManager.CRUD.DAL.DTO
+namespace QuanLyDuAn.Utilities
 {
-    public class DefectFeedback : DOBase
+    public class DefectFeedBack
     {
+
+        //public int? Id { get; set; }
         public int? RealEstateId { get; set; }
         public int? CustomerId { get; set; }
         public int? DefectiveId { get; set; }
@@ -15,6 +16,7 @@ namespace OperationManager.CRUD.DAL.DTO
         public string Phone { get; set; }
         public string Note { get; set; }
         public int? NoAttachment { get; set; }
-     
+        public string token { get; set; }
+
     }
 }

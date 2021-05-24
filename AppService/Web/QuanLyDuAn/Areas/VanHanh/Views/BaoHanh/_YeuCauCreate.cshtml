@@ -107,6 +107,28 @@
                             validationRules: [{ type: "required" }],
                         },
                         {
+                            colSpan: 6,
+                            dataField: "fullName",
+                            label: { text: "Họ tên khách hàng" },
+                            editorType: "dxTextBox",
+                            editorOptions: {
+                                stylingMode: "filled",
+                                placeholder: "Vui lòng nhập...",
+                                value: formData["description"],
+                            },
+                        },
+                        {
+                            colSpan: 6,
+                            dataField: "phone",
+                            label: { text: "Số điện thoại" },
+                            editorType: "dxTextBox",
+                            editorOptions: {
+                                stylingMode: "filled",
+                                placeholder: "Vui lòng nhập...",
+                                value: formData["description"],
+                            },
+                        },
+                        {
                             colSpan: 12,
                             dataField: "note",
                             label: { text: "Mô tả" },
@@ -169,15 +191,15 @@
                 }
 
             });
-            fdata.append('projectId', PROJECTID);
-            fdata.append('token', UserCurrentInfo.accessToken);
-
+            //fdata.append('projectId', PROJECTID);
+            //fdata.append('token', UserCurrentInfo.accessToken);
             var files = $("#file-uploader").dxFileUploader("instance").option("value");
             if (files.length > 0) {
                 $.each(files, function (key, value) {
                     fdata.append(files[key].name, files[key]);
                 });
             }
+            fdata.append('token', UserCurrentInfo.accessToken);
             //else {
             //    DevExpress.ui.notify("Vui lòng chọn file đính kèm", "error", 3000);
             //    e.preventDefault();
@@ -186,30 +208,31 @@
             for (var pair of fdata.entries()) {
                 console.log(pair[0] + ', ' + pair[1]);
             }
-
+            var values = JSON.stringify(fdata);
+            console.log(values);
             var deferred = $.Deferred();
-            //$.ajax({
-            //    type: "POST",
-            //    enctype: 'multipart/form-data',
-            //    url: "/ThongTin/PhatHanh/Create",
-            //    data: fdata,
-            //    processData: false,
-            //    contentType: false,
-            //    cache: false,
-            //    success: function (rs) {
-            //        deferred.resolve(true);
-            //        loadingPanel.hide();
-            //        DevExpress.ui.notify(rs.result, rs.status, 3000);
-            //        if (rs.status == "success") {
-            //            $("#popup-register").dxPopup('instance').hide();
-            //            loadAccount(rs.id);
-            //        }
-            //    },
-            //    error: function (xhr, textStatus, errorThrown) {
-            //        loadingPanel.hide();
-            //        DevExpress.ui.notify("Có lỗi xảy ra: " + errorThrown, "error", 3000);
-            //    }
-            //});
+            $.ajax({
+                type: "POST",
+                enctype: 'multipart/form-data',
+                url: "/VanHanh/BaoHanh/YeuCauCreate",
+                data: fdata,
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function (rs) {
+                    deferred.resolve(true);
+                    loadingPanel.hide();
+                    DevExpress.ui.notify(rs.result, rs.status, 3000);
+                    if (rs.status == "success") {
+                        $("#popup-register").dxPopup('instance').hide();
+                        loadAccount(rs.id);
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    loadingPanel.hide();
+                    DevExpress.ui.notify("Có lỗi xảy ra: " + errorThrown, "error", 3000);
+                }
+            });
             //e.preventDefault();
             return deferred.promise();
         }

@@ -156,7 +156,9 @@ var ajax_read = (name, loadOptions) => {
     };
     var deferred = $.Deferred();
     $.ajax({
-        headers: header, url: URL_API_PM_READ_All, dataType: "json", type: "POST",
+        headers: header,
+        url: URL_API_PM_READ_All,
+        dataType: "json", type: "POST",
         data: JSON.stringify(data),
         success: function (result) {
             deferred.resolve(result.data, {
