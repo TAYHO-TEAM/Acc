@@ -10,6 +10,8 @@ namespace OperationManager.CRUD.DAL.DTO
         public int? RealEstateId { get; set; }
         public int? CustomerId { get; set; }
         public int? DefectiveId { get; set; }
+        public string FullName { get; set; }
+        public string Phone { get; set; }
         public string Note { get; set; }
         public int? NoAttachment { get; set; }
 
