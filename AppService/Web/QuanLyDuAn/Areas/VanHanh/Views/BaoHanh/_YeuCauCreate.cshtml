@@ -189,7 +189,6 @@
                 else {
                     fdata.append(key, value);
                 }
-
             });
             //fdata.append('projectId', PROJECTID);
             //fdata.append('token', UserCurrentInfo.accessToken);
@@ -199,6 +198,7 @@
                     fdata.append(files[key].name, files[key]);
                 });
             }
+            //fdata.append('status', 10);
             fdata.append('token', UserCurrentInfo.accessToken);
             //else {
             //    DevExpress.ui.notify("Vui lòng chọn file đính kèm", "error", 3000);
@@ -208,8 +208,7 @@
             for (var pair of fdata.entries()) {
                 console.log(pair[0] + ', ' + pair[1]);
             }
-            var values = JSON.stringify(fdata);
-            console.log(values);
+            //var values = JSON.stringify(fdata);
             var deferred = $.Deferred();
             $.ajax({
                 type: "POST",
@@ -225,7 +224,6 @@
                     DevExpress.ui.notify(rs.result, rs.status, 3000);
                     if (rs.status == "success") {
                         $("#popup-register").dxPopup('instance').hide();
-                        loadAccount(rs.id);
                     }
                 },
                 error: function (xhr, textStatus, errorThrown) {
