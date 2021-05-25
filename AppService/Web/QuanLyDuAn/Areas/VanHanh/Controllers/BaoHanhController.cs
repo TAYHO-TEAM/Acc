@@ -28,6 +28,10 @@ namespace QuanLyDuAn.Areas.VanHanh.Controllers
         {
             return PartialView();
         }
+        public ActionResult _YeuCauDetail(int id)
+        {
+            return PartialView(id);
+        }
         [HttpPost, ValidateInput(false)]
         public JsonResult YeuCauCreate(DefectFeedBack requestOBJ)
         {
@@ -65,8 +69,50 @@ namespace QuanLyDuAn.Areas.VanHanh.Controllers
                 client.BaseAddress = new Uri(ConfigurationSettings.AppSettings["omCRUD"].ToString());//http://localhost:50999/,https://api-pm-cmd.tayho.com.vn/
                 client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
                 using (HttpResponseMessage response = client.PostAsync("api/v1/DefectFeedback/", mFormData).Result)
+                {
+                    if (response.StatusCode != HttpStatusCode.OK)
+                    {
+                        var err = response.Content.ReadAsStringAsync().Result;
+                        return Json(new { status = "error", result = err });
+                    }
+                }
+            }
+            return Json(new { status = "success", result = "Đã lưu thông tin yêu cầu thành công" });
+        }
+        [HttpPost, ValidateInput(false)]
+        public JsonResult YeuCauUpdate(DefectFeedBack requestOBJ)
+        {
+            MultipartFormDataContent mFormData = new MultipartFormDataContent();
+            HttpFileCollectionBase listFile = HttpContext.Request.Files;
+            string token = requestOBJ.token;
+            var values = new JavaScriptSerializer().Serialize(requestOBJ);
+            if (!string.IsNullOrEmpty(requestOBJ.Id.ToString())) mFormData.Add(new StringContent(requestOBJ.Id.ToString()), "key");
+            if (!string.IsNullOrEmpty(values)) mFormData.Add(new StringContent(values), nameof(values));
+            if (listFile.Count > 0)
+            {
+                int i = 1;
+                foreach (string file in listFile)
+                {
+                    HttpPostedFileBase fileBase = Request.Files[file];
+                    byte[] fileData = null;
+                    using (var binaryReader = new BinaryReader(fileBase.InputStream))
+                    {
+                        fileData = binaryReader.ReadBytes(fileBase.ContentLength);
+                    }
+                    ByteArrayContent b = new ByteArrayContent(fileData);
+                    b.Headers.ContentType = MediaTypeHeaderValue.Parse("multipart/form-data");
+                    //byte[] binData = b.ReadBytes(fileBase.ContentLength);
+                    mFormData.Add(b, nameof(file) + i++.ToString(), fileBase.FileName);
+                }
+
+            }
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(ConfigurationSettings.AppSettings["omCRUD"].ToString());//http://localhost:50999/,https://api-pm-cmd.tayho.com.vn/
+                client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                using (HttpResponseMessage response = client.PutAsync("api/v1/DefectFeedback/", mFormData).Result)
                 {
                     if (response.StatusCode != HttpStatusCode.OK)
                     {

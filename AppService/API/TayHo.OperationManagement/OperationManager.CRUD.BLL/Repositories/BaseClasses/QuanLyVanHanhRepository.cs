@@ -24,6 +24,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 
 
@@ -33,10 +34,12 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
     {
         protected readonly QuanLyVanHanhContext _dbContext;
         protected readonly MediaOptions _mediaOptions;
+        private CancellationToken _cancellationToken = default;
         public QuanLyVanHanhRepository(QuanLyVanHanhContext dbContext, IOptionsSnapshot<MediaOptions> snapshotOptionsAccessor)
         {
             _dbContext = dbContext;
             _mediaOptions = snapshotOptionsAccessor.Value;
+            //_cancellationToken = cancellationToken;
             //_dbContext.ChangeTracker.AutoDetectChangesEnabled = false;
         }
         public async Task<LoadResult> GetAll(int user, string nameEF, DataLoadOptionsHelper dataSourceLoadOptionsBase)
@@ -178,7 +181,7 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
         }
         public async Task<MethodResult<T>> Insert(int user, string nameEF, T Model, IFormFileCollection formFiles = null)
         {
-
+        
             int _function = 2;
             var methodResult = new MethodResult<T>();
             if (!await CheckPermission(user, _function))
@@ -194,14 +197,16 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
                 Model.CreateBy = user;
                 objEF.Add(Model);
                 //var a =_dbContext.Add(Model).Entity;
-                await _dbContext.SaveChangesAsync();
+                await _dbContext.SaveChangesAndDispatchEventsAsync(_cancellationToken).ConfigureAwait(false);
                 if (formFiles != null)
                 {
                     if (formFiles.Count > 0)
                     {
-                        UploadFile(formFiles, Model.Id, nameEF, "", user);
+                       await UploadFile(formFiles, Model.Id, nameEF, "", user );
                     }
                 }
+              
+
             }
             catch (Exception ex)
             {
@@ -211,7 +216,7 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
             methodResult.Result = Model;
             return methodResult;
         }
-        public async Task<MethodResult<T>> Update(int user, string nameEF, T model)
+        public async Task<MethodResult<T>> Update(int user, string nameEF, T model, IFormFileCollection formFiles = null)
         {
             int _function = 3;
             var methodResult = new MethodResult<T>();
@@ -232,7 +237,14 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
                 existsModel.UpdateDate = DateTime.Now;
                 existsModel.UpdateDateUTC = DateTime.UtcNow;
                 objEF.Update(existsModel);
-                await _dbContext.SaveChangesAsync();
+                await _dbContext.SaveChangesAndDispatchEventsAsync(_cancellationToken).ConfigureAwait(false);
+                if (formFiles != null)
+                {
+                    if (formFiles.Count > 0)
+                    {
+                        await UploadFile(formFiles, existsModel.Id, nameEF, "", user);
+                    }
+                }
                 methodResult.Result = existsModel;
             }
             else
@@ -259,7 +271,6 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
             }
             else if (model != null && model.IsDelete != true)
             {
-
                 model.IsModify = true;
                 model.ModifyBy = user;
                 model.UpdateDate = DateTime.Now;
@@ -291,13 +302,11 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
                 IList<ResultCheck> result = await _sprocRepository.GetStoredProcedure("sp_DataBase_Log_CMD")
                             .WithSqlParams(parameter)
                             .ExecuteStoredProcedureAsync<ResultCheck>();
-
             }
             catch
             {
 
             }
-
         }
         private dynamic ConvertEF(string nameEntity)
         {
@@ -352,40 +361,53 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
             }
             return orders;
         }
-        public async void UploadFile(IFormFileCollection request, int ownerById = 0, string tableName = "", string code = "", int userid = 0)
+        public async Task UploadFile(IFormFileCollection request, int ownerById = 0, string tableName = "", string code = "", int userid = 0)
         {
             var methodResult = new MethodResult<FilesAttachment>();
-            // ghi file vào server và lưu log file dữ liệu
+            List<FilesAttachment> filesAttachments = new List<FilesAttachment>();
+            // ghi file vào server và lưu log file dữ liệu List<FilesAttachment>
             if (request != null && request.Count > 0)
             {
                 foreach (var i in request)
                 {
                     var result = await FileHelpers.SaveFile(i, tableName, code, _mediaOptions);
-                    FilesAttachment filesAttachment = new FilesAttachment();
-                    filesAttachment.OwnerById = ownerById;
-                    filesAttachment.OwnerByTable = tableName;
-                    filesAttachment.Code = code;
-                    filesAttachment.FileName = result.Item1;
-                    filesAttachment.Host = result.Item2;
-                    filesAttachment.Url = result.Item3;
-                    filesAttachment.Direct = result.Item4;
-                    filesAttachment.Tail = result.Item5;
-                    filesAttachment.DisplayName = result.Item6;
-                    filesAttachment.SetCreate(userid);
-                    filesAttachment.Status = 0;
-                    filesAttachment.IsActive = true;
-                    filesAttachment.IsVisible = true;
-                    filesAttachment.IsDelete = false;
-                    DbSet<FilesAttachment> objEF = ConvertEF("FilesAttachment");
-                    objEF.Add(filesAttachment);
-                    _dbContext.SaveChanges();
+                    if(result!= null)
+                    {
+                        FilesAttachment filesAttachment = new FilesAttachment();
+                        filesAttachment.OwnerById = ownerById;
+                        filesAttachment.OwnerByTable = tableName;
+                        filesAttachment.Code = code;
+                        filesAttachment.FileName = result.Item1;
+                        filesAttachment.Host = result.Item2;
+                        filesAttachment.Url = result.Item3;
+                        filesAttachment.Direct = result.Item4;
+                        filesAttachment.Tail = result.Item5;
+                        filesAttachment.DisplayName = result.Item6;
+                        filesAttachment.SetCreate(userid);
+                        filesAttachment.Status = 0;
+                        filesAttachment.IsActive = true;
+                        filesAttachment.IsVisible = true;
+                        filesAttachment.IsDelete = false;
+                        filesAttachments.Add(filesAttachment);
+                    }    
+                    //_dbContext.FilesAttachment.Add(filesAttachment);
+                    //await _dbContext.SaveChangesAsync().ConfigureAwait(false);
                 }
+                if(filesAttachments.Count>0)
+                {
+                    //await Insert(userid, "FilesAttachment", filesAttachments).ConfigureAwait(false);
+                    await _dbContext.FilesAttachment.AddRangeAsync(filesAttachments);
+                    await _dbContext.SaveChangesAsync().ConfigureAwait(false);
+                    //await _dbContext.SaveChangesAndDispatchEventsAsync(_cancellationToken);
+                }
+
             }
             else
             {
                 methodResult.AddErrorMessage("Lỗi xứ lý");
             }
         }
+        
     }
 
 }

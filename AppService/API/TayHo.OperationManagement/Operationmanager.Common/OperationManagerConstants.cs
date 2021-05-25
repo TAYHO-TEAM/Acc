@@ -16,6 +16,7 @@
         public const string LogEvent_TABLENAME = "LogEvent";
         public const string Project_TABLENAME = "Project";
         public const string RealEstate_TABLENAME = "RealEstate";
+        public const string FilesAttachment_TABLENAME = "FilesAttachment";
         public const string TestApi_TABLENAME = "TestApi";
         public const string WarrantyRequest_TABLENAME = "WarrantyRequest";
     }

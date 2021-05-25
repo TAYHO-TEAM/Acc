@@ -2519,6 +2519,7 @@
     <Content Include="Areas\VanHanh\Views\QuanTri\HeThongVH.cshtml" />
     <Content Include="Areas\VanHanh\Views\BaoHanh\YeuCau.cshtml" />
     <Content Include="Areas\VanHanh\Views\BaoHanh\_YeuCauCreate.cshtml" />
+    <Content Include="Areas\VanHanh\Views\BaoHanh\_YeuCauDetail.cshtml" />
     <None Include="packages.config" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Home\About.cshtml" />

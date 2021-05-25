@@ -9,7 +9,7 @@ namespace OperationManager.CRUD.DAL.EFConfig
     {
         public void Configure(EntityTypeBuilder<FilesAttachment> builder)
         {
-            builder.ToTable(OperationManagerConstants.DefectFeedback_TABLENAME);
+            builder.ToTable(OperationManagerConstants.FilesAttachment_TABLENAME);
             builder.Property(x => x.OwnerById).HasColumnName("OwnerById").UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.OwnerByTable).HasColumnName("OwnerByTable").HasMaxLength(128).UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.Code).HasColumnName("Code").HasMaxLength(32).UsePropertyAccessMode(PropertyAccessMode.Field);

@@ -8,7 +8,7 @@ namespace QuanLyDuAn.Utilities
     public class DefectFeedBack
     {
 
-        //public int? Id { get; set; }
+        public int? Id { get; set; }
         public int? RealEstateId { get; set; }
         public int? CustomerId { get; set; }
         public int? DefectiveId { get; set; }

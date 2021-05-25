@@ -13,7 +13,7 @@ namespace OperationManager.CRUD.BLL.IRepositories.BaseClasses
         Task<LoadResult> GetAll(int user, string nameEF, DataLoadOptionsHelper dataSourceLoadOptionsBase);
         Task<LoadResult> GetAll(int user, string nameEF, DataSourceLoadOptionsHelper dataSourceLoadOptionsBase, string searchOperation, string searchValue, List<string> searchExpr);
         Task<MethodResult<T>> Insert(int user, string nameEF, T Model, IFormFileCollection formFile = null);
-        Task<MethodResult<T>> Update(int user, string nameEF, T model);
+        Task<MethodResult<T>> Update(int user, string nameEF, T model, IFormFileCollection formFile = null);
         Task<MethodResult<T>> Delete(int user, string nameEF, int key);
     }
 }
