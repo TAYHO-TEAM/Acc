@@ -79,8 +79,11 @@ namespace OperationManager.CRUD.Api.Controllers.v1
             {
                 DefectFeedback model = new DefectFeedback();
                 JsonConvert.PopulateObject(values, model);
+                if (!string.IsNullOrEmpty(values))
+                    JsonConvert.PopulateObject(values, model);
+                IFormFileCollection files = Request.Form.Files;
                 model.Id = key;
-                return Ok(await _quanLyVanHanhRepository.Update(_user, nameEF, model));
+                return Ok(await _quanLyVanHanhRepository.Update(_user, nameEF, model, files));
             }
             catch (Exception ex)
             {

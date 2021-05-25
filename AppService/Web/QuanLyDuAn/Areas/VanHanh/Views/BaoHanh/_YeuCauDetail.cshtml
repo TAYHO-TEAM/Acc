@@ -13,7 +13,8 @@
     };
     var fdata = new FormData();
     $(document).ready(function () {
-        customStore_Detail(@Model).load().done((rs) => rs.length==0?null: $("#form-regist").dxForm({
+        customStore_Detail(@Model).load()
+            .done((rs) => rs.length == 0 ? null : $("#form-regist").dxForm({
             formData: rs[0],
             labelLocation: "top",
             items: [
@@ -118,6 +119,7 @@
                                 value: formData["description"],
                             },
                         },
+
                         {
                             colSpan: 6,
                             dataField: "phone",
@@ -140,11 +142,40 @@
                                 value: formData["description"],
                             },
                         },
-                        {
-                            colSpan: 12,
-                            template: '<span class="dx-field-item-label-text font-bold">Các tập tin đính kèm</span><div class="file-uploader" id="file-uploader"></div>',
-                        },
+
                     ]
+                },
+                {
+                    name: "order",
+                    visible: true,
+                    template: function (data, $itemElement) {
+                        $("<div id='dataGrid'>")
+                            .appendTo($itemElement)
+                            .dxDataGrid({
+                                dataSource: customStore_Attachment(@Model),
+                                columns: [
+                                    {
+                                        dataField: "displayName",
+                                        caption: "Tên File ",
+                                        dataType: "string",
+                                    },
+                                    {
+                                        dataField: "createDate",
+                                        caption: "Ngày tạo",
+                                        dataType: "date",
+                                    },
+                                ],
+                                editing: {
+                                    allowAdding: false,
+                                    allowDeleting: true,
+                                    allowUpdating: false,
+                                    mode: "row",
+                                    useIcons: true,
+                                    confirmDelete: true,
+                                    popup: null,
+                                },
+                            });
+                    }
                 },
                 {
                     itemType: "simple",
@@ -153,11 +184,11 @@
                     editorOptions: {
                         stylingMode: "filled",
                         dataSource: customStore_Attachment(@Model),
-                        height: '100%',
-                        width: '100%',
+                        height: 100,
+                        width: 'auto',
                         slideshowDelay: 1500,
                         itemTemplate: function (data) {
-                            return $("<img />").attr({ "src": (data.host + data.url + "/" + data.fileName), onerror: ImgError(this), "style":"maxheight: 300px; height : 100%" });
+                            return $("<img />").attr({ "src": (data.host + data.url + "/" + data.fileName), onerror: ImgError(this), "style": "max-height: 200px; height : auto ;width : fit-content ;margin: auto;" });
                         },
                         onItemClick: function (value) {
                         }
@@ -165,21 +196,55 @@
 
                 },
                 {
-                    itemType: "button",
-                    horizontalAlignment: "center",
-                    buttonOptions: {
-                        text: "Lưu lại",
-                        icon: "fa fa-save",
-                        type: "success",
-                        useSubmitBehavior: true,
-                        elementAttr: {
-                            id: "submit",
+                    colSpan: 12,
+                    template: '<span class="dx-field-item-label-text font-bold">Các tập tin đính kèm</span><div class="file-uploader" id="file-uploader"></div>',
+                },
+                {
+                    itemType: "group",
+                    name: "button-action",
+
+                    colCount: 12,
+                    items: [
+                        {
+                            colSpan: 6,
+                            itemType: "button",
+                            horizontalAlignment: "right",
+                            buttonOptions: {
+                                text: "Lưu lại",
+                                icon: "fa fa-save",
+                                type: "success",
+                                useSubmitBehavior: true,
+                                elementAttr: {
+                                    id: "submit",
+                                },
+                                editorOptions: {
+                                    stylingMode: "filled",
+                                }
+                            }
+                        },
+                        {
+                            colSpan: 6,
+                            itemType: "button",
+                            horizontalAlignment: "left",
+                            buttonOptions: {
+                                text: "Xác nhận lỗi",
+                                icon: "fas fa-check-circle",
+                                type: "default",
+                                useSubmitBehavior: true,
+                                elementAttr: {
+                                    id: "accept",
+                                },
+                                editorOptions: {
+                                    stylingMode: "filled",
+                                }
+                            }
                         }
-                    }
+                    ],
                 },
             ],
-        }).dxForm("instance"));
-        fileUploader();
+            }).dxForm("instance"))
+            .done((rs) => rs.length == 0 ? null : fileUploader());
+       
     });
     $(document).on('submit', '#form-regist', function (e) {
         //$(this).prop("disabled", true);
@@ -223,16 +288,11 @@
             //    //    e.preventDefault();
             //    //    return false;
             //    //};
-            //for (var pair of fdata.entries()) {
-            //    console.log(pair[0] + ', ' + pair[1]);
-            //}
-            //    var values = JSON.stringify(fdata);
-            //    console.log(values);
             var deferred = $.Deferred();
             $.ajax({
                 type: "POST",
                 enctype: 'multipart/form-data',
-                url: "/VanHanh/BaoHanh/YeuCauCreate",
+                url: "/VanHanh/BaoHanh/YeuCauUpdate",
                 data: fdata,
                 processData: false,
                 contentType: false,
@@ -255,7 +315,6 @@
             return deferred.promise();
         }
     });
-
     var fileUploader = () => $("#file-uploader").dxFileUploader({
         selectButtonText: "Chọn tập tin...",
         labelText: "Hoặc kéo thả vào đây",
