@@ -8,6 +8,7 @@ namespace OperationManager.CRUD.DAL.DTO
 {
     public class DefectFeedback : DOBase
     {
+        public int? ConstructionItemsId { get; set; }
         public int? RealEstateId { get; set; }
         public int? CustomerId { get; set; }
         public int? DefectiveId { get; set; }

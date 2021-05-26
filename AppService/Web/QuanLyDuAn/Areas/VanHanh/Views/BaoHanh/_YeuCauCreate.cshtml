@@ -1,6 +1,10 @@
 ﻿<form id="form-regist" action="#" method="POST" enctype="application/json">
 </form>
 <script>
+    var customStore_RealEstate_Filter = (id) => new DevExpress.data.DataSource({
+        store: $DATASOURCEGET(ACTION_REALESTATE, KEY),
+        filter: ["constructionItemsId", "=", id]
+    });
     var formData = {
         "customerId": ""
         , "realEstateId": ""
@@ -25,7 +29,7 @@
                             dataField: "realEstateId",
                             label: { text: "Mã căn hộ" },
                             lookup: {
-                                dataSource: customStore_RealEstate,
+                                dataSource: customStore_RealEstate_Filter(ITEMSID),
                                 valueExpr: "id",
                                 displayExpr: "code",
                             },
@@ -33,7 +37,7 @@
                             editorOptions: {
                                 stylingMode: "filled",
                                 //value: formData["documentTypeId"],
-                                dataSource: customStore_RealEstate,
+                                dataSource: customStore_RealEstate_Filter(ITEMSID),
                                 valueExpr: "id",
                                 displayExpr: "code",
                                 elementAttr: {
@@ -198,7 +202,7 @@
                     fdata.append(files[key].name, files[key]);
                 });
             }
-            //fdata.append('status', 10);
+            fdata.append('ConstructionItemsId', ITEMSID); 
             fdata.append('token', UserCurrentInfo.accessToken);
             //else {
             //    DevExpress.ui.notify("Vui lòng chọn file đính kèm", "error", 3000);

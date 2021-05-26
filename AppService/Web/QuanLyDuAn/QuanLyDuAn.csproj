@@ -205,6 +205,7 @@
     <Compile Include="Utilities\ContractorInfoOBJ - Copy.cs" />
     <Compile Include="Utilities\ContractorInfoOBJ.cs" />
     <Compile Include="Utilities\CongViecOBJ.cs" />
+    <Compile Include="Utilities\DefectFix.cs" />
     <Compile Include="Utilities\DefectFeedBack.cs" />
     <Compile Include="Utilities\DocumentReleasedOBJ.cs" />
     <Compile Include="Utilities\DynamicOBJ.cs" />
@@ -2520,6 +2521,7 @@
     <Content Include="Areas\VanHanh\Views\BaoHanh\YeuCau.cshtml" />
     <Content Include="Areas\VanHanh\Views\BaoHanh\_YeuCauCreate.cshtml" />
     <Content Include="Areas\VanHanh\Views\BaoHanh\_YeuCauDetail.cshtml" />
+    <Content Include="Areas\VanHanh\Views\BaoHanh\_DefectFix.cshtml" />
     <None Include="packages.config" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Home\About.cshtml" />

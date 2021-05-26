@@ -12,6 +12,7 @@ const ACTION_READ_ACCOUNTINFO = "/AccountInfo";
 const ACTION_CMD_REQUESTREGIST = "/RequestRegist";
 const ACTION_CMD_RESPONSEREGIST = "/ResponseRegist";
 var GROUPOWNERID = isNullOrEmpty(localStorage.getItem("groupOwnerIdCurrent")) ? parseInt(localStorage.getItem("groupOwnerIdCurrent")) : 0;
+var ITEMSID = isNullOrEmpty(localStorage.getItem("ItemsIdCurrent")) ? parseInt(localStorage.getItem("ItemsIdCurrent")) : 1;
 var HOST = 'http://api-om-crud.tayho.com.vn/api/v1/'; ///'https://api-om-crud.tayho.com.vn/api/v1/''http://localhost:54323/api/v1/http://localhost:8088/api/v1/
 
 var $DATASOURCE = (link, key) => {
@@ -914,4 +915,34 @@ const Sex = [
 var listActiveStatus = [
     { value: true, text: "Hoạt động", color: "success", icon: 'fa fa-check-circle' },
     { value: false, text: "Tạm dừng", color: "danger", icon: 'fa fa-minus-circle' },
+];
+const statusDefect = [
+    {
+        ID: 0,
+        Name: 'Chờ'
+    },
+    {
+        ID: 10,
+        Name: 'Chờ xác nhận'
+    },
+    {
+        ID: 11,
+        Name: 'Đã xác nhận'
+    },
+    {
+        ID: 20,
+        Name: 'Chờ khắc phục'
+    },
+    {
+        ID: 21,
+        Name: 'Đã khắc phục'
+    },
+    {
+        ID: 30,
+        Name: 'Chờ nghiệm thu'
+    },
+    {
+        ID: 31,
+        Name: 'Đã nghiệm thu'
+    },
 ];

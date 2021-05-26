@@ -1,4 +1,5 @@
-﻿using QuanLyDuAn.Utilities;
+﻿using Newtonsoft.Json.Linq;
+using QuanLyDuAn.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -36,15 +37,26 @@ namespace QuanLyDuAn.Areas.VanHanh.Controllers
         public JsonResult YeuCauCreate(DefectFeedBack requestOBJ)
         {
             MultipartFormDataContent mFormData = new MultipartFormDataContent();
-            HttpFileCollectionBase listFile = HttpContext.Request.Files;
+           HttpFileCollectionBase listFile = HttpContext.Request.Files;
             string token = requestOBJ.token;
+            requestOBJ.Status = 10;
+            requestOBJ.Key = null;
+            var values = new JavaScriptSerializer().Serialize(requestOBJ);
+          
+            //var temp = JArray.Parse(values);
+            //temp.Descendants()
+            //    .OfType<JProperty>()
+            //    .Where(attr => attr.Name.StartsWith("Id"))
+            //    .ToList() // you should call ToList because you're about to changing the result, which is not possible if it is IEnumerable
+            //    .ForEach(attr => attr.Remove()); // removing unwanted attributes
+            //values = temp.ToString();
             //if (requestOBJ.RealEstateId.HasValue) mFormData.Add(new StringContent(((int)requestOBJ.RealEstateId).ToString()), nameof(requestOBJ.RealEstateId));
             //if (requestOBJ.DefectiveId.HasValue) mFormData.Add(new StringContent(((int)requestOBJ.DefectiveId).ToString()), nameof(requestOBJ.DefectiveId));
             //if (requestOBJ.CustomerId.HasValue) mFormData.Add(new StringContent(((int)requestOBJ.CustomerId).ToString()), nameof(requestOBJ.CustomerId));
             //if (!string.IsNullOrEmpty(requestOBJ.Note)) mFormData.Add(new StringContent(requestOBJ.Note), nameof(requestOBJ.Note));
             //if (!string.IsNullOrEmpty(requestOBJ.FullName)) mFormData.Add(new StringContent(requestOBJ.FullName), nameof(requestOBJ.FullName));
             //if (!string.IsNullOrEmpty(requestOBJ.Phone)) mFormData.Add(new StringContent(requestOBJ.Phone), nameof(requestOBJ.Phone));
-            var values = new JavaScriptSerializer().Serialize(requestOBJ);
+           
             if (!string.IsNullOrEmpty(values)) mFormData.Add(new StringContent(values), nameof(values));
             if (listFile.Count > 0)
             {
@@ -87,7 +99,7 @@ namespace QuanLyDuAn.Areas.VanHanh.Controllers
             HttpFileCollectionBase listFile = HttpContext.Request.Files;
             string token = requestOBJ.token;
             var values = new JavaScriptSerializer().Serialize(requestOBJ);
-            if (!string.IsNullOrEmpty(requestOBJ.Id.ToString())) mFormData.Add(new StringContent(requestOBJ.Id.ToString()), "key");
+            if (!string.IsNullOrEmpty(requestOBJ.Key.ToString())) mFormData.Add(new StringContent(requestOBJ.Key.ToString()), "key");
             if (!string.IsNullOrEmpty(values)) mFormData.Add(new StringContent(values), nameof(values));
             if (listFile.Count > 0)
             {

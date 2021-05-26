@@ -111,11 +111,15 @@
         var ACTION_DEFECTIVE = "Defective/";
         var ACTION_CUSTOMERINFO = "CustomerInfo/";
         var ACTION_FILESATTACHMENT = "FilesAttachment/";
+        var ACTION_CONSTRUCTIONITEMS= "ConstructionItems/";
         var KEY = "id";
         var WIDTH_CONTAINER = $("#container").width();
         //..........................Get data -------------------------------------------------------------
 
-        var customStore = $DATASOURCE(ACTION_FEEDBACK, KEY);
+        var customStore = (id) => new DevExpress.data.DataSource({
+            store: $DATASOURCE(ACTION_FEEDBACK, KEY),
+            filter: ["constructionItemsId", "=", id]
+        });
         var customStore_Detail = (id) => new DevExpress.data.DataSource({
             store: $DATASOURCE(ACTION_FEEDBACK, KEY),
             filter: ["id", "=", id]
@@ -126,15 +130,20 @@
         });
         var customStore_Defective = $DATASOURCEGET(ACTION_DEFECTIVE, KEY);
         var customStore_RealEstate = $DATASOURCEGET(ACTION_REALESTATE, KEY);
+      
         var customStore_CustomerInfo = $DATASOURCEGET(ACTION_CUSTOMERINFO, KEY);
+        var customStore_ConstructionItems =(id) => new DevExpress.data.DataSource({
+            store: $DATASOURCE(ACTION_CONSTRUCTIONITEMS, KEY),
+            filter: ["parentId", "=", 0]
+        });
         //..........................  Load View -------------------------------------------------------------
         $(function () {
-            loadData();
+            loadData(ITEMSID);
         });
-        var loadData = () => {
+        var loadData = (ITEMSID) => {
             $("#container").dxDataGrid({
                 height: heightScreen,
-                dataSource: customStore,
+                dataSource: customStore(ITEMSID),
                 repaintChangesOnly: true,
                 remoteOperations: true,
                 scrolling: { mode: "standard" },
@@ -176,19 +185,19 @@
                             location: "before",
                             widget: "dxSelectBox",
                             options: {
-                                dataSource: groupOwner,
-                                valueExpr: "ID",
-                                displayExpr: "Name",
+                                dataSource: customStore_ConstructionItems(0),
+                                valueExpr: "id",
+                                displayExpr: "title",
                                 width: "100%",
                                 searchEnabled: true,
                                 searchMode: "contains",
                                 showClearButton: false,
                                 stylingMode: "filled",
-                                value: GROUPOWNERID,
+                                value: ITEMSID,
                                 onValueChanged: function (data) {
-                                    GROUPOWNERID = data.value;
-                                    localStorage.setItem('groupOwnerIdCurrent', GROUPOWNERID);
-                                    loadData(GROUPOWNERID);
+                                    ITEMSID = data.value;
+                                    localStorage.setItem('ItemsIdCurrent', ITEMSID);
+                                    loadData(ITEMSID);
                                 },
                             },
                         },
@@ -314,7 +323,7 @@
                     {
                         dataField: "realEstateId",
                         allowFiltering: true,
-                        caption: "Căn hộ",
+                        caption: "Địa ốc",
                         dataType: "string",
                         alignment: "center",
                         visible: true,
@@ -426,6 +435,11 @@
                         dataType: "string",
                         alignment: "center",
                         visible: true,
+                        lookup: {
+                            dataSource: statusDefect,
+                            valueExpr: "ID",
+                            displayExpr: "Name",
+                        },
                     },// code
 
                 ],
@@ -465,5 +479,14 @@
                 },
             });
         };
+        var  loadDefect = () =>{
+
+        }
+        var loadDefectFix = () => {
+
+        }
+        var loadDefectComplete = () => {
+
+        }
     </script>
 }

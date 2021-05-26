@@ -3,14 +3,15 @@
 </form>
 <script>
     var formData = {
-        "customerId": ""
-        , "realEstateId": ""
-        , "fullName": ""
-        , "defectiveId": ""
-        , "phone": ""
-        , "note": ""
-        , "noAttachment": ""
-        , "key": @Model
+        "defectFeedbackId": ""
+        , "fixer": ""
+        , "startDate": ""
+        , "endDate": ""
+        , "deadline": ""
+        , "fixedDate": ""
+        , "result": ""
+        , "resultType": ""
+        ,"note":""
     };
     var fdata = new FormData();
     $(document).ready(function () {
@@ -25,87 +26,34 @@
                     items: [
                         {
                             colSpan: 4,
-                            dataField: "realEstateId",
-                            label: { text: "Mã căn hộ" },
-                            lookup: {
-                                dataSource: customStore_RealEstate,
-                                valueExpr: "id",
-                                displayExpr: "code",
-                            },
-                            editorType: "dxSelectBox",
-                            editorOptions: {
-                                stylingMode: "filled",
-                                //value: formData["documentTypeId"],
-                                dataSource: customStore_RealEstate,
-                                valueExpr: "id",
-                                displayExpr: "code",
-                                elementAttr: {
-                                    id: "elementRealEstateId",
-                                },
-                                onValueChanged: function (e) {
-                                    //if (e.value === 7) {
-                                    //    formInstance.itemOption("address", "visible", false);
-                                    //    formInstance.itemOption("calen", "visible", false);
-                                    //}
-                                    //else {
-
-                                    //    formInstance.itemOption("address", "visible", true);
-                                    //    formInstance.itemOption("calen", "visible", true);
-                                    //}
-                                    //fileUploader();
-                                },
-                            },
-                            validationRules: [{ type: "required" }],
-                        },
-                        {
-                            colSpan: 4,
-                            dataField: "customerId",
-                            label: { text: "mã khách hàng" },
+                            dataField: "fixer",
+                            label: { text: "Thợ sửa" },
                             editorType: "dxTextBox",
                             editorOptions: {
                                 stylingMode: "filled",
-                                value: formData["title"],
                                 placeholder: "Vui lòng nhập...",
-                                dataSource: customStore_CustomerInfo,
-                                valueExpr: "id",
-                                displayExpr: "title",
-                                elementAttr: {
-                                    id: "elementTitle",
-                                }
                             },
                             validationRules: [{ type: "required" }],
                         },
                         {
                             colSpan: 4,
-                            dataField: "defectiveId",
-                            label: { text: "Mã lỗi" },
-                            lookup: {
-                                dataSource: customStore_Defective,
-                                valueExpr: "id",
-                                displayExpr: "code",
-                            },
-                            editorType: "dxSelectBox",
+                            dataField: "fixedDate",
+                            label: { text: "Dự kiến sửa" },
+                            editorType: "dxDateBox",
+                            type:"datetime",
                             editorOptions: {
                                 stylingMode: "filled",
-                                //value: formData["documentTypeId"],
-                                dataSource: customStore_Defective,
-                                valueExpr: "id",
-                                displayExpr: "code",
-                                elementAttr: {
-                                    id: "elementDefectiveId",
-                                },
-                                onValueChanged: function (e) {
-                                    //if (e.value === 7) {
-                                    //    formInstance.itemOption("address", "visible", false);
-                                    //    formInstance.itemOption("calen", "visible", false);
-                                    //}
-                                    //else {
-
-                                    //    formInstance.itemOption("address", "visible", true);
-                                    //    formInstance.itemOption("calen", "visible", true);
-                                    //}
-                                    //fileUploader();
-                                },
+                            },
+                            validationRules: [{ type: "required" }],
+                        },
+                        {
+                            colSpan: 4,
+                            dataField: "deadline",
+                            label: { text: "Dự kiến hoàn thành" },
+                            editorType: "dxDateBox",
+                            type: "datetime",
+                            editorOptions: {
+                                stylingMode: "filled",
                             },
                             validationRules: [{ type: "required" }],
                         },
@@ -120,7 +68,6 @@
                                 value: formData["description"],
                             },
                         },
-
                         {
                             colSpan: 6,
                             dataField: "phone",

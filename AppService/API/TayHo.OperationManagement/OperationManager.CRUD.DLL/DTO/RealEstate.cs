@@ -7,7 +7,7 @@ namespace OperationManager.CRUD.DAL.DTO
 {
     public class RealEstate : DOBase
     {
-        public int? ConstructionCategoryId { get; set; }
+        public int? ConstructionItemsId { get; set; }
         public string BarCode { get; set; }
         public string Code { get; set; }
         public string Address { get; set; }
