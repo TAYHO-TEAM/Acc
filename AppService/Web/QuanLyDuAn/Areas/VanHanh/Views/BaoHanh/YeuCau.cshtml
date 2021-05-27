@@ -111,9 +111,12 @@
         var ACTION_DEFECTIVE = "Defective/";
         var ACTION_CUSTOMERINFO = "CustomerInfo/";
         var ACTION_FILESATTACHMENT = "FilesAttachment/";
-        var ACTION_CONSTRUCTIONITEMS= "ConstructionItems/";
+        var ACTION_CONSTRUCTIONITEMS = "ConstructionItems/";
+        var ACTION_DEFECTFIX = "DefectFix/";
         var KEY = "id";
         var WIDTH_CONTAINER = $("#container").width();
+
+        var ITEMSID = isNullOrEmpty(localStorage.getItem("ItemsIdCurrent")) ? 1 : parseInt(localStorage.getItem("ItemsIdCurrent"));
         //..........................Get data -------------------------------------------------------------
 
         var customStore = (id) => new DevExpress.data.DataSource({
@@ -124,10 +127,16 @@
             store: $DATASOURCE(ACTION_FEEDBACK, KEY),
             filter: ["id", "=", id]
         });
-        var customStore_Attachment = (id) => new DevExpress.data.DataSource({
+        
+        var customStore_Attachment = (id,owner) => new DevExpress.data.DataSource({
             store: $DATASOURCE(ACTION_FILESATTACHMENT, KEY),
-            filter: [["ownerById", "=", id], "and", ["ownerByTable", "=", "DefectFeedback"]]
+            filter: [["ownerById", "=", id], "and", ["ownerByTable", "=", owner ]]
         });
+        var customStore_DefectFix = (id) => new DevExpress.data.DataSource({
+            store: $DATASOURCE(ACTION_DEFECTFIX, KEY),
+            filter: ["defectFeedbackId", "=", id]
+        });
+
         var customStore_Defective = $DATASOURCEGET(ACTION_DEFECTIVE, KEY);
         var customStore_RealEstate = $DATASOURCEGET(ACTION_REALESTATE, KEY);
       
@@ -140,10 +149,10 @@
         $(function () {
             loadData(ITEMSID);
         });
-        var loadData = (ITEMSID) => {
+        var loadData = (ItemID) => {
             $("#container").dxDataGrid({
                 height: heightScreen,
-                dataSource: customStore(ITEMSID),
+                dataSource: customStore(ItemID),
                 repaintChangesOnly: true,
                 remoteOperations: true,
                 scrolling: { mode: "standard" },
@@ -265,18 +274,17 @@
                 onSelectionChanged: (e) => {
                     var selectedRowData = e.selectedRowsData[0];
                     var selectedRowKey = e.selectedRowKeys[0];
-                    console.log(selectedRowKey);
-                    e.component.refresh();
+                    //e.component.refresh();
                     if (selectedRowData != null && selectedRowKey != null) {
                         var data = e.component.getRowIndexByKey(selectedRowData.paId);
                         $("#action-update").dxSpeedDialAction({
-                            index: 2, icon: "fas fa-edit", label: "Cập nhật thông tin",
+                            index: 2, icon: "fas fa-edit",
+                            label: "Cập nhật thông tin",
                             visible: PermitInAction["update"] ,
                             onClick: () => {
                                 var containerE = e.component;
-                                console.log(e);
                                 CALLPOPUP(
-                                    "Danh sách văn bảo mẫu",
+                                    "Chi tiết yêu cầu bảo hành",
                                     "/VanHanh/BaoHanh/_YeuCauDetail?id=" + selectedRowKey,
                                     ($(window).width() > 767 ? "50%" : "80%"),
                                     containerE
@@ -303,10 +311,17 @@
                         }).dxSpeedDialAction("instance");
                         $("#action-log").dxSpeedDialAction({
                             index: 4,
-                            icon: "fas fa-user",
-                            label: "Phân công",
-                            visible: (selectedRowData.pmCreateBy === UserCurrentInfo.accountId || selectedRowData.paPermistionId === 7),
+                            icon: "fas fa-tools",
+                            label: "Kế hoạch sửa chữa",
+                            visible: selectedRowData.status > 10 && PermitInAction["update"],
                             onClick: () => {
+                                var containerE = e.component;
+                                CALLPOPUP(
+                                    "Kế hoạch sửa chữa",
+                                    "/VanHanh/BaoHanh/_DefectFix?id=" + selectedRowKey,
+                                    ($(window).width() > 767 ? "50%" : "80%"),
+                                    containerE
+                                );
                             }
                         }).dxSpeedDialAction("instance");
                     }
@@ -327,6 +342,7 @@
                         dataType: "string",
                         alignment: "center",
                         visible: true,
+                        editorType: "dxLookup",
                         lookup: {
                             dataSource: customStore_RealEstate,
                             valueExpr: "id",
@@ -352,21 +368,22 @@
                         dataType: "string",
                         alignment: "center",
                         visible: true,
+                        editorType: "dxLookup",
                         lookup: {
                             dataSource: customStore_CustomerInfo,
                             valueExpr: "id",
-                            displayExpr: "signCode",
+                            displayExpr: "id",
                         },
                         editorOptions: {
                             dataSource: customStore_CustomerInfo,
                             valueExpr: "id",
-                            displayExpr: "signCode",
+                            displayExpr: "id",
                             placeholder: "Vui lòng chọn...",
                             searchExpr: ['name', 'description'],
                             searchEnabled: true,
                             showClearButton: true,
                             itemTemplate: function (data) {
-                                return $("<div>").append($("<b>").append(data.signCode).addClass("mr-1"));
+                                return $("<div>").append($("<b>").append(data.id).addClass("mr-1"));
                             },
                         },
                     },// customerId

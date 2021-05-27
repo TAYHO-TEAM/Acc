@@ -169,7 +169,7 @@
         }).dxForm("instance");
         fileUploader();
     });
-    $(document).on('submit', '#form-regist', function (e) {
+    $(document).on('click','#submit', '#form-regist', function (e) {
         //$(this).prop("disabled", true);
         e.preventDefault();
         var fileWrappers = fileUploader()._files;

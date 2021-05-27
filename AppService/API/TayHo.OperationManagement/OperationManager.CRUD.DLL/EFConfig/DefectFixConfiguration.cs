@@ -12,6 +12,7 @@ namespace OperationManager.CRUD.DAL.EFConfig
             builder.ToTable(OperationManagerConstants.DefectFix_TABLENAME);
             builder.Property(x => x.DefectFeedbackId).HasColumnName("DefectFeedbackId").UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.Fixer).HasColumnName("Fixer").HasMaxLength(512).UsePropertyAccessMode(PropertyAccessMode.Field);
+            builder.Property(x => x.FixerPhone).HasColumnName("FixerPhone").HasMaxLength(64).UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.StartDate).HasColumnName("StartDate").UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.EndDate).HasColumnName("EndDate").UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.Deadline).HasColumnName("Deadline").UsePropertyAccessMode(PropertyAccessMode.Field);

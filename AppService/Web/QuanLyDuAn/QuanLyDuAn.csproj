@@ -2521,6 +2521,7 @@
     <Content Include="Areas\VanHanh\Views\BaoHanh\YeuCau.cshtml" />
     <Content Include="Areas\VanHanh\Views\BaoHanh\_YeuCauCreate.cshtml" />
     <Content Include="Areas\VanHanh\Views\BaoHanh\_YeuCauDetail.cshtml" />
+    <Content Include="Areas\VanHanh\Views\BaoHanh\_DefectFixbak.cshtml" />
     <Content Include="Areas\VanHanh\Views\BaoHanh\_DefectFix.cshtml" />
     <None Include="packages.config" />
     <Content Include="Views\Account\Login.cshtml" />

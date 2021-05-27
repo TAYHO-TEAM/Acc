@@ -10,6 +10,7 @@ namespace QuanLyDuAn.Utilities
 
         public int? DefectFeedbackId { get; set; }
         public string Fixer { get; set; }
+        public string FixerPhone { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public DateTime? Deadline { get; set; }
@@ -17,7 +18,8 @@ namespace QuanLyDuAn.Utilities
         public string Result { get; set; }
         public int? ResultType { get; set; }
         public string Note { get; set; }
+        public byte? Status { get; set; }
         public string token { get; set; }
-
+        public int Key { get; set; }
     }
 }
