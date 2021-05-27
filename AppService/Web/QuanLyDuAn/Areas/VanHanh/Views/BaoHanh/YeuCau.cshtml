@@ -21,33 +21,22 @@
             </li>
             <!-- /.timeline-label -->
             <!-- timeline item -->
-            <li>
+            <li id="Requet-Defect">
                 <i class="fa fa-envelope bg-blue"></i>
                 <div class="timeline-item">
-                    <span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
-                    <h3 class="timeline-header"><a href="#">Support Team</a> sent you an email</h3>
+                    <span class="time" id="Requet-Defect-Time"><i class="fa fa-clock-o"></i> 12:05</span>
+                    <h3 class="timeline-header" id="Requet-Defect-Time"><a href="#">Đã gửi yêu cầu Defect</a> </h3>
                     <div class="timeline-body">
                     </div>
-
                 </div>
             </li>
             <!-- END timeline item -->
             <!-- timeline item -->
-            <li>
-                <i class="fa fa-user bg-aqua"></i>
-                <div class="timeline-item">
-                    <span class="time"><i class="fa fa-clock-o"></i> 5 mins ago</span>
-                    <h3 class="timeline-header no-border"><a href="#">Sarah Young</a> accepted your friend request</h3>
-                </div>
-            </li>
-            <!-- END timeline item -->
-            <!-- timeline item -->
-            <li>
+            <li id="Requet-Defect-Submit">
                 <i class="fa fa-comments bg-yellow"></i>
-
                 <div class="timeline-item">
                     <span class="time"><i class="fa fa-clock-o"></i> 27 mins ago</span>
-                    <h3 class="timeline-header"><a href="#">Jay White</a> commented on your post</h3>
+                    <h3 class="timeline-header"><a href="#">Xác nhận defect</a> Nội dung</h3>
                     <div class="timeline-body">
                         Take me to your leader!
                         Switzerland is small and neutral!
@@ -93,7 +82,7 @@
             </li>
             <li class="time-label">
                 <span class="bg-blue">
-                   Nghiệm thu
+                    Nghiệm thu
                 </span>
             </li>
         </ul>
@@ -127,10 +116,10 @@
             store: $DATASOURCE(ACTION_FEEDBACK, KEY),
             filter: ["id", "=", id]
         });
-        
-        var customStore_Attachment = (id,owner) => new DevExpress.data.DataSource({
+
+        var customStore_Attachment = (id, owner) => new DevExpress.data.DataSource({
             store: $DATASOURCE(ACTION_FILESATTACHMENT, KEY),
-            filter: [["ownerById", "=", id], "and", ["ownerByTable", "=", owner ]]
+            filter: [["ownerById", "=", id], "and", ["ownerByTable", "=", owner]]
         });
         var customStore_DefectFix = (id) => new DevExpress.data.DataSource({
             store: $DATASOURCE(ACTION_DEFECTFIX, KEY),
@@ -139,9 +128,9 @@
 
         var customStore_Defective = $DATASOURCEGET(ACTION_DEFECTIVE, KEY);
         var customStore_RealEstate = $DATASOURCEGET(ACTION_REALESTATE, KEY);
-      
+
         var customStore_CustomerInfo = $DATASOURCEGET(ACTION_CUSTOMERINFO, KEY);
-        var customStore_ConstructionItems =(id) => new DevExpress.data.DataSource({
+        var customStore_ConstructionItems = (id) => new DevExpress.data.DataSource({
             store: $DATASOURCE(ACTION_CONSTRUCTIONITEMS, KEY),
             filter: ["parentId", "=", 0]
         });
@@ -280,7 +269,7 @@
                         $("#action-update").dxSpeedDialAction({
                             index: 2, icon: "fas fa-edit",
                             label: "Cập nhật thông tin",
-                            visible: PermitInAction["update"] ,
+                            visible: PermitInAction["update"],
                             onClick: () => {
                                 var containerE = e.component;
                                 CALLPOPUP(
@@ -309,21 +298,40 @@
                                 });
                             }
                         }).dxSpeedDialAction("instance");
-                        $("#action-log").dxSpeedDialAction({
-                            index: 4,
-                            icon: "fas fa-tools",
-                            label: "Kế hoạch sửa chữa",
-                            visible: selectedRowData.status > 10 && PermitInAction["update"],
-                            onClick: () => {
-                                var containerE = e.component;
-                                CALLPOPUP(
-                                    "Kế hoạch sửa chữa",
-                                    "/VanHanh/BaoHanh/_DefectFix?id=" + selectedRowKey,
-                                    ($(window).width() > 767 ? "50%" : "80%"),
-                                    containerE
-                                );
-                            }
-                        }).dxSpeedDialAction("instance");
+                        if (selectedRowData.status < 20) {
+                            $("#action-log").dxSpeedDialAction({
+                                index: 4,
+                                icon: "fas fa-tools",
+                                label: "Kế hoạch sửa chữa",
+                                visible: selectedRowData.status > 10 && PermitInAction["update"],
+                                onClick: () => {
+                                    var containerE = e.component;
+                                    CALLPOPUP(
+                                        "Kế hoạch sửa chữa",
+                                        "/VanHanh/BaoHanh/_DefectFix?id=" + selectedRowKey,
+                                        ($(window).width() > 767 ? "50%" : "80%"),
+                                        containerE
+                                    );
+                                }
+                            }).dxSpeedDialAction("instance");
+                        }
+                        else if (selectedRowData.status > 30) {
+                            $("#action-log").dxSpeedDialAction({
+                                index: 4,
+                                icon: "fas fa-tools",
+                                label: "Nghệm thu",
+                                visible: selectedRowData.status > 10 && PermitInAction["update"],
+                                onClick: () => {
+                                    var containerE = e.component;
+                                    CALLPOPUP(
+                                        "Kế hoạch sửa chữa",
+                                        "/VanHanh/BaoHanh/_DefectFix?id=" + selectedRowKey,
+                                        ($(window).width() > 767 ? "50%" : "80%"),
+                                        containerE
+                                    );
+                                }
+                            }).dxSpeedDialAction("instance");
+                        }
                     }
                 },
                 onCellClick: function (e) {
@@ -496,7 +504,7 @@
                 },
             });
         };
-        var  loadDefect = () =>{
+        var loadDefect = () => {
 
         }
         var loadDefectFix = () => {

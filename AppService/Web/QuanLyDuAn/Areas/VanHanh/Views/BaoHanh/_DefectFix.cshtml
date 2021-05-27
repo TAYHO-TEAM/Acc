@@ -17,8 +17,9 @@
     };
     var $defectFixId = 0;
     var fdata = new FormData();
+    var  = @Model;
     $(document).ready(function () {
-        customStore_DefectFix(@Model).load()
+        customStore_DefectFix($model).load()
             .done((rs) => {
                 $defectFixId = rs[0].id;
                 rs.length == 0 ? null : $("#form-DefectFix").dxForm({
