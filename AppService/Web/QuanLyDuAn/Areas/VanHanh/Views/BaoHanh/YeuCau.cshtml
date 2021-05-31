@@ -102,6 +102,7 @@
         var ACTION_FILESATTACHMENT = "FilesAttachment/";
         var ACTION_CONSTRUCTIONITEMS = "ConstructionItems/";
         var ACTION_DEFECTFIX = "DefectFix/";
+        var ACTION_DEFECTACCEPTANCE = "DefectAcceptance/";
         var KEY = "id";
         var WIDTH_CONTAINER = $("#container").width();
 
@@ -124,6 +125,11 @@
         var customStore_DefectFix = (id) => new DevExpress.data.DataSource({
             store: $DATASOURCE(ACTION_DEFECTFIX, KEY),
             filter: ["defectFeedbackId", "=", id]
+        });
+
+        var customStore_DefectAcceptance = (id) => new DevExpress.data.DataSource({
+            store: $DATASOURCE(ACTION_DEFECTACCEPTANCE, KEY),
+            filter: ["defectFixId", "=", id]
         });
 
         var customStore_Defective = $DATASOURCEGET(ACTION_DEFECTIVE, KEY);
@@ -321,22 +327,35 @@
                             }).dxSpeedDialAction("instance");
                         }
                         else if (selectedRowData.status > 30) {
-                            //$("#action-log").dxSpeedDialAction({
-                            //    index: 4,
-                            //    icon: "fas fa-tools",
-                            //    label: "Nghệm thu",
-                            //    visible: selectedRowData.status > 10 && PermitInAction["update"],
-                            //    onClick: () => {
-                            //        var containerE = e.component;
-                            //        CALLPOPUP(
-                            //            "Kế hoạch sửa chữa",
-                            //            "/VanHanh/BaoHanh/_DefectFix?id=" + selectedRowKey,
-                            //            ($(window).width() > 767 ? "50%" : "80%"),
-                            //            containerE
-                            //        );
-                            //    }
-                            //}).dxSpeedDialAction("instance");
+                            $("#action-log").dxSpeedDialAction({
+                                index: 4,
+                                icon: "fas fa-tools",
+                                label: "Kế hoạch sửa chữa",
+                                visible: selectedRowData.status < 19 && selectedRowData.status > 10 && PermitInAction["update"],
+                                onClick: () => {
+                                    var containerE = e.component;
+                                    CALLPOPUP(
+                                        "Kế hoạch sửa chữa",
+                                        "/VanHanh/BaoHanh/_DefectAcceptance?id=" + selectedRowKey,
+                                        ($(window).width() > 767 ? "50%" : "80%"),
+                                        containerE
+                                    );
+                                }
+                            }).dxSpeedDialAction("instance");
                         }
+                        if (selectedRowData.status < 19) {
+
+                        }
+                        else if (selectedRowData.status < 29) {
+
+                        }
+                        else if (selectedRowData.status < 39) {
+
+                        }
+                        else if (selectedRowData.status > 200) {
+
+                        }
+
                     }
                 },
                 onCellClick: function (e) {
@@ -441,6 +460,9 @@
                         dataType: "string",
                         alignment: "center",
                         visible: true,
+                        validationRules: [{
+                            type: "numeric"
+                        }] 
                     },// code
                     {
                         dataField: "note",

@@ -316,7 +316,12 @@
                     $("#action-delete").dxSpeedDialAction({
                         index: 3, icon: "fas fa-trash", label: "Xóa",
                         visible: PermitInAction["delete"],
-                        onClick: (e) => e.component.deleteRow(data)
+                        onClick: (e) =>{
+                            ds_account.store().remove(selectedRowData.id).then(() => {
+                                DevExpress.ui.notify("Xoá thành công", "success", 3000);
+                                e.component.refresh();
+                            }, deferred.reject);
+                        }
                     }).dxSpeedDialAction("instance");
 
                     $("#action-log").dxSpeedDialAction({

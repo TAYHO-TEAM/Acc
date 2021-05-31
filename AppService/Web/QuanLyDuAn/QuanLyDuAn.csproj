@@ -2521,8 +2521,10 @@
     <Content Include="Areas\VanHanh\Views\BaoHanh\YeuCau.cshtml" />
     <Content Include="Areas\VanHanh\Views\BaoHanh\_YeuCauCreate.cshtml" />
     <Content Include="Areas\VanHanh\Views\BaoHanh\_YeuCauDetail.cshtml" />
-    <Content Include="Areas\VanHanh\Views\BaoHanh\_DefectFixbak.cshtml" />
+    <Content Include="Areas\VanHanh\Views\BaoHanh\_DefectFixback.cshtml" />
     <Content Include="Areas\VanHanh\Views\BaoHanh\_DefectFix.cshtml" />
+    <Content Include="Areas\VanHanh\Views\QuanTri\_KhachHangCreate.cshtml" />
+    <Content Include="Areas\VanHanh\Views\BaoHanh\_DefectAcceptance.cshtml" />
     <None Include="packages.config" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Home\About.cshtml" />

@@ -33,11 +33,15 @@ namespace QuanLyDuAn.Areas.VanHanh.Controllers
         {
             return PartialView(id);
         }
-        public ActionResult _DefectFixbak(int id)
+        public ActionResult _DefectFixback(int id)
         {
             return PartialView(id);
         }
         public ActionResult _DefectFix(int id)
+        {
+            return PartialView(id);
+        }
+        public ActionResult _DefectAcceptance(int id)
         {
             return PartialView(id);
         }

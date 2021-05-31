@@ -4,16 +4,14 @@
 </form>
 <script>
     var formData = {
-        "defectFeedbackId": ""
-        , "fixer": ""
-        , "fixerPhone": ""
-        , "startDate": ""
-        , "endDate": ""
-        , "deadline": ""
-        , "fixedDate": ""
-        , "result": ""
-        , "resultType": ""
-        ,"note":""
+        "signCode": ""
+        , "firstName": ""
+        , "lastName": ""
+        , "birthday": ""
+        , "phone": ""
+        , "email": ""
+        , "idCard": ""
+        , "isActive": ""
     };
     var $defectFixId = 0;
     var fdata = new FormData();
@@ -32,8 +30,8 @@
                             items: [
                                 {
                                     colSpan: 3,
-                                    dataField: "fixer",
-                                    label: { text: "Thợ sửa" },
+                                    dataField: "firstName", 
+                                    label: { text: "Họ" },
                                     editorType: "dxTextBox",
                                     editorOptions: {
                                         stylingMode: "filled",
@@ -43,8 +41,8 @@
                                 },
                                 {
                                     colSpan: 3,
-                                    dataField: "fixedDate",
-                                    label: { text: "Dự kiến sửa" },
+                                    dataField: "lastName",
+                                    label: { text: "Tên" },
                                     editorType: "dxDateBox",
                                     type: "datetime",
                                     editorOptions: {
@@ -54,12 +52,13 @@
                                 },
                                 {
                                     colSpan: 3,
-                                    dataField: "deadline",
-                                    label: { text: "Dự kiến hoàn thành" },
+                                    dataField: "birthday",
+                                    label: { text: "Ngày sinh" },
                                     editorType: "dxDateBox",
                                     type: "datetime",
                                     editorOptions: {
                                         stylingMode: "filled",
+                                        placeholder: "Vui lòng chọn...",
                                     },
                                     validationRules: [{ type: "required" }],
                                 },
@@ -76,30 +75,26 @@
                                 //},
                                 {
                                     colSpan: 3,
-                                    dataField: "fixerPhone",
+                                    dataField: "phone",
                                     label: { text: "Số điện thoại" },
+                                    editorType: "dxTextBox",
+                                    editorOptions: {
+                                        stylingMode: "filled",
+                                        placeholder: "Vui lòng nhập...",
+                                    },
+                                    validationRules: [{ type: "required" }],
+                                },
+                                {
+                                    colSpan: 12,
+                                    dataField: "email",
+                                    label: { text: "Email" },
                                     editorType: "dxTextBox",
                                     editorOptions: {
                                         stylingMode: "filled",
                                         placeholder: "Vui lòng nhập...",
                                         value: formData["description"],
                                     },
-                                    validationRules: [{
-                                        type: "numeric"
-                                    }] 
                                 },
-                                {
-                                    colSpan: 12,
-                                    dataField: "note",
-                                    label: { text: "Ghi chú" },
-                                    editorType: "dxTextArea",
-                                    editorOptions: {
-                                        stylingMode: "filled",
-                                        placeholder: "Vui lòng nhập...",
-                                        value: formData["description"],
-                                    },
-                                },
-
                             ]
                         },
                         {

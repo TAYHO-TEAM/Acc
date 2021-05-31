@@ -6,9 +6,11 @@
 <div id="popup-main-upload"></div>
 <div id="popup-register"></div>
 <div class="row">
-    <div class="col-12">
-        <div id="container" class="col-8"></div>
-        <div id="container-detail" class="col-4"></div>
+    <div class="col-8">
+        <div id="container" class="elevation-2"></div>
+    </div>
+    <div class="col-4">
+        <div id="container-owner" class="elevation-2"></div>
     </div>
 </div>
 
@@ -18,12 +20,19 @@
         var id = 1;
         ///-----------------------------READ ------------------------
 
-        var ACTION_READ = "RealEstate/";
+        var ACTION_READ = "RealEstate/"; 
+        var ACTION_CUSTOMERINFO = "CustomerInfo/";
+        var ACTION_CUSTOMERREALESTATE = "CustomerRealEstate/";
         var KEY = "id";
         var WIDTH_CONTAINER = $("#container").width();
         //..........................Get data -------------------------------------------------------------
 
-        let customStore = $DATASOURCE( ACTION_READ, KEY);
+        let customStore = $DATASOURCE(ACTION_READ, KEY);
+        let customStore_CustomerInfo = $DATASOURCEREAD(ACTION_CUSTOMERINFO, KEY);
+        let customStore_CustomerRealEstate = $DATASOURCE = (id) => new DevExpress.data.DataSource({
+            store: $DATASOURCE(ACTION_CUSTOMERREALESTATE, KEY),
+            filter: ["realEstateId", "=", id]
+        });
         //..........................  Load View -------------------------------------------------------------
         $(function () {
             loadData();
@@ -156,6 +165,7 @@
                     console.log(container);
                     var selectedRowData = e.selectedRowsData[0];
                     var selectedRowKey = e.selectedRowKeys[0];
+                    loadData_CustomerInfo(selectedRowKey);
                     if (selectedRowData != null && selectedRowKey != null) {
                         var data = e.component.getRowIndexByKey(selectedRowKey);
                         console.log("abc");
@@ -274,6 +284,120 @@
                                     dataSource: listActiveStatus,
                                     valueExpr: "value",
                                     displayExpr: "text",
+                                },
+                            },
+                        ],
+                    },
+                },
+            });
+        };
+        var loadData_CustomerInfo = (id) => {
+            $("#container-defect").dxDataGrid({
+                height: heightScreen,
+                dataSource: customStore_CustomerRealEstate(id),
+                remoteOperations: true,
+                scrolling: { mode: "standard" },
+                showBorders: false,
+                showColumnHeaders: true,
+                showColumnLines: false,
+                hoverStateEnabled: true,
+                showRowLines: true,
+                columnAutoWidth: true,
+                wordWrapEnabled: true,
+                paging: {
+                    enabled: true,
+                    pageSize: 10
+                },
+                pager: {
+                    showPageSizeSelector: true,
+                    allowedPageSizes: [10, 20, 40],
+                    showInfo: true,
+                },
+                searchPanel: {
+                    //searchVisibleColumnsOnly: true,
+                    visible: WIDTH_CONTAINER > 350
+                },
+                onToolbarPreparing: function (e) {
+                    var container = e.component;
+                    e.toolbarOptions.items.unshift(
+                        {
+                            location: "after",
+                            widget: "dxButton",
+                            options: {
+                                icon: "refresh", tylingMode: "filled", type: "default",
+                                onClick: () => container.refresh()
+                            },
+
+                        },
+
+                    )
+                },
+                onInitNewRow: (e) => {
+                    e.data.isActive = true;
+                    e.data.isVisible = true;
+                    e.data.constructionItemsId = id;
+                },
+                onRowUpdating: (e) => {
+                    console.log(e);
+                    e.newData['isVisible'] = e.newData['pmIsVisible'];
+                    e.newData['id'] = e.oldData['id'];
+                },
+                onCellPrepared: (e) => {
+                    if (e.rowType == "data" && e.columnIndex == 1)
+                        e.cellElement.find('.dx-treelist-empty-space').toggleClass("dx-treelist-collapsed", e.data.chilCount > 0)
+                },
+                onRowDblClick: function (e) {
+                    var container = e.component;
+                },
+                selection: {
+                    mode: "single"
+                },
+                onCellClick: function (e) {
+                },
+                columns: [
+                    {
+                        dataField: "customerInfoId",
+                        allowFiltering: true,
+                        allowEdit: false,
+                        caption: "Chủ hộ",
+                        dataType: "string",
+                        alignment: "center",
+                        lookup: {
+                            dataSource: customStore_CustomerInfo,
+                            valueExpr: "id",
+                            displayExpr: "firstName",
+                        },
+                    },// SignCode
+                ],
+                editing: {
+                    allowAdding: true,
+                    allowUpdating: true,
+                    allowDeleting: true,
+                    mode: "batch",
+                    useIcons: true,
+                    confirmDelete: true,
+                    popup: {
+                        width: "50%",
+                        height: "50%",
+                        showTitle: true,
+                        title: "kế hoạch công việc",
+                        closeOnOutsideClick: false,
+                        showCloseButton: true,
+                    },
+                    form: {
+                        labelLocation: "left",
+                        itemType: "group",
+                        colCount: 12,
+                        showRequiredMark: true,
+                        requiredMark: "(*)",
+                        items: [
+                            {
+                                colSpan: 3,
+                                dataField: "name",
+                                label: { text: "Mã " },
+                                editorOptions: {
+                                    stylingMode: "filled",
+                                    placeholder: "Vui lòng nhập...",
                                 },
                             },
                         ],

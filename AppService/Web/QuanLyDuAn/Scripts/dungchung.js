@@ -4,11 +4,11 @@ var heightScreenWithFilter = heightScreen - $("#container-filter").parent().pare
 var widthScreen = $(document).width();
 //Thông số api
 const api_version = 1; 
-const URL_API_ACC_CMD = "https://api-acc-cmd.tayho.com.vn/api/cmd/v" + api_version;
-const URL_API_ACC_READ = "https://api-acc-read.tayho.com.vn/api/read/v" + api_version; 
-const URL_API_PM_CMD = "https://api-pm-cmd.tayho.com.vn/api/cmd/v" + api_version;
-const URL_API_PM_READ = "https://api-pm-read.tayho.com.vn/api/read/v" + api_version; 
-const URL_API_PM_READ_All = "https://api-pm-read.tayho.com.vn/api/read/v" + api_version +"/ProjectManager"; 
+const URL_API_ACC_CMD = "http://192.168.1.26:8080/api/cmd/v" + api_version;//"https://api-acc-cmd.tayho.com.vn/api/cmd/v" + api_version;
+const URL_API_ACC_READ = "http://192.168.1.26:8083/api/read/v" + api_version; //"https://api-acc-read.tayho.com.vn/api/read/v" + api_version; 
+const URL_API_PM_CMD = "http://192.168.1.26:8081/api/cmd/v" + api_version;//"https://api-pm-cmd.tayho.com.vn/api/cmd/v" + api_version;
+const URL_API_PM_READ = "http://192.168.1.26:8082/api/read/v" + api_version; //"https://api-pm-read.tayho.com.vn/api/read/v" + api_version; 
+const URL_API_PM_READ_All = "http://192.168.1.26:8082/api/read/v" + api_version +"/ProjectManager"; //"https://api-pm-read.tayho.com.vn/api/read/v" + api_version +"/ProjectManager"; 
 
 const listSexs = [
     {value: 0, text:"Nữ"},
