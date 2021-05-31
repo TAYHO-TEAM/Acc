@@ -269,6 +269,7 @@
                 onSelectionChanged: (e) => {
                     var selectedRowData = e.selectedRowsData[0];
                     var selectedRowKey = e.selectedRowKeys[0];
+                    console.log(selectedRowData);
                     //$('#action-log').remove();
                     //e.component.refresh();
                     if (selectedRowData != null && selectedRowKey != null) {
@@ -531,13 +532,13 @@
                 },
             });
         };
-        var loadDefect = () => {
+        var loadDefect = (data) => {
 
         }
-        var loadDefectFix = () => {
+        var loadDefectFix = (data) => {
 
         }
-        var loadDefectComplete = () => {
+        var loadDefectComplete = (data) => {
 
         }
     </script>
