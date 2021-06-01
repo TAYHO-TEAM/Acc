@@ -380,7 +380,7 @@ let customStore_AccountInfo = (type) => new DevExpress.data.DataSource({
         loadMode: "raw",
         load: (values) => ajax_read(ACTION_READ_ACCOUNTINFO, values),
     }),
-    //filter: [["type", "=", type]]
+   filter: [["type", "=", type]]
 });
 let customStore_READ_ALL_ACC = (READ) => new DevExpress.data.CustomStore({
     key: "id",
