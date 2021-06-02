@@ -18,7 +18,7 @@ namespace OperationManager.CRUD.DAL.EFConfig
             builder.Property(x => x.Ward).HasColumnName("Ward").UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.District).HasColumnName("District").HasMaxLength(512).UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.City).HasColumnName("City").HasMaxLength(512).UsePropertyAccessMode(PropertyAccessMode.Field);
-            builder.Property(x => x.Contry).HasColumnName("Contry").HasMaxLength(512).UsePropertyAccessMode(PropertyAccessMode.Field);
+            builder.Property(x => x.Country).HasColumnName("Country").HasMaxLength(512).UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.ZipCode).HasColumnName("ZipCode").HasMaxLength(64).UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.Type).HasColumnName("Type").UsePropertyAccessMode(PropertyAccessMode.Field);
         }
