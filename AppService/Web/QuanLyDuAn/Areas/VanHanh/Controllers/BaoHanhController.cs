@@ -41,12 +41,16 @@ namespace QuanLyDuAn.Areas.VanHanh.Controllers
         {
             return PartialView(id);
         }
+        public ActionResult _DefectFixReport(int id)
+        {
+            return PartialView(id);
+        }
         public ActionResult _DefectAcceptance(int id)
         {
             return PartialView(id);
         }
         [HttpPost, ValidateInput(false)]
-        public JsonResult YeuCauCreate(DefectFeedBack requestOBJ)
+        public JsonResult YeuCauCreate(DefectFeedBackOBJ requestOBJ)
         {
             MultipartFormDataContent mFormData = new MultipartFormDataContent();
             HttpFileCollectionBase listFile = HttpContext.Request.Files;
@@ -105,7 +109,7 @@ namespace QuanLyDuAn.Areas.VanHanh.Controllers
             return Json(new { status = "success", result = "Đã lưu thông tin yêu cầu thành công" });
         }
         [HttpPost, ValidateInput(false)]
-        public JsonResult YeuCauUpdate(DefectFeedBack requestOBJ)
+        public JsonResult YeuCauUpdate(DefectFeedBackOBJ requestOBJ)
         {
             MultipartFormDataContent mFormData = new MultipartFormDataContent();
             HttpFileCollectionBase listFile = HttpContext.Request.Files;
@@ -148,7 +152,7 @@ namespace QuanLyDuAn.Areas.VanHanh.Controllers
             return Json(new { status = "success", result = "Đã lưu thông tin yêu cầu thành công" });
         }
         [HttpPost, ValidateInput(false)]
-        public JsonResult YeuCauAccept(DefectFeedBack requestOBJ)
+        public JsonResult YeuCauAccept(DefectFeedBackOBJ requestOBJ)
         {
             MultipartFormDataContent mFormData = new MultipartFormDataContent();
             HttpFileCollectionBase listFile = HttpContext.Request.Files;
@@ -189,7 +193,7 @@ namespace QuanLyDuAn.Areas.VanHanh.Controllers
                     }
                 }
             }
-            DefectFix defectFix = new DefectFix();
+            DefectFixOBJ defectFix = new DefectFixOBJ();
             defectFix.DefectFeedbackId = requestOBJ.Key;
             mFormData = new MultipartFormDataContent();
             var valuesDefectFix = new JavaScriptSerializer().Serialize(defectFix);
@@ -211,12 +215,83 @@ namespace QuanLyDuAn.Areas.VanHanh.Controllers
             return Json(new { status = "success", result = "Đã lưu thông tin yêu cầu thành công" });
         }
         [HttpPost, ValidateInput(false)]
-        public JsonResult DefectFixUpdate(DefectFix requestOBJ)
+        public JsonResult DefectFixUpdate(DefectFixOBJ requestOBJ)
         {
             MultipartFormDataContent mFormData = new MultipartFormDataContent();
             HttpFileCollectionBase listFile = HttpContext.Request.Files;
             string token = requestOBJ.token;
-            requestOBJ.Status = 20;
+            if (requestOBJ.Status == null || requestOBJ.Status < 20)
+                requestOBJ.Status = 20;
+            else if (requestOBJ.Status == 21)
+                requestOBJ.StartDate = DateTime.Now;
+            else if (requestOBJ.Status == 22)
+            {
+                requestOBJ.EndDate = DateTime.Now;
+                DefectAcceptanceOBJ defectAcceptance = new DefectAcceptanceOBJ();
+                defectAcceptance.DefectFixId = requestOBJ.Key;
+                defectAcceptance.DefectFeedbackId = requestOBJ.DefectFeedbackId;
+                mFormData = new MultipartFormDataContent();
+                var valueAcceptance = new JavaScriptSerializer().Serialize(defectAcceptance);
+                if (!string.IsNullOrEmpty(valueAcceptance)) mFormData.Add(new StringContent(valueAcceptance), "values");
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(ConfigurationSettings.AppSettings["omCRUD"].ToString());
+                    client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                    using (HttpResponseMessage response = client.PostAsync("api/v1/DefectAcceptance/", mFormData).Result)
+                    {
+                        if (response.StatusCode != HttpStatusCode.OK)
+                        {
+                            var err = response.Content.ReadAsStringAsync().Result;
+                            return Json(new { status = "error", result = err });
+                        }
+                    }
+                }
+                requestOBJ.Status = 30;
+            }
+            var values = new JavaScriptSerializer().Serialize(requestOBJ);
+            mFormData = new MultipartFormDataContent();
+            if (!string.IsNullOrEmpty(requestOBJ.Key.ToString())) mFormData.Add(new StringContent(requestOBJ.Key.ToString()), "key");
+            if (!string.IsNullOrEmpty(values)) mFormData.Add(new StringContent(values), nameof(values));
+            if (listFile.Count > 0)
+            {
+                
+                int i = 1;
+                foreach (string file in listFile)
+                {
+                    HttpPostedFileBase fileBase = Request.Files[file];
+                    byte[] fileData = null;
+                    using (var binaryReader = new BinaryReader(fileBase.InputStream))
+                    {
+                        fileData = binaryReader.ReadBytes(fileBase.ContentLength);
+                    }
+                    ByteArrayContent b = new ByteArrayContent(fileData);
+                    b.Headers.ContentType = MediaTypeHeaderValue.Parse("multipart/form-data");
+                    mFormData.Add(b, nameof(file) + i++.ToString(), fileBase.FileName);
+                }
+            }
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(ConfigurationSettings.AppSettings["omCRUD"].ToString());//http://localhost:50999/,https://api-pm-cmd.tayho.com.vn/
+                client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                using (HttpResponseMessage response = client.PutAsync("api/v1/DefectFix/", mFormData).Result)
+                {
+                    if (response.StatusCode != HttpStatusCode.OK)
+                    {
+                        var err = response.Content.ReadAsStringAsync().Result;
+                        return Json(new { status = "error", result = err });
+                    }
+                }
+            }
+            return Json(new { status = "success", result = "Đã lưu thông tin yêu cầu thành công" });
+        }
+        [HttpPost, ValidateInput(false)]
+        public JsonResult DefectAcceptenceUpdate(DefectAcceptanceOBJ requestOBJ)
+        {
+            MultipartFormDataContent mFormData = new MultipartFormDataContent();
+            HttpFileCollectionBase listFile = HttpContext.Request.Files;
+            string token = requestOBJ.token;
             var values = new JavaScriptSerializer().Serialize(requestOBJ);
             if (!string.IsNullOrEmpty(requestOBJ.Key.ToString())) mFormData.Add(new StringContent(requestOBJ.Key.ToString()), "key");
             if (!string.IsNullOrEmpty(values)) mFormData.Add(new StringContent(values), nameof(values));
@@ -233,16 +308,16 @@ namespace QuanLyDuAn.Areas.VanHanh.Controllers
                     }
                     ByteArrayContent b = new ByteArrayContent(fileData);
                     b.Headers.ContentType = MediaTypeHeaderValue.Parse("multipart/form-data");
+                    //byte[] binData = b.ReadBytes(fileBase.ContentLength);
                     mFormData.Add(b, nameof(file) + i++.ToString(), fileBase.FileName);
                 }
-
             }
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(ConfigurationSettings.AppSettings["omCRUD"].ToString());//http://localhost:50999/,https://api-pm-cmd.tayho.com.vn/
                 client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-                using (HttpResponseMessage response = client.PutAsync("api/v1/DefectFix/", mFormData).Result)
+                using (HttpResponseMessage response = client.PutAsync("api/v1/DefectAcceptance/", mFormData).Result)
                 {
                     if (response.StatusCode != HttpStatusCode.OK)
                     {

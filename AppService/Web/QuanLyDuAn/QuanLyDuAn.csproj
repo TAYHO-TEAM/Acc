@@ -205,8 +205,9 @@
     <Compile Include="Utilities\ContractorInfoOBJ - Copy.cs" />
     <Compile Include="Utilities\ContractorInfoOBJ.cs" />
     <Compile Include="Utilities\CongViecOBJ.cs" />
-    <Compile Include="Utilities\DefectFix.cs" />
-    <Compile Include="Utilities\DefectFeedBack.cs" />
+    <Compile Include="Utilities\DefectAcceptanceOBJ.cs" />
+    <Compile Include="Utilities\DefectFixOBJ.cs" />
+    <Compile Include="Utilities\DefectFeedBackOBJ.cs" />
     <Compile Include="Utilities\DocumentReleasedOBJ.cs" />
     <Compile Include="Utilities\DynamicOBJ.cs" />
     <Compile Include="Utilities\FilesAttachmentOBJ.cs" />
@@ -2525,6 +2526,8 @@
     <Content Include="Areas\VanHanh\Views\BaoHanh\_DefectFix.cshtml" />
     <Content Include="Areas\VanHanh\Views\QuanTri\_KhachHangCreate.cshtml" />
     <Content Include="Areas\VanHanh\Views\BaoHanh\_DefectAcceptance.cshtml" />
+    <Content Include="Areas\VanHanh\Views\BaoHanh\_DefectFixReport.cshtml" />
+    <Content Include="Areas\VanHanh\Views\QuanTri\_CanHoCreate.cshtml" />
     <None Include="packages.config" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Home\About.cshtml" />

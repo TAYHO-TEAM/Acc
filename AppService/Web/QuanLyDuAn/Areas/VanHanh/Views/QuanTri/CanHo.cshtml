@@ -28,8 +28,8 @@
         //..........................Get data -------------------------------------------------------------
 
         let customStore = $DATASOURCE(ACTION_READ, KEY);
-        let customStore_CustomerInfo = $DATASOURCEREAD(ACTION_CUSTOMERINFO, KEY);
-        let customStore_CustomerRealEstate = $DATASOURCE = (id) => new DevExpress.data.DataSource({
+        let customStore_CustomerInfo = $DATASOURCEGET(ACTION_CUSTOMERINFO, KEY);
+        let customStore_CustomerRealEstate  = (id) => new DevExpress.data.DataSource({
             store: $DATASOURCE(ACTION_CUSTOMERREALESTATE, KEY),
             filter: ["realEstateId", "=", id]
         });
@@ -116,8 +116,7 @@
                 },
                 onRowUpdating: (e) => {
                     console.log(e);
-                    e.newData['isVisible'] = e.newData['pmIsVisible'];
-                    e.newData['id'] = e.oldData['id'];
+                 
                 },
                 onCellPrepared: (e) => {
                     if (e.rowType == "data" && e.columnIndex == 1)
@@ -131,67 +130,64 @@
                 },
                 onContentReady: (e) => {
                     var container = e.component;
-                    $("#action-add").dxSpeedDialAction({
-                        index: 1, icon: "fas fa-plus",
-                        label: "Thêm mới",
-                        visible: PermitInAction["insert"],
-                        onClick: () => {
-                            CALLPOPUP(
-                                "Tạo công việc",
-                                "/ThongTin/QLCongViec/_CongViecDetail",
-                                ($(window).width() > 767 ? "50%" : "80%"),
-                                container
-                            );
-                        }
-                    }).dxSpeedDialAction("instance");
-                    DevExpress.config({
-                        floatingActionButtonConfig: {
-                            icon: "rowfield",
-                            label: "Tác vụ",
-                            shading: true,
-                            position: {
-                                of: e.element,
-                                my: "right bottom",
-                                at: "right bottom",
-                                offset: e.component.pageCount() > 1 ? "-15 -60" : "-15 -15"
-                            }
-                        }
-                    });
-                    DevExpress.ui.repaintFloatingActionButton();
+                    //$("#action-add").dxSpeedDialAction({
+                    //    index: 1, icon: "fas fa-plus",
+                    //    label: "Thêm mới",
+                    //    visible: PermitInAction["insert"],
+                    //    onClick: () => {
+                    //        CALLPOPUP(
+                    //            "Tạo công việc",
+                    //            "/ThongTin/QLCongViec/_CongViecDetail",
+                    //            ($(window).width() > 767 ? "50%" : "80%"),
+                    //            container
+                    //        );
+                    //    }
+                    //}).dxSpeedDialAction("instance");
+                    //DevExpress.config({
+                    //    floatingActionButtonConfig: {
+                    //        icon: "rowfield",
+                    //        label: "Tác vụ",
+                    //        shading: true,
+                    //        position: {
+                    //            of: e.element,
+                    //            my: "right bottom",
+                    //            at: "right bottom",
+                    //            offset: e.component.pageCount() > 1 ? "-15 -60" : "-15 -15"
+                    //        }
+                    //    }
+                    //});
+                    //DevExpress.ui.repaintFloatingActionButton();
                 },
                 onSelectionChanged: (e) => {
                     var container = e.component;
-                    console.log("abc");
                     console.log(container);
                     var selectedRowData = e.selectedRowsData[0];
                     var selectedRowKey = e.selectedRowKeys[0];
                     loadData_CustomerInfo(selectedRowKey);
                     if (selectedRowData != null && selectedRowKey != null) {
                         var data = e.component.getRowIndexByKey(selectedRowKey);
-                        console.log("abc");
-                        $("#action-update").dxSpeedDialAction({
-                            index: 2, icon: "fas fa-edit", label: "Cập nhật thông tin",
-                            visible: PermitInAction["update"],
-                            onClick: () => e.component.editRow(data)
-                        }).dxSpeedDialAction("instance");
+                        //$("#action-update").dxSpeedDialAction({
+                        //    index: 2, icon: "fas fa-edit", label: "Cập nhật thông tin",
+                        //    visible: PermitInAction["update"],
+                        //    onClick: () => e.component.editRow(data)
+                        //}).dxSpeedDialAction("instance");
 
-                        $("#action-delete").dxSpeedDialAction({
-                            index: 3, icon: "fas fa-trash", label: "Xóa",
-                            visible: PermitInAction["delete"],
-                            onClick: (e) => e.component.deleteRow(data)
-                        }).dxSpeedDialAction("instance");
-
-                        $("#action-log").dxSpeedDialAction({
-                            index: 4, icon: "fas fa-user", label: "Thêm nhà thầu",
-                            onClick: () => {
-                                callPopup(
-                                    "THÊM NHÀ THẦU",
-                                    "/Admin/SystemConfig/_ContractorInfoAdd",
-                                    ($(window).width() > 767 ? "50%" : "80%"),
-                                    e.component
-                                );
-                            }
-                        }).dxSpeedDialAction("instance");
+                        //$("#action-delete").dxSpeedDialAction({
+                        //    index: 3, icon: "fas fa-trash", label: "Xóa",
+                        //    visible: PermitInAction["delete"],
+                        //    onClick: (e) => e.component.deleteRow(data)
+                        //}).dxSpeedDialAction("instance");
+                        //$("#action-log").dxSpeedDialAction({
+                        //    index: 4, icon: "fas fa-user", label: "Thêm nhà thầu",
+                        //    onClick: () => {
+                        //        callPopup(
+                        //            "THÊM NHÀ THẦU",
+                        //            "/Admin/SystemConfig/_ContractorInfoAdd",
+                        //            ($(window).width() > 767 ? "50%" : "80%"),
+                        //            e.component
+                        //        );
+                        //    }
+                        //}).dxSpeedDialAction("instance");
                     }
                 },
                 //onCellClick: function (e) {
@@ -214,7 +210,42 @@
                     {
                         dataField: "address",
                         allowFiltering: true,
-                        caption: "Địa chỉ",
+                        caption: "Số nhà",
+                        dataType: "string",
+                        alignment: "center",
+                    },// address
+                    {
+                        dataField: "street",
+                        allowFiltering: true,
+                        caption: "Đường",
+                        dataType: "string",
+                        alignment: "center",
+                    },// address
+                    {
+                        dataField: "ward",
+                        allowFiltering: true,
+                        caption: "Phố/Phường",
+                        dataType: "string",
+                        alignment: "center",
+                    },// address
+                    {
+                        dataField: "district",
+                        allowFiltering: true,
+                        caption: "Quận/Huyện",
+                        dataType: "string",
+                        alignment: "center",
+                    },// address
+                    {
+                        dataField: "city",
+                        allowFiltering: true,
+                        caption: "Tỉnh/Thành",
+                        dataType: "string",
+                        alignment: "center",
+                    },// address
+                    {
+                        dataField: "country",
+                        allowFiltering: true,
+                        caption: "Quốc gia",
                         dataType: "string",
                         alignment: "center",
                     },// address
@@ -236,10 +267,10 @@
                     },// Trạng thái
                 ],
                 editing: {
-                    //allowAdding: true,
-                    //allowUpdating: true,
-                    //allowDeleting: true,
-                    mode: "popup",
+                    allowAdding: true,
+                    allowUpdating: true,
+                    allowDeleting: true,
+                    mode: "rown",
                     useIcons: true,
                     confirmDelete: true,
                     popup: {
@@ -292,7 +323,7 @@
             });
         };
         var loadData_CustomerInfo = (id) => {
-            $("#container-defect").dxDataGrid({
+            $("#container-owner").dxDataGrid({
                 height: heightScreen,
                 dataSource: customStore_CustomerRealEstate(id),
                 remoteOperations: true,
@@ -335,7 +366,7 @@
                 onInitNewRow: (e) => {
                     e.data.isActive = true;
                     e.data.isVisible = true;
-                    e.data.constructionItemsId = id;
+                    e.data.realEstateId = id;
                 },
                 onRowUpdating: (e) => {
                     console.log(e);

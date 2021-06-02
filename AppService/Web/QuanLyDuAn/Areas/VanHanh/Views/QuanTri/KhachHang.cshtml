@@ -122,33 +122,33 @@
                 },
                 onContentReady: (e) => {
                     var container = e.component;
-                    $("#action-add").dxSpeedDialAction({
-                        index: 1, icon: "fas fa-plus",
-                        label: "Thêm mới",
-                        visible: PermitInAction["insert"],
-                        onClick: () => {
-                            CALLPOPUP(
-                                "Tạo công việc",
-                                "/ThongTin/QLCongViec/_CongViecDetail",
-                                ($(window).width() > 767 ? "50%" : "80%"),
-                                container
-                            );
-                        }
-                    }).dxSpeedDialAction("instance");
-                    DevExpress.config({
-                        floatingActionButtonConfig: {
-                            icon: "rowfield",
-                            label: "Tác vụ",
-                            shading: true,
-                            position: {
-                                of: e.element,
-                                my: "right bottom",
-                                at: "right bottom",
-                                offset: e.component.pageCount() > 1 ? "-15 -60" : "-15 -15"
-                            }
-                        }
-                    });
-                    DevExpress.ui.repaintFloatingActionButton();
+                    //$("#action-add").dxSpeedDialAction({
+                    //    index: 1, icon: "fas fa-plus",
+                    //    label: "Thêm mới",
+                    //    visible: PermitInAction["insert"],
+                    //    onClick: () => {
+                    //        CALLPOPUP(
+                    //            "Tạo công việc",
+                    //            "/ThongTin/QLCongViec/_CongViecDetail",
+                    //            ($(window).width() > 767 ? "50%" : "80%"),
+                    //            container
+                    //        );
+                    //    }
+                    //}).dxSpeedDialAction("instance");
+                    //DevExpress.config({
+                    //    floatingActionButtonConfig: {
+                    //        icon: "rowfield",
+                    //        label: "Tác vụ",
+                    //        shading: true,
+                    //        position: {
+                    //            of: e.element,
+                    //            my: "right bottom",
+                    //            at: "right bottom",
+                    //            offset: e.component.pageCount() > 1 ? "-15 -60" : "-15 -15"
+                    //        }
+                    //    }
+                    //});
+                    //DevExpress.ui.repaintFloatingActionButton();
                 },
                 onCellClick: function (e) {
                 },

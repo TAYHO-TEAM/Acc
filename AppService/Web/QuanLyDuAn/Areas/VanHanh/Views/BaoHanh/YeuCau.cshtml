@@ -5,6 +5,7 @@
 @section style{   }
 <div id="popup-main-upload"></div>
 <div id="popup-register"></div>
+<div id="popup-acceptence"></div>
 <div class="row">
     <div class="col-8">
         <div id="container" class="elevation-2"></div>
@@ -310,12 +311,12 @@
                             index: 4,
                             visible: false,
                         }).dxSpeedDialAction("instance");
-                        if (selectedRowData.status < 19 && selectedRowData.status > 10) {
+                        if (selectedRowData.status < 20 && selectedRowData.status > 10) {
                             $("#action-log").dxSpeedDialAction({
                                 index: 4,
                                 icon: "fas fa-tools",
                                 label: "Kế hoạch sửa chữa",
-                                visible: selectedRowData.status < 19 && selectedRowData.status > 10 && PermitInAction["update"],
+                                visible: selectedRowData.status < 20 && selectedRowData.status > 10 && PermitInAction["update"],
                                 onClick: () => {
                                     var containerE = e.component;
                                     CALLPOPUP(
@@ -327,11 +328,29 @@
                                 }
                             }).dxSpeedDialAction("instance");
                         }
-                        else if (selectedRowData.status > 30) {
+                        else if (selectedRowData.status >= 20 && selectedRowData.status < 30) {
+                            console.log("abc");
                             $("#action-log").dxSpeedDialAction({
                                 index: 4,
                                 icon: "fas fa-tools",
-                                label: "Kế hoạch sửa chữa",
+                                label: "Tiến độ sửa chữa",
+                                visible: selectedRowData.status < 30 && selectedRowData.status >= 20 && PermitInAction["update"],
+                                onClick: () => {
+                                    var containerE = e.component;
+                                    CALLPOPUP(
+                                        "Kế hoạch sửa chữa",
+                                        "/VanHanh/BaoHanh/_DefectFixReport?id=" + selectedRowKey,
+                                        ($(window).width() > 767 ? "50%" : "80%"),
+                                        containerE
+                                    );
+                                }
+                            }).dxSpeedDialAction("instance");
+                        }
+                        else if (selectedRowData.status >= 30) {
+                            $("#action-log").dxSpeedDialAction({
+                                index: 4,
+                                icon: "fas fa-tools",
+                                label: "Nghiệm thu",
                                 visible: selectedRowData.status < 19 && selectedRowData.status > 10 && PermitInAction["update"],
                                 onClick: () => {
                                     var containerE = e.component;

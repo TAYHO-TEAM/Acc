@@ -1,17 +1,21 @@
-using OperationManager.CRUD.DAL.DTO.BaseClasses;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
+using System.Web;
 
-namespace OperationManager.CRUD.DAL.DTO
+namespace QuanLyDuAn.Utilities
 {
-    public class DefectAcceptance : DOBase
+    public class DefectAcceptanceOBJ
     {
+
+        public int? Key { get; set; }
+        public int? Type { get; set; }
         public int? DefectFixId { get; set; }
         public int? DefectFeedbackId { get; set; }
         public int? CustomerInfoId { get; set; }
         public string Note { get; set; }
         public int? NoAttachment { get; set; }
-        public int? Type { get; set; }
+        public string token { get; set; }
+
     }
 }

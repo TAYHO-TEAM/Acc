@@ -13,7 +13,7 @@ const ACTION_CMD_REQUESTREGIST = "/RequestRegist";
 const ACTION_CMD_RESPONSEREGIST = "/ResponseRegist";
 var GROUPOWNERID = isNullOrEmpty(localStorage.getItem("groupOwnerIdCurrent")) ? parseInt(localStorage.getItem("groupOwnerIdCurrent")) : 0;
 var ITEMSID = isNullOrEmpty(localStorage.getItem("ItemsIdCurrent")) ? 1: parseInt(localStorage.getItem("ItemsIdCurrent"));
-var HOST = 'http://192.168.1.26:8688//api/v1/'; ///'https://api-om-crud.tayho.com.vn/api/v1/''http://localhost:54323/api/v1/http://localhost:8088/api/v1/
+var HOST = 'http://api-om-crud.tayho.com.vn/api/v1/'; ///'https://api-om-crud.tayho.com.vn/api/v1/''http://localhost:54323/api/v1/http://localhost:8088/api/v1/
 
 var $DATASOURCE = (link, key) => {
     var url = HOST + link;
@@ -586,10 +586,8 @@ var dataGridOptions = {
     rowAlternationEnabled: true,
 };
 function CALLPOPUP(title, url, width, container) {
-
     var isFullscreen = false;
     if (width == "100%") isFullscreen = true;
-
     $("#popup-main").dxPopup({
         width: width,
         height: "auto",
@@ -625,7 +623,6 @@ function CALLPOPUP(title, url, width, container) {
 function CALLPOPUPMULTI(title, url, width, container, popupId) {
     var isFullscreen = false;
     if (width == "100%") isFullscreen = true;
-
     $("#" + popupId).dxPopup({
         width: width,
         height: "auto",
@@ -935,6 +932,10 @@ const statusDefect = [
     },
     {
         ID: 21,
+        Name: 'Đang khắc phục'
+    },
+    {
+        ID: 22,
         Name: 'Đã khắc phục'
     },
     {
@@ -943,6 +944,10 @@ const statusDefect = [
     },
     {
         ID: 31,
+        Name: 'Đang nghiệm thu'
+    },
+    {
+        ID: 32,
         Name: 'Đã nghiệm thu'
     },
 ];

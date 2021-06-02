@@ -5,7 +5,7 @@ using System.Web;
 
 namespace QuanLyDuAn.Utilities
 {
-    public class DefectFeedBack
+    public class DefectFeedBackOBJ
     {
 
         public int? Key { get; set; }
