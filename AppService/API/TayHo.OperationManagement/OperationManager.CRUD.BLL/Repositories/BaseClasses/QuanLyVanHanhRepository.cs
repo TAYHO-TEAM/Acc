@@ -71,7 +71,7 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
                 {
                     if (loadOptions.Filter.Count > 0)
                     {
-                        var _filter = DevexpressHelperFunction.ConvertFilter(loadOptions.Filter);
+                        IList _filter = DevexpressHelperFunction.ConvertFilter(loadOptions.Filter);
                         loadOptions.Filter.Clear();
                         loadOptions.Filter = _filter;
                     }
@@ -80,28 +80,7 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
                     //    dataSourceLoadOptionsBase.Filter = JsonConvert.DeserializeObject<IList>(dataSourceLoadOptionsBase.Filter[0].ToString());
                     //}
                 }
-                if ( getActionId.Count > 0) //!checkPermit &&
-                {
-                    IList filterOwnerBy = DevexpressHelperFunction.ConvertFilter(JsonConvert.DeserializeObject<IList>(@"[""createBy"",""=""," + user.ToString() + @"]"));
-                    IList filterDeleteNull = DevexpressHelperFunction.ConvertFilter(JsonConvert.DeserializeObject<IList>(@"[""isDelete"",""IS NULL""]"));
-                    IList filterDeleteFalse = DevexpressHelperFunction.ConvertFilter(JsonConvert.DeserializeObject<IList>(@"[""isDelete"",""=""," + 0 + @"]"));
-                    IList filterIsDelete = new List<object>();
-                    filterIsDelete.Add(filterDeleteNull);
-                    filterIsDelete.Add("or");
-                    filterIsDelete.Add(filterDeleteFalse);
-                    IList filter = new List<object>();
-                    filter.Add(filterOwnerBy);
-                    filter.Add("and");
-                    filter.Add(filterDeleteFalse);
-                    if (loadOptions.Filter.Count > 0)
-                    {
-                        filter.Add("and");
-                        filter.Add(loadOptions.Filter);
-                    }
-                    loadOptions.Filter.Clear();
-                    loadOptions.Filter = filter;
-                }
-                else if (!checkPermit && getActionId.Count > 0) 
+                if (checkPermit && getActionId.Count > 0) //!checkPermit &&
                 {
                     //IList filterOwnerBy = DevexpressHelperFunction.ConvertFilter(JsonConvert.DeserializeObject<IList>(@"[""createBy"",""=""," + user.ToString() + @"]"));
                     IList filterDeleteNull = DevexpressHelperFunction.ConvertFilter(JsonConvert.DeserializeObject<IList>(@"[""isDelete"",""IS NULL""]"));
@@ -113,13 +92,37 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
                     IList filter = new List<object>();
                     //filter.Add(filterOwnerBy);
                     //filter.Add("and");
-                    filter.Add(filterDeleteFalse);
-                    if (loadOptions.Filter.Count > 0)
+                    filter.Add(filterIsDelete);
+                    if (loadOptions.Filter != null)
                     {
+                        IList _filter = DevexpressHelperFunction.ConvertFilter(loadOptions.Filter);
                         filter.Add("and");
-                        filter.Add(loadOptions.Filter);
+                        filter = _filter;
+                        loadOptions.Filter.Clear();
                     }
-                    loadOptions.Filter.Clear();
+                    
+                    loadOptions.Filter = filter;
+                }
+                else if (!checkPermit && getActionId.Count > 0) 
+                {
+                    IList filterOwnerBy = DevexpressHelperFunction.ConvertFilter(JsonConvert.DeserializeObject<IList>(@"[""createBy"",""=""," + (string.IsNullOrEmpty(user.ToString())? "0":user.ToString()) + @"]"));
+                    IList filterDeleteNull = DevexpressHelperFunction.ConvertFilter(JsonConvert.DeserializeObject<IList>(@"[""isDelete"",""IS NULL""]"));
+                    IList filterDeleteFalse = DevexpressHelperFunction.ConvertFilter(JsonConvert.DeserializeObject<IList>(@"[""isDelete"",""=""," + 0 + @"]"));
+                    IList filterIsDelete = new List<object>();
+                    filterIsDelete.Add(filterDeleteNull);
+                    filterIsDelete.Add("or");
+                    filterIsDelete.Add(filterDeleteFalse);
+                    IList filter = new List<object>();
+                    filter.Add(filterOwnerBy);
+                    filter.Add("and");
+                    filter.Add(filterIsDelete);
+                    if (loadOptions.Filter != null)
+                    {
+                        IList _filter = DevexpressHelperFunction.ConvertFilter(loadOptions.Filter);
+                        filter.Add("and");
+                        filter = _filter;
+                        loadOptions.Filter.Clear();
+                    }
                     loadOptions.Filter = filter;
                 }                    
                 return await DataSourceLoader.LoadAsync(objEF, loadOptions);
