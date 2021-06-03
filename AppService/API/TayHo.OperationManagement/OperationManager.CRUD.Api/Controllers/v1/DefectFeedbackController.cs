@@ -78,7 +78,6 @@ namespace OperationManager.CRUD.Api.Controllers.v1
             try
             {
                 DefectFeedback model = new DefectFeedback();
-                JsonConvert.PopulateObject(values, model);
                 if (!string.IsNullOrEmpty(values))
                     JsonConvert.PopulateObject(values, model);
                 IFormFileCollection files = Request.Form.Files;

@@ -16,75 +16,65 @@
         <ul class="timeline">
             <!-- timeline time label -->
             <li class="time-label">
-                <span class="bg-red">
-                    Nhận Defect
+                <span class="bg-blue" id="Defect">
+                    Defect
                 </span>
             </li>
             <!-- /.timeline-label -->
             <!-- timeline item -->
-            <li id="Requet-Defect">
-                <i class="fa fa-envelope bg-blue"></i>
+            <li>
+                <i class="fa fa-paper-plane bg-blue" id="Defect-FeedBack-Logo"></i>
                 <div class="timeline-item">
-                    <span class="time" id="Requet-Defect-Time"><i class="fa fa-clock-o"></i> 12:05</span>
-                    <h3 class="timeline-header" id="Requet-Defect-Time"><a href="#">Đã gửi yêu cầu Defect</a> </h3>
-                    <div class="timeline-body">
-                    </div>
+                    <span class="time"><i class="fa fa-clock-o"></i> <a id="Defect-FeedBack-Time"></a> </span>
+                    <h3 class="timeline-header"><a href="#" id="Defect-FeedBack-Text">Đã gửi yêu cầu Defect</a> </h3>
+                    <div class="timeline-body" id="Defect-FeedBack-Content"></div>
                 </div>
             </li>
             <!-- END timeline item -->
             <!-- timeline item -->
-            <li id="Requet-Defect-Submit">
-                <i class="fa fa-comments bg-yellow"></i>
+            <li id="Defect-Approve">
+                <i class="fa fa-comments bg-yellow" id="Defect-Approve-Logo"></i>
                 <div class="timeline-item">
-                    <span class="time"><i class="fa fa-clock-o"></i> 27 mins ago</span>
-                    <h3 class="timeline-header"><a href="#">Xác nhận defect</a> Nội dung</h3>
-                    <div class="timeline-body">
-                        Take me to your leader!
-                        Switzerland is small and neutral!
-                        We are more like Germany, ambitious and misunderstood!
-                    </div>
-                    <div class="timeline-footer">
-                        <a class="btn btn-warning btn-flat btn-xs">View comment</a>
-                    </div>
+                    <span class="time"><i class="fa fa-clock-o"></i><a id="Defect-Approve-Time"></a></span>
+                    <h3 class="timeline-header"><a href="#" id="Defect-Approve-Text">Xác nhận defect</a></h3>
                 </div>
             </li>
             <!-- END timeline item -->
             <!-- timeline time label -->
             <li class="time-label">
-                <span class="bg-green">
+                <span class="bg-green" id="Defect-Fix">
                     Xử lý Defect
                 </span>
             </li>
             <!-- /.timeline-label -->
+            <li>
+                <i class="fa fa-map-marker bg-green" id="Defect-FixPlan-Logo"></i>
+                <div class="timeline-item">
+                    <span class="time" id="Defect-FixPlan-Time"><i class="fa fa-clock-o"></i> 2 days ago</span>
+                    <h3 class="timeline-header"><a href="#" id="Defect-FixPlan-Text">Lên kế hoạch sửa chữa</a> </h3>
+                </div>
+            </li>
             <!-- timeline item -->
             <li>
-                <i class="fa fa-camera bg-purple"></i>
-
+                <i class="fa fa-tools bg-purple" id="Defect-Fixing-Logo"></i>
                 <div class="timeline-item">
-                    <span class="time"><i class="fa fa-clock-o"></i> 2 days ago</span>
-                    <h3 class="timeline-header"><a href="#">Mina Lee</a> uploaded new photos</h3>
-                    <div class="timeline-body">
-                    </div>
+                    <span class="time" id="Defect-Fixing-Time"><i class="fa fa-clock-o"></i> 2 days ago</span>
+                    <h3 class="timeline-header"><a href="#" id="Defect-Fixing-Text">Đang thực hiện sửa chữa</a></h3>
                 </div>
             </li>
             <!-- END timeline item -->
             <!-- timeline item -->
-            <li>
-                <i class="fa fa-video-camera bg-maroon"></i>
-                <div class="timeline-item">
-                    <span class="time"><i class="fa fa-clock-o"></i> 5 days ago</span>
-                    <h3 class="timeline-header"><a href="#">Mr. Doe</a> shared a video</h3>
-                    <div class="timeline-body">
-                    </div>
-                    <div class="timeline-footer">
-                        <a href="#" class="btn btn-xs bg-maroon">See comments</a>
-                    </div>
-                </div>
-            </li>
             <li class="time-label">
-                <span class="bg-blue">
+                <span class="bg-red" id="Defect-Accept">
                     Nghiệm thu
                 </span>
+            </li>
+            <li>
+                <i class="fa fa-clipboard-list bg-red" id="Defect-Accept-Logo"></i>
+                <div class="timeline-item">
+                    <span class="time" id="Defect-Accept-Time"><i class="fa fa-clock-o"></i> 2 days ago</span>
+                    <h3 class="timeline-header"><a href="#" id="Defect-Accept-Text">Nghiệm thu</a></h3>
+                </div>
             </li>
         </ul>
     </div>
@@ -94,6 +84,7 @@
     <script src="~/Scripts/page/vanhanh.js"></script>
     <script>
         var id = 1;
+        clearContent();
         ///-----------------------------READ ------------------------
 
         var ACTION_FEEDBACK = "DefectFeedback/";
@@ -329,7 +320,6 @@
                             }).dxSpeedDialAction("instance");
                         }
                         else if (selectedRowData.status >= 20 && selectedRowData.status < 30) {
-                            console.log("abc");
                             $("#action-log").dxSpeedDialAction({
                                 index: 4,
                                 icon: "fas fa-tools",
@@ -338,7 +328,7 @@
                                 onClick: () => {
                                     var containerE = e.component;
                                     CALLPOPUP(
-                                        "Kế hoạch sửa chữa",
+                                        "Báo cáo sửa chữa",
                                         "/VanHanh/BaoHanh/_DefectFixReport?id=" + selectedRowKey,
                                         ($(window).width() > 767 ? "50%" : "80%"),
                                         containerE
@@ -351,11 +341,11 @@
                                 index: 4,
                                 icon: "fas fa-tools",
                                 label: "Nghiệm thu",
-                                visible: selectedRowData.status < 19 && selectedRowData.status > 10 && PermitInAction["update"],
+                                visible: PermitInAction["update"],
                                 onClick: () => {
                                     var containerE = e.component;
                                     CALLPOPUP(
-                                        "Kế hoạch sửa chữa",
+                                        "Nghiệm thu",
                                         "/VanHanh/BaoHanh/_DefectAcceptance?id=" + selectedRowKey,
                                         ($(window).width() > 767 ? "50%" : "80%"),
                                         containerE
@@ -363,8 +353,10 @@
                                 }
                             }).dxSpeedDialAction("instance");
                         }
-                        if (selectedRowData.status < 19) {
-
+                        clearContent();
+                        loadDefect(selectedRowData);
+                        if (selectedRowData.status < 20) {
+                            //loadDefect(selectedRowData);
                         }
                         else if (selectedRowData.status < 29) {
 
@@ -482,7 +474,7 @@
                         visible: true,
                         validationRules: [{
                             type: "numeric"
-                        }] 
+                        }]
                     },// code
                     {
                         dataField: "note",
@@ -551,14 +543,91 @@
                 },
             });
         };
-        var loadDefect = (data) => {
+        var loadDefect = (content) => {
+            $("#Defect").addClass("bg-blue");
+            $("#Defect").removeClass("text-muted");
+            $("#Defect-FeedBack-Logo").addClass("bg-blue");
+            $("#Defect-FeedBack-Text").removeClass("text-muted");
+            $("#Defect-FeedBack-Content").append("<p>" + content.note + "</p>");
+            $("#Defect-FeedBack-Time").append(moment(content.createDate).locale("vi").fromNow());
+
+
+            if (content.status < 11) {
+                $("#Defect-Approve-Text").empty();
+                $("#Defect-Approve-Text").append("Chờ xác nhận");
+                $("#Defect-Approve-Text").addClass("text-muted");
+            }
+            if (content.status >= 11) {
+                $("#Defect-Approve-Logo").addClass("bg-yellow");
+                $("#Defect-Approve-Text").empty();
+                $("#Defect-Approve-Text").append("Đã xác nhận");
+                $("#Defect-Approve-Text").removeClass("text-muted");
+            }
+            if (content.status >= 20) {
+                $("#Defect-Fix").addClass("bg-green");
+                $("#Defect-Fix").removeClass("text-muted");
+                $("#Defect-FixPlan-Logo").addClass("bg-green");
+                $("#Defect-FixPlan-Text").removeClass("text-muted");
+                $("#Defect-FixPlan-Text").empty();
+                $("#Defect-FixPlan-Text").append("Đã lên kế hoách sửa chữa");
+                
+            }
+            if (content.status >= 21) {
+                $("#Defect-Fixing-Logo").addClass("bg-purple");
+                $("#Defect-Fixing-Text").removeClass("text-muted");
+            }
+            if (content.status >= 22) {
+                $("#Defect-Fixing-Text").empty();
+                $("#Defect-Fixing-Text").append("Đã hoàn tất sửa chữa");
+            }
+            if (content.status >= 30) {
+                $("#Defect-Accept").addClass("bg-red");
+                $("#Defect-Accept").removeClass("text-muted");
+                $("#Defect-Accept-Logo").addClass("bg-red");
+                $("#Defect-Accept-Text").removeClass("text-muted");
+                $("#Defect-Accept-Text").empty();
+                $("#Defect-Accept-Text").append("Chờ nghiệm thu");
+            }
+            if (content.status >= 200) {
+                $("#Defect-Accept-Text").empty();
+                $("#Defect-Accept-Text").append("Đã nghiệm thu");
+            }
+        }
+        var loadDefectFix = (content) => {
 
         }
-        var loadDefectFix = (data) => {
+        var loadDefectComplete = (content) => {
 
         }
-        var loadDefectComplete = (data) => {
+        function clearContent() {
+            $("#Defect").removeClass("bg-blue");
+            $("#Defect").addClass("text-muted");
+            $("#Defect-FeedBack-Logo").removeClass("bg-blue");
+            $("#Defect-FeedBack-Text").addClass("text-muted");
+            $("#Defect-FeedBack-Content").empty();
+            $("#Defect-FeedBack-Time").empty();
+            $("#Defect-Approve-Logo").removeClass("bg-yellow");
+            $("#Defect-Approve-Text").addClass("text-muted");
+            
+            $("#Defect-Approve-Time").empty();
 
+
+            $("#Defect-Fix").removeClass("bg-green");
+            $("#Defect-Fix").addClass("text-muted");
+            $("#Defect-FixPlan-Logo").removeClass("bg-green");
+            $("#Defect-FixPlan-Text").addClass("text-muted");
+            $("#Defect-FixPlan-Time").empty();
+            $("#Defect-Fixing-Logo").removeClass("bg-purple");
+            $("#Defect-Fixing-Text").addClass("text-muted");
+            $("#Defect-Fixing-Time").empty();
+
+
+            $("#Defect-Accept").removeClass("bg-red");
+            $("#Defect-Accept").addClass("text-muted");
+            $("#Defect-Accept-Logo").removeClass("bg-red");
+            $("#Defect-Accept-Text").addClass("text-muted");
+            $("#Defect-Accept-Time").empty();
         }
+
     </script>
 }

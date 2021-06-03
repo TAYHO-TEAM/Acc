@@ -92,6 +92,10 @@
                 remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION_CMD_REQUESTREGIST, key),
             }),
             filter: ["projectId", "=", PROJECT],
+            sort: [
+                "LastName",
+                { selector: "createDate", desc: true }
+            ]
         });
         let customStore_Projects = customStore_READ_ALL_ACC(ACTION_READ_PROJECT);
         var customStore_PLAN = (id) => customStore_READ_ID(ACTION_READ_PLAN, id);
@@ -161,7 +165,7 @@
                 showRowLines: true,
                 columnAutoWidth: true,
                 wordWrapEnabled: true,
-                rowAlternationEnabled: false,
+                rowAlternationEnabled: true,
                 columns: [
                     {
                         dataField: "barCode",
@@ -240,6 +244,7 @@
                             },
                         },
                         cellTemplate: (c, o) => {
+                            console.log(o);
                             $("<img />")
                                 .attr('id', "popover-target-" + o.key)
                                 .attr("src", "data:image/png;base64," + o.text)
@@ -338,14 +343,14 @@
                                                             options.value == 7 ? 'Ban phản hồi(C)' :
                                                                 options.value == 8 ? 'Ban phản hồi(D)' : 'Đã gửi')
                                 .addClass(options.value == 0 ? 'text-warning font-weight-bold' :
-                                    options.value == 1 ? 'text-muted font-weight-bold' :
-                                        options.value == 2 ? 'text-muted font-weight-bold' :
-                                            options.value == 3 ? 'text-muted font-weight-bold' :
+                                    options.value == 1 ? 'text-success font-weight-bold' :
+                                        options.value == 2 ? 'text-info font-weight-bold' :
+                                            options.value == 3 ? 'text-danger font-weight-bold' :
                                                 options.value == 4 ? 'text-muted font-weight-bold' :
                                                     options.value == 5 ? 'text-success font-weight-bold' :
-                                                        options.value == 6 ? 'text-success font-weight-bold' :
-                                                            options.value == 7 ? 'text-success font-weight-bold' :
-                                                                options.value == 8 ? 'text-success font-weight-bold' : 'text-danger font-weight-bold');
+                                                        options.value == 6 ? 'text-info font-weight-bold' :
+                                                            options.value == 7 ? 'text-danger font-weight-bold' :
+                                                                options.value == 8 ? 'text-muted font-weight-bold' : 'text-danger font-weight-bold');
 
                         },
                     },//status
@@ -774,13 +779,13 @@
                                         },
                                         items: [
                                             {
+                                                colSpan: 6,
                                                 dataField: "typeOfResult",
                                                 label: {
                                                     text: "Đánh giá"
                                                 },
                                                 dataType: "number",
                                                 alignment: "left",
-                                                editorType: "dxSelectBox",
                                                 editorOptions: {
                                                     stylingMode: "filled",
                                                     disabled: 0,
@@ -807,6 +812,20 @@
                                                 },
                                                 //editorType: "dxTextArea",
                                             },
+                                            {
+                                                colSpan: 6,
+                                                dataField: "updateDate",
+                                                label: {
+                                                    text: "Ngày"
+                                                },
+                                                dataType: "date",
+                                                alignment: "left",
+                                                editorType: "dxDateBox",
+                                                editorOptions: {
+                                                    stylingMode: "filled",
+                                                    readOnly: true,
+                                                },
+                                            },//AttachmentisApprove
                                             {
                                                 colSpan: 12,
                                                 dataField: "noAttachment",
@@ -875,7 +894,6 @@
                                 }).appendTo(content_sub);
                             }
                         }
-
                         $i++;
                     });
                 }, d.reject);

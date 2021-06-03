@@ -18,6 +18,7 @@
         , "status": 20
     };
     var $defectFixId = 0;
+    var $defectfeeedBackId = 0;
     var fdata = new FormData();
     var $model = @Model;
     var $status = 20;
@@ -26,6 +27,7 @@
             .done((rs) => {
                 console.log(rs[0].status);
                 $defectFixId = rs[0].id;
+                $defectfeeedBackId = rs[0].defectFeedbackId;
                 $status = rs[0].status;
                 rs.length == 0 ? null : $("#form-DefectFix").dxForm({
                     formData: rs[0],
@@ -170,7 +172,6 @@
                         {
                             itemType: "group",
                             name: "button-action",
-
                             colCount: 12,
                             items: [
                                 {
@@ -240,6 +241,7 @@
                 //        fdata.append(key, value);
                 //    }
                 //});
+                fdata.append('defectFeedbackId', $defectfeeedBackId);
                 fdata.append('key', $defectFixId);
                 fdata.append('token', UserCurrentInfo.accessToken);
                 console.log($status);

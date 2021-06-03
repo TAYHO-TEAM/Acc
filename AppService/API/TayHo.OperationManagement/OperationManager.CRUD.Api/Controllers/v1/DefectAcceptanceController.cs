@@ -51,7 +51,8 @@ namespace OperationManager.CRUD.Api.Controllers.v1
                 if (!ModelState.IsValid) throw new CommandHandlerException(new ErrorResult());
                 var model = new DefectAcceptance();
                 JsonConvert.PopulateObject(values, model);
-                return Ok(await _quanLyVanHanhRepository.Insert(_user, nameEF, model));
+                IFormFileCollection files = Request.Form.Files;
+                return Ok(await _quanLyVanHanhRepository.Insert(_user, nameEF, model,files));
             }
             catch (Exception ex)
             {
@@ -70,9 +71,11 @@ namespace OperationManager.CRUD.Api.Controllers.v1
             try
             {
                 DefectAcceptance model = new DefectAcceptance();
-                JsonConvert.PopulateObject(values, model);
+                if (!string.IsNullOrEmpty(values))
+                    JsonConvert.PopulateObject(values, model);
+                IFormFileCollection files = Request.Form.Files;
                 model.Id = key;
-                return Ok(await _quanLyVanHanhRepository.Update(_user, nameEF, model));
+                return Ok(await _quanLyVanHanhRepository.Update(_user, nameEF, model, files));
             }
             catch (Exception ex)
             {
