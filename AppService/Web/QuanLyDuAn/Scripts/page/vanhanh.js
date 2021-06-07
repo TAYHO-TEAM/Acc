@@ -11,6 +11,7 @@ const ACTION_READ_ACCOUNTINFO = "/AccountInfo";
 
 const ACTION_CMD_REQUESTREGIST = "/RequestRegist";
 const ACTION_CMD_RESPONSEREGIST = "/ResponseRegist";
+var CUNSTRITEMS = isNullOrEmpty(localStorage.getItem("CItemsCurrent")) ? parseInt(localStorage.getItem("CItemsCurrent")) : 1;
 var GROUPOWNERID = isNullOrEmpty(localStorage.getItem("groupOwnerIdCurrent")) ? parseInt(localStorage.getItem("groupOwnerIdCurrent")) : 0;
 var ITEMSID = isNullOrEmpty(localStorage.getItem("ItemsIdCurrent")) ? 1: parseInt(localStorage.getItem("ItemsIdCurrent"));
 var HOST = 'http://api-om-crud.tayho.com.vn/api/v1/'; ///'https://api-om-crud.tayho.com.vn/api/v1/''http://localhost:54323/api/v1/http://localhost:8088/api/v1/
@@ -672,6 +673,19 @@ function ConvertProjectToPlanProject(PLANPROJECT) {
     }
 }
 
+//--------------------------Unity Function ------------------
+function getTemplateMarkup(data, containerClass) {
+    console.log(data);
+    return "<div class='" + containerClass + "'><img src='" +
+        data.Picture + "' /><div>" +
+        data.firstName + " " + data.lastName + "</div></div>";
+}
+function getDisplayExpr(item) {
+    if (!item) {
+        return "";
+    }
+    return item.firstName + " " + item.lastName;
+}
 //-----------------------Unity OBJ -----------------------
 const Category = [{
     "CategoryName": "Email",
@@ -947,7 +961,11 @@ const statusDefect = [
         Name: 'Đang nghiệm thu'
     },
     {
-        ID: 32,
+        ID: 101,
+        Name: 'Từ chỗi nghiệm thu'
+    },
+    {
+        ID: 200,
         Name: 'Đã nghiệm thu'
     },
 ];

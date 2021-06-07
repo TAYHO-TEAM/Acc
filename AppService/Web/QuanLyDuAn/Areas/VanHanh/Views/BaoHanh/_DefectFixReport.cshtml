@@ -168,6 +168,11 @@
                         {
                             colSpan: 12,
                             template: '<span class="dx-field-item-label-text font-bold">Các tập tin đính kèm</span><div class="file-uploader" id="file-uploader"></div>',
+                            visible: false,
+                            editorOptions: {
+                                stylingMode: "filled",
+                               
+                            }
                         },
                         {
                             itemType: "group",
@@ -178,8 +183,9 @@
                                     colSpan: 12,
                                     itemType: "button",
                                     horizontalAlignment: "center",
+                                    visible: (rs[0].status < 22) ?true:false, 
                                     buttonOptions: {
-                                        text: (rs[0].status === 20) ? "Bắt đầu" : ((rs[0].status === 21) ? "Hoàn thành" : ((rs[0].status === 22) ? "Nghiệm thu" : "")),
+                                        text: (rs[0].status === 20) ? "Bắt đầu" : ((rs[0].status === 21) ? "Hoàn thành"  : ""),
                                         icon: "fa fa-save",
                                         type: "success",
                                         useSubmitBehavior: true,
@@ -188,6 +194,7 @@
                                         },
                                         editorOptions: {
                                             stylingMode: "filled",
+                                            
                                         }
                                     }
                                 },

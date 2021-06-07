@@ -1,5 +1,5 @@
 ﻿{
-  // LErr Error
+
   "LErr000": "Tài khoản không tồn tại trên hệ thống LDAP!",
   "LErr001": "Tài Khoản không tông tại!",
   "LErr002": "Tài khoản đã bị xoá!",
@@ -7,7 +7,7 @@
   "LErr004": "Tài khoản đã bị khoá. Vui Lòng liên hệ Phòng Hệ Thống!",
   "LErr005": "Sai mật khẩu tài khoản !",
   "LErr006": "Sai chuỗi !",
-  // Insert Error
+
   "IErr000": "Dữ liệu không được để trống!",
   "IErr001": "Dự liệu thêm mới đã bị trùng khoá chính!",
   "IErr002": "Dự liệu thêm mới thiếu trường dữ liệu!",
@@ -29,10 +29,10 @@
   "IErrN2": "Dự liệu không được chứa ký tự đặc biệt!",
   "IErrN3": "Dự liệu không tồn tại dữ liệu cha!",
   "IErrN4": "Dự liệu không thêm được do thiếu dữ liệu liên kết!",
-  // Update Error
+
   "UErr01": "Dữ liệu không tông tại!",
   "UErr02": "Tài Khoản không có quyền!",
-  // Delete Error
+ 
   "DErr001": "Dữ liệu không tông tại!",
   "DErr002": "Không được phép xoá dòng dữ liệu này!"
 }

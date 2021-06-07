@@ -97,7 +97,7 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
                     {
                         IList _filter = DevexpressHelperFunction.ConvertFilter(loadOptions.Filter);
                         filter.Add("and");
-                        filter = _filter;
+                        filter.Add(_filter);
                         loadOptions.Filter.Clear();
                     }
                     
@@ -120,7 +120,7 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
                     {
                         IList _filter = DevexpressHelperFunction.ConvertFilter(loadOptions.Filter);
                         filter.Add("and");
-                        filter = _filter;
+                        filter.Add(_filter);
                         loadOptions.Filter.Clear();
                     }
                     loadOptions.Filter = filter;

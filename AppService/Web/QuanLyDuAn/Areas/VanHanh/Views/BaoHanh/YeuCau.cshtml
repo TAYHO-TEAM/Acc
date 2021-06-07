@@ -64,7 +64,7 @@
             </li>
             <!-- END timeline item -->
             <!-- timeline item -->
-            <li class="time-label">
+            <!--<li class="time-label">
                 <span class="bg-red" id="Defect-Accept">
                     Nghiệm thu
                 </span>
@@ -75,7 +75,7 @@
                     <span class="time" id="Defect-Accept-Time"><i class="fa fa-clock-o"></i> 2 days ago</span>
                     <h3 class="timeline-header"><a href="#" id="Defect-Accept-Text">Nghiệm thu</a></h3>
                 </div>
-            </li>
+            </li>-->
         </ul>
     </div>
 </div>
@@ -91,6 +91,7 @@
         var ACTION_REALESTATE = "RealEstate/";
         var ACTION_DEFECTIVE = "Defective/";
         var ACTION_CUSTOMERINFO = "CustomerInfo/";
+        var ACTION_CUSTOMERREALESTATE = "CustomerRealEstate/";
         var ACTION_FILESATTACHMENT = "FilesAttachment/";
         var ACTION_CONSTRUCTIONITEMS = "ConstructionItems/";
         var ACTION_DEFECTFIX = "DefectFix/";
@@ -123,10 +124,28 @@
             store: $DATASOURCE(ACTION_DEFECTACCEPTANCE, KEY),
             filter: ["defectFixId", "=", id]
         });
+        var customStore_CustomerRealEstate = (id) => new DevExpress.data.DataSource({
+            store: $DATASOURCEGET(ACTION_CUSTOMERREALESTATE, KEY),
+            filter: ["realEstateId", "=", id]
+        });
 
         var customStore_Defective = $DATASOURCEGET(ACTION_DEFECTIVE, KEY);
         var customStore_RealEstate = $DATASOURCEGET(ACTION_REALESTATE, KEY);
-
+        var customStore_CustomerInfoRealEstateById = (id) => {
+            return customStore_CustomerRealEstate(id).load().then((rs) => {
+                if (rs != null && rs.length > 0) {
+                    console.log("khách :" + rs[0].customerInfoId);
+                    return customStore_CustomerInfoById(rs[0].customerInfoId);
+                }
+                else {
+                    return null;
+                }
+            });
+        }
+        var customStore_CustomerInfoById = (id) => new DevExpress.data.DataSource({
+            store: $DATASOURCEGET(ACTION_CUSTOMERINFO, KEY),
+            filter: ["id", "=", id]
+        });
         var customStore_CustomerInfo = $DATASOURCEGET(ACTION_CUSTOMERINFO, KEY);
         var customStore_ConstructionItems = (id) => new DevExpress.data.DataSource({
             store: $DATASOURCE(ACTION_CONSTRUCTIONITEMS, KEY),
@@ -261,7 +280,6 @@
                 onSelectionChanged: (e) => {
                     var selectedRowData = e.selectedRowsData[0];
                     var selectedRowKey = e.selectedRowKeys[0];
-                    console.log(selectedRowData);
                     //$('#action-log').remove();
                     //e.component.refresh();
                     if (selectedRowData != null && selectedRowKey != null) {
@@ -289,7 +307,7 @@
                                 DevExpress.ui.dialog.confirm("Bạn có chắc là muốn hủy bỏ giá trị của hạng mục?", "XÁC NHẬN THÔNG TIN").done(function (dialogResult) {
                                     if (dialogResult) {
                                         var deferred = $.Deferred();
-                                        customStore.remove(selectedRowData.id).then(() => {
+                                        customStore(ItemID).store().remove(selectedRowKey).then(() => {
                                             DevExpress.ui.notify("Xoá thành công", "success", 3000);
                                             e.component.refresh();
                                         }, deferred.reject);
@@ -319,12 +337,12 @@
                                 }
                             }).dxSpeedDialAction("instance");
                         }
-                        else if (selectedRowData.status >= 20 && selectedRowData.status < 30) {
+                        else if (selectedRowData.status >= 20) {
                             $("#action-log").dxSpeedDialAction({
                                 index: 4,
                                 icon: "fas fa-tools",
                                 label: "Tiến độ sửa chữa",
-                                visible: selectedRowData.status < 30 && selectedRowData.status >= 20 && PermitInAction["update"],
+                                visible: selectedRowData.status >= 20 && PermitInAction["update"],
                                 onClick: () => {
                                     var containerE = e.component;
                                     CALLPOPUP(
@@ -336,23 +354,23 @@
                                 }
                             }).dxSpeedDialAction("instance");
                         }
-                        else if (selectedRowData.status >= 30) {
-                            $("#action-log").dxSpeedDialAction({
-                                index: 4,
-                                icon: "fas fa-tools",
-                                label: "Nghiệm thu",
-                                visible: PermitInAction["update"],
-                                onClick: () => {
-                                    var containerE = e.component;
-                                    CALLPOPUP(
-                                        "Nghiệm thu",
-                                        "/VanHanh/BaoHanh/_DefectAcceptance?id=" + selectedRowKey,
-                                        ($(window).width() > 767 ? "50%" : "80%"),
-                                        containerE
-                                    );
-                                }
-                            }).dxSpeedDialAction("instance");
-                        }
+                        //else if (selectedRowData.status >= 30) {
+                        //    $("#action-log").dxSpeedDialAction({
+                        //        index: 4,
+                        //        icon: "fas fa-tools",
+                        //        label: "Nghiệm thu",
+                        //        visible: PermitInAction["update"],
+                        //        onClick: () => {
+                        //            var containerE = e.component;
+                        //            CALLPOPUP(
+                        //                "Nghiệm thu",
+                        //                "/VanHanh/BaoHanh/_DefectAcceptance?id=" + selectedRowKey,
+                        //                ($(window).width() > 767 ? "50%" : "80%"),
+                        //                containerE
+                        //            );
+                        //        }
+                        //    }).dxSpeedDialAction("instance");
+                        //}
                         clearContent();
                         loadDefect(selectedRowData);
                         if (selectedRowData.status < 20) {
@@ -399,6 +417,7 @@
                             placeholder: "Vui lòng chọn...",
                             searchExpr: ['name', 'description'],
                             searchEnabled: true,
+                            searchMode: "contains",
                             showClearButton: true,
                             itemTemplate: function (data) {
                                 return $("<div>").append($("<b>").append(data.code).addClass("mr-1"));
@@ -570,7 +589,7 @@
                 $("#Defect-FixPlan-Text").removeClass("text-muted");
                 $("#Defect-FixPlan-Text").empty();
                 $("#Defect-FixPlan-Text").append("Đã lên kế hoách sửa chữa");
-                
+
             }
             if (content.status >= 21) {
                 $("#Defect-Fixing-Logo").addClass("bg-purple");
@@ -580,18 +599,18 @@
                 $("#Defect-Fixing-Text").empty();
                 $("#Defect-Fixing-Text").append("Đã hoàn tất sửa chữa");
             }
-            if (content.status >= 30) {
-                $("#Defect-Accept").addClass("bg-red");
-                $("#Defect-Accept").removeClass("text-muted");
-                $("#Defect-Accept-Logo").addClass("bg-red");
-                $("#Defect-Accept-Text").removeClass("text-muted");
-                $("#Defect-Accept-Text").empty();
-                $("#Defect-Accept-Text").append("Chờ nghiệm thu");
-            }
-            if (content.status >= 200) {
-                $("#Defect-Accept-Text").empty();
-                $("#Defect-Accept-Text").append("Đã nghiệm thu");
-            }
+            //if (content.status >= 30) {
+            //    $("#Defect-Accept").addClass("bg-red");
+            //    $("#Defect-Accept").removeClass("text-muted");
+            //    $("#Defect-Accept-Logo").addClass("bg-red");
+            //    $("#Defect-Accept-Text").removeClass("text-muted");
+            //    $("#Defect-Accept-Text").empty();
+            //    $("#Defect-Accept-Text").append("Chờ nghiệm thu");
+            //}
+            //if (content.status >= 200) {
+            //    $("#Defect-Accept-Text").empty();
+            //    $("#Defect-Accept-Text").append("Đã nghiệm thu");
+            //}
         }
         var loadDefectFix = (content) => {
 
@@ -608,7 +627,7 @@
             $("#Defect-FeedBack-Time").empty();
             $("#Defect-Approve-Logo").removeClass("bg-yellow");
             $("#Defect-Approve-Text").addClass("text-muted");
-            
+
             $("#Defect-Approve-Time").empty();
 
 

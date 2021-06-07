@@ -12,6 +12,7 @@ using Services.Common.Utilities;
 using System;
 using System.Collections.Generic;
 using System.DirectoryServices;
+using System.DirectoryServices.AccountManagement;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -37,7 +38,7 @@ namespace Acc.Cmd.Infrastructure.Services
         #endregion fields
 
         #region constructors
-        public AccountService(IAccountsRepository accountRepository , IStaffTayHoRepository staffTayHoRepository,IContractorInfoRepository contractorInfoRepository, ITokenManager tokenManager, IOptionsSnapshot<JwtOptions> jwtOptionsSnapshot, IHttpContextAccessor httpContextAccessor, IDeviceAccountRepository deviceAccountRepository)//, IUserBlackListCacheManager userBlackListCacheManager)
+        public AccountService(IAccountsRepository accountRepository, IStaffTayHoRepository staffTayHoRepository, IContractorInfoRepository contractorInfoRepository, ITokenManager tokenManager, IOptionsSnapshot<JwtOptions> jwtOptionsSnapshot, IHttpContextAccessor httpContextAccessor, IDeviceAccountRepository deviceAccountRepository)//, IUserBlackListCacheManager userBlackListCacheManager)
         {
             _accountRepository = accountRepository;
             _staffTayHoRepository = staffTayHoRepository;
@@ -57,10 +58,10 @@ namespace Acc.Cmd.Infrastructure.Services
         {
             if (_httpContextAccessor.HttpContext.Items.Any(x => (string)x.Key == ClaimsTypeName.ACCOUNT_ID))
             {
-               
+
                 int? userId = (int)_httpContextAccessor.HttpContext.Items[ClaimsTypeName.ACCOUNT_ID];
                 Accounts existingAccount = await _accountRepository.SingleOrDefaultAsync(x => x.Id == userId).ConfigureAwait(false);
-        
+
                 if (existingAccount != null)
                 {
                     existingAccount.SetRefreshToken(string.Empty);
@@ -69,21 +70,43 @@ namespace Acc.Cmd.Infrastructure.Services
                     _accountRepository.Update(existingAccount, x => x.ExpiryTime, x => x.ExpiryTimeUTC, x => x.RefreshToken);
                     await _accountRepository.UnitOfWork.SaveChangesAsync(CancellationToken.None).ConfigureAwait(false);
                     //await _userBlackListCacheManager.AddUserToBlackListAsync(existingAccount.Id);
-                   
+
                 }
             }
         }
-        public async Task<TokenAccountResult> LoginAsync(string userName, string password,string device, string deviceToken,string browser )
+        public async Task<TokenAccountResult> LoginAsync(string userName, string password, string device, string deviceToken, string browser)
         {
             // Validation
 
             string status = "OK";
-           
+            bool checkLoginAD = false;
+            bool checkAccountAD = false;
             try
             {
+                // set up domain context
+                PrincipalContext ctx = new PrincipalContext(ContextType.Domain, "192.168.1.20", "spadmin", "Tayho@2019");
+                // find a user
+                UserPrincipal user = UserPrincipal.FindByIdentity(ctx, userName);
+                if (user != null)
+                {
+                    checkAccountAD = true;
+                }
+                else
+                {
+                    checkAccountAD = false;
+                }
+            }
+            catch
+            {
+                checkAccountAD = false;
+            }
+            try
+            {
+
                 DirectoryEntry entry = new DirectoryEntry("LDAP://192.168.1.20", userName, password);
                 object nativeObject = entry.NativeObject;
-                Accounts currentAcc = new Accounts("",1,userName, password,"", null, null, "",null);
+                checkLoginAD = true;
+                Accounts currentAcc = new Accounts("", 1, userName, password, "", null, null, "", null);
                 if (!(await _accountRepository.AnyAsync(x => x.AccountName == currentAcc.AccountName && x.IsDelete == false)))
                 {
                     currentAcc.SetType(1);
@@ -92,12 +115,13 @@ namespace Acc.Cmd.Infrastructure.Services
                     currentAcc.UpdateDateUTC = null;
                     await _accountRepository.AddAsync(currentAcc).ConfigureAwait(false);
                     await _accountRepository.UnitOfWork.SaveChangesAsync(CancellationToken.None).ConfigureAwait(false);
-                  
+
                 }
             }
             catch (DirectoryServicesCOMException cex)
             {
                 status = cex.Message;
+                checkLoginAD = false;
             }
             catch (Exception ex)
             {
@@ -110,10 +134,21 @@ namespace Acc.Cmd.Infrastructure.Services
                 errorResults.Add(new ErrorResult
                 {
                     ErrorCode = nameof(ErrorCodeLogin.LErr001),
-                    ErrorMessage = AccExtensions.GetErrorMessage( nameof(ErrorCodeLogin.LErr001)),
+                    ErrorMessage = AccExtensions.GetErrorMessage(nameof(ErrorCodeLogin.LErr001)),
                     ErrorValues = new List<string> { ErrorHelpers.GenerateErrorResult(nameof(userName), userName) }
                 });
             }
+            // nếu có tài khoản AD mà mật khẩu sai trên DB -> update lại mật khẩu trên DB 
+            else if (existingAccount.Type == 1 && !Hash.Validate(password, existingAccount.Salt, existingAccount.PasswordHash))
+            {
+                if(checkAccountAD && checkLoginAD)
+                {
+                    existingAccount.SetPasswordHash(password);
+                    _accountRepository.Update(existingAccount);
+                    await _accountRepository.UnitOfWork.SaveChangesAsync(CancellationToken.None).ConfigureAwait(false);
+                }    
+            }
+           
             if (existingAccount != null && !Hash.Validate(password, existingAccount.Salt, existingAccount.PasswordHash))
             {
                 errorResults.Add(new ErrorResult
@@ -126,7 +161,7 @@ namespace Acc.Cmd.Infrastructure.Services
             if (errorResults.Any()) throw new ServiceException(errorResults);
             var tokenResult = await GetTokenResultByUserAsync(existingAccount).ConfigureAwait(false);
             tokenResult.AccountId = existingAccount.Id;
-            if (existingAccount.Type ==1)
+            if (existingAccount.Type == 1)
             {
                 StaffTayHo existingStaffTaHo = await _staffTayHoRepository.SingleOrDefaultAsync(x => x.AccountName == existingAccount.AccountName).ConfigureAwait(false);
                 if (existingStaffTaHo != null)
@@ -136,33 +171,33 @@ namespace Acc.Cmd.Infrastructure.Services
                     tokenResult.UserName = existingStaffTaHo.UserName;
                 }
             }
-            else if(existingAccount.Type == 2)
+            else if (existingAccount.Type == 2)
             {
-                ContractorInfo existContractorInfo = await _contractorInfoRepository.SingleOrDefaultAsync(x=>x.Id == existingAccount.UserId).ConfigureAwait(false);
+                ContractorInfo existContractorInfo = await _contractorInfoRepository.SingleOrDefaultAsync(x => x.Id == existingAccount.UserId).ConfigureAwait(false);
                 if (existContractorInfo != null)
                 {
-                    if(existContractorInfo.Image != null)
+                    if (existContractorInfo.Image != null)
                     {
                         tokenResult.AvatarImg = existContractorInfo.Image;
                     }
                     tokenResult.UserName = existContractorInfo.Name;
                 }
-            }    
-            DeviceAccount existDeviceAccount = await _deviceAccountRepository.SingleOrDefaultAsync(x => x.DeviceToken == deviceToken && (x.IsDelete == false || !x.IsDelete.HasValue)) ;// new DeviceAccount(device, existingAccount.Id, deviceToken, browser);
-            if (existDeviceAccount != null )
+            }
+            DeviceAccount existDeviceAccount = await _deviceAccountRepository.SingleOrDefaultAsync(x => x.DeviceToken == deviceToken && (x.IsDelete == false || !x.IsDelete.HasValue));// new DeviceAccount(device, existingAccount.Id, deviceToken, browser);
+            if (existDeviceAccount != null)
             {
-                if(existDeviceAccount.Status == null)
+                if (existDeviceAccount.Status == null)
                 {
                     existDeviceAccount.SetUpdate(0, 1);
                     existDeviceAccount.Status = 1;
-                }    
+                }
                 else
                 {
                     try
                     {
                         byte intValue = (byte)(existDeviceAccount.Status + 1);
                         existDeviceAccount.SetUpdate(0, intValue);
-                        existDeviceAccount.Status=intValue;
+                        existDeviceAccount.Status = intValue;
                     }
                     catch
                     {
@@ -170,14 +205,14 @@ namespace Acc.Cmd.Infrastructure.Services
                         existDeviceAccount.Status = 255;
                     }
                 }
-                if(existDeviceAccount.AccountId != existingAccount.Id )
+                if (existDeviceAccount.AccountId != existingAccount.Id)
                 {
                     existDeviceAccount.SetAccountId(existingAccount.Id);
                     existDeviceAccount.SetBrowser(browser);
                     _deviceAccountRepository.Update(existDeviceAccount);
                     await _deviceAccountRepository.UnitOfWork.SaveChangesAsync(CancellationToken.None).ConfigureAwait(false);
-                }    
-              
+                }
+
             }
             else
             {
@@ -188,7 +223,7 @@ namespace Acc.Cmd.Infrastructure.Services
                 newDeviceAccount.Status = 1;
                 await _deviceAccountRepository.AddAsync(newDeviceAccount);
                 await _deviceAccountRepository.UnitOfWork.SaveChangesAsync(CancellationToken.None).ConfigureAwait(false);
-            }    
+            }
             return tokenResult;
         }
         public async Task<TokenAccountResult> RefreshTokenAsync(string refreshToken)
@@ -244,10 +279,10 @@ namespace Acc.Cmd.Infrastructure.Services
         {
             DateTime utcNow = DateTime.UtcNow;
             TokenAccountResult tokenResult = _tokenManager.GenerateTokens(GetClaims(existingAccount), utcNow);
-            existingAccount.SetRefreshToken(tokenResult.RefreshToken); 
+            existingAccount.SetRefreshToken(tokenResult.RefreshToken);
             existingAccount.SetExpiryTime(DateTime.Now);
             existingAccount.SetExpiryTimeUTC(utcNow);
-            _accountRepository.Update(existingAccount, x => x.ExpiryTimeUTC,x=>x.ExpiryTime, x => x.RefreshToken);
+            _accountRepository.Update(existingAccount, x => x.ExpiryTimeUTC, x => x.ExpiryTime, x => x.RefreshToken);
             await _accountRepository.UnitOfWork.SaveChangesAsync(CancellationToken.None).ConfigureAwait(false);
             return tokenResult;
         }

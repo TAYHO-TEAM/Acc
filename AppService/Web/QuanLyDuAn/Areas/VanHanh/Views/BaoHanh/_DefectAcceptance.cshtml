@@ -168,24 +168,24 @@
 
                                     ]
                                 },
-                                {
-                                    itemType: "group",
-                                    colCount: 12,
-                                    items: [
-                                        {
-                                            colSpan: 12,
-                                            dataField: "type",
-                                            label: { text: "Mô tả" },
-                                            editorType: "dxTextArea",
-                                            editorOptions: {
-                                                stylingMode: "filled",
-                                                visible : false,
+                                //{
+                                //    itemType: "group",
+                                //    colCount: 12,
+                                //    items: [
+                                //        {
+                                //            colSpan: 12,
+                                //            dataField: "type",
+                                //            label: { text: "Mô tả" },
+                                //            editorType: "dxTextArea",
+                                //            editorOptions: {
+                                //                stylingMode: "filled",
+                                //                visible : false,
                                          
-                                            },
-                                        },
+                                //            },
+                                //        },
 
-                                    ]
-                                },
+                                //    ]
+                                //},
                                 {
                                     name: "order",
                                     visible: true,
@@ -291,7 +291,6 @@
     });
     $(document).ready(function () {
         $(document).on('click', '#acceptFix', function (e) {
-            alert(1);
             e.preventDefault();
             var formdata = $('#form-DefectAcceptence').dxForm("instance").option('formData');
             var fileWrappers = fileUploader()._files;
@@ -313,13 +312,16 @@
                 });
                 console.log($key);
                 fdata.append('key', $key);
-                fdata.append('type', '1');
+                fdata.set('type', 1);
                 fdata.append('token', UserCurrentInfo.accessToken);
                 var files = $("#file-uploader").dxFileUploader("instance").option("value");
                 if (files.length > 0) {
                     $.each(files, function (key, value) {
                         fdata.append(files[key].name, files[key]);
                     });
+                }
+                for (var pair of fdata.entries()) {
+                    console.log(pair[0] + ', ' + pair[1]);
                 }
                 var deferred = $.Deferred();
                 $.ajax({
@@ -369,7 +371,7 @@
                     fdata.append(key, value);
                 });
                 fdata.append('key', $key);
-                fdata.append('type', 0);
+                fdata.set('type', 1);
                 fdata.append('token', UserCurrentInfo.accessToken);
                 var files = $("#file-uploader").dxFileUploader("instance").option("value");
                 if (files.length > 0) {

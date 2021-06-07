@@ -30,12 +30,18 @@
                             label: { text: "Mã căn hộ" },
                             lookup: {
                                 dataSource: customStore_RealEstate_Filter(ITEMSID),
+                                searchEnabled: true,
+                                searchMode: "contains",
+                                showClearButton: true,
                                 valueExpr: "id",
                                 displayExpr: "code",
                             },
                             editorType: "dxSelectBox",
                             editorOptions: {
                                 stylingMode: "filled",
+                                searchEnabled: true,
+                                searchMode: "contains",
+                                showClearButton: true,
                                 //value: formData["documentTypeId"],
                                 dataSource: customStore_RealEstate_Filter(ITEMSID),
                                 valueExpr: "id",
@@ -43,17 +49,33 @@
                                 elementAttr: {
                                     id: "elementRealEstateId",
                                 },
-                                onValueChanged: function (e) {
-                                    //if (e.value === 7) {
-                                    //    formInstance.itemOption("address", "visible", false);
-                                    //    formInstance.itemOption("calen", "visible", false);
-                                    //}
-                                    //else {
+                                onValueChanged: function (data) {
+                                    //$('#elementCustomerId').dxSelectBox('instance')
+                                    //    .option('disabled', data.value != null);
+                                    //$('#elementFullNameId').dxTextBox('instance')
+                                    //    .option('disabled', data.value != null);
+                                    //$('#elementPhoneId').dxTextBox('instance')
+                                    //.option('disabled', data.value != null);
+                                    if (data.value != null) {
+                                        console.log(data.value);
+                                        
+                                        var a = "";
+                                        customStore_CustomerInfoRealEstateById(data.value).load().then((rs) => { console.log(rs); });
+                                        //customStore_CustomerInfoRealEstateById(data.value).load().done((rs) => {
+                                        //    a = rs;
+                                        //    console.log(rs);
+                                        //    //return rs;
 
-                                    //    formInstance.itemOption("address", "visible", true);
-                                    //    formInstance.itemOption("calen", "visible", true);
-                                    //}
-                                    //fileUploader();
+                                        //    //$('#elementDocumentTypeId').dxSelectBox('instance')
+                                        //    //    .option('value', rs[0].documentTypeId == null ? 0 : rs[0].documentTypeId);
+                                        //});
+                                    }
+                                    else {
+                                        $('#elementDocumentTypeId').dxSelectBox('instance')
+                                            .option('value', null);
+                                    };
+
+
                                 },
                             },
                             validationRules: [{ type: "required" }],
@@ -62,17 +84,25 @@
                             colSpan: 4,
                             dataField: "customerId",
                             label: { text: "mã khách hàng" },
-                            editorType: "dxTextBox",
+                            lookup: {
+                                dataSource: customStore_CustomerInfo,
+                                valueExpr: "id",
+                                displayExpr: getDisplayExpr,
+                            },
+                            editorType: "dxSelectBox",
                             editorOptions: {
                                 stylingMode: "filled",
-                                value: formData["title"],
+                                searchEnabled: true,
+                                searchMode: "contains",
+                                searchExpr: ['firstName', 'lastName'],
+                                showClearButton: true,
                                 placeholder: "Vui lòng nhập...",
                                 dataSource: customStore_CustomerInfo,
                                 valueExpr: "id",
-                                displayExpr: "title",
+                                displayExpr: getDisplayExpr,
                                 elementAttr: {
-                                    id: "elementTitle",
-                                }
+                                    id: "elementCustomerId",
+                                },
                             },
                             validationRules: [{ type: "required" }],
                         },
@@ -90,22 +120,16 @@
                                 stylingMode: "filled",
                                 //value: formData["documentTypeId"],
                                 dataSource: customStore_Defective,
+                                searchEnabled: true,
+                                searchMode: "contains",
+                                showClearButton: true,
                                 valueExpr: "id",
-                                displayExpr: "code",
+                                displayExpr: "name",
                                 elementAttr: {
                                     id: "elementDefectiveId",
                                 },
-                                onValueChanged: function (e) {
-                                    //if (e.value === 7) {
-                                    //    formInstance.itemOption("address", "visible", false);
-                                    //    formInstance.itemOption("calen", "visible", false);
-                                    //}
-                                    //else {
-
-                                    //    formInstance.itemOption("address", "visible", true);
-                                    //    formInstance.itemOption("calen", "visible", true);
-                                    //}
-                                    //fileUploader();
+                                itemTemplate: function (data) {
+                                    return $("<div>").append($("<b>").append(data.code).addClass("mr-1"), $("<em>").append(data.name));
                                 },
                             },
                             validationRules: [{ type: "required" }],
@@ -116,6 +140,9 @@
                             label: { text: "Họ tên khách hàng" },
                             editorType: "dxTextBox",
                             editorOptions: {
+                                elementAttr: {
+                                    id: "elementFullNameId",
+                                },
                                 stylingMode: "filled",
                                 placeholder: "Vui lòng nhập...",
                                 value: formData["description"],
@@ -127,6 +154,9 @@
                             label: { text: "Số điện thoại" },
                             editorType: "dxTextBox",
                             editorOptions: {
+                                elementAttr: {
+                                    id: "elementPhoneId",
+                                },
                                 stylingMode: "filled",
                                 placeholder: "Vui lòng nhập...",
                                 value: formData["description"],
@@ -169,7 +199,7 @@
         }).dxForm("instance");
         fileUploader();
     });
-    $(document).on('click','#submit', '#form-regist', function (e) {
+    $(document).on('click', '#submit', '#form-regist', function (e) {
         //$(this).prop("disabled", true);
         e.preventDefault();
         var fileWrappers = fileUploader()._files;
@@ -202,7 +232,7 @@
                     fdata.append(files[key].name, files[key]);
                 });
             }
-            fdata.append('ConstructionItemsId', ITEMSID); 
+            fdata.append('ConstructionItemsId', ITEMSID);
             fdata.append('token', UserCurrentInfo.accessToken);
             //else {
             //    DevExpress.ui.notify("Vui lòng chọn file đính kèm", "error", 3000);

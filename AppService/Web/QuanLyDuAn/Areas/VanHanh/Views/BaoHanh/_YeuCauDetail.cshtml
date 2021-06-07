@@ -43,6 +43,9 @@
                                     dataSource: customStore_RealEstate,
                                     valueExpr: "id",
                                     displayExpr: "code",
+                                    searchEnabled: true,
+                                    searchMode: "contains",
+                                    showClearButton: true,
                                     elementAttr: {
                                         id: "elementRealEstateId",
                                     },
@@ -66,16 +69,25 @@
                                 dataField: "customerId",
                                 label: { text: "mã khách hàng" },
                                 editorType: "dxLookup",
+                                lookup: {
+                                    dataSource: customStore_CustomerInfo,
+                                    valueExpr: "id",
+                                    displayExpr: getDisplayExpr,
+                                },
+                                editorType: "dxSelectBox",
                                 editorOptions: {
                                     stylingMode: "filled",
-                                    value: formData["title"],
+                                    searchEnabled: true,
+                                    searchMode: "contains",
+                                    searchExpr: ['firstName', 'lastName'],
+                                    showClearButton: true,
                                     placeholder: "Vui lòng nhập...",
                                     dataSource: customStore_CustomerInfo,
                                     valueExpr: "id",
-                                    displayExpr: "id",
+                                    displayExpr: getDisplayExpr,
                                     elementAttr: {
                                         id: "elementTitle",
-                                    }
+                                    },
                                 },
                                 validationRules: [{ type: "required" }],
                             },
@@ -95,6 +107,9 @@
                                     dataSource: customStore_Defective,
                                     valueExpr: "id",
                                     displayExpr: "code",
+                                    searchEnabled: true,
+                                    searchMode: "contains",
+                                    showClearButton: true,
                                     elementAttr: {
                                         id: "elementDefectiveId",
                                     },

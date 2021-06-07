@@ -21,27 +21,33 @@
     <script src="~/Scripts/page/vanhanh.js"></script>
     <script>
         var id = 1;
+        var PROJECTID = isNullOrEmpty(localStorage.getItem("projectIdCurrent")) ? parseInt(localStorage.getItem("projectIdCurrent")) : 1;
         ///-----------------------------READ ------------------------
 
         var ACTION_ITEMS = "ConstructionItems/";
         var ACTION_DEFECTIVE = "Defective/";
+        var ACTION_PROJECT = "Project/";
         var KEY = "id";
-        var WIDTH_CONTAINER = $("#container").width() ;
+        var WIDTH_CONTAINER = $("#container").width();
         //..........................Get data -------------------------------------------------------------
 
-        var customStore = $DATASOURCE(ACTION_ITEMS, KEY);
-        var customStore_Defect =(id)=> new DevExpress.data.DataSource({
+        var customStore = (id) => new DevExpress.data.DataSource({
+            store: $DATASOURCE(ACTION_ITEMS, KEY),
+            filter: ["projectId", "=", id]
+        });
+        var customStore_Defect = (id) => new DevExpress.data.DataSource({
             store: $DATASOURCE(ACTION_DEFECTIVE, KEY),
             filter: ["constructionItemsId", "=", id]
         });
-        var customStore_Check = $DATASOURCE(ACTION_ITEMS, KEY);
+        var customStore_Project = $DATASOURCEGET(ACTION_PROJECT, KEY);
+        //var customStore_Check = $DATASOURCE(ACTION_ITEMS, KEY);
 
         //..........................  Load View -------------------------------------------------------------
         $(function () {
-            loadData();
+            loadData(PROJECTID);
         });
-        var loadData = () => $("#container").dxTreeList({
-            dataSource: customStore,
+        var loadData = (id) => $("#container").dxTreeList({
+            dataSource: customStore(id),
             remoteOperations: true,
             height: heightScreen,
             rootValue: 0,
@@ -67,12 +73,39 @@
                 var container = e.component;
                 e.toolbarOptions.items.unshift(
                     {
-                        location: "before", widget: "dxButton",
+                        location: "before",
+                        widget: "dxSelectBox",
                         options: {
-                            icon: "refresh", type: "default",
+                            dataSource: customStore_Project,
+                            valueExpr: "id",
+                            displayExpr: "title",
+                            width: "100%",
+                            searchEnabled: true,
+                            searchMode: "contains",
+                            showClearButton: true,
+                            stylingMode: "filled",
+                            value: PROJECTID,
+                            onValueChanged: function (data) {
+                                PROJECTID = data.value;
+                                localStorage.setItem('projectIdCurrent', PROJECTID);
+                                loadData(data.value);
+                            },
+                        },
+                    },
+                    {
+                        location: "after",
+                        widget: "dxButton",
+                        options: {
+                            icon: "refresh",
+                            type: "default",
                             onClick: () => container.refresh()
                         }
                     })
+            },
+            onInitNewRow: (e) => {
+                e.data.isActive = true;
+                e.data.isVisible = true;
+                e.data.projectId = PROJECTID;
             },
             onSelectionChanged: (e) => {
                 var $id = e.selectedRowKeys[0];
@@ -82,15 +115,15 @@
                 mode: "single"
             },
             columns: [
-               
+
                 {
                     dataField: "title",
                     dataType: "string",
                     cellTemplate: (c, o) => {
                         var rs = "<div class='d-flex'>\
-                                    <i style='margin: auto 0;' class='fa "+ o.data.icon + "' />\
-                                    <div class='ml-2 text-left'><b>"+ o.value + "</b>\
-                                    <em class='small ml-1 text-muted'>"+ o.data.descriptions + "</em></div><div>";
+                                            <i style='margin: auto 0;' class='fa "+ o.data.icon + "' />\
+                                            <div class='ml-2 text-left'><b>"+ o.value + "</b>\
+                                            <em class='small ml-1 text-muted'>"+ o.data.descriptions + "</em></div><div>";
                         c.append(rs);
                     }
                 },
@@ -101,6 +134,8 @@
                     dataType: "string",
                     alignment: "center",
                     visible: false,
+                    readOnly: true,
+                    allowEditing: false,
                 },// code
                 {
                     dataField: "icon",
@@ -116,7 +151,7 @@
                         //    var rs = "<div class='d-flex' >\<a><i class='fa " + e.text + "'></i></a>" + e.text +"</div>";
                         //    return rs;
                         //},
-                        displayExpr:"text",
+                        displayExpr: "text",
                     },
                     cellTemplate: (c, o) => {
                         c.append((o.value != null) ? o.text : null)
@@ -179,20 +214,20 @@
                     showRequiredMark: true,
                     requiredMark: "(*)",
                     items: [
-                        {
-                            colSpan: 12,
-                            dataField: "code",
-                            label: { text: "Mã hạng mục" },
-                            editorOptions: {
-                                stylingMode: "filled",
-                                placeholder: "Vui lòng nhập...",
-                            },
-                        },
+                        //{
+                        //    colSpan: 12,
+                        //    dataField: "code",
+                        //    label: { text: "Mã hạng mục" },
+                        //    editorOptions: {
+                        //        stylingMode: "filled",
+                        //        placeholder: "Vui lòng nhập...",
+                        //    },
+                        //},
                         {
                             colSpan: 12,
                             dataField: "icon",
                             label: { text: "Biểu tượng" },
-                          
+
                         },
                         {
                             colSpan: 12,
@@ -202,6 +237,7 @@
                                 stylingMode: "filled",
                                 placeholder: "Vui lòng nhập...",
                             },
+                            validationRules: [{ type: "required" }],
                         },
                         {
                             colSpan: 12,
@@ -211,6 +247,7 @@
                                 stylingMode: "filled",
                                 placeholder: "Vui lòng nhập...",
                             },
+                            validationRules: [{ type: "required" }],
                         },
                         {
                             colSpan: 12,
@@ -302,7 +339,7 @@
                     {
                         dataField: "constructionItemsId",
                         allowFiltering: true,
-                        visible : false,
+                        visible: false,
                         caption: "Hạng mục",
                         dataType: "string",
                         alignment: "center",
@@ -314,7 +351,7 @@
                         dataType: "string",
                         alignment: "center",
                     },// LastName
-                  
+
                     {
                         dataField: "description",
                         allowFiltering: true,
@@ -380,7 +417,8 @@
                         ],
                     },
                 },
-            });};
+            });
+        };
 
     </script>
 }

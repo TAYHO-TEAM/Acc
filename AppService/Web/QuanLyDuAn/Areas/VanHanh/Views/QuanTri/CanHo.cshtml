@@ -18,29 +18,43 @@
     <script src="~/Scripts/page/vanhanh.js"></script>
     <script>
         var id = 1;
+        CUNSTRITEMS = isNullOrEmpty(localStorage.getItem("CItemsCurrent")) ? parseInt(localStorage.getItem("CItemsCurrent")) : 1;
         ///-----------------------------READ ------------------------
 
-        var ACTION_READ = "RealEstate/"; 
+        var ACTION_READ = "RealEstate/";
+        var ACTION_PROJECT = "Project/";
         var ACTION_CUSTOMERINFO = "CustomerInfo/";
+        var ACTION_CONSTRUCTIONITEMS = "ConstructionItems/";
         var ACTION_CUSTOMERREALESTATE = "CustomerRealEstate/";
         var KEY = "id";
         var WIDTH_CONTAINER = $("#container").width();
         //..........................Get data -------------------------------------------------------------
 
-        let customStore = $DATASOURCE(ACTION_READ, KEY);
-        let customStore_CustomerInfo = $DATASOURCEGET(ACTION_CUSTOMERINFO, KEY);
-        let customStore_CustomerRealEstate  = (id) => new DevExpress.data.DataSource({
+        var customStore = (id) => new DevExpress.data.DataSource({
+            store: $DATASOURCE(ACTION_READ, KEY),
+            filter: ["constructionItemsId", "=", id]
+        });
+        var customStore_CustomerInfo = $DATASOURCEGET(ACTION_CUSTOMERINFO, KEY);
+        //var customStore_Project = (id) => new DevExpress.data.DataSource({
+        //    store: $DATASOURCEGET(ACTION_PROJECT, KEY),
+        //    filter: ["id", "=", id]
+        //});
+        var customStore_ConstructionItems = () => new DevExpress.data.DataSource({
+            store: $DATASOURCEGET(ACTION_CONSTRUCTIONITEMS, KEY),
+            filter: ["parentId", "=", 0]
+        });
+        var customStore_CustomerRealEstate = (id) => new DevExpress.data.DataSource({
             store: $DATASOURCE(ACTION_CUSTOMERREALESTATE, KEY),
             filter: ["realEstateId", "=", id]
         });
         //..........................  Load View -------------------------------------------------------------
         $(function () {
-            loadData();
+            loadData(CUNSTRITEMS);
         });
-        let loadData = () => {
+        let loadData = (id) => {
             $("#container").dxDataGrid({
                 height: heightScreen,
-                dataSource: customStore,
+                dataSource: customStore(id),
                 repaintChangesOnly: true,
                 remoteOperations: true,
                 scrolling: { mode: "standard" },
@@ -82,19 +96,19 @@
                             location: "before",
                             widget: "dxSelectBox",
                             options: {
-                                dataSource: groupOwner,
-                                valueExpr: "ID",
-                                displayExpr: "Name",
+                                dataSource: customStore_ConstructionItems(),
+                                valueExpr: "id",
+                                displayExpr: "title",
                                 width: "100%",
                                 searchEnabled: true,
                                 searchMode: "contains",
                                 showClearButton: false,
                                 stylingMode: "filled",
-                                value: GROUPOWNERID,
+                                value: CUNSTRITEMS,
                                 onValueChanged: function (data) {
-                                    GROUPOWNERID = data.value;
-                                    localStorage.setItem('groupOwnerIdCurrent', GROUPOWNERID);
-                                    loadData(GROUPOWNERID);
+                                    CUNSTRITEMS = data.value;
+                                    localStorage.setItem('CItemsCurrent', CUNSTRITEMS);
+                                    loadData(data.value);
                                 },
                             },
                         },
@@ -113,10 +127,9 @@
                 onInitNewRow: (e) => {
                     e.data.isActive = true;
                     e.data.isVisible = true;
+                    e.data.constructionItemsId = CUNSTRITEMS;
                 },
                 onRowUpdating: (e) => {
-                    console.log(e);
-                 
                 },
                 onCellPrepared: (e) => {
                     if (e.rowType == "data" && e.columnIndex == 1)
@@ -160,7 +173,6 @@
                 },
                 onSelectionChanged: (e) => {
                     var container = e.component;
-                    console.log(container);
                     var selectedRowData = e.selectedRowsData[0];
                     var selectedRowKey = e.selectedRowKeys[0];
                     loadData_CustomerInfo(selectedRowKey);
@@ -206,6 +218,8 @@
                         caption: "Mã căn hộ",
                         dataType: "string",
                         alignment: "center",
+                        readOnly: true,
+                        allowEditing: false,
                     },// barCode
                     {
                         dataField: "address",
@@ -292,10 +306,11 @@
                                 colSpan: 12,
                                 dataField: "code",
                                 label: { text: "Mã cắn hộ" },
-                                editorOptions: {
-                                    stylingMode: "filled",
-                                    placeholder: "Vui lòng nhập...",
-                                },
+
+                                //editorOptions: {
+                                //    stylingMode: "filled",
+                                //    placeholder: "Vui lòng nhập...",
+                                //},
                             },
                             {
                                 colSpan: 12,
@@ -396,8 +411,28 @@
                         lookup: {
                             dataSource: customStore_CustomerInfo,
                             valueExpr: "id",
-                            displayExpr: "firstName",
+                            displayExpr: getDisplayExpr,
                         },
+                        editorType: "dxLookup",
+                        editorOptions: {
+                            stylingMode: "filled",
+                            searchEnabled: true,
+                            searchExpr: ['firstName', 'lastName'],
+                            searchMode: "contains",
+                            showClearButton: true,
+                            placeholder: "Vui lòng nhập...",
+                            dataSource: customStore_CustomerInfo,
+                            valueExpr: "id",
+                            displayExpr: getDisplayExpr,
+                            //itemTemplate: function (data) {
+                            //    return $("<div>").append($("<b>").append(data.firstName + " " + data.lastName));
+                            //},
+                        },
+                        //cellTemplate: (c, o) => {
+                        //    console.log(c);
+                        //    console.log(o);
+                        //    $("<div>").append($("<b>").append(o.data.firstName + " " + o.data.lastName)).appendTo(c);
+                        //},
                     },// SignCode
                 ],
                 editing: {
@@ -436,6 +471,6 @@
                 },
             });
         };
-
+        
     </script>
 }
