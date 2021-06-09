@@ -216,7 +216,7 @@ namespace AppWFGenProject
             this.gbGenCode.Controls.Add(this.lbl3);
             this.gbGenCode.Controls.Add(this.lbl4);
             this.gbGenCode.Controls.Add(this.lbl1);
-            this.gbGenCode.Location = new System.Drawing.Point(12, 71);
+            this.gbGenCode.Location = new System.Drawing.Point(980, 13);
             this.gbGenCode.Name = "gbGenCode";
             this.gbGenCode.Size = new System.Drawing.Size(978, 493);
             this.gbGenCode.TabIndex = 0;
@@ -548,7 +548,7 @@ namespace AppWFGenProject
             // 
             // btnSearch_tbpSMJob
             // 
-            this.btnSearch_tbpSMJob.Image = global::AppWFGenProject.Properties.Resources.icons8_search_16;
+            this.btnSearch_tbpSMJob.Image = ((System.Drawing.Image)(resources.GetObject("btnSearch_tbpSMJob.Image")));
             this.btnSearch_tbpSMJob.Location = new System.Drawing.Point(841, 20);
             this.btnSearch_tbpSMJob.Name = "btnSearch_tbpSMJob";
             this.btnSearch_tbpSMJob.Size = new System.Drawing.Size(38, 25);
@@ -574,7 +574,7 @@ namespace AppWFGenProject
             // 
             // btnFirst_tbpSMJob
             // 
-            this.btnFirst_tbpSMJob.Image = global::AppWFGenProject.Properties.Resources.icons8_double_left_16;
+            this.btnFirst_tbpSMJob.Image = ((System.Drawing.Image)(resources.GetObject("btnFirst_tbpSMJob.Image")));
             this.btnFirst_tbpSMJob.Location = new System.Drawing.Point(323, 360);
             this.btnFirst_tbpSMJob.Name = "btnFirst_tbpSMJob";
             this.btnFirst_tbpSMJob.Size = new System.Drawing.Size(55, 27);
@@ -584,7 +584,7 @@ namespace AppWFGenProject
             // 
             // btnPrevious_tbpSMJob
             // 
-            this.btnPrevious_tbpSMJob.Image = global::AppWFGenProject.Properties.Resources.icons8_back_16;
+            this.btnPrevious_tbpSMJob.Image = ((System.Drawing.Image)(resources.GetObject("btnPrevious_tbpSMJob.Image")));
             this.btnPrevious_tbpSMJob.Location = new System.Drawing.Point(384, 360);
             this.btnPrevious_tbpSMJob.Name = "btnPrevious_tbpSMJob";
             this.btnPrevious_tbpSMJob.Size = new System.Drawing.Size(55, 27);
@@ -594,7 +594,7 @@ namespace AppWFGenProject
             // 
             // btnNext_tbpSMJob
             // 
-            this.btnNext_tbpSMJob.Image = global::AppWFGenProject.Properties.Resources.icons8_forward_16;
+            this.btnNext_tbpSMJob.Image = ((System.Drawing.Image)(resources.GetObject("btnNext_tbpSMJob.Image")));
             this.btnNext_tbpSMJob.Location = new System.Drawing.Point(543, 359);
             this.btnNext_tbpSMJob.Name = "btnNext_tbpSMJob";
             this.btnNext_tbpSMJob.Size = new System.Drawing.Size(55, 27);
@@ -604,7 +604,7 @@ namespace AppWFGenProject
             // 
             // btnLast_tbpSMJob
             // 
-            this.btnLast_tbpSMJob.Image = global::AppWFGenProject.Properties.Resources.icons8_double_right_16;
+            this.btnLast_tbpSMJob.Image = ((System.Drawing.Image)(resources.GetObject("btnLast_tbpSMJob.Image")));
             this.btnLast_tbpSMJob.Location = new System.Drawing.Point(604, 359);
             this.btnLast_tbpSMJob.Name = "btnLast_tbpSMJob";
             this.btnLast_tbpSMJob.Size = new System.Drawing.Size(55, 27);
@@ -707,7 +707,7 @@ namespace AppWFGenProject
             // 
             // btnSMLoad
             // 
-            this.btnSMLoad.Image = global::AppWFGenProject.Properties.Resources.icons8_data_encryption_30;
+            this.btnSMLoad.Image = ((System.Drawing.Image)(resources.GetObject("btnSMLoad.Image")));
             this.btnSMLoad.Location = new System.Drawing.Point(807, 14);
             this.btnSMLoad.Name = "btnSMLoad";
             this.btnSMLoad.Size = new System.Drawing.Size(75, 43);
@@ -840,7 +840,7 @@ namespace AppWFGenProject
             // 
             // btnCreateLDAP
             // 
-            this.btnCreateLDAP.Image = global::AppWFGenProject.Properties.Resources.icons8_add_user_male_30;
+            this.btnCreateLDAP.Image = ((System.Drawing.Image)(resources.GetObject("btnCreateLDAP.Image")));
             this.btnCreateLDAP.Location = new System.Drawing.Point(259, 222);
             this.btnCreateLDAP.Name = "btnCreateLDAP";
             this.btnCreateLDAP.Size = new System.Drawing.Size(123, 45);
@@ -953,7 +953,7 @@ namespace AppWFGenProject
             this.btnLDAPDone.Cursor = System.Windows.Forms.Cursors.AppStarting;
             this.btnLDAPDone.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.btnLDAPDone.ForeColor = System.Drawing.Color.Blue;
-            this.btnLDAPDone.Image = global::AppWFGenProject.Properties.Resources.icons8_checkmark_30;
+            this.btnLDAPDone.Image = ((System.Drawing.Image)(resources.GetObject("btnLDAPDone.Image")));
             this.btnLDAPDone.Location = new System.Drawing.Point(492, 205);
             this.btnLDAPDone.Name = "btnLDAPDone";
             this.btnLDAPDone.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -967,7 +967,7 @@ namespace AppWFGenProject
             this.btnLDAPEditUser.Cursor = System.Windows.Forms.Cursors.AppStarting;
             this.btnLDAPEditUser.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.btnLDAPEditUser.ForeColor = System.Drawing.Color.Blue;
-            this.btnLDAPEditUser.Image = global::AppWFGenProject.Properties.Resources.icons8_registration_30;
+            this.btnLDAPEditUser.Image = ((System.Drawing.Image)(resources.GetObject("btnLDAPEditUser.Image")));
             this.btnLDAPEditUser.Location = new System.Drawing.Point(132, 277);
             this.btnLDAPEditUser.Name = "btnLDAPEditUser";
             this.btnLDAPEditUser.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -982,7 +982,7 @@ namespace AppWFGenProject
             this.btnLDAPDUserDisable.Cursor = System.Windows.Forms.Cursors.AppStarting;
             this.btnLDAPDUserDisable.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.btnLDAPDUserDisable.ForeColor = System.Drawing.Color.Blue;
-            this.btnLDAPDUserDisable.Image = global::AppWFGenProject.Properties.Resources.icons8_denied_30;
+            this.btnLDAPDUserDisable.Image = ((System.Drawing.Image)(resources.GetObject("btnLDAPDUserDisable.Image")));
             this.btnLDAPDUserDisable.Location = new System.Drawing.Point(55, 277);
             this.btnLDAPDUserDisable.Name = "btnLDAPDUserDisable";
             this.btnLDAPDUserDisable.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -997,7 +997,7 @@ namespace AppWFGenProject
             this.btnLDAPRemoveGroup.Cursor = System.Windows.Forms.Cursors.AppStarting;
             this.btnLDAPRemoveGroup.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.btnLDAPRemoveGroup.ForeColor = System.Drawing.Color.Blue;
-            this.btnLDAPRemoveGroup.Image = global::AppWFGenProject.Properties.Resources.icons8_delete_30;
+            this.btnLDAPRemoveGroup.Image = ((System.Drawing.Image)(resources.GetObject("btnLDAPRemoveGroup.Image")));
             this.btnLDAPRemoveGroup.Location = new System.Drawing.Point(492, 155);
             this.btnLDAPRemoveGroup.Name = "btnLDAPRemoveGroup";
             this.btnLDAPRemoveGroup.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -1011,7 +1011,7 @@ namespace AppWFGenProject
             this.btnLDAPAddGroup.Cursor = System.Windows.Forms.Cursors.AppStarting;
             this.btnLDAPAddGroup.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.btnLDAPAddGroup.ForeColor = System.Drawing.Color.Blue;
-            this.btnLDAPAddGroup.Image = global::AppWFGenProject.Properties.Resources.icons8_add_user_group_man_man_30;
+            this.btnLDAPAddGroup.Image = ((System.Drawing.Image)(resources.GetObject("btnLDAPAddGroup.Image")));
             this.btnLDAPAddGroup.Location = new System.Drawing.Point(492, 105);
             this.btnLDAPAddGroup.Name = "btnLDAPAddGroup";
             this.btnLDAPAddGroup.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -1034,7 +1034,7 @@ namespace AppWFGenProject
             this.btnLDAPClear.Cursor = System.Windows.Forms.Cursors.AppStarting;
             this.btnLDAPClear.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.btnLDAPClear.ForeColor = System.Drawing.Color.Blue;
-            this.btnLDAPClear.Image = global::AppWFGenProject.Properties.Resources.icons8_broom_30;
+            this.btnLDAPClear.Image = ((System.Drawing.Image)(resources.GetObject("btnLDAPClear.Image")));
             this.btnLDAPClear.Location = new System.Drawing.Point(443, 19);
             this.btnLDAPClear.Name = "btnLDAPClear";
             this.btnLDAPClear.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -1087,7 +1087,7 @@ namespace AppWFGenProject
             // 
             this.btnLoginLDAP.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.btnLoginLDAP.ForeColor = System.Drawing.Color.Blue;
-            this.btnLoginLDAP.Image = global::AppWFGenProject.Properties.Resources.icons8_lock_50;
+            this.btnLoginLDAP.Image = ((System.Drawing.Image)(resources.GetObject("btnLoginLDAP.Image")));
             this.btnLoginLDAP.Location = new System.Drawing.Point(361, 48);
             this.btnLoginLDAP.Name = "btnLoginLDAP";
             this.btnLoginLDAP.Size = new System.Drawing.Size(103, 50);
@@ -1145,7 +1145,7 @@ namespace AppWFGenProject
             // 
             // cmsMenuNew
             // 
-            this.cmsMenuNew.Image = global::AppWFGenProject.Properties.Resources.icons8_add_new_16;
+            this.cmsMenuNew.Image = ((System.Drawing.Image)(resources.GetObject("cmsMenuNew.Image")));
             this.cmsMenuNew.Name = "cmsMenuNew";
             this.cmsMenuNew.Size = new System.Drawing.Size(107, 22);
             this.cmsMenuNew.Text = "New";
@@ -1153,35 +1153,35 @@ namespace AppWFGenProject
             // 
             // cmsMenuEdit
             // 
-            this.cmsMenuEdit.Image = global::AppWFGenProject.Properties.Resources.icons8_edit_row_16;
+            this.cmsMenuEdit.Image = ((System.Drawing.Image)(resources.GetObject("cmsMenuEdit.Image")));
             this.cmsMenuEdit.Name = "cmsMenuEdit";
             this.cmsMenuEdit.Size = new System.Drawing.Size(107, 22);
             this.cmsMenuEdit.Text = "Edit";
             // 
             // cmsMenuDelete
             // 
-            this.cmsMenuDelete.Image = global::AppWFGenProject.Properties.Resources.icons8_delete_16;
+            this.cmsMenuDelete.Image = ((System.Drawing.Image)(resources.GetObject("cmsMenuDelete.Image")));
             this.cmsMenuDelete.Name = "cmsMenuDelete";
             this.cmsMenuDelete.Size = new System.Drawing.Size(107, 22);
             this.cmsMenuDelete.Text = "Delete";
             // 
             // cmsMenuCopy
             // 
-            this.cmsMenuCopy.Image = global::AppWFGenProject.Properties.Resources.icons8_copy_16;
+            this.cmsMenuCopy.Image = ((System.Drawing.Image)(resources.GetObject("cmsMenuCopy.Image")));
             this.cmsMenuCopy.Name = "cmsMenuCopy";
             this.cmsMenuCopy.Size = new System.Drawing.Size(107, 22);
             this.cmsMenuCopy.Text = "Copy";
             // 
             // cmsMenuPaste
             // 
-            this.cmsMenuPaste.Image = global::AppWFGenProject.Properties.Resources.icons8_paste_16;
+            this.cmsMenuPaste.Image = ((System.Drawing.Image)(resources.GetObject("cmsMenuPaste.Image")));
             this.cmsMenuPaste.Name = "cmsMenuPaste";
             this.cmsMenuPaste.Size = new System.Drawing.Size(107, 22);
             this.cmsMenuPaste.Text = "Paste";
             // 
             // cmsMenuClone
             // 
-            this.cmsMenuClone.Image = global::AppWFGenProject.Properties.Resources.icons8_clone_16;
+            this.cmsMenuClone.Image = ((System.Drawing.Image)(resources.GetObject("cmsMenuClone.Image")));
             this.cmsMenuClone.Name = "cmsMenuClone";
             this.cmsMenuClone.Size = new System.Drawing.Size(107, 22);
             this.cmsMenuClone.Text = "Clone";
@@ -1203,7 +1203,7 @@ namespace AppWFGenProject
             this.toolStripButton1});
             this.tspNavigator.Location = new System.Drawing.Point(0, 24);
             this.tspNavigator.Name = "tspNavigator";
-            this.tspNavigator.Size = new System.Drawing.Size(1847, 25);
+            this.tspNavigator.Size = new System.Drawing.Size(1958, 25);
             this.tspNavigator.TabIndex = 26;
             this.tspNavigator.Text = "toolStrip1";
             // 
@@ -1335,7 +1335,7 @@ namespace AppWFGenProject
             // 
             // sub11GenNetApi
             // 
-            this.sub11GenNetApi.Image = global::AppWFGenProject.Properties.Resources.icons8_piston_16;
+            this.sub11GenNetApi.Image = ((System.Drawing.Image)(resources.GetObject("sub11GenNetApi.Image")));
             this.sub11GenNetApi.Name = "sub11GenNetApi";
             this.sub11GenNetApi.Size = new System.Drawing.Size(190, 22);
             this.sub11GenNetApi.Text = "Gen CURD API Net 3.1";
@@ -1343,7 +1343,7 @@ namespace AppWFGenProject
             // 
             // sub12SendMail
             // 
-            this.sub12SendMail.Image = global::AppWFGenProject.Properties.Resources.icons8_system_task_16;
+            this.sub12SendMail.Image = ((System.Drawing.Image)(resources.GetObject("sub12SendMail.Image")));
             this.sub12SendMail.Name = "sub12SendMail";
             this.sub12SendMail.Size = new System.Drawing.Size(190, 22);
             this.sub12SendMail.Text = "Setting Send Mail";
@@ -1351,7 +1351,7 @@ namespace AppWFGenProject
             // 
             // sub13LDAP
             // 
-            this.sub13LDAP.Image = global::AppWFGenProject.Properties.Resources.icons8_active_directory_16;
+            this.sub13LDAP.Image = ((System.Drawing.Image)(resources.GetObject("sub13LDAP.Image")));
             this.sub13LDAP.Name = "sub13LDAP";
             this.sub13LDAP.Size = new System.Drawing.Size(190, 22);
             this.sub13LDAP.Text = "LDAP Manger";
@@ -1562,7 +1562,7 @@ namespace AppWFGenProject
             this.mnHelp});
             this.menuMain.Location = new System.Drawing.Point(0, 0);
             this.menuMain.Name = "menuMain";
-            this.menuMain.Size = new System.Drawing.Size(1847, 24);
+            this.menuMain.Size = new System.Drawing.Size(1958, 24);
             this.menuMain.TabIndex = 1;
             this.menuMain.Text = "menuStrip1";
             // 
@@ -1584,7 +1584,7 @@ namespace AppWFGenProject
             // MainProject
             // 
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(1847, 608);
+            this.ClientSize = new System.Drawing.Size(1847, 642);
             this.Controls.Add(this.gbGenCode);
             this.Controls.Add(this.tspNavigator);
             this.Controls.Add(this.gbAutoSendMail);

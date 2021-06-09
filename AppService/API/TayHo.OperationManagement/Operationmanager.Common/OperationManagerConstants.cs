@@ -19,5 +19,19 @@
         public const string FilesAttachment_TABLENAME = "FilesAttachment";
         public const string TestApi_TABLENAME = "TestApi";
         public const string WarrantyRequest_TABLENAME = "WarrantyRequest";
+        public const string CategoryGoods_TABLENAME = "CategoryGoods";
+        public const string Complaint_TABLENAME = "Complaint";
+        public const string ComplaintResolve_TABLENAME = "ComplaintResolve";
+        public const string CategoryStorage_TABLENAME = "CategoryStorage";
+        public const string ComplaintsType_TABLENAME = "ComplaintsType";
+        public const string MaintenanceLog_TABLENAME = "MaintenanceLog";
+        public const string MaintenancerInfo_TABLENAME = "MaintenancerInfo";
+        public const string MaintenanceSchedule_TABLENAME = "MaintenanceSchedule";
+        public const string MaintenanceSupplierInfo_TABLENAME = "MaintenanceSupplierInfo";
+        public const string WarehouseGoodsLog_TABLENAME = "WarehouseGoodsLog";
+        public const string WarehouseGoodsStorage_TABLENAME = "WarehouseGoodsStorage";
+        public const string WarehouseStorage_TABLENAME = "WarehouseStorage";
+        //public const string WarehouseGoodsLog_TABLENAME = "WarehouseGoodsLog";
+
     }
 }
