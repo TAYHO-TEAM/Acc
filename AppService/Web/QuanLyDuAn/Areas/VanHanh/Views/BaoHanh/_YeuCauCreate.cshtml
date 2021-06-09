@@ -25,7 +25,7 @@
                     colCount: 12,
                     items: [
                         {
-                            colSpan: 4,
+                            colSpan: 6,
                             dataField: "realEstateId",
                             label: { text: "Mã căn hộ" },
                             lookup: {
@@ -58,17 +58,21 @@
                                     //.option('disabled', data.value != null);
                                     if (data.value != null) {
                                         console.log(data.value);
-                                        
-                                        var a = "";
-                                        customStore_CustomerInfoRealEstateById(data.value).load().then((rs) => { console.log(rs); });
-                                        //customStore_CustomerInfoRealEstateById(data.value).load().done((rs) => {
-                                        //    a = rs;
-                                        //    console.log(rs);
-                                        //    //return rs;
+                                        var deferred = $.Deferred();
+                                        customStore_CustomerRealEstate(data.value).load().done((rs) => {
+                                            if (rs != null && rs.length > 0) {
+                                                customStore_CustomerInfoById(rs[0].customerInfoId).load().done((rsCI) => {
+                                                    console.log(rsCI);
+                                                    $('#elementCustomerId').dxSelectBox('instance')
+                                                        .option('value', rsCI[0].id == null ? 0 : rsCI[0].id);
+                                                    //$('#elementFullNameId').dxTextBox('instance')
+                                                    //    .option('value', rsCI[0].id == null ? "" : (rsCI[0].firstName + " " + rsCI[0].lastName));
+                                                    $('#elementPhoneId').dxTextBox('instance')
+                                                        .option('value', rsCI[0].id == null ? 0 : rsCI[0].phone);
+                                                });
+                                            }
+                                        });
 
-                                        //    //$('#elementDocumentTypeId').dxSelectBox('instance')
-                                        //    //    .option('value', rs[0].documentTypeId == null ? 0 : rs[0].documentTypeId);
-                                        //});
                                     }
                                     else {
                                         $('#elementDocumentTypeId').dxSelectBox('instance')
@@ -81,7 +85,7 @@
                             validationRules: [{ type: "required" }],
                         },
                         {
-                            colSpan: 4,
+                            colSpan: 6,
                             dataField: "customerId",
                             label: { text: "mã khách hàng" },
                             lookup: {
@@ -107,7 +111,7 @@
                             validationRules: [{ type: "required" }],
                         },
                         {
-                            colSpan: 4,
+                            colSpan: 6,
                             dataField: "defectiveId",
                             label: { text: "Mã lỗi" },
                             lookup: {
@@ -134,20 +138,20 @@
                             },
                             validationRules: [{ type: "required" }],
                         },
-                        {
-                            colSpan: 6,
-                            dataField: "fullName",
-                            label: { text: "Họ tên khách hàng" },
-                            editorType: "dxTextBox",
-                            editorOptions: {
-                                elementAttr: {
-                                    id: "elementFullNameId",
-                                },
-                                stylingMode: "filled",
-                                placeholder: "Vui lòng nhập...",
-                                value: formData["description"],
-                            },
-                        },
+                        //{
+                        //    colSpan: 6,
+                        //    dataField: "fullName",
+                        //    label: { text: "Họ tên khách hàng" },
+                        //    editorType: "dxTextBox",
+                        //    editorOptions: {
+                        //        elementAttr: {
+                        //            id: "elementFullNameId",
+                        //        },
+                        //        stylingMode: "filled",
+                        //        placeholder: "Vui lòng nhập...",
+                        //        value: formData["description"],
+                        //    },
+                        //},
                         {
                             colSpan: 6,
                             dataField: "phone",

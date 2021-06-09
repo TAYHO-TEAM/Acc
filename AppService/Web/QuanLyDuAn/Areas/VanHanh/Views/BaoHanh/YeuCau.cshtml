@@ -132,15 +132,14 @@
         var customStore_Defective = $DATASOURCEGET(ACTION_DEFECTIVE, KEY);
         var customStore_RealEstate = $DATASOURCEGET(ACTION_REALESTATE, KEY);
         var customStore_CustomerInfoRealEstateById = (id) => {
+            var deferred = $.Deferred();
             return customStore_CustomerRealEstate(id).load().then((rs) => {
                 if (rs != null && rs.length > 0) {
                     console.log("khách :" + rs[0].customerInfoId);
-                    return customStore_CustomerInfoById(rs[0].customerInfoId)[0];
-                }
-                else {
-                    return null;
+                    deferred.resolve(customStore_CustomerInfoById(rs[0].customerInfoId)[0]);
                 }
             });
+            return deferred.promise();
         }
         var customStore_CustomerInfoById = (id) => new DevExpress.data.DataSource({
             store: $DATASOURCEGET(ACTION_CUSTOMERINFO, KEY),
