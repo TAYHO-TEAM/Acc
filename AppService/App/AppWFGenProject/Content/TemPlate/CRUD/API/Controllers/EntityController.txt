@@ -18,7 +18,7 @@ namespace {nameproject}.Api.Controllers.v1
     public class {Entity}Controller : APIControllerBase
     {
         const string VALIDATION_ERROR = "The request failed due to a validation error";
-        public string nameEF = QuanLyVanHanhConstants.{Entity}_TABLENAME;
+        public string nameEF = OperationManagerConstants.{Entity}_TABLENAME;
         protected readonly IQuanLyVanHanhRepository<{Entity}> _quanLyVanHanhRepository;
         public {Entity}Controller(IMapper mapper, IHttpContextAccessor httpContextAccessor, IQuanLyVanHanhRepository<{Entity}> quanLyVanHanhRepository) : base(mapper, httpContextAccessor)
         {
@@ -31,7 +31,7 @@ namespace {nameproject}.Api.Controllers.v1
         /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(typeof(VoidMethodResult), (int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> GetAll([FromQuery] DataSourceLoadOptions loadOptions)
+        public async Task<IActionResult> GetAll([FromQuery] DataLoadOptionsHelper loadOptions)
         {
             return Ok(await _quanLyVanHanhRepository.GetAll(_user, nameEF, loadOptions));
         }
@@ -50,8 +50,10 @@ namespace {nameproject}.Api.Controllers.v1
             {
                 if (!ModelState.IsValid) throw new CommandHandlerException(new ErrorResult());
                 var model = new {Entity}();
-                JsonConvert.PopulateObject(values, model);
-                return Ok(await _quanLyVanHanhRepository.Insert(_user, nameEF, model));
+                if (!string.IsNullOrEmpty(values))
+                    JsonConvert.PopulateObject(values, model);
+                IFormFileCollection files = Request.Form.Files;
+                return Ok(await _quanLyVanHanhRepository.Insert(_user, nameEF, model, files));
             }
             catch (Exception ex)
             {
@@ -70,9 +72,11 @@ namespace {nameproject}.Api.Controllers.v1
             try
             {
                 {Entity} model = new {Entity}();
-                JsonConvert.PopulateObject(values, model);
+                if (!string.IsNullOrEmpty(values))
+                    JsonConvert.PopulateObject(values, model);
+                IFormFileCollection files = Request.Form.Files;
                 model.Id = key;
-                return Ok(await _quanLyVanHanhRepository.Update(_user, nameEF, model));
+                return Ok(await _quanLyVanHanhRepository.Update(_user, nameEF, model, files));
             }
             catch (Exception ex)
             {

@@ -54,11 +54,6 @@ namespace OperationManager.CRUD.Api.Controllers.v1
                 if (!string.IsNullOrEmpty(values))
                     JsonConvert.PopulateObject(values, model);
                 IFormFileCollection files = Request.Form.Files;
-                //if (files != null)
-                //{
-                //    model.setFile(files);
-                //}
-
                 return Ok(await _quanLyVanHanhRepository.Insert(_user, nameEF, model, files));
             }
             catch (Exception ex)

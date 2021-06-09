@@ -40,6 +40,19 @@ namespace OperationManager.CRUD.BLL.Extensions
             services.AddScoped<IQuanLyVanHanhRepository<RealEstate>, QuanLyVanHanhRepository<RealEstate>>();
             services.AddScoped<IQuanLyVanHanhRepository<TestApi>, QuanLyVanHanhRepository<TestApi>>();
             services.AddScoped<IQuanLyVanHanhRepository<FilesAttachment>, QuanLyVanHanhRepository<FilesAttachment>>();
+            services.AddScoped<IQuanLyVanHanhRepository<Complaint>, QuanLyVanHanhRepository<Complaint>>();
+            services.AddScoped<IQuanLyVanHanhRepository<ComplaintResolve>, QuanLyVanHanhRepository<ComplaintResolve>>();
+            services.AddScoped<IQuanLyVanHanhRepository<ComplaintsType>, QuanLyVanHanhRepository<ComplaintsType>>();
+            services.AddScoped<IQuanLyVanHanhRepository<CategoryGoods>, QuanLyVanHanhRepository<CategoryGoods>>();
+            services.AddScoped<IQuanLyVanHanhRepository<CategoryStorage>, QuanLyVanHanhRepository<CategoryStorage>>();
+            services.AddScoped<IQuanLyVanHanhRepository<MaintenanceLog>, QuanLyVanHanhRepository<MaintenanceLog>>();
+            services.AddScoped<IQuanLyVanHanhRepository<MaintenanceSchedule>, QuanLyVanHanhRepository<MaintenanceSchedule>>();
+            services.AddScoped<IQuanLyVanHanhRepository<MaintenancerInfo>, QuanLyVanHanhRepository<MaintenancerInfo>>();
+            services.AddScoped<IQuanLyVanHanhRepository<MaintenanceSupplierInfo>, QuanLyVanHanhRepository<MaintenanceSupplierInfo>>();
+            services.AddScoped<IQuanLyVanHanhRepository<WarehouseGoodsLog>, QuanLyVanHanhRepository<WarehouseGoodsLog>>();
+            services.AddScoped<IQuanLyVanHanhRepository<WarehouseGoodsStorage>, QuanLyVanHanhRepository<WarehouseGoodsStorage>>();
+            services.AddScoped<IQuanLyVanHanhRepository<WarehouseStorage>, QuanLyVanHanhRepository<WarehouseStorage>>();
+
             return services;
         }
         #endregion private functions

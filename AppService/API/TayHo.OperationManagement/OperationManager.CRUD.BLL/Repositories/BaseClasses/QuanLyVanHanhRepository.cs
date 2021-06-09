@@ -379,6 +379,42 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
                 case nameof(_dbContext.TestApi):
                     orders = _dbContext.TestApi;
                     break;
+                case nameof(_dbContext.CategoryGoods):
+                    orders = _dbContext.CategoryGoods;
+                    break;
+                case nameof(_dbContext.CategoryStorage):
+                    orders = _dbContext.CategoryStorage;
+                    break;
+                case nameof(_dbContext.Complaint):
+                    orders = _dbContext.Complaint;
+                    break;
+                case nameof(_dbContext.ComplaintResolve):
+                    orders = _dbContext.ComplaintResolve;
+                    break;
+                case nameof(_dbContext.ComplaintsType):
+                    orders = _dbContext.ComplaintsType;
+                    break;
+                case nameof(_dbContext.MaintenanceLog):
+                    orders = _dbContext.MaintenanceLog;
+                    break;
+                case nameof(_dbContext.MaintenancerInfo):
+                    orders = _dbContext.MaintenancerInfo;
+                    break;
+                case nameof(_dbContext.MaintenanceSchedule):
+                    orders = _dbContext.MaintenanceSchedule;
+                    break;
+                case nameof(_dbContext.MaintenanceSupplierInfo):
+                    orders = _dbContext.MaintenanceSupplierInfo;
+                    break;
+                case nameof(_dbContext.WarehouseGoodsLog):
+                    orders = _dbContext.WarehouseGoodsLog;
+                    break;
+                case nameof(_dbContext.WarehouseGoodsStorage):
+                    orders = _dbContext.WarehouseGoodsStorage;
+                    break;
+                case nameof(_dbContext.WarehouseStorage):
+                    orders = _dbContext.WarehouseStorage;
+                    break;
                 default:
                     orders = null;
                     break;

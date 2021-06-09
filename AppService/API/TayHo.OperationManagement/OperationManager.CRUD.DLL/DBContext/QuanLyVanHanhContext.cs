@@ -26,7 +26,18 @@ namespace OperationManager.CRUD.DAL.DBContext
         public DbSet<RealEstate> RealEstate { get; set; }
         public DbSet<FilesAttachment> FilesAttachment { get; set; }
         public DbSet<TestApi> TestApi { get; set; }
-
+        public DbSet<CategoryGoods> CategoryGoods { get; set; }
+        public DbSet<CategoryStorage> CategoryStorage { get; set; }
+        public DbSet<Complaint> Complaint { get; set; }
+        public DbSet<ComplaintResolve> ComplaintResolve { get; set; }
+        public DbSet<ComplaintsType> ComplaintsType { get; set; }
+        public DbSet<MaintenanceLog> MaintenanceLog { get; set; }
+        public DbSet<MaintenancerInfo> MaintenancerInfo { get; set; }
+        public DbSet<MaintenanceSchedule> MaintenanceSchedule { get; set; }
+        public DbSet<MaintenanceSupplierInfo> MaintenanceSupplierInfo { get; set; }
+        public DbSet<WarehouseGoodsLog> WarehouseGoodsLog { get; set; }
+        public DbSet<WarehouseGoodsStorage> WarehouseGoodsStorage { get; set; }
+        public DbSet<WarehouseStorage> WarehouseStorage { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
