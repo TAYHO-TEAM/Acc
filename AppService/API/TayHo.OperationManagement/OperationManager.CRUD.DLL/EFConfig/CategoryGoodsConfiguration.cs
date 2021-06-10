@@ -17,12 +17,11 @@ namespace OperationManager.CRUD.DAL.EFConfig
             builder.Property(x => x.Hight).HasColumnName("Hight").UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.Width).HasColumnName("Width").UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.Depth).HasColumnName("Depth").UsePropertyAccessMode(PropertyAccessMode.Field);
-            builder.Property(x => x.Unit).HasColumnName("Unit").HasMaxLength(128).UsePropertyAccessMode(PropertyAccessMode.Field);
-            builder.Property(x => x.UnitType).HasColumnName("UnitType").UsePropertyAccessMode(PropertyAccessMode.Field);
+            builder.Property(x => x.UnitId).HasColumnName("UnitId").HasMaxLength(128).UsePropertyAccessMode(PropertyAccessMode.Field);
+            builder.Property(x => x.UnitMeasureId).HasColumnName("UnitMeasureId").UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.Weight).HasColumnName("Weight").UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.WeightUp).HasColumnName("WeightUp").UsePropertyAccessMode(PropertyAccessMode.Field);
-            builder.Property(x => x.UnitWeight).HasColumnName("UnitWeight").HasMaxLength(128).UsePropertyAccessMode(PropertyAccessMode.Field);
-            builder.Property(x => x.UnitWeightType).HasColumnName("UnitWeightType").UsePropertyAccessMode(PropertyAccessMode.Field);
+            builder.Property(x => x.UnitWeightId).HasColumnName("UnitWeightId").HasMaxLength(128).UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.Description).HasColumnName("Description").UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.Type).HasColumnName("Type").UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.Priority).HasColumnName("Priority").UsePropertyAccessMode(PropertyAccessMode.Field);

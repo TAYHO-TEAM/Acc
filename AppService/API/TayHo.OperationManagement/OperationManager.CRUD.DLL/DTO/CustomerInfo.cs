@@ -9,7 +9,7 @@ namespace OperationManager.CRUD.DAL.DTO
     public class CustomerInfo : DOBase
     {
         public string Code { get; set; }
-        public string BarCode { get; set; }
+        public string Barcode { get; set; }
         public string SignCode { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }

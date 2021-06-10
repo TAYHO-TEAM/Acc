@@ -11,7 +11,7 @@ namespace OperationManager.CRUD.DAL.EFConfig
         {
             builder.ToTable(OperationManagerConstants.CustomerInfo_TABLENAME);
             builder.Property(x => x.Code).HasColumnName("Code").HasMaxLength(128).UsePropertyAccessMode(PropertyAccessMode.Field);
-            builder.Property(x => x.BarCode).HasColumnName("BarCode").HasMaxLength(128).UsePropertyAccessMode(PropertyAccessMode.Field);
+            builder.Property(x => x.Barcode).HasColumnName("Barcode").HasMaxLength(128).UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.SignCode).HasColumnName("SignCode").HasMaxLength(128).UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.FirstName).HasColumnName("FirstName").HasMaxLength(256).UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.LastName).HasColumnName("LastName").HasMaxLength(256).UsePropertyAccessMode(PropertyAccessMode.Field);

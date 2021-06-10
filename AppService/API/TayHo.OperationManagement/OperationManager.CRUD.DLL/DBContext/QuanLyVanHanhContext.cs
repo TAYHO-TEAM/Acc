@@ -38,6 +38,12 @@ namespace OperationManager.CRUD.DAL.DBContext
         public DbSet<WarehouseGoodsLog> WarehouseGoodsLog { get; set; }
         public DbSet<WarehouseGoodsStorage> WarehouseGoodsStorage { get; set; }
         public DbSet<WarehouseStorage> WarehouseStorage { get; set; }
+        public DbSet<CategoryUnit> CategoryUnit { get; set; }
+
+        /// <summary>
+        /// View Table
+        /// </summary>
+        public DbSet<WareHouseAllGoods> WareHouseAllGoods { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

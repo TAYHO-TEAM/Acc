@@ -31,7 +31,8 @@
         public const string WarehouseGoodsLog_TABLENAME = "WarehouseGoodsLog";
         public const string WarehouseGoodsStorage_TABLENAME = "WarehouseGoodsStorage";
         public const string WarehouseStorage_TABLENAME = "WarehouseStorage";
-        //public const string WarehouseGoodsLog_TABLENAME = "WarehouseGoodsLog";
+        public const string CategoryUnit_TABLENAME = "CategoryUnit";
+        public const string WareHouseAllGoods_TABLENAME = "WareHouseAllGoods";
 
     }
 }

@@ -1,0 +1,354 @@
+﻿
+@{
+    ViewBag.Title = "DanhMuchHH";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section style{   }
+<div id="popup-main-upload"></div>
+<div id="popup-register"></div>
+<div class="row">
+    <div class="col-8">
+        <div id="container" class="elevation-2"></div>
+    </div>
+    <div class="col-4">
+        <div id="container-defect" class="elevation-2"></div>
+    </div>
+    @*<div class="col-4">
+        <div id="container-maintenance" class="elevation-2"></div>
+    </div>*@
+</div>
+
+@section script{
+    <script src="~/Scripts/page/vanhanh.js"></script>
+    <script>
+        var id = 1;
+        var PROJECTID = isNullOrEmpty(localStorage.getItem("projectIdCurrent")) ? parseInt(localStorage.getItem("projectIdCurrent")) : 1;
+        ///-----------------------------READ ------------------------
+
+        var ACTION_CATEGORYGOODS = "CategoryGoods/";
+        var ACTION_CATEGORYUNIT = "CategoryUnit/";
+        var KEY = "id";
+        var WIDTH_CONTAINER = $("#container").width();
+        //..........................Get data -------------------------------------------------------------
+
+        var customStore =  new DevExpress.data.DataSource({
+            store: $DATASOURCE(ACTION_CATEGORYGOODS, KEY),
+        });
+        var customStore_CategoryUnit = $DATASOURCEGET(ACTION_CATEGORYUNIT, KEY);
+        //var customStore_Check = $DATASOURCE(ACTION_ITEMS, KEY);
+
+        //..........................  Load View -------------------------------------------------------------
+        $(function () {
+            loadData();
+        });
+        var loadData = () => $("#container").dxTreeList({
+            dataSource: customStore,
+            remoteOperations: true,
+            height: heightScreen,
+            rootValue: 0,
+            parentIdExpr: "parentId",
+            keyExpr: "id",
+            showBorders: false,
+            showColumnHeaders: true,
+            showColumnLines: false,
+            hoverStateEnabled: true,
+            showRowLines: true,
+            columnAutoWidth: true,
+            wordWrapEnabled: true,
+            rowAlternationEnabled: true,
+            autoExpandAll: false,
+            searchPanel: {
+                //highlightCaseSensitive: true,
+                //highlightSearchText: true,
+                searchVisibleColumnsOnly: true,
+                visible: true
+            },
+            paging: { enabled: false },
+            onToolbarPreparing: function (e) {
+                var container = e.component;
+                e.toolbarOptions.items.unshift(
+                    {
+                        location: "after",
+                        widget: "dxButton",
+                        options: {
+                            icon: "refresh",
+                            type: "default",
+                            onClick: () => container.refresh()
+                        }
+                    })
+            },
+            onInitNewRow: (e) => {
+                e.data.isActive = true;
+                e.data.isVisible = true;
+            },
+            onSelectionChanged: (e) => {
+                var $id = e.selectedRowKeys[0];
+            },
+            selection: {
+                mode: "single"
+            },
+            columns: [
+                {
+                    dataField: "code",
+                    allowFiltering: true,
+                    caption: "Mã",
+                    dataType: "string",
+                    alignment: "center",
+                    visible: false,
+                    readOnly: true,
+                    allowEditing: false,
+                },// code
+                {
+                    dataField: "title",
+                    dataType: "string",
+                    alignment: "center",
+                    caption: "Tên",
+                },
+                {
+                    dataField: "description",
+                    allowFiltering: true,
+                    caption: "Mô tả",
+                    dataType: "string",
+                    alignment: "center",
+                },// descriptions
+                {
+                    dataField: "unitId",
+                    allowFiltering: true,
+                    caption: "Đơn vị",
+                    dataType: "number",
+                    editorType: "dxNumberBox",
+                    alignment: "center",
+                    lookup: {
+                        dataSource: customStore_CategoryUnit,
+                        valueExpr: "id",
+                        displayExpr: "title",
+                    },
+                },// descriptions
+                {
+                    dataField: "hight",
+                    allowFiltering: true,
+                    caption: "Cao",
+                    dataType: "number",
+                    editorType: "dxNumberBox",
+                    alignment: "center",
+                },// descriptions
+                {
+                    dataField: "width",
+                    allowFiltering: true,
+                    caption: "Rộng",
+                    dataType: "number",
+                    editorType: "dxNumberBox",
+                    alignment: "center",
+                },// descriptions
+                {
+                    dataField: "depth",
+                    allowFiltering: true,
+                    caption: "Sâu",
+                    dataType: "number",
+                    editorType: "dxNumberBox",
+                },// descriptions
+                {
+                    dataField: "unitMeasureId",
+                    allowFiltering: true,
+                    caption: "Đơ vị đo lường",
+                    dataType: "string",
+                    alignment: "center",
+                    lookup: {
+                        dataSource: customStore_CategoryUnit,
+                        valueExpr: "id",
+                        displayExpr: "title",
+                    },
+                },
+                {
+                    dataField: "weight",
+                    allowFiltering: true,
+                    caption: "Cân nặng",
+                    dataType: "number",
+                    editorType: "dxNumberBox",
+                    alignment: "center",
+                },
+                {
+                    dataField: "weightUp",
+                    allowFiltering: true,
+                    caption: "Chịu tải",
+                    dataType: "number",
+                    editorType: "dxNumberBox",
+                    alignment: "center",
+                },
+                {
+                    dataField: "unitWeightId",
+                    allowFiltering: true,
+                    caption: "Đơn vị tl",
+                    dataType: "string",
+                    alignment: "center",
+                    lookup: {
+                         dataSource: customStore_CategoryUnit,
+                        valueExpr: "id",
+                        displayExpr: "title",
+                    },
+                },// descriptions
+                {
+                    dataField: "isActive",
+                    allowFiltering: true,
+                    caption: "Trạng thái",
+                    dataType: "string",
+                    alignment: "center",
+                    visible: false,
+                },// isActive
+                {
+                    dataField: "priority",
+                    visible: false,
+                    caption: "Ưu tiên",
+                    sortOrder: "asc"
+                },
+            ],
+            editing: {
+                allowAdding: true,
+                allowUpdating: true,
+                allowDeleting: true,
+                mode: "popup",
+                useIcons: true,
+                confirmDelete: true,
+                popup: {
+                    width: "60%",
+                    height: "60%",
+                    showTitle: true,
+                    title: "Thêm hạng mục vận hành",
+                    closeOnOutsideClick: false,
+                    showCloseButton: true,
+                },
+                form: {
+                    labelLocation: "left",
+                    itemType: "group",
+                    colCount: 12,
+                    showRequiredMark: true,
+                    requiredMark: "(*)",
+                    items: [
+                        {
+                            colSpan: 4,
+                            dataField: "title",
+                            label: { text: "Tên HH" },
+                            editorOptions: {
+                                stylingMode: "filled",
+                                placeholder: "Vui lòng nhập...",
+                            },
+                            validationRules: [{ type: "required" }],
+                        },
+                        {
+                            colSpan: 4,
+                            dataField: "unitId",
+                            label: { text: "Đơn vị" },
+                            editorType: "dxSelectBox",
+                            editorOptions: {
+                                stylingMode: "filled",
+                                dataSource: customStore_CategoryUnit,
+                                placeholder: "Vui lòng chọn...",
+                            },
+                            validationRules: [{ type: "required" }],
+                        },
+                        {
+                            colSpan: 4,
+                            dataField: "hight",
+                            label: { text: "Cao" },
+                            editorOptions: {
+                                stylingMode: "filled",
+                                placeholder: "Vui lòng nhập...",
+                            },
+                            validationRules: [{ type: "required" }],
+                        },
+                        {
+                            colSpan: 4,
+                            dataField: "width",
+                            label: { text: "Rộng" },
+                            editorOptions: {
+                                stylingMode: "filled",
+                                placeholder: "Vui lòng nhập...",
+                            },
+                            validationRules: [{ type: "required" }],
+                        },
+                        {
+                            colSpan: 4,
+                            dataField: "depth",
+                            label: { text: "Sâu" },
+                            editorOptions: {
+                                stylingMode: "filled",
+                                placeholder: "Vui lòng nhập...",
+                            },
+                            validationRules: [{ type: "required" }],
+                        },
+                        {
+                            colSpan: 4,
+                            dataField: "unitMeasureId",
+                            label: { text: "Đơn vị kích thước" },
+                            editorType: "dxSelectBox",
+                            editorOptions: {
+                                stylingMode: "filled",
+                                dataSource: customStore_CategoryUnit,
+                                placeholder: "Vui lòng chọn...",
+                            },
+                            validationRules: [{ type: "required" }],
+                         
+                        },
+                        {
+                            colSpan: 4,
+                            dataField: "weight",
+                            label: { text: "Cân nặng" },
+                            editorOptions: {
+                                stylingMode: "filled",
+                                placeholder: "Vui lòng nhập...",
+                            },
+                            validationRules: [{ type: "required" }],
+                        },
+                        {
+                            colSpan: 4,
+                            dataField: "weightUp",
+                            label: { text: "Chị tải" },
+                            editorOptions: {
+                                stylingMode: "filled",
+                                placeholder: "Vui lòng nhập...",
+                            },
+                            validationRules: [{ type: "required" }],
+                        },
+                        {
+                            colSpan: 4,
+                            dataField: "unitWeightId",
+                            label: { text: "Đơn vị kích thước" },
+                            editorType: "dxSelectBox",
+                            editorOptions: {
+                                stylingMode: "filled",
+                                dataSource: customStore_CategoryUnit,
+                                placeholder: "Vui lòng chọn...",
+                            },
+                            validationRules: [{ type: "required" }],
+
+                        },
+                        {
+                            colSpan: 12,
+                            dataField: "isActive",
+                            label: { text: "Trạng thái" },
+                            editorType: "dxSwitch",
+                            editorOptions: {
+                                dataSource: listActiveStatus,
+                                valueExpr: "value",
+                                displayExpr: "text",
+                            },
+                        },
+                        {
+                            colSpan: 12,
+                            dataField: "descriptions",
+                            label: { text: "Mô tả" },
+                            editorOptions: {
+                                stylingMode: "filled",
+                                placeholder: "Vui lòng nhập...",
+                            },
+                            validationRules: [{ type: "required" }],
+                        },
+                       
+                    ],
+                },
+            },
+        });
+  
+    </script>
+}
+

@@ -1,0 +1,552 @@
+﻿
+@{
+    ViewBag.Title = "XuatNhap";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section style{   }
+<div id="popup-main-upload"></div>
+<div id="popup-register"></div>
+<div id="popup-acceptence"></div>
+<div class="row">
+    <div class="col-4">
+        <div id="container" class="elevation-2"></div>
+    </div>
+    <div class="col-8">
+        <div id="container-detail" class="elevation-2"></div>
+    </div>
+</div>
+
+@section script{
+    <script src="~/Scripts/page/vanhanh.js"></script>
+    <script>
+        var id = 1;
+        clearContent();
+        ///-----------------------------READ ------------------------
+
+        var ACTION_WAREHOUSEALLGOODS = "WareHouseAllGoods/";
+        var ACTION_CONSTRUCTIONITEMS = "ConstructionItems/";
+        var ACTION_REALESTATE = "RealEstate/";
+        var ACTION_WAREHOUSESTORAGE = "WarehouseStorage/";
+        var KEY = "id";
+        var WIDTH_CONTAINER = $("#container").width();
+        var WareHouseID = isNullOrEmpty(localStorage.getItem("WareHouseCurrent")) ? parseInt(localStorage.getItem("WareHouseCurrent")) : 14;
+        //..........................Get data -------------------------------------------------------------
+
+        var customStore = (id) => new DevExpress.data.DataSource({
+            store: $DATASOURCEGET(ACTION_REALESTATE, KEY),
+            filter: [["ConstructionItemsId", "=", id]]
+        });
+        var customStore_Detail = (id) => new DevExpress.data.DataSource({
+            store: $DATASOURCE(ACTION_FEEDBACK, KEY),
+            filter: ["id", "=", id]
+        });
+        var customStore_WareHouse = new DevExpress.data.DataSource({
+            store: $DATASOURCEGET(ACTION_CONSTRUCTIONITEMS, KEY),
+            filter: [["parentId", "=", 0], "and", ["status", "=", 201]]
+        });
+        var customStore_WarehouseStorage = (id) => new DevExpress.data.DataSource({
+            store: $DATASOURCE(ACTION_WAREHOUSESTORAGE, KEY),
+            filter: ["realEstateId", "=", id]
+        });
+
+
+        //..........................  Load View -------------------------------------------------------------
+        $(function () {
+            loadData(ITEMSID);
+        });
+        var loadData = (ItemID) => {
+            $("#container").dxDataGrid({
+                height: heightScreen,
+                dataSource: customStore(ItemID),
+                repaintChangesOnly: true,
+                remoteOperations: true,
+                scrolling: { mode: "standard" },
+                showBorders: false,
+                showColumnHeaders: true,
+                showColumnLines: false,
+                hoverStateEnabled: true,
+                showRowLines: true,
+                columnAutoWidth: true,
+                wordWrapEnabled: true,
+                rowAlternationEnabled: true,
+                filterRow: { visible: true },
+                summary: {
+                    groupItems: [{
+                        column: "pmIsVisible",
+                        summaryType: "count"
+                    },
+                    ]
+                },
+                paging: {
+                    enabled: true,
+                    pageSize: 20
+                },
+                pager: {
+                    showPageSizeSelector: true,
+                    allowedPageSizes: [10, 20, 40],
+                    showInfo: true,
+                },
+                searchPanel: {
+                    highlightCaseSensitive: true,
+                    highlightSearchText: true,
+                    searchVisibleColumnsOnly: true,
+                    visible: WIDTH_CONTAINER > 350
+                },
+                onToolbarPreparing: function (e) {
+                    var container = e.component;
+                    e.toolbarOptions.items.unshift(
+                        {
+                            location: "before",
+                            widget: "dxSelectBox",
+                            options: {
+                                dataSource: customStore_ConstructionItems(0),
+                                valueExpr: "id",
+                                displayExpr: "title",
+                                width: "100%",
+                                searchEnabled: true,
+                                searchMode: "contains",
+                                showClearButton: false,
+                                stylingMode: "filled",
+                                value: ITEMSID,
+                                onValueChanged: function (data) {
+                                    ITEMSID = data.value;
+                                    localStorage.setItem('ItemsIdCurrent', ITEMSID);
+                                    loadData(ITEMSID);
+                                },
+                            },
+                        },
+                        {
+                            location: "after",
+                            widget: "dxButton",
+                            options: {
+                                icon: "refresh", tylingMode: "filled", type: "default",
+                                onClick: () => container.refresh()
+                            },
+
+                        },
+
+                    )
+                },
+                onInitNewRow: (e) => {
+                    e.data.isActive = true;
+                    e.data.isVisible = true;
+                },
+                onRowUpdating: (e) => {
+                    console.log(e);
+                    e.newData['isVisible'] = e.newData['pmIsVisible'];
+                    e.newData['id'] = e.oldData['id'];
+                },
+                onCellPrepared: (e) => {
+                    if (e.rowType == "data" && e.columnIndex == 1)
+                        e.cellElement.find('.dx-treelist-empty-space').toggleClass("dx-treelist-collapsed", e.data.chilCount > 0)
+                },
+                onRowDblClick: function (e) {
+                    var container = e.component;
+                },
+                selection: {
+                    mode: "single"
+                },
+                onContentReady: (e) => {
+                    var container = e.component;
+                    $("#action-add").dxSpeedDialAction({
+                        index: 1, icon: "fas fa-plus",
+                        label: "Thêm mới",
+                        visible: PermitInAction["insert"],
+                        onClick: () => {
+                            CALLPOPUP(
+                                "Tạo công việc",
+                                "/VanHanh/BaoHanh/_YeuCauCreate",
+                                ($(window).width() > 767 ? "50%" : "80%"),
+                                container
+                            );
+                        }
+                    }).dxSpeedDialAction("instance");
+                    DevExpress.config({
+                        floatingActionButtonConfig: {
+                            icon: "rowfield",
+                            label: "Tác vụ",
+                            shading: true,
+                            position: {
+                                of: e.element,
+                                my: "right bottom",
+                                at: "right bottom",
+                                offset: e.component.pageCount() > 1 ? "-15 -60" : "-15 -15"
+                            }
+                        }
+                    });
+                    DevExpress.ui.repaintFloatingActionButton();
+                },
+                onSelectionChanged: (e) => {
+                    var selectedRowData = e.selectedRowsData[0];
+                    var selectedRowKey = e.selectedRowKeys[0];
+                    //$('#action-log').remove();
+                    //e.component.refresh();
+                    if (selectedRowData != null && selectedRowKey != null) {
+                        var data = e.component.getRowIndexByKey(selectedRowData.paId);
+                        $("#action-update").dxSpeedDialAction({
+                            index: 2, icon: "fas fa-edit",
+                            label: "Cập nhật thông tin",
+                            visible: PermitInAction["update"],
+                            onClick: () => {
+                                var containerE = e.component;
+                                CALLPOPUP(
+                                    "Chi tiết yêu cầu bảo hành",
+                                    "/VanHanh/BaoHanh/_YeuCauDetail?id=" + selectedRowKey,
+                                    ($(window).width() > 767 ? "50%" : "80%"),
+                                    containerE
+                                );
+                            }
+                        }).dxSpeedDialAction("instance");
+                        $("#action-delete").dxSpeedDialAction({
+                            index: 3,
+                            icon: "fas fa-trash",
+                            label: "Xoá",
+                            visible: (selectedRowData.id != null && PermitInAction["delete"]),
+                            onClick: () => {
+                                DevExpress.ui.dialog.confirm("Bạn có chắc là muốn hủy bỏ giá trị của hạng mục?", "XÁC NHẬN THÔNG TIN").done(function (dialogResult) {
+                                    if (dialogResult) {
+                                        var deferred = $.Deferred();
+                                        customStore(ItemID).store().remove(selectedRowKey).then(() => {
+                                            DevExpress.ui.notify("Xoá thành công", "success", 3000);
+                                            e.component.refresh();
+                                        }, deferred.reject);
+                                        return deferred.promise();
+                                    }
+                                });
+                            }
+                        }).dxSpeedDialAction("instance");
+                        $("#action-log").dxSpeedDialAction({
+                            index: 4,
+                            visible: false,
+                        }).dxSpeedDialAction("instance");
+                        if (selectedRowData.status < 20 && selectedRowData.status > 10) {
+                            $("#action-log").dxSpeedDialAction({
+                                index: 4,
+                                icon: "fas fa-tools",
+                                label: "Kế hoạch sửa chữa",
+                                visible: selectedRowData.status < 20 && selectedRowData.status > 10 && PermitInAction["update"],
+                                onClick: () => {
+                                    var containerE = e.component;
+                                    CALLPOPUP(
+                                        "Kế hoạch sửa chữa",
+                                        "/VanHanh/BaoHanh/_DefectFix?id=" + selectedRowKey,
+                                        ($(window).width() > 767 ? "50%" : "80%"),
+                                        containerE
+                                    );
+                                }
+                            }).dxSpeedDialAction("instance");
+                        }
+                        else if (selectedRowData.status >= 20) {
+                            $("#action-log").dxSpeedDialAction({
+                                index: 4,
+                                icon: "fas fa-tools",
+                                label: "Tiến độ sửa chữa",
+                                visible: selectedRowData.status >= 20 && PermitInAction["update"],
+                                onClick: () => {
+                                    var containerE = e.component;
+                                    CALLPOPUP(
+                                        "Báo cáo sửa chữa",
+                                        "/VanHanh/BaoHanh/_DefectFixReport?id=" + selectedRowKey,
+                                        ($(window).width() > 767 ? "50%" : "80%"),
+                                        containerE
+                                    );
+                                }
+                            }).dxSpeedDialAction("instance");
+                        }
+                        //else if (selectedRowData.status >= 30) {
+                        //    $("#action-log").dxSpeedDialAction({
+                        //        index: 4,
+                        //        icon: "fas fa-tools",
+                        //        label: "Nghiệm thu",
+                        //        visible: PermitInAction["update"],
+                        //        onClick: () => {
+                        //            var containerE = e.component;
+                        //            CALLPOPUP(
+                        //                "Nghiệm thu",
+                        //                "/VanHanh/BaoHanh/_DefectAcceptance?id=" + selectedRowKey,
+                        //                ($(window).width() > 767 ? "50%" : "80%"),
+                        //                containerE
+                        //            );
+                        //        }
+                        //    }).dxSpeedDialAction("instance");
+                        //}
+                        clearContent();
+                        loadDefect(selectedRowData);
+                        if (selectedRowData.status < 20) {
+                            //loadDefect(selectedRowData);
+                        }
+                        else if (selectedRowData.status < 29) {
+
+                        }
+                        else if (selectedRowData.status < 39) {
+
+                        }
+                        else if (selectedRowData.status > 200) {
+
+                        }
+
+                    }
+                },
+                onCellClick: function (e) {
+
+                    if (typeof e.column !== "undefined") {
+                        if (e.column.dataField === "noAttachment") {
+                            loadUpload("PlanMaster", e.row.data, false);
+                        }
+                    }
+                },
+                columns: [
+                    {
+                        dataField: "realEstateId",
+                        allowFiltering: true,
+                        caption: "Địa ốc",
+                        dataType: "string",
+                        alignment: "center",
+                        visible: true,
+                        editorType: "dxLookup",
+                        lookup: {
+                            dataSource: customStore_RealEstate,
+                            valueExpr: "id",
+                            displayExpr: "code",
+                        },
+                        editorOptions: {
+                            dataSource: customStore_RealEstate,
+                            valueExpr: "id",
+                            displayExpr: "code",
+                            placeholder: "Vui lòng chọn...",
+                            searchExpr: ['name', 'description'],
+                            searchEnabled: true,
+                            searchMode: "contains",
+                            showClearButton: true,
+                            itemTemplate: function (data) {
+                                return $("<div>").append($("<b>").append(data.code).addClass("mr-1"));
+                            },
+                        },
+                    },// realEstateId
+                    {
+                        dataField: "customerId",
+                        allowFiltering: true,
+                        caption: "khách hàng",
+                        dataType: "string",
+                        alignment: "center",
+                        visible: true,
+                        editorType: "dxLookup",
+                        lookup: {
+                            dataSource: customStore_CustomerInfo,
+                            valueExpr: "id",
+                            displayExpr: "id",
+                        },
+                        editorOptions: {
+                            dataSource: customStore_CustomerInfo,
+                            valueExpr: "id",
+                            displayExpr: "id",
+                            placeholder: "Vui lòng chọn...",
+                            searchExpr: ['name', 'description'],
+                            searchEnabled: true,
+                            showClearButton: true,
+                            itemTemplate: function (data) {
+                                return $("<div>").append($("<b>").append(data.id).addClass("mr-1"));
+                            },
+                        },
+                    },// customerId
+                    {
+                        dataField: "fullName",
+                        allowFiltering: true,
+                        caption: "Họ tên khách hàng",
+                        dataType: "string",
+                        alignment: "center",
+                        visible: true,
+                    },// fullName
+                    {
+                        dataField: "defectiveId",
+                        allowFiltering: true,
+                        caption: "Lỗi",
+                        dataType: "number",
+                        alignment: "center",
+                        visible: true,
+                        editorType: "dxLookup",
+                        lookup: {
+                            dataSource: customStore_Defective,
+                            valueExpr: "id",
+                            displayExpr: "name",
+                        },
+                        editorOptions: {
+                            dataSource: customStore_Defective,
+                            valueExpr: "id",
+                            displayExpr: "name",
+                            placeholder: "Vui lòng chọn...",
+                            searchExpr: ['name', 'description'],
+                            searchEnabled: true,
+                            showClearButton: true,
+                            itemTemplate: function (data) {
+                                return $("<div>").append($("<b>").append(data.name).addClass("mr-1").append($("<em>").append(data.code).addClass("small ml-1 text-muted")));
+                            },
+                        },
+                    },// defectiveId
+                    {
+                        dataField: "phone",
+                        allowFiltering: true,
+                        caption: "Số điện thoại",
+                        dataType: "string",
+                        alignment: "center",
+                        visible: true,
+                        validationRules: [{
+                            type: "numeric"
+                        }]
+                    },// code
+                    {
+                        dataField: "note",
+                        allowFiltering: true,
+                        caption: "Ghi chú",
+                        dataType: "string",
+                        alignment: "center",
+                        visible: true,
+                    },// code
+                    {
+                        dataField: "noAttachment",
+                        allowFiltering: true,
+                        caption: "Căn hộ",
+                        dataType: "string",
+                        alignment: "center",
+                        visible: false,
+                    },// code
+                    {
+                        dataField: "status",
+                        allowFiltering: true,
+                        caption: "Trạng thái",
+                        dataType: "string",
+                        alignment: "center",
+                        visible: true,
+                        lookup: {
+                            dataSource: statusDefect,
+                            valueExpr: "ID",
+                            displayExpr: "Name",
+                        },
+                    },// code
+
+                ],
+                editing: {
+                    //allowAdding: true,
+                    //allowUpdating: true,
+                    //allowDeleting: true,
+                    mode: "batch",
+                    useIcons: true,
+                    confirmDelete: true,
+                    popup: {
+                        width: "50%",
+                        height: "50%",
+                        showTitle: true,
+                        title: "kế hoạch công việc",
+                        closeOnOutsideClick: false,
+                        showCloseButton: true,
+                    },
+                    form: {
+                        labelLocation: "left",
+                        itemType: "group",
+                        colCount: 12,
+                        showRequiredMark: true,
+                        requiredMark: "(*)",
+                        items: [
+                            {
+                                colSpan: 3,
+                                dataField: "name",
+                                label: { text: "Mã " },
+                                editorOptions: {
+                                    stylingMode: "filled",
+                                    placeholder: "Vui lòng nhập...",
+                                },
+                            },
+                        ],
+                    },
+                },
+            });
+        };
+        var loadDefect = (content) => {
+            $("#Defect").addClass("bg-blue");
+            $("#Defect").removeClass("text-muted");
+            $("#Defect-FeedBack-Logo").addClass("bg-blue");
+            $("#Defect-FeedBack-Text").removeClass("text-muted");
+            $("#Defect-FeedBack-Content").append("<p>" + content.note + "</p>");
+            $("#Defect-FeedBack-Time").append(moment(content.createDate).locale("vi").fromNow());
+
+
+            if (content.status < 11) {
+                $("#Defect-Approve-Text").empty();
+                $("#Defect-Approve-Text").append("Chờ xác nhận");
+                $("#Defect-Approve-Text").addClass("text-muted");
+            }
+            if (content.status >= 11) {
+                $("#Defect-Approve-Logo").addClass("bg-yellow");
+                $("#Defect-Approve-Text").empty();
+                $("#Defect-Approve-Text").append("Đã xác nhận");
+                $("#Defect-Approve-Text").removeClass("text-muted");
+            }
+            if (content.status >= 20) {
+                $("#Defect-Fix").addClass("bg-green");
+                $("#Defect-Fix").removeClass("text-muted");
+                $("#Defect-FixPlan-Logo").addClass("bg-green");
+                $("#Defect-FixPlan-Text").removeClass("text-muted");
+                $("#Defect-FixPlan-Text").empty();
+                $("#Defect-FixPlan-Text").append("Đã lên kế hoách sửa chữa");
+
+            }
+            if (content.status >= 21) {
+                $("#Defect-Fixing-Logo").addClass("bg-purple");
+                $("#Defect-Fixing-Text").removeClass("text-muted");
+            }
+            if (content.status >= 22) {
+                $("#Defect-Fixing-Text").empty();
+                $("#Defect-Fixing-Text").append("Đã hoàn tất sửa chữa");
+            }
+            //if (content.status >= 30) {
+            //    $("#Defect-Accept").addClass("bg-red");
+            //    $("#Defect-Accept").removeClass("text-muted");
+            //    $("#Defect-Accept-Logo").addClass("bg-red");
+            //    $("#Defect-Accept-Text").removeClass("text-muted");
+            //    $("#Defect-Accept-Text").empty();
+            //    $("#Defect-Accept-Text").append("Chờ nghiệm thu");
+            //}
+            //if (content.status >= 200) {
+            //    $("#Defect-Accept-Text").empty();
+            //    $("#Defect-Accept-Text").append("Đã nghiệm thu");
+            //}
+        }
+        var loadDefectFix = (content) => {
+
+        }
+        var loadDefectComplete = (content) => {
+
+        }
+        function clearContent() {
+            $("#Defect").removeClass("bg-blue");
+            $("#Defect").addClass("text-muted");
+            $("#Defect-FeedBack-Logo").removeClass("bg-blue");
+            $("#Defect-FeedBack-Text").addClass("text-muted");
+            $("#Defect-FeedBack-Content").empty();
+            $("#Defect-FeedBack-Time").empty();
+            $("#Defect-Approve-Logo").removeClass("bg-yellow");
+            $("#Defect-Approve-Text").addClass("text-muted");
+
+            $("#Defect-Approve-Time").empty();
+
+
+            $("#Defect-Fix").removeClass("bg-green");
+            $("#Defect-Fix").addClass("text-muted");
+            $("#Defect-FixPlan-Logo").removeClass("bg-green");
+            $("#Defect-FixPlan-Text").addClass("text-muted");
+            $("#Defect-FixPlan-Time").empty();
+            $("#Defect-Fixing-Logo").removeClass("bg-purple");
+            $("#Defect-Fixing-Text").addClass("text-muted");
+            $("#Defect-Fixing-Time").empty();
+
+
+            $("#Defect-Accept").removeClass("bg-red");
+            $("#Defect-Accept").addClass("text-muted");
+            $("#Defect-Accept-Logo").removeClass("bg-red");
+            $("#Defect-Accept-Text").addClass("text-muted");
+            $("#Defect-Accept-Time").empty();
+        }
+
+    </script>
+}
+

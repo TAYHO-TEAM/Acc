@@ -211,7 +211,8 @@
                         editorType: "dxSwitch",
                         lookup: {
                             dataSource: listActiveStatus,
-                            valueExpr: "value", displayExpr: "text",
+                            valueExpr: "value",
+                            displayExpr: "text",
                         },
                         cellTemplate: (c, o) => {
                             $("<span />").addClass("badge badge-" + listActiveStatus.find(x => x.value == o.value).color).append(

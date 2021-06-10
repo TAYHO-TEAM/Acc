@@ -100,12 +100,12 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
                         filter.Add(_filter);
                         loadOptions.Filter.Clear();
                     }
-                    
+
                     loadOptions.Filter = filter;
                 }
-                else if (!checkPermit && getActionId.Count > 0) 
+                else if (!checkPermit && getActionId.Count > 0)
                 {
-                    IList filterOwnerBy = DevexpressHelperFunction.ConvertFilter(JsonConvert.DeserializeObject<IList>(@"[""createBy"",""=""," + (string.IsNullOrEmpty(user.ToString())? "0":user.ToString()) + @"]"));
+                    IList filterOwnerBy = DevexpressHelperFunction.ConvertFilter(JsonConvert.DeserializeObject<IList>(@"[""createBy"",""=""," + (string.IsNullOrEmpty(user.ToString()) ? "0" : user.ToString()) + @"]"));
                     IList filterDeleteNull = DevexpressHelperFunction.ConvertFilter(JsonConvert.DeserializeObject<IList>(@"[""isDelete"",""IS NULL""]"));
                     IList filterDeleteFalse = DevexpressHelperFunction.ConvertFilter(JsonConvert.DeserializeObject<IList>(@"[""isDelete"",""=""," + 0 + @"]"));
                     IList filterIsDelete = new List<object>();
@@ -124,7 +124,7 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
                         loadOptions.Filter.Clear();
                     }
                     loadOptions.Filter = filter;
-                }                    
+                }
                 return await DataSourceLoader.LoadAsync(objEF, loadOptions);
             }
             else
@@ -205,9 +205,10 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
         }
         public async Task<MethodResult<T>> Insert(int user, string nameEF, T Model, IFormFileCollection formFiles = null)
         {
-        
+
             int _function = 2;
             var methodResult = new MethodResult<T>();
+
             if (!await CheckPermission(user, _function))
             {
                 methodResult.AddAPIErrorMessage(nameof(ErrorCodePermission.PErr101), new[]
@@ -219,6 +220,12 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
             {
                 DbSet<T> objEF = ConvertEF(nameEF);
                 Model.CreateBy = user;
+                if (Model.GetType().GetProperty("Code") != null)
+                {
+                    string code = await GenCodeMultipleTableSQL(nameEF);
+                    if(!string.IsNullOrEmpty(code))
+                        Model.GetType().GetProperty("Code").SetValue(Model, code);
+                }
                 objEF.Add(Model);
                 //var a =_dbContext.Add(Model).Entity;
                 await _dbContext.SaveChangesAndDispatchEventsAsync(_cancellationToken).ConfigureAwait(false);
@@ -226,10 +233,10 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
                 {
                     if (formFiles.Count > 0)
                     {
-                       await UploadFile(formFiles, Model.Id, nameEF, "", user );
+                        await UploadFile(formFiles, Model.Id, nameEF, "", user);
                     }
                 }
-              
+
 
             }
             catch (Exception ex)
@@ -332,6 +339,29 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
 
             }
         }
+        public async Task<string> GenCodeMultipleTableSQL(string TableName = "")
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(TableName))
+                {
+                    (string, object)[] parameter = new (string, object)[] { ("@TableName", TableName) };
+                    SprocRepository _sprocRepository = new SprocRepository(_dbContext);
+                    IList<GetCode> result = await _sprocRepository.GetStoredProcedure("sp_GenCode_MultipleTable")
+                                .WithSqlParams(parameter)
+                                .ExecuteStoredProcedureAsync<GetCode>();
+                    return result[0].Code.ToString();
+                }
+                else
+                {
+                    return "";
+                }
+            }
+            catch (Exception ex)
+            {
+                return "";
+            }
+        }
         private dynamic ConvertEF(string nameEntity)
         {
             dynamic orders = null;
@@ -415,6 +445,12 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
                 case nameof(_dbContext.WarehouseStorage):
                     orders = _dbContext.WarehouseStorage;
                     break;
+                case nameof(_dbContext.CategoryUnit):
+                    orders = _dbContext.CategoryUnit;
+                    break;
+                case nameof(_dbContext.WareHouseAllGoods):
+                    orders = _dbContext.WareHouseAllGoods;
+                    break;
                 default:
                     orders = null;
                     break;
@@ -431,7 +467,7 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
                 foreach (var i in request)
                 {
                     var result = await FileHelpers.SaveFile(i, tableName, code, _mediaOptions);
-                    if(result!= null)
+                    if (result != null)
                     {
                         FilesAttachment filesAttachment = new FilesAttachment();
                         filesAttachment.OwnerById = ownerById;
@@ -449,11 +485,11 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
                         filesAttachment.IsVisible = true;
                         filesAttachment.IsDelete = false;
                         filesAttachments.Add(filesAttachment);
-                    }    
+                    }
                     //_dbContext.FilesAttachment.Add(filesAttachment);
                     //await _dbContext.SaveChangesAsync().ConfigureAwait(false);
                 }
-                if(filesAttachments.Count>0)
+                if (filesAttachments.Count > 0)
                 {
                     //await Insert(userid, "FilesAttachment", filesAttachments).ConfigureAwait(false);
                     await _dbContext.FilesAttachment.AddRangeAsync(filesAttachments);
@@ -467,7 +503,7 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
                 methodResult.AddErrorMessage("Lỗi xứ lý");
             }
         }
-        
+
     }
 
 }

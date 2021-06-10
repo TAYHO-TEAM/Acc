@@ -6,4 +6,8 @@ namespace Services.Common.DomainObjects
     {
         public int resultCheck { get;set;}
     }
+    public class GetCode
+    {
+        public string Code { get; set; }
+    }
 }
