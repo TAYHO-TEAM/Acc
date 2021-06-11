@@ -12,8 +12,11 @@
     <div class="col-4">
         <div id="container" class="elevation-2"></div>
     </div>
-    <div class="col-8">
+    <div class="col-4">
         <div id="container-detail" class="elevation-2"></div>
+    </div>
+    <div class="col-4">
+        <div id="container-goods" class="elevation-2"></div>
     </div>
 </div>
 
@@ -28,6 +31,7 @@
         var ACTION_REALESTATE = "RealEstate/";
         var ACTION_WAREHOUSESTORAGE = "WarehouseStorage/";
         var ACTION_CATEGORYUNIT = "CategoryUnit/";
+        var ACTION_CATEGORYGOODS = "CategoryGoods/";
         var KEY = "id";
         var WIDTH_CONTAINER = $("#container").width();
         var WareHouseID = isNullOrEmpty(localStorage.getItem("WareHouseCurrent")) ? parseInt(localStorage.getItem("WareHouseCurrent")) : 14;
@@ -38,7 +42,7 @@
 
         var customStore = (id) => new DevExpress.data.DataSource({
             store: $DATASOURCEGET(ACTION_WAREHOUSEALLGOODS, KEY),
-            filter: ["id", "=", id]
+            filter: ["WarehouseStorageId", "=", id]
         });
         var customStore_Detail = (id) => new DevExpress.data.DataSource({
             store: $DATASOURCE(ACTION_FEEDBACK, KEY),
@@ -49,14 +53,17 @@
             filter: [["parentId", "=", 0], "and", ["status", "=", 201]]
         });
         var customStore_WarehouseStorage = (id) => new DevExpress.data.DataSource({
-            store: $DATASOURCE(ACTION_WAREHOUSESTORAGE, KEY),
+            store: $DATASOURCEGET(ACTION_WAREHOUSESTORAGE, KEY),
             filter: ["realEstateId", "=", id]
         });
         var customStore_RealEstate = (id) => new DevExpress.data.DataSource({
             store: $DATASOURCEGET(ACTION_REALESTATE, KEY),
             filter: [["ConstructionItemsId", "=", id]]
         });
+        var customStore_CategoryGoods = $DATASOURCEGET(ACTION_CATEGORYGOODS, KEY);
         var customStore_CategoryUnit = $DATASOURCEGET(ACTION_CATEGORYUNIT, KEY);
+        var customStore_Goods = $DATASOURCEGET(ACTION_WAREHOUSEALLGOODS, KEY);
+        var customStore_WarehouseStorageList = $DATASOURCEGET(ACTION_WAREHOUSESTORAGE, KEY);
 
         //..........................  Load View -------------------------------------------------------------
         $(function () {
@@ -166,7 +173,7 @@
                     var $id = e.selectedRowKeys[0];
                     var selectedRowData = e.selectedRowsData[0];
                     var selectedRowKey = e.selectedRowKeys[0];
-                    console.log(selectedRowData);
+               
                     if (selectedRowData != null && selectedRowKey != null) {
                         var data = e.component.getRowIndexByKey(selectedRowData.paId);
                         $("#action-update").dxSpeedDialAction({
@@ -177,7 +184,7 @@
                                 var containerE = e.component;
                                 CALLPOPUP(
                                     "Phiếu nhập kho",
-                                    "/VanHanh/KhoBai/_XuatNhapCreate?id=" + selectedRowKey+"&isIn=false",
+                                    "/VanHanh/KhoBai/_XuatNhapCreate?id=" + selectedRowKey+"&isIn=true",
                                     ($(window).width() > 767 ? "50%" : "80%"),
                                     containerE
                                 );
@@ -192,7 +199,7 @@
                                 var containerE = e.component;
                                 CALLPOPUP(
                                     "Phiếu xuất kho",
-                                    "/VanHanh/KhoBai/_XuatNhapCreate?id=" + selectedRowKey + "&isIn=true",
+                                    "/VanHanh/KhoBai/_XuatNhapCreate?id=" + selectedRowKey + "&isIn=false",
                                     ($(window).width() > 767 ? "50%" : "80%"),
                                     containerE
                                 );
@@ -381,12 +388,36 @@
 
                 },
                 columns: [
+                    {
+                        dataField: "categoryGoodsId",
+                        allowFiltering: true,
+                        caption: "Hàng hóa",
+                        width: "250",
+                        dataType: "string",
+                        alignment: "center",
+                        readOnly: true,
+                        allowEditing: false,
+                        lookup: {
+                            dataSource: customStore_CategoryGoods,
+                            valueExpr: "id",
+                            displayExpr: "title",
+                        },
+                    },// code
+                    {
+                        dataField: "quantity",
+                        allowFiltering: true,
+                        caption: "Tồn kho",
+                        dataType: "number",
+                        alignment: "center",
+                        readOnly: true,
+                        allowEditing: false,
+                    },// code
 
                 ],
                 editing: {
-                    //allowAdding: true,
-                    //allowUpdating: true,
-                    //allowDeleting: true,
+                    allowAdding: false,
+                    allowUpdating: false,
+                    allowDeleting: false,
                     mode: "batch",
                     useIcons: true,
                     confirmDelete: true,
@@ -419,91 +450,166 @@
                 },
             });
         };
-        var loadDefect = (content) => {
-            $("#Defect").addClass("bg-blue");
-            $("#Defect").removeClass("text-muted");
-            $("#Defect-FeedBack-Logo").addClass("bg-blue");
-            $("#Defect-FeedBack-Text").removeClass("text-muted");
-            $("#Defect-FeedBack-Content").append("<p>" + content.note + "</p>");
-            $("#Defect-FeedBack-Time").append(moment(content.createDate).locale("vi").fromNow());
+        var loadData_Goods = () => {
+            $("#container-goods").dxDataGrid({
+                height: heightScreen,
+                dataSource: customStore_Goods(),
+                repaintChangesOnly: true,
+                remoteOperations: true,
+                scrolling: { mode: "standard" },
+                showBorders: false,
+                showColumnHeaders: true,
+                showColumnLines: false,
+                hoverStateEnabled: true,
+                showRowLines: true,
+                columnAutoWidth: true,
+                wordWrapEnabled: true,
+                rowAlternationEnabled: true,
+                filterRow: { visible: true },
+                summary: {
+                    groupItems: [{
+                        column: "pmIsVisible",
+                        summaryType: "count"
+                    },
+                    ]
+                },
+                paging: {
+                    enabled: true,
+                    pageSize: 20
+                },
+                pager: {
+                    showPageSizeSelector: true,
+                    allowedPageSizes: [10, 20, 40],
+                    showInfo: true,
+                },
+                searchPanel: {
+                    highlightCaseSensitive: true,
+                    highlightSearchText: true,
+                    searchVisibleColumnsOnly: true,
+                    visible: WIDTH_CONTAINER > 350
+                },
+                onToolbarPreparing: function (e) {
+                    var container = e.component;
+                    e.toolbarOptions.items.unshift(
+                        {
+                            location: "after",
+                            widget: "dxButton",
+                            options: {
+                                icon: "refresh",
+                                tylingMode: "filled",
+                                type: "default",
+                                onClick: () => container.refresh()
+                            },
 
+                        },
 
-            if (content.status < 11) {
-                $("#Defect-Approve-Text").empty();
-                $("#Defect-Approve-Text").append("Chờ xác nhận");
-                $("#Defect-Approve-Text").addClass("text-muted");
-            }
-            if (content.status >= 11) {
-                $("#Defect-Approve-Logo").addClass("bg-yellow");
-                $("#Defect-Approve-Text").empty();
-                $("#Defect-Approve-Text").append("Đã xác nhận");
-                $("#Defect-Approve-Text").removeClass("text-muted");
-            }
-            if (content.status >= 20) {
-                $("#Defect-Fix").addClass("bg-green");
-                $("#Defect-Fix").removeClass("text-muted");
-                $("#Defect-FixPlan-Logo").addClass("bg-green");
-                $("#Defect-FixPlan-Text").removeClass("text-muted");
-                $("#Defect-FixPlan-Text").empty();
-                $("#Defect-FixPlan-Text").append("Đã lên kế hoách sửa chữa");
+                    )
+                },
+                onInitNewRow: (e) => {
+                    e.data.isActive = true;
+                    e.data.isVisible = true;
+                },
+                onRowUpdating: (e) => {
+                    console.log(e);
+                },
+                onCellPrepared: (e) => {
 
-            }
-            if (content.status >= 21) {
-                $("#Defect-Fixing-Logo").addClass("bg-purple");
-                $("#Defect-Fixing-Text").removeClass("text-muted");
-            }
-            if (content.status >= 22) {
-                $("#Defect-Fixing-Text").empty();
-                $("#Defect-Fixing-Text").append("Đã hoàn tất sửa chữa");
-            }
-            //if (content.status >= 30) {
-            //    $("#Defect-Accept").addClass("bg-red");
-            //    $("#Defect-Accept").removeClass("text-muted");
-            //    $("#Defect-Accept-Logo").addClass("bg-red");
-            //    $("#Defect-Accept-Text").removeClass("text-muted");
-            //    $("#Defect-Accept-Text").empty();
-            //    $("#Defect-Accept-Text").append("Chờ nghiệm thu");
-            //}
-            //if (content.status >= 200) {
-            //    $("#Defect-Accept-Text").empty();
-            //    $("#Defect-Accept-Text").append("Đã nghiệm thu");
-            //}
+                },
+                onRowDblClick: function (e) {
+                    var container = e.component;
+                },
+                selection: {
+                    mode: "single"
+                },
+                onContentReady: (e) => {
+
+                },
+                onSelectionChanged: (e) => {
+
+                },
+                onCellClick: function (e) {
+
+                },
+                columns: [
+                    {
+                        dataField: "warehouseStorageId",
+                        allowFiltering: true,
+                        caption: "Kho",
+                        width: "250",
+                        dataType: "string",
+                        alignment: "center",
+                        readOnly: true,
+                        allowEditing: false,
+                        lookup: {
+                            dataSource: customStore_WarehouseStorageList,
+                            valueExpr: "id",
+                            displayExpr: "title",
+                        },
+                    },// code
+                    {
+                        dataField: "categoryGoodsId",
+                        allowFiltering: true,
+                        caption: "Hàng hóa",
+                        width: "250",
+                        dataType: "string",
+                        alignment: "center",
+                        readOnly: true,
+                        allowEditing: false,
+                        lookup: {
+                            dataSource: customStore_CategoryGoods,
+                            valueExpr: "id",
+                            displayExpr: "title",
+                        },
+                    },// code
+                    {
+                        dataField: "quantity",
+                        allowFiltering: true,
+                        caption: "Tồn kho",
+                        dataType: "number",
+                        alignment: "center",
+                        readOnly: true,
+                        allowEditing: false,
+                    },// code
+
+                ],
+                editing: {
+                    allowAdding: false,
+                    allowUpdating: false,
+                    allowDeleting: false,
+                    mode: "batch",
+                    useIcons: true,
+                    confirmDelete: true,
+                    popup: {
+                        width: "50%",
+                        height: "50%",
+                        showTitle: true,
+                        title: "kế hoạch công việc",
+                        closeOnOutsideClick: false,
+                        showCloseButton: true,
+                    },
+                    form: {
+                        labelLocation: "left",
+                        itemType: "group",
+                        colCount: 12,
+                        showRequiredMark: true,
+                        requiredMark: "(*)",
+                        items: [
+                            {
+                                colSpan: 3,
+                                dataField: "name",
+                                label: { text: "Mã " },
+                                editorOptions: {
+                                    stylingMode: "filled",
+                                    placeholder: "Vui lòng nhập...",
+                                },
+                            },
+                        ],
+                    },
+                },
+            });
         }
-        var loadDefectFix = (content) => {
-
-        }
-        var loadDefectComplete = (content) => {
-
-        }
-        function clearContent() {
-            $("#Defect").removeClass("bg-blue");
-            $("#Defect").addClass("text-muted");
-            $("#Defect-FeedBack-Logo").removeClass("bg-blue");
-            $("#Defect-FeedBack-Text").addClass("text-muted");
-            $("#Defect-FeedBack-Content").empty();
-            $("#Defect-FeedBack-Time").empty();
-            $("#Defect-Approve-Logo").removeClass("bg-yellow");
-            $("#Defect-Approve-Text").addClass("text-muted");
-
-            $("#Defect-Approve-Time").empty();
 
 
-            $("#Defect-Fix").removeClass("bg-green");
-            $("#Defect-Fix").addClass("text-muted");
-            $("#Defect-FixPlan-Logo").removeClass("bg-green");
-            $("#Defect-FixPlan-Text").addClass("text-muted");
-            $("#Defect-FixPlan-Time").empty();
-            $("#Defect-Fixing-Logo").removeClass("bg-purple");
-            $("#Defect-Fixing-Text").addClass("text-muted");
-            $("#Defect-Fixing-Time").empty();
-
-
-            $("#Defect-Accept").removeClass("bg-red");
-            $("#Defect-Accept").addClass("text-muted");
-            $("#Defect-Accept-Logo").removeClass("bg-red");
-            $("#Defect-Accept-Text").addClass("text-muted");
-            $("#Defect-Accept-Time").empty();
-        }
 
     </script>
 }

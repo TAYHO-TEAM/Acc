@@ -1,6 +1,5 @@
-﻿
-@model int
-<form id="form-DefectFix" action="#" method="POST" enctype="application/json">
+﻿@model Tuple<int, bool>
+<form id="form-WarehouseGoodsLog" >
 </form>
 <script>
     var formData = {
@@ -23,9 +22,10 @@
     };
     var $defectFixId = 0;
     var fdata = new FormData();
-    var $model = @Model;
+    var $model = @Model.Item1;
+    var $isIn = @Model.Item2.ToString().ToLower();
     $(document).ready(function () {
-        var formInstance = $("#form-DefectFix").dxForm({
+        var formInstance = $("#form-WarehouseGoodsLog").dxForm({
             formData: formData,
             labelLocation: "top",
             items: [
@@ -34,31 +34,62 @@
                     colCount: 12,
                     items: [
                         {
-                            colSpan: 3,
+                            colSpan: 4,
                             dataField: "warehouseStorageId",
                             label: { text: "Kho" },
                             editorType: "dxSelectBox",
                             type: "string",
+                            lookup: {
+                                dataSource: customStore_WarehouseStorage(WarehouseStorageID),
+                                valueExpr: "id",
+                                displayExpr: "title",
+                            },
                             editorOptions: {
                                 stylingMode: "filled",
+                                searchEnabled: true,
+                                searchMode: "contains",
+                                searchExpr: ['title', 'description'],
+                                showClearButton: true,
                                 placeholder: "Vui lòng chọn...",
+                                dataSource: customStore_WarehouseStorage(WarehouseStorageID),
+                                value: $model,
+                                valueExpr: "id",
+                                displayExpr: 'title',
+                                elementAttr: {
+                                    id: "elementcategoryGoodsId",
+                                },
                             },
                             validationRules: [{ type: "required" }],
                         },
                         {
-                            colSpan: 3,
+                            colSpan: 4,
                             dataField: "categoryGoodsId",
                             label: { text: "Loại hàng" },
-                            editorType: "dxSelectBox",
                             type: "string",
+                            editorType: "dxSelectBox",
+                            lookup: {
+                                dataSource: customStore_CategoryGoods,
+                                valueExpr: "id",
+                                displayExpr: "title",
+                            },
                             editorOptions: {
                                 stylingMode: "filled",
+                                searchEnabled: true,
+                                searchMode: "contains",
+                                searchExpr: ['title', 'description'],
+                                showClearButton: true,
                                 placeholder: "Vui lòng chọn...",
+                                dataSource: customStore_CategoryGoods,
+                                valueExpr: "id",
+                                displayExpr: 'title',
+                                elementAttr: {
+                                    id: "elementcategoryGoodsId",
+                                },
                             },
                             validationRules: [{ type: "required" }],
                         },
                         {
-                            colSpan: 3,
+                            colSpan: 4,
                             dataField: "quantity",
                             label: { text: "Số lượng" },
                             editorType: "dxNumberBox",
@@ -70,22 +101,23 @@
                             validationRules: [{ type: "required" }],
                         },
                         {
-                            colSpan: 3,
+                            colSpan: 4,
                             dataField: "checkInBy",
                             label: { text: "Mã người gửi" },
                             editorType: "dxSelectBox",
                             type: "string",
+                            visible: $isIn ? true : false,
                             editorOptions: {
                                 stylingMode: "filled",
                                 placeholder: "Vui lòng chọn...",
                             },
-                            validationRules: [{ type: "required" }],
                         },
                         {
-                            colSpan: 3,
+                            colSpan: 4,
                             dataField: "sender",
                             label: { text: "Người gửi" },
                             editorType: "dxTextBox",
+                            visible: $isIn ? true : false,
                             type: "string",
                             editorOptions: {
                                 stylingMode: "filled",
@@ -94,24 +126,25 @@
                             validationRules: [{ type: "required" }],
                         },
                         {
-                            colSpan: 3,
+                            colSpan: 4,
                             dataField: "checkOutBy",
                             label: { text: "Mã người nhận" },
                             editorType: "dxSelectBox",
+                            visible: !$isIn ? true : false,
                             type: "string",
                             editorOptions: {
                                 stylingMode: "filled",
                                 placeholder: "Vui lòng chọn...",
                             },
-                            validationRules: [{ type: "required" }],
+                            
                         },
                         {
-                            colSpan: 3,
+                            colSpan: 4,
                             dataField: "receiver",
                             label: { text: "Người nhận" },
                             editorType: "dxTextBox",
                             type: "string",
-                            visible: true,
+                            visible: !$isIn ? true : false,
                             editorOptions: {
                                 stylingMode: "filled",
                                 placeholder: "Vui lòng nhập số lượng...",
@@ -119,7 +152,7 @@
                             validationRules: [{ type: "required" }],
                         },
                         {
-                            colSpan: 3,
+                            colSpan: 4,
                             dataField: "phoneContact",
                             label: { text: "Số ĐT Liên Lạc" },
                             editorType: "dxTextBox",
@@ -147,12 +180,12 @@
                             itemType: "button",
                             horizontalAlignment: "center",
                             buttonOptions: {
-                                text: "Xuất kho",
+                                text: $isIn ? "Nhập kho" : "Xuất kho", 
                                 icon: "fa fa-save",
                                 type: "success",
                                 useSubmitBehavior: true,
                                 elementAttr: {
-                                    id: "sxport",
+                                    id: "export",
                                 },
                                 editorOptions: {
                                     stylingMode: "filled",
@@ -164,18 +197,11 @@
 
             ],
         }).dxForm("instance");
-    });
-    $(document).ready(function () {
-        $(document).on('click', '#schedule', function (e) {
+        $(document).on('click', '#export', function (e) {
+            alert('123');
             e.preventDefault();
-            var formdata = $('#form-DefectFix').dxForm("instance").option('formData');
-            var fileWrappers = fileUploader()._files;
+            var formdata = $('#form-WarehouseGoodsLog').dxForm("instance").option('formData');
             var resValid = true
-            for (var i = 0; i < fileWrappers.length; i++) {
-                if (fileWrappers[i].isValid() === false) {
-                    resValid = false;
-                }
-            }
             if (!resValid) {
                 DevExpress.ui.notify("Vui lòng kiểm tra lại file đính kèm!", "error", 3000);
             }
@@ -191,22 +217,16 @@
                         fdata.append(key, value);
                     }
                 });
+                fdata.set("warehouseStorageId", $model);
+                fdata.set("isInOrOut", $isIn);
                 fdata.append('key', $defectFixId);
                 fdata.append('token', UserCurrentInfo.accessToken);
-                var files = $("#file-uploader").dxFileUploader("instance").option("value");
-                if (files.length > 0) {
-                    $.each(files, function (key, value) {
-                        fdata.append(files[key].name, files[key]);
-                    });
-                }
-                for (var pair of fdata.entries()) {
-                    console.log(pair[0] + ', ' + pair[1]);
-                }
+               
                 var deferred = $.Deferred();
                 $.ajax({
                     type: "POST",
                     enctype: 'multipart/form-data',
-                    url: "/VanHanh/BaoHanh/DefectFixUpdate",
+                    url: "/VanHanh/KhoBai/XuatNhapCreate",
                     data: fdata,
                     processData: false,
                     contentType: false,

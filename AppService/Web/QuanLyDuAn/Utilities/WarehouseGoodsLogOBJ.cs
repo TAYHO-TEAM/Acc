@@ -24,6 +24,6 @@ namespace QuanLyDuAn.Utilities
         public bool? IsInOrOut { get; set; }
         public int? Priority { get; set; }
         public string token { get; set; }
-        public int Key { get; set; }
+        public int? Key { get; set; }
     }
 }
