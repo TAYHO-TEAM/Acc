@@ -1,11 +1,11 @@
-using OperationManager.CRUD.DAL.DTO.BaseClasses;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
+using System.Web;
 
-namespace OperationManager.CRUD.DAL.DTO
+namespace QuanLyDuAn.Utilities
 {
-    public class WarehouseGoodsLog : DOBase
+    public class WarehouseGoodsLogOBJ
     {
         public int? WarehouseStorageId { get; set; }
         public int? CategoryGoodsId { get; set; }
@@ -23,6 +23,7 @@ namespace OperationManager.CRUD.DAL.DTO
         public string PhoneContact { get; set; }
         public bool? IsInOrOut { get; set; }
         public int? Priority { get; set; }
-
+        public string token { get; set; }
+        public int Key { get; set; }
     }
 }

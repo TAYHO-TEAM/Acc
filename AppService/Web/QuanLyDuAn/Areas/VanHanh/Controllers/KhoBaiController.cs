@@ -21,5 +21,14 @@ namespace QuanLyDuAn.Areas.VanHanh.Controllers
         {
             return View();
         }
+        public ActionResult _XuatNhapCreate(int id,bool isIn )
+        {
+            bool checkin = isIn;
+            return PartialView(id);
+        }
+        public ActionResult _NhatKyKho(int id)
+        {
+            return PartialView();
+        }
     }
 }

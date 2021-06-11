@@ -207,6 +207,7 @@
     <Compile Include="Utilities\ContractorInfoOBJ.cs" />
     <Compile Include="Utilities\CongViecOBJ.cs" />
     <Compile Include="Utilities\DefectAcceptanceOBJ.cs" />
+    <Compile Include="Utilities\WarehouseGoodsLogOBJ.cs" />
     <Compile Include="Utilities\DefectFixOBJ.cs" />
     <Compile Include="Utilities\DefectFeedBackOBJ.cs" />
     <Compile Include="Utilities\DocumentReleasedOBJ.cs" />
@@ -2533,6 +2534,8 @@
     <Content Include="Areas\VanHanh\Views\KhoBai\DanhMucHH.cshtml" />
     <Content Include="Areas\VanHanh\Views\QuanTri\DonVi.cshtml" />
     <Content Include="Areas\VanHanh\Views\QuanTri\QuanLyKho.cshtml" />
+    <Content Include="Areas\VanHanh\Views\KhoBai\_NhatKyKho.cshtml" />
+    <Content Include="Areas\VanHanh\Views\KhoBai\_XuatNhapCreate.cshtml" />
     <None Include="packages.config" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Home\About.cshtml" />

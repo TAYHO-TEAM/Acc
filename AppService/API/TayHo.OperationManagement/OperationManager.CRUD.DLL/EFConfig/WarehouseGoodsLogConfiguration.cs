@@ -20,7 +20,10 @@ namespace OperationManager.CRUD.DAL.EFConfig
             builder.Property(x => x.CheckInDate).HasColumnName("CheckInDate").UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.CheckOutDate).HasColumnName("CheckOutDate").UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.CheckInBy).HasColumnName("CheckInBy").UsePropertyAccessMode(PropertyAccessMode.Field);
+            builder.Property(x => x.Sender).HasColumnName("Sender").UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.CheckOutBy).HasColumnName("CheckOutBy").UsePropertyAccessMode(PropertyAccessMode.Field);
+            builder.Property(x => x.Receiver).HasColumnName("Receiver").UsePropertyAccessMode(PropertyAccessMode.Field);
+            builder.Property(x => x.PhoneContact).HasColumnName("PhoneContact").UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.IsInOrOut).HasColumnName("IsInOrOut").UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.Priority).HasColumnName("Priority").UsePropertyAccessMode(PropertyAccessMode.Field);
 

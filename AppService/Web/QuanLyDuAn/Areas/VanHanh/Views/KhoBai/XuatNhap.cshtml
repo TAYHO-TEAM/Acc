@@ -4,6 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @section style{   }
+<div id="popup-main"></div>
 <div id="popup-main-upload"></div>
 <div id="popup-register"></div>
 <div id="popup-acceptence"></div>
@@ -20,7 +21,6 @@
     <script src="~/Scripts/page/vanhanh.js"></script>
     <script>
         var id = 1;
-        clearContent();
         ///-----------------------------READ ------------------------
 
         var ACTION_WAREHOUSEALLGOODS = "WareHouseAllGoods/";
@@ -33,6 +33,7 @@
         var WareHouseID = isNullOrEmpty(localStorage.getItem("WareHouseCurrent")) ? parseInt(localStorage.getItem("WareHouseCurrent")) : 14;
         var WarehouseStorageID = isNullOrEmpty(localStorage.getItem("WarehouseStorageCurrent")) ? parseInt(localStorage.getItem("WarehouseStorageCurrent")) : 14;
         var $WareHouseID = 0;
+        var $realEstateId = 0;
         //..........................Get data -------------------------------------------------------------
 
         var customStore = (id) => new DevExpress.data.DataSource({
@@ -59,145 +60,220 @@
 
         //..........................  Load View -------------------------------------------------------------
         $(function () {
-            loadData(WarehouseStorageID);
+            loadData();
         });
-        var loadData = (id) => $("#container").dxTreeList({
-            dataSource: customStore_WarehouseStorage(id),
-            remoteOperations: true,
-            height: heightScreen,
-            rootValue: 0,
-            parentIdExpr: "parentId",
-            keyExpr: "id",
-            showBorders: false,
-            showColumnHeaders: true,
-            showColumnLines: false,
-            hoverStateEnabled: true,
-            showRowLines: true,
-            columnAutoWidth: true,
-            wordWrapEnabled: true,
-            rowAlternationEnabled: true,
-            autoExpandAll: false,
-            searchPanel: {
-                visible: false,
-            },
-            paging: { enabled: false },
-            onToolbarPreparing: function (e) {
-                var container = e.component;
-                e.toolbarOptions.items.unshift(
-                    {
-                        location: "before",
-                        widget: "dxSelectBox",
-                        options: {
-                            dataSource: customStore_WareHouse,
-                            valueExpr: "id",
-                            displayExpr: "title",
-                            width: "150",
-                            searchEnabled: true,
-                            searchMode: "contains",
-                            showClearButton: false,
-                            stylingMode: "filled",
-                            value: WareHouseID,
-                            onValueChanged: function (data) {
-                                WareHouseID = data.value;
-                            },
-                        },
-                    },
-                    {
-                        location: "before",
-                        widget: "dxSelectBox",
-                        options: {
-                            dataSource: customStore_RealEstate(WareHouseID),
-                            valueExpr: "id",
-                            displayExpr: "address",
-                            width: "150",
-                            searchEnabled: true,
-                            searchMode: "contains",
-                            showClearButton: false,
-                            stylingMode: "filled",
-                            value: WarehouseStorageID,
-                            onValueChanged: function (data) {
-                                WarehouseStorageID = data.value;
-                                localStorage.setItem('WarehouseStorageCurrent', data.value);
-                                loadData(WarehouseStorageID);
-                            },
-                        },
-                    },
-                    {
-                        location: "after",
-                        widget: "dxButton",
-                        options: {
-                            icon: "refresh",
-                            type: "default",
-                            onClick: () => container.refresh()
-                        }
-                    })
-            },
-            onInitNewRow: (e) => {
-                e.data.isActive = true;
-                e.data.isVisible = true;
-                e.data.realEstateId = id;
-            },
-            onSelectionChanged: (e) => {
-                var $id = e.selectedRowKeys[0];
-                loadData_Detail($id);
-            },
-            selection: {
-                mode: "single"
-            },
-            columns: [
-                {
-                    dataField: "code",
-                    allowFiltering: true,
-                    caption: "Mã",
-                    width: "250",
-                    dataType: "string",
-                    alignment: "center",
-                    readOnly: true,
-                    allowEditing: false,
-                },// code
-                {
-                    dataField: "title",
-                    dataType: "string",
-                    alignment: "left",
-                    caption: "Tên",
+        var loadData = () => {
+            if (WarehouseStorageID === null) {
+                WarehouseStorageID = isNullOrEmpty(localStorage.getItem("WarehouseStorageCurrent")) ? parseInt(localStorage.getItem("WarehouseStorageCurrent")) : 14;
+            };
+            $("#container").dxTreeList({
+                dataSource: customStore_WarehouseStorage(WarehouseStorageID),
+                remoteOperations: true,
+                height: heightScreen,
+                rootValue: 0,
+                parentIdExpr: "parentId",
+                keyExpr: "id",
+                showBorders: false,
+                showColumnHeaders: true,
+                showColumnLines: false,
+                hoverStateEnabled: true,
+                showRowLines: true,
+                columnAutoWidth: true,
+                wordWrapEnabled: true,
+                rowAlternationEnabled: true,
+                autoExpandAll: false,
+                searchPanel: {
+                    visible: false,
                 },
-            ],
-            editing: {
-                allowAdding: false,
-                allowUpdating: false,
-                allowDeleting: false,
-                mode: "popup",
-                useIcons: true,
-                confirmDelete: true,
-                popup: {
-                    width: "60%",
-                    height: "60%",
-                    showTitle: true,
-                    title: "Thêm hạng mục vận hành",
-                    closeOnOutsideClick: false,
-                    showCloseButton: true,
-                },
-                form: {
-                    labelLocation: "left",
-                    itemType: "group",
-                    colCount: 12,
-                    showRequiredMark: true,
-                    requiredMark: "(*)",
-                    items: [
+                paging: { enabled: false },
+                onToolbarPreparing: function (e) {
+                    var container = e.component;
+                    e.toolbarOptions.items.unshift(
                         {
-                            colSpan: 4,
-                            dataField: "title",
-                            label: { text: "Tên" },
-                            editorOptions: {
+                            location: "before",
+                            widget: "dxSelectBox",
+                            options: {
+                                dataSource: customStore_WareHouse,
+                                valueExpr: "id",
+                                displayExpr: "title",
+                                width: "150",
+                                searchEnabled: true,
+                                searchMode: "contains",
+                                showClearButton: false,
                                 stylingMode: "filled",
-                                placeholder: "Vui lòng nhập...",
+                                value: WareHouseID,
+                                onValueChanged: function (data) {
+                                    console.log(WareHouseID);
+                                    WareHouseID = data.value;
+                                    console.log(WareHouseID);
+                                    localStorage.setItem('WareHouseCurrent', data.value);
+                                },
                             },
-                            validationRules: [{ type: "required" }],
                         },
-                    ],
+                        {
+                            location: "before",
+                            widget: "dxSelectBox",
+                            options: {
+                                dataSource: customStore_RealEstate(WareHouseID),
+                                valueExpr: "id",
+                                displayExpr: "address",
+                                width: "150",
+                                searchEnabled: true,
+                                searchMode: "contains",
+                                showClearButton: false,
+                                stylingMode: "filled",
+                                value: WarehouseStorageID,
+                                onValueChanged: function (data) {
+                                    WarehouseStorageID = data.value;
+                                    localStorage.setItem('WarehouseStorageCurrent', data.value);
+                                    loadData();
+                                },
+                            },
+                        },
+                        {
+                            location: "after",
+                            widget: "dxButton",
+                            options: {
+                                icon: "refresh",
+                                type: "default",
+                                onClick: () => container.refresh()
+                            }
+                        })
                 },
-            },
-        });
+                onInitNewRow: (e) => {
+                    e.data.isActive = true;
+                    e.data.isVisible = true;
+                    e.data.realEstateId = id;
+                },
+                onContentReady: (e) => {
+                    var container = e.component;
+                    DevExpress.config({
+                        floatingActionButtonConfig: {
+                            icon: "rowfield",
+                            label: "Tác vụ",
+                            shading: true,
+                            position: {
+                                of: e.element,
+                                my: "right bottom",
+                                at: "right bottom",
+                                offset: e.component.pageCount() > 1 ? "-15 -60" : "-15 -15"
+                            }
+                        }
+                    });
+                    DevExpress.ui.repaintFloatingActionButton();
+                },
+                onSelectionChanged: (e) => {
+                    var $id = e.selectedRowKeys[0];
+                    var selectedRowData = e.selectedRowsData[0];
+                    var selectedRowKey = e.selectedRowKeys[0];
+                    console.log(selectedRowData);
+                    if (selectedRowData != null && selectedRowKey != null) {
+                        var data = e.component.getRowIndexByKey(selectedRowData.paId);
+                        $("#action-update").dxSpeedDialAction({
+                            index: 2, icon: "fas fa-file-import",
+                            label: "Nhập kho",
+                            visible: PermitInAction["update"],
+                            onClick: () => {
+                                var containerE = e.component;
+                                CALLPOPUP(
+                                    "Phiếu nhập kho",
+                                    "/VanHanh/KhoBai/_XuatNhapCreate?id=" + selectedRowKey+"&isIn=false",
+                                    ($(window).width() > 767 ? "50%" : "80%"),
+                                    containerE
+                                );
+                            }
+                        }).dxSpeedDialAction("instance");
+                        $("#action-delete").dxSpeedDialAction({
+                            index: 3,
+                            icon: "fas fa-file-export",
+                            label: "Xuất kho",
+                            visible: (selectedRowData.id != null && PermitInAction["delete"]),
+                            onClick: () => {
+                                var containerE = e.component;
+                                CALLPOPUP(
+                                    "Phiếu xuất kho",
+                                    "/VanHanh/KhoBai/_XuatNhapCreate?id=" + selectedRowKey + "&isIn=true",
+                                    ($(window).width() > 767 ? "50%" : "80%"),
+                                    containerE
+                                );
+                            }
+                        }).dxSpeedDialAction("instance");
+                        $("#action-log").dxSpeedDialAction({
+                            index: 4,
+                            icon: "fas fa-shipping-fast",
+                            label: "Nhật ký xuất nhập",
+                            visible: PermitInAction["view"],
+                            onClick: () => {
+                                var containerE = e.component;
+                                CALLPOPUP(
+                                    "Báo cáo sửa chữa",
+                                    "/VanHanh/KhoBai/_NhatKyKho?id=" + selectedRowKey,
+                                    ($(window).width() > 767 ? "50%" : "80%"),
+                                    containerE
+                                );
+                            }
+                        }).dxSpeedDialAction("instance");
+                    }
+                    loadData_Detail($id);
+                },
+                selection: {
+                    mode: "single"
+                },
+                columns: [
+                    {
+                        dataField: "code",
+                        allowFiltering: true,
+                        caption: "Mã",
+                        width: "250",
+                        dataType: "string",
+                        alignment: "center",
+                        readOnly: true,
+                        allowEditing: false,
+                    },// code
+                    {
+                        dataField: "title",
+                        dataType: "string",
+                        alignment: "left",
+                        caption: "Tên",
+                    },
+                ],
+                editing: {
+                    allowAdding: false,
+                    allowUpdating: false,
+                    allowDeleting: false,
+                    mode: "popup",
+                    useIcons: true,
+                    confirmDelete: true,
+                    popup: {
+                        width: "60%",
+                        height: "60%",
+                        showTitle: true,
+                        title: "Thêm hạng mục vận hành",
+                        closeOnOutsideClick: false,
+                        showCloseButton: true,
+                    },
+                    form: {
+                        labelLocation: "left",
+                        itemType: "group",
+                        colCount: 12,
+                        showRequiredMark: true,
+                        requiredMark: "(*)",
+                        items: [
+                            {
+                                colSpan: 4,
+                                dataField: "title",
+                                label: { text: "Tên" },
+                                editorOptions: {
+                                    stylingMode: "filled",
+                                    placeholder: "Vui lòng nhập...",
+                                },
+                                validationRules: [{ type: "required" }],
+                            },
+                        ],
+                    },
+                },
+            })
+        };
         var loadData_Detail = (ItemID) => {
             $("#container-detail").dxDataGrid({
                 height: heightScreen,
