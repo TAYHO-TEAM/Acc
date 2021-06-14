@@ -196,7 +196,7 @@
                     {
                         dataField: "workItemId",
                         caption: "Hạng mục",
-                        width: 250,
+                        width: 150,
                         allowFiltering: true,
                         lookup: {
                             dataSource: customStore_HangMuc,
@@ -219,7 +219,7 @@
                     },//hangMucId
                     {
                         dataField: "createBy",
-                        width: 150,
+                        width: 120,
                         caption: "Người đệ trình",
                         //dataType: "number",
                         allowEditing: false,
@@ -269,7 +269,7 @@
                     {
                         dataField: "documentTypeId",
                         caption: "Loại tài liệu",
-                        width: 250,
+                    
                         alignment: "left",
                         lookup: {
                             dataSource: customStore_DocumetnType,
@@ -292,6 +292,7 @@
                     {
                         dataField: "title",
                         caption: "Tiêu đề",
+                        width: 250,
                         dataType: "string",
                         alignment: "left",
                     },//tiêu đề
@@ -320,6 +321,7 @@
                     {
                         dataField: "note",
                         allowFiltering: true,
+                        width: 300,
                         caption: "Ghi Chú",
                         dataType: "string",
                         alignment: "left",
@@ -328,6 +330,7 @@
                         dataField: "status",
                         allowFiltering: true,
                         caption: "Trạng thái",
+                        width: 100,
                         dataType: "number",
                         alignment: "left",
                         cellTemplate: (container, options) => {
@@ -357,6 +360,7 @@
                     {
                         dataField: "noAttachment",
                         caption: "File đính kèm",
+                        width: 150,
                         dataType: "number",
                         alignment: "left",
                         allowFiltering: false,

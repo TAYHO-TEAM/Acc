@@ -1,5 +1,5 @@
 ﻿@model Tuple<int, bool>
-<form id="form-WarehouseGoodsLog" >
+<form id="form-WarehouseGoodsLog">
 </form>
 <script>
     var formData = {
@@ -56,7 +56,7 @@
                                 valueExpr: "id",
                                 displayExpr: 'title',
                                 elementAttr: {
-                                    id: "elementcategoryGoodsId",
+                                    id: "elementwarehouseStorageId",
                                 },
                             },
                             validationRules: [{ type: "required" }],
@@ -98,7 +98,27 @@
                                 stylingMode: "filled",
                                 placeholder: "Vui lòng nhập số lượng...",
                             },
-                            validationRules: [{ type: "required" }],
+                            validationRules: [{
+                                type: "required",
+                            },
+                            {
+                                type: "async",
+                                message: "Email is already registered",
+                                validationCallback: function (params) {
+                                    var $categoryGoodsId = $('#elementcategoryGoodsId').dxSelectBox("instance").option('value');
+                                    console.log($categoryGoodsId);
+                                    var d = $.Deferred();
+                                    customStore($model).load().done((rs) => {
+                                        console.log(rs);
+                                        var quantity = rs.find(x => x.id == $categoryGoodsId).quantity;
+                                        console.log(quantity);
+                                        d.resolve(quantity > params.value );
+                                    });
+                                   
+                                    return d.promise();;
+                                    //return !(params.value > checkInventory($quantity));
+                                }
+                            }],
                         },
                         {
                             colSpan: 4,
@@ -136,7 +156,7 @@
                                 stylingMode: "filled",
                                 placeholder: "Vui lòng chọn...",
                             },
-                            
+
                         },
                         {
                             colSpan: 4,
@@ -180,7 +200,7 @@
                             itemType: "button",
                             horizontalAlignment: "center",
                             buttonOptions: {
-                                text: $isIn ? "Nhập kho" : "Xuất kho", 
+                                text: $isIn ? "Nhập kho" : "Xuất kho",
                                 icon: "fa fa-save",
                                 type: "success",
                                 useSubmitBehavior: true,
@@ -198,7 +218,6 @@
             ],
         }).dxForm("instance");
         $(document).on('click', '#export', function (e) {
-            alert('123');
             e.preventDefault();
             var formdata = $('#form-WarehouseGoodsLog').dxForm("instance").option('formData');
             var resValid = true
@@ -221,7 +240,7 @@
                 fdata.set("isInOrOut", $isIn);
                 fdata.append('key', $defectFixId);
                 fdata.append('token', UserCurrentInfo.accessToken);
-               
+
                 var deferred = $.Deferred();
                 $.ajax({
                     type: "POST",

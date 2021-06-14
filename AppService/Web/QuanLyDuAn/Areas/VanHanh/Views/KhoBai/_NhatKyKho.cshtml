@@ -1,1 +1,179 @@
-﻿<div>abc</div>
+﻿@model int
+<div class="row">
+    <div class="col-12">
+        <div id="container_popup" class="elevation-2"></div>
+    </div>
+</div>
+<script>
+        $(document).ready(function () {
+            var $id =  @Model;
+            //..........................  Load View -------------------------------------------------------------
+            $(function () {
+                loadData_popup($id);
+            });
+            var loadData_popup = (id) => {
+                $("#container_popup").dxDataGrid({
+                    height: heightScreen,
+                    dataSource: customStore_WarehouseGoodsLog(id),
+                    repaintChangesOnly: true,
+                    remoteOperations: true,
+                    scrolling: { mode: "standard" },
+                    showBorders: false,
+                    showColumnHeaders: true,
+                    showColumnLines: false,
+                    hoverStateEnabled: true,
+                    showRowLines: true,
+                    columnAutoWidth: true,
+                    wordWrapEnabled: true,
+                    rowAlternationEnabled: true,
+                    filterRow: { visible: true },
+                    summary: {
+                        groupItems: [{
+                            column: "id",
+                            summaryType: "count"
+                        },
+                        ]
+                    },
+                    paging: {
+                        enabled: true,
+                        pageSize: 20
+                    },
+                    pager: {
+                        showPageSizeSelector: true,
+                        allowedPageSizes: [10, 20, 40],
+                        showInfo: true,
+                    },
+                    searchPanel: {
+                        highlightCaseSensitive: true,
+                        highlightSearchText: true,
+                        searchVisibleColumnsOnly: true,
+                        visible: WIDTH_CONTAINER > 350
+                    },
+                    onToolbarPreparing: function (e) {
+                        var container = e.component;
+                        e.toolbarOptions.items.unshift(
+                            {
+                                location: "after",
+                                widget: "dxButton",
+                                options: {
+                                    icon: "refresh", tylingMode: "filled", type: "default",
+                                    onClick: () => container.refresh()
+                                },
+
+                            },
+
+                        )
+                    },
+                    onInitNewRow: (e) => {
+                    },
+                    onRowUpdating: (e) => {
+                    },
+                    onRowDblClick: function (e) {
+                        var container = e.component;
+                    },
+                    selection: {
+                        mode: "single"
+                    },
+                    onSelectionChanged: (e) => {
+                        var container = e.component;
+                    },
+                    columns: [
+                        {
+                            dataField: "categoryGoodsId",
+                            allowFiltering: true,
+                            caption: "Hàng hoá",
+                            dataType: "string",
+                            alignment: "center",
+                            readOnly: true,
+                            allowEditing: false,
+                            lookup: {
+                                dataSource: customStore_CategoryGoods,
+                                valueExpr: "id",
+                                displayExpr: "title",
+                            },
+                        },
+                        {
+                            dataField: "quantity",
+                            allowFiltering: true,
+                            caption: "Số lượng",
+                            dataType: "number",
+                            alignment: "center",
+                        },// address
+                        {
+                            dataField: "createDate",
+                            allowFiltering: true,
+                            caption: "Ngày tạo",
+                            dataType: "datetime",
+                            alignment: "center",
+                        },// address
+                        {
+                            dataField: "isInOrOut",
+                            allowFiltering: true,
+                            caption: "Xuất/Nhập",
+                            dataType: "string",
+                            alignment: "center",
+                            lookup: {
+                                dataSource: listIsInOrOutStatus,
+                                valueExpr: "value", displayExpr: "text",
+                            },
+                            cellTemplate: (c, o) => {
+                                $("<span />").addClass("badge badge-" + listIsInOrOutStatus.find(x => x.value == o.value).color).append(
+                                    $("<i />").addClass("mr-1 " + listIsInOrOutStatus.find(x => x.value == o.value).icon), o.text
+                                ).appendTo(c);
+                            }
+                        },// address
+                    ],
+                    editing: {
+                        allowAdding: false,
+                        allowUpdating: false,
+                        allowDeleting: false,
+                        mode: "rown",
+                        useIcons: true,
+                        confirmDelete: true,
+                        popup: {
+                            width: "30%",
+                            height: "45%",
+                            showTitle: true,
+                            title: "Thêm căn hộ mới",
+                            closeOnOutsideClick: false,
+                            showCloseButton: true,
+                        },
+                        form: {
+                            labelLocation: "left",
+                            itemType: "group",
+                            colCount: 12,
+                            showRequiredMark: true,
+                            requiredMark: "(*)",
+                            items: [
+                                {
+                                    colSpan: 12,
+                                    dataField: "code",
+                                    label: { text: "Mã cắn hộ" },
+                                },
+                                {
+                                    colSpan: 12,
+                                    dataField: "address",
+                                    label: { text: "Địa chỉ" },
+                                    editorOptions: {
+                                        stylingMode: "filled",
+                                        placeholder: "Vui lòng nhập...",
+                                    },
+                                },
+                                {
+                                    colSpan: 12,
+                                    dataField: "isActive",
+                                    label: { text: "Trạng thái" },
+                                    editorType: "dxSwitch",
+                                    editorOptions: {
+                                        dataSource: listActiveStatus,
+                                        valueExpr: "value",
+                                        displayExpr: "text",
+                                    },
+                                },
+                            ],
+                        },
+                    },
+                });
+            };
+        });
+</script>

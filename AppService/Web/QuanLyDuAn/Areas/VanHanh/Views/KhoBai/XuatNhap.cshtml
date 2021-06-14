@@ -9,13 +9,13 @@
 <div id="popup-register"></div>
 <div id="popup-acceptence"></div>
 <div class="row">
-    <div class="col-4">
+    <div class="col-md-4 col-sm-12">
         <div id="container" class="elevation-2"></div>
     </div>
-    <div class="col-4">
+    <div class="col-md-4 col-sm-12">
         <div id="container-detail" class="elevation-2"></div>
     </div>
-    <div class="col-4">
+    <div class="col-md-4 col-sm-12">
         <div id="container-goods" class="elevation-2"></div>
     </div>
 </div>
@@ -24,12 +24,12 @@
     <script src="~/Scripts/page/vanhanh.js"></script>
     <script>
         var id = 1;
-        ///-----------------------------READ ------------------------
-
+        //-----------------------------READ -------------------------------------------------------------
         var ACTION_WAREHOUSEALLGOODS = "WareHouseAllGoods/";
         var ACTION_CONSTRUCTIONITEMS = "ConstructionItems/";
         var ACTION_REALESTATE = "RealEstate/";
         var ACTION_WAREHOUSESTORAGE = "WarehouseStorage/";
+        var ACTION_WAREHOUSEGOODSLOG = "WarehouseGoodsLog/";
         var ACTION_CATEGORYUNIT = "CategoryUnit/";
         var ACTION_CATEGORYGOODS = "CategoryGoods/";
         var KEY = "id";
@@ -38,8 +38,8 @@
         var WarehouseStorageID = isNullOrEmpty(localStorage.getItem("WarehouseStorageCurrent")) ? parseInt(localStorage.getItem("WarehouseStorageCurrent")) : 14;
         var $WareHouseID = 0;
         var $realEstateId = 0;
-        //..........................Get data -------------------------------------------------------------
 
+        //..........................Get data -------------------------------------------------------------
         var customStore = (id) => new DevExpress.data.DataSource({
             store: $DATASOURCEGET(ACTION_WAREHOUSEALLGOODS, KEY),
             filter: ["WarehouseStorageId", "=", id]
@@ -60,15 +60,39 @@
             store: $DATASOURCEGET(ACTION_REALESTATE, KEY),
             filter: [["ConstructionItemsId", "=", id]]
         });
+        var customStore_WarehouseGoodsLog = (id) => new DevExpress.data.DataSource({
+            store: $DATASOURCEGET(ACTION_WAREHOUSEGOODSLOG, KEY),
+            filter: [["WarehouseStorageId", "=", id]]
+        });
         var customStore_CategoryGoods = $DATASOURCEGET(ACTION_CATEGORYGOODS, KEY);
         var customStore_CategoryUnit = $DATASOURCEGET(ACTION_CATEGORYUNIT, KEY);
         var customStore_Goods = $DATASOURCEGET(ACTION_WAREHOUSEALLGOODS, KEY);
         var customStore_WarehouseStorageList = $DATASOURCEGET(ACTION_WAREHOUSESTORAGE, KEY);
 
+
+        //------------------------- Check validate ------------------------------------------
+        var checkInventory = function (id) {
+            if (WarehouseStorageID === null) {
+                WarehouseStorageID = isNullOrEmpty(localStorage.getItem("WarehouseStorageCurrent")) ? parseInt(localStorage.getItem("WarehouseStorageCurrent")) : 14;
+            };
+            var dCheck = $.Deferred();
+            //setTimeout(function () {
+            //    d.resolve(value === validEmail);
+            //}, 1000);
+            console.log(id);
+            customStore_WarehouseGoodsLog(WarehouseStorageID).load().done((rs) => {
+                var quantity = rs.find(x => x.id == id).quantity;
+                console.log(rs);
+                dCheck.resolve(quantity);
+            });
+            return dCheck.promise();
+        };
+
         //..........................  Load View -------------------------------------------------------------
         $(function () {
             loadData();
         });
+    
         var loadData = () => {
             if (WarehouseStorageID === null) {
                 WarehouseStorageID = isNullOrEmpty(localStorage.getItem("WarehouseStorageCurrent")) ? parseInt(localStorage.getItem("WarehouseStorageCurrent")) : 14;
@@ -213,7 +237,7 @@
                             onClick: () => {
                                 var containerE = e.component;
                                 CALLPOPUP(
-                                    "Báo cáo sửa chữa",
+                                    "Lịch sử xuất nhập",
                                     "/VanHanh/KhoBai/_NhatKyKho?id=" + selectedRowKey,
                                     ($(window).width() > 767 ? "50%" : "80%"),
                                     containerE
@@ -330,6 +354,12 @@
                                 tylingMode: "filled",
                                 type: "default",
                                 onClick: () => {
+                                    CALLPOPUP(
+                                        "Phiếu xuất kho",
+                                        "/VanHanh/KhoBai/_XuatNhapCreate?id=" + ItemID + "&isIn=false",
+                                        ($(window).width() > 767 ? "50%" : "80%"),
+                                        container
+                                    );
                                 }
                             }
                         },
@@ -341,10 +371,15 @@
                                 tylingMode: "filled",
                                 type: "default",
                                 onClick: () => {
+                                    CALLPOPUP(
+                                        "Phiếu nhập kho",
+                                        "/VanHanh/KhoBai/_XuatNhapCreate?id=" + ItemID + "&isIn=true",
+                                        ($(window).width() > 767 ? "50%" : "80%"),
+                                        container
+                                    );
                                 }
                             }
                         },
-
                         {
                             location: "after",
                             widget: "dxButton",
@@ -608,9 +643,6 @@
                 },
             });
         }
-
-
-
     </script>
 }
 

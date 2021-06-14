@@ -35,7 +35,7 @@ namespace QuanLyDuAn.Areas.VanHanh.Controllers
         }
         public ActionResult _NhatKyKho(int id)
         {
-            return PartialView();
+            return PartialView(id);
         }
         [HttpPost, ValidateInput(false)]
         public JsonResult XuatNhapCreate(WarehouseGoodsLogOBJ requestOBJ)

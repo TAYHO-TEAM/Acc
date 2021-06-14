@@ -223,9 +223,8 @@ namespace QuanLyDuAn.Areas.VanHanh.Controllers
             if (requestOBJ.Status == null || requestOBJ.Status < 20)
                 requestOBJ.Status = 20;
             else if (requestOBJ.Status == 21)
-                requestOBJ.StartDate = DateTime.Now;
-            else if (requestOBJ.Status == 22)
             {
+                requestOBJ.StartDate = DateTime.Now;
                 requestOBJ.EndDate = DateTime.Now;
                 DefectAcceptanceOBJ defectAcceptance = new DefectAcceptanceOBJ();
                 defectAcceptance.DefectFixId = requestOBJ.Key;
@@ -247,6 +246,10 @@ namespace QuanLyDuAn.Areas.VanHanh.Controllers
                         }
                     }
                 }
+            }     
+            else if (requestOBJ.Status == 22)
+            {
+               
                 requestOBJ.Status = 30;
             }
             var values = new JavaScriptSerializer().Serialize(requestOBJ);
