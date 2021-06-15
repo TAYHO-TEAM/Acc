@@ -108,15 +108,19 @@
                                     var $categoryGoodsId = $('#elementcategoryGoodsId').dxSelectBox("instance").option('value');
                                     console.log($categoryGoodsId);
                                     var d = $.Deferred();
-                                    customStore($model).load().done((rs) => {
-                                        console.log(rs);
-                                        var quantity = rs.find(x => x.id == $categoryGoodsId).quantity;
-                                        console.log(quantity);
-                                        d.resolve(quantity > params.value );
-                                    });
-                                   
-                                    return d.promise();;
-                                    //return !(params.value > checkInventory($quantity));
+                                    if ($isIn === true)
+                                        d.resolve(true);
+                                    else {
+                                        customStore($model).load().done((rs) => {
+                                            console.log($categoryGoodsId);
+                                            var quantity = rs.find(x => x.id == $categoryGoodsId).quantity;
+                                            if (quantity > 0)
+                                                d.resolve(quantity > params.value);
+                                            else
+                                                d.resolve(false);
+                                        });
+                                    }
+                                    return d.promise();
                                 }
                             }],
                         },
@@ -193,7 +197,6 @@
                                 stylingMode: "filled",
                                 placeholder: "Vui lòng nhập...",
                             },
-                            validationRules: [{ type: "required" }],
                         },
                         {
                             colSpan: 12,
@@ -217,7 +220,8 @@
 
             ],
         }).dxForm("instance");
-        $(document).on('click', '#export', function (e) {
+        //$(document).on('click', '#export', function (e)
+        $("#form-WarehouseGoodsLog").on("submit", function (e){
             e.preventDefault();
             var formdata = $('#form-WarehouseGoodsLog').dxForm("instance").option('formData');
             var resValid = true
@@ -255,7 +259,7 @@
                         loadingPanel.hide();
                         DevExpress.ui.notify(rs.result, rs.status, 3000);
                         if (rs.status == "success") {
-                            $("#popup-register").dxPopup('instance').hide();
+                            $("#popup-main").dxPopup('instance').hide();
                         }
                     },
                     error: function (xhr, textStatus, errorThrown) {

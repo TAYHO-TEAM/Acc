@@ -51,5 +51,13 @@ namespace QuanLyDuAn.Areas.VanHanh.Controllers
         {
             return View();
         }
+        public ActionResult DonViKyThuat()
+        {
+            return View();
+        }
+        public ActionResult KhieuNai()
+        {
+            return View();
+        }
     }
 }

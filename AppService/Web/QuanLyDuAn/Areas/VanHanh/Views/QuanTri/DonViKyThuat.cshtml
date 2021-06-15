@@ -1,5 +1,6 @@
-﻿@{
-    ViewBag.Title = "Index";
+﻿
+@{
+    ViewBag.Title = "DonViKyThuat";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @section style{   }
@@ -21,8 +22,8 @@
         CUNSTRITEMS = isNullOrEmpty(localStorage.getItem("CItemsCurrent")) ? parseInt(localStorage.getItem("CItemsCurrent")) : 1;
         ///-----------------------------READ ------------------------
 
-        var ACTION_READ = "RealEstate/";
-        var ACTION_PROJECT = "Project/";
+        var ACTION_MAINTENANCESUPPLIERINFO = "MaintenanceSupplierInfo/";
+        var ACTION_MAINTENANCERINFO = "MaintenancerInfo/";
         var ACTION_CUSTOMERINFO = "CustomerInfo/";
         var ACTION_CONSTRUCTIONITEMS = "ConstructionItems/";
         var ACTION_CUSTOMERREALESTATE = "CustomerRealEstate/";
@@ -30,15 +31,14 @@
         var WIDTH_CONTAINER = $("#container").width();
         //..........................Get data -------------------------------------------------------------
 
-        var customStore = (id) => new DevExpress.data.DataSource({
-            store: $DATASOURCE(ACTION_READ, KEY),
-            filter: ["constructionItemsId", "=", id]
+        var customStore = () => new DevExpress.data.DataSource({
+            store: $DATASOURCE(ACTION_MAINTENANCESUPPLIERINFO, KEY)
+        });
+        var customStore_MaintenancerInfo = (id) => new DevExpress.data.DataSource({
+            store: $DATASOURCE(ACTION_MAINTENANCERINFO, KEY),
+            filter: ["maintenanceSupplierInfoId", "=", id]
         });
         var customStore_CustomerInfo = $DATASOURCEGET(ACTION_CUSTOMERINFO, KEY);
-        //var customStore_Project = (id) => new DevExpress.data.DataSource({
-        //    store: $DATASOURCEGET(ACTION_PROJECT, KEY),
-        //    filter: ["id", "=", id]
-        //});
         var customStore_ConstructionItems = () => new DevExpress.data.DataSource({
             store: $DATASOURCEGET(ACTION_CONSTRUCTIONITEMS, KEY),
             filter: ["parentId", "=", 0]
@@ -49,12 +49,12 @@
         });
         //..........................  Load View -------------------------------------------------------------
         $(function () {
-            loadData(CUNSTRITEMS);
+            loadData();
         });
         let loadData = (id) => {
             $("#container").dxDataGrid({
                 height: heightScreen,
-                dataSource: customStore(id),
+                dataSource: customStore(),
                 repaintChangesOnly: true,
                 remoteOperations: true,
                 scrolling: { mode: "standard" },
@@ -92,26 +92,26 @@
                 onToolbarPreparing: function (e) {
                     var container = e.component;
                     e.toolbarOptions.items.unshift(
-                        {
-                            location: "before",
-                            widget: "dxSelectBox",
-                            options: {
-                                dataSource: customStore_ConstructionItems(),
-                                valueExpr: "id",
-                                displayExpr: "title",
-                                width: "100%",
-                                searchEnabled: true,
-                                searchMode: "contains",
-                                showClearButton: false,
-                                stylingMode: "filled",
-                                value: CUNSTRITEMS,
-                                onValueChanged: function (data) {
-                                    CUNSTRITEMS = data.value;
-                                    localStorage.setItem('CItemsCurrent', CUNSTRITEMS);
-                                    loadData(data.value);
-                                },
-                            },
-                        },
+                        //{
+                        //    location: "before",
+                        //    widget: "dxSelectBox",
+                        //    options: {
+                        //        dataSource: customStore_ConstructionItems(),
+                        //        valueExpr: "id",
+                        //        displayExpr: "title",
+                        //        width: "100%",
+                        //        searchEnabled: true,
+                        //        searchMode: "contains",
+                        //        showClearButton: false,
+                        //        stylingMode: "filled",
+                        //        value: CUNSTRITEMS,
+                        //        onValueChanged: function (data) {
+                        //            CUNSTRITEMS = data.value;
+                        //            localStorage.setItem('CItemsCurrent', CUNSTRITEMS);
+                        //            loadData(data.value);
+                        //        },
+                        //    },
+                        //},
                         {
                             location: "after",
                             widget: "dxButton",
@@ -143,95 +143,44 @@
                 },
                 onContentReady: (e) => {
                     var container = e.component;
-                    //$("#action-add").dxSpeedDialAction({
-                    //    index: 1, icon: "fas fa-plus",
-                    //    label: "Thêm mới",
-                    //    visible: PermitInAction["insert"],
-                    //    onClick: () => {
-                    //        CALLPOPUP(
-                    //            "Tạo công việc",
-                    //            "/ThongTin/QLCongViec/_CongViecDetail",
-                    //            ($(window).width() > 767 ? "50%" : "80%"),
-                    //            container
-                    //        );
-                    //    }
-                    //}).dxSpeedDialAction("instance");
-                    //DevExpress.config({
-                    //    floatingActionButtonConfig: {
-                    //        icon: "rowfield",
-                    //        label: "Tác vụ",
-                    //        shading: true,
-                    //        position: {
-                    //            of: e.element,
-                    //            my: "right bottom",
-                    //            at: "right bottom",
-                    //            offset: e.component.pageCount() > 1 ? "-15 -60" : "-15 -15"
-                    //        }
-                    //    }
-                    //});
-                    //DevExpress.ui.repaintFloatingActionButton();
                 },
                 onSelectionChanged: (e) => {
                     var container = e.component;
                     var selectedRowData = e.selectedRowsData[0];
                     var selectedRowKey = e.selectedRowKeys[0];
-                    loadData_CustomerInfo(selectedRowKey);
-                    if (selectedRowData != null && selectedRowKey != null) {
-                        var data = e.component.getRowIndexByKey(selectedRowKey);
-                        //$("#action-update").dxSpeedDialAction({
-                        //    index: 2, icon: "fas fa-edit", label: "Cập nhật thông tin",
-                        //    visible: PermitInAction["update"],
-                        //    onClick: () => e.component.editRow(data)
-                        //}).dxSpeedDialAction("instance");
-
-                        //$("#action-delete").dxSpeedDialAction({
-                        //    index: 3, icon: "fas fa-trash", label: "Xóa",
-                        //    visible: PermitInAction["delete"],
-                        //    onClick: (e) => e.component.deleteRow(data)
-                        //}).dxSpeedDialAction("instance");
-                        //$("#action-log").dxSpeedDialAction({
-                        //    index: 4, icon: "fas fa-user", label: "Thêm nhà thầu",
-                        //    onClick: () => {
-                        //        callPopup(
-                        //            "THÊM NHÀ THẦU",
-                        //            "/Admin/SystemConfig/_ContractorInfoAdd",
-                        //            ($(window).width() > 767 ? "50%" : "80%"),
-                        //            e.component
-                        //        );
-                        //    }
-                        //}).dxSpeedDialAction("instance");
-                    }
+                    loadData_MaintenancerInfo(selectedRowKey);
+                    //if (selectedRowData != null && selectedRowKey != null) {
+                    //    var data = e.component.getRowIndexByKey(selectedRowKey);
+                    //}
                 },
-                //onCellClick: function (e) {
-
-                //    if (typeof e.column !== "undefined") {
-                //        if (e.column.dataField === "noAttachment") {
-                //            loadUpload("PlanMaster", e.row.data, false);
-                //        }
-                //    }
-
-                //},
                 columns: [
                     {
                         dataField: "code",
                         allowFiltering: true,
-                        caption: "Mã căn hộ",
+                        caption: "Mã",
                         dataType: "string",
                         alignment: "center",
                         readOnly: true,
                         allowEditing: false,
                     },// barCode
                     {
-                        dataField: "address",
+                        dataField: "name",
                         allowFiltering: true,
-                        caption: "Số nhà",
+                        caption: "Tên đơn vị",
                         dataType: "string",
                         alignment: "center",
                     },// address
                     {
-                        dataField: "street",
+                        dataField: "taxCode",
                         allowFiltering: true,
-                        caption: "Đường",
+                        caption: "MS Thuế",
+                        dataType: "string",
+                        alignment: "center",
+                    },// TaxCode
+                    {
+                        dataField: "address",
+                        allowFiltering: true,
+                        caption: "Số nhà",
                         dataType: "string",
                         alignment: "center",
                     },// address
@@ -337,10 +286,10 @@
                 },
             });
         };
-        var loadData_CustomerInfo = (id) => {
+        var loadData_MaintenancerInfo = (id) => {
             $("#container-owner").dxDataGrid({
                 height: heightScreen,
-                dataSource: customStore_CustomerRealEstate(id),
+                dataSource: customStore_MaintenancerInfo(id),
                 remoteOperations: true,
                 scrolling: { mode: "standard" },
                 showBorders: false,
@@ -381,7 +330,7 @@
                 onInitNewRow: (e) => {
                     e.data.isActive = true;
                     e.data.isVisible = true;
-                    e.data.realEstateId = id;
+                    e.data.maintenanceSupplierInfoId = id;
                 },
                 onRowUpdating: (e) => {
                     console.log(e);
@@ -402,38 +351,52 @@
                 },
                 columns: [
                     {
-                        dataField: "customerInfoId",
+                        dataField: "fullName",
                         allowFiltering: true,
-                        allowEdit: false,
-                        caption: "Chủ hộ",
+                        caption: "Kỹ thuật viên",
+                        dataType: "string",
+                        alignment: "center",
+                        allowEditing: true,
+                    },// barCode
+                    {
+                        dataField: "phone",
+                        allowFiltering: true,
+                        caption: "Số điện thoại",
+                        dataType: "string",
+                        alignment: "center",
+                        editorType: "dxTextBox",
+                    },// addres
+                    {
+                        dataField: "email",
+                        allowFiltering: true,
+                        caption: "Email",
+                        dataType: "string",
+                        alignment: "center",
+                    },// TaxCode
+                    {
+                        dataField: "sex",
+                        allowFiltering: true,
+                        caption: "Giới tính",
                         dataType: "string",
                         alignment: "center",
                         lookup: {
-                            dataSource: customStore_CustomerInfo,
-                            valueExpr: "id",
-                            displayExpr: getDisplayExpr,
+                            dataSource: Sex,
+                            valueExpr: "ID",
+                            displayExpr: "Name",
                         },
                         editorType: "dxLookup",
                         editorOptions: {
                             stylingMode: "filled",
-                            searchEnabled: true,
-                            searchExpr: ['firstName', 'lastName'],
-                            searchMode: "contains",
-                            showClearButton: true,
-                            placeholder: "Vui lòng nhập...",
-                            dataSource: customStore_CustomerInfo,
-                            valueExpr: "id",
-                            displayExpr: getDisplayExpr,
+                            searchEnabled: false,
+                            placeholder: "Vui lòng chọn...",
+                            dataSource: Sex,
+                            valueExpr: "ID",
+                            displayExpr: "Name",
                             //itemTemplate: function (data) {
                             //    return $("<div>").append($("<b>").append(data.firstName + " " + data.lastName));
                             //},
                         },
-                        //cellTemplate: (c, o) => {
-                        //    console.log(c);
-                        //    console.log(o);
-                        //    $("<div>").append($("<b>").append(o.data.firstName + " " + o.data.lastName)).appendTo(c);
-                        //},
-                    },// SignCode
+                    },// TaxCode
                 ],
                 editing: {
                     allowAdding: true,
@@ -471,6 +434,7 @@
                 },
             });
         };
-        
+
     </script>
 }
+

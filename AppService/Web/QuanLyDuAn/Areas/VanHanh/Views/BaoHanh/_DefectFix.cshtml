@@ -31,9 +31,29 @@
                             colCount: 12,
                             items: [
                                 {
-                                    colSpan: 3,
+                                    colSpan: 4,
+                                    dataField: "maintenanceSupplierInfoId",
+                                    label: { text: "Đơn vị sửa" },
+                                    editorType: "dxTextBox",
+                                    editorOptions: {
+                                        stylingMode: "filled",
+                                        placeholder: "Vui lòng nhập...",
+                                    },
+                                },
+                                {
+                                    colSpan: 4,
+                                    dataField: "maintenancerInfoId",
+                                    label: { text: "Mã KTV" },
+                                    editorType: "dxTextBox",
+                                    editorOptions: {
+                                        stylingMode: "filled",
+                                        placeholder: "Vui lòng nhập...",
+                                    },
+                                },
+                                {
+                                    colSpan: 4,
                                     dataField: "fixer",
-                                    label: { text: "Thợ sửa" },
+                                    label: { text: "Kỹ thuật viên" },
                                     editorType: "dxTextBox",
                                     editorOptions: {
                                         stylingMode: "filled",
@@ -42,7 +62,21 @@
                                     validationRules: [{ type: "required" }],
                                 },
                                 {
-                                    colSpan: 3,
+                                    colSpan: 4,
+                                    dataField: "fixerPhone",
+                                    label: { text: "Số điện thoại" },
+                                    editorType: "dxTextBox",
+                                    editorOptions: {
+                                        stylingMode: "filled",
+                                        placeholder: "Vui lòng nhập...",
+                                        value: formData["description"],
+                                    },
+                                    validationRules: [{
+                                        type: "numeric"
+                                    }]
+                                },
+                                {
+                                    colSpan: 4,
                                     dataField: "fixedDate",
                                     label: { text: "Dự kiến sửa" },
                                     editorType: "dxDateBox",
@@ -53,7 +87,7 @@
                                     validationRules: [{ type: "required" }],
                                 },
                                 {
-                                    colSpan: 3,
+                                    colSpan: 4,
                                     dataField: "deadline",
                                     label: { text: "Dự kiến hoàn thành" },
                                     editorType: "dxDateBox",
@@ -74,20 +108,7 @@
                                 //        value: formData["description"],
                                 //    },
                                 //},
-                                {
-                                    colSpan: 3,
-                                    dataField: "fixerPhone",
-                                    label: { text: "Số điện thoại" },
-                                    editorType: "dxTextBox",
-                                    editorOptions: {
-                                        stylingMode: "filled",
-                                        placeholder: "Vui lòng nhập...",
-                                        value: formData["description"],
-                                    },
-                                    validationRules: [{
-                                        type: "numeric"
-                                    }] 
-                                },
+                               
                                 {
                                     colSpan: 12,
                                     dataField: "note",
@@ -164,9 +185,9 @@
                             colCount: 12,
                             items: [
                                 {
-                                    colSpan: 6,
+                                    colSpan: 12,
                                     itemType: "button",
-                                    horizontalAlignment: "right",
+                                    horizontalAlignment: "center",
                                     buttonOptions: {
                                         text: "Cập nhật kế hoạch",
                                         icon: "fa fa-save",
@@ -180,23 +201,23 @@
                                         }
                                     }
                                 },
-                                {
-                                    colSpan: 6,
-                                    itemType: "button",
-                                    horizontalAlignment: "left",
-                                    buttonOptions: {
-                                        text: "Hoàn thành",
-                                        icon: "fas fa-check-circle",
-                                        type: "default",
-                                        useSubmitBehavior: true,
-                                        elementAttr: {
-                                            id: "finish",
-                                        },
-                                        editorOptions: {
-                                            stylingMode: "filled",
-                                        }
-                                    }
-                                }
+                                //{
+                                //    colSpan: 6,
+                                //    itemType: "button",
+                                //    horizontalAlignment: "left",
+                                //    buttonOptions: {
+                                //        text: "Hoàn thành",
+                                //        icon: "fas fa-check-circle",
+                                //        type: "default",
+                                //        useSubmitBehavior: true,
+                                //        elementAttr: {
+                                //            id: "finish",
+                                //        },
+                                //        editorOptions: {
+                                //            stylingMode: "filled",
+                                //        }
+                                //    }
+                                //}
                             ],
                         },
                     ],

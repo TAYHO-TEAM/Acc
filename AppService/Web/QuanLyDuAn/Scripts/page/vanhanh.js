@@ -617,7 +617,7 @@ function CALLPOPUP(title, url, width, container) {
             container.refresh();
         },
         onHidden: function () {
-            loadData(ITEMSID);
+            //loadData(ITEMSID);
         }
     });
 }

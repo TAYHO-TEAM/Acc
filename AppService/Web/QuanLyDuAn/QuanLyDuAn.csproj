@@ -2536,6 +2536,8 @@
     <Content Include="Areas\VanHanh\Views\QuanTri\QuanLyKho.cshtml" />
     <Content Include="Areas\VanHanh\Views\KhoBai\_NhatKyKho.cshtml" />
     <Content Include="Areas\VanHanh\Views\KhoBai\_XuatNhapCreate.cshtml" />
+    <Content Include="Areas\VanHanh\Views\QuanTri\DonViKyThuat.cshtml" />
+    <Content Include="Areas\VanHanh\Views\QuanTri\KhieuNai.cshtml" />
     <None Include="packages.config" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Home\About.cshtml" />

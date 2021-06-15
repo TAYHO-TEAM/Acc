@@ -96,6 +96,8 @@
         var ACTION_CONSTRUCTIONITEMS = "ConstructionItems/";
         var ACTION_DEFECTFIX = "DefectFix/";
         var ACTION_DEFECTACCEPTANCE = "DefectAcceptance/";
+        var ACTION_MAINTENANCESUPPLIERINFO = "MaintenanceSupplierInfo/";
+        var ACTION_MAINTENANCERINFO = "MaintenancerInfo/";
         var KEY = "id";
         var WIDTH_CONTAINER = $("#container").width();
 
@@ -149,6 +151,13 @@
         var customStore_ConstructionItems = (id) => new DevExpress.data.DataSource({
             store: $DATASOURCE(ACTION_CONSTRUCTIONITEMS, KEY),
             filter: ["parentId", "=", 0]
+        });
+        var customStore_MaintenanceSupplierInfo = () => new DevExpress.data.DataSource({
+            store: $DATASOURCEGET(ACTION_MAINTENANCESUPPLIERINFO, KEY)
+        });
+        var customStore_MaintenancerInfo = (id) => new DevExpress.data.DataSource({
+            store: $DATASOURCEGET(ACTION_MAINTENANCERINFO, KEY),
+            filter: ["maintenanceSupplierInfoId", "=", id]
         });
         //..........................  Load View -------------------------------------------------------------
         $(function () {
@@ -425,7 +434,7 @@
                     {
                         dataField: "customerId",
                         allowFiltering: true,
-                        caption: "khách hàng",
+                        caption: "Mã KH",
                         dataType: "string",
                         alignment: "center",
                         visible: true,
@@ -590,8 +599,10 @@
 
             }
             if (content.status >= 21) {
+                $("#Defect-Fixing-Text").empty();
                 $("#Defect-Fixing-Logo").addClass("bg-purple");
                 $("#Defect-Fixing-Text").removeClass("text-muted");
+                $("#Defect-Fixing-Text").append("Đang sửa chữa");
             }
             if (content.status >= 22) {
                 $("#Defect-Fixing-Text").empty();
