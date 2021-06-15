@@ -64,7 +64,7 @@
             </li>
             <!-- END timeline item -->
             <!-- timeline item -->
-            <!--<li class="time-label">
+            <li class="time-label">
                 <span class="bg-red" id="Defect-Accept">
                     Nghiệm thu
                 </span>
@@ -75,7 +75,7 @@
                     <span class="time" id="Defect-Accept-Time"><i class="fa fa-clock-o"></i> 2 days ago</span>
                     <h3 class="timeline-header"><a href="#" id="Defect-Accept-Text">Nghiệm thu</a></h3>
                 </div>
-            </li>-->
+            </li>
         </ul>
     </div>
 </div>
@@ -135,7 +135,7 @@
             var deferred = $.Deferred();
             return customStore_CustomerRealEstate(id).load().then((rs) => {
                 if (rs != null && rs.length > 0) {
-                    console.log("khách :" + rs[0].customerInfoId);
+           
                     deferred.resolve(customStore_CustomerInfoById(rs[0].customerInfoId)[0]);
                 }
             });
@@ -232,7 +232,6 @@
                     e.data.isVisible = true;
                 },
                 onRowUpdating: (e) => {
-                    console.log(e);
                     e.newData['isVisible'] = e.newData['pmIsVisible'];
                     e.newData['id'] = e.oldData['id'];
                 },
@@ -277,6 +276,7 @@
                     DevExpress.ui.repaintFloatingActionButton();
                 },
                 onSelectionChanged: (e) => {
+                    var containerE = e.component;
                     var selectedRowData = e.selectedRowsData[0];
                     var selectedRowKey = e.selectedRowKeys[0];
                     //$('#action-log').remove();
@@ -288,7 +288,7 @@
                             label: "Cập nhật thông tin",
                             visible: PermitInAction["update"],
                             onClick: () => {
-                                var containerE = e.component;
+                               
                                 CALLPOPUP(
                                     "Chi tiết yêu cầu bảo hành",
                                     "/VanHanh/BaoHanh/_YeuCauDetail?id=" + selectedRowKey,
@@ -326,7 +326,7 @@
                                 label: "Kế hoạch sửa chữa",
                                 visible: selectedRowData.status < 20 && selectedRowData.status > 10 && PermitInAction["update"],
                                 onClick: () => {
-                                    var containerE = e.component;
+                                  
                                     CALLPOPUP(
                                         "Kế hoạch sửa chữa",
                                         "/VanHanh/BaoHanh/_DefectFix?id=" + selectedRowKey,
@@ -343,7 +343,6 @@
                                 label: "Tiến độ sửa chữa",
                                 visible: selectedRowData.status >= 20 && PermitInAction["update"],
                                 onClick: () => {
-                                    var containerE = e.component;
                                     CALLPOPUP(
                                         "Báo cáo sửa chữa",
                                         "/VanHanh/BaoHanh/_DefectFixReport?id=" + selectedRowKey,
@@ -598,18 +597,18 @@
                 $("#Defect-Fixing-Text").empty();
                 $("#Defect-Fixing-Text").append("Đã hoàn tất sửa chữa");
             }
-            //if (content.status >= 30) {
-            //    $("#Defect-Accept").addClass("bg-red");
-            //    $("#Defect-Accept").removeClass("text-muted");
-            //    $("#Defect-Accept-Logo").addClass("bg-red");
-            //    $("#Defect-Accept-Text").removeClass("text-muted");
-            //    $("#Defect-Accept-Text").empty();
-            //    $("#Defect-Accept-Text").append("Chờ nghiệm thu");
-            //}
-            //if (content.status >= 200) {
-            //    $("#Defect-Accept-Text").empty();
-            //    $("#Defect-Accept-Text").append("Đã nghiệm thu");
-            //}
+            if (content.status >= 30) {
+                $("#Defect-Accept").addClass("bg-red");
+                $("#Defect-Accept").removeClass("text-muted");
+                $("#Defect-Accept-Logo").addClass("bg-red");
+                $("#Defect-Accept-Text").removeClass("text-muted");
+                $("#Defect-Accept-Text").empty();
+                $("#Defect-Accept-Text").append("Chờ nghiệm thu");
+            }
+            if (content.status >= 200) {
+                $("#Defect-Accept-Text").empty();
+                $("#Defect-Accept-Text").append("Đã nghiệm thu");
+            }
         }
         var loadDefectFix = (content) => {
 
