@@ -1,0 +1,298 @@
+﻿@model int
+<form id="form-MaintenanceSchedule" action="#" method="POST" enctype="application/json">
+</form>
+<script>
+    var $constructionItemsId = @Model;
+    var formData = {
+        //"code": "",
+        //"barcode": "",
+        "constructionItemsId": $constructionItemsId ,
+        "maintenanceSupplierInfoId": "",
+        "maintenancerInfoId": "",
+        "title": "",
+        "cycle": 0,
+        "priority": 0,
+        "isRemind": "",
+        "remindBy": "",
+        "startDate": "",
+        "endDate": "",
+        "times": 0,
+        "startTime": "",
+        "endTime": "",
+        "type":0,
+        "noAttachment": "",
+        "status": 1,
+    };
+    var $defectFixId = 0;
+    var fdata = new FormData();
+    var $maintenanceSupplierInfoId = 0;
+    var $dataSource = {};
+    $(document).ready(function () {
+        var formMaintenanceSchedule= $("#form-MaintenanceSchedule").dxForm({
+            formData: formData,
+            labelLocation: "top",
+            items: [
+                {
+                    itemType: "group",
+                    colCount: 12,
+                    items: [
+                        {
+                            colSpan: 3,
+                            dataField: "constructionItemsId",
+                            label: { text: "Hạng muc" },
+                            type: "string",
+                            editorType: "dxSelectBox",
+                            //lookup: {
+                            //    dataSource: customStore(PROJECTID),
+                            //    valueExpr: "id",
+                            //    displayExpr: "title",
+                            //},
+                            editorOptions: {
+                                stylingMode: "filled",
+                                searchenabled: true,
+                                searchmode: "contains",
+                                searchexpr: ['title', 'descriptions'],
+                                showclearbutton: true,
+                                placeholder: "vui lòng chọn...",
+                                dataSource: customStore(PROJECTID),
+                                value: $constructionItemsId,
+                                valueExpr: "id",
+                                displayExpr: 'title',
+                                elementAttr: {
+                                    id: "elementConstructionItemsId",
+                                },
+                            },
+                            validationRules: [{ type: "required" }],
+                        },
+                        {
+                            colSpan: 3,
+                            dataField: "maintenanceSupplierInfoId",
+                            label: { text: "Đơn vị BT" },
+                            type: "string",
+                            editorType: "dxSelectBox",
+                            editorOptions: {
+                                stylingMode: "filled",
+                                searchEnabled: true,
+                                searchMode: "contains",
+                                searchExpr: ['name'],
+                                showClearButton: true,
+                                placeholder: "Vui lòng chọn...",
+                                dataSource: customStore_MaintenanceSupplierInfo(),
+                                valueExpr: 'id',
+                                displayExpr: 'name',
+                                elementAttr: {
+                                    id: "elementMaintenanceSupplierInfo",
+                                },
+                                onValueChanged: function (e) {
+                                    var selTarget = $('#elementMaintenancerInfoId').dxSelectBox('instance');
+                                    selTarget.option('value', null);
+                                    if (e.value > 0) {
+                                        selTarget.option("dataSource", customStore_MaintenancerInfo(e.value));
+                                    }
+                                    else {
+                                        selTarget.option("dataSource", customStore_MaintenancerInfo(0));
+                                    }
+                                },
+                            },
+                            validationRules: [{ type: "required" }],
+                        },
+                        {
+                            colSpan: 3,
+                            dataField: "maintenancerInfoId",
+                            label: { text: "Kỹ thuật viên" },
+                            type: "string",
+                            editorType: "dxSelectBox",
+                            editorOptions: {
+                                stylingMode: "filled",
+                                searchEnabled: true,
+                                searchMode: "contains",
+                                searchExpr: ['fullName'],
+                                showClearButton: true,
+                                placeholder: "Vui lòng chọn...",
+                                dataSource: customStore_MaintenancerInfo(0),
+                                valueExpr: "id",
+                                displayExpr: 'fullName',
+                                elementAttr: {
+                                    id: "elementMaintenancerInfoId",
+                                },
+                            },
+                        },
+                        {
+                            colSpan: 3,
+                            dataField: "title",
+                            label: { text: "Tiêu đề" },
+                            editorType: "dxTextBox",
+                            editorOptions: {
+                                stylingMode: "filled",
+                                placeholder: "Vui lòng nhập...",
+                            },
+                        },
+                        {
+                            colSpan: 3,
+                            dataField: "cycle",
+                            label: { text: "Chu kỳ theo ngày" },
+                            editorType: "dxNumberBox",
+                            editorOptions: {
+                                stylingMode: "filled",
+                                placeholder: "Vui lòng nhập...",
+                            },
+                            validationRules: [{ type: "required" }],
+                        },
+                        {
+                            colSpan: 3,
+                            dataField: "isRemind",
+                            label: { text: "Báo lịch" },
+                            editorType: "dxSwitch",
+                            editorOptions: {
+                                stylingMode: "filled",
+                                dataSource: listRemind,
+                                valueExpr: "value",
+                                value:true,
+                                displayExpr: "text",
+                            },
+                        },
+                        {
+                            colSpan: 3,
+                            dataField: "remindBy",
+                            label: { text: "Nhắc bằng" },
+                            editorType: "dxSelectBox",
+                            editorOptions: {
+                                dataSource: remidBy,
+                                valueExpr: "ID",
+                                displayExpr: "Name",
+                            },
+                        },
+                        {
+                            colSpan: 3,
+                            dataField: "startDate",
+                            label: { text: "Ngày bắt đầu" },
+                            type: "date",
+                            editorType: "dxDateBox",
+                            editorOptions: {
+                                type: "date",
+                                stylingMode: "filled",
+                                placeholder: "Vui lòng nhập...",
+                            },
+                            validationRules: [{ type: "required" }],
+                        },
+                        {
+                            colSpan: 3,
+                            dataField: "endDate",
+                            type: "date",
+                            label: { text: "Ngày kết thúc" },
+                            editorType: "dxDateBox",
+                            editorOptions: {
+                                stylingMode: "filled",
+                                placeholder: "Vui lòng nhập...",
+                            },
+                        },
+                        {
+                            colSpan: 3,
+                            dataField: "startTime",
+                            label: { text: "Bắt đầu lúc" },
+                            editorType: "dxDateBox",
+                            editorOptions: {
+                                type: "time",
+                                value: new Date(2015, 11, 1, 6),
+                                stylingMode: "filled",
+                                placeholder: "Vui lòng chọn...",
+                            },
+                        },
+                        {
+                            colSpan: 3,
+                            dataField: "endTime",
+                            label: { text: "Kết thúc lúc" },
+                            editorType: "dxDateBox",
+                            editorOptions: {
+                                type: "time",
+                                value: new Date(2015, 11, 1, 6),
+                                stylingMode: "filled",
+                                placeholder: "Vui lòng chọn...",
+                            },
+                        },
+                    ]
+                },
+                {
+                    itemType: "group",
+                    name: "button-action",
+                    colCount: 12,
+                    items: [
+                        {
+                            colSpan: 12,
+                            itemType: "button",
+                            horizontalAlignment: "center",
+                            buttonOptions: {
+                                text: "Cập nhật kế hoạch",
+                                icon: "fa fa-save",
+                                type: "success",
+                                useSubmitBehavior: true,
+                                elementAttr: {
+                                    id: "schedule",
+                                },
+                                editorOptions: {
+                                    stylingMode: "filled",
+                                }
+                            }
+                        },
+                    ],
+                },
+            ],
+        }).dxForm("instance");
+
+        $("#form-MaintenanceSchedule").on("submit", function (e) {
+            e.preventDefault();
+            var formdata = $('#form-MaintenanceSchedule').dxForm("instance").option('formData');
+            //var fileWrappers = fileUploader()._files;
+            var resValid = true
+            //for (var i = 0; i < fileWrappers.length; i++) {
+            //    if (fileWrappers[i].isValid() === false) {
+            //        resValid = false;
+            //    }
+            //}
+            if (!resValid) {
+                DevExpress.ui.notify("Vui lòng kiểm tra lại file đính kèm!", "error", 3000);
+            }
+            else {
+                loadingPanel.show();
+                //formdata.append('constructionItemsId', $constructionItemsId);
+                var deferred = $.Deferred();
+                customStore_MaintenanceSchedule(0).store().insert(formdata).done((rs) => {
+                    deferred.resolve(true);
+                    loadingPanel.hide();
+                    $("#popup-main").dxPopup('instance').hide();
+                    if (rs.status == "success") {
+                        DevExpress.ui.notify(rs.result, rs.status, 3000);
+
+                    }
+                    else
+                    {
+                        DevExpress.ui.notify("Có lỗi xảy ra: " + errorThrown, "error", 3000);
+                    }
+                }, deferred.reject)
+                //$.ajax({
+                //    type: "POST",
+                //    enctype: 'multipart/form-data',
+                //    url: "/VanHanh/BaoHanh/DefectFixUpdate",
+                //    data: fdata,
+                //    processData: false,
+                //    contentType: false,
+                //    cache: false,
+                //    success: function (rs) {
+                //        deferred.resolve(true);
+                //        loadingPanel.hide();
+                //        DevExpress.ui.notify(rs.result, rs.status, 3000);
+                //        if (rs.status == "success") {
+                //            $("#popup-register").dxPopup('instance').hide();
+                //        }
+                //    },
+                //    error: function (xhr, textStatus, errorThrown) {
+                //        loadingPanel.hide();
+                //        DevExpress.ui.notify("Có lỗi xảy ra: " + errorThrown, "error", 3000);
+                //    }
+                //});
+                return deferred.promise();
+            }
+        });
+    });
+</script>
+

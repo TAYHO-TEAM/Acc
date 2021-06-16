@@ -25,6 +25,9 @@
         ///-----------------------------READ ------------------------
 
         var ACTION_ITEMS = "ConstructionItems/";
+        var ACTION_MAINTENANCESCHEDULE = "MaintenanceSchedule/";
+        var ACTION_MAINTENANCESUPPLIERINFO = "MaintenanceSupplierInfo/";
+        var ACTION_MAINTENANCERINFO = "MaintenancerInfo/";
         var ACTION_DEFECTIVE = "Defective/";
         var ACTION_PROJECT = "Project/";
         var KEY = "id";
@@ -38,6 +41,21 @@
         var customStore_Defect = (id) => new DevExpress.data.DataSource({
             store: $DATASOURCE(ACTION_DEFECTIVE, KEY),
             filter: ["constructionItemsId", "=", id]
+        });
+        var customStore_MaintenanceSchedule = (id) => new DevExpress.data.DataSource({
+            store: $DATASOURCE(ACTION_MAINTENANCESCHEDULE, KEY),
+            filter: ["constructionItemsId", "=", id]
+        });
+        var customStore_MaintenanceScheduleById = (id) => new DevExpress.data.DataSource({
+            store: $DATASOURCE(ACTION_MAINTENANCESCHEDULE, KEY),
+            filter: ["id", "=", id]
+        });
+        var customStore_MaintenanceSupplierInfo = () => new DevExpress.data.DataSource({
+            store: $DATASOURCEGET(ACTION_MAINTENANCESUPPLIERINFO, KEY),
+        });
+        var customStore_MaintenancerInfo = (id) => new DevExpress.data.DataSource({
+            store: $DATASOURCE(ACTION_MAINTENANCERINFO, KEY),
+            filter: ["maintenanceSupplierInfoId", "=", id]
         });
         var customStore_Project = $DATASOURCEGET(ACTION_PROJECT, KEY);
         //var customStore_Check = $DATASOURCE(ACTION_ITEMS, KEY);
@@ -110,6 +128,7 @@
             onSelectionChanged: (e) => {
                 var $id = e.selectedRowKeys[0];
                 loadData_Defective($id);
+                loadData_Maintenance($id);
             },
             selection: {
                 mode: "single"
@@ -331,7 +350,7 @@
                     {
                         dataField: "code",
                         allowFiltering: true,
-                        allowEdit: false,
+                        allowEditing: false,
                         caption: "Mã lỗi",
                         dataType: "string",
                         alignment: "center",
@@ -387,6 +406,220 @@
                     allowAdding: true,
                     allowUpdating: true,
                     allowDeleting: true,
+                    mode: "batch",
+                    useIcons: true,
+                    confirmDelete: true,
+                    popup: {
+                        width: "50%",
+                        height: "50%",
+                        showTitle: true,
+                        title: "kế hoạch công việc",
+                        closeOnOutsideClick: false,
+                        showCloseButton: true,
+                    },
+                    form: {
+                        labelLocation: "left",
+                        itemType: "group",
+                        colCount: 12,
+                        showRequiredMark: true,
+                        requiredMark: "(*)",
+                        items: [
+                            {
+                                colSpan: 3,
+                                dataField: "name",
+                                label: { text: "Mã " },
+                                editorOptions: {
+                                    stylingMode: "filled",
+                                    placeholder: "Vui lòng nhập...",
+                                },
+                            },
+                        ],
+                    },
+                },
+            });
+        };
+        var loadData_Maintenance = (id) => {
+            $("#container-maintenance").dxDataGrid({
+                height: heightScreen,
+                dataSource: customStore_MaintenanceSchedule(id),
+                remoteOperations: true,
+                scrolling: { mode: "standard" },
+                showBorders: false,
+                showColumnHeaders: true,
+                showColumnLines: false,
+                hoverStateEnabled: true,
+                showRowLines: true,
+                columnAutoWidth: true,
+                wordWrapEnabled: true,
+                paging: {
+                    enabled: true,
+                    pageSize: 10
+                },
+                pager: {
+                    showPageSizeSelector: true,
+                    allowedPageSizes: [10, 20, 40],
+                    showInfo: true,
+                },
+                searchPanel: {
+                    //searchVisibleColumnsOnly: true,
+                    visible: WIDTH_CONTAINER > 350
+                },
+                onToolbarPreparing: function (e) {
+                    var container = e.component;
+                    e.toolbarOptions.items.unshift(
+                        {
+                            location: "after",
+                            widget: "dxButton",
+                            options: {
+                                icon: "refresh", tylingMode: "filled", type: "default",
+                                onClick: () => container.refresh(),
+                            },
+                        },
+                    )
+                },
+                onInitNewRow: (e) => {
+                    e.data.isActive = true;
+                    e.data.isVisible = true;
+                    e.data.constructionItemsId = id;
+                },
+                onRowUpdating: (e) => {
+                    console.log(e);
+                    e.newData['isVisible'] = e.newData['pmIsVisible'];
+                    e.newData['id'] = e.oldData['id'];
+                },
+                onCellPrepared: (e) => {
+                    if (e.rowType == "data" && e.columnIndex == 1)
+                        e.cellElement.find('.dx-treelist-empty-space').toggleClass("dx-treelist-collapsed", e.data.chilCount > 0)
+                },
+                onRowDblClick: function (e) {
+                    var container = e.component;
+                },
+                onContentReady: (e) => {
+                    var container = e.component;
+                    $("#action-add").dxSpeedDialAction({
+                        index: 1, icon: "fas fa-plus",
+                        label: "Thêm mới",
+                        visible: PermitInAction["insert"],
+                        onClick: () => {
+                            CALLPOPUP(
+                                "Tạo lịch bảo trì",
+                                "/VanHanh/QuanTri/_LichBaoTriCreate?id=" + id,
+                                ($(window).width() > 767 ? "50%" : "80%"),
+                                container
+                            );
+                        }
+                    }).dxSpeedDialAction("instance");
+                    DevExpress.config({
+                        floatingActionButtonConfig: {
+                            icon: "rowfield",
+                            label: "Tác vụ",
+                            shading: true,
+                            position: {
+                                of: e.element,
+                                my: "right bottom",
+                                at: "right bottom",
+                                offset: e.component.pageCount() > 1 ? "-15 -60" : "-15 -15"
+                            }
+                        }
+                    });
+                    DevExpress.ui.repaintFloatingActionButton();
+                },
+                onSelectionChanged: (e) => {
+                    var containerE = e.component;
+                    var selectedRowData = e.selectedRowsData[0];
+                    var selectedRowKey = e.selectedRowKeys[0];
+                    if (selectedRowData != null && selectedRowKey != null) {
+                        var data = e.component.getRowIndexByKey(selectedRowData.paId);
+                        $("#action-update").dxSpeedDialAction({
+                            index: 2, icon: "fas fa-edit",
+                            label: "Cập nhật thông tin",
+                            visible: PermitInAction["update"],
+                            onClick: () => {
+                                CALLPOPUP(
+                                    "Chi tiết lịch bảo trì",
+                                    "/VanHanh/QuanTri/_LichBaoTriDetail?id=" + selectedRowKey,
+                                    ($(window).width() > 767 ? "50%" : "80%"),
+                                    containerE
+                                );
+                            }
+                        }).dxSpeedDialAction("instance");
+                        $("#action-delete").dxSpeedDialAction({
+                            index: 3,
+                            icon: "fas fa-trash",
+                            label: "Xoá",
+                            visible: (selectedRowData.id != null && PermitInAction["delete"]),
+                            onClick: () => {
+                                DevExpress.ui.dialog.confirm("Bạn có chắc là muốn hủy bỏ giá trị của hạng mục?", "XÁC NHẬN THÔNG TIN").done(function (dialogResult) {
+                                    if (dialogResult) {
+                                        var deferred = $.Deferred();
+                                        customStore_MaintenanceSchedule(0).store().remove(selectedRowKey).then(() => {
+                                            DevExpress.ui.notify("Xoá thành công", "success", 3000);
+                                            e.component.refresh();
+                                        }, deferred.reject);
+                                        return deferred.promise();
+                                    }
+                                });
+                            }
+                        }).dxSpeedDialAction("instance");
+                    }
+                },
+                selection: {
+                    mode: "single"
+                },
+                onCellClick: function (e) {
+                },
+                columns: [
+                    {
+                        dataField: "constructionItemsId",
+                        allowFiltering: true,
+                        visible: false,
+                        caption: "Hạng mục",
+                        dataType: "string",
+                        alignment: "center",
+                    
+                    },// firstName
+                    {
+                        dataField: "maintenanceSupplierInfoId",
+                        allowFiltering: true,
+                        caption: "Đơn vị BT",
+                        dataType: "string",
+                        alignment: "center",
+                        lookup: {
+                            dataSource: customStore_MaintenanceSupplierInfo().store(),
+                            valueExpr: "id",
+                            displayExpr: "name",
+                        },
+                    },// LastName
+
+                    {
+                        dataField: "title",
+                        allowFiltering: true,
+                        caption: "Nội dung",
+                        dataType: "string",
+                        alignment: "center",
+                    },// phone
+                    {
+                        dataField: "isRemind",
+                        allowFiltering: true,
+                        caption: "Nhắc nhở",
+                        alignment: "center",
+                        editorType: "dxSwitch",
+                        lookup: {
+                            dataSource: listRemind,
+                            valueExpr: "value",
+                            displayExpr: "text",
+                        },
+                        cellTemplate: (c, o) => {
+                            $("<span />").addClass("badge badge-" + listActiveStatus.find(x => x.value == o.value).color).append(
+                                $("<i />").addClass("mr-1 " + listActiveStatus.find(x => x.value == o.value).icon), o.text
+                            ).appendTo(c);
+                        }
+                    },
+                ],
+                editing: {
+                    allowAdding: false,
+                    allowUpdating: false,
+                    allowDeleting: false,
                     mode: "batch",
                     useIcons: true,
                     confirmDelete: true,

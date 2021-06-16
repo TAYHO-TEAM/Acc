@@ -396,12 +396,6 @@
                     }
                 },
                 onCellClick: function (e) {
-
-                    if (typeof e.column !== "undefined") {
-                        if (e.column.dataField === "noAttachment") {
-                            loadUpload("PlanMaster", e.row.data, false);
-                        }
-                    }
                 },
                 columns: [
                     {

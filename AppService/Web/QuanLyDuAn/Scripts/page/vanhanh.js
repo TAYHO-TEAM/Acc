@@ -927,9 +927,29 @@ var listActiveStatus = [
     { value: true, text: "Hoạt động", color: "success", icon: 'fa fa-check-circle' },
     { value: false, text: "Tạm dừng", color: "danger", icon: 'fa fa-minus-circle' },
 ];
+var listRemind = [
+    { value: true, text: "Nhắc", color: "success", icon: 'fa fa-check-circle' },
+    { value: false, text: "Không nhắc", color: "danger", icon: 'fa fa-minus-circle' },
+];
+
 var listIsInOrOutStatus = [
     { value: true, text: "Nhập kho", color: "success", icon: 'fa fa-check-circle' },
     { value: false, text: "Xuất kho", color: "danger", icon: 'fa fa-minus-circle' },
+];
+var remidBy = [
+    {
+        ID: "Call",
+        Name: "Call",
+    },
+    {
+        ID: "Notify",
+        Name: "Notify",
+    },
+    {
+        ID: "Email",
+        Name: "Email",
+    },
+
 ];
 const statusDefect = [
     {

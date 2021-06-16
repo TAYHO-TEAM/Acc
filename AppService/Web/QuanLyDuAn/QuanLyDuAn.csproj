@@ -192,7 +192,9 @@
     <Compile Include="Areas\ThongTin\Controllers\VanBanMauController.cs" />
     <Compile Include="Areas\ThongTin\ThongTinAreaRegistration.cs" />
     <Compile Include="Areas\VanHanh\Controllers\BaoHanhController.cs" />
+    <Compile Include="Areas\VanHanh\Controllers\BaoTriController.cs" />
     <Compile Include="Areas\VanHanh\Controllers\HomeController.cs" />
+    <Compile Include="Areas\VanHanh\Controllers\KhieuNaiController.cs" />
     <Compile Include="Areas\VanHanh\Controllers\KhoBaiController.cs" />
     <Compile Include="Areas\VanHanh\Controllers\QuanTriController.cs" />
     <Compile Include="Areas\VanHanh\VanHanhAreaRegistration.cs" />
@@ -2529,7 +2531,7 @@
     <Content Include="Areas\VanHanh\Views\QuanTri\_KhachHangCreate.cshtml" />
     <Content Include="Areas\VanHanh\Views\BaoHanh\_DefectAcceptance.cshtml" />
     <Content Include="Areas\VanHanh\Views\BaoHanh\_DefectFixReport.cshtml" />
-    <Content Include="Areas\VanHanh\Views\QuanTri\_CanHoCreate.cshtml" />
+    <Content Include="Areas\VanHanh\Views\QuanTri\_LichBaoTriCreate.cshtml" />
     <Content Include="Areas\VanHanh\Views\KhoBai\XuatNhap.cshtml" />
     <Content Include="Areas\VanHanh\Views\KhoBai\DanhMucHH.cshtml" />
     <Content Include="Areas\VanHanh\Views\QuanTri\DonVi.cshtml" />
@@ -2538,6 +2540,10 @@
     <Content Include="Areas\VanHanh\Views\KhoBai\_XuatNhapCreate.cshtml" />
     <Content Include="Areas\VanHanh\Views\QuanTri\DonViKyThuat.cshtml" />
     <Content Include="Areas\VanHanh\Views\QuanTri\KhieuNai.cshtml" />
+    <Content Include="Areas\VanHanh\Views\QuanTri\_LichBaoTriDetail.cshtml" />
+    <Content Include="Areas\VanHanh\Views\KhieuNai\Index.cshtml" />
+    <Content Include="Areas\VanHanh\Views\BaoTri\NhatKyBaoTri.cshtml" />
+    <Content Include="Areas\VanHanh\Views\BaoTri\BaoTriDinhKy.cshtml" />
     <None Include="packages.config" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Home\About.cshtml" />

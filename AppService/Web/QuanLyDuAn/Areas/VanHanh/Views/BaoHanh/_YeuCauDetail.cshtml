@@ -17,9 +17,9 @@
     var fdata = new FormData();
     $(document).ready(function () {
         customStore_Detail($model).load()
-            .done((rs) => {
-                console.log(rs);
-                rs.length == 0 ? null : $("#form-DefectDetail").dxForm({
+        .done((rs) => {
+            console.log(rs);
+            rs.length == 0 ? null : $("#form-DefectDetail").dxForm({
                 formData: rs[0],
                 labelLocation: "top",
                 items: [

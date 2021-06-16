@@ -59,5 +59,13 @@ namespace QuanLyDuAn.Areas.VanHanh.Controllers
         {
             return View();
         }
+        public ActionResult _LichBaoTriCreate(int id)
+        {
+            return PartialView(id);
+        }
+        public ActionResult _LichBaoTriDetail(int id)
+        {
+            return PartialView(id);
+        }
     }
 }
