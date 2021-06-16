@@ -14,7 +14,7 @@ const ACTION_CMD_RESPONSEREGIST = "/ResponseRegist";
 var CUNSTRITEMS = isNullOrEmpty(localStorage.getItem("CItemsCurrent")) ? parseInt(localStorage.getItem("CItemsCurrent")) : 1;
 var GROUPOWNERID = isNullOrEmpty(localStorage.getItem("groupOwnerIdCurrent")) ? parseInt(localStorage.getItem("groupOwnerIdCurrent")) : 0;
 var ITEMSID = isNullOrEmpty(localStorage.getItem("ItemsIdCurrent")) ? 1: parseInt(localStorage.getItem("ItemsIdCurrent"));
-var HOST = 'http://api-om-crud.tayho.com.vn/api/v1/'; ///'https://api-om-crud.tayho.com.vn/api/v1/''http://localhost:54323/api/v1/http://localhost:8088/api/v1/
+var HOST = 'https://api-om-crud.tayho.com.vn/api/v1/'; ///'https://api-om-crud.tayho.com.vn/api/v1/''http://localhost:54323/api/v1/http://localhost:8088/api/v1/
 
 var $DATASOURCE = (link, key) => {
     var url = HOST + link;
