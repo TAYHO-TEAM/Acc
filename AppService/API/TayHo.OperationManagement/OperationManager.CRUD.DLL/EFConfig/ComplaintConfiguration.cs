@@ -13,7 +13,7 @@ namespace OperationManager.CRUD.DAL.EFConfig
             builder.Property(x => x.Code).HasColumnName("Code").HasMaxLength(128).UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.Barcode).HasColumnName("Barcode").HasMaxLength(256).UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.ComplaintTypeId).HasColumnName("ComplaintTypeId").UsePropertyAccessMode(PropertyAccessMode.Field);
-            builder.Property(x => x.CustomerId).HasColumnName("CustomerId").UsePropertyAccessMode(PropertyAccessMode.Field);
+            builder.Property(x => x.CustomerInfoId).HasColumnName("CustomerInfoId").UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.ConstructionItemsId).HasColumnName("ConstructionItemsId").UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.RealEstateId).HasColumnName("RealEstateId").UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.FullName).HasColumnName("FullName").HasMaxLength(512).UsePropertyAccessMode(PropertyAccessMode.Field);

@@ -3,7 +3,7 @@ using Services.Common.DomainObjects.Interfaces;
 
 namespace OperationManager.CRUD.DAL.DTO.BaseClasses
 {
-    public abstract class DOBase : EntityDO, IAggregateRoot
+    public abstract class DOBase : EntityDTO, IAggregateRoot
     {
         #region Fields
 

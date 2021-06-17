@@ -7,24 +7,53 @@
 <div id="popup-register"></div>
 <div class="row">
     <div class="col-8">
-        <div class="card card-primary">
-            <div class="card-header">
+        <div class="card card-info">
+            <div class="card-header ui-sortable-handle" style="cursor: move;">
                 <h3 class="card-title">Khiếu nại</h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" id="new-Complaint" onclick="newComplaint()">
+                        <i class="fas fa-file"></i>
+                    </button>
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
             </div>
             <div id="container" class="elevation-2 card-body">
                 <form id="form-Complaint" action="#" method="POST" enctype="application/json">
                 </form>
             </div>
         </div>
-        
+        <div class="card card-success">
+            <div class="card-header ui-sortable-handle" style="cursor: move;">
+                <h3 class="card-title">Nội dung giải quyết</h3>
+
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+
+                </div>
+            </div>
+            <div id="container-resolve" class="elevation-2 card-body">
+                <form id="form-Resolve" action="#" method="POST" enctype="application/json">
+                </form>
+            </div>
+        </div>
+
     </div>
     <div class="col-4">
-        <div id="container-owner" class="elevation-2"></div>
+        <div class="card card-warning">
+            <div id="container-complaint" class="elevation-2"></div>
+        </div>
     </div>
 </div>
+
+
 @section script{
     <script src="~/Scripts/page/vanhanh.js"></script>
     <script>
+     
         ///-----------------------------READ ------------------------
 
         var ACTION_COMPLAINT = "Complaint/";
@@ -32,12 +61,30 @@
         var ACTION_CUSTOMERINFO = "CustomerInfo/";
         var ACTION_CONSTRUCTIONITEMS = "ConstructionItems/";
         var ACTION_CUSTOMERREALESTATE = "CustomerRealEstate/";
+        var ACTION_COMPLAINTSTYPE = "ComplaintsType/";
+        var ACTION_COMPLAINTRESOLVE = "ComplaintResolve/";
+        var ACTION_REALESTATE = "RealEstate/";
         var KEY = "id";
         var WIDTH_CONTAINER = $("#container").width();
         //..........................Get data -------------------------------------------------------------
 
         var customStore = () => new DevExpress.data.DataSource({
             store: $DATASOURCE(ACTION_COMPLAINT, KEY)
+        });
+        var customStore_ById = (id) => new DevExpress.data.DataSource({
+            store: $DATASOURCE(ACTION_COMPLAINT, KEY),
+            filter: ["id", "=", id]
+        });
+        var customStore_ComplaintResolve = (id) => new DevExpress.data.DataSource({
+            store: $DATASOURCE(ACTION_COMPLAINTRESOLVE, KEY),
+            filter: ["complaintId", "=", id]
+        });
+        var customStore_CustomerInfo = $DATASOURCEGET(ACTION_CUSTOMERINFO, KEY);
+        var customStore_RealEstate = $DATASOURCEGET(ACTION_REALESTATE, KEY);
+        var customStore_ComplaintsType = $DATASOURCEGET(ACTION_COMPLAINTSTYPE, KEY);
+        var customStore_CustomerRealEstate = (id) => new DevExpress.data.DataSource({
+            store: $DATASOURCEGET(ACTION_CUSTOMERREALESTATE, KEY),
+            filter: ["realEstateId", "=", id]
         });
         var $constructionItemsId = 0;
         var formData = {
@@ -64,273 +111,663 @@
         var fdata = new FormData();
         var $maintenanceSupplierInfoId = 0;
         var $dataSource = {};
-        $(document).ready(function () {
-            var formMaintenanceSchedule = $("#form-Complaint").dxForm({
-                formData: formData,
-                labelLocation: "top",
-                items: [
-                    {
-                        itemType: "group",
-                        colCount: 12,
-                        cssClass: "first-group",
-                        items: [
-                            {
-                                colSpan: 3,
-                                dataField: "constructionItemsId",
-                                label: { text: "Hạng muc" },
-                                type: "string",
-                                editorType: "dxSelectBox",
-                                //lookup: {
-                                //    dataSource: customStore(PROJECTID),
-                                //    valueExpr: "id",
-                                //    displayExpr: "title",
-                                //},
-                                editorOptions: {
-                                    stylingMode: "filled",
-                                    searchenabled: true,
-                                    searchmode: "contains",
-                                    searchexpr: ['title', 'descriptions'],
-                                    showclearbutton: true,
-                                    placeholder: "vui lòng chọn...",
-                                    dataSource: customStore(PROJECTID),
-                                    value: $constructionItemsId,
-                                    valueExpr: "id",
-                                    displayExpr: 'title',
-                                    elementAttr: {
-                                        id: "elementConstructionItemsId",
-                                    },
-                                },
-                                validationRules: [{ type: "required" }],
-                            },
-                            {
-                                colSpan: 3,
-                                dataField: "maintenanceSupplierInfoId",
-                                label: { text: "Đơn vị BT" },
-                                type: "string",
-                                editorType: "dxSelectBox",
-                                //editorOptions: {
-                                //    stylingMode: "filled",
-                                //    searchEnabled: true,
-                                //    searchMode: "contains",
-                                //    searchExpr: ['name'],
-                                //    showClearButton: true,
-                                //    placeholder: "Vui lòng chọn...",
-                                //    dataSource: customStore_MaintenanceSupplierInfo(),
-                                //    valueExpr: 'id',
-                                //    displayExpr: 'name',
-                                //    elementAttr: {
-                                //        id: "elementMaintenanceSupplierInfo",
-                                //    },
-                                //    onValueChanged: function (e) {
-                                //        var selTarget = $('#elementMaintenancerInfoId').dxSelectBox('instance');
-                                //        selTarget.option('value', null);
-                                //        if (e.value > 0) {
-                                //            selTarget.option("dataSource", customStore_MaintenancerInfo(e.value));
-                                //        }
-                                //        else {
-                                //            selTarget.option("dataSource", customStore_MaintenancerInfo(0));
-                                //        }
-                                //    },
-                                //},
-                                //validationRules: [{ type: "required" }],
-                            },
-                            {
-                                colSpan: 3,
-                                dataField: "maintenancerInfoId",
-                                label: { text: "Kỹ thuật viên" },
-                                type: "string",
-                                //editorType: "dxSelectBox",
-                                //editorOptions: {
-                                //    stylingMode: "filled",
-                                //    searchEnabled: true,
-                                //    searchMode: "contains",
-                                //    searchExpr: ['fullName'],
-                                //    showClearButton: true,
-                                //    placeholder: "Vui lòng chọn...",
-                                //    dataSource: customStore_MaintenancerInfo(0),
-                                //    valueExpr: "id",
-                                //    displayExpr: 'fullName',
-                                //    elementAttr: {
-                                //        id: "elementMaintenancerInfoId",
-                                //    },
-                                //},
-                            },
-                            {
-                                colSpan: 3,
-                                dataField: "title",
-                                label: { text: "Tiêu đề" },
-                                editorType: "dxTextBox",
-                                editorOptions: {
-                                    stylingMode: "filled",
-                                    placeholder: "Vui lòng nhập...",
-                                },
-                            },
-                            {
-                                colSpan: 3,
-                                dataField: "cycle",
-                                label: { text: "Chu kỳ theo ngày" },
-                                editorType: "dxNumberBox",
-                                editorOptions: {
-                                    stylingMode: "filled",
-                                    placeholder: "Vui lòng nhập...",
-                                },
-                                validationRules: [{ type: "required" }],
-                            },
-                            {
-                                colSpan: 3,
-                                dataField: "isRemind",
-                                label: { text: "Báo lịch" },
-                                editorType: "dxSwitch",
-                                editorOptions: {
-                                    stylingMode: "filled",
-                                    dataSource: listRemind,
-                                    valueExpr: "value",
-                                    value: true,
-                                    displayExpr: "text",
-                                },
-                            },
-                            {
-                                colSpan: 3,
-                                dataField: "remindBy",
-                                label: { text: "Nhắc bằng" },
-                                editorType: "dxSelectBox",
-                                editorOptions: {
-                                    dataSource: remidBy,
-                                    valueExpr: "ID",
-                                    displayExpr: "Name",
-                                },
-                            },
-                            {
-                                colSpan: 3,
-                                dataField: "startDate",
-                                label: { text: "Ngày bắt đầu" },
-                                type: "date",
-                                editorType: "dxDateBox",
-                                editorOptions: {
-                                    type: "date",
-                                    stylingMode: "filled",
-                                    placeholder: "Vui lòng nhập...",
-                                },
-                                validationRules: [{ type: "required" }],
-                            },
-                            {
-                                colSpan: 3,
-                                dataField: "endDate",
-                                type: "date",
-                                label: { text: "Ngày kết thúc" },
-                                editorType: "dxDateBox",
-                                editorOptions: {
-                                    stylingMode: "filled",
-                                    placeholder: "Vui lòng nhập...",
-                                },
-                            },
-                            {
-                                colSpan: 3,
-                                dataField: "startTime",
-                                label: { text: "Bắt đầu lúc" },
-                                editorType: "dxDateBox",
-                                editorOptions: {
-                                    type: "time",
-                                    value: new Date(2015, 11, 1, 6),
-                                    stylingMode: "filled",
-                                    placeholder: "Vui lòng chọn...",
-                                },
-                            },
-                            {
-                                colSpan: 3,
-                                dataField: "endTime",
-                                label: { text: "Kết thúc lúc" },
-                                editorType: "dxDateBox",
-                                editorOptions: {
-                                    type: "time",
-                                    value: new Date(2015, 11, 1, 6),
-                                    stylingMode: "filled",
-                                    placeholder: "Vui lòng chọn...",
-                                },
-                            },
-                        ]
-                    },
-                    {
-                        itemType: "group",
-                        name: "button-action",
-                        colCount: 12,
-                        items: [
-                            {
-                                colSpan: 12,
-                                itemType: "button",
-                                horizontalAlignment: "center",
-                                buttonOptions: {
-                                    text: "Cập nhật kế hoạch",
-                                    icon: "fa fa-save",
-                                    type: "success",
-                                    useSubmitBehavior: true,
-                                    elementAttr: {
-                                        id: "schedule",
+        function newComplaint() {
+            loadData_Complaint(0);
+        }
+        //..........................Function -------------------------------------------------------------
+        $(function () {
+            loadData();
+            loadData_Complaint(0);
+            loadData_Resolve(0);
+        });
+        var $issetCP = false;
+        var $keyCP = 0;
+        var $issetRS = false;
+        var $keyRS = 0;
+        var loadData_Complaint = (id) => {
+            customStore_ById(id).load().done((rs) => {
+                $issetCP = (rs.length > 0);
+                if ($issetCP) {
+                    $keyCP = rs[0].id;
+                }
+                $("#form-Complaint").dxForm({
+                    formData: rs[0],
+                    //height: '35vh',
+                    labelLocation: "top",
+                    items: [
+                        {
+                            itemType: "group",
+                            colCount: 12,
+                            cssClass: "first-group",
+                            items: [
+                                {
+                                    colSpan: 4,
+                                    dataField: "realEstateId",
+                                    label: { text: "Căn hộ" },
+                                    type: "string",
+                                    editorType: "dxSelectBox",
+                                    lookup: {
+                                        dataSource: customStore_RealEstate,
+                                        valueExpr: "id",
+                                        displayExpr: "title",
                                     },
                                     editorOptions: {
                                         stylingMode: "filled",
+                                        searchenabled: true,
+                                        searchmode: "contains",
+                                        searchexpr: ['title', 'descriptions'],
+                                        showclearbutton: true,
+                                        placeholder: "vui lòng chọn...",
+                                        dataSource: customStore_RealEstate,
+                                        //value: $constructionItemsId,
+                                        valueExpr: "id",
+                                        displayExpr: 'code',
+                                        elementAttr: {
+                                            id: "elementRealEstateId",
+                                        },
+                                        itemTemplate: function (data) {
+                                            return $("<div>").append($("<b>").append(data.code).addClass("mr-1"), $("<em>").append(data.address).addClass("mr-1"));
+                                        },
+                                        onValueChanged: function (data) {
+                                            if (data.value != null) {
+                                                customStore_CustomerRealEstate(data.value).load().done((rs) => {
+                                                    if (rs != null && rs.length > 0) {
+                                                        $('#elementCustomerInfoId').dxSelectBox('instance')
+                                                            .option('value', rs[0].id == null ? 0 : rs[0].customerInfoId);
+                                                    }
+                                                    else {
+                                                        $('#elementCustomerInfoId').dxSelectBox('instance')
+                                                            .option('value', null);
+                                                    };
+                                                });
+                                            }
+                                            else {
+                                                $('#elementCustomerInfoId').dxSelectBox('instance')
+                                                    .option('value', null);
+                                            };
+                                        },
+                                    },
+                                },
+                                {
+                                    colSpan: 4,
+                                    dataField: "customerInfoId",
+                                    label: { text: "Mã Khách hàng" },
+                                    type: "string",
+                                    editorType: "dxSelectBox",
+                                    editorOptions: {
+                                        stylingMode: "filled",
+                                        searchEnabled: true,
+                                        searchMode: "contains",
+                                        searchExpr: ['name'],
+                                        showClearButton: true,
+                                        placeholder: "Vui lòng chọn...",
+                                        dataSource: customStore_CustomerInfo,
+                                        valueExpr: "id",
+                                        displayExpr: "id",
+                                        elementAttr: {
+                                            id: "elementCustomerInfoId",
+                                        },
+                                        itemTemplate: function (data) {
+                                            return $("<div>").append($("<b>").append(data.id).addClass("mr-1"), $("<em>").append(data.firstName + " " + data.lastName).addClass("mr-1"));
+                                        },
+                                        onValueChanged: function (data) {
+                                            if (data.value != null) {
+                                                customStore_CustomerInfo.load().done((rsCI) => {
+                                                    var item = rsCI.filter(x => x.id == data.value).shift();
+                                                    $('#elementFullName').dxTextBox('instance')
+                                                        .option('value', item == null ? "" : (item.firstName + " " + item.lastName));
+                                                    $('#elementPhone').dxTextBox('instance')
+                                                        .option('value', item == null ? "" : (item.phone));
+                                                });
+                                            }
+                                            else {
+                                                $('#elementFullName').dxTextBox('instance')
+                                                    .option('value', null);
+                                                $('#elementPhone').dxTextBox('instance')
+                                                    .option('value', null);
+                                            };
+                                        },
+                                    },
+                                },
+                                {
+                                    colSpan: 4,
+                                    dataField: "complaintTypeId",
+                                    label: { text: "Vấn đề Khiếu nại" },
+                                    type: "string",
+                                    editorType: "dxSelectBox",
+                                    editorOptions: {
+                                        stylingMode: "filled",
+                                        searchEnabled: true,
+                                        searchMode: "contains",
+                                        searchExpr: ['code', 'title'],
+                                        showClearButton: true,
+                                        placeholder: "Vui lòng chọn...",
+                                        valueExpr: "id",
+                                        displayExpr: "title",
+                                        dataSource: customStore_ComplaintsType,
+                                        elementAttr: {
+                                            id: "elementComplaintTypeId",
+                                        },
+                                        onValueChanged: function (data) {
+                                            if (data.value != null) {
+                                                customStore_ComplaintsType.load().done((rs) => {
+                                                    var item = rs.filter(x => x.id == data.value).shift();
+                                                    $('#elementNoteResolve').dxTextArea('instance')
+                                                        .option('value', item == null ? "" : (item.resolveSuggest));
+                                                });
+                                            }
+                                            else {
+                                                $('#elementNoteResolve').dxTextArea('instance')
+                                                    .option('value', null);
+                                            };
+                                        },
+                                    },
+                                    validationRules: [{ type: "required" }],
+                                },
+                                {
+                                    colSpan: 6,
+                                    dataField: "fullName",
+                                    label: { text: "Họ tên" },
+                                    type: "string",
+                                    editorType: "dxTextBox",
+                                    editorOptions: {
+                                        stylingMode: "filled",
+                                        elementAttr: {
+                                            id: "elementFullName",
+                                        },
+                                    },
+                                    validationRules: [{ type: "required" }],
+                                },
+                                {
+                                    colSpan: 6,
+                                    dataField: "phone",
+                                    label: { text: "Số điện thoại" },
+                                    type: "string",
+                                    editorType: "dxTextBox",
+                                    editorOptions: {
+                                        stylingMode: "filled",
+                                        elementAttr: {
+                                            id: "elementPhone",
+                                        },
+                                    },
+                                    validationRules: [{ type: "required" }],
+                                },
+
+                            ]
+                        },
+                        {
+                            itemType: "group",
+                            name: "button-action",
+                            colCount: 12,
+                            items: [
+                                {
+                                    colSpan: 12,
+                                    dataField: "note",
+                                    label: { text: "Nội dung khiếu nại" },
+                                    editorType: "dxTextArea",
+                                    editorOptions: {
+                                        stylingMode: "filled",
+                                        height: 100,
+                                    },
+                                },
+                            ],
+                        },
+                        {
+                            itemType: "group",
+                            name: "button-action",
+                            colCount: 12,
+                            items: [
+                                {
+                                    colSpan: 12,
+                                    itemType: "button",
+
+                                    horizontalAlignment: "center",
+                                    buttonOptions: {
+                                        text: !$issetRS ? "Gửi khiếu nại" : "Cập nhật",
+                                        icon: "fa fa-save",
+                                        type: "default",
+                                        useSubmitBehavior: true,
+                                        elementAttr: {
+                                            id: "schedule",
+                                        },
+                                        editorOptions: {
+                                            stylingMode: "contained",
+                                            cssClass: "bg-info",
+                                        }
                                     }
-                                }
+                                },
+                            ],
+                        },
+                    ],
+                }).dxForm("instance");
+                loadData_Resolve($keyCP);
+            });
+        };
+        $("#form-Complaint").on("submit", function (e) {
+            e.preventDefault();
+            var formdata = $('#form-Complaint').dxForm("instance").option('formData');
+            var resValid = true
+            if (!resValid) {
+                DevExpress.ui.notify("Vui lòng kiểm tra lại file đính kèm!", "error", 3000);
+            }
+            else {
+                loadingPanel.show();
+                var deferred = $.Deferred();
+                if (!$issetRS) {
+                    customStore().store().insert(formdata).done((rs) => {
+                        loadingPanel.hide();
+                        console.log(rs);
+                        if (rs.isOk) {
+                            deferred.resolve(rs);
+                            DevExpress.ui.notify("Cập nhật thành công", "success", 3000);
+                        }
+                        else {
+                            DevExpress.ui.notify("Có lỗi xảy ra", "error", 3000);
+                            deferred.resolve(false);
+                        }
+                    }, deferred.reject)
+                }
+                else if ($keyCP > 0) {
+                    customStore().store().update($keyCP, formdata).done((rs) => {
+                        deferred.resolve(rs);
+                        loadingPanel.hide();
+                        if (rs.isOk) {
+                            deferred.resolve(rs);
+                            DevExpress.ui.notify("Cập nhật thành công", "success", 3000);
+                        }
+                        else {
+                            DevExpress.ui.notify("Có lỗi xảy ra", "error", 3000);
+                        }
+                    }, deferred.reject)
+                }
+                loadData();
+                return deferred.promise();
+            }
+        });
+        var loadData_Resolve = (id) => {
+            customStore_ComplaintResolve(id).load().done((rs) => {
+                $issetRS = (rs.length > 0);
+                console.log(id);
+                if ($issetRS) {
+                    $keyRS = rs[0].id;
+                }
+                $("#form-Resolve").dxForm({
+                    formData: rs[0],
+                    //height: '20vh',
+                    labelLocation: "top",
+                    items: [
+                        {
+                            itemType: "group",
+                            colCount: 12,
+                            cssClass: "first-group",
+                            items: [
+                                {
+                                    colSpan: 3,
+                                    dataField: "complaintId",
+                                    label: { text: "Mã KN" },
+                                    editorType: "dxSelectBox",
+                                    editorOptions: {
+                                        dataSource: customStore(),
+                                        stylingMode: "filled",
+                                        //allowEditing: false,
+                                        valueExpr: "id",
+                                        readOnly: true,
+                                        displayExpr: "code",
+                                        value: id,
+                                        elementAttr: {
+                                            id: "elementComplaintId",
+                                        },
+                                    },
+                                },
+                                {
+                                    colSpan: 3,
+                                    dataField: "resolver",
+                                    label: { text: "Người trả lời" },
+                                    type: "string",
+                                    editorType: "dxTextBox",
+                                    editorOptions: {
+                                        stylingMode: "filled",
+                                        //searchEnabled: true,
+                                        //searchMode: "contains",
+                                        //searchExpr: ['name'],
+                                        //showClearButton: true,
+                                        //placeholder: "Vui lòng chọn...",
+                                        //dataSource: customStore_CustomerInfo,
+                                        //valueExpr: "id",
+                                        //displayExpr: "id",
+                                        //elementAttr: {
+                                        //    id: "elementResolver",
+                                        //},
+                                        //itemTemplate: function (data) {
+                                        //    return $("<div>").append($("<b>").append(data.id).addClass("mr-1"), $("<em>").append(data.firstName + " " + data.lastName).addClass("mr-1"));
+                                        //},
+                                        //onValueChanged: function (data) {
+                                           
+                                        //},
+                                    },
+                                },
+                                {
+                                    colSpan: 3,
+                                    dataField: "resolverPhone",
+                                    label: { text: "Số điện thoại" },
+                                    type: "string",
+                                    //editorType: "dxSelectBox",
+                                    editorOptions: {
+                                        stylingMode: "filled",
+                                    //    searchEnabled: true,
+                                    //    searchMode: "contains",
+                                    //    searchExpr: ['code', 'title'],
+                                    //    showClearButton: true,
+                                    //    placeholder: "Vui lòng chọn...",
+                                    //    valueExpr: "id",
+                                    //    displayExpr: "title",
+                                    //    dataSource: customStore_ComplaintsType,
+                                    //    elementAttr: {
+                                    //        id: "elementResolverPhone",
+                                    //    },
+                                    },
+                                    //validationRules: [{ type: "required" }],
+                                },
+                                {
+                                    colSpan: 3,
+                                    dataField: "resolveDate",
+                                    label: { text: "Ngày trả lời" },
+                                    type: "string",
+                                    editorType: "dxDateBox",
+                                    editorOptions: {
+                                        stylingMode: "filled",
+                                        elementAttr: {
+                                            id: "elementResolveDate",
+                                        },
+                                    },
+                                    //validationRules: [{ type: "required" }],
+                                },
+                                //{
+                                //    colSpan: 12,
+                                //    dataField: "result",
+                                //    label: { text: "Kết quả" },
+                                //    type: "string",
+                                //    editorType: "dxTextBox",
+                                //    editorOptions: {
+                                //        stylingMode: "filled",
+                                //        elementAttr: {
+                                //            id: "elementResult",
+                                //        },
+                                //    },
+                                //    validationRules: [{ type: "required" }],
+                                //},
+
+                            ]
+                        },
+                        {
+                            itemType: "group",
+                            name: "button-action",
+                            colCount: 12,
+                            items: [
+                                {
+                                    colSpan: 12,
+                                    dataField: "note",
+                                    label: { text: "Phương án giải quyết" },
+                                    editorType: "dxTextArea",
+                                    editorOptions: {
+                                        stylingMode: "filled",
+                                        height: 100,
+                                        elementAttr: {
+                                            id: "elementNoteResolve",
+                                        },
+                                    },
+                                },
+                            ],
+                        },
+                        {
+                            itemType: "group",
+                            name: "button-action",
+                            colCount: 12,
+                            items: [
+                                {
+                                    colSpan: 6,
+                                    itemType: "button",
+                                    horizontalAlignment: "right",
+                                    disabled: id==0,
+                                    buttonOptions: {
+                                        text: "Đã trả lời",
+                                        icon: "fa fa-check",
+                                        type: "default",
+                                        useSubmitBehavior: true,
+                                        elementAttr: {
+                                            id: "resolve",
+                                        },
+                                        editorOptions: {
+                                            stylingMode: "contained",
+                                            cssClass: "bg-info",
+                                        }
+                                    }
+                                },
+                                {
+                                    colSpan: 6,
+                                    itemType: "button",
+                                    horizontalAlignment: "left",
+                                    disabled: id == 0,
+                                    buttonOptions: {
+                                        text: "Hẹn hỗ trợ",
+                                        icon: "fa fa-clipboard",
+                                        type: "default",
+                                        elementAttr: {
+                                            id: "resolveDelay",
+                                        },
+                                        editorOptions: {
+                                            stylingMode: "contained",
+                                            cssClass: "bg-info",
+                                        }
+                                    }
+                                },
+                            ],
+                        },
+                    ],
+                }).dxForm("instance");
+            });
+        };
+        $("#form-Resolve").on("submit", function (e) {
+            e.preventDefault();
+            var formdata = $('#form-Resolve').dxForm("instance").option('formData');
+            var resValid = true
+            if (!resValid) {
+                DevExpress.ui.notify("Vui lòng kiểm tra lại file đính kèm!", "error", 3000);
+            }
+            else {
+                loadingPanel.show();
+                var deferred = $.Deferred();
+                customStore_ComplaintResolve(0).store().insert(formdata).done((rs) => {
+                    loadingPanel.hide();
+                    console.log(rs);
+                    if (rs.isOk) {
+                        deferred.resolve(rs);
+                        DevExpress.ui.notify("Cập nhật thành công", "success", 3000);
+                    }
+                    else {
+                        DevExpress.ui.notify("Có lỗi xảy ra", "error", 3000);
+                        deferred.resolve(false);
+                    }
+                }, deferred.reject)
+                return deferred.promise();
+            }
+        });
+        var loadData = () => {
+            $("#container-complaint").dxDataGrid({
+                height: heightScreen,
+                dataSource: customStore(),
+                repaintChangesOnly: true,
+                remoteOperations: true,
+                scrolling: { mode: "standard" },
+                showBorders: false,
+                showColumnHeaders: true,
+                showColumnLines: false,
+                hoverStateEnabled: true,
+                showRowLines: true,
+                columnAutoWidth: true,
+                wordWrapEnabled: true,
+                rowAlternationEnabled: true,
+                filterRow: { visible: true },
+                summary: {
+                    groupItems: [{
+                        column: "status",
+                        summaryType: "count"
+                    },
+                    ]
+                },
+                paging: {
+                    enabled: true,
+                    pageSize: 20
+                },
+                pager: {
+                    showPageSizeSelector: true,
+                    allowedPageSizes: [10, 20, 40],
+                    showInfo: true,
+                },
+                searchPanel: {
+                    highlightCaseSensitive: true,
+                    highlightSearchText: true,
+                    searchVisibleColumnsOnly: true,
+                    visible: WIDTH_CONTAINER > 350
+                },
+                onToolbarPreparing: function (e) {
+                    var container = e.component;
+                    e.toolbarOptions.items.unshift(
+                        {
+                            location: "after",
+                            widget: "dxButton",
+                            options: {
+                                icon: "refresh",
+                                stylingMode: "filled",
+                                type: "default",
+                                onClick: () => container.refresh()
+                            },
+
+                        },
+
+                    )
+                },
+                onInitNewRow: (e) => {
+                    e.data.isActive = true;
+                    e.data.isVisible = true;
+                    e.data.constructionItemsId = CUNSTRITEMS;
+                },
+                onRowUpdating: (e) => {
+                },
+                onCellPrepared: (e) => {
+                    if (e.rowType == "data" && e.columnIndex == 1)
+                        e.cellElement.find('.dx-treelist-empty-space').toggleClass("dx-treelist-collapsed", e.data.chilCount > 0)
+                },
+                onRowDblClick: function (e) {
+                    var container = e.component;
+                },
+                selection: {
+                    mode: "single"
+                },
+                onContentReady: (e) => {
+                    var container = e.component;
+                },
+                onSelectionChanged: (e) => {
+                    var container = e.component;
+                    var selectedRowData = e.selectedRowsData[0];
+                    var selectedRowKey = e.selectedRowKeys[0];
+                    loadData_Complaint(selectedRowKey);
+                    //$('#elementComplaintId').dxTextBox('instance')
+                    //    .option('value', selectedRowData == null ? "" : (selectedRowData.id));
+                },
+                columns: [
+                    {
+                        dataField: "code",
+                        allowFiltering: true,
+                        caption: "Mã KN",
+                        dataType: "string",
+                        alignment: "center",
+                        readOnly: true,
+                        allowEditing: false,
+                    },// barCode
+                    {
+                        dataField: "fullName",
+                        allowFiltering: true,
+                        caption: "Người KN",
+                        dataType: "string",
+                        alignment: "center",
+                    },// address
+                    {
+                        dataField: "complaintTypeId",
+                        allowFiltering: true,
+                        caption: "Vấn đề",
+                        dataType: "string",
+                        alignment: "center",
+                    },// address
+                    {
+                        dataField: "isActive",
+                        allowFiltering: true,
+                        caption: "Trạng thái",
+                        alignment: "center",
+                        editorType: "dxSwitch",
+                        lookup: {
+                            dataSource: listActiveStatus,
+                            valueExpr: "value", displayExpr: "text",
+                        },
+                        cellTemplate: (c, o) => {
+                            $("<span />").addClass("badge badge-" + listActiveStatus.find(x => x.value == o.value).color).append(
+                                $("<i />").addClass("mr-1 " + listActiveStatus.find(x => x.value == o.value).icon), o.text
+                            ).appendTo(c);
+                        }
+                    },// Trạng thái
+                ],
+                editing: {
+                    allowAdding: false,
+                    allowUpdating: false,
+                    allowDeleting: false,
+                    mode: "rown",
+                    useIcons: true,
+                    confirmDelete: true,
+                    popup: {
+                        width: "30%",
+                        height: "45%",
+                        showTitle: true,
+                        title: "Thêm căn hộ mới",
+                        closeOnOutsideClick: false,
+                        showCloseButton: true,
+                    },
+                    form: {
+                        labelLocation: "left",
+                        itemType: "group",
+                        colCount: 12,
+                        showRequiredMark: true,
+                        requiredMark: "(*)",
+                        items: [
+                            {
+                                colSpan: 12,
+                                dataField: "code",
+                                label: { text: "Mã Kho" },
+                            },
+                            {
+                                colSpan: 12,
+                                dataField: "address",
+                                label: { text: "Địa chỉ" },
+                                editorOptions: {
+                                    stylingMode: "filled",
+                                    placeholder: "Vui lòng nhập...",
+                                },
+                            },
+                            {
+                                colSpan: 12,
+                                dataField: "isActive",
+                                label: { text: "Trạng thái" },
+                                editorType: "dxSwitch",
+                                editorOptions: {
+                                    dataSource: listActiveStatus,
+                                    valueExpr: "value",
+                                    displayExpr: "text",
+                                },
                             },
                         ],
                     },
-                ],
-            }).dxForm("instance");
-
-            $("#form-Complaint").on("submit", function (e) {
-                e.preventDefault();
-                var formdata = $('#form-MaintenanceSchedule').dxForm("instance").option('formData');
-                //var fileWrappers = fileUploader()._files;
-                var resValid = true
-                //for (var i = 0; i < fileWrappers.length; i++) {
-                //    if (fileWrappers[i].isValid() === false) {
-                //        resValid = false;
-                //    }
-                //}
-                if (!resValid) {
-                    DevExpress.ui.notify("Vui lòng kiểm tra lại file đính kèm!", "error", 3000);
-                }
-                else {
-                    loadingPanel.show();
-                    //formdata.append('constructionItemsId', $constructionItemsId);
-                    var deferred = $.Deferred();
-                    customStore_MaintenanceSchedule(0).store().insert(formdata).done((rs) => {
-                        deferred.resolve(true);
-                        loadingPanel.hide();
-                        $("#popup-main").dxPopup('instance').hide();
-                        if (rs.status == "success") {
-                            DevExpress.ui.notify(rs.result, rs.status, 3000);
-
-                        }
-                        else {
-                            DevExpress.ui.notify("Có lỗi xảy ra: " + errorThrown, "error", 3000);
-                        }
-                    }, deferred.reject)
-                    //$.ajax({
-                    //    type: "POST",
-                    //    enctype: 'multipart/form-data',
-                    //    url: "/VanHanh/BaoHanh/DefectFixUpdate",
-                    //    data: fdata,
-                    //    processData: false,
-                    //    contentType: false,
-                    //    cache: false,
-                    //    success: function (rs) {
-                    //        deferred.resolve(true);
-                    //        loadingPanel.hide();
-                    //        DevExpress.ui.notify(rs.result, rs.status, 3000);
-                    //        if (rs.status == "success") {
-                    //            $("#popup-register").dxPopup('instance').hide();
-                    //        }
-                    //    },
-                    //    error: function (xhr, textStatus, errorThrown) {
-                    //        loadingPanel.hide();
-                    //        DevExpress.ui.notify("Có lỗi xảy ra: " + errorThrown, "error", 3000);
-                    //    }
-                    //});
-                    return deferred.promise();
-                }
+                },
             });
-        });
+        };
     </script>
 }
 
