@@ -11,7 +11,7 @@
         <div id="container" class="elevation-2"></div>
     </div>
     <div class="col-4">
-        <div id="container-owner" class="elevation-2"></div>
+        <div id="container-complaint" class="elevation-2"></div>
     </div>
 </div>
 
@@ -21,7 +21,7 @@
         var id = 1;
         CUNSTRITEMS = isNullOrEmpty(localStorage.getItem("CItemsCurrent")) ? parseInt(localStorage.getItem("CItemsCurrent")) : 1;
         ///-----------------------------READ ------------------------
-
+        var ACTION_COMPLAINT = "Complaint/";
         var ACTION_COMPLAINTSTYPE = "ComplaintsType/";
         var ACTION_PROJECT = "Project/";
         var ACTION_CUSTOMERINFO = "CustomerInfo/";
@@ -47,9 +47,14 @@
             store: $DATASOURCE(ACTION_CUSTOMERREALESTATE, KEY),
             filter: ["realEstateId", "=", id]
         });
+        var customStore_Complaint = (id) => new DevExpress.data.DataSource({
+            store: $DATASOURCEGET(ACTION_COMPLAINT, KEY),
+            filter: ["complaintTypeId", "=", id]
+        });
         //..........................  Load View -------------------------------------------------------------
         $(function () {
             loadData(CUNSTRITEMS);
+
         });
         let loadData = (id) => {
             $("#container").dxDataGrid({
@@ -155,42 +160,10 @@
                     var container = e.component;
                     var selectedRowData = e.selectedRowsData[0];
                     var selectedRowKey = e.selectedRowKeys[0];
-                    //loadData_CustomerInfo(selectedRowKey);
-                    //if (selectedRowData != null && selectedRowKey != null) {
-                    //    var data = e.component.getRowIndexByKey(selectedRowKey);
-                    //    //$("#action-update").dxSpeedDialAction({
-                    //    //    index: 2, icon: "fas fa-edit", label: "Cập nhật thông tin",
-                    //    //    visible: PermitInAction["update"],
-                    //    //    onClick: () => e.component.editRow(data)
-                    //    //}).dxSpeedDialAction("instance");
+                    loadData_Complaint(selectedRowKey);
 
-                    //    //$("#action-delete").dxSpeedDialAction({
-                    //    //    index: 3, icon: "fas fa-trash", label: "Xóa",
-                    //    //    visible: PermitInAction["delete"],
-                    //    //    onClick: (e) => e.component.deleteRow(data)
-                    //    //}).dxSpeedDialAction("instance");
-                    //    //$("#action-log").dxSpeedDialAction({
-                    //    //    index: 4, icon: "fas fa-user", label: "Thêm nhà thầu",
-                    //    //    onClick: () => {
-                    //    //        callPopup(
-                    //    //            "THÊM NHÀ THẦU",
-                    //    //            "/Admin/SystemConfig/_ContractorInfoAdd",
-                    //    //            ($(window).width() > 767 ? "50%" : "80%"),
-                    //    //            e.component
-                    //    //        );
-                    //    //    }
-                    //    //}).dxSpeedDialAction("instance");
-                    //}
                 },
-                //onCellClick: function (e) {
 
-                //    if (typeof e.column !== "undefined") {
-                //        if (e.column.dataField === "noAttachment") {
-                //            loadUpload("PlanMaster", e.row.data, false);
-                //        }
-                //    }
-
-                //},
                 columns: [
                     {
                         dataField: "code",
@@ -269,11 +242,6 @@
                                 colSpan: 12,
                                 dataField: "code",
                                 label: { text: "Mã cắn hộ" },
-
-                                //editorOptions: {
-                                //    stylingMode: "filled",
-                                //    placeholder: "Vui lòng nhập...",
-                                //},
                             },
                             {
                                 colSpan: 12,
@@ -434,6 +402,144 @@
                 },
             });
         };
+        var loadData_Complaint = (id) => {
+            $("#container-complaint").dxDataGrid({
+                height: heightScreen,
+                dataSource: customStore_Complaint(id),
+                repaintChangesOnly: true,
+                remoteOperations: true,
+                scrolling: { mode: "standard" },
+                showBorders: false,
+                showColumnHeaders: true,
+                showColumnLines: false,
+                hoverStateEnabled: true,
+                showRowLines: true,
+                columnAutoWidth: true,
+                wordWrapEnabled: true,
+                rowAlternationEnabled: true,
+                filterRow: { visible: true },
+                summary: {
+                    groupItems: [{
+                        column: "status",
+                        summaryType: "count"
+                    },
+                    ]
+                },
+                paging: {
+                    enabled: true,
+                    pageSize: 20
+                },
+                pager: {
+                    showPageSizeSelector: true,
+                    allowedPageSizes: [10, 20, 40],
+                    showInfo: true,
+                },
+                searchPanel: {
+                    highlightCaseSensitive: true,
+                    highlightSearchText: true,
+                    searchVisibleColumnsOnly: true,
+                    visible: WIDTH_CONTAINER > 350
+                },
+                onToolbarPreparing: function (e) {
+                    var container = e.component;
+                    e.toolbarOptions.items.unshift(
+                        {
+                            location: "after",
+                            widget: "dxButton",
+                            options: {
+                                icon: "refresh",
+                                stylingMode: "filled",
+                                type: "default",
+                                onClick: () => container.refresh()
+                            },
 
+                        },
+
+                    )
+                },
+                onInitNewRow: (e) => {
+                    e.data.isActive = true;
+                    e.data.isVisible = true;
+                    e.data.constructionItemsId = CUNSTRITEMS;
+                },
+                onRowUpdating: (e) => {
+                },
+                onCellPrepared: (e) => {
+                    if (e.rowType == "data" && e.columnIndex == 1)
+                        e.cellElement.find('.dx-treelist-empty-space').toggleClass("dx-treelist-collapsed", e.data.chilCount > 0)
+                },
+                onRowDblClick: function (e) {
+                    var container = e.component;
+                },
+                selection: {
+                    mode: "single"
+                },
+                onContentReady: (e) => {
+                    var container = e.component;
+                },
+                onSelectionChanged: (e) => {
+                    var container = e.component;
+                    var selectedRowData = e.selectedRowsData[0];
+                    var selectedRowKey = e.selectedRowKeys[0];
+                    loadData_Complaint(selectedRowKey);
+                    //$('#elementComplaintId').dxTextBox('instance')
+                    //    .option('value', selectedRowData == null ? "" : (selectedRowData.id));
+                },
+                columns: [
+                    {
+                        dataField: "code",
+                        allowFiltering: true,
+                        caption: "Mã KN",
+                        dataType: "string",
+                        alignment: "center",
+                        readOnly: true,
+                        allowEditing: false,
+                    },// barCode
+                    {
+                        dataField: "fullName",
+                        allowFiltering: true,
+                        caption: "Người KN",
+                        dataType: "string",
+                        alignment: "center",
+                    },// address
+                    {
+                        dataField: "status",
+                        allowFiltering: true,
+                        caption: "Tình trang",
+                        alignment: "center",
+                        editorType: "dxSwitch",
+                        groupIndex: 0,
+                        showWhenGrouped: true,
+                        lookup: {
+                            dataSource: complaintStatus,
+                            valueExpr: "value",
+                            displayExpr: "text",
+                        },
+                        cellTemplate: (c, o) => {
+                            $("<span />").addClass("badge badge-" + complaintStatus.find(x => x.value == o.value).color).append(
+                                $("<i />").addClass("mr-1 " + complaintStatus.find(x => x.value == o.value).icon), o.text
+                            ).appendTo(c);
+                        }
+                    },// Trạng thái
+                ],
+                editing: {
+                    allowAdding: false,
+                    allowUpdating: false,
+                    allowDeleting: false,
+                    mode: "rown",
+                    useIcons: true,
+                    confirmDelete: true,
+                    popup: {
+                        width: "30%",
+                        height: "45%",
+                        showTitle: true,
+                        title: "Thêm căn hộ mới",
+                        closeOnOutsideClick: false,
+                        showCloseButton: true,
+                    },
+
+                },
+            });
+        };
     </script>
 }

@@ -936,6 +936,12 @@ var listIsInOrOutStatus = [
     { value: true, text: "Nhập kho", color: "success", icon: 'fa fa-check-circle' },
     { value: false, text: "Xuất kho", color: "danger", icon: 'fa fa-minus-circle' },
 ];
+var complaintStatus = [
+    { value: 1, text: "Chờ giải quyết", color: "warning", icon: 'fa fa-minus-circle' },
+    { value: 101, text: "Chờ hỗ trợ", color: "info", icon: 'fa fa-pause-circle' },
+    { value: 200, text: "Đã giải quyết", color: "success", icon: 'fa fa-check-circle' },
+];
+
 var remidBy = [
     {
         ID: "Call",

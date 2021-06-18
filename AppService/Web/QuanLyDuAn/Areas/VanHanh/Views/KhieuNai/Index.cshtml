@@ -53,7 +53,7 @@
 @section script{
     <script src="~/Scripts/page/vanhanh.js"></script>
     <script>
-     
+
         ///-----------------------------READ ------------------------
 
         var ACTION_COMPLAINT = "Complaint/";
@@ -112,7 +112,14 @@
         var $maintenanceSupplierInfoId = 0;
         var $dataSource = {};
         function newComplaint() {
+            var dataGrid = $("#container-complaint").dxDataGrid("instance");
+            $issetCP = false;
+            $keyCP = 0;
+            $issetRS = false;
+            $keyRS = 0;
+            dataGrid.clearSelection();
             loadData_Complaint(0);
+            loadData_Resolve(0);
         }
         //..........................Function -------------------------------------------------------------
         $(function () {
@@ -261,6 +268,9 @@
                                                     .option('value', null);
                                             };
                                         },
+                                        itemTemplate: function (data) {
+                                            return $("<div>").append($("<b>").append(data.title).addClass("mr-1").append($("<em>").append(data.description).addClass("small ml-1 text-muted")));
+                                        },
                                     },
                                     validationRules: [{ type: "required" }],
                                 },
@@ -323,7 +333,7 @@
 
                                     horizontalAlignment: "center",
                                     buttonOptions: {
-                                        text: !$issetRS ? "Gửi khiếu nại" : "Cập nhật",
+                                        text: !$issetCP ? "Gửi khiếu nại" : "Cập nhật",
                                         icon: "fa fa-save",
                                         type: "default",
                                         useSubmitBehavior: true,
@@ -353,10 +363,12 @@
             else {
                 loadingPanel.show();
                 var deferred = $.Deferred();
-                if (!$issetRS) {
+                if (!$issetCP) {
+                    formdata.status = 1;
                     customStore().store().insert(formdata).done((rs) => {
                         loadingPanel.hide();
-                        console.log(rs);
+                        $keyCP = rs.result.id;
+                        loadData_Resolve($keyCP);
                         if (rs.isOk) {
                             deferred.resolve(rs);
                             DevExpress.ui.notify("Cập nhật thành công", "success", 3000);
@@ -366,6 +378,8 @@
                             deferred.resolve(false);
                         }
                     }, deferred.reject)
+                    console.log($keyCP);
+
                 }
                 else if ($keyCP > 0) {
                     customStore().store().update($keyCP, formdata).done((rs) => {
@@ -382,14 +396,26 @@
                 }
                 loadData();
                 return deferred.promise();
+                
             }
         });
         var loadData_Resolve = (id) => {
             customStore_ComplaintResolve(id).load().done((rs) => {
                 $issetRS = (rs.length > 0);
-                console.log(id);
+                console.log($issetRS);
                 if ($issetRS) {
                     $keyRS = rs[0].id;
+
+                }
+                else {
+                    var cptId = $('#elementComplaintTypeId').dxSelectBox('instance').option('value');;
+                    console.log(cptId);
+                    customStore_ComplaintsType.load().done((rs) => {
+                        var item = rs.filter(x => x.id == cptId).shift();
+                        $('#elementNoteResolve').dxTextArea('instance')
+                            .option('value', item == null ? "" : (item.resolveSuggest));
+                    });
+                  
                 }
                 $("#form-Resolve").dxForm({
                     formData: rs[0],
@@ -442,7 +468,7 @@
                                         //    return $("<div>").append($("<b>").append(data.id).addClass("mr-1"), $("<em>").append(data.firstName + " " + data.lastName).addClass("mr-1"));
                                         //},
                                         //onValueChanged: function (data) {
-                                           
+
                                         //},
                                     },
                                 },
@@ -454,17 +480,17 @@
                                     //editorType: "dxSelectBox",
                                     editorOptions: {
                                         stylingMode: "filled",
-                                    //    searchEnabled: true,
-                                    //    searchMode: "contains",
-                                    //    searchExpr: ['code', 'title'],
-                                    //    showClearButton: true,
-                                    //    placeholder: "Vui lòng chọn...",
-                                    //    valueExpr: "id",
-                                    //    displayExpr: "title",
-                                    //    dataSource: customStore_ComplaintsType,
-                                    //    elementAttr: {
-                                    //        id: "elementResolverPhone",
-                                    //    },
+                                        //    searchEnabled: true,
+                                        //    searchMode: "contains",
+                                        //    searchExpr: ['code', 'title'],
+                                        //    showClearButton: true,
+                                        //    placeholder: "Vui lòng chọn...",
+                                        //    valueExpr: "id",
+                                        //    displayExpr: "title",
+                                        //    dataSource: customStore_ComplaintsType,
+                                        //    elementAttr: {
+                                        //        id: "elementResolverPhone",
+                                        //    },
                                     },
                                     //validationRules: [{ type: "required" }],
                                 },
@@ -528,7 +554,7 @@
                                     colSpan: 6,
                                     itemType: "button",
                                     horizontalAlignment: "right",
-                                    disabled: id==0,
+                                    disabled: id == 0,
                                     buttonOptions: {
                                         text: "Đã trả lời",
                                         icon: "fa fa-check",
@@ -577,18 +603,83 @@
             else {
                 loadingPanel.show();
                 var deferred = $.Deferred();
-                customStore_ComplaintResolve(0).store().insert(formdata).done((rs) => {
-                    loadingPanel.hide();
-                    console.log(rs);
-                    if (rs.isOk) {
-                        deferred.resolve(rs);
-                        DevExpress.ui.notify("Cập nhật thành công", "success", 3000);
-                    }
-                    else {
-                        DevExpress.ui.notify("Có lỗi xảy ra", "error", 3000);
-                        deferred.resolve(false);
-                    }
-                }, deferred.reject)
+                //formdata.append('complaintId', $keyCP);
+                formdata.complaintId = $keyCP;
+                formdata.status = 200;
+                if (!$issetRS) {
+                    customStore_ComplaintResolve(0).store().insert(formdata).done((rs) => {
+                        loadingPanel.hide();
+                        console.log(rs);
+                        if (rs.isOk) {
+                            deferred.resolve(rs);
+                            DevExpress.ui.notify("Cập nhật thành công", "success", 3000);
+                        }
+                        else {
+                            DevExpress.ui.notify("Có lỗi xảy ra", "error", 3000);
+                            deferred.resolve(false);
+                        }
+                    }, deferred.reject)
+                }
+                else if ($keyRS > 0) {
+                    customStore_ComplaintResolve(0).store().update($keyRS, formdata).done((rs) => {
+                        loadingPanel.hide();
+                        console.log(rs);
+                        if (rs.isOk) {
+                            deferred.resolve(rs);
+                            DevExpress.ui.notify("Cập nhật thành công", "success", 3000);
+                        }
+                        else {
+                            DevExpress.ui.notify("Có lỗi xảy ra", "error", 3000);
+                            deferred.resolve(false);
+                        }
+                    }, deferred.reject)
+                }
+
+                return deferred.promise();
+            }
+        });
+        $(document).on('click', '#resolveDelay', '#form-Resolve', function (e) {
+            e.preventDefault();
+            var formdata = $('#form-Resolve').dxForm("instance").option('formData');
+            var resValid = true
+            if (!resValid) {
+                DevExpress.ui.notify("Vui lòng kiểm tra lại file đính kèm!", "error", 3000);
+            }
+            else {
+                loadingPanel.show();
+                var deferred = $.Deferred();
+                //formdata.append('complaintId', $keyCP);
+                formdata.status = 101;
+                formdata.complaintId = $keyCP;
+                if (!$issetRS) {
+                    customStore_ComplaintResolve(0).store().insert(formdata).done((rs) => {
+                        loadingPanel.hide();
+                        console.log(rs);
+                        if (rs.isOk) {
+                            deferred.resolve(rs);
+                            DevExpress.ui.notify("Cập nhật thành công", "success", 3000);
+                        }
+                        else {
+                            DevExpress.ui.notify("Có lỗi xảy ra", "error", 3000);
+                            deferred.resolve(false);
+                        }
+                    }, deferred.reject)
+                }
+                else if ($keyRS > 0) {
+                    customStore_ComplaintResolve(0).store().update($keyRS, formdata).done((rs) => {
+                        loadingPanel.hide();
+                        console.log(rs);
+                        if (rs.isOk) {
+                            deferred.resolve(rs);
+                            DevExpress.ui.notify("Cập nhật thành công", "success", 3000);
+                        }
+                        else {
+                            DevExpress.ui.notify("Có lỗi xảy ra", "error", 3000);
+                            deferred.resolve(false);
+                        }
+                    }, deferred.reject)
+                }
+
                 return deferred.promise();
             }
         });
@@ -698,20 +789,28 @@
                         caption: "Vấn đề",
                         dataType: "string",
                         alignment: "center",
+                        lookup: {
+                            dataSource: customStore_ComplaintsType,
+                            valueExpr: "id",
+                            displayExpr: "title",
+                        },
                     },// address
                     {
-                        dataField: "isActive",
+                        dataField: "status",
                         allowFiltering: true,
-                        caption: "Trạng thái",
+                        caption: "Tình trang",
                         alignment: "center",
                         editorType: "dxSwitch",
+                        groupIndex: 0,
+                        showWhenGrouped: true,
                         lookup: {
-                            dataSource: listActiveStatus,
-                            valueExpr: "value", displayExpr: "text",
+                            dataSource: complaintStatus,
+                            valueExpr: "value",
+                            displayExpr: "text",
                         },
                         cellTemplate: (c, o) => {
-                            $("<span />").addClass("badge badge-" + listActiveStatus.find(x => x.value == o.value).color).append(
-                                $("<i />").addClass("mr-1 " + listActiveStatus.find(x => x.value == o.value).icon), o.text
+                            $("<span />").addClass("badge badge-" + complaintStatus.find(x => x.value == o.value).color).append(
+                                $("<i />").addClass("mr-1 " + complaintStatus.find(x => x.value == o.value).icon), o.text
                             ).appendTo(c);
                         }
                     },// Trạng thái
@@ -731,40 +830,7 @@
                         closeOnOutsideClick: false,
                         showCloseButton: true,
                     },
-                    form: {
-                        labelLocation: "left",
-                        itemType: "group",
-                        colCount: 12,
-                        showRequiredMark: true,
-                        requiredMark: "(*)",
-                        items: [
-                            {
-                                colSpan: 12,
-                                dataField: "code",
-                                label: { text: "Mã Kho" },
-                            },
-                            {
-                                colSpan: 12,
-                                dataField: "address",
-                                label: { text: "Địa chỉ" },
-                                editorOptions: {
-                                    stylingMode: "filled",
-                                    placeholder: "Vui lòng nhập...",
-                                },
-                            },
-                            {
-                                colSpan: 12,
-                                dataField: "isActive",
-                                label: { text: "Trạng thái" },
-                                editorType: "dxSwitch",
-                                editorOptions: {
-                                    dataSource: listActiveStatus,
-                                    valueExpr: "value",
-                                    displayExpr: "text",
-                                },
-                            },
-                        ],
-                    },
+                 
                 },
             });
         };
