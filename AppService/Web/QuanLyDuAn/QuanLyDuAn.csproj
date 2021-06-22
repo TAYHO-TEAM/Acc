@@ -2544,6 +2544,7 @@
     <Content Include="Areas\VanHanh\Views\KhieuNai\Index.cshtml" />
     <Content Include="Areas\VanHanh\Views\BaoTri\NhatKyBaoTri.cshtml" />
     <Content Include="Areas\VanHanh\Views\BaoTri\BaoTriDinhKy.cshtml" />
+    <Content Include="Areas\VanHanh\Views\BaoTri\_LichBaoTriCreate.cshtml" />
     <None Include="packages.config" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
