@@ -196,18 +196,21 @@
                     var selectedRowData = e.selectedRowsData[0];
                     var selectedRowKey = e.selectedRowKeys[0];
                     loadData_MaintenanceLog(selectedRowKey);
-                    //$('#action-log').remove();
-                    //e.component.refresh();
-        
                 },
                 onContextMenuPreparing: function (e) {
+                    var container = e.component;
                     if (!e.items) e.items = [];
                     if (e.target == "content" && e.rowIndex >= 0) {
                         e.items.push({
                             icon: "fas fa-clipboard-list",
                             text: "Tạo phiếu hẹn bảo trì",
                             onItemClick: (e) => {
-                              
+                                CALLPOPUP(
+                                    "Phiếu xuất kho",
+                                    "/VanHanh/BaoTri/_PhieuHenBaoTriCreate",
+                                    ($(window).width() > 767 ? "50%" : "80%"),
+                                    container
+                                );
                             }
                         });
 

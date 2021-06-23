@@ -1,29 +1,33 @@
-﻿@model Tuple<int, bool>
-<form id="form-WarehouseGoodsLog">
+﻿<form id="form-WarehouseGoodsLog">
 </form>
 <script>
     var formData = {
-        "warehouseStorageId": "",
-        "categoryGoodsId": "",
-        "quantity": "",
-        "code": "",
-        "barcode": "",
-        "title": "",
-        "description": "",
-        "checkInDate": "",
-        "checkOutDate": "",
-        "checkInBy": "",
-        "checkOutBy": "",
-        "isInOrOut": "",
-        "priority": "",
-        "sender": "",
-        "receiver": "",
-        "phoneContact":""
+        "Code": "",
+        "Barcode": "",
+        "Priority": "",
+        "ConstructionItemsId": "",
+        "MaintenancerInfoId": "",
+        "MaintenanceSupplierInfoId": "",
+        "MaintenanceScheduleId": "",
+        "MaintaincerName": "",
+        "MaintaincerPhone": "",
+        "Note": "",
+        "Result": "",
+        "ResultType": "",
+        "CurrentTimes": "",
+        "Times": "",
+        "StartTime": "",
+        "EndTime": "",
+        "Duration": "",
+        "DurationUnit": "",
+        "DurationUnitType": "",
+        "Type": "",
+        "NoAttachment": "",
+        "Status": ""
     };
     var $defectFixId = 0;
     var fdata = new FormData();
-    var $model = @Model.Item1;
-    var $isIn = @Model.Item2.ToString().ToLower();
+
     $(document).ready(function () {
         var formInstance = $("#form-WarehouseGoodsLog").dxForm({
             formData: formData,
@@ -39,26 +43,26 @@
                             label: { text: "Kho" },
                             editorType: "dxSelectBox",
                             type: "string",
-                            lookup: {
-                                dataSource: customStore_WarehouseStorage(WarehouseStorageID),
-                                valueExpr: "id",
-                                displayExpr: "title",
-                            },
-                            editorOptions: {
-                                stylingMode: "filled",
-                                searchEnabled: true,
-                                searchMode: "contains",
-                                searchExpr: ['title', 'description'],
-                                showClearButton: true,
-                                placeholder: "Vui lòng chọn...",
-                                dataSource: customStore_WarehouseStorage(WarehouseStorageID),
-                                value: $model,
-                                valueExpr: "id",
-                                displayExpr: 'title',
-                                elementAttr: {
-                                    id: "elementwarehouseStorageId",
-                                },
-                            },
+                            //lookup: {
+                            //    dataSource: customStore_WarehouseStorage(WarehouseStorageID),
+                            //    valueExpr: "id",
+                            //    displayExpr: "title",
+                            //},
+                            //editorOptions: {
+                            //    stylingMode: "filled",
+                            //    searchEnabled: true,
+                            //    searchMode: "contains",
+                            //    searchExpr: ['title', 'description'],
+                            //    showClearButton: true,
+                            //    placeholder: "Vui lòng chọn...",
+                            //    dataSource: customStore_WarehouseStorage(WarehouseStorageID),
+                            //    value: $model,
+                            //    valueExpr: "id",
+                            //    displayExpr: 'title',
+                            //    elementAttr: {
+                            //        id: "elementwarehouseStorageId",
+                            //    },
+                            //},
                             validationRules: [{ type: "required" }],
                         },
                         {
@@ -67,25 +71,25 @@
                             label: { text: "Loại hàng" },
                             type: "string",
                             editorType: "dxSelectBox",
-                            lookup: {
-                                dataSource: customStore_CategoryGoods,
-                                valueExpr: "id",
-                                displayExpr: "title",
-                            },
-                            editorOptions: {
-                                stylingMode: "filled",
-                                searchEnabled: true,
-                                searchMode: "contains",
-                                searchExpr: ['title', 'description'],
-                                showClearButton: true,
-                                placeholder: "Vui lòng chọn...",
-                                dataSource: customStore_CategoryGoods,
-                                valueExpr: "id",
-                                displayExpr: 'title',
-                                elementAttr: {
-                                    id: "elementcategoryGoodsId",
-                                },
-                            },
+                            //lookup: {
+                            //    dataSource: customStore_CategoryGoods,
+                            //    valueExpr: "id",
+                            //    displayExpr: "title",
+                            //},
+                            //editorOptions: {
+                            //    stylingMode: "filled",
+                            //    searchEnabled: true,
+                            //    searchMode: "contains",
+                            //    searchExpr: ['title', 'description'],
+                            //    showClearButton: true,
+                            //    placeholder: "Vui lòng chọn...",
+                            //    dataSource: customStore_CategoryGoods,
+                            //    valueExpr: "id",
+                            //    displayExpr: 'title',
+                            //    elementAttr: {
+                            //        id: "elementcategoryGoodsId",
+                            //    },
+                            //},
                             validationRules: [{ type: "required" }],
                         },
                         {
@@ -94,35 +98,35 @@
                             label: { text: "Số lượng" },
                             editorType: "dxNumberBox",
                             type: "number",
-                            editorOptions: {
-                                stylingMode: "filled",
-                                placeholder: "Vui lòng nhập số lượng...",
-                            },
-                            validationRules: [{
-                                type: "required",
-                            },
-                            {
-                                type: "async",
-                                message: "Email is already registered",
-                                validationCallback: function (params) {
-                                    var $categoryGoodsId = $('#elementcategoryGoodsId').dxSelectBox("instance").option('value');
-                                    console.log($categoryGoodsId);
-                                    var d = $.Deferred();
-                                    if ($isIn === true)
-                                        d.resolve(true);
-                                    else {
-                                        customStore($model).load().done((rs) => {
-                                            console.log($categoryGoodsId);
-                                            var quantity = rs.find(x => x.id == $categoryGoodsId).quantity;
-                                            if (quantity > 0)
-                                                d.resolve(quantity > params.value);
-                                            else
-                                                d.resolve(false);
-                                        });
-                                    }
-                                    return d.promise();
-                                }
-                            }],
+                            //editorOptions: {
+                            //    stylingMode: "filled",
+                            //    placeholder: "Vui lòng nhập số lượng...",
+                            //},
+                            //validationRules: [{
+                            //    type: "required",
+                            //},
+                            //{
+                            //    type: "async",
+                            //    message: "Email is already registered",
+                            //    validationCallback: function (params) {
+                            //        var $categoryGoodsId = $('#elementcategoryGoodsId').dxSelectBox("instance").option('value');
+                            //        console.log($categoryGoodsId);
+                            //        var d = $.Deferred();
+                            //        if ($isIn === true)
+                            //            d.resolve(true);
+                            //        else {
+                            //            customStore($model).load().done((rs) => {
+                            //                console.log($categoryGoodsId);
+                            //                var quantity = rs.find(x => x.id == $categoryGoodsId).quantity;
+                            //                if (quantity > 0)
+                            //                    d.resolve(quantity > params.value);
+                            //                else
+                            //                    d.resolve(false);
+                            //            });
+                            //        }
+                            //        return d.promise();
+                            //    }
+                            //}],
                         },
                         {
                             colSpan: 4,
