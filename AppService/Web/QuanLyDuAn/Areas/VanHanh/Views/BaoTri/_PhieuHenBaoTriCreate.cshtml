@@ -31,9 +31,9 @@
     var fdata = new FormData();
     var $keyMaintenanceLog = 0;
     $(function () {
-        loadData_MaintenanceLog($id);
+        loadData_MaintenanceLog_Detail($id);
     });
-    var loadData_MaintenanceLog = (id) => {
+    var loadData_MaintenanceLog_Detail = (id) => {
         customStore_MaintenanceLogFilter(id).load().done((rs) => {
             $issetML = (rs.length > 0);
             if ($issetML) {

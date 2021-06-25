@@ -32,6 +32,10 @@ namespace QuanLyDuAn.Areas.VanHanh.Controllers
         {
             return PartialView(id);
         }
+        public ActionResult _BaoTriHistory(int id)
+        {
+            return PartialView(id);
+        }
         [HttpPost, ValidateInput(false)]
         public JsonResult MaintenanceLogUpdate(MaintenanceLogOBJ requestOBJ)
         {

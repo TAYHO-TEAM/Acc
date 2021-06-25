@@ -10,23 +10,6 @@
         <div id="container" class="elevation-2"></div>
     </div>
     <div class="col-8">
-        @*<div class="card card-info" id="container-maintenancelog-detail">
-                <div class="card-header ui-sortable-handle" style="cursor: move;">
-                    <h3 class="card-title">Khiếu nại</h3>
-                    <div class="card-tools">
-                        <button type="button" class="btn btn-tool" id="new-Complaint" onclick="newComplaint()">
-                            <i class="fas fa-file"></i>
-                        </button>
-                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                            <i class="fas fa-minus"></i>
-                        </button>
-                    </div>
-                </div>
-                <div id="maintenancelog-detail" class="elevation-2 card-body">
-                    <form id="form-Complaint" action="#" method="POST" enctype="application/json">
-                    </form>
-                </div>
-            </div>*@
         <div id="container-maintenancelog" class="elevation-2 ">
         </div>
     </div>
@@ -48,6 +31,7 @@
         var ACTION_COMPLAINTSTYPE = "ComplaintsType/";
         var ACTION_COMPLAINTRESOLVE = "ComplaintResolve/";
         var ACTION_REALESTATE = "RealEstate/";
+        var ACTION_FILESATTACHMENT = "FilesAttachment/";
         var KEY = "id";
         var WIDTH_CONTAINER = $("#container").width();
         //..........................Get data -------------------------------------------------------------
@@ -98,6 +82,10 @@
         var customStore_CustomerRealEstate = (id) => new DevExpress.data.DataSource({
             store: $DATASOURCEGET(ACTION_CUSTOMERREALESTATE, KEY),
             filter: ["realEstateId", "=", id]
+        });
+        var customStore_Attachment = (id, owner) => new DevExpress.data.DataSource({
+            store: $DATASOURCE(ACTION_FILESATTACHMENT, KEY),
+            filter: [["ownerById", "=", id], "and", ["ownerByTable", "=", owner]]
         });
         var $constructionItemsId = 0;
         var $currentMaintenanceSupplierInfoId = 0;
@@ -282,7 +270,7 @@
                         allowFiltering: true,
                         caption: "Ngày BTTT",
                         alignment: "center",
-                        dataType: "datetime",
+                        dataType: "date",
                         //lookup: {
                         //    dataSource: customStore_ComplaintsType,
                         //    valueExpr: "id",
@@ -415,12 +403,12 @@
                             icon: "fas fa-info",
                             text: "Chi tiết bảo trì",
                             onItemClick: () => {
-                                //CALLPOPUP(
-                                //    "Phiếu xuất kho",
-                                //    "/VanHanh/BaoTri/_PhieuHenBaoTriCreate?id=" + e.row.data.id,
-                                //    ($(window).width() > 767 ? "50%" : "80%"),
-                                //    container
-                                //);
+                                CALLPOPUP(
+                                    "Phiếu xuất kho",
+                                    "/VanHanh/BaoTri/_BaoTriHistory?id=" + e.row.data.id,
+                                    ($(window).width() > 767 ? "50%" : "80%"),
+                                    container
+                                );
                             }
                         });
 
@@ -494,16 +482,15 @@
                         alignment: "center",
                         editorType: "dxSwitch",
                         showWhenGrouped: true,
-                        //lookup: {
-                        //    dataSource: complaintStatus,
-                        //    valueExpr: "value",
-                        //    displayExpr: "text",
-                        //},
-                        //cellTemplate: (c, o) => {
-                        //    $("<span />").addClass("badge badge-" + complaintStatus.find(x => x.value == o.value).color).append(
-                        //        $("<i />").addClass("mr-1 " + complaintStatus.find(x => x.value == o.value).icon), o.text
-                        //    ).appendTo(c);
-                        //}
+                        lookup: {
+                            dataSource: maintenanceLogStatus,
+                            valueExpr: "value", displayExpr: "text",
+                        },
+                        cellTemplate: (c, o) => {
+                            $("<span />").addClass("badge badge-" + maintenanceLogStatus.find(x => x.value == o.value).color).append(
+                                $("<i />").addClass("mr-1 " + maintenanceLogStatus.find(x => x.value == o.value).icon), o.text
+                            ).appendTo(c);
+                        }
                     },// Trạng thái
                 ],
                 editing: {

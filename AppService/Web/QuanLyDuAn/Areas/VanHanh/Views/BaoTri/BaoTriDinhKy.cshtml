@@ -10,7 +10,7 @@
     <div class="col-4" id="cont-left">
         <div id="container" class="elevation-2"></div>
     </div>
-    <div class="col-8" id="cont-right" >
+    <div class="col-8" id="cont-right">
         <div id="container-maintenancelog-detail" class="elevation-2" style="height:100%">
             <div class="card card-success" style="height:100%">
                 <div class="card-header ui-sortable-handle" style="cursor: move;" id="card-header">
@@ -48,7 +48,7 @@
         var ACTION_REALESTATE = "RealEstate/";
         var ACTION_FILESATTACHMENT = "FilesAttachment/";
         var KEY = "id";
-        var WIDTH_CONTAINER = $("#container").width(); 
+        var WIDTH_CONTAINER = $("#container").width();
         var $today = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss');
         console.log($today);
         //..........................Get data -------------------------------------------------------------
@@ -140,7 +140,7 @@
         });
 
         var loadData = () => {
-            $("#cont-right").hide(); 
+            $("#cont-right").hide();
             $("#container").dxDataGrid({
                 height: heightScreen,
                 dataSource: customStore(),
@@ -219,28 +219,10 @@
                     var container = e.component;
                     var selectedRowData = e.selectedRowsData[0];
                     var selectedRowKey = e.selectedRowKeys[0];
+
                     loadData_MaintenanceLogDetail(selectedRowKey);
                 },
-                onContextMenuPreparing: function (e) {
-                    var container = e.component;
-                  
-                    if (!e.items) e.items = [];
-                    if (e.target == "content" && e.rowIndex >= 0) {
-                        e.items.push({
-                            icon: "fas fa-clipboard-list",
-                            text: e.row.data.status >= 10 ? "Cập nhật phiếu hẹn" : "Tạo phiếu hẹn",
-                            onItemClick: () => {
-                                CALLPOPUP(
-                                    "Phiếu xuất kho",
-                                    "/VanHanh/BaoTri/_PhieuHenBaoTriCreate?id=" + e.row.data.id,
-                                    ($(window).width() > 767 ? "50%" : "80%"),
-                                    container
-                                );
-                            }
-                        });
-
-                    };
-                },
+               
                 columns: [
                     {
                         dataField: "constructionItemsId",
@@ -279,7 +261,15 @@
                         caption: "Tình trang",
                         alignment: "center",
                         editorType: "dxSwitch",
-                        showWhenGrouped: true,
+                        lookup: {
+                            dataSource: maintenanceLogStatus,
+                            valueExpr: "value", displayExpr: "text",
+                        },
+                        cellTemplate: (c, o) => {
+                            $("<span />").addClass("badge badge-" + maintenanceLogStatus.find(x => x.value == o.value).color).append(
+                                $("<i />").addClass("mr-1 " + maintenanceLogStatus.find(x => x.value == o.value).icon), o.text
+                            ).appendTo(c);
+                        }
                     },// Trạng thái
                 ],
                 editing: {
@@ -302,14 +292,15 @@
             });
         };
         var loadData_MaintenanceLogDetail = (id) => {
-            $("#cont-right").show(); 
+            $("#cont-right").show();
             //document.getElementById('cont-right').style.width = document.getElementById('cont-left').clientHeight;
-            var $heightForm = (document.getElementById('cont-left').clientHeight) - (document.getElementById('card-header').clientHeight)*3;
+            var $heightForm = (document.getElementById('cont-left').clientHeight) - (document.getElementById('card-header').clientHeight) * 3;
             //document.getElementById('container-resolve').style.width = $heightForm;
             customStore_MaintenanceLogById(id).load().done((rs) => {
                 $issetRS = (rs.length > 0);
-                console.log($issetRS);
+
                 if ($issetRS) {
+                    console.log(rs[0].id);
                     $keyRS = rs[0].id;
                 }
                 //else {
@@ -410,7 +401,7 @@
                                     dataField: "endTime",
                                     label: { text: "Dự kiến hoàn thành" },
                                     editorType: "dxDateBox",
-                                    type: "datetime",
+                                    type: "date",
                                     editorOptions: {
                                         stylingMode: "filled",
                                         readOnly: true,
@@ -450,7 +441,7 @@
                                     colSpan: 12,
                                     dataField: "result",
                                     label: { text: "Ghi nhận kết quả" },
-                                    editorType: "dxTextBox",
+                                    editorType: "dxTextArea",
                                     editorOptions: {
                                         stylingMode: "filled",
                                         elementAttr: {
@@ -568,7 +559,7 @@
                         },
                         {
                             colSpan: 12,
-                            template: rs[0].status >= 11 ? '<span class="dx-field-item-label-text font-bold">Các tập tin đính kèm</span><div class="file-uploader" id="file-uploader"></div>' : '',
+                            template: () => { return rs[0].status >= 11 ? '<span class="dx-field-item-label-text font-bold">Các tập tin đính kèm</span><div class="file-uploader" id="file-uploader"></div>' : ''; },
                             editorOptions: {
                                 stylingMode: "filled",
                             }
@@ -643,6 +634,7 @@
                 }).dxForm("instance");
                 fileUploader();
                 $(document).on('click', '#start', function (e) {
+                    console.log("click start");
                     //$("#form-maintenancelog").on("submit", function (e) {
                     e.preventDefault();
                     var formdata = $('#form-maintenancelog-detail').dxForm("instance").option('formData');
@@ -663,6 +655,8 @@
                                 if (rs.isOk) {
                                     deferred.resolve(rs);
                                     DevExpress.ui.notify("Cập nhật thành công", "success", 3000);
+                                    loadData_MaintenanceLogDetail(id);
+                                    loadData();
                                 }
                                 else {
                                     DevExpress.ui.notify("Có lỗi xảy ra", "error", 3000);
@@ -675,10 +669,11 @@
                     }
                 });
                 $(document).on('click', '#updateLog', function (e) {
+                    console.log("click updateLog");
                     e.preventDefault();
                     var formdata = $('#form-maintenancelog-detail').dxForm("instance").option('formData');
                     var files = $("#file-uploader").dxFileUploader("instance").option("value");
-                 
+
                     var fileWrappers = fileUploader()._files;
                     var resValid = true
                     if (!resValid) {
@@ -716,7 +711,10 @@
                                     deferred.resolve(true);
                                     loadingPanel.hide();
                                     DevExpress.ui.notify(rs.result, rs.status, 3000);
-                                    loadData_MaintenanceLogDetail(id);
+                                    //loadData_MaintenanceLogDetail(id);
+                                    location.reload();
+                                    $("#container").dxDataGrid('instance').refresh();
+                                
                                 },
                                 error: function (xhr, textStatus, errorThrown) {
                                     loadingPanel.hide();
@@ -728,6 +726,7 @@
                     }
                 });
                 $(document).on('click', '#acceptence', function (e) {
+                    console.log("click acceptence");
                     e.preventDefault();
                     var formdata = $('#form-maintenancelog-detail').dxForm("instance").option('formData');
                     var files = $("#file-uploader").dxFileUploader("instance").option("value");
@@ -769,7 +768,7 @@
                                     deferred.resolve(true);
                                     loadingPanel.hide();
                                     DevExpress.ui.notify(rs.result, rs.status, 3000);
-                                    loadData_MaintenanceLogDetail(id);
+                                    loadData();
                                 },
                                 error: function (xhr, textStatus, errorThrown) {
                                     loadingPanel.hide();

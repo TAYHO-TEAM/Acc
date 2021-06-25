@@ -1,0 +1,260 @@
+﻿@model int
+<form id="form-maintenancelog-history">
+</form>
+<script>
+   
+    var $defectFixId = 0;
+    var $id = @Model;
+    var fdata = new FormData();
+    var $keyMaintenanceLog = 0;
+    $(function () {
+        loadData_MaintenanceLogHistory($id);
+    });
+    var loadData_MaintenanceLogHistory = (id) => {
+        customStore_MaintenanceLogById(id).load().done((rs) => {
+            $issetRS = (rs.length > 0);
+            if ($issetRS) {
+                console.log(rs[0].id);
+                $keyRS = rs[0].id;
+            }
+            $("#form-maintenancelog-history").dxForm({
+                formData: rs[0],
+                labelLocation: "top",
+                items: [
+                    {
+                        itemType: "group",
+                        colCount: 12,
+                        cssClass: "first-group",
+                        items: [
+                            {
+                                colSpan: 4,
+                                dataField: "constructionItemsId",
+                                label: { text: "Hạng mục" },
+                                editorType: "dxSelectBox",
+                                editorOptions: {
+                                    stylingMode: "filled",
+                                    readOnly: true,
+                                    placeholder: "Vui lòng chọn...",
+                                    dataSource: customStore_ConstructionItems,
+                                    valueExpr: "id",
+                                    displayExpr: 'title',
+                                },
+                            },
+                            {
+                                colSpan: 4,
+                                dataField: "maintenanceSupplierInfoId",
+                                label: { text: "Đơn vị Bảo trì" },
+                                type: "string",
+                                editorType: "dxSelectBox",
+                                editorOptions: {
+                                    stylingMode: "filled",
+                                    dataSource: customStore_MaintenanceSupplierInfo().store(),
+                                    readOnly: true,
+                                    valueExpr: "id",
+                                    displayExpr: "name",
+                                    elementAttr: {
+                                        id: "elementMaintenanceSupplierInfoId",
+                                    },
+                                },
+                                validationRules: [{ type: "required" }],
+                            },
+                            {
+                                colSpan: 4,
+                                dataField: "maintaincerName",
+                                label: { text: "Nhân viên kỹ thuật" },
+                                visible: true,
+                                editorType: "dxTextBox",
+                                editorOptions: {
+                                    stylingMode: "filled",
+                                    readOnly: true,
+                                    elementAttr: {
+                                        id: "elementMaintaincerName",
+                                    },
+                                },
+                                validationRules: [{ type: "required" }],
+                            },
+                            {
+                                colSpan: 4,
+                                dataField: "maintaincerPhone",
+                                label: { text: "Số ĐT Liên hệ" },
+                                editorType: "dxTextBox",
+                                editorOptions: {
+                                    stylingMode: "filled",
+                                    readOnly: true,
+                                    elementAttr: {
+                                        id: "elementMaintaincerPhone",
+                                    },
+                                },
+                                validationRules: [{ type: "required" }],
+                            },
+                            {
+                                colSpan: 4,
+                                dataField: "startTime",
+                                label: { text: "Dự kiến bảo trì" },
+                                editorType: "dxDateBox",
+                                type: "datetime",
+                                editorOptions: {
+                                    readOnly: true,
+                                    stylingMode: "filled",
+                                },
+                                validationRules: [{ type: "required" }],
+                            },
+                            {
+                                colSpan: 4,
+                                dataField: "endTime",
+                                label: { text: "Dự kiến hoàn thành" },
+                                editorType: "dxDateBox",
+                                type: "date",
+                                editorOptions: {
+                                    stylingMode: "filled",
+                                    readOnly: true,
+                                },
+                                validationRules: [{ type: "required" }],
+                            },
+                        ]
+                    },
+                    {
+                        itemType: "group",
+                        name: "save-note-action",
+                        visible: rs[0].status < 11 ? false : true,
+                        colCount: 12,
+                        items: [
+                            {
+                                colSpan: 12,
+                                dataField: "note",
+                                label: { text: "Ghi nhận quá trình" },
+                                editorType: "dxTextArea",
+                                editorOptions: {
+                                    stylingMode: "filled",
+                                    height: 100,
+                                    elementAttr: {
+                                        id: "elementNote",
+                                    },
+                                },
+                            },
+                        ],
+                    },
+                    {
+                        itemType: "group",
+                        name: "save-note-action",
+                        colCount: 12,
+                        visible: rs[0].status < 11 ? false : true,
+                        items: [
+                            {
+                                colSpan: 12,
+                                dataField: "result",
+                                label: { text: "Ghi nhận kết quả" },
+                                editorType: "dxTextArea",
+                                editorOptions: {
+                                    stylingMode: "filled",
+                                    elementAttr: {
+                                        id: "elementResult",
+                                    },
+                                },
+                            },
+                        ],
+                    },
+                    {
+                        colSpan: 12,
+                        template: () => {
+                            var scrollView = $("<div id='scrollView'></div>");
+                            var content = $("<div/>");
+                            content.dxDataGrid({
+                                dataSource: customStore_Attachment(rs[0].id, "MaintenanceLog"),
+                                remoteOperations: {
+                                    paging: true,
+                                    sorting: true,
+                                },
+                                repaintChangesOnly: true,
+                                showBorders: true,
+                                showColumnHeaders: true,
+                                showColumnLines: false,
+                                hoverStateEnabled: true,
+                                showRowLines: true,
+                                columnAutoWidth: true,
+                                wordWrapEnabled: true,
+                                wordWrapEnabled: true,
+                                rowAlternationEnabled: true,
+                                paging: {
+                                    enabled: true,
+                                    pageSize: 20
+                                },
+                                pager: {
+                                    showPageSizeSelector: true,
+                                    allowedPageSizes: [10, 20, 40],
+                                    showInfo: true,
+
+                                },
+                                columns: [
+                                    {
+                                        caption: "STT", alignment: "center",
+                                        cellTemplate: (c, o) => $("<div/>").append(o.rowIndex + 1).appendTo(c),
+                                        width: '10%',
+                                    },
+                                    {
+                                        dataField: "fileName",
+                                        caption: "Tên file",
+                                        dataType: "string",
+                                        width: '50%',
+                                    },//rev
+                                    {
+                                        caption: "File",
+                                        dataType: "string",
+                                        cellTemplate: (c, o) => {
+                                            var x = (o.data.host + "\\" + o.data.url + "\\" + o.data.fileName).replaceAll('/', '\\');
+                                            if (!x.includes('null'))
+                                                if (['.png', '.jpg', '.jpge'].includes(o.data.tail.toLowerCase(x))) {
+
+                                                    $("<a/>").append($("<img/>").attr("src", x).attr("style", "max-width :150px;").attr("onerror", "this.onerror=null;this.src='https://qlcv.tayho.com.vn/Content/user-avartar/avartar-default.jpg';")).appendTo(c);
+                                                }
+                                                else if (['.pdf'].includes(o.data.tail.toLowerCase(x))) {
+                                                    $("<a/>").attr("href", x).addClass("far fa-file-pdf").appendTo(c);
+                                                }
+                                                else {
+                                                }
+                                        },
+                                    }, //url
+                                ],
+                                editing: {
+                                    mode: "batch",
+                                    allowAdding: false,
+                                    allowDeleting: false,
+                                    allowUpdating: false,
+                                },
+                                onToolbarPreparing: (e) => {
+                                    var container = e.component;
+                                    e.toolbarOptions.items.unshift(
+                                        {
+                                            location: "after", widget: "dxButton",
+                                            options: {
+                                                icon: "refresh", type: "default",
+                                                onClick: () => container.refresh()
+                                            }
+                                        })
+                                },
+                            });
+                            scrollView.append(content);
+                            //c.append(scrollView);
+                            return scrollView;
+                        },
+                        editorOptions: {
+                            stylingMode: "filled",
+                        }
+                    },
+                    {
+                        colSpan: 12,
+                        template: () => { return rs[0].status >= 11 ? '<span class="dx-field-item-label-text font-bold">Các tập tin đính kèm</span><div class="file-uploader" id="file-uploader"></div>' : ''; },
+                        editorOptions: {
+                            stylingMode: "filled",
+                        }
+                    },
+
+                ],
+            }).dxForm("instance");
+
+        });
+    };
+
+</script>
+
+
