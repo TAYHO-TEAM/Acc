@@ -293,9 +293,10 @@
         };
         var loadData_MaintenanceLogDetail = (id) => {
             $("#cont-right").show();
-            //document.getElementById('cont-right').style.width = document.getElementById('cont-left').clientHeight;
+            $(document).off('click', '#updateLog');
+            $(document).off('click', '#start');
+            $(document).off('click', '#acceptence');
             var $heightForm = (document.getElementById('cont-left').clientHeight) - (document.getElementById('card-header').clientHeight) * 3;
-            //document.getElementById('container-resolve').style.width = $heightForm;
             customStore_MaintenanceLogById(id).load().done((rs) => {
                 $issetRS = (rs.length > 0);
 
@@ -711,8 +712,9 @@
                                     deferred.resolve(true);
                                     loadingPanel.hide();
                                     DevExpress.ui.notify(rs.result, rs.status, 3000);
-                                    //loadData_MaintenanceLogDetail(id);
-                                    location.reload();
+                                    loadData();
+                                    loadData_MaintenanceLogDetail(id);
+                                    //location.reload();
                                     $("#container").dxDataGrid('instance').refresh();
                                 
                                 },
