@@ -205,7 +205,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utilities\ContractorInfoOBJ - Copy.cs" />
+    <Compile Include="Utilities\ConversationOBJ.cs" />
+    <Compile Include="Utilities\MaintenanceLogOBJ.cs" />
     <Compile Include="Utilities\ContractorInfoOBJ.cs" />
     <Compile Include="Utilities\CongViecOBJ.cs" />
     <Compile Include="Utilities\DefectAcceptanceOBJ.cs" />

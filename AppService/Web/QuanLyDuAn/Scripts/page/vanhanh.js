@@ -13,7 +13,7 @@ const ACTION_CMD_REQUESTREGIST = "/RequestRegist";
 const ACTION_CMD_RESPONSEREGIST = "/ResponseRegist";
 var CUNSTRITEMS = isNullOrEmpty(localStorage.getItem("CItemsCurrent")) ? parseInt(localStorage.getItem("CItemsCurrent")) : 1;
 var GROUPOWNERID = isNullOrEmpty(localStorage.getItem("groupOwnerIdCurrent")) ? parseInt(localStorage.getItem("groupOwnerIdCurrent")) : 0;
-var ITEMSID = isNullOrEmpty(localStorage.getItem("ItemsIdCurrent")) ? 1: parseInt(localStorage.getItem("ItemsIdCurrent"));
+var ITEMSID = isNullOrEmpty(localStorage.getItem("ItemsIdCurrent")) ? 1 : parseInt(localStorage.getItem("ItemsIdCurrent"));
 var HOST = 'https://api-om-crud.tayho.com.vn/api/v1/'; ///'https://api-om-crud.tayho.com.vn/api/v1/''http://localhost:54323/api/v1/http://localhost:8088/api/v1/
 
 var $DATASOURCE = (link, key) => {
@@ -940,6 +940,13 @@ var complaintStatus = [
     { value: 1, text: "Chờ giải quyết", color: "warning", icon: 'fa fa-minus-circle' },
     { value: 101, text: "Chờ hỗ trợ", color: "info", icon: 'fa fa-pause-circle' },
     { value: 200, text: "Đã giải quyết", color: "success", icon: 'fa fa-check-circle' },
+];
+var maintenanceLogStatus = [
+    { value: 1, text: "Vừa khởi tạo", color: "primary", icon: 'fa fa-plus-circle' },
+    { value: 9, text: "Quá ngày BT", color: "pink", icon: 'fa fa-minus-circle' },
+    { value: 10, text: "Chờ bảo trì", color: "warning", icon: 'fa fa-pause-circle' },
+    { value: 11, text: "Đang bảo trì", color: "info", icon: 'fa fa-play-circle' },
+    { value: 200, text: "Đã nghiệm thu", color: "success", icon: 'fa fa-check-circle' },
 ];
 
 var remidBy = [

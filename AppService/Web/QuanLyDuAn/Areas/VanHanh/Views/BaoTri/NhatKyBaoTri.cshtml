@@ -11,22 +11,22 @@
     </div>
     <div class="col-8">
         @*<div class="card card-info" id="container-maintenancelog-detail">
-            <div class="card-header ui-sortable-handle" style="cursor: move;">
-                <h3 class="card-title">Khiếu nại</h3>
-                <div class="card-tools">
-                    <button type="button" class="btn btn-tool" id="new-Complaint" onclick="newComplaint()">
-                        <i class="fas fa-file"></i>
-                    </button>
-                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                        <i class="fas fa-minus"></i>
-                    </button>
+                <div class="card-header ui-sortable-handle" style="cursor: move;">
+                    <h3 class="card-title">Khiếu nại</h3>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" id="new-Complaint" onclick="newComplaint()">
+                            <i class="fas fa-file"></i>
+                        </button>
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </div>
                 </div>
-            </div>
-            <div id="maintenancelog-detail" class="elevation-2 card-body">
-                <form id="form-Complaint" action="#" method="POST" enctype="application/json">
-                </form>
-            </div>
-        </div>*@
+                <div id="maintenancelog-detail" class="elevation-2 card-body">
+                    <form id="form-Complaint" action="#" method="POST" enctype="application/json">
+                    </form>
+                </div>
+            </div>*@
         <div id="container-maintenancelog" class="elevation-2 ">
         </div>
     </div>
@@ -59,16 +59,29 @@
             store: $DATASOURCE(ACTION_MAINTENANCESCHEDULE, KEY),
             filter: ["id", "=", id]
         });
+
         var customStore_MaintenanceSupplierInfo = () => new DevExpress.data.DataSource({
             store: $DATASOURCEGET(ACTION_MAINTENANCESUPPLIERINFO, KEY),
         });
         var customStore_MaintenancerInfo = (id) => new DevExpress.data.DataSource({
-            store: $DATASOURCE(ACTION_MAINTENANCERINFO, KEY),
+            store: $DATASOURCEGET(ACTION_MAINTENANCERINFO, KEY),
             filter: ["maintenanceSupplierInfoId", "=", id]
+        });
+        var customStore_MaintenancerInfoById = (id) => new DevExpress.data.DataSource({
+            store: $DATASOURCEGET(ACTION_MAINTENANCERINFO, KEY),
+            filter: ["id", "=", id]
         });
         var customStore_MaintenanceLog = (id) => new DevExpress.data.DataSource({
             store: $DATASOURCE(ACTION_MAINTENANCELOG, KEY),
             filter: ["maintenanceScheduleId", "=", id]
+        });
+        var customStore_MaintenanceLogFilter = (id) => new DevExpress.data.DataSource({
+            store: $DATASOURCE(ACTION_MAINTENANCELOG, KEY),
+            filter: [["status", "<", 100], "and", ["maintenanceScheduleId", "=", id], "and", ["isActive", "=", true]]
+        });
+        var customStore_MaintenanceLogById = (id) => new DevExpress.data.DataSource({
+            store: $DATASOURCE(ACTION_MAINTENANCELOG, KEY),
+            filter: ["id", "=", id]
         });
         var customStore_ById = (id) => new DevExpress.data.DataSource({
             store: $DATASOURCE(ACTION_COMPLAINT, KEY),
@@ -87,6 +100,9 @@
             filter: ["realEstateId", "=", id]
         });
         var $constructionItemsId = 0;
+        var $currentMaintenanceSupplierInfoId = 0;
+        var $currentMaintenancerInfoId = 0;
+        var $currentMaintenanceLogStatus  = 0;
         var formData = {
             //"code": "",
             //"barcode": "",
@@ -111,6 +127,8 @@
         var fdata = new FormData();
         var $maintenanceSupplierInfoId = 0;
         var $dataSource = {};
+        var $currentConstructionItemsId = 0;
+        var $currentTimes = 0;
         //..........................Function -------------------------------------------------------------
         $(function () {
             loadData();
@@ -199,15 +217,21 @@
                 },
                 onContextMenuPreparing: function (e) {
                     var container = e.component;
+                    console.log(e.component);
+                    $currentConstructionItemsId = e.row.data.constructionItemsId;
+                    $currentMaintenanceSupplierInfoId = e.row.data.maintenanceSupplierInfoId;
+                    $currentMaintenancerInfoId = e.row.data.maintenancerInfoId;
+                    $currentMaintenanceLogStatus = e.row.data.status; 
+                    $currentTimes = e.row.data.times;
                     if (!e.items) e.items = [];
                     if (e.target == "content" && e.rowIndex >= 0) {
                         e.items.push({
                             icon: "fas fa-clipboard-list",
-                            text: "Tạo phiếu hẹn bảo trì",
-                            onItemClick: (e) => {
+                            text: (e.row.data.status >= 10 && e.row.data.status < 100)? "Cập nhật phiếu hẹn" : "Tạo phiếu hẹn",
+                            onItemClick: () => {
                                 CALLPOPUP(
                                     "Phiếu xuất kho",
-                                    "/VanHanh/BaoTri/_PhieuHenBaoTriCreate",
+                                    "/VanHanh/BaoTri/_PhieuHenBaoTriCreate?id="+ e.row.data.id,
                                     ($(window).width() > 767 ? "50%" : "80%"),
                                     container
                                 );
@@ -305,7 +329,7 @@
         };
         var loadData_MaintenanceLog = (id) => {
             $("#container-maintenancelog").dxDataGrid({
-                height: heightScreen ,
+                height: heightScreen,
                 dataSource: customStore_MaintenanceLog(id),
                 repaintChangesOnly: true,
                 remoteOperations: true,
@@ -383,6 +407,25 @@
                     var selectedRowData = e.selectedRowsData[0];
                     var selectedRowKey = e.selectedRowKeys[0];
                 },
+                onContextMenuPreparing: function (e) {
+                    var container = e.component;
+                    if (!e.items) e.items = [];
+                    if (e.target == "content" && e.rowIndex >= 0) {
+                        e.items.push({
+                            icon: "fas fa-info",
+                            text: "Chi tiết bảo trì",
+                            onItemClick: () => {
+                                //CALLPOPUP(
+                                //    "Phiếu xuất kho",
+                                //    "/VanHanh/BaoTri/_PhieuHenBaoTriCreate?id=" + e.row.data.id,
+                                //    ($(window).width() > 767 ? "50%" : "80%"),
+                                //    container
+                                //);
+                            }
+                        });
+
+                    };
+                },
                 columns: [
                     {
                         dataField: "constructionItemsId",
@@ -409,29 +452,41 @@
                         },
                     },// address
                     {
-                        dataField: "title",
-                        allowFiltering: true,
-                        caption: "Tiêu đề",
-                        dataType: "string",
+                        dataField: "startTime",
+                        allowFiltering: false,
+                        caption: "Ngày dự kiến BT",
                         alignment: "center",
-                        //lookup: {
-                        //    dataSource: customStore_ComplaintsType,
-                        //    valueExpr: "id",
-                        //    displayExpr: "title",
-                        //},
+                        dataType: "date",
                     },// address
                     {
-                        dataField: "nextTimes",
-                        allowFiltering: true,
-                        caption: "Ngày BTTT",
+                        dataField: "endTime",
+                        allowFiltering: false,
+                        caption: "Ngày dự kiến HT",
                         alignment: "center",
-                        dataType: "datetime",
-                        //lookup: {
-                        //    dataSource: customStore_ComplaintsType,
-                        //    valueExpr: "id",
-                        //    displayExpr: "title",
-                        //},
+               
+                        dataType: "date",
                     },// address
+                    {
+                        dataField: "currentTimes",
+                        allowFiltering: false,
+                        caption: "Ngày thực tế BT",
+                        alignment: "center",
+                        dataType: "date",
+                    },// address
+                    {
+                        dataField: "times",
+                        allowFiltering: true,
+                        caption: "Lần bảo trì",
+                        alignment: "center",
+                        dataType: "number",
+                    },// address
+                    //{
+                    //    dataField: "updateDate",
+                    //    allowFiltering: true,
+                    //    caption: "Ngày thực tế HT",
+                    //    alignment: "center",
+                    //    dataType: "date",
+                    //},// address
                     {
                         dataField: "status",
                         allowFiltering: true,

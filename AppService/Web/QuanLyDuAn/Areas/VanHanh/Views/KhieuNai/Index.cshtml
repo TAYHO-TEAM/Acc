@@ -27,7 +27,6 @@
         <div class="card card-success">
             <div class="card-header ui-sortable-handle" style="cursor: move;">
                 <h3 class="card-title">Nội dung giải quyết</h3>
-
                 <div class="card-tools">
                     <button type="button" class="btn btn-tool" data-card-widget="collapse">
                         <i class="fas fa-minus"></i>
@@ -40,7 +39,6 @@
                 </form>
             </div>
         </div>
-
     </div>
     <div class="col-4">
         <div class="card card-warning">
@@ -48,14 +46,10 @@
         </div>
     </div>
 </div>
-
-
 @section script{
     <script src="~/Scripts/page/vanhanh.js"></script>
     <script>
-
-        ///-----------------------------READ ------------------------
-
+        ///--------------------------------- READ -------------------------------------
         var ACTION_COMPLAINT = "Complaint/";
         var ACTION_PROJECT = "Project/";
         var ACTION_CUSTOMERINFO = "CustomerInfo/";
@@ -66,8 +60,7 @@
         var ACTION_REALESTATE = "RealEstate/";
         var KEY = "id";
         var WIDTH_CONTAINER = $("#container").width();
-        //..........................Get data -------------------------------------------------------------
-
+        ///----------------------------- Get Data --------------------------------------
         var customStore = () => new DevExpress.data.DataSource({
             store: $DATASOURCE(ACTION_COMPLAINT, KEY)
         });
@@ -378,7 +371,7 @@
                             deferred.resolve(false);
                         }
                     }, deferred.reject)
-                    console.log($keyCP);
+              
 
                 }
                 else if ($keyCP > 0) {
@@ -395,10 +388,10 @@
                     }, deferred.reject)
                 }
                 loadData();
-                return deferred.promise();
-                
+                return deferred.promise(); 
             }
         });
+
         var loadData_Resolve = (id) => {
             customStore_ComplaintResolve(id).load().done((rs) => {
                 $issetRS = (rs.length > 0);
@@ -453,23 +446,7 @@
                                     editorType: "dxTextBox",
                                     editorOptions: {
                                         stylingMode: "filled",
-                                        //searchEnabled: true,
-                                        //searchMode: "contains",
-                                        //searchExpr: ['name'],
-                                        //showClearButton: true,
-                                        //placeholder: "Vui lòng chọn...",
-                                        //dataSource: customStore_CustomerInfo,
-                                        //valueExpr: "id",
-                                        //displayExpr: "id",
-                                        //elementAttr: {
-                                        //    id: "elementResolver",
-                                        //},
-                                        //itemTemplate: function (data) {
-                                        //    return $("<div>").append($("<b>").append(data.id).addClass("mr-1"), $("<em>").append(data.firstName + " " + data.lastName).addClass("mr-1"));
-                                        //},
-                                        //onValueChanged: function (data) {
-
-                                        //},
+                                       
                                     },
                                 },
                                 {
@@ -477,22 +454,10 @@
                                     dataField: "resolverPhone",
                                     label: { text: "Số điện thoại" },
                                     type: "string",
-                                    //editorType: "dxSelectBox",
                                     editorOptions: {
                                         stylingMode: "filled",
-                                        //    searchEnabled: true,
-                                        //    searchMode: "contains",
-                                        //    searchExpr: ['code', 'title'],
-                                        //    showClearButton: true,
-                                        //    placeholder: "Vui lòng chọn...",
-                                        //    valueExpr: "id",
-                                        //    displayExpr: "title",
-                                        //    dataSource: customStore_ComplaintsType,
-                                        //    elementAttr: {
-                                        //        id: "elementResolverPhone",
-                                        //    },
+                                       
                                     },
-                                    //validationRules: [{ type: "required" }],
                                 },
                                 {
                                     colSpan: 3,
@@ -508,21 +473,6 @@
                                     },
                                     //validationRules: [{ type: "required" }],
                                 },
-                                //{
-                                //    colSpan: 12,
-                                //    dataField: "result",
-                                //    label: { text: "Kết quả" },
-                                //    type: "string",
-                                //    editorType: "dxTextBox",
-                                //    editorOptions: {
-                                //        stylingMode: "filled",
-                                //        elementAttr: {
-                                //            id: "elementResult",
-                                //        },
-                                //    },
-                                //    validationRules: [{ type: "required" }],
-                                //},
-
                             ]
                         },
                         {
@@ -609,7 +559,6 @@
                 if (!$issetRS) {
                     customStore_ComplaintResolve(0).store().insert(formdata).done((rs) => {
                         loadingPanel.hide();
-                        console.log(rs);
                         if (rs.isOk) {
                             deferred.resolve(rs);
                             DevExpress.ui.notify("Cập nhật thành công", "success", 3000);
@@ -648,7 +597,6 @@
             else {
                 loadingPanel.show();
                 var deferred = $.Deferred();
-                //formdata.append('complaintId', $keyCP);
                 formdata.status = 101;
                 formdata.complaintId = $keyCP;
                 if (!$issetRS) {
@@ -668,7 +616,6 @@
                 else if ($keyRS > 0) {
                     customStore_ComplaintResolve(0).store().update($keyRS, formdata).done((rs) => {
                         loadingPanel.hide();
-                        console.log(rs);
                         if (rs.isOk) {
                             deferred.resolve(rs);
                             DevExpress.ui.notify("Cập nhật thành công", "success", 3000);
