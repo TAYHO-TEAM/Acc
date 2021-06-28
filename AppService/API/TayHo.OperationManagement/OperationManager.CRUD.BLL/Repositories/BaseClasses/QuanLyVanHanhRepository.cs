@@ -236,8 +236,6 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
                         await UploadFile(formFiles, Model.Id, nameEF, "", user);
                     }
                 }
-
-
             }
             catch (Exception ex)
             {
