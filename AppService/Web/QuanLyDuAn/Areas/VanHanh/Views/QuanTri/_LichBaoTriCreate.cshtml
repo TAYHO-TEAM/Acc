@@ -256,6 +256,7 @@
                 loadingPanel.show();
                 //formdata.append('constructionItemsId', $constructionItemsId);
                 var deferred = $.Deferred();
+                formdata.nextTimes = formdata.startTime;
                 customStore_MaintenanceSchedule(0).store().insert(formdata).done((rs) => {
                     deferred.resolve(true);
                     loadingPanel.hide();
@@ -269,27 +270,7 @@
                         DevExpress.ui.notify("Có lỗi xảy ra: " + errorThrown, "error", 3000);
                     }
                 }, deferred.reject)
-                //$.ajax({
-                //    type: "POST",
-                //    enctype: 'multipart/form-data',
-                //    url: "/VanHanh/BaoHanh/DefectFixUpdate",
-                //    data: fdata,
-                //    processData: false,
-                //    contentType: false,
-                //    cache: false,
-                //    success: function (rs) {
-                //        deferred.resolve(true);
-                //        loadingPanel.hide();
-                //        DevExpress.ui.notify(rs.result, rs.status, 3000);
-                //        if (rs.status == "success") {
-                //            $("#popup-register").dxPopup('instance').hide();
-                //        }
-                //    },
-                //    error: function (xhr, textStatus, errorThrown) {
-                //        loadingPanel.hide();
-                //        DevExpress.ui.notify("Có lỗi xảy ra: " + errorThrown, "error", 3000);
-                //    }
-                //});
+                
                 return deferred.promise();
             }
         });

@@ -36,6 +36,7 @@ namespace QuanLyDuAn.Areas.VanHanh.Controllers
         {
             return PartialView(id);
         }
+     
         [HttpPost, ValidateInput(false)]
         public JsonResult MaintenanceLogUpdate(MaintenanceLogOBJ requestOBJ)
         {
@@ -43,10 +44,14 @@ namespace QuanLyDuAn.Areas.VanHanh.Controllers
             HttpFileCollectionBase listFile = HttpContext.Request.Files;
             if (string.IsNullOrEmpty(requestOBJ.Result))
                 requestOBJ.Result = "";
+            if (requestOBJ.Status < 11)
+                requestOBJ.Status = 11;
+            if (requestOBJ.Status > 225)
+                requestOBJ.Status = 200;
             string token = requestOBJ.token;
             var values = new JavaScriptSerializer().Serialize(requestOBJ);
             mFormData = new MultipartFormDataContent();
-            
+
             if (!string.IsNullOrEmpty(requestOBJ.Key.ToString())) mFormData.Add(new StringContent(requestOBJ.Key.ToString()), "key");
             if (!string.IsNullOrEmpty(values)) mFormData.Add(new StringContent(values), nameof(values));
             if (listFile.Count > 0)
