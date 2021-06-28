@@ -281,19 +281,18 @@
                         dataField: "status",
                         allowFiltering: true,
                         caption: "Tình trang",
-                        alignment: "center",
+                        alignment: "left",
+                
                         editorType: "dxSwitch",
-                        showWhenGrouped: true,
-                        //lookup: {
-                        //    dataSource: complaintStatus,
-                        //    valueExpr: "value",
-                        //    displayExpr: "text",
-                        //},
-                        //cellTemplate: (c, o) => {
-                        //    $("<span />").addClass("badge badge-" + complaintStatus.find(x => x.value == o.value).color).append(
-                        //        $("<i />").addClass("mr-1 " + complaintStatus.find(x => x.value == o.value).icon), o.text
-                        //    ).appendTo(c);
-                        //}
+                        lookup: {
+                            dataSource: maintenanceLogStatus,
+                            valueExpr: "value", displayExpr: "text",
+                        },
+                        cellTemplate: (c, o) => {
+                            $("<span />").addClass("badge badge-" + maintenanceLogStatus.find(x => x.value == o.value).color).append(
+                                $("<i />").addClass("mr-1 " + maintenanceLogStatus.find(x => x.value == o.value).icon), o.text
+                            ).appendTo(c);
+                        }
                     },// Trạng thái
                 ],
                 editing: {

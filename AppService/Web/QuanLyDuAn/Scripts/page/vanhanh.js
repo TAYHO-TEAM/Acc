@@ -942,11 +942,11 @@ var complaintStatus = [
     { value: 200, text: "Đã giải quyết", color: "success", icon: 'fa fa-check-circle' },
 ];
 var maintenanceLogStatus = [
-    { value: 1, text: "Vừa khởi tạo", color: "primary", icon: 'fa fa-plus-circle' },
-    { value: 9, text: "Quá ngày BT", color: "pink", icon: 'fa fa-minus-circle' },
-    { value: 10, text: "Chờ bảo trì", color: "warning", icon: 'fa fa-pause-circle' },
-    { value: 11, text: "Đang bảo trì", color: "info", icon: 'fa fa-play-circle' },
-    { value: 200, text: "Đã nghiệm thu", color: "success", icon: 'fa fa-check-circle' },
+    { value: 1, text: "Vừa Tạo", color: "primary", icon: 'fa fa-plus-circle' },
+    { value: 9, text: "Quá Hạn ", color: "danger", icon: 'fa fa-minus-circle' },
+    { value: 10, text: "Chờ BT", color: "warning", icon: 'fa fa-pause-circle' },
+    { value: 11, text: "Đang BT", color: "info", icon: 'fa fa-play-circle' },
+    { value: 200, text: "Đã NT ", color: "success", icon: 'fa fa-check-circle' },
 ];
 
 var remidBy = [
