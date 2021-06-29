@@ -54,6 +54,10 @@ namespace OperationManager.CRUD.BLL.Extensions
             services.AddScoped<IQuanLyVanHanhRepository<WarehouseStorage>, QuanLyVanHanhRepository<WarehouseStorage>>();
             services.AddScoped<IQuanLyVanHanhRepository<CategoryUnit>, QuanLyVanHanhRepository<CategoryUnit>>();
             services.AddScoped<IQuanLyVanHanhRepository<WareHouseAllGoods>, QuanLyVanHanhRepository<WareHouseAllGoods>>();
+            services.AddScoped<IQuanLyVanHanhRepository<ComplaintDetail>, QuanLyVanHanhRepository<ComplaintDetail>>();
+            services.AddScoped<IQuanLyVanHanhRepository<DefectFeedbackDetail>, QuanLyVanHanhRepository<DefectFeedbackDetail>>();
+            services.AddScoped<IQuanLyVanHanhRepository<WarehouseReleased>, QuanLyVanHanhRepository<WarehouseReleased>>();
+            services.AddScoped<IQuanLyVanHanhRepository<WarehouseReleasedDetail>, QuanLyVanHanhRepository<WarehouseReleasedDetail>>();
             return services;
         }
         #endregion private functions

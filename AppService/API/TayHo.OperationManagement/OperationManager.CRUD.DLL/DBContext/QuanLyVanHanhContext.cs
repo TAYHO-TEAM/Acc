@@ -39,6 +39,11 @@ namespace OperationManager.CRUD.DAL.DBContext
         public DbSet<WarehouseGoodsStorage> WarehouseGoodsStorage { get; set; }
         public DbSet<WarehouseStorage> WarehouseStorage { get; set; }
         public DbSet<CategoryUnit> CategoryUnit { get; set; }
+        public DbSet<ComplaintDetail> ComplaintDetail { get; set; }
+        public DbSet<DefectFeedbackDetail> DefectFeedbackDetail { get; set; }
+        public DbSet<WarehouseReleased> WarehouseReleased { get; set; }
+        public DbSet<WarehouseReleasedDetail> WarehouseReleasedDetail { get; set; }
+
 
         /// <summary>
         /// View Table

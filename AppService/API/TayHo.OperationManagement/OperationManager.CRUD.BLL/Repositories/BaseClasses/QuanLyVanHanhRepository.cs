@@ -449,6 +449,18 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
                 case nameof(_dbContext.WareHouseAllGoods):
                     orders = _dbContext.WareHouseAllGoods;
                     break;
+                case nameof(_dbContext.ComplaintDetail):
+                    orders = _dbContext.ComplaintDetail;
+                    break;
+                case nameof(_dbContext.DefectFeedbackDetail):
+                    orders = _dbContext.DefectFeedbackDetail;
+                    break;
+                case nameof(_dbContext.WarehouseReleased):
+                    orders = _dbContext.WarehouseReleased;
+                    break;
+                case nameof(_dbContext.WarehouseReleasedDetail):
+                    orders = _dbContext.WarehouseReleasedDetail;
+                    break;
                 default:
                     orders = null;
                     break;

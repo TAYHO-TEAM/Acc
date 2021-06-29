@@ -33,6 +33,11 @@
         public const string WarehouseStorage_TABLENAME = "WarehouseStorage";
         public const string CategoryUnit_TABLENAME = "CategoryUnit";
         public const string WareHouseAllGoods_TABLENAME = "WareHouseAllGoods";
+        public const string ComplaintDetail_TABLENAME = "ComplaintDetail";
+        public const string WarehouseReleasedDetail_TABLENAME = "WareHouseAllGoods";
+        public const string WarehouseReleased_TABLENAME = "WareHouseAllGoods";
+        public const string DefectFeedbackDetail_TABLENAME = "WareHouseAllGoods";
+        
 
     }
 }
