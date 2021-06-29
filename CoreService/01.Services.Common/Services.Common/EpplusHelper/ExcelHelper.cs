@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Services.Common.EpplusHelper
 {
-    class ExcelHelper
+    public class ExcelHelper
     {
     }
 }
