@@ -41,5 +41,19 @@ namespace Services.Common.Utilities
                 }
             }
         }
+        public static void DeleteNullProperties(object source)
+        {
+            foreach (var prop in source.GetType()
+                                       .GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                                       .Where(p => !p.GetIndexParameters().Any())
+                                       .Where(p => p.CanRead && p.CanWrite))
+            {
+                var value = prop.GetValue(source, null);
+                if (value != null)
+                {
+                  
+                }
+            }
+        }
     }
 }

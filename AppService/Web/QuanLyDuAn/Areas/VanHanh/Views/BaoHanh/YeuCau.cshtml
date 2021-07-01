@@ -401,7 +401,7 @@
                     {
                         dataField: "realEstateId",
                         allowFiltering: true,
-                        caption: "Địa ốc",
+                        caption: "Căn hộ",
                         dataType: "string",
                         alignment: "center",
                         visible: true,
@@ -409,7 +409,7 @@
                         lookup: {
                             dataSource: customStore_RealEstate,
                             valueExpr: "id",
-                            displayExpr: "code",
+                            displayExpr: "address",
                         },
                         editorOptions: {
                             dataSource: customStore_RealEstate,
@@ -425,32 +425,32 @@
                             },
                         },
                     },// realEstateId
-                    {
-                        dataField: "customerId",
-                        allowFiltering: true,
-                        caption: "Mã KH",
-                        dataType: "string",
-                        alignment: "center",
-                        visible: true,
-                        editorType: "dxLookup",
-                        lookup: {
-                            dataSource: customStore_CustomerInfo,
-                            valueExpr: "id",
-                            displayExpr: "id",
-                        },
-                        editorOptions: {
-                            dataSource: customStore_CustomerInfo,
-                            valueExpr: "id",
-                            displayExpr: "id",
-                            placeholder: "Vui lòng chọn...",
-                            searchExpr: ['name', 'description'],
-                            searchEnabled: true,
-                            showClearButton: true,
-                            itemTemplate: function (data) {
-                                return $("<div>").append($("<b>").append(data.id).addClass("mr-1"));
-                            },
-                        },
-                    },// customerId
+                    //{
+                    //    dataField: "customerId",
+                    //    allowFiltering: true,
+                    //    caption: "Mã KH",
+                    //    dataType: "string",
+                    //    alignment: "center",
+                    //    visible: true,
+                    //    editorType: "dxLookup",
+                    //    lookup: {
+                    //        dataSource: customStore_CustomerInfo,
+                    //        valueExpr: "id",
+                    //        displayExpr: "id",
+                    //    },
+                    //    editorOptions: {
+                    //        dataSource: customStore_CustomerInfo,
+                    //        valueExpr: "id",
+                    //        displayExpr: "id",
+                    //        placeholder: "Vui lòng chọn...",
+                    //        searchExpr: ['name', 'description'],
+                    //        searchEnabled: true,
+                    //        showClearButton: true,
+                    //        itemTemplate: function (data) {
+                    //            return $("<div>").append($("<b>").append(data.id).addClass("mr-1"));
+                    //        },
+                    //    },
+                    //},// customerId
                     {
                         dataField: "fullName",
                         allowFiltering: true,

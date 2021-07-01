@@ -678,13 +678,13 @@ function getTemplateMarkup(data, containerClass) {
     console.log(data);
     return "<div class='" + containerClass + "'><img src='" +
         data.Picture + "' /><div>" +
-        data.firstName + " " + data.lastName + "</div></div>";
+        (data.firstName ?? "") + " " + (data.lastName ?? "")+ "</div></div>";
 }
 function getDisplayExpr(item) {
     if (!item) {
         return "";
     }
-    return item.firstName + " " + item.lastName;
+    return (item.firstName ?? "") + " " + (item.lastName ?? "") ;
 }
 //-----------------------Unity OBJ -----------------------
 const Category = [{

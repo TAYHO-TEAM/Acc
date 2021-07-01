@@ -161,12 +161,12 @@
                                         dataSource: customStore_RealEstate,
                                         //value: $constructionItemsId,
                                         valueExpr: "id",
-                                        displayExpr: 'code',
+                                        displayExpr: 'address',
                                         elementAttr: {
                                             id: "elementRealEstateId",
                                         },
                                         itemTemplate: function (data) {
-                                            return $("<div>").append($("<b>").append(data.code).addClass("mr-1"), $("<em>").append(data.address).addClass("mr-1"));
+                                            return $("<div>").append($("<b>").append(data.address).addClass("mr-1"), $("<em>"));
                                         },
                                         onValueChanged: function (data) {
                                             if (data.value != null) {
@@ -208,16 +208,16 @@
                                             id: "elementCustomerInfoId",
                                         },
                                         itemTemplate: function (data) {
-                                            return $("<div>").append($("<b>").append(data.id).addClass("mr-1"), $("<em>").append(data.firstName + " " + data.lastName).addClass("mr-1"));
+                                            return $("<div>").append($("<b>").append(data.id).addClass("mr-1"), $("<em>").append(data.firstName??"" + " " + data.lastName??"").addClass("mr-1"));
                                         },
                                         onValueChanged: function (data) {
                                             if (data.value != null) {
                                                 customStore_CustomerInfo.load().done((rsCI) => {
                                                     var item = rsCI.filter(x => x.id == data.value).shift();
                                                     $('#elementFullName').dxTextBox('instance')
-                                                        .option('value', item == null ? "" : (item.firstName + " " + item.lastName));
+                                                        .option('value', item == null ? "" : (item.firstName??"" + " " + item.lastName??""));
                                                     $('#elementPhone').dxTextBox('instance')
-                                                        .option('value', item == null ? "" : (item.phone));
+                                                        .option('value', item == null ? "" : (item.phone??""));
                                                 });
                                             }
                                             else {
@@ -446,7 +446,6 @@
                                     editorType: "dxTextBox",
                                     editorOptions: {
                                         stylingMode: "filled",
-                                       
                                     },
                                 },
                                 {
@@ -743,13 +742,20 @@
                         },
                     },// address
                     {
+                        dataField: "createDate",
+                        allowFiltering: false,
+                        caption: "Ngày KN",
+                        dataType: "date",
+                        
+                    },// address
+                    {
                         dataField: "status",
                         allowFiltering: true,
                         caption: "Tình trang",
                         alignment: "center",
                         editorType: "dxSwitch",
                         groupIndex: 0,
-                        showWhenGrouped: true,
+                        showWhenGrouped: false,
                         lookup: {
                             dataSource: complaintStatus,
                             valueExpr: "value",

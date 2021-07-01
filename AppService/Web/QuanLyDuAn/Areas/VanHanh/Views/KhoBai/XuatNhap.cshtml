@@ -447,6 +447,20 @@
                         readOnly: true,
                         allowEditing: false,
                     },// code
+                    {
+                        dataField: "unitId",
+                        allowFiltering: true,
+                        caption: "Đơn vị",
+                        dataType: "string",
+                        alignment: "center",
+                        readOnly: true,
+                        allowEditing: false,
+                        lookup: {
+                            dataSource: customStore_CategoryUnit,
+                            valueExpr: "id",
+                            displayExpr: "title",
+                        },
+                    },// code
                 ],
                 editing: {
                     allowAdding: false,
