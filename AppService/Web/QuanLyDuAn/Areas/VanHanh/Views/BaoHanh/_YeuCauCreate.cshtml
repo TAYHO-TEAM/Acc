@@ -112,18 +112,22 @@
                         },
                         {
                             colSpan: 6,
-                            dataField: "defectiveId",
+                            //dataField: "defectiveId",
                             label: { text: "Mã lỗi" },
                             lookup: {
                                 dataSource: customStore_Defective,
                                 valueExpr: "id",
                                 displayExpr: "code",
                             },
-                            editorType: "dxSelectBox",
+                            editorType: "dxTagBox",
                             editorOptions: {
                                 stylingMode: "filled",
                                 //value: formData["documentTypeId"],
                                 dataSource: customStore_Defective,
+                                //dataSource: new DevExpress.data.ArrayStore({
+                                //    data: customStore_Defective,
+                                //    key: "id"
+                                //}),
                                 searchEnabled: true,
                                 searchMode: "contains",
                                 showClearButton: true,
@@ -202,88 +206,92 @@
             }
         }).dxForm("instance");
         fileUploader();
-    });
-    $(document).on('click', '#submit', '#form-regist', function (e) {
-        //$(this).prop("disabled", true);
-        e.preventDefault();
-        var fileWrappers = fileUploader()._files;
-        var resValid = true
-        for (var i = 0; i < fileWrappers.length; i++) {
-            if (fileWrappers[i].isValid() === false) {
-                resValid = false;
-            }
-        }
-        if (!resValid) {
-            DevExpress.ui.notify("Vui lòng kiểm tra lại file đính kèm!", "error", 3000);
-        }
-        else {
-            loadingPanel.show();
-            var fdata = new FormData();
-            var i = 10;
-            $.each(formData, function (key, value) {
-                if (key === 'calendar') {
-                    fdata.append(key, moment(value).format('YYYY-MM-DD HH:mm:ss'));
-                }
-                else {
-                    fdata.append(key, value);
-                }
-            });
-            //fdata.append('projectId', PROJECTID);
-            //fdata.append('token', UserCurrentInfo.accessToken);
-            var files = $("#file-uploader").dxFileUploader("instance").option("value");
-            if (files.length > 0) {
-                $.each(files, function (key, value) {
-                    fdata.append(files[key].name, files[key]);
-                });
-            }
-            fdata.append('ConstructionItemsId', ITEMSID);
-            fdata.append('token', UserCurrentInfo.accessToken);
-            //else {
-            //    DevExpress.ui.notify("Vui lòng chọn file đính kèm", "error", 3000);
-            //    e.preventDefault();
-            //    return false;
+        $("#form-regist").on("submit", function (e) {
+            e.preventDefault();
+            var formdata = $('#form-regist').dxForm("instance").option('formData');
+            var tagDefectiveData = $('#elementDefectiveId').dxTagBox("instance").option('selectedItems');
+            console.log(tagDefectiveData.map(x => x.id));
+            //var fileWrappers = $('#form-regist').dxForm("instance").option('formData');._files;
+            var resValid = true
+            //for (var i = 0; i < fileWrappers.length; i++) {
+            //    if (fileWrappers[i].isValid() === false) {
+            //        resValid = false;
+            //    }
             //};
-            //for (var pair of fdata.entries()) {
-            //    console.log(pair[0] + ', ' + pair[1]);
-            //}
-            //var values = JSON.stringify(fdata);
-            var deferred = $.Deferred();
-            $.ajax({
-                type: "POST",
-                enctype: 'multipart/form-data',
-                url: "/VanHanh/BaoHanh/YeuCauCreate",
-                data: fdata,
-                processData: false,
-                contentType: false,
-                cache: false,
-                success: function (rs) {
-                    deferred.resolve(true);
-                    loadingPanel.hide();
-                    DevExpress.ui.notify(rs.result, rs.status, 3000);
-                    if (rs.status == "success") {
-                        $("#popup-register").dxPopup('instance').hide();
+            if (!resValid) {
+                DevExpress.ui.notify("Vui lòng kiểm tra lại file đính kèm!", "error", 3000);
+            }
+            else {
+                loadingPanel.show();
+                var fdata = new FormData();
+                var i = 10;
+                $.each(formData, function (key, value) {
+                    if (key === 'calendar') {
+                        fdata.append(key, moment(value).format('YYYY-MM-DD HH:mm:ss'));
                     }
-                },
-                error: function (xhr, textStatus, errorThrown) {
-                    loadingPanel.hide();
-                    DevExpress.ui.notify("Có lỗi xảy ra: " + errorThrown, "error", 3000);
+                    else {
+                        fdata.append(key, value);
+                    }
+                });
+                //fdata.append('projectId', PROJECTID);
+                //fdata.append('token', UserCurrentInfo.accessToken);
+                var files = $("#file-uploader").dxFileUploader("instance").option("value");
+                if (files.length > 0) {
+                    $.each(files, function (key, value) {
+                        fdata.append(files[key].name, files[key]);
+                    });
                 }
-            });
-            //e.preventDefault();
-            return deferred.promise();
+                fdata.append('ConstructionItemsId', ITEMSID);
+                fdata.append('token', UserCurrentInfo.accessToken);
+                //else {
+                //    DevExpress.ui.notify("Vui lòng chọn file đính kèm", "error", 3000);
+                //    e.preventDefault();
+                //    return false;
+                //};
+                for (var pair of fdata.entries()) {
+                    console.log(pair[0] + ', ' + pair[1]);
+                }
+                //var values = JSON.stringify(fdata);
+                var deferred = $.Deferred();
+                //$.ajax({
+                //    type: "POST",
+                //    enctype: 'multipart/form-data',
+                //    url: "/VanHanh/BaoHanh/YeuCauCreate",
+                //    data: fdata,
+                //    processData: false,
+                //    contentType: false,
+                //    cache: false,
+                //    success: function (rs) {
+                //        deferred.resolve(true);
+                //        loadingPanel.hide();
+                //        DevExpress.ui.notify(rs.result, rs.status, 3000);
+                //        if (rs.status == "success") {
+                //            $("#popup-register").dxPopup('instance').hide();
+                //        }
+                //    },
+                //    error: function (xhr, textStatus, errorThrown) {
+                //        loadingPanel.hide();
+                //        DevExpress.ui.notify("Có lỗi xảy ra: " + errorThrown, "error", 3000);
+                //    }
+                //});
+                //e.preventDefault();
+                return deferred.promise();
+            }
+        });
+        function fileUploader() {
+            $("#file-uploader").dxFileUploader({
+                selectButtonText: "Chọn tập tin...",
+                labelText: "Hoặc kéo thả vào đây",
+                showFileList: true,
+                multiple: true,
+                uploadMode: "useForm",
+                accept: ".jpg,.jpeg,.gif,.png,.pdf",
+                allowedFileExtensions: [".jpg", ".jpeg", ".png", ".pdf"],
+                maxFileSize: 52428800,
+            }).dxFileUploader("instance");
         }
-
-
     });
-    var fileUploader = () => $("#file-uploader").dxFileUploader({
-        selectButtonText: "Chọn tập tin...",
-        labelText: "Hoặc kéo thả vào đây",
-        showFileList: true,
-        multiple: true,
-        uploadMode: "useForm",
-        accept: ".jpg,.jpeg,.gif,.png,.pdf",
-        allowedFileExtensions: [".jpg", ".jpeg", ".png", ".pdf"],
-        maxFileSize: 52428800,
-    }).dxFileUploader("instance");
+
+
 
 </script>

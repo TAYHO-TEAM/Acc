@@ -98,6 +98,7 @@
         var ACTION_DEFECTACCEPTANCE = "DefectAcceptance/";
         var ACTION_MAINTENANCESUPPLIERINFO = "MaintenanceSupplierInfo/";
         var ACTION_MAINTENANCERINFO = "MaintenancerInfo/";
+        var ACTION_COMPLAINTDETAIL = "ComplaintDetail/";
         var KEY = "id";
         var WIDTH_CONTAINER = $("#container").width();
 
@@ -112,7 +113,6 @@
             store: $DATASOURCE(ACTION_FEEDBACK, KEY),
             filter: ["id", "=", id]
         });
-
         var customStore_Attachment = (id, owner) => new DevExpress.data.DataSource({
             store: $DATASOURCE(ACTION_FILESATTACHMENT, KEY),
             filter: [["ownerById", "=", id], "and", ["ownerByTable", "=", owner]]
@@ -121,7 +121,6 @@
             store: $DATASOURCE(ACTION_DEFECTFIX, KEY),
             filter: ["defectFeedbackId", "=", id]
         });
-
         var customStore_DefectAcceptance = (id) => new DevExpress.data.DataSource({
             store: $DATASOURCE(ACTION_DEFECTACCEPTANCE, KEY),
             filter: ["defectFixId", "=", id]
@@ -130,7 +129,6 @@
             store: $DATASOURCEGET(ACTION_CUSTOMERREALESTATE, KEY),
             filter: ["realEstateId", "=", id]
         });
-
         var customStore_Defective = $DATASOURCEGET(ACTION_DEFECTIVE, KEY);
         var customStore_RealEstate = $DATASOURCEGET(ACTION_REALESTATE, KEY);
         var customStore_CustomerInfoRealEstateById = (id) => {
@@ -158,6 +156,10 @@
         var customStore_MaintenancerInfo = (id) => new DevExpress.data.DataSource({
             store: $DATASOURCEGET(ACTION_MAINTENANCERINFO, KEY),
             filter: ["maintenanceSupplierInfoId", "=", id]
+        });
+        var customStore_ComplaintDetail = (id) => new DevExpress.data.DataSource({
+            store: $DATASOURCEGET(ACTION_COMPLAINTDETAIL, KEY),
+            filter: ["ComplaintId", "=", id]
         });
         //..........................  Load View -------------------------------------------------------------
         $(function () {

@@ -100,11 +100,14 @@
                                     valueExpr: "id",
                                     displayExpr: "code",
                                 },
-                                editorType: "dxSelectBox",
+                                editorType: "dxTagBox",
                                 editorOptions: {
                                     stylingMode: "filled",
                                     //value: formData["documentTypeId"],
-                                    dataSource: customStore_Defective,
+                                    dataSource: new DevExpress.data.ArrayStore({
+                                        data: customStore_Defective,
+                                        key: "id"
+                                    }), 
                                     valueExpr: "id",
                                     displayExpr: "code",
                                     searchEnabled: true,

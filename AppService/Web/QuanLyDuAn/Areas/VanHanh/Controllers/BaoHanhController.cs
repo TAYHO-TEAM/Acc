@@ -104,6 +104,28 @@ namespace QuanLyDuAn.Areas.VanHanh.Controllers
                         var err = response.Content.ReadAsStringAsync().Result;
                         return Json(new { status = "error", result = err });
                     }
+                    else
+                    {
+                        var json = new JavaScriptSerializer().Deserialize<dynamic>(response.Content.ReadAsStringAsync().Result.ToString());
+                        var id = Convert.ToInt32(json["result"]["id"].ToString());
+                        foreach (var item in requestOBJ.DefectiveIds)
+                        {
+                            using (HttpResponseMessage responseSub = client.PostAsync("api/v1/DefectFeedbackDetail/", mFormData).Result)
+                            {
+                                MultipartFormDataContent mFormDataSub = new MultipartFormDataContent();
+                                DefectFeedBackDetailOBJ defectFeedBackDetailOBJ = new DefectFeedBackDetailOBJ();
+                                defectFeedBackDetailOBJ.ComplaintId = id;
+                                defectFeedBackDetailOBJ.ComplaintsTypeId = item;
+                                var valuesSub = new JavaScriptSerializer().Serialize(defectFeedBackDetailOBJ);
+                                if (!string.IsNullOrEmpty(valuesSub)) mFormData.Add(new StringContent(valuesSub),"values");
+                                if (response.StatusCode != HttpStatusCode.OK)
+                                {
+                                    var err = response.Content.ReadAsStringAsync().Result;
+                                    return Json(new { status = "error", result = err });
+                                }
+                            }
+                        }
+                    }
                 }
             }
             return Json(new { status = "success", result = "Đã lưu thông tin yêu cầu thành công" });
@@ -246,10 +268,10 @@ namespace QuanLyDuAn.Areas.VanHanh.Controllers
                         }
                     }
                 }
-            }     
+            }
             else if (requestOBJ.Status == 22)
             {
-               
+
                 requestOBJ.Status = 30;
             }
             var values = new JavaScriptSerializer().Serialize(requestOBJ);
@@ -258,7 +280,7 @@ namespace QuanLyDuAn.Areas.VanHanh.Controllers
             if (!string.IsNullOrEmpty(values)) mFormData.Add(new StringContent(values), nameof(values));
             if (listFile.Count > 0)
             {
-                
+
                 int i = 1;
                 foreach (string file in listFile)
                 {
