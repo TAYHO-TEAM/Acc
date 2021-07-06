@@ -1584,7 +1584,7 @@ namespace AppWFGenProject
             // MainProject
             // 
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(1847, 642);
+            this.ClientSize = new System.Drawing.Size(1847, 659);
             this.Controls.Add(this.gbGenCode);
             this.Controls.Add(this.tspNavigator);
             this.Controls.Add(this.gbAutoSendMail);
