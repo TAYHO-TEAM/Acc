@@ -210,7 +210,9 @@
             e.preventDefault();
             var formdata = $('#form-regist').dxForm("instance").option('formData');
             var tagDefectiveData = $('#elementDefectiveId').dxTagBox("instance").option('selectedItems');
-            console.log(tagDefectiveData.map(x => x.id));
+            
+            var tagDefectiveIds = tagDefectiveData.map(x => x.id);
+       
             //var fileWrappers = $('#form-regist').dxForm("instance").option('formData');._files;
             var resValid = true
             //for (var i = 0; i < fileWrappers.length; i++) {
@@ -241,6 +243,7 @@
                         fdata.append(files[key].name, files[key]);
                     });
                 }
+                fdata.append('DefectiveIds', tagDefectiveIds);
                 fdata.append('ConstructionItemsId', ITEMSID);
                 fdata.append('token', UserCurrentInfo.accessToken);
                 //else {
@@ -253,28 +256,28 @@
                 }
                 //var values = JSON.stringify(fdata);
                 var deferred = $.Deferred();
-                //$.ajax({
-                //    type: "POST",
-                //    enctype: 'multipart/form-data',
-                //    url: "/VanHanh/BaoHanh/YeuCauCreate",
-                //    data: fdata,
-                //    processData: false,
-                //    contentType: false,
-                //    cache: false,
-                //    success: function (rs) {
-                //        deferred.resolve(true);
-                //        loadingPanel.hide();
-                //        DevExpress.ui.notify(rs.result, rs.status, 3000);
-                //        if (rs.status == "success") {
-                //            $("#popup-register").dxPopup('instance').hide();
-                //        }
-                //    },
-                //    error: function (xhr, textStatus, errorThrown) {
-                //        loadingPanel.hide();
-                //        DevExpress.ui.notify("Có lỗi xảy ra: " + errorThrown, "error", 3000);
-                //    }
-                //});
-                //e.preventDefault();
+                $.ajax({
+                    type: "POST",
+                    enctype: 'multipart/form-data',
+                    url: "/VanHanh/BaoHanh/YeuCauCreate",
+                    data: fdata,
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    success: function (rs) {
+                        deferred.resolve(true);
+                        loadingPanel.hide();
+                        DevExpress.ui.notify(rs.result, rs.status, 3000);
+                        if (rs.status == "success") {
+                            $("#popup-register").dxPopup('instance').hide();
+                        }
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        loadingPanel.hide();
+                        DevExpress.ui.notify("Có lỗi xảy ra: " + errorThrown, "error", 3000);
+                    }
+                });
+                e.preventDefault();
                 return deferred.promise();
             }
         });
