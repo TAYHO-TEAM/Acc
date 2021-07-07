@@ -98,7 +98,7 @@
         var ACTION_DEFECTACCEPTANCE = "DefectAcceptance/";
         var ACTION_MAINTENANCESUPPLIERINFO = "MaintenanceSupplierInfo/";
         var ACTION_MAINTENANCERINFO = "MaintenancerInfo/";
-        var ACTION_COMPLAINTDETAIL = "ComplaintDetail/";
+        var ACTION_DEFECTFEEDBACKDETAIL = "DefectFeedbackDetail/";
         var KEY = "id";
         var WIDTH_CONTAINER = $("#container").width();
 
@@ -157,9 +157,9 @@
             store: $DATASOURCEGET(ACTION_MAINTENANCERINFO, KEY),
             filter: ["maintenanceSupplierInfoId", "=", id]
         });
-        var customStore_ComplaintDetail = (id) => new DevExpress.data.DataSource({
-            store: $DATASOURCEGET(ACTION_COMPLAINTDETAIL, KEY),
-            filter: ["ComplaintId", "=", id]
+        var customStore_DefectFeedbackDetail =  (id) => new DevExpress.data.DataSource({
+            store: $DATASOURCE(ACTION_DEFECTFEEDBACKDETAIL, KEY),
+            filter: ["defectFeedbackId", "=", 71]
         });
         //..........................  Load View -------------------------------------------------------------
         $(function () {

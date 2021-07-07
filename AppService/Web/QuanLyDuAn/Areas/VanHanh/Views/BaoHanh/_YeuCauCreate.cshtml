@@ -142,20 +142,6 @@
                             },
                             validationRules: [{ type: "required" }],
                         },
-                        //{
-                        //    colSpan: 6,
-                        //    dataField: "fullName",
-                        //    label: { text: "Họ tên khách hàng" },
-                        //    editorType: "dxTextBox",
-                        //    editorOptions: {
-                        //        elementAttr: {
-                        //            id: "elementFullNameId",
-                        //        },
-                        //        stylingMode: "filled",
-                        //        placeholder: "Vui lòng nhập...",
-                        //        value: formData["description"],
-                        //    },
-                        //},
                         {
                             colSpan: 6,
                             dataField: "phone",
@@ -209,9 +195,11 @@
         $("#form-regist").on("submit", function (e) {
             e.preventDefault();
             var formdata = $('#form-regist').dxForm("instance").option('formData');
+          
             var tagDefectiveData = $('#elementDefectiveId').dxTagBox("instance").option('selectedItems');
-            
-            var tagDefectiveIds = tagDefectiveData.map(x => x.id);
+            //var DefectiveIds = new int[];
+            var tagDefectiveIds = tagDefectiveData.map(x => x.id).toString();
+
        
             //var fileWrappers = $('#form-regist').dxForm("instance").option('formData');._files;
             var resValid = true
@@ -246,6 +234,7 @@
                 fdata.append('DefectiveIds', tagDefectiveIds);
                 fdata.append('ConstructionItemsId', ITEMSID);
                 fdata.append('token', UserCurrentInfo.accessToken);
+                //fdata.push(DefectiveIds);
                 //else {
                 //    DevExpress.ui.notify("Vui lòng chọn file đính kèm", "error", 3000);
                 //    e.preventDefault();
@@ -269,7 +258,7 @@
                         loadingPanel.hide();
                         DevExpress.ui.notify(rs.result, rs.status, 3000);
                         if (rs.status == "success") {
-                            $("#popup-register").dxPopup('instance').hide();
+                            $("#popup-main").dxPopup('instance').hide();
                         }
                     },
                     error: function (xhr, textStatus, errorThrown) {

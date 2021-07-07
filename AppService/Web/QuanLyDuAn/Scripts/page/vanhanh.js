@@ -29,7 +29,8 @@ var $DATASOURCE = (link, key) => {
             options.headers = {
                 'Authorization': 'Bearer ' + UserCurrentInfo.accessToken,
             };
-        }
+        },
+        reshapeOnPush :true
     });
 };
 var $DATASOURCEGET = (link, key) => {
@@ -42,7 +43,8 @@ var $DATASOURCEGET = (link, key) => {
             options.headers = {
                 'Authorization': 'Bearer ' + UserCurrentInfo.accessToken,
             };
-        }
+        },
+        reshapeOnPush : true
     });
 };
 ////---------------------------CMD--------------------------- 

@@ -9,8 +9,8 @@ namespace QuanLyDuAn.Utilities
     {
 
         public int? Key { get; set; }
-        public int? ComplaintId { get; set; }
-        public int? ComplaintsTypeId { get; set; }
+        public int? DefectiveId { get; set; }
+        public int? DefectFeedbackId { get; set; }
         public byte? Status { get; set; }
         public string token { get; set; }
     }
