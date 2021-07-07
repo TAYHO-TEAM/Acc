@@ -65,7 +65,7 @@
         var ds_giaidoan = new DevExpress.data.CustomStore({
             key: "id",
             load: (values) => {
-                values['filter'] = [["projectId", "=", PROJECTID], 'and', ["tenGiaiDoan", "contains", 'thanh toán'], 'and', ["isActive", "=", 1]];
+                values['filter'] = [["projectId", "=", PROJECTID], /*'and', ["tenGiaiDoan", "contains", 'thanh toán'],*/ 'and', ["isActive", "=", 1]];
                 values['sort'] = [{ selector: "status", desc: false }];
                 return ajax_read(ACTION_GIAIDOAN, values);
             },
@@ -173,7 +173,7 @@
                         {
                             colSpan: 3,
                             dataField: "projectId", label: { text: "Dự án" },
-                            editorType: "dxLookup",
+                            editorType: "dxSelectBox",
                             editorOptions: {
                                 dataSource: customStore_Projects,
                                 searchEnabled: true, searchMode: "contains",
@@ -193,7 +193,7 @@
                         },
                         {
                             colSpan: 2, dataField: "goiThauId", label: { text: "Gói thầu" },
-                            editorType: "dxLookup",
+                            editorType: "dxSelectBox",
                             editorOptions: {
                                 elementAttr: { id: "goiThauIdFilter" },
                                 dataSource: ds_goithau,
@@ -205,22 +205,22 @@
                                     return $("<div>").html("<b>" + data.soHopDong + "</b> - <em>" + data.dienGiai + "</em>");
                                 },
                                 onValueChanged: function (data) {
-                                    listDot(
-                                        data.value, $("#giaiDoanIdFilter").dxLookup('instance').option('value'), 0
-                                    ).done((rs) => {
-                                        $("#dotFilter").dxSelectBox("instance").option("dataSource", rs);
-                                        MAX_DOT = rs.length > 0 ? Math.max.apply(Math, rs.map(function (o) { return o; })) : 0;
-                                        $("#dotFilter").dxSelectBox("instance").option("value", MAX_DOT);
-                                    });
+                                    //listDot(
+                                    //    data.value, $("#giaiDoanIdFilter").dxLookup('instance').option('value'), 0
+                                    //).done((rs) => {
+                                    //    $("#dotFilter").dxSelectBox("instance").option("dataSource", rs);
+                                    //    MAX_DOT = rs.length > 0 ? Math.max.apply(Math, rs.map(function (o) { return o; })) : 0;
+                                    //    $("#dotFilter").dxSelectBox("instance").option("value", MAX_DOT);
+                                    //});
                                 }
                             },
                             validationRules: [{ type: "required" }]
                         },
                         {
                             colSpan: 2, dataField: "giaiDoanId", label: { text: "Giai đoạn" },
-                            editorType: "dxLookup",
+                            editorType: "dxSelectBox",
                             editorOptions: {
-                                dataSource: ds_giaidoan, value: 13,
+                                dataSource: ds_giaidoan, 
                                 elementAttr: { id: "giaiDoanIdFilter" },
                                 valueExpr: "id", displayExpr: (item) => { return item && item.tenGiaiDoan + " - " + item.dienGiai; },
                                 searchEnabled: true, searchMode: "contains",
@@ -229,13 +229,13 @@
                                     return $("<div>").html("<b>" + data.tenGiaiDoan + "</b> - <em>" + data.dienGiai + "</em>");
                                 },
                                 onValueChanged: function (data) {
-                                    listDot(
-                                        $("#goiThauIdFilter").dxLookup('instance').option('value'), data.value, 0
-                                    ).done((rs) => {
-                                        $("#dotFilter").dxSelectBox("instance").option("dataSource", rs);
-                                        MAX_DOT = rs.length > 0 ? Math.max.apply(Math, rs.map(function (o) { return o; })) : 0;
-                                        $("#dotFilter").dxSelectBox("instance").option("value", MAX_DOT);
-                                    });
+                                    //listDot(
+                                    //    $("#goiThauIdFilter").dxLookup('instance').option('value'), data.value, 0
+                                    //).done((rs) => {
+                                    //    $("#dotFilter").dxSelectBox("instance").option("dataSource", rs);
+                                    //    MAX_DOT = rs.length > 0 ? Math.max.apply(Math, rs.map(function (o) { return o; })) : 0;
+                                    //    $("#dotFilter").dxSelectBox("instance").option("value", MAX_DOT);
+                                    //});
                                 }
                             },
                             validationRules: [{ type: "required" }]
@@ -267,47 +267,59 @@
                 }
             ],
             onFieldDataChanged: (e) => {
-                var formData = $("#container-filter").dxForm('instance').option("formData");
+                var formData = $("#container-filter").dxForm('instance').option("formData"); 
+                if (formData.giaiDoanId != null && formData.goiThauId != null) {
+                    listDot(formData.goiThauId, formData.giaiDoanId, 0).done((rs) => {
+                        $("#dotFilter").dxSelectBox("instance").option("dataSource", rs);
+                        MAX_DOT = rs.length > 0 ? Math.max.apply(Math, rs.map(function (o) { return o; })) : 0;
+                        if ($("#dotFilter").dxSelectBox("instance").option("value") == null) $("#dotFilter").dxSelectBox("instance").option("value", MAX_DOT);
+                    });
+                }
+
                 if (Object.keys(formData).length == 4) {
                     $("#btnSubmitFilter").dxButton('instance').option('disabled', false);
                     loadPanel(formData);
                 }
+
             },
         }).dxForm("instance");
-        var loadPanel = (filter) => $("#container-main").dxTabPanel({
-            height: heightScreen - $("#container-filter").parent().parent().parent().parent().height(),
-            dataSource: [
-                {
-                    text: "Công việc",
-                    icon: "fas fa-circle",
-                   template: () => loadDataMain_Left(filter)
+        var loadPanel = (filter) => {
+            return $("#container-main").dxTabPanel({
+                height: heightScreen - $("#container-filter").parent().parent().parent().parent().height(),
+                dataSource: [
+                    {
+                        text: "Công việc",
+                        icon: "fas fa-circle",
+                        template: () => loadDataMain_Left(filter)
+                    },
+                    {
+                        text: "Phạt",
+                        icon: "fas fa-circle",
+                        template: () => loadDataSub(filter, "PHAT")
+                    },
+                    {
+                        text: "Tạm ứng",
+                        icon: "fas fa-circle",
+                        template: () => loadDataSub(filter, "TAMUNG")
+                    },
+                    {
+                        text: "Khấu trừ",
+                        icon: "fas fa-circle",
+                        template: () => loadDataSub(filter, "KHAUTRU")
+                    }
+                ],
+                deferRendering: true,
+                selectedIndex: 0, loop: true, animationEnabled: true, swipeEnabled: true,
+                scrollByContent: true, showNavButtons: true,
+                itemTitleTemplate: function (data, index, element) {
+                    const $item = $("<div>").append(
+                        $("<i>").addClass(data.icon),
+                        $("<span />").addClass("ml-2 font-weight-bold").text(data.text));
+                    element.append($item);
                 },
-                {
-                    text: "Phạt",
-                    icon: "fas fa-circle",
-                    template: () => loadDataSub(filter, "PHAT")
-                },
-                {
-                    text: "Tạm ứng",
-                    icon: "fas fa-circle",
-                    template: () => loadDataSub(filter, "TAMUNG")
-                },
-                {
-                    text: "Khấu trừ",
-                    icon: "fas fa-circle",
-                    template: () => loadDataSub(filter, "KHAUTRU")
-                }
-            ],
-            deferRendering: true,
-            selectedIndex: 0, loop: true, animationEnabled: true, swipeEnabled: true,
-            scrollByContent: true, showNavButtons: true,
-            itemTitleTemplate: function (data, index, element) {
-                const $item = $("<div>").append(
-                    $("<i>").addClass(data.icon),
-                    $("<span />").addClass("ml-2 font-weight-bold").text(data.text));
-                element.append($item);
-            }, 
-        }).dxTabPanel("instance");
+            }).dxScrollView({ width: '100%', height: '100%' });
+        } 
+
         var loadDataMain_Left = (filter) => $("<div />").addClass("row").append(
             $("<div />")
                 .addClass("col-lg-3 pl-2 pr-1")
@@ -338,6 +350,7 @@
             $("<div />").addClass("col-lg-9 pl-1 pr-2").attr("id", "container-congviec")
         );
         var loadDataMain_Right = (filter, id) => $("#container-congviec").dxDataGrid({
+            heaight:"100%",
             dataSource: ds_nghiemthu(filter.goiThauId, filter.giaiDoanId, filter.dot),
             showBorders: true, showColumnHeaders: true, showColumnLines: true, hoverStateEnabled: true,
             showRowLines: true, columnAutoWidth: true, wordWrapEnabled: true, rowAlternationEnabled: false,
@@ -417,10 +430,21 @@
                 },
                 {
                     dataField: "tenNhomCongViec", allowEditing: false,
-                    groupIndex: 0, caption: "Nhóm công việc"
+                    //groupIndex: 0, caption: "Nhóm công việc"
                 },
             ],
             filterValue: ["hangMucId", "=", id],
+            //scrolling: {
+            //    columnRenderingMode: "standard",
+            //    mode: "virtual",
+            //    preloadEnabled: false,
+            //    rowRenderingMode: "standard",
+            //    scrollByContent: true,
+            //    scrollByThumb: false,
+            //    showScrollbar: "onHover",
+            //    useNative: "auto"
+            //},
+            //paging: { enabled: true, pageSize: 2 },
             editing: {
                 mode: "cell", useIcons: false, confirmDelete: true,
                 allowUpdating: (filter.dot == MAX_DOT)
@@ -1158,7 +1182,7 @@
             }).appendTo(container);
         }
         var loadCreate = (filter) => $("#popup-main").dxPopup({
-            fullScreen: true, showTitle: true, title: "Tạo nghiệm thu đợt " + (filter.dot + 1),
+            fullScreen: true, showTitle: true, title: "Tạo nghiệm thu đợt " + (MAX_DOT + 1),
             showCloseButton: true, visible: true,
             contentTemplate: (c) => {
                 var scrollView = $("<div id='scrollView'></div>");
@@ -1167,6 +1191,7 @@
                     dataSource: ds_congviec_detail(filter.goiThauId, filter.giaiDoanId),
                     showBorders: true, showColumnHeaders: true, showColumnLines: true, hoverStateEnabled: true,
                     showRowLines: true, columnAutoWidth: true, wordWrapEnabled: true, rowAlternationEnabled: false,
+                    paging: { enabled: false }, 
                     columns: [
                         {
                             caption: "STT", alignment: "center", width: 80,
@@ -1282,7 +1307,7 @@
                                 widget: "dxButton",
                                 options: {
                                     stylingMode: "filled", type: "default",
-                                    text: "TẠO ĐỢT " + (filter.dot + 1), icon: "add",
+                                    text: "TẠO ĐỢT " + (MAX_DOT + 1), icon: "add",
                                     onClick: function () {
                                         var counter = 0;
                                         $.each(e.component.getDataSource().items(), function (index, value) {
@@ -1307,7 +1332,7 @@
                                                                 congViecDetailId: valueSub.id,
                                                                 goiThauId: filter.goiThauId,
                                                                 giaiDoanId: filter.giaiDoanId,
-                                                                dot: (filter.dot + 1),
+                                                                dot: (MAX_DOT + 1),
                                                                 khoiLuong: ((item.option('value') != null || item.option('value') > 0)) ? item.option('value') : 0,
                                                                 isActive: true,
                                                                 isVisible: true,
