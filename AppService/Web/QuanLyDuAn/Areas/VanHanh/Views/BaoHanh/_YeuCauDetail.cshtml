@@ -2,7 +2,7 @@
 <form id="form-DefectDetail" action="#" method="POST" enctype="application/json">
 </form>
 <script>
-     var $owner = "DefectFeedback";
+    var $owner = "DefectFeedback";
     var $model = @Model;
     var formData = {
         "customerId": ""
@@ -17,403 +17,399 @@
     var fdata = new FormData();
     $(document).ready(function () {
         var $listDefective = [];
-        //var deferred = $.Deferred();
-        //var json = await customStore_DefectFeedbackDetail($model).load().then((rssb) => {
-        //    $listDefective = rssb.map(x => x.defectiveId);
-        //    deferred.resolve(rssb.map(x => x.defectiveId));
-        //    return $listDefective;
-        //});
-        $listDefective = getJSON();
-        function getJSON() {
-
-            // To make the function blocking we manually create a Promise.
-            return new Promise(function (resolve) {
-                customStore_DefectFeedbackDetail($model).load().then((rssb) => {
-                    $listDefective = rssb.map(x => x.defectiveId);
-                    //deferred.resolve(rssb.map(x => x.defectiveId));
-                    return $listDefective;
-                });
-            });
-        }
-        //$listDefective = deferred.promise();
-        console.log($listDefective);
-        customStore_Detail($model).load()
-        .done((rs) => {
-            //var $listDefective = () => {
-            //    //customStore_DefectFeedbackDetail(rs[0].id).load().done((rssb) => { console.log(rssb.map(x => x.defectiveId)); return rssb.map(x => x.defectiveId); })
-            //    return [1, 2, 3, 4];
-            //};
-            console.log($listDefective);
-            rs.length == 0 ? null : $("#form-DefectDetail").dxForm({
-                formData: rs[0],
-                labelLocation: "top",
-                items: [
-                    {
-                        itemType: "group",
-                        colCount: 12,
+        customStore_DefectFeedbackDetail($model).load().then(function (rssb) {
+            $listDefective = rssb.map(x => x.defectiveId);
+            customStore_Detail($model).load()
+                .done((rs) => {
+                    rs.length == 0 ? null : $("#form-DefectDetail").dxForm({
+                        formData: rs[0],
+                        labelLocation: "top",
                         items: [
                             {
-                                colSpan: 4,
-                                dataField: "realEstateId",
-                                label: { text: "Mã căn hộ" },
-                                lookup: {
-                                    dataSource: customStore_RealEstate,
-                                    valueExpr: "id",
-                                    displayExpr: "code",
-                                },
-                                editorType: "dxSelectBox",
-                                editorOptions: {
-                                    stylingMode: "filled",
-                                    //value: formData["documentTypeId"],
-                                    dataSource: customStore_RealEstate,
-                                    valueExpr: "id",
-                                    displayExpr: "code",
-                                    searchEnabled: true,
-                                    searchMode: "contains",
-                                    showClearButton: true,
-                                    elementAttr: {
-                                        id: "elementRealEstateId",
-                                    },
-                                    onValueChanged: function (e) {
-                                        //if (e.value === 7) {
-                                        //    formInstance.itemOption("address", "visible", false);
-                                        //    formInstance.itemOption("calen", "visible", false);
-                                        //}
-                                        //else {
+                                itemType: "group",
+                                colCount: 12,
+                                items: [
+                                    {
+                                        colSpan: 4,
+                                        dataField: "realEstateId",
+                                        label: { text: "Mã căn hộ" },
+                                        lookup: {
+                                            dataSource: customStore_RealEstate,
+                                            valueExpr: "id",
+                                            displayExpr: "code",
+                                        },
+                                        editorType: "dxSelectBox",
+                                        editorOptions: {
+                                            stylingMode: "filled",
+                                            //value: formData["documentTypeId"],
+                                            dataSource: customStore_RealEstate,
+                                            valueExpr: "id",
+                                            displayExpr: "code",
+                                            searchEnabled: true,
+                                            searchMode: "contains",
+                                            showClearButton: true,
+                                            elementAttr: {
+                                                id: "elementRealEstateId",
+                                            },
+                                            onValueChanged: function (e) {
+                                                //if (e.value === 7) {
+                                                //    formInstance.itemOption("address", "visible", false);
+                                                //    formInstance.itemOption("calen", "visible", false);
+                                                //}
+                                                //else {
 
-                                        //    formInstance.itemOption("address", "visible", true);
-                                        //    formInstance.itemOption("calen", "visible", true);
-                                        //}
-                                        //fileUploader();
+                                                //    formInstance.itemOption("address", "visible", true);
+                                                //    formInstance.itemOption("calen", "visible", true);
+                                                //}
+                                                //fileUploader();
+                                            },
+                                        },
+                                        validationRules: [{ type: "required" }],
                                     },
-                                },
-                                validationRules: [{ type: "required" }],
+                                    {
+                                        colSpan: 4,
+                                        dataField: "customerId",
+                                        label: { text: "mã khách hàng" },
+                                        editorType: "dxLookup",
+                                        lookup: {
+                                            dataSource: customStore_CustomerInfo,
+                                            valueExpr: "id",
+                                            displayExpr: getDisplayExpr,
+                                        },
+                                        editorType: "dxSelectBox",
+                                        editorOptions: {
+                                            stylingMode: "filled",
+                                            searchEnabled: true,
+                                            searchMode: "contains",
+                                            searchExpr: ['firstName', 'lastName'],
+                                            showClearButton: true,
+                                            placeholder: "Vui lòng nhập...",
+                                            dataSource: customStore_CustomerInfo,
+                                            valueExpr: "id",
+                                            displayExpr: getDisplayExpr,
+                                            elementAttr: {
+                                                id: "elementTitle",
+                                            },
+                                        },
+                                        validationRules: [{ type: "required" }],
+                                    },
+                                    {
+                                        colSpan: 4,
+                                        //dataField: "defectiveId",
+                                        label: { text: "Mã lỗi" },
+                                        lookup: {
+                                            dataSource: customStore_Defective,
+                                            valueExpr: "id",
+                                            displayExpr: "code",
+                                        },
+                                        editorType: "dxTagBox",
+                                        editorOptions: {
+                                            stylingMode: "filled",
+                                            dataSource: customStore_Defective,
+                                            searchEnabled: true,
+                                            searchMode: "contains",
+                                            showClearButton: true,
+                                            valueExpr: "id",
+                                            displayExpr: "name",
+                                            value: $listDefective,
+                                            acceptCustomValue: true,
+                                            onDisposing: function (e) {
+                                                alert(1);
+                                                console.log(e);
+                                            },
+                                            onSelectionChanged: function (e) {
+                                                console.log(e);
+                                            },
+                                            onValueChanged: function (e) {
+                                                console.log(e);
+                                            },
+                                            onChange: function (e) {
+                                                console.log(e);
+                                                alert(2);
+                                            },
+                                            onCustomItemCreating: function (e) {
+                                                console.log(e);
+                                                if (!e.customItem)
+                                                { e.customItem = e.text; }
+                                            },
+                                            elementAttr: {
+                                                id: "elementDefectiveId",
+                                            },
+                                            itemTemplate: function (data) {
+                                                return $("<div>").append($("<b>").append(data.code).addClass("mr-1"), $("<em>").append(data.name));
+                                            },
+                                          
+                                        
+                                        },
+                                      
+                                        validationRules: [{ type: "required" }],
+                                    },
+                                    {
+                                        colSpan: 6,
+                                        dataField: "fullName",
+                                        label: { text: "Họ tên khách hàng" },
+                                        editorType: "dxTextBox",
+                                        editorOptions: {
+                                            stylingMode: "filled",
+                                            placeholder: "Vui lòng nhập...",
+                                            value: formData["description"],
+                                        },
+                                    },
+                                    {
+                                        colSpan: 6,
+                                        dataField: "phone",
+                                        label: { text: "Số điện thoại" },
+                                        editorType: "dxTextBox",
+                                        editorOptions: {
+                                            stylingMode: "filled",
+                                            placeholder: "Vui lòng nhập...",
+                                            value: formData["description"],
+                                        },
+                                    },
+                                    {
+                                        colSpan: 12,
+                                        dataField: "note",
+                                        label: { text: "Mô tả" },
+                                        editorType: "dxTextArea",
+                                        editorOptions: {
+                                            stylingMode: "filled",
+                                            placeholder: "Vui lòng nhập...",
+                                            value: formData["description"],
+                                        },
+                                    },
+
+                                ]
                             },
                             {
-                                colSpan: 4,
-                                dataField: "customerId",
-                                label: { text: "mã khách hàng" },
-                                editorType: "dxLookup",
-                                lookup: {
-                                    dataSource: customStore_CustomerInfo,
-                                    valueExpr: "id",
-                                    displayExpr: getDisplayExpr,
-                                },
-                                editorType: "dxSelectBox",
-                                editorOptions: {
-                                    stylingMode: "filled",
-                                    searchEnabled: true,
-                                    searchMode: "contains",
-                                    searchExpr: ['firstName', 'lastName'],
-                                    showClearButton: true,
-                                    placeholder: "Vui lòng nhập...",
-                                    dataSource: customStore_CustomerInfo,
-                                    valueExpr: "id",
-                                    displayExpr: getDisplayExpr,
-                                    elementAttr: {
-                                        id: "elementTitle",
-                                    },
-                                },
-                                validationRules: [{ type: "required" }],
+                                name: "order",
+                                visible: true,
+                                template: function (data, $itemElement) {
+                                    $("<div id='dataGrid'>")
+                                        .appendTo($itemElement)
+                                        .dxDataGrid({
+                                            dataSource: customStore_Attachment($model, $owner),
+                                            columns: [
+                                                {
+                                                    dataField: "displayName",
+                                                    caption: "Tên File ",
+                                                    dataType: "string",
+                                                },
+                                                {
+                                                    dataField: "createDate",
+                                                    caption: "Ngày tạo",
+                                                    dataType: "date",
+                                                },
+                                            ],
+                                            editing: {
+                                                allowDeleting: (rs[0].status > 10) ? false : true,
+                                                mode: "row",
+                                                useIcons: true,
+                                                confirmDelete: true,
+                                                popup: null,
+                                            },
+                                        });
+                                }
                             },
                             {
-                                colSpan: 4,
-                                //dataField: "defectiveId",
-                                label: { text: "Mã lỗi" },
-                                lookup: {
-                                    dataSource: customStore_Defective,
-                                    valueExpr: "id",
-                                    displayExpr: "code",
-                                },
-                                editorType: "dxTagBox",
+                                itemType: "simple",
+                                name: "Image",
+                                editorType: 'dxGallery',
                                 editorOptions: {
                                     stylingMode: "filled",
-                                    //value: formData["documentTypeId"],
-                                    dataSource: customStore_Defective,
-                                    //dataSource: new DevExpress.data.ArrayStore({
-                                    //    data: customStore_Defective,
-                                    //    key: "id"
-                                    //}),
-                                    searchEnabled: true,
-                                    searchMode: "contains",
-                                    showClearButton: true,
-                                    valueExpr: "id",
-                                    displayExpr: "name",
-                                    value: $listDefective,
-                                    elementAttr: {
-                                        id: "elementDefectiveId",
-                                    },
+                                    dataSource: customStore_Attachment($model, $owner),
+                                    height: 100,
+                                    width: 'auto',
+                                    slideshowDelay: 1500,
                                     itemTemplate: function (data) {
-                                        return $("<div>").append($("<b>").append(data.code).addClass("mr-1"), $("<em>").append(data.name));
+                                        return $("<img />").attr({ "src": (data.host + data.url + "/" + data.fileName), onerror: ImgError(this), "style": "max-height: 200px; height : auto ;width : fit-content ;margin: auto;" });
                                     },
+                                    onItemClick: function (value) {
+                                    }
                                 },
-                                validationRules: [{ type: "required" }],
-                            },
-                            {
-                                colSpan: 6,
-                                dataField: "fullName",
-                                label: { text: "Họ tên khách hàng" },
-                                editorType: "dxTextBox",
-                                editorOptions: {
-                                    stylingMode: "filled",
-                                    placeholder: "Vui lòng nhập...",
-                                    value: formData["description"],
-                                },
-                            },
-                            {
-                                colSpan: 6,
-                                dataField: "phone",
-                                label: { text: "Số điện thoại" },
-                                editorType: "dxTextBox",
-                                editorOptions: {
-                                    stylingMode: "filled",
-                                    placeholder: "Vui lòng nhập...",
-                                    value: formData["description"],
-                                },
+
                             },
                             {
                                 colSpan: 12,
-                                dataField: "note",
-                                label: { text: "Mô tả" },
-                                editorType: "dxTextArea",
-                                editorOptions: {
-                                    stylingMode: "filled",
-                                    placeholder: "Vui lòng nhập...",
-                                    value: formData["description"],
-                                },
-                            },
-
-                        ]
-                    },
-                    {
-                        name: "order",
-                        visible: true,
-                        template: function(data, $itemElement) {
-                            $("<div id='dataGrid'>")
-                                .appendTo($itemElement)
-                                .dxDataGrid({
-                                    dataSource: customStore_Attachment($model, $owner),
-                                    columns: [
-                                        {
-                                            dataField: "displayName",
-                                            caption: "Tên File ",
-                                            dataType: "string",
-                                        },
-                                        {
-                                            dataField: "createDate",
-                                            caption: "Ngày tạo",
-                                            dataType: "date",
-                                        },
-                                    ],
-                                    editing: {
-                                        allowDeleting: (rs[0].status > 10) ? false : true,
-                                        mode: "row",
-                                        useIcons: true,
-                                        confirmDelete: true,
-                                        popup: null,
-                                    },
-                                });
-                            }
-                    },
-                    {
-                        itemType: "simple",
-                        name: "Image",
-                        editorType: 'dxGallery',
-                        editorOptions: {
-                            stylingMode: "filled",
-                            dataSource:  customStore_Attachment($model, $owner),
-                            height: 100,
-                            width: 'auto',
-                            slideshowDelay: 1500,
-                            itemTemplate: function (data) {
-                                return $("<img />").attr({ "src": (data.host + data.url + "/" + data.fileName), onerror: ImgError(this), "style": "max-height: 200px; height : auto ;width : fit-content ;margin: auto;" });
-                            },
-                            onItemClick: function (value) {
-                            }
-                        },
-
-                    },
-                    {
-                        colSpan: 12,
-                        visible: (rs[0].status > 10) ? false : true,
-                        template: '<span class="dx-field-item-label-text font-bold">Các tập tin đính kèm</span><div class="file-uploader" id="file-uploader"></div>',
-                    },
-                    {
-                        itemType: "group",
-                        name: "button-action",
-                        colCount: 12,
-                        items: [
-                            {
-                                colSpan: 6,
-                                itemType: "button",
                                 visible: (rs[0].status > 10) ? false : true,
-                                horizontalAlignment: "right",
-                                buttonOptions: {
-                                    text: "Lưu lại",
-                                    icon: "fa fa-save",
-                                    type: "success",
-                                    useSubmitBehavior: true,
-                                    elementAttr: {
-                                        id: "update",
-                                    },
-                                    editorOptions: {
-                                        stylingMode: "filled",
-
-                                    }
-                                }
+                                template: '<span class="dx-field-item-label-text font-bold">Các tập tin đính kèm</span><div class="file-uploader" id="file-uploader"></div>',
                             },
                             {
-                                colSpan: 6,
-                                itemType: "button",
-                                visible: (rs[0].status > 10) ? false : true,
-                                horizontalAlignment: "left",
-                                buttonOptions: {
-                                    text: "Xác nhận lỗi",
-                                    icon: "fas fa-check-circle",
-                                    type: "default",
-                                    useSubmitBehavior: true,
-                                    elementAttr: {
-                                        id: "accept",
+                                itemType: "group",
+                                name: "button-action",
+                                colCount: 12,
+                                items: [
+                                    {
+                                        colSpan: 6,
+                                        itemType: "button",
+                                        visible: (rs[0].status > 10) ? false : true,
+                                        horizontalAlignment: "right",
+                                        buttonOptions: {
+                                            text: "Lưu lại",
+                                            icon: "fa fa-save",
+                                            type: "success",
+                                            useSubmitBehavior: true,
+                                            elementAttr: {
+                                                id: "update",
+                                            },
+                                            editorOptions: {
+                                                stylingMode: "filled",
+
+                                            }
+                                        }
                                     },
-                                    editorOptions: {
-                                        stylingMode: "filled",
+                                    {
+                                        colSpan: 6,
+                                        itemType: "button",
+                                        visible: (rs[0].status > 10) ? false : true,
+                                        horizontalAlignment: "left",
+                                        buttonOptions: {
+                                            text: "Xác nhận lỗi",
+                                            icon: "fas fa-check-circle",
+                                            type: "default",
+                                            useSubmitBehavior: true,
+                                            elementAttr: {
+                                                id: "accept",
+                                            },
+                                            editorOptions: {
+                                                stylingMode: "filled",
+                                            }
+                                        }
                                     }
-                                }
-                            }
+                                ],
+                            },
                         ],
-                        },
-                    ],
+                    }).dxForm("instance");
                 })
-            .dxForm("instance");
-        })
-        .done((rs) => (rs.length == 0 || rs[0].status > 10 )? null : fileUploader());});
-    $(document).ready(function () {
-        $(document).on('click', '#update', function (e) {
-            e.preventDefault();
-            var formdata = $('#form-DefectDetail').dxForm("instance").option('formData');
-            var fileWrappers = fileUploader()._files;
-            var resValid = true
-            for (var i = 0; i < fileWrappers.length; i++) {
-                if (fileWrappers[i].isValid() === false) {
-                    resValid = false;
-                }
-            }
-            if (!resValid) {
-                DevExpress.ui.notify("Vui lòng kiểm tra lại file đính kèm!", "error", 3000);
-            }
-            else {
-                loadingPanel.show();
-                var fdata = new FormData();
-                var i = 10;
-                $.each(formdata, function (key, value) {
-                    if (key === 'calendar') {
-                        fdata.append(key, moment(value).format('YYYY-MM-DD HH:mm:ss'));
-                    }
-                    else {
-                        fdata.append(key, value);
-                    }
-
-                });
-                fdata.append('key', @Model);
-                fdata.append('token', UserCurrentInfo.accessToken);
-                var files = $("#file-uploader").dxFileUploader("instance").option("value");
-                if (files.length > 0) {
-                    $.each(files, function (key, value) {
-                        fdata.append(files[key].name, files[key]);
-                    });
-                }
-                //    //else {
-                //    //    DevExpress.ui.notify("Vui lòng chọn file đính kèm", "error", 3000);
-                //    //    e.preventDefault();
-                //    //    return false;
-                //    //};
-                var deferred = $.Deferred();
-                $.ajax({
-                    type: "POST",
-                    enctype: 'multipart/form-data',
-                    url: "/VanHanh/BaoHanh/YeuCauUpdate",
-                    data: fdata,
-                    processData: false,
-                    contentType: false,
-                    cache: false,
-                    success: function (rs) {
-                        deferred.resolve(true);
-                        loadingPanel.hide();
-                        DevExpress.ui.notify(rs.result, rs.status, 3000);
-                        if (rs.status == "success") {
-                            $("#popup-register").dxPopup('instance').hide();
-                        }
-                    },
-                    error: function (xhr, textStatus, errorThrown) {
-                        loadingPanel.hide();
-                        DevExpress.ui.notify("Có lỗi xảy ra: " + errorThrown, "error", 3000);
-                    }
-                });
-                //   /* e.preventDefault();*/
-                return deferred.promise();
-            }
-        });
-        $(document).on('click', '#accept', '#form-DefectDetail', function (e) {
-            var formdata = $('#form-DefectDetail').dxForm("instance").option('formData');
-            var fileWrappers = fileUploader()._files;
-            var resValid = true
-            for (var i = 0; i < fileWrappers.length; i++) {
-                if (fileWrappers[i].isValid() === false) {
-                    resValid = false;
-                }
-            }
-            if (!resValid) {
-                DevExpress.ui.notify("Vui lòng kiểm tra lại file đính kèm!", "error", 3000);
-            }
-            else {
-                loadingPanel.show();
-                var fdata = new FormData();
-                var i = 10;
-                $.each(formdata, function (key, value) {
-                    if (key === 'calendar') {
-                        fdata.append(key, moment(value).format('YYYY-MM-DD HH:mm:ss'));
-                    }
-                    else {
-                        fdata.append(key, value);
-                    }
-
-                });
-                fdata.append('key', @Model);
-                fdata.append('token', UserCurrentInfo.accessToken);
-                var files = $("#file-uploader").dxFileUploader("instance").option("value");
-                if (files.length > 0) {
-                    $.each(files, function (key, value) {
-                        fdata.append(files[key].name, files[key]);
-                    });
-                }
-                var deferred = $.Deferred();
-                $.ajax({
-                    type: "POST",
-                    enctype: 'multipart/form-data',
-                    url: "/VanHanh/BaoHanh/YeuCauAccept",
-                    data: fdata,
-                    processData: false,
-                    contentType: false,
-                    cache: false,
-                    success: function (rs) {
-                        deferred.resolve(true);
-                        loadingPanel.hide();
-                        DevExpress.ui.notify(rs.result, rs.status, 3000);
-                        if (rs.status == "success") {
-                            $("#popup-register").dxPopup('instance').hide();
-                            loadAccount(rs.id);
-                        }
-                    },
-                    error: function (xhr, textStatus, errorThrown) {
-                        loadingPanel.hide();
-                        DevExpress.ui.notify("Có lỗi xảy ra: " + errorThrown, "error", 3000);
-                    }
-                });
-                //   /* e.preventDefault();*/
-                return deferred.promise();
-            }
+                .done((rs) => (rs.length == 0 || rs[0].status > 10) ? null : fileUploader());
         });
     });
+
+    $(document).on('click', '#update', function (e) {
+        e.preventDefault();
+        var formdata = $('#form-DefectDetail').dxForm("instance").option('formData');
+        var fileWrappers = fileUploader()._files;
+        var resValid = true
+        for (var i = 0; i < fileWrappers.length; i++) {
+            if (fileWrappers[i].isValid() === false) {
+                resValid = false;
+            }
+        }
+        if (!resValid) {
+            DevExpress.ui.notify("Vui lòng kiểm tra lại file đính kèm!", "error", 3000);
+        }
+        else {
+            loadingPanel.show();
+            var fdata = new FormData();
+            var i = 10;
+            $.each(formdata, function (key, value) {
+                if (key === 'calendar') {
+                    fdata.append(key, moment(value).format('YYYY-MM-DD HH:mm:ss'));
+                }
+                else {
+                    fdata.append(key, value);
+                }
+
+            });
+            fdata.append('key', @Model);
+            fdata.append('token', UserCurrentInfo.accessToken);
+            var files = $("#file-uploader").dxFileUploader("instance").option("value");
+            if (files.length > 0) {
+                $.each(files, function (key, value) {
+                    fdata.append(files[key].name, files[key]);
+                });
+            }
+            //    //else {
+            //    //    DevExpress.ui.notify("Vui lòng chọn file đính kèm", "error", 3000);
+            //    //    e.preventDefault();
+            //    //    return false;
+            //    //};
+            var deferred = $.Deferred();
+            $.ajax({
+                type: "POST",
+                enctype: 'multipart/form-data',
+                url: "/VanHanh/BaoHanh/YeuCauUpdate",
+                data: fdata,
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function (rs) {
+                    deferred.resolve(true);
+                    loadingPanel.hide();
+                    DevExpress.ui.notify(rs.result, rs.status, 3000);
+                    if (rs.status == "success") {
+                        $("#popup-register").dxPopup('instance').hide();
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    loadingPanel.hide();
+                    DevExpress.ui.notify("Có lỗi xảy ra: " + errorThrown, "error", 3000);
+                }
+            });
+            //   /* e.preventDefault();*/
+            return deferred.promise();
+        }
+    });
+    $(document).on('click', '#accept', '#form-DefectDetail', function (e) {
+        var formdata = $('#form-DefectDetail').dxForm("instance").option('formData');
+        var fileWrappers = fileUploader()._files;
+        var resValid = true
+        for (var i = 0; i < fileWrappers.length; i++) {
+            if (fileWrappers[i].isValid() === false) {
+                resValid = false;
+            }
+        }
+        if (!resValid) {
+            DevExpress.ui.notify("Vui lòng kiểm tra lại file đính kèm!", "error", 3000);
+        }
+        else {
+            loadingPanel.show();
+            var fdata = new FormData();
+            var i = 10;
+            $.each(formdata, function (key, value) {
+                if (key === 'calendar') {
+                    fdata.append(key, moment(value).format('YYYY-MM-DD HH:mm:ss'));
+                }
+                else {
+                    fdata.append(key, value);
+                }
+
+            });
+            fdata.append('key', @Model);
+            fdata.append('token', UserCurrentInfo.accessToken);
+            var files = $("#file-uploader").dxFileUploader("instance").option("value");
+            if (files.length > 0) {
+                $.each(files, function (key, value) {
+                    fdata.append(files[key].name, files[key]);
+                });
+            }
+            var deferred = $.Deferred();
+            $.ajax({
+                type: "POST",
+                enctype: 'multipart/form-data',
+                url: "/VanHanh/BaoHanh/YeuCauAccept",
+                data: fdata,
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function (rs) {
+                    deferred.resolve(true);
+                    loadingPanel.hide();
+                    DevExpress.ui.notify(rs.result, rs.status, 3000);
+                    if (rs.status == "success") {
+                        $("#popup-register").dxPopup('instance').hide();
+                        loadAccount(rs.id);
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    loadingPanel.hide();
+                    DevExpress.ui.notify("Có lỗi xảy ra: " + errorThrown, "error", 3000);
+                }
+            });
+            //   /* e.preventDefault();*/
+            return deferred.promise();
+        }
+    });
+
     var fileUploader = () => $("#file-uploader").dxFileUploader({
         selectButtonText: "Chọn tập tin...",
         labelText: "Hoặc kéo thả vào đây",
