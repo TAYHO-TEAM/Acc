@@ -114,7 +114,6 @@ namespace QuanLyDuAn.Areas.VanHanh.Controllers
                 }
                 if(id >0)
                 {
-
                     var numbers = requestOBJ.DefectiveIds.Split(',').Select(Int32.Parse).ToList();
                     foreach (var item in numbers)
                     {
