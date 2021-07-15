@@ -545,6 +545,7 @@
         $("#form-Resolve").on("submit", function (e) {
             e.preventDefault();
             var formdata = $('#form-Resolve').dxForm("instance").option('formData');
+            console.log(typeof formdata);
             var resValid = true
             if (!resValid) {
                 DevExpress.ui.notify("Vui lòng kiểm tra lại file đính kèm!", "error", 3000);
@@ -571,7 +572,6 @@
                 else if ($keyRS > 0) {
                     customStore_ComplaintResolve(0).store().update($keyRS, formdata).done((rs) => {
                         loadingPanel.hide();
-                        console.log(rs);
                         if (rs.isOk) {
                             deferred.resolve(rs);
                             DevExpress.ui.notify("Cập nhật thành công", "success", 3000);

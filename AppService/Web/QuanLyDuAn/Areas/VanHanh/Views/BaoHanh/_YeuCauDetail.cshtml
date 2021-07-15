@@ -113,24 +113,52 @@
                                             displayExpr: "name",
                                             value: $listDefective,
                                             acceptCustomValue: true,
-                                            onDisposing: function (e) {
-                                                alert(1);
-                                                console.log(e);
-                                            },
-                                            onSelectionChanged: function (e) {
-                                                console.log(e);
-                                            },
                                             onValueChanged: function (e) {
                                                 console.log(e);
-                                            },
-                                            onChange: function (e) {
-                                                console.log(e);
-                                                alert(2);
-                                            },
-                                            onCustomItemCreating: function (e) {
-                                                console.log(e);
-                                                if (!e.customItem)
-                                                { e.customItem = e.text; }
+                                                var oldAr = e.previousValue;
+                                                var newAr = e.value;
+                                                if (oldAr.length > newAr.length) {
+                                                    oldAr.forEach(elOldAr => {
+                                                        if (newAr.findIndex(elNewAr => elNewAr === elOldAr) < 0) {
+                                                            var deferred = $.Deferred();
+                                                            customStore_DefectFeedbackDetail($model).load().then(function (rssbCurrent) {
+                                                                var $listDetail = rssbCurrent.filter(x => x.defectiveId == elOldAr);
+                                                                if ($listDetail.length > 0) {
+                                                                    customStore_DefectFeedbackDetail($model).store().remove($listDetail[0].id).then(() => {
+                                                                        DevExpress.ui.notify("Xoá thành công", "success", 3000);
+                                                                    }, deferred.reject);
+                                                                }
+                                                            });
+                                                            return deferred.promise();
+                                                        }
+                                                    });
+                                                }
+                                                else if (newAr.length > oldAr.length) {
+                                                    newAr.forEach(elNewAr => {
+                                                        if (oldAr.findIndex(elOldAr => elOldAr === elNewAr) < 0) {
+                                                            var deferred = $.Deferred();
+                                                            var fDataDetail = new FormData();
+                                                            fDataDetail.append('defectFeedbackId', $model);
+                                                            fDataDetail.append('defectiveId', elNewAr);
+                                                            var object = {};
+                                                            fDataDetail.forEach(function (value, key) {
+                                                                object[key] = value;
+                                                            });
+                                                            customStore_DefectFeedbackDetail($model).store().insert(object).done((rssbInsert) => {
+                                                                console.log(rssbInsert);
+                                                                if (rssbInsert.isOk) {
+                                                                    deferred.resolve(rs);
+                                                                    DevExpress.ui.notify("Cập nhật thành công", "success", 3000);
+                                                                }
+                                                                else {
+                                                                    DevExpress.ui.notify("Có lỗi xảy ra", "error", 3000);
+                                                                    deferred.resolve(false);
+                                                                }
+                                                            }, deferred.reject);
+                                                            return deferred.promise();
+                                                        }
+                                                    });
+                                                }
                                             },
                                             elementAttr: {
                                                 id: "elementDefectiveId",
@@ -138,10 +166,7 @@
                                             itemTemplate: function (data) {
                                                 return $("<div>").append($("<b>").append(data.code).addClass("mr-1"), $("<em>").append(data.name));
                                             },
-                                          
-                                        
                                         },
-                                      
                                         validationRules: [{ type: "required" }],
                                     },
                                     {
@@ -247,7 +272,7 @@
                                             text: "Lưu lại",
                                             icon: "fa fa-save",
                                             type: "success",
-                                            useSubmitBehavior: true,
+                                            useSubmitBehavior: false,
                                             elementAttr: {
                                                 id: "update",
                                             },
@@ -266,7 +291,7 @@
                                             text: "Xác nhận lỗi",
                                             icon: "fas fa-check-circle",
                                             type: "default",
-                                            useSubmitBehavior: true,
+                                            useSubmitBehavior: false,
                                             elementAttr: {
                                                 id: "accept",
                                             },
