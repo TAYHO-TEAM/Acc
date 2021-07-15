@@ -30,7 +30,7 @@
                                 colCount: 12,
                                 items: [
                                     {
-                                        colSpan: 4,
+                                        colSpan: 6,
                                         dataField: "realEstateId",
                                         label: { text: "Mã căn hộ" },
                                         lookup: {
@@ -44,30 +44,39 @@
                                             //value: formData["documentTypeId"],
                                             dataSource: customStore_RealEstate,
                                             valueExpr: "id",
-                                            displayExpr: "code",
+                                            displayExpr: "address",
                                             searchEnabled: true,
                                             searchMode: "contains",
                                             showClearButton: true,
                                             elementAttr: {
                                                 id: "elementRealEstateId",
                                             },
-                                            onValueChanged: function (e) {
-                                                //if (e.value === 7) {
-                                                //    formInstance.itemOption("address", "visible", false);
-                                                //    formInstance.itemOption("calen", "visible", false);
-                                                //}
-                                                //else {
-
-                                                //    formInstance.itemOption("address", "visible", true);
-                                                //    formInstance.itemOption("calen", "visible", true);
-                                                //}
-                                                //fileUploader();
+                                            onValueChanged: function (data) {
+                                                if (data.value != null) {
+                                                    console.log(data.value);
+                                                    var deferred = $.Deferred();
+                                                    customStore_CustomerRealEstate(data.value).load().done((rs) => {
+                                                        if (rs != null && rs.length > 0) {
+                                                            customStore_CustomerInfoById(rs[0].customerInfoId).load().done((rsCI) => {
+                                                                console.log(rsCI);
+                                                                $('#elementCustomerId').dxSelectBox('instance')
+                                                                    .option('value', rsCI[0].id == null ? 0 : rsCI[0].id);
+                                                                $('#elementCustomerFullName').dxTextBox('instance')
+                                                                    .option('value', rsCI[0].id == null ? "" : (rsCI[0].firstName ?? "" + " " + rsCI[0].lastName ?? ""));
+                                                                $('#elementPhoneId').dxTextBox('instance')
+                                                                    .option('value', rsCI[0].id == null ? 0 : rsCI[0].phone);
+                                                            });
+                                                        }
+                                                    });
+                                                }
+                                                else {
+                                                };
                                             },
                                         },
                                         validationRules: [{ type: "required" }],
                                     },
                                     {
-                                        colSpan: 4,
+                                        colSpan: 6,
                                         dataField: "customerId",
                                         label: { text: "mã khách hàng" },
                                         editorType: "dxLookup",
@@ -88,13 +97,42 @@
                                             valueExpr: "id",
                                             displayExpr: getDisplayExpr,
                                             elementAttr: {
-                                                id: "elementTitle",
+                                                id: "elementCustomerId",
                                             },
                                         },
                                         validationRules: [{ type: "required" }],
                                     },
+                                  
                                     {
-                                        colSpan: 4,
+                                        colSpan: 6,
+                                        dataField: "fullName",
+                                        label: { text: "Họ tên khách hàng" },
+                                        editorType: "dxTextBox",
+                                        editorOptions: {
+                                            stylingMode: "filled",
+                                            placeholder: "Vui lòng nhập...",
+                                            value: formData["fullName"],
+                                            elementAttr: {
+                                                id: "elementCustomerFullName",
+                                            },
+                                        },
+                                    },
+                                    {
+                                        colSpan: 6,
+                                        dataField: "phone",
+                                        label: { text: "Số điện thoại" },
+                                        editorType: "dxTextBox",
+                                        editorOptions: {
+                                            stylingMode: "filled",
+                                            placeholder: "Vui lòng nhập...",
+                                            value: formData["phone"],
+                                            elementAttr: {
+                                                id: "elementPhoneId",
+                                            },
+                                        },
+                                    },
+                                    {
+                                        colSpan: 12,
                                         //dataField: "defectiveId",
                                         label: { text: "Mã lỗi" },
                                         lookup: {
@@ -168,28 +206,6 @@
                                             },
                                         },
                                         validationRules: [{ type: "required" }],
-                                    },
-                                    {
-                                        colSpan: 6,
-                                        dataField: "fullName",
-                                        label: { text: "Họ tên khách hàng" },
-                                        editorType: "dxTextBox",
-                                        editorOptions: {
-                                            stylingMode: "filled",
-                                            placeholder: "Vui lòng nhập...",
-                                            value: formData["description"],
-                                        },
-                                    },
-                                    {
-                                        colSpan: 6,
-                                        dataField: "phone",
-                                        label: { text: "Số điện thoại" },
-                                        editorType: "dxTextBox",
-                                        editorOptions: {
-                                            stylingMode: "filled",
-                                            placeholder: "Vui lòng nhập...",
-                                            value: formData["description"],
-                                        },
                                     },
                                     {
                                         colSpan: 12,
@@ -327,15 +343,14 @@
             var fdata = new FormData();
             var i = 10;
             $.each(formdata, function (key, value) {
-                if (key === 'calendar') {
-                    fdata.append(key, moment(value).format('YYYY-MM-DD HH:mm:ss'));
-                }
-                else {
+                if (value !== null) {
                     fdata.append(key, value);
                 }
-
+                else {
+                    fdata.append(key, ' ');
+                }
             });
-            fdata.append('key', @Model);
+            fdata.append('key',$model);
             fdata.append('token', UserCurrentInfo.accessToken);
             var files = $("#file-uploader").dxFileUploader("instance").option("value");
             if (files.length > 0) {
@@ -349,6 +364,21 @@
             //    //    return false;
             //    //};
             var deferred = $.Deferred();
+            //if ($model > 0) {
+            //    customStore_Detail(0).store().update($model, formdata).done((rs) => {
+            //        loadingPanel.hide();
+            //        if (rs.isOk) {
+            //            deferred.resolve(rs);
+            //            DevExpress.ui.notify("Cập nhật thành công", "success", 3000);
+            //            $("#popup-main").dxPopup('instance').hide();
+            //        }
+            //        else {
+            //            DevExpress.ui.notify("Có lỗi xảy ra", "error", 3000);
+            //            deferred.resolve(false);
+            //            $("#popup-main").dxPopup('instance').hide();
+            //        }
+            //    }, deferred.reject)
+            //}
             $.ajax({
                 type: "POST",
                 enctype: 'multipart/form-data',
@@ -362,7 +392,7 @@
                     loadingPanel.hide();
                     DevExpress.ui.notify(rs.result, rs.status, 3000);
                     if (rs.status == "success") {
-                        $("#popup-register").dxPopup('instance').hide();
+                        $("#popup-main").dxPopup('instance').hide();
                     }
                 },
                 error: function (xhr, textStatus, errorThrown) {
@@ -404,6 +434,7 @@
             var files = $("#file-uploader").dxFileUploader("instance").option("value");
             if (files.length > 0) {
                 $.each(files, function (key, value) {
+                    console.log(value);
                     fdata.append(files[key].name, files[key]);
                 });
             }
@@ -421,8 +452,7 @@
                     loadingPanel.hide();
                     DevExpress.ui.notify(rs.result, rs.status, 3000);
                     if (rs.status == "success") {
-                        $("#popup-register").dxPopup('instance').hide();
-                        loadAccount(rs.id);
+                        $("#popup-main").dxPopup('instance').hide();
                     }
                 },
                 error: function (xhr, textStatus, errorThrown) {

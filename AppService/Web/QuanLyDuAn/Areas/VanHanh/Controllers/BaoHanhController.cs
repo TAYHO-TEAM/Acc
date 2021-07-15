@@ -144,6 +144,7 @@ namespace QuanLyDuAn.Areas.VanHanh.Controllers
             MultipartFormDataContent mFormData = new MultipartFormDataContent();
             HttpFileCollectionBase listFile = HttpContext.Request.Files;
             string token = requestOBJ.token;
+            requestOBJ.Note =requestOBJ.Note??" ";
             var values = new JavaScriptSerializer().Serialize(requestOBJ);
             if (!string.IsNullOrEmpty(requestOBJ.Key.ToString())) mFormData.Add(new StringContent(requestOBJ.Key.ToString()), "key");
             if (!string.IsNullOrEmpty(values)) mFormData.Add(new StringContent(values), nameof(values));

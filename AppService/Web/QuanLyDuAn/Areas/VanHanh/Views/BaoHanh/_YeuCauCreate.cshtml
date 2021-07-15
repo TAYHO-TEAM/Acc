@@ -50,12 +50,6 @@
                                     id: "elementRealEstateId",
                                 },
                                 onValueChanged: function (data) {
-                                    //$('#elementCustomerId').dxSelectBox('instance')
-                                    //    .option('disabled', data.value != null);
-                                    //$('#elementFullNameId').dxTextBox('instance')
-                                    //    .option('disabled', data.value != null);
-                                    //$('#elementPhoneId').dxTextBox('instance')
-                                    //.option('disabled', data.value != null);
                                     if (data.value != null) {
                                         console.log(data.value);
                                         var deferred = $.Deferred();
@@ -65,21 +59,16 @@
                                                     console.log(rsCI);
                                                     $('#elementCustomerId').dxSelectBox('instance')
                                                         .option('value', rsCI[0].id == null ? 0 : rsCI[0].id);
-                                                    //$('#elementFullNameId').dxTextBox('instance')
-                                                    //    .option('value', rsCI[0].id == null ? "" : (rsCI[0].firstName + " " + rsCI[0].lastName));
+                                                    $('#elementCustomerFullName').dxTextBox('instance')
+                                                        .option('value', rsCI[0].id == null ? "" : (rsCI[0].firstName ?? "" + " " + rsCI[0].lastName ?? ""));
                                                     $('#elementPhoneId').dxTextBox('instance')
                                                         .option('value', rsCI[0].id == null ? 0 : rsCI[0].phone);
                                                 });
                                             }
                                         });
-
                                     }
                                     else {
-                                        $('#elementDocumentTypeId').dxSelectBox('instance')
-                                            .option('value', null);
                                     };
-
-
                                 },
                             },
                             validationRules: [{ type: "required" }],
@@ -88,11 +77,11 @@
                             colSpan: 6,
                             dataField: "customerId",
                             label: { text: "mã khách hàng" },
-                            lookup: {
-                                dataSource: customStore_CustomerInfo,
-                                valueExpr: "id",
-                                displayExpr: getDisplayExpr,
-                            },
+                            //lookup: {
+                            //    dataSource: customStore_CustomerInfo,
+                            //    valueExpr: "id",
+                            //    displayExpr: getDisplayExpr,
+                            //},
                             editorType: "dxSelectBox",
                             editorOptions: {
                                 stylingMode: "filled",
@@ -103,7 +92,7 @@
                                 placeholder: "Vui lòng nhập...",
                                 dataSource: customStore_CustomerInfo,
                                 valueExpr: "id",
-                                displayExpr: getDisplayExpr,
+                                displayExpr: "id",
                                 elementAttr: {
                                     id: "elementCustomerId",
                                 },
@@ -112,6 +101,46 @@
                         },
                         {
                             colSpan: 6,
+                            dataField: "fullName",
+                            label: { text: "Tên Khách Hàng" },
+                            //lookup: {
+                            //    dataSource: customStore_CustomerInfo,
+                            //    valueExpr: "id",
+                            //    displayExpr: getDisplayExpr,
+                            //},
+                            editorType: "dxTextBox",
+                            editorOptions: {
+                                stylingMode: "filled",
+                                //searchEnabled: true,
+                                //searchMode: "contains",
+                                //searchExpr: ['firstName', 'lastName'],
+                                //showClearButton: true,
+                                //placeholder: "Vui lòng nhập...",
+                                //dataSource: customStore_CustomerInfo,
+                                //valueExpr: "id",
+                                //displayExpr: getDisplayExpr,
+                                elementAttr: {
+                                    id: "elementCustomerFullName",
+                                },
+                            },
+                            validationRules: [{ type: "required" }],
+                        },
+                        {
+                            colSpan: 6,
+                            dataField: "phone",
+                            label: { text: "Số điện thoại" },
+                            editorType: "dxTextBox",
+                            editorOptions: {
+                                elementAttr: {
+                                    id: "elementPhoneId",
+                                },
+                                stylingMode: "filled",
+                                placeholder: "Vui lòng nhập...",
+                                value: formData["description"],
+                            },
+                        },
+                        {
+                            colSpan: 12,
                             //dataField: "defectiveId",
                             label: { text: "Mã lỗi" },
                             lookup: {
@@ -142,20 +171,7 @@
                             },
                             validationRules: [{ type: "required" }],
                         },
-                        {
-                            colSpan: 6,
-                            dataField: "phone",
-                            label: { text: "Số điện thoại" },
-                            editorType: "dxTextBox",
-                            editorOptions: {
-                                elementAttr: {
-                                    id: "elementPhoneId",
-                                },
-                                stylingMode: "filled",
-                                placeholder: "Vui lòng nhập...",
-                                value: formData["description"],
-                            },
-                        },
+                      
                         {
                             colSpan: 12,
                             dataField: "note",
