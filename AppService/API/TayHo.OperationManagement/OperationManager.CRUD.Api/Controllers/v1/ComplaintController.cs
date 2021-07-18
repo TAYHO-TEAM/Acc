@@ -132,11 +132,12 @@ namespace OperationManager.CRUD.Api.Controllers.v1
                 if (id > 0)
                 {
                     var files = Path.GetFileNameWithoutExtension(_template);
-                    string ext = Path.GetExtension(files).ToLowerInvariant();
+                    string ext = Path.GetExtension(_template).ToLowerInvariant();
                     List<DataTable> dataTables = new List<DataTable>();
                     (string, object)[] parameter = new (string, object)[] { ("@RecordId", id) };
+                     
                     dataTables = await _quanLyVanHanhRepository.ExecuteStoredProcedure("sp_Complaint_Report001", parameter);
-                    memoryStream = EpplusHelper.Export(dataTables[0], "R001",false, _template, 1,3);
+                    memoryStream = EpplusHelper.Export(dataTables[0], "R001",true, _template, 1,3,true);
                     return File(memoryStream, FileHelpers.GetMimeTypes()[ext], Path.GetFileNameWithoutExtension(_template)+ DateTime.Now.ToString("yyyyMMdd"));
                 }
                 else
@@ -145,7 +146,7 @@ namespace OperationManager.CRUD.Api.Controllers.v1
                     return BadRequest(methodResult);
                 }
             }
-            catch
+            catch(Exception ex)
             {
                 methodResult.AddErrorMessage(err);
                 return BadRequest(methodResult);

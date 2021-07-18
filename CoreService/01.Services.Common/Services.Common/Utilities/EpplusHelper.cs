@@ -110,7 +110,7 @@ namespace Services.Common.Utilities
         /// <param name="curColIndex">Current Colum Index </param>
         /// <param name="curRowIndex">Current Rown Index</param>
         /// <returns></returns>
-        public static MemoryStream Export(DataTable dtSource, string title, bool showTitle = true, string template = "", int curColIndex = 1, int curRowIndex = 0)
+        public static MemoryStream Export(DataTable dtSource, string title, bool showTitle = false, string template = "", int curColIndex = 1, int curRowIndex = 0, bool isHeader = false)
         {
             FileInfo templateFile = null;
             try
@@ -124,47 +124,46 @@ namespace Services.Common.Utilities
 
             using (ExcelPackage package = (templateFile == null ? new ExcelPackage() : new ExcelPackage(templateFile)))
             {
-                ExcelWorksheet workSheet = package.Workbook.Worksheets[1];
-
+                ExcelWorksheet workSheet = package.Workbook.Worksheets[0];
                 int maxColumnCount = dtSource.Columns.Count;
 
-                if (showTitle == true)
+                if (showTitle)
                 {
-                    // tesst lại xem có bị côt đầu là 0 hoặc 1 không
-                    curRowIndex++;
                     //theme
-                    workSheet.Cells[curRowIndex, curColIndex, 1, maxColumnCount].Merge = true;
+                    workSheet.Cells[curRowIndex, curColIndex, curRowIndex, maxColumnCount].Merge = true;
                     workSheet.Cells[curRowIndex, curColIndex].Value = title;
                     var headerStyle = workSheet.Workbook.Styles.CreateNamedStyle("headerStyle");
                     headerStyle.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                     headerStyle.Style.Font.Bold = true;
                     headerStyle.Style.Font.Size = 20;
                     workSheet.Cells[curRowIndex, curColIndex].StyleName = "headerStyle";
-
                     curRowIndex++;
                     //Export time bar
-                    workSheet.Cells[curRowIndex, curColIndex, 2, maxColumnCount].Merge = true;
+                    workSheet.Cells[curRowIndex, curColIndex, curRowIndex, maxColumnCount].Merge = true;
                     workSheet.Cells[curRowIndex, curColIndex].Value = "Export time:" + DateTime.Now.ToString("yyyy-MM-dd HH:mm");
                     workSheet.Cells[curRowIndex, curColIndex].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                    curRowIndex++;
                 }
-
-                curRowIndex++;
-                var titleStyle = workSheet.Workbook.Styles.CreateNamedStyle("titleStyle");
-                titleStyle.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                titleStyle.Style.Font.Bold = true;
-                //title
-                for (var i = 0; i < maxColumnCount; i++)
+                if(isHeader)
                 {
-                    DataColumn column = dtSource.Columns[i];
-                    workSheet.Cells[curRowIndex, i + curColIndex].Value = column.ColumnName;
-                    workSheet.Cells[curRowIndex, i + curColIndex].StyleName = "titleStyle";
+                    
+                    var titleStyle = workSheet.Workbook.Styles.CreateNamedStyle("titleStyle");
+                    titleStyle.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    titleStyle.Style.Font.Bold = true;
+                    //title
+                    for (var i = 0; i < maxColumnCount; i++)
+                    {
+                        DataColumn column = dtSource.Columns[i];
+                        workSheet.Cells[curRowIndex, i + curColIndex].Value = column.ColumnName;
+                        workSheet.Cells[curRowIndex, i + curColIndex].StyleName = "titleStyle";
+                    }
+                    workSheet.View.FreezePanes(curRowIndex, curColIndex);//Freeze the title row
+                    curRowIndex++;
                 }
-                workSheet.View.FreezePanes(curRowIndex, curColIndex);//Freeze the title row
 
                 //content
                 for (var i = 0; i < dtSource.Rows.Count; i++)
                 {
-                    curRowIndex++;
                     for (var j = 0; j < maxColumnCount; j++)
                     {
                         DataColumn column = dtSource.Columns[j];
@@ -176,15 +175,15 @@ namespace Services.Common.Utilities
                         if (pType == typeof(DateTime))
                         {
                             cell.Style.Numberformat.Format = "yyyy-MM-dd hh:mm";
-                            cell.Value = Convert.ToDateTime(value);
+                            if (value != null && value.ToString() != "") cell.Value = Convert.ToDateTime(value);
                         }
                         else if (pType == typeof(int))
                         {
-                            cell.Value = Convert.ToInt32(value);
+                            cell.Value = Convert.ToInt32(value??0);
                         }
                         else if (pType == typeof(double) || pType == typeof(decimal))
                         {
-                            cell.Value = Convert.ToDouble(value);
+                            cell.Value = Convert.ToDouble(value??0);
                         }
                         else
                         {
@@ -192,6 +191,7 @@ namespace Services.Common.Utilities
                         }
                         workSheet.Cells[curRowIndex, j + curColIndex].Value = row[column].ToString();
                     }
+                    curRowIndex++;
                 }
                 workSheet.Cells[workSheet.Dimension.Address].Style.Font.Name = "Song Ti";
                 workSheet.Cells[workSheet.Dimension.Address].AutoFitColumns();//Auto fill

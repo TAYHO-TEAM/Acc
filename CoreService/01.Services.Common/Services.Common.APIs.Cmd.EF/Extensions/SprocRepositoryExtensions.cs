@@ -69,11 +69,32 @@ namespace Services.Common.APIs.Cmd.EF.Extensions
                 }
             }
         }
-        public static async Task<List<DataTable>> ExecuteStoredProcedureAsync(this DbCommand command) 
+        public static async Task<List<DataTable>> ExecuteStoredProcedureAsync(this DbCommand command)
         {
             List<DataTable> dataTables = new List<DataTable>();
-
-            
+            using (command)
+            {
+                if (command.Connection.State == ConnectionState.Closed)
+                    await command.Connection.OpenAsync();
+                try
+                {
+                    DataTable dataTable = new DataTable();
+                    using (IDataReader reader = command.ExecuteReader())
+                    {
+                        dataTable.Load(reader);
+                        reader.NextResult();
+                    }
+                    dataTables.Add(dataTable);
+                    return dataTables;
+                }
+                finally
+                {
+                    command.Connection.Close();
+                }
+            }
+        }
+        public static async Task<DataTable> ExecuteStoredProcedureToTableAsync(this DbCommand command)
+        {
             using (command)
             {
                 if (command.Connection.State == ConnectionState.Closed)
@@ -82,12 +103,8 @@ namespace Services.Common.APIs.Cmd.EF.Extensions
                 {
                     using (var reader = command.ExecuteReader())
                     {
-                        DataTable dataTable = new DataTable();
-                        dataTable.Load(reader);
-                        dataTables.Add(dataTable);
-                        reader.NextResult();
+                        return reader.MapToList();
                     }
-                    return dataTables;
                 }
                 finally
                 {
@@ -180,6 +197,31 @@ namespace Services.Common.APIs.Cmd.EF.Extensions
                 }
             }
             return objList;
+        }
+        private static DataTable MapToList(this DbDataReader dr)
+        {
+            DataTable objTable = new DataTable();
+            //var props = typeof(T).GetRuntimeProperties();
+            var colMapping = dr.GetColumnSchema()
+                            .ToDictionary(key => key.ColumnName.ToLower());
+            foreach(var col in colMapping)
+            {
+                objTable.Columns.Add(col.Key);
+                objTable.Columns[col.Key].DataType = col.Value.DataType;
+            }    
+            if (dr.HasRows)
+            {
+                while (dr.Read())
+                {
+                    DataRow row = objTable.NewRow();
+                    foreach (DataColumn colName in objTable.Columns)
+                    {
+                        row[colName.ColumnName] =(dr.GetValue(colName.ColumnName));
+                    }
+                    objTable.Rows.Add(row);
+                }
+            }
+            return objTable;
         }
     }
 }

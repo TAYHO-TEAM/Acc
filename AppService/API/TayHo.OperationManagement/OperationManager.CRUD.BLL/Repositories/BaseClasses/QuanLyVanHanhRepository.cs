@@ -338,11 +338,16 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
         }
         public async Task<List<DataTable>> ExecuteStoredProcedure(string storeProcedure, params (string, object)[] parameter)
         {
+            List<DataTable> tables = new List<DataTable>();
             SprocRepository _sprocRepository = new SprocRepository(_dbContext);
-            List<DataTable> result = await _sprocRepository.GetStoredProcedure(storeProcedure)
+            DataTable result = await _sprocRepository.GetStoredProcedure(storeProcedure)
                         .WithSqlParams(parameter)
-                        .ExecuteStoredProcedureAsync();
-            return result;
+                        .ExecuteStoredProcedureToTableAsync();
+            tables.Add(result);
+            //IList<DataTable> result = await _sprocRepository.GetStoredProcedure(storeProcedure)
+            //                .WithSqlParams(parameter)
+            //                .ExecuteStoredProcedureAsync<DataTable>();
+            return tables;
         }
         public async Task<string> GenCodeMultipleTableSQL(string TableName = "")
         {
