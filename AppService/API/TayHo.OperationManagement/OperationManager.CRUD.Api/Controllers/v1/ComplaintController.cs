@@ -1,4 +1,4 @@
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OperationManager.CRUD.Api.Controllers.v1.BaseClasses;
@@ -12,12 +12,18 @@ using Services.Common.DomainObjects.Exceptions;
 using OperationManager.CRUD.DAL.DTO;
 using OperationManager.CRUD.BLL.IRepositories.BaseClasses;
 using OperationManager.CRUD.Common;
+using System.IO;
+using Services.Common.Media;
+using System.Data;
+using System.Collections.Generic;
+using Services.Common.Utilities;
 
 namespace OperationManager.CRUD.Api.Controllers.v1
 {
     public class ComplaintController : APIControllerBase
     {
         const string VALIDATION_ERROR = "The request failed due to a validation error";
+        const string ReportComplaint = nameof(ReportComplaint);
         public string nameEF = OperationManagerConstants.Complaint_TABLENAME;
         protected readonly IQuanLyVanHanhRepository<Complaint> _quanLyVanHanhRepository;
         public ComplaintController(IMapper mapper, IHttpContextAccessor httpContextAccessor, IQuanLyVanHanhRepository<Complaint> quanLyVanHanhRepository) : base(mapper, httpContextAccessor)
@@ -103,6 +109,48 @@ namespace OperationManager.CRUD.Api.Controllers.v1
             }
 
         }
+        /// <summary>
+        /// DownLoad FilesAttachment.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [Route(ReportComplaint)]
+        [HttpGet]
+        [ProducesResponseType(typeof(MethodResult<dynamic>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(VoidMethodResult), (int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> DownReportAsync(int id)
+        {
+            var methodResult = new MethodResult<dynamic>();
+            ErrorResult err = new ErrorResult();
+            err.ErrorCode = "101";
+            err.ErrorMessage = "File không tồn tại";
+            var memoryStream = new MemoryStream();
+            string _template = @"F:\TayHo\SystemCore\AppService\Web\QuanLyDuAn\Content\Template\OperationManagement\Report0001_Complaint.xlsx";
+            try
+            {
 
+                if (id > 0)
+                {
+                    var files = Path.GetFileNameWithoutExtension(_template);
+                    string ext = Path.GetExtension(files).ToLowerInvariant();
+                    List<DataTable> dataTables = new List<DataTable>();
+                    (string, object)[] parameter = new (string, object)[] { ("@RecordId", id) };
+                    dataTables = await _quanLyVanHanhRepository.ExecuteStoredProcedure("sp_Complaint_Report001", parameter);
+                    memoryStream = EpplusHelper.Export(dataTables[0], "R001",false, _template, 1,3);
+                    return File(memoryStream, FileHelpers.GetMimeTypes()[ext], Path.GetFileNameWithoutExtension(_template)+ DateTime.Now.ToString("yyyyMMdd"));
+                }
+                else
+                {
+                    methodResult.AddErrorMessage(err);
+                    return BadRequest(methodResult);
+                }
+            }
+            catch
+            {
+                methodResult.AddErrorMessage(err);
+                return BadRequest(methodResult);
+            }
+
+        }
     }
 }

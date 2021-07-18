@@ -161,6 +161,7 @@ namespace OperationManager.CRUD.Api.Controllers.v1
             //    methodResult.AddErrorMessage(err);
             //    //if (!methodResult.IsOk) throw new CommandHandlerException(methodResult.ErrorMessages);
                 return File(memoryStream, "");
+            //return BadRequest(ErrorResult);
             //}
         }
     }

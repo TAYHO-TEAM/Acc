@@ -2552,6 +2552,7 @@
     <Content Include="Areas\VanHanh\Views\BaoTri\BaoTriDinhKy.cshtml" />
     <Content Include="Areas\VanHanh\Views\BaoTri\_PhieuHenBaoTriCreate.cshtml" />
     <Content Include="Areas\VanHanh\Views\BaoTri\_BaoTriHistory.cshtml" />
+    <Content Include="Content\Template\OperationManagement\Report0001_Complaint.xlsx" />
     <None Include="packages.config" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
