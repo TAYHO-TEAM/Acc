@@ -69,6 +69,32 @@ namespace Services.Common.APIs.Cmd.EF.Extensions
                 }
             }
         }
+        public static async Task<List<DataTable>> ExecuteStoredProcedureAsync(this DbCommand command) 
+        {
+            List<DataTable> dataTables = new List<DataTable>();
+
+            
+            using (command)
+            {
+                if (command.Connection.State == ConnectionState.Closed)
+                    await command.Connection.OpenAsync();
+                try
+                {
+                    using (var reader = command.ExecuteReader())
+                    {
+                        DataTable dataTable = new DataTable();
+                        dataTable.Load(reader);
+                        dataTables.Add(dataTable);
+                        reader.NextResult();
+                    }
+                    return dataTables;
+                }
+                finally
+                {
+                    command.Connection.Close();
+                }
+            }
+        }
         //public static async Task<List<IEnumerable>> ExecuteStoredProcedureAsync(this DbContext context, DbCommand command) 
         //{
         //    List<Func<IObjectContextAdapter, DbDataReader, IEnumerable>> _resultSets = new List<Func<IObjectContextAdapter, DbDataReader, IEnumerable>>();
