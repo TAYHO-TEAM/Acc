@@ -161,6 +161,10 @@
             store: $DATASOURCE(ACTION_DEFECTFEEDBACKDETAIL, KEY),
             filter: ["defectFeedbackId", "=", id]
         });
+        var customStore_MaintenancerInfoById = (id) => new DevExpress.data.DataSource({
+            store: $DATASOURCEGET(ACTION_MAINTENANCERINFO, KEY),
+            filter: ["id", "=", id]
+        });
         //..........................  Load View -------------------------------------------------------------
         $(function () {
             loadData(ITEMSID);

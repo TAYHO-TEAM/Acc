@@ -51,8 +51,7 @@
                                 },
                                 onValueChanged: function (data) {
                                     if (data.value != null) {
-                                        console.log(data.value);
-                                        var deferred = $.Deferred();
+                                   
                                         customStore_CustomerRealEstate(data.value).load().done((rs) => {
                                             if (rs != null && rs.length > 0) {
                                                 customStore_CustomerInfoById(rs[0].customerInfoId).load().done((rsCI) => {

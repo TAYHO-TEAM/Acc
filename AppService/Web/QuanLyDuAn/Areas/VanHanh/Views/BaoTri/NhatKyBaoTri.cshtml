@@ -218,7 +218,7 @@
                             text: (e.row.data.status >= 10 && e.row.data.status < 100)? "Cập nhật phiếu hẹn" : "Tạo phiếu hẹn",
                             onItemClick: () => {
                                 CALLPOPUP(
-                                    "Phiếu xuất kho",
+                                    "Phiếu bảo trì",
                                     "/VanHanh/BaoTri/_PhieuHenBaoTriCreate?id="+ e.row.data.id,
                                     ($(window).width() > 767 ? "50%" : "80%"),
                                     container
@@ -403,7 +403,7 @@
                             text: "Chi tiết bảo trì",
                             onItemClick: () => {
                                 CALLPOPUP(
-                                    "Phiếu xuất kho",
+                                    "Chi tiết bảo trì",
                                     "/VanHanh/BaoTri/_BaoTriHistory?id=" + e.row.data.id,
                                     ($(window).width() > 767 ? "50%" : "80%"),
                                     container

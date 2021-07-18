@@ -506,7 +506,6 @@ namespace Services.Common.Utilities
             public List<List<ExportColumn>> HeaderExportColumnList { get; set; }
         }
 
-
     }
     //Table properties
     public class TableProperties
