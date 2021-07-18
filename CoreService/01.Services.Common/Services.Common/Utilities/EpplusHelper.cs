@@ -110,7 +110,7 @@ namespace Services.Common.Utilities
         /// <param name="curColIndex">Current Colum Index </param>
         /// <param name="curRowIndex">Current Rown Index</param>
         /// <returns></returns>
-        public static MemoryStream Export(DataTable dtSource, string title, bool showTitle = true, string template="", int curColIndex = 1, int curRowIndex = 0)
+        public static MemoryStream Export(DataTable dtSource, string title, bool showTitle = true, string template = "", int curColIndex = 1, int curRowIndex = 0)
         {
             FileInfo templateFile = null;
             try
@@ -200,7 +200,160 @@ namespace Services.Common.Utilities
                 return ms;
             }
         }
+        /// <summary>
+        /// Generate excel
+        /// </summary>
+        ///  /// <param name="template">template</param>
+        /// <param name="dtSource">Data source</param>
+        /// <param name="tableProp">tableProp</param>
+        /// <param name="showTitle">whether to show</param>
+        /// <param name="curColIndex">Current Colum Index </param>
+        /// <param name="curRowIndex">Current Rown Index</param>
+        /// <returns></returns>
+        public static void Export(TableProperties tableProp,ExcelPackage package)
+        {
+            DataTable dtSource = new DataTable();
+            int curColIndex = 0;
+            int curRowIndex = 0;
+            bool isShowTitle = true;
+            bool isHeader = true;
+            bool isFreezeHeader = true;
+            string title = "";
+            int positionSheet = 0;
+            
+            try
+            {
+                dtSource = tableProp.DataSource;
+                curColIndex = tableProp.BeginCol ?? 1;
+                curRowIndex = tableProp.BeginRow ?? 0;
+                isShowTitle = tableProp.IsShowTitle ?? false;
+                isHeader = tableProp.IsHeader ?? false;
+                title = tableProp.Title;
+                positionSheet = tableProp.SheetIndex??0;
+            }
+            catch
+            {
+            }
+            ExcelWorksheet workSheet = null;
+            if (IssetSheet(package, tableProp.SheetName, positionSheet))
+            {
+                workSheet = package.Workbook.Worksheets[positionSheet];
+            }    
+            else
+            {
+                workSheet = package.Workbook.Worksheets.Add(string.IsNullOrEmpty(tableProp.SheetName)?"Sheet"+tableProp.TableIndex:tableProp.SheetName); 
+            }    
+           
+            int maxColumnCount = dtSource.Columns.Count;
 
+            if (isShowTitle == true)
+            {
+                // tesst lại xem có bị côt đầu là 0 hoặc 1 không
+                curRowIndex++;
+                //theme
+                workSheet.Cells[curRowIndex, curColIndex, 1, maxColumnCount].Merge = true;
+                workSheet.Cells[curRowIndex, curColIndex].Value = title;
+                var headerStyle = workSheet.Workbook.Styles.CreateNamedStyle("headerStyle");
+                headerStyle.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                headerStyle.Style.Font.Bold = true;
+                headerStyle.Style.Font.Size = 20;
+                workSheet.Cells[curRowIndex, curColIndex].StyleName = "headerStyle";
+
+                curRowIndex++;
+                //Export time bar
+                workSheet.Cells[curRowIndex, curColIndex, 2, maxColumnCount].Merge = true;
+                workSheet.Cells[curRowIndex, curColIndex].Value = "Export time:" + DateTime.Now.ToString("yyyy-MM-dd HH:mm");
+                workSheet.Cells[curRowIndex, curColIndex].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+            }
+
+            curRowIndex++;
+            var titleStyle = workSheet.Workbook.Styles.CreateNamedStyle("titleStyle");
+            titleStyle.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            titleStyle.Style.Font.Bold = true;
+            //Header colum
+            if(isHeader)
+            {
+                for (var i = 0; i < maxColumnCount; i++)
+                {
+                    DataColumn column = dtSource.Columns[i];
+                    workSheet.Cells[curRowIndex, i + curColIndex].Value = column.ColumnName;
+                    workSheet.Cells[curRowIndex, i + curColIndex].StyleName = "titleStyle";
+                }
+                if(isFreezeHeader)
+                {
+                    workSheet.View.FreezePanes(curRowIndex, curColIndex);//Freeze header rown
+                }    
+            }    
+           
+
+            //content
+            for (var i = 0; i < dtSource.Rows.Count; i++)
+            {
+                curRowIndex++;
+                for (var j = 0; j < maxColumnCount; j++)
+                {
+                    DataColumn column = dtSource.Columns[j];
+                    var row = dtSource.Rows[i];
+                    object value = row[column];
+                    var cell = workSheet.Cells[curRowIndex, j + curColIndex];
+                    var pType = column.DataType;
+                    pType = pType.Name == "Nullable`1" ? Nullable.GetUnderlyingType(pType) : pType;
+                    if (pType == typeof(DateTime))
+                    {
+                        cell.Style.Numberformat.Format = "hh:mm dd/MM/yyyy";
+                        cell.Value = Convert.ToDateTime(value);
+                    }
+                    else if (pType == typeof(int))
+                    {
+                        cell.Value = Convert.ToInt32(value);
+                    }
+                    else if (pType == typeof(double) || pType == typeof(decimal))
+                    {
+                        cell.Value = Convert.ToDouble(value);
+                    }
+                    else
+                    {
+                        cell.Value = value == null ? "" : value.ToString();
+                    }
+                    workSheet.Cells[curRowIndex, j + curColIndex].Value = row[column].ToString();
+                }
+            }
+            workSheet.Cells[workSheet.Dimension.Address].Style.Font.Name = "Song Ti";
+            workSheet.Cells[workSheet.Dimension.Address].AutoFitColumns();//Auto fill
+            for (var i = curColIndex; i <= workSheet.Dimension.End.Column; i++) { workSheet.Column(i).Width = workSheet.Column(i).Width + 2; }//Add 2 to the filling
+        }
+        /// <summary>
+        /// Generate excel
+        /// </summary>
+        ///  /// <param name="template">template</param>
+        /// <param name="dtSource">Data source</param>
+        /// <param name="tableProp">tableProp</param>
+        /// <param name="showTitle">whether to show</param>
+        /// <param name="curColIndex">Current Colum Index </param>
+        /// <param name="curRowIndex">Current Rown Index</param>
+        /// <returns></returns>
+        public static MemoryStream Export(List<TableProperties> tablePros, string template = "")
+        {
+            FileInfo templateFile = null;
+            try
+            {
+                templateFile = new FileInfo(template);
+            }
+            catch
+            {
+                templateFile = null;
+            }
+            using (ExcelPackage package = (templateFile == null ? new ExcelPackage() : new ExcelPackage(templateFile)))
+            {
+                foreach(var tablePro in tablePros)
+                {
+                    Export(tablePro, package);
+                }    
+                MemoryStream ms = new MemoryStream(package.GetAsByteArray());
+                return ms;
+            }
+
+        }
         /// <summary>
         /// Generate excel
         /// </summary>
@@ -319,6 +472,27 @@ namespace Services.Common.Utilities
             }
             return col;
         }
+        public static bool IssetSheet(ExcelPackage excelPackage, string sheetName , int position = -1)
+        {
+            foreach (ExcelWorksheet sheet in excelPackage.Workbook.Worksheets)
+            {
+                if (!string.IsNullOrEmpty(sheetName))
+                {
+                    if (sheet.Name == sheetName)
+                    {
+                        return true;
+                    }
+                }
+                else
+                {
+                    if (position > -1 && sheet.Index == position)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
         //Export the set of fields and headers that need to be mapped
         public class ExportColumnCollective
         {
@@ -337,32 +511,27 @@ namespace Services.Common.Utilities
     //Table properties
     public class TableProperties
     {
-
-        /// <summary>
-        /// Title
-        /// </summary>
-        [JsonProperty("title")]
+        public DataTable DataSource { get; set; }
+        public int? SysJobId { get; set; }
+        public int? No { get; set; }
+        public string SheetName { get; set; }
+        public int? SheetIndex { get; set; }
+        public int? TableIndex { get; set; }
         public string Title { get; set; }
-        /// <summary>
-        /// field
-        /// </summary>
-        [JsonProperty("field")]
-        public string Field { get; set; }
-        /// <summary>
-        /// Precision (only valid for double, decimal)
-        /// </summary>
-        [JsonProperty("precision")]
-        public int? Precision { get; set; }
-        /// <summary>
-        /// Cross column
-        /// </summary>
-        [JsonProperty("colSpan")]
-        public int ColSpan { get; set; }
-        /// <summary>
-        /// Cross line
-        /// </summary>
-        [JsonProperty("rowSpan")]
-        public int RowSpan { get; set; }
+        public bool? IsShowTitle { get; set; }
+        public bool? IsHeader { get; set; }
+        public bool? IsFreezeHeader { get; set; }
+        public bool? IsShowTotal { get; set; }
+        public bool? IsAutoFit { get; set; }
+        public string HeaderColor { get; set; }
+        public string HeaderBackGroundColor { get; set; }
+        public int? Border { get; set; }
+        public string Color { get; set; }
+        public string BackGroundColor { get; set; }
+        public int? BeginRow { get; set; }
+        public int? BeginCol { get; set; }
+        public string Style { get; set; }
+        public int? Priority { get; set; }
     }
     //Mapping excel entity
     public class ExportColumn
