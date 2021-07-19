@@ -1,4 +1,4 @@
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OperationManager.CRUD.Api.Controllers.v1.BaseClasses;
@@ -12,6 +12,11 @@ using Services.Common.DomainObjects.Exceptions;
 using OperationManager.CRUD.DAL.DTO;
 using OperationManager.CRUD.BLL.IRepositories.BaseClasses;
 using OperationManager.CRUD.Common;
+using System.IO;
+using System.Data;
+using System.Collections.Generic;
+using Services.Common.Utilities;
+using Services.Common.Media;
 
 namespace OperationManager.CRUD.Api.Controllers.v1
 {
@@ -19,6 +24,7 @@ namespace OperationManager.CRUD.Api.Controllers.v1
     {
         const string VALIDATION_ERROR = "The request failed due to a validation error";
         public string nameEF = OperationManagerConstants.WarehouseGoodsLog_TABLENAME;
+        const string ReportWarehouseGoodsLog = nameof(ReportWarehouseGoodsLog);
         protected readonly IQuanLyVanHanhRepository<WarehouseGoodsLog> _quanLyVanHanhRepository;
         public WarehouseGoodsLogController(IMapper mapper, IHttpContextAccessor httpContextAccessor, IQuanLyVanHanhRepository<WarehouseGoodsLog> quanLyVanHanhRepository) : base(mapper, httpContextAccessor)
         {
@@ -100,6 +106,54 @@ namespace OperationManager.CRUD.Api.Controllers.v1
             catch (Exception ex)
             {
                 return new OkObjectResult(HttpStatusCode.BadRequest);
+            }
+
+        }
+        /// <summary>
+        /// DownLoad FilesAttachment.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [Route(ReportWarehouseGoodsLog)]
+        [HttpGet]
+        [ProducesResponseType(typeof(MethodResult<dynamic>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(VoidMethodResult), (int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> DownReportAsync(int id)
+        {
+            var methodResult = new MethodResult<dynamic>();
+            ErrorResult err = new ErrorResult();
+            err.ErrorCode = "101";
+            err.ErrorMessage = "File không tồn tại";
+            var memoryStream = new MemoryStream();
+            //D:\duan\Content
+            //F:\TayHo\SystemCore\AppService\Web\QuanLyDuAn\Content
+            string _template = @"D:\duan\Content\Template\OperationManagement\Report0003_WarehouseGoodsLog.xlsx";
+            try
+            {
+
+                if (id > 0)
+                {
+                    var files = Path.GetFileNameWithoutExtension(_template);
+                    string ext = Path.GetExtension(_template).ToLowerInvariant();
+                    List<DataTable> dataTables = new List<DataTable>();
+                    ext = string.IsNullOrEmpty(ext) ? "xlsx" : ext;
+                    (string, object)[] parameter = new (string, object)[] { ("@RecordId", id) };
+
+                    dataTables = await _quanLyVanHanhRepository.ExecuteStoredProcedure("sp_Report0003_WarehouseGoodsLog", parameter);
+                    memoryStream = EpplusHelper.Export(dataTables[0], "R001", false, _template, 1, 3, false);
+                    memoryStream.Position = 0;
+                    return File(memoryStream, FileHelpers.GetMimeTypes()[ext], Path.GetFileNameWithoutExtension(_template) + DateTime.Now.ToString("yyyyMMdd"));
+                }
+                else
+                {
+                    methodResult.AddErrorMessage(err);
+                    return BadRequest(methodResult);
+                }
+            }
+            catch (Exception ex)
+            {
+                methodResult.AddErrorMessage(err);
+                return BadRequest(methodResult);
             }
 
         }

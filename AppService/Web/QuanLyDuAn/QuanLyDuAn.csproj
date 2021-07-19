@@ -2553,6 +2553,8 @@
     <Content Include="Areas\VanHanh\Views\BaoTri\_PhieuHenBaoTriCreate.cshtml" />
     <Content Include="Areas\VanHanh\Views\BaoTri\_BaoTriHistory.cshtml" />
     <Content Include="Content\Template\OperationManagement\Report0001_Complaint.xlsx" />
+    <Content Include="Content\Template\OperationManagement\Report0003_WarehouseGoodsLog.xlsx" />
+    <Content Include="Content\Template\OperationManagement\Report0002_DefectFeedback.xlsx" />
     <None Include="packages.config" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Home\About.cshtml" />

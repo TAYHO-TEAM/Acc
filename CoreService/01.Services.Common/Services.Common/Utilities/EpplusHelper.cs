@@ -124,7 +124,19 @@ namespace Services.Common.Utilities
 
             using (ExcelPackage package = (templateFile == null ? new ExcelPackage() : new ExcelPackage(templateFile)))
             {
-                ExcelWorksheet workSheet = package.Workbook.Worksheets[0];
+                ExcelWorksheet workSheet = null;
+                try
+                {
+                    if (templateFile == null)
+                        workSheet = package.Workbook.Worksheets.Add(title);
+                    else
+                        workSheet = package.Workbook.Worksheets[0];
+                }
+                catch
+                {
+                    workSheet = package.Workbook.Worksheets.Add("sheet1");
+                }
+
                 int maxColumnCount = dtSource.Columns.Count;
 
                 if (showTitle)
@@ -144,9 +156,9 @@ namespace Services.Common.Utilities
                     workSheet.Cells[curRowIndex, curColIndex].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                     curRowIndex++;
                 }
-                if(isHeader)
+                if (isHeader)
                 {
-                    
+
                     var titleStyle = workSheet.Workbook.Styles.CreateNamedStyle("titleStyle");
                     titleStyle.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                     titleStyle.Style.Font.Bold = true;
@@ -179,11 +191,11 @@ namespace Services.Common.Utilities
                         }
                         else if (pType == typeof(int))
                         {
-                            cell.Value = Convert.ToInt32(value??0);
+                            cell.Value = Convert.ToInt32(value ?? 0);
                         }
                         else if (pType == typeof(double) || pType == typeof(decimal))
                         {
-                            cell.Value = Convert.ToDouble(value??0);
+                            cell.Value = Convert.ToDouble(value ?? 0);
                         }
                         else
                         {
@@ -210,7 +222,7 @@ namespace Services.Common.Utilities
         /// <param name="curColIndex">Current Colum Index </param>
         /// <param name="curRowIndex">Current Rown Index</param>
         /// <returns></returns>
-        public static void Export(TableProperties tableProp,ExcelPackage package)
+        public static void Export(TableProperties tableProp, ExcelPackage package)
         {
             DataTable dtSource = new DataTable();
             int curColIndex = 0;
@@ -220,7 +232,7 @@ namespace Services.Common.Utilities
             bool isFreezeHeader = true;
             string title = "";
             int positionSheet = 0;
-            
+
             try
             {
                 dtSource = tableProp.DataSource;
@@ -229,7 +241,7 @@ namespace Services.Common.Utilities
                 isShowTitle = tableProp.IsShowTitle ?? false;
                 isHeader = tableProp.IsHeader ?? false;
                 title = tableProp.Title;
-                positionSheet = tableProp.SheetIndex??0;
+                positionSheet = tableProp.SheetIndex ?? 0;
             }
             catch
             {
@@ -238,12 +250,12 @@ namespace Services.Common.Utilities
             if (IssetSheet(package, tableProp.SheetName, positionSheet))
             {
                 workSheet = package.Workbook.Worksheets[positionSheet];
-            }    
+            }
             else
             {
-                workSheet = package.Workbook.Worksheets.Add(string.IsNullOrEmpty(tableProp.SheetName)?"Sheet"+tableProp.TableIndex:tableProp.SheetName); 
-            }    
-           
+                workSheet = package.Workbook.Worksheets.Add(string.IsNullOrEmpty(tableProp.SheetName) ? "Sheet" + tableProp.TableIndex : tableProp.SheetName);
+            }
+
             int maxColumnCount = dtSource.Columns.Count;
 
             if (isShowTitle == true)
@@ -271,7 +283,7 @@ namespace Services.Common.Utilities
             titleStyle.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             titleStyle.Style.Font.Bold = true;
             //Header colum
-            if(isHeader)
+            if (isHeader)
             {
                 for (var i = 0; i < maxColumnCount; i++)
                 {
@@ -279,12 +291,12 @@ namespace Services.Common.Utilities
                     workSheet.Cells[curRowIndex, i + curColIndex].Value = column.ColumnName;
                     workSheet.Cells[curRowIndex, i + curColIndex].StyleName = "titleStyle";
                 }
-                if(isFreezeHeader)
+                if (isFreezeHeader)
                 {
                     workSheet.View.FreezePanes(curRowIndex, curColIndex);//Freeze header rown
-                }    
-            }    
-           
+                }
+            }
+
 
             //content
             for (var i = 0; i < dtSource.Rows.Count; i++)
@@ -345,10 +357,10 @@ namespace Services.Common.Utilities
             }
             using (ExcelPackage package = (templateFile == null ? new ExcelPackage() : new ExcelPackage(templateFile)))
             {
-                foreach(var tablePro in tablePros)
+                foreach (var tablePro in tablePros)
                 {
                     Export(tablePro, package);
-                }    
+                }
                 MemoryStream ms = new MemoryStream(package.GetAsByteArray());
                 return ms;
             }
@@ -472,7 +484,7 @@ namespace Services.Common.Utilities
             }
             return col;
         }
-        public static bool IssetSheet(ExcelPackage excelPackage, string sheetName , int position = -1)
+        public static bool IssetSheet(ExcelPackage excelPackage, string sheetName, int position = -1)
         {
             foreach (ExcelWorksheet sheet in excelPackage.Workbook.Worksheets)
             {

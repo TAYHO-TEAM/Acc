@@ -110,7 +110,6 @@ namespace ProjectManager.Read.Api.Controllers.v1
                     if (string.IsNullOrEmpty(filename))
                         filename = string.IsNullOrEmpty(oldFile.FileName.ToString()) ? "" : oldFile.FileName.ToString();
 
-
                     using (var stream = new FileStream(oldFile.Direct.ToString(), FileMode.Open))
                     {
                         await stream.CopyToAsync(memoryStream);

@@ -84,6 +84,7 @@
     <script src="~/Scripts/page/vanhanh.js"></script>
     <script>
         var id = 1;
+        var $selectionID = 0;
         clearContent();
         ///-----------------------------READ ------------------------
 
@@ -135,7 +136,7 @@
             var deferred = $.Deferred();
             return customStore_CustomerRealEstate(id).load().then((rs) => {
                 if (rs != null && rs.length > 0) {
-           
+
                     deferred.resolve(customStore_CustomerInfoById(rs[0].customerInfoId)[0]);
                 }
             });
@@ -157,7 +158,7 @@
             store: $DATASOURCEGET(ACTION_MAINTENANCERINFO, KEY),
             filter: ["maintenanceSupplierInfoId", "=", id]
         });
-        var customStore_DefectFeedbackDetail =  (id) => new DevExpress.data.DataSource({
+        var customStore_DefectFeedbackDetail = (id) => new DevExpress.data.DataSource({
             store: $DATASOURCE(ACTION_DEFECTFEEDBACKDETAIL, KEY),
             filter: ["defectFeedbackId", "=", id]
         });
@@ -210,6 +211,25 @@
                 onToolbarPreparing: function (e) {
                     var container = e.component;
                     e.toolbarOptions.items.unshift(
+                        {
+                            location: "after",
+                            widget: "dxButton",
+                            options: {
+                                icon: "download",
+                                tylingMode: "filled",
+                                type: "default",
+                                visible: true,
+                                onClick: (e) => {
+                                    console.log(e);
+                                    window.open('https://api-om-crud.tayho.com.vn/api/v1/Complaint/ReportComplaint?id=' + $selectionID, '_blank');
+                                }
+                            },
+                            editorOptions: {
+                                elementAttr: {
+                                    id: "elementDownLoad",
+                                },
+                            },
+                        },
                         {
                             location: "before",
                             widget: "dxSelectBox",
@@ -295,6 +315,7 @@
                     var containerE = e.component;
                     var selectedRowData = e.selectedRowsData[0];
                     var selectedRowKey = e.selectedRowKeys[0];
+                    $selectionID = selectedRowKey;
                     //$('#action-log').remove();
                     //e.component.refresh();
                     if (selectedRowData != null && selectedRowKey != null) {
@@ -482,7 +503,7 @@
                     //                //deferred.resolve($listDefectCurrent);
                     //                return rsCurrent.map(x => x.defectiveId).join(',');
                     //            });
-                               
+
                     //            $listDefectCurrent = subscription;
                     //            console.log($listDefectCurrent);
                     //        };

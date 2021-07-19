@@ -124,8 +124,8 @@ namespace OperationManager.CRUD.Api.Controllers.v1
             ErrorResult err = new ErrorResult();
             err.ErrorCode = "101";
             err.ErrorMessage = "File không tồn tại";
-            var memoryStream = new MemoryStream();
-            string _template = @"F:\TayHo\SystemCore\AppService\Web\QuanLyDuAn\Content\Template\OperationManagement\Report0001_Complaint.xlsx";
+            MemoryStream memoryStream = new MemoryStream();
+            string _template = @"D:\duan\Content\Template\OperationManagement\Report0001_Complaint.xlsx";
             try
             {
 
@@ -133,23 +133,27 @@ namespace OperationManager.CRUD.Api.Controllers.v1
                 {
                     var files = Path.GetFileNameWithoutExtension(_template);
                     string ext = Path.GetExtension(_template).ToLowerInvariant();
+                    ext = string.IsNullOrEmpty(ext) ? ".xlsx" : ext;
                     List<DataTable> dataTables = new List<DataTable>();
                     (string, object)[] parameter = new (string, object)[] { ("@RecordId", id) };
                      
-                    dataTables = await _quanLyVanHanhRepository.ExecuteStoredProcedure("sp_Complaint_Report001", parameter);
-                    memoryStream = EpplusHelper.Export(dataTables[0], "R001",true, _template, 1,3,true);
-                    return File(memoryStream, FileHelpers.GetMimeTypes()[ext], Path.GetFileNameWithoutExtension(_template)+ DateTime.Now.ToString("yyyyMMdd"));
+                    dataTables = await _quanLyVanHanhRepository.ExecuteStoredProcedure("sp_Report0001_Complaint", parameter);
+                    memoryStream = EpplusHelper.Export(dataTables[0], "R001",false, _template, 1,3, false);
+                   
+                    //memoryStream.Position = 0;
+                    memoryStream.Seek(0, SeekOrigin.Begin);
+                    return File(memoryStream, FileHelpers.GetMimeTypes()[ext], files + DateTime.Now.ToString("yyyyMMdd"));
                 }
                 else
                 {
                     methodResult.AddErrorMessage(err);
-                    return BadRequest(methodResult);
+                    return NotFound();
                 }
             }
             catch(Exception ex)
             {
                 methodResult.AddErrorMessage(err);
-                return BadRequest(methodResult);
+                return NotFound();
             }
 
         }
