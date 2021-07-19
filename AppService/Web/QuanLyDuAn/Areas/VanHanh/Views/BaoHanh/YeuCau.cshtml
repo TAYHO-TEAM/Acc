@@ -221,7 +221,7 @@
                                 visible: true,
                                 onClick: (e) => {
                                     console.log(e);
-                                    window.open('https://api-om-crud.tayho.com.vn/api/v1/Complaint/ReportComplaint?id=' + $selectionID, '_blank');
+                                    window.location.href =('https://api-om-crud.tayho.com.vn/api/v1/Complaint/ReportComplaint?id=' + $selectionID);
                                 }
                             },
                             editorOptions: {

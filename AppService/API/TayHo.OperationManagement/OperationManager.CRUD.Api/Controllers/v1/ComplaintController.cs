@@ -116,8 +116,8 @@ namespace OperationManager.CRUD.Api.Controllers.v1
         /// <returns></returns>
         [Route(ReportComplaint)]
         [HttpGet]
-        [ProducesResponseType(typeof(MethodResult<dynamic>), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(VoidMethodResult), (int)HttpStatusCode.BadRequest)]
+        //[ProducesResponseType(typeof(MethodResult<dynamic>), (int)HttpStatusCode.OK)]
+        //[ProducesResponseType(typeof(VoidMethodResult), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> DownReportAsync(int id)
         {
             var methodResult = new MethodResult<dynamic>();
@@ -142,7 +142,7 @@ namespace OperationManager.CRUD.Api.Controllers.v1
                    
                     //memoryStream.Position = 0;
                     memoryStream.Seek(0, SeekOrigin.Begin);
-                    return File(memoryStream, FileHelpers.GetMimeTypes()[ext], files + DateTime.Now.ToString("yyyyMMdd"));
+                    return File(memoryStream, FileHelpers.GetMimeTypes()[ext], files + DateTime.Now.ToString("yyyyMMdd")+ ext);
                 }
                 else
                 {

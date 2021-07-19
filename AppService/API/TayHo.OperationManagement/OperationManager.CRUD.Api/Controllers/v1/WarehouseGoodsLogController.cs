@@ -142,7 +142,7 @@ namespace OperationManager.CRUD.Api.Controllers.v1
                     dataTables = await _quanLyVanHanhRepository.ExecuteStoredProcedure("sp_Report0003_WarehouseGoodsLog", parameter);
                     memoryStream = EpplusHelper.Export(dataTables[0], "R001", false, _template, 1, 3, false);
                     memoryStream.Position = 0;
-                    return File(memoryStream, FileHelpers.GetMimeTypes()[ext], Path.GetFileNameWithoutExtension(_template) + DateTime.Now.ToString("yyyyMMdd"));
+                    return File(memoryStream, FileHelpers.GetMimeTypes()[ext], Path.GetFileNameWithoutExtension(_template) + DateTime.Now.ToString("yyyyMMdd") + ext);
                 }
                 else
                 {
