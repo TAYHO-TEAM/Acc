@@ -49,6 +49,7 @@
 @section script{
     <script src="~/Scripts/page/vanhanh.js"></script>
     <script>
+        var $selectionID = 0;
         ///--------------------------------- READ -------------------------------------
         var ACTION_COMPLAINT = "Complaint/";
         var ACTION_PROJECT = "Project/";
@@ -736,6 +737,20 @@
                             location: "after",
                             widget: "dxButton",
                             options: {
+                                icon: "download",
+                                stylingMode: "filled",
+                                type: "default",
+                                visible: true,
+                                onClick: (e) => {
+                                    console.log($selectionID);
+                                    window.location.href = ('https://api-om-crud.tayho.com.vn/api/v1/Complaint/ReportComplaint?id=' + $selectionID);
+                                }
+                            },
+                        },
+                        {
+                            location: "after",
+                            widget: "dxButton",
+                            options: {
                                 icon: "refresh",
                                 stylingMode: "filled",
                                 type: "default",
@@ -770,6 +785,7 @@
                     var container = e.component;
                     var selectedRowData = e.selectedRowsData[0];
                     var selectedRowKey = e.selectedRowKeys[0];
+                    $selectionID = selectedRowKey; 
                     loadData_Complaint(selectedRowKey);
                     //$('#elementComplaintId').dxTextBox('instance')
                     //    .option('value', selectedRowData == null ? "" : (selectedRowData.id));

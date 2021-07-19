@@ -220,8 +220,8 @@
                                 type: "default",
                                 visible: true,
                                 onClick: (e) => {
-                                    console.log(e);
-                                    window.location.href =('https://api-om-crud.tayho.com.vn/api/v1/Complaint/ReportComplaint?id=' + $selectionID);
+                                    console.log($selectionID);
+                                    window.location.href = ('https://api-om-crud.tayho.com.vn/api/v1/DefectFeedback/ReportDefectFeedback/?id=' + $selectionID);
                                 }
                             },
                             editorOptions: {
