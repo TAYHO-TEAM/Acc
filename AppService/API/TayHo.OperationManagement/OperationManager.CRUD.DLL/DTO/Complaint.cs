@@ -17,6 +17,7 @@ namespace OperationManager.CRUD.DAL.DTO
         public string Phone { get; set; }
         public string Note { get; set; }
         public int? NoAttachment { get; set; }
+        public DateTime CompaintDate { get; set; }
 
     }
 }

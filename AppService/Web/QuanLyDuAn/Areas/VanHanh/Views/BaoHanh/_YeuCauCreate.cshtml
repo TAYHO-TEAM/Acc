@@ -1,6 +1,11 @@
 ﻿<form id="form-regist" action="#" method="POST" enctype="application/json">
 </form>
+<div id="container-defect-detail" class="elevation-2 list-defect-detail" disabled></div>
+<form id="form-defect-detail"  class="list-defect-detail" action="#" method="POST" enctype="application/json" disabled>
+</form>
+
 <script>
+    var $defectDetailId = 0;
     var customStore_RealEstate_Filter = (id) => new DevExpress.data.DataSource({
         store: $DATASOURCEGET(ACTION_REALESTATE, KEY),
         filter: ["constructionItemsId", "=", id]
@@ -14,8 +19,18 @@
         , "note": ""
         , "noAttachment": ""
     };
+    var formDataDefect = {
+        "customerId": ""
+        , "realEstateId": ""
+        , "fullName": ""
+        , "defectiveId": ""
+        , "phone": ""
+        , "note": ""
+        , "noAttachment": ""
+    };
     var fdata = new FormData();
     $(document).ready(function () {
+        loadData_DefectDetail(0);
         var formInstance = $("#form-regist").dxForm({
             formData: formData,
             labelLocation: "top",
@@ -51,7 +66,7 @@
                                 },
                                 onValueChanged: function (data) {
                                     if (data.value != null) {
-                                   
+
                                         customStore_CustomerRealEstate(data.value).load().done((rs) => {
                                             if (rs != null && rs.length > 0) {
                                                 customStore_CustomerInfoById(rs[0].customerInfoId).load().done((rsCI) => {
@@ -76,11 +91,6 @@
                             colSpan: 6,
                             dataField: "customerId",
                             label: { text: "mã khách hàng" },
-                            //lookup: {
-                            //    dataSource: customStore_CustomerInfo,
-                            //    valueExpr: "id",
-                            //    displayExpr: getDisplayExpr,
-                            //},
                             editorType: "dxSelectBox",
                             editorOptions: {
                                 stylingMode: "filled",
@@ -102,22 +112,9 @@
                             colSpan: 6,
                             dataField: "fullName",
                             label: { text: "Tên Khách Hàng" },
-                            //lookup: {
-                            //    dataSource: customStore_CustomerInfo,
-                            //    valueExpr: "id",
-                            //    displayExpr: getDisplayExpr,
-                            //},
                             editorType: "dxTextBox",
                             editorOptions: {
                                 stylingMode: "filled",
-                                //searchEnabled: true,
-                                //searchMode: "contains",
-                                //searchExpr: ['firstName', 'lastName'],
-                                //showClearButton: true,
-                                //placeholder: "Vui lòng nhập...",
-                                //dataSource: customStore_CustomerInfo,
-                                //valueExpr: "id",
-                                //displayExpr: getDisplayExpr,
                                 elementAttr: {
                                     id: "elementCustomerFullName",
                                 },
@@ -140,22 +137,56 @@
                         },
                         {
                             colSpan: 12,
-                            //dataField: "defectiveId",
+                            dataField: "note",
+                            label: { text: "Mô tả" },
+                            editorType: "dxTextArea",
+                            editorOptions: {
+                                stylingMode: "filled",
+                                placeholder: "Vui lòng nhập...",
+                                value: formData["description"],
+                            },
+                        },
+                    ]
+                },
+                {
+                    itemType: "button",
+                    horizontalAlignment: "center",
+                    buttonOptions: {
+                        text: "Tạo phiếu defect",
+                        icon: "fa fa-save",
+                        type: "success",
+                        useSubmitBehavior: true,
+                        elementAttr: {
+                            id: "submit",
+                        }
+                    }
+                },
+            ],
+            onFieldDataChanged: function (e) {
+                var newFormData = e.component.option("formData");
+            }
+        }).dxForm("instance");
+        var formInstanceDefectDetail = $("#form-defect-detail").dxForm({
+            formData: formDataDefect,
+            labelLocation: "top",
+            items: [
+                {
+                    itemType: "group",
+                    colCount: 12,
+                    items: [
+                        {
+                            colSpan: 12,
+                            dataField: "defectiveId",
                             label: { text: "Mã lỗi" },
                             lookup: {
                                 dataSource: customStore_Defective,
                                 valueExpr: "id",
                                 displayExpr: "code",
                             },
-                            editorType: "dxTagBox",
+                            editorType: "dxSelectBox",
                             editorOptions: {
                                 stylingMode: "filled",
-                                //value: formData["documentTypeId"],
                                 dataSource: customStore_Defective,
-                                //dataSource: new DevExpress.data.ArrayStore({
-                                //    data: customStore_Defective,
-                                //    key: "id"
-                                //}),
                                 searchEnabled: true,
                                 searchMode: "contains",
                                 showClearButton: true,
@@ -170,7 +201,6 @@
                             },
                             validationRules: [{ type: "required" }],
                         },
-                      
                         {
                             colSpan: 12,
                             dataField: "note",
@@ -192,12 +222,13 @@
                     itemType: "button",
                     horizontalAlignment: "center",
                     buttonOptions: {
-                        text: "Lưu lại",
+                        text: "Lưu defect",
                         icon: "fa fa-save",
                         type: "success",
-                        useSubmitBehavior: true,
+                        useSubmitBehavior: true
+                        ,
                         elementAttr: {
-                            id: "submit",
+                            id: "importDefect",
                         }
                     }
                 },
@@ -206,82 +237,137 @@
                 var newFormData = e.component.option("formData");
             }
         }).dxForm("instance");
+        function loadData_DefectDetail(DefectID) {
+            $("#container_defect_detail").dxDataGrid({
+                height: 300,
+                dataSource: customStore_DefectFeedbackDetail(DefectID),
+                repaintChangesOnly: true,
+                remoteOperations: true,
+                scrolling: { mode: "standard" },
+                showBorders: false,
+                showColumnHeaders: true,
+                showColumnLines: false,
+                hoverStateEnabled: true,
+                showRowLines: true,
+                columnAutoWidth: true,
+                wordWrapEnabled: true,
+                rowAlternationEnabled: true,
+                filterRow: { visible: false },
+                summary: {
+                    groupItems: [{
+                        column: "id",
+                        summaryType: "count"
+                    },
+                    ]
+                },
+                paging: {
+                    enabled: true,
+                    pageSize: 20
+                },
+                pager: {
+                    showPageSizeSelector: true,
+                    allowedPageSizes: [10, 20, 40],
+                    showInfo: true,
+                },
+                onInitNewRow: (e) => {
+                    e.data.isActive = true;
+                    e.data.isVisible = true;
+                },
+                onRowUpdating: (e) => {
+                    e.newData['isVisible'] = e.newData['pmIsVisible'];
+                    e.newData['id'] = e.oldData['id'];
+                },
+                onCellPrepared: (e) => {
+                    if (e.rowType == "data" && e.columnIndex == 1)
+                        e.cellElement.find('.dx-treelist-empty-space').toggleClass("dx-treelist-collapsed", e.data.chilCount > 0)
+                },
+                onRowDblClick: function (e) {
+                    var container = e.component;
+                },
+                selection: {
+                    mode: "single"
+                },
+                columns: [
+                    {
+                        dataField: "defectiveId",
+                        allowFiltering: true,
+                        caption: "Lỗi",
+                        dataType: "string",
+                        alignment: "center",
+                        visible: true,
+                        editorType: "dxLookup",
+                        lookup: {
+                            dataSource: customStore_Defective,
+                            valueExpr: "id",
+                            displayExpr: "name",
+                        },
+                    },// realEstateId
+                    {
+                        dataField: "note",
+                        allowFiltering: true,
+                        caption: "Ghi chú",
+                        dataType: "string",
+                        alignment: "center",
+                        visible: true,
+                        editorType: "dxTextBox",
+                    },
+                    {
+                        allowFiltering: true,
+                        caption: "Ảnh",
+                        dataType: "string",
+                        alignment: "center",
+                        visible: true,
+                        editorType: "dxTextBox",
+                        cellTemplate: function (element, info) {
+                            console.log(element);
+                            console.log(info);
+                            //element.append("<div>" + info.text + "</div>")
+                            //    .css("color", "blue");
+                        }
+                    },
+                ],
+                editing: {
+                    mode: "batch",
+                    useIcons: true,
+                    confirmDelete: true,
+                    popup: {
+                        width: "50%",
+                        height: "50%",
+                        showTitle: true,
+                        title: "kế hoạch công việc",
+                        closeOnOutsideClick: false,
+                        showCloseButton: true,
+                    },
+                },
+            });
+        };
         fileUploader();
         $("#form-regist").on("submit", function (e) {
             e.preventDefault();
             var formdata = $('#form-regist').dxForm("instance").option('formData');
-          
-            var tagDefectiveData = $('#elementDefectiveId').dxTagBox("instance").option('selectedItems');
-            //var DefectiveIds = new int[];
-            var tagDefectiveIds = tagDefectiveData.map(x => x.id).toString();
-
-       
-            //var fileWrappers = $('#form-regist').dxForm("instance").option('formData');._files;
             var resValid = true
-            //for (var i = 0; i < fileWrappers.length; i++) {
-            //    if (fileWrappers[i].isValid() === false) {
-            //        resValid = false;
-            //    }
-            //};
             if (!resValid) {
                 DevExpress.ui.notify("Vui lòng kiểm tra lại file đính kèm!", "error", 3000);
             }
             else {
                 loadingPanel.show();
-                var fdata = new FormData();
-                var i = 10;
-                $.each(formData, function (key, value) {
-                    if (key === 'calendar') {
-                        fdata.append(key, moment(value).format('YYYY-MM-DD HH:mm:ss'));
+                formdata['ConstructionItemsId'] = ITEMSID;
+                formdata['Status'] = 10;
+                var deferred = $.Deferred();
+                customStore(0).store().insert(formdata).done((rssbInsert) => {
+                    loadingPanel.hide();
+                    if (rssbInsert.isOk) {
+                        document.getElementById('container-defect-detail').style.display = 'block';
+                        document.getElementById('form-defect-detail').style.display = 'block';
+                        document.getElementById('submit').style.pointerEvents = 'none';
+                        DevExpress.ui.notify("Cập nhật thành công", "success", 3000);
+                        deferred.resolve(rs);
                     }
                     else {
-                        fdata.append(key, value);
+                        DevExpress.ui.notify("Có lỗi xảy ra", "error", 3000);
+                        deferred.resolve(false);
                     }
-                });
-                //fdata.append('projectId', PROJECTID);
-                //fdata.append('token', UserCurrentInfo.accessToken);
-                var files = $("#file-uploader").dxFileUploader("instance").option("value");
-                if (files.length > 0) {
-                    $.each(files, function (key, value) {
-                        fdata.append(files[key].name, files[key]);
-                    });
-                }
-                fdata.append('DefectiveIds', tagDefectiveIds);
-                fdata.append('ConstructionItemsId', ITEMSID);
-                fdata.append('token', UserCurrentInfo.accessToken);
-                //fdata.push(DefectiveIds);
-                //else {
-                //    DevExpress.ui.notify("Vui lòng chọn file đính kèm", "error", 3000);
-                //    e.preventDefault();
-                //    return false;
-                //};
-                for (var pair of fdata.entries()) {
-                    console.log(pair[0] + ', ' + pair[1]);
-                }
-                //var values = JSON.stringify(fdata);
-                var deferred = $.Deferred();
-                $.ajax({
-                    type: "POST",
-                    enctype: 'multipart/form-data',
-                    url: "/VanHanh/BaoHanh/YeuCauCreate",
-                    data: fdata,
-                    processData: false,
-                    contentType: false,
-                    cache: false,
-                    success: function (rs) {
-                        deferred.resolve(true);
-                        loadingPanel.hide();
-                        DevExpress.ui.notify(rs.result, rs.status, 3000);
-                        if (rs.status == "success") {
-                            $("#popup-main").dxPopup('instance').hide();
-                        }
-                    },
-                    error: function (xhr, textStatus, errorThrown) {
-                        loadingPanel.hide();
-                        DevExpress.ui.notify("Có lỗi xảy ra: " + errorThrown, "error", 3000);
-                    }
-                });
-                e.preventDefault();
+                }, deferred.reject);
                 return deferred.promise();
             }
         });

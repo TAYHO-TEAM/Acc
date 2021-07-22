@@ -150,7 +150,7 @@
                                 cssClass: "first-group",
                                 items: [
                                     {
-                                        colSpan: 6,
+                                        colSpan: 4,
                                         dataField: "realEstateId",
                                         label: { text: "Căn hộ" },
                                         type: "string",
@@ -198,7 +198,7 @@
                                         },
                                     },
                                     {
-                                        colSpan: 6,
+                                        colSpan: 4,
                                         dataField: "customerInfoId",
                                         label: { text: "Mã Khách hàng" },
                                         type: "string",
@@ -235,6 +235,21 @@
                                                     $('#elementPhone').dxTextBox('instance')
                                                         .option('value', null);
                                                 };
+                                            },
+                                        },
+                                    },
+                                    {
+                                        colSpan: 4,
+                                        dataField: "compaintDate",
+                                        label: { text: "Ngày khiếu nại" },
+                                        type: "string",
+                                        editorType: "dxDateBox",
+                                        editorOptions: {
+                                            value: new Date(), 
+                                            type: "date",
+                                            stylingMode: "filled",
+                                            elementAttr: {
+                                                id: "elementCompaintDate",
                                             },
                                         },
                                     },
@@ -792,13 +807,32 @@
                 },
                 columns: [
                     {
-                        dataField: "code",
+                        dataField: "realEstateId",
                         allowFiltering: true,
                         caption: "Mã KN",
                         dataType: "string",
                         alignment: "center",
                         readOnly: true,
                         allowEditing: false,
+                        editorType: "dxLookup",
+                        lookup: {
+                            dataSource: customStore_RealEstate,
+                            valueExpr: "id",
+                            displayExpr: "address",
+                        },
+                        editorOptions: {
+                            dataSource: customStore_RealEstate,
+                            valueExpr: "id",
+                            displayExpr: "address",
+                            placeholder: "Vui lòng chọn...",
+                            searchExpr: ['address'],
+                            searchEnabled: true,
+                            searchMode: "contains",
+                            showClearButton: true,
+                            itemTemplate: function (data) {
+                                return $("<div>").append($("<b>").append(data.address).addClass("mr-1"));
+                            },
+                        },
                     },// barCode
                     {
                         dataField: "fullName",
@@ -833,7 +867,7 @@
                         alignment: "center",
                         editorType: "dxSwitch",
                         groupIndex: 0,
-                        showWhenGrouped: false,
+                        showWhenGrouped: true,
                         lookup: {
                             dataSource: complaintStatus,
                             valueExpr: "value",
