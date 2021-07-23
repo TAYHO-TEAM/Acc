@@ -280,7 +280,7 @@
         }).dxForm("instance");
 
         var loadNhomCongViec = (filter) => $("#container").dxDataGrid({
-            height: heightScreen,
+            height: heightScreen - $("#container-filter").parent().height() - 45,
             dataSource: customStore(filter.hangmucId),
             remoteOperations: {
                 paging: true,
