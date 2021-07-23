@@ -85,11 +85,23 @@
                                 elementAttr: {
                                     id: "elementcategoryGoodsId",
                                 },
+                                onValueChanged: function (data) {
+                                    console.log(data);
+                                    customStore_CategoryGoods.load().then((rs) => {
+                                        var goods = rs.filter(x => x.id === data.value).shift();
+                                        customStore_CategoryUnit.load().then((rsUnit) => {
+                                            var item = rsUnit.filter(x => x.id === goods.unitId).shift();
+                                            $('#elementUnitItem').dxTextBox('instance')
+                                                .option('value', item == null ? "" : (item.title));
+                                            });
+                                        });
+
+                                },
                             },
                             validationRules: [{ type: "required" }],
                         },
                         {
-                            colSpan: 4,
+                            colSpan: 2,
                             dataField: "quantity",
                             label: { text: "Số lượng" },
                             editorType: "dxNumberBox",
@@ -123,6 +135,24 @@
                                     return d.promise();
                                 }
                             }],
+                        },
+                        {
+                            colSpan: 2,
+                            label: { text: "Đơn vị" },
+                            editorType: "dxTextBox",
+                            type: "string",
+                            editorOptions: {
+                                stylingMode: "filled",
+                                readOnly:true,
+                                elementAttr: {
+                                    id: "elementUnitItem",
+                                },
+                            },
+                            lookup: {
+                                dataSource: customStore_CategoryUnit,
+                                valueExpr: "id",
+                                displayExpr: "title",
+                            },
                         },
                         {
                             colSpan: 4,

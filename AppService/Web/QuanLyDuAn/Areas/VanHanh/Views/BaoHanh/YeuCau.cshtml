@@ -2,7 +2,16 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@section style{   }
+@section style{
+    <style>
+        .list-defect-detail {
+            display: none;
+        }
+        #container-defect-detail{
+            margin-bottom : 5px;
+        }
+    </style>
+}
 <div id="popup-main-upload"></div>
 <div id="popup-register"></div>
 <div id="popup-acceptence"></div>
@@ -442,14 +451,14 @@
                         editorOptions: {
                             dataSource: customStore_RealEstate,
                             valueExpr: "id",
-                            displayExpr: "code",
+                            displayExpr: "address",
                             placeholder: "Vui lòng chọn...",
-                            searchExpr: ['name', 'description'],
+                            searchExpr: ['address'],
                             searchEnabled: true,
                             searchMode: "contains",
                             showClearButton: true,
                             itemTemplate: function (data) {
-                                return $("<div>").append($("<b>").append(data.code).addClass("mr-1"));
+                                return $("<div>").append($("<b>").append(data.address).addClass("mr-1"));
                             },
                         },
                     },// realEstateId
