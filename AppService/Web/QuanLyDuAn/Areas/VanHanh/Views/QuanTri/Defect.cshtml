@@ -19,11 +19,13 @@
         ///-----------------------------READ ------------------------
 
         var ACTION_READ = "Defective/";
+        var ACTION_CONSTRUCTIONITEMS= "ConstructionItems/";
         var KEY = "id";
         var WIDTH_CONTAINER = $("#container").width();
         //..........................Get data -------------------------------------------------------------
 
         let customStore = $DATASOURCE(ACTION_READ, KEY);
+        let customStore_ConstructionItems = $DATASOURCEGET(ACTION_CONSTRUCTIONITEMS, KEY);
         //..........................  Load View -------------------------------------------------------------
         $(function () {
             loadData();
@@ -125,12 +127,17 @@
                 },
                 columns: [
                     {
-                        dataField: "itemsId",
+                        dataField: "constructionItemsId",
                         allowFiltering: true,
                         allowEdit: false,
                         caption: "Mã hạng mục",
                         dataType: "string",
                         alignment: "center",
+                        lookup: {
+                            dataSource: customStore_ConstructionItems,
+                            valueExpr: "id",
+                            displayExpr: "title",
+                        },
                     },// SignCode
                     {
                         dataField: "code",

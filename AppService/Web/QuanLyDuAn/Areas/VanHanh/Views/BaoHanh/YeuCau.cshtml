@@ -127,6 +127,10 @@
             store: $DATASOURCE(ACTION_FILESATTACHMENT, KEY),
             filter: [["ownerById", "=", id], "and", ["ownerByTable", "=", owner]]
         });
+        var customStore_Attachment_All = (owner) => new DevExpress.data.DataSource({
+            store: $DATASOURCE(ACTION_FILESATTACHMENT, KEY),
+            filter: ["ownerByTable", "=", owner]
+        });
         var customStore_DefectFix = (id) => new DevExpress.data.DataSource({
             store: $DATASOURCE(ACTION_DEFECTFIX, KEY),
             filter: ["defectFeedbackId", "=", id]
