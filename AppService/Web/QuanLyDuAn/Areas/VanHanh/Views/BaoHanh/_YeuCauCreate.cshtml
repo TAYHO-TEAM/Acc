@@ -1,7 +1,7 @@
-﻿<form id="form-regist" action="#" method="POST" enctype="application/json">
+﻿<form id="form-regist" action="#" method="POST" enctype="multipart/form-data">
 </form>
 <div id="container-defect-detail" class="elevation-2 list-defect-detail" disabled></div>
-<form id="form-defect-detail"  class="list-defect-detail" action="#" method="POST" enctype="application/json" disabled>
+<form id="form-defect-detail"  class="list-defect-detail" action="#" method="POST" enctype="multipart/form-data" disabled>
 </form>
 
 <script>
@@ -175,7 +175,7 @@
                     colCount: 12,
                     items: [
                         {
-                            colSpan: 12,
+                            colSpan: 6,
                             dataField: "defectiveId",
                             label: { text: "Mã lỗi" },
                             lookup: {
@@ -200,6 +200,19 @@
                                 },
                             },
                             validationRules: [{ type: "required" }],
+                        },
+                        {
+                            colSpan: 6,
+                            dataField: "defectFeedbackId",
+                            label: { text: "Mã Yêu Cầu BH" },
+                            editorType: "dxTextBox",
+                            readOnly: true,
+                            editorOptions: {
+                                stylingMode: "filled",
+                                elementAttr: {
+                                    id: "elementDefectFeedbackId",
+                                },
+                            }
                         },
                         {
                             colSpan: 12,
@@ -354,14 +367,43 @@
                 formdata['ConstructionItemsId'] = ITEMSID;
                 formdata['Status'] = 10;
                 var deferred = $.Deferred();
-                customStore(0).store().insert(formdata).done((rssbInsert) => {
+                customStore(0).store().insert(formdata).done((rs) => {
                     loadingPanel.hide();
-                    if (rssbInsert.isOk) {
+                    if (rs.isOk) {
+                        console.log(rs.result.id)
+                        $('#elementDefectFeedbackId').dxTextBox('instance')
+                            .option('value', rs.result.id== null ? 0 : rs.result.id);
                         document.getElementById('container-defect-detail').style.display = 'block';
                         document.getElementById('form-defect-detail').style.display = 'block';
                         document.getElementById('submit').style.pointerEvents = 'none';
                         DevExpress.ui.notify("Cập nhật thành công", "success", 3000);
                         deferred.resolve(rs);
+                    }
+                    else {
+                        DevExpress.ui.notify("Có lỗi xảy ra", "error", 3000);
+                        deferred.resolve(false);
+                    }
+                }, deferred.reject);
+                return deferred.promise();
+            }
+        });
+        $("#form-defect-detail").on("submit", function (e) {
+            e.preventDefault();
+            var formdata = $('#form-defect-detail').dxForm("instance").option('formData');
+            var resValid = true
+            if (!resValid) {
+                DevExpress.ui.notify("Vui lòng kiểm tra lại file đính kèm!", "error", 3000);
+            }
+            else {
+                loadingPanel.show();
+                formdata['ConstructionItemsId'] = ITEMSID;
+                formdata['Status'] = 10;
+                var deferred = $.Deferred();
+                customStore_DefectFeedbackDetail(0).store().insert(formdata).done((rsDetailDefect) => {
+                    loadingPanel.hide();
+                    if (rsDetailDefect.isOk) {
+                        DevExpress.ui.notify("Cập nhật thành công", "success", 3000);
+                        deferred.resolve(rsDetailDefect);
                     }
                     else {
                         DevExpress.ui.notify("Có lỗi xảy ra", "error", 3000);
