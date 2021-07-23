@@ -1,0 +1,15 @@
+using DevExtreme.AspNet.Data.ResponseModel;
+using OperationManager.CRUD.DAL.DBContext;
+using OperationManager.CRUD.DAL.DTO.BaseClasses;
+using Services.Common.DevExpress;
+using Services.Common.DomainObjects;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace OperationManager.CRUD.BLL.IRepositories
+{
+    public interface IComplaintRepository<T> where T : DOBase
+    {
+       
+    }
+}

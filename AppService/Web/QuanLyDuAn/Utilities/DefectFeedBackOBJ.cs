@@ -19,6 +19,7 @@ namespace QuanLyDuAn.Utilities
         public int? NoAttachment { get; set; }
         public byte? Status { get; set; }
         public string token { get; set; }
+        public string DefectiveIds { get; set; }
 
     }
 }

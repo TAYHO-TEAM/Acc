@@ -22,6 +22,7 @@ using Services.Common.Utilities;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
@@ -39,8 +40,6 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
         {
             _dbContext = dbContext;
             _mediaOptions = snapshotOptionsAccessor.Value;
-            //_cancellationToken = cancellationToken;
-            //_dbContext.ChangeTracker.AutoDetectChangesEnabled = false;
         }
         public async Task<LoadResult> GetAll(int user, string nameEF, DataLoadOptionsHelper dataSourceLoadOptionsBase)
         {
@@ -223,7 +222,7 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
                 if (Model.GetType().GetProperty("Code") != null)
                 {
                     string code = await GenCodeMultipleTableSQL(nameEF);
-                    if(!string.IsNullOrEmpty(code))
+                    if (!string.IsNullOrEmpty(code))
                         Model.GetType().GetProperty("Code").SetValue(Model, code);
                 }
                 objEF.Add(Model);
@@ -336,6 +335,19 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
             {
 
             }
+        }
+        public async Task<List<DataTable>> ExecuteStoredProcedure(string storeProcedure, params (string, object)[] parameter)
+        {
+            List<DataTable> tables = new List<DataTable>();
+            SprocRepository _sprocRepository = new SprocRepository(_dbContext);
+            DataTable result = await _sprocRepository.GetStoredProcedure(storeProcedure)
+                        .WithSqlParams(parameter)
+                        .ExecuteStoredProcedureToTableAsync();
+            tables.Add(result);
+            //IList<DataTable> result = await _sprocRepository.GetStoredProcedure(storeProcedure)
+            //                .WithSqlParams(parameter)
+            //                .ExecuteStoredProcedureAsync<DataTable>();
+            return tables;
         }
         public async Task<string> GenCodeMultipleTableSQL(string TableName = "")
         {

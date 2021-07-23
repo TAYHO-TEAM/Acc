@@ -34,9 +34,9 @@
         public const string CategoryUnit_TABLENAME = "CategoryUnit";
         public const string WareHouseAllGoods_TABLENAME = "WareHouseAllGoods";
         public const string ComplaintDetail_TABLENAME = "ComplaintDetail";
-        public const string WarehouseReleasedDetail_TABLENAME = "WareHouseAllGoods";
-        public const string WarehouseReleased_TABLENAME = "WareHouseAllGoods";
-        public const string DefectFeedbackDetail_TABLENAME = "WareHouseAllGoods";
+        public const string WarehouseReleasedDetail_TABLENAME = "WarehouseReleasedDetail";
+        public const string WarehouseReleased_TABLENAME = "WarehouseReleased";
+        public const string DefectFeedbackDetail_TABLENAME = "DefectFeedbackDetail";
         
 
     }

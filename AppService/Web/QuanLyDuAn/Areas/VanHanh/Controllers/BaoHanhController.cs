@@ -97,6 +97,7 @@ namespace QuanLyDuAn.Areas.VanHanh.Controllers
                 client.BaseAddress = new Uri(ConfigurationSettings.AppSettings["omCRUD"].ToString());//http://localhost:50999/,https://api-pm-cmd.tayho.com.vn/
                 client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                int id = 0;
                 using (HttpResponseMessage response = client.PostAsync("api/v1/DefectFeedback/", mFormData).Result)
                 {
                     if (response.StatusCode != HttpStatusCode.OK)
@@ -104,7 +105,36 @@ namespace QuanLyDuAn.Areas.VanHanh.Controllers
                         var err = response.Content.ReadAsStringAsync().Result;
                         return Json(new { status = "error", result = err });
                     }
+                    else
+                    {
+                        var json = new JavaScriptSerializer().Deserialize<dynamic>(response.Content.ReadAsStringAsync().Result.ToString());
+                       id = Convert.ToInt32(json["result"]["id"].ToString());
+                       
+                    }
                 }
+                if(id >0)
+                {
+                    var numbers = requestOBJ.DefectiveIds.Split(',').Select(Int32.Parse).ToList();
+                    foreach (var item in numbers)
+                    {
+                        MultipartFormDataContent mFormDataSub = new MultipartFormDataContent();
+                        DefectFeedBackDetailOBJ defectFeedBackDetailOBJ = new DefectFeedBackDetailOBJ();
+                        defectFeedBackDetailOBJ.DefectiveId = item;
+                        defectFeedBackDetailOBJ.DefectFeedbackId = id;
+                        defectFeedBackDetailOBJ.Status = 1;
+                        var valuesSub = new JavaScriptSerializer().Serialize(defectFeedBackDetailOBJ);
+                        if (!string.IsNullOrEmpty(valuesSub)) mFormDataSub.Add(new StringContent(valuesSub), "values");
+                        using (HttpResponseMessage responseSub = client.PostAsync("api/v1/DefectFeedbackDetail/", mFormDataSub).Result)
+                        {
+                            if (responseSub.StatusCode != HttpStatusCode.OK)
+                            {
+                                var err = responseSub.Content.ReadAsStringAsync().Result;
+                                return Json(new { status = "error", result = err });
+                            }
+                        }
+                    }
+                }    
+               
             }
             return Json(new { status = "success", result = "Đã lưu thông tin yêu cầu thành công" });
         }
@@ -114,6 +144,7 @@ namespace QuanLyDuAn.Areas.VanHanh.Controllers
             MultipartFormDataContent mFormData = new MultipartFormDataContent();
             HttpFileCollectionBase listFile = HttpContext.Request.Files;
             string token = requestOBJ.token;
+            requestOBJ.Note =requestOBJ.Note??" ";
             var values = new JavaScriptSerializer().Serialize(requestOBJ);
             if (!string.IsNullOrEmpty(requestOBJ.Key.ToString())) mFormData.Add(new StringContent(requestOBJ.Key.ToString()), "key");
             if (!string.IsNullOrEmpty(values)) mFormData.Add(new StringContent(values), nameof(values));
@@ -246,10 +277,10 @@ namespace QuanLyDuAn.Areas.VanHanh.Controllers
                         }
                     }
                 }
-            }     
+            }
             else if (requestOBJ.Status == 22)
             {
-               
+
                 requestOBJ.Status = 30;
             }
             var values = new JavaScriptSerializer().Serialize(requestOBJ);
@@ -258,7 +289,7 @@ namespace QuanLyDuAn.Areas.VanHanh.Controllers
             if (!string.IsNullOrEmpty(values)) mFormData.Add(new StringContent(values), nameof(values));
             if (listFile.Count > 0)
             {
-                
+
                 int i = 1;
                 foreach (string file in listFile)
                 {

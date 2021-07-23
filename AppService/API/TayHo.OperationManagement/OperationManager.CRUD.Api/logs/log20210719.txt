@@ -1,0 +1,15 @@
+2021-07-19 01:51:51.838 +07:00 [INF] Application Starting.
+2021-07-19 01:51:54.543 +07:00 [INF] User profile is available. Using 'C:\Users\poka\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2021-07-19 01:51:54.915 +07:00 [INF] Now listening on: http://localhost:54323
+2021-07-19 01:51:54.917 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2021-07-19 01:51:54.917 +07:00 [INF] Hosting environment: Development
+2021-07-19 01:51:54.918 +07:00 [INF] Content root path: F:\TayHo\SystemCore\AppService\API\TayHo.OperationManagement\OperationManager.CRUD.Api
+2021-07-19 01:51:55.600 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:54323/swagger/index.html  
+2021-07-19 01:51:55.792 +07:00 [INF] Request finished in 195.3414ms 200 text/html;charset=utf-8
+2021-07-19 01:51:56.011 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:54323/swagger/v1/swagger.json  
+2021-07-19 01:51:56.374 +07:00 [INF] Request finished in 363.5286ms 200 application/json;charset=utf-8
+2021-07-19 01:52:02.962 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:54323/api/v1/Complaint/ReportComplaint?id=57  
+2021-07-19 01:52:02.996 +07:00 [INF] Executing endpoint 'OperationManager.CRUD.Api.Controllers.v1.ComplaintController.DownReportAsync (OperationManager.CRUD.Api)'
+2021-07-19 01:52:03.037 +07:00 [INF] Route matched with {action = "DownReport", controller = "Complaint"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] DownReportAsync(Int32) on controller OperationManager.CRUD.Api.Controllers.v1.ComplaintController (OperationManager.CRUD.Api).
+2021-07-19 01:52:05.841 +07:00 [INF] Executing action method OperationManager.CRUD.Api.Controllers.v1.ComplaintController.DownReportAsync (OperationManager.CRUD.Api) - Validation state: "Valid"
+2021-07-19 01:52:06.358 +07:00 [INF] Entity Framework Core 3.1.8 initialized 'QuanLyVanHanhContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None

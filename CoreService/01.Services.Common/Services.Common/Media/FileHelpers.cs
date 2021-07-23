@@ -834,9 +834,6 @@ namespace Services.Common.Media
             var fileType = new FileType();
             try
             {
-                //var uploadPath = Path.Combine(_env.ContentRootPath, "/Uploads");
-                //Directory.CreateDirectory(uploadPath);
-                //var provider = new MultipartFormDataStreamProvider(uploadPath);
                 var target = Path.Combine(_mediaOptions.LocalUploadUrl + _mediaOptions.FolderForWeb + Folder);
                 Directory.CreateDirectory(target);
                 filename = string.Format("{0}-{1}{2}"

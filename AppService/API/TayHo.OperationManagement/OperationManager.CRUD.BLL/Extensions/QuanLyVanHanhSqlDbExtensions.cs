@@ -2,7 +2,9 @@
 using Dapper.Common.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using OperationManager.CRUD.BLL.IRepositories;
 using OperationManager.CRUD.BLL.IRepositories.BaseClasses;
+using OperationManager.CRUD.BLL.Repositories;
 using OperationManager.CRUD.BLL.Repositories.BaseClasses;
 using OperationManager.CRUD.DAL.DTO;
 
@@ -58,6 +60,8 @@ namespace OperationManager.CRUD.BLL.Extensions
             services.AddScoped<IQuanLyVanHanhRepository<DefectFeedbackDetail>, QuanLyVanHanhRepository<DefectFeedbackDetail>>();
             services.AddScoped<IQuanLyVanHanhRepository<WarehouseReleased>, QuanLyVanHanhRepository<WarehouseReleased>>();
             services.AddScoped<IQuanLyVanHanhRepository<WarehouseReleasedDetail>, QuanLyVanHanhRepository<WarehouseReleasedDetail>>();
+
+            services.AddScoped<IComplaintRepository<Complaint>, ComplaintRepository<Complaint>>();
             return services;
         }
         #endregion private functions

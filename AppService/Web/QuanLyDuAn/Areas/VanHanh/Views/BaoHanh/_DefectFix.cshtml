@@ -34,30 +34,86 @@
                                     colSpan: 4,
                                     dataField: "maintenanceSupplierInfoId",
                                     label: { text: "Đơn vị sửa" },
-                                    editorType: "dxTextBox",
+                                    editorType: "dxSelectBox",
                                     editorOptions: {
                                         stylingMode: "filled",
-                                        placeholder: "Vui lòng nhập...",
+                                        searchEnabled: true,
+                                        searchMode: "contains",
+                                        searchExpr: ['name'],
+                                        showClearButton: true,
+                                        placeholder: "Vui lòng chọn...",
+                                        dataSource: customStore_MaintenanceSupplierInfo(),
+                                        valueExpr: 'id',
+                                        displayExpr: 'name',
+                                        elementAttr: {
+                                            id: "elementMaintenanceSupplierInfo",
+                                        },
+                                        onValueChanged: function (e) {
+                                            var selTarget = $('#elementMaintenancerInfoId').dxSelectBox('instance');
+                                            selTarget.option('value', null);
+                                            if (e.value > 0) {
+                                                selTarget.option("dataSource", customStore_MaintenancerInfo(e.value));
+                                            }
+                                            else {
+                                                selTarget.option("dataSource", customStore_MaintenancerInfo(0));
+                                            }
+                                        },
                                     },
+                                    validationRules: [{ type: "required" }],
                                 },
                                 {
                                     colSpan: 4,
                                     dataField: "maintenancerInfoId",
                                     label: { text: "Mã KTV" },
-                                    editorType: "dxTextBox",
+                                    visible: true,
+                                    editorType: "dxSelectBox",
                                     editorOptions: {
                                         stylingMode: "filled",
-                                        placeholder: "Vui lòng nhập...",
+                                        searchEnabled: true,
+                                        searchMode: "contains",
+                                        searchExpr: ['fullName'],
+                                        showClearButton: true,
+                                        placeholder: "Vui lòng chọn...",
+                                        dataSource: customStore_MaintenancerInfo(0),
+                                        valueExpr: "id",
+                                        displayExpr: 'id',
+                                        elementAttr: {
+                                            id: "elementMaintenancerInfoId",
+                                        },
+                                        onValueChanged: function (data) {
+
+                                            if (data.value != null) {
+                                                customStore_MaintenancerInfoById(data.value).load().done((rs) => {
+                                                    if (rs != null && rs.length > 0) {
+                                                        console.log(rs);
+                                                        $('#elementMaintaincerName').dxTextBox('instance')
+                                                            .option('value', rs[0].id == null ? "" : (rs[0].fullName ?? ""));
+                                                        $('#elementPhoneId').dxTextBox('instance')
+                                                            .option('value', rs[0].id == null ? 0 : rs[0].phone);
+                                                    }
+                                                });
+                                            }
+                                            else {
+                                            };
+                                        },
+                                        itemTemplate: function (data) {
+                                            return $("<div>").append($("<b>").append(data.id).addClass("mr-1"), $("<em>").append(data.fullName));
+                                        },
                                     },
+                                    validationRules: [{ type: "required" }],
                                 },
                                 {
                                     colSpan: 4,
                                     dataField: "fixer",
                                     label: { text: "Kỹ thuật viên" },
+                                    visible: true,
                                     editorType: "dxTextBox",
                                     editorOptions: {
                                         stylingMode: "filled",
-                                        placeholder: "Vui lòng nhập...",
+                                        readOnly: false,
+                                        elementAttr: {
+                                            id: "elementMaintaincerName",
+                                        },
                                     },
                                     validationRules: [{ type: "required" }],
                                 },
@@ -69,11 +125,12 @@
                                     editorOptions: {
                                         stylingMode: "filled",
                                         placeholder: "Vui lòng nhập...",
+                                        readOnly: false,
                                         value: formData["description"],
+                                        elementAttr: {
+                                            id: "elementPhoneId",
+                                        },
                                     },
-                                    validationRules: [{
-                                        type: "numeric"
-                                    }]
                                 },
                                 {
                                     colSpan: 4,
@@ -108,7 +165,7 @@
                                 //        value: formData["description"],
                                 //    },
                                 //},
-                               
+
                                 {
                                     colSpan: 12,
                                     dataField: "note",

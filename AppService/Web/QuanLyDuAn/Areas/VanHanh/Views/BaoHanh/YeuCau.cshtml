@@ -84,6 +84,7 @@
     <script src="~/Scripts/page/vanhanh.js"></script>
     <script>
         var id = 1;
+        var $selectionID = 0;
         clearContent();
         ///-----------------------------READ ------------------------
 
@@ -98,6 +99,7 @@
         var ACTION_DEFECTACCEPTANCE = "DefectAcceptance/";
         var ACTION_MAINTENANCESUPPLIERINFO = "MaintenanceSupplierInfo/";
         var ACTION_MAINTENANCERINFO = "MaintenancerInfo/";
+        var ACTION_DEFECTFEEDBACKDETAIL = "DefectFeedbackDetail/";
         var KEY = "id";
         var WIDTH_CONTAINER = $("#container").width();
 
@@ -112,7 +114,6 @@
             store: $DATASOURCE(ACTION_FEEDBACK, KEY),
             filter: ["id", "=", id]
         });
-
         var customStore_Attachment = (id, owner) => new DevExpress.data.DataSource({
             store: $DATASOURCE(ACTION_FILESATTACHMENT, KEY),
             filter: [["ownerById", "=", id], "and", ["ownerByTable", "=", owner]]
@@ -121,7 +122,6 @@
             store: $DATASOURCE(ACTION_DEFECTFIX, KEY),
             filter: ["defectFeedbackId", "=", id]
         });
-
         var customStore_DefectAcceptance = (id) => new DevExpress.data.DataSource({
             store: $DATASOURCE(ACTION_DEFECTACCEPTANCE, KEY),
             filter: ["defectFixId", "=", id]
@@ -130,14 +130,13 @@
             store: $DATASOURCEGET(ACTION_CUSTOMERREALESTATE, KEY),
             filter: ["realEstateId", "=", id]
         });
-
         var customStore_Defective = $DATASOURCEGET(ACTION_DEFECTIVE, KEY);
         var customStore_RealEstate = $DATASOURCEGET(ACTION_REALESTATE, KEY);
         var customStore_CustomerInfoRealEstateById = (id) => {
             var deferred = $.Deferred();
             return customStore_CustomerRealEstate(id).load().then((rs) => {
                 if (rs != null && rs.length > 0) {
-           
+
                     deferred.resolve(customStore_CustomerInfoById(rs[0].customerInfoId)[0]);
                 }
             });
@@ -158,6 +157,14 @@
         var customStore_MaintenancerInfo = (id) => new DevExpress.data.DataSource({
             store: $DATASOURCEGET(ACTION_MAINTENANCERINFO, KEY),
             filter: ["maintenanceSupplierInfoId", "=", id]
+        });
+        var customStore_DefectFeedbackDetail = (id) => new DevExpress.data.DataSource({
+            store: $DATASOURCE(ACTION_DEFECTFEEDBACKDETAIL, KEY),
+            filter: ["defectFeedbackId", "=", id]
+        });
+        var customStore_MaintenancerInfoById = (id) => new DevExpress.data.DataSource({
+            store: $DATASOURCEGET(ACTION_MAINTENANCERINFO, KEY),
+            filter: ["id", "=", id]
         });
         //..........................  Load View -------------------------------------------------------------
         $(function () {
@@ -204,6 +211,25 @@
                 onToolbarPreparing: function (e) {
                     var container = e.component;
                     e.toolbarOptions.items.unshift(
+                        {
+                            location: "after",
+                            widget: "dxButton",
+                            options: {
+                                icon: "download",
+                                tylingMode: "filled",
+                                type: "default",
+                                visible: true,
+                                onClick: (e) => {
+                                    console.log($selectionID);
+                                    window.location.href = ('https://api-om-crud.tayho.com.vn/api/v1/DefectFeedback/ReportDefectFeedback/?id=' + $selectionID);
+                                }
+                            },
+                            editorOptions: {
+                                elementAttr: {
+                                    id: "elementDownLoad",
+                                },
+                            },
+                        },
                         {
                             location: "before",
                             widget: "dxSelectBox",
@@ -257,7 +283,8 @@
                 onContentReady: (e) => {
                     var container = e.component;
                     $("#action-add").dxSpeedDialAction({
-                        index: 1, icon: "fas fa-plus",
+                        index: 1,
+                        icon: "fas fa-plus",
                         label: "Thêm mới",
                         visible: PermitInAction["insert"],
                         onClick: () => {
@@ -288,6 +315,7 @@
                     var containerE = e.component;
                     var selectedRowData = e.selectedRowsData[0];
                     var selectedRowKey = e.selectedRowKeys[0];
+                    $selectionID = selectedRowKey;
                     //$('#action-log').remove();
                     //e.component.refresh();
                     if (selectedRowData != null && selectedRowKey != null) {
@@ -297,7 +325,7 @@
                             label: "Cập nhật thông tin",
                             visible: PermitInAction["update"],
                             onClick: () => {
-                               
+
                                 CALLPOPUP(
                                     "Chi tiết yêu cầu bảo hành",
                                     "/VanHanh/BaoHanh/_YeuCauDetail?id=" + selectedRowKey,
@@ -335,7 +363,7 @@
                                 label: "Kế hoạch sửa chữa",
                                 visible: selectedRowData.status < 20 && selectedRowData.status > 10 && PermitInAction["update"],
                                 onClick: () => {
-                                  
+
                                     CALLPOPUP(
                                         "Kế hoạch sửa chữa",
                                         "/VanHanh/BaoHanh/_DefectFix?id=" + selectedRowKey,
@@ -459,32 +487,69 @@
                         alignment: "center",
                         visible: true,
                     },// fullName
-                    {
-                        dataField: "defectiveId",
-                        allowFiltering: true,
-                        caption: "Lỗi",
-                        dataType: "number",
-                        alignment: "center",
-                        visible: true,
-                        editorType: "dxLookup",
-                        lookup: {
-                            dataSource: customStore_Defective,
-                            valueExpr: "id",
-                            displayExpr: "name",
-                        },
-                        editorOptions: {
-                            dataSource: customStore_Defective,
-                            valueExpr: "id",
-                            displayExpr: "name",
-                            placeholder: "Vui lòng chọn...",
-                            searchExpr: ['name', 'description'],
-                            searchEnabled: true,
-                            showClearButton: true,
-                            itemTemplate: function (data) {
-                                return $("<div>").append($("<b>").append(data.name).addClass("mr-1").append($("<em>").append(data.code).addClass("small ml-1 text-muted")));
-                            },
-                        },
-                    },// defectiveId
+                    //{
+                    //    dataField: "id",
+                    //    allowFiltering: true,
+                    //    caption: "Lỗi",
+                    //    dataType: "number",
+                    //    alignment: "center",
+                    //    visible: true,
+                    //    //editorType: "dxLookup",
+                    //    calculateDisplayValue: function (rowData) {
+                    //        var deferred = $.Deferred();
+                    //        var $listDefectCurrent = '';
+                    //        var funcA = async () => {
+                    //            var subscription = await customStore_DefectFeedbackDetail(rowData.id).load().then((rsCurrent) => {
+                    //                //deferred.resolve($listDefectCurrent);
+                    //                return rsCurrent.map(x => x.defectiveId).join(',');
+                    //            });
+
+                    //            $listDefectCurrent = subscription;
+                    //            console.log($listDefectCurrent);
+                    //        };
+                    //        funcA();
+                    //        console.log($listDefectCurrent);
+                    //        return $listDefectCurrent;
+                    //        //customStore_DefectFeedbackDetail(rowData.id).load().then((rsCurrent) => {
+                    //        //    this.$listDefectCurrent = rsCurrent.map(x => x.defectiveId).join(',');
+                    //        //    console.log(this.$listDefectCurrent);
+                    //        //    //deferred.resolve($listDefectCurrent);
+                    //        //    return rsCurrent.map(x => x.defectiveId).join(',');
+                    //        //});
+                    //        //console.log("return");
+                    //        //console.log(this.$listDefectCurrent);
+                    //        //return this.$listDefectCurrent;
+                    //        //var filterExpression = [],
+                    //        //    values = rowData.StateID;
+                    //        //for (var i = 0; i < values.length; i++) {
+                    //        //    if (i > 0) {
+                    //        //        filterExpression.push('or');
+                    //        //    }
+                    //        //    filterExpression.push(['ID', values[i]]);
+                    //        //}
+                    //        //var result = $.map(DevExpress.data.query(states).filter(filterExpression).toArray(), function (item) {
+                    //        //    return item.Name;
+                    //        //}).join(',');
+                    //        //return result;
+                    //    },
+                    //    //lookup: {
+                    //    //    dataSource: customStore_Defective,
+                    //    //    valueExpr: "id",
+                    //    //    displayExpr: "name",
+                    //    //},
+                    //    //editorOptions: {
+                    //    //    dataSource: customStore_Defective,
+                    //    //    valueExpr: "id",
+                    //    //    displayExpr: "name",
+                    //    //    placeholder: "Vui lòng chọn...",
+                    //    //    searchExpr: ['name', 'description'],
+                    //    //    searchEnabled: true,
+                    //    //    showClearButton: true,
+                    //    //    itemTemplate: function (data) {
+                    //    //        return $("<div>").append($("<b>").append(data.name).addClass("mr-1").append($("<em>").append(data.code).addClass("small ml-1 text-muted")));
+                    //    //    },
+                    //    //},
+                    //},// defectiveId
                     {
                         dataField: "phone",
                         allowFiltering: true,

@@ -12,7 +12,6 @@ namespace OperationManager.CRUD.BLL.Repositories
         public DocumentReleasedRepository(QuanLyVanHanhContext dbContext)
         {
             _dbContext = dbContext;
-            //_dbContext.ChangeTracker.AutoDetectChangesEnabled = false;
         }
     }
 }

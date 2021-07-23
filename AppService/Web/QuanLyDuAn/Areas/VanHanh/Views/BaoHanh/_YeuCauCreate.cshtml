@@ -50,36 +50,24 @@
                                     id: "elementRealEstateId",
                                 },
                                 onValueChanged: function (data) {
-                                    //$('#elementCustomerId').dxSelectBox('instance')
-                                    //    .option('disabled', data.value != null);
-                                    //$('#elementFullNameId').dxTextBox('instance')
-                                    //    .option('disabled', data.value != null);
-                                    //$('#elementPhoneId').dxTextBox('instance')
-                                    //.option('disabled', data.value != null);
                                     if (data.value != null) {
-                                        console.log(data.value);
-                                        var deferred = $.Deferred();
+                                   
                                         customStore_CustomerRealEstate(data.value).load().done((rs) => {
                                             if (rs != null && rs.length > 0) {
                                                 customStore_CustomerInfoById(rs[0].customerInfoId).load().done((rsCI) => {
                                                     console.log(rsCI);
                                                     $('#elementCustomerId').dxSelectBox('instance')
                                                         .option('value', rsCI[0].id == null ? 0 : rsCI[0].id);
-                                                    //$('#elementFullNameId').dxTextBox('instance')
-                                                    //    .option('value', rsCI[0].id == null ? "" : (rsCI[0].firstName + " " + rsCI[0].lastName));
+                                                    $('#elementCustomerFullName').dxTextBox('instance')
+                                                        .option('value', rsCI[0].id == null ? "" : (rsCI[0].firstName ?? "" + " " + rsCI[0].lastName ?? ""));
                                                     $('#elementPhoneId').dxTextBox('instance')
                                                         .option('value', rsCI[0].id == null ? 0 : rsCI[0].phone);
                                                 });
                                             }
                                         });
-
                                     }
                                     else {
-                                        $('#elementDocumentTypeId').dxSelectBox('instance')
-                                            .option('value', null);
                                     };
-
-
                                 },
                             },
                             validationRules: [{ type: "required" }],
@@ -88,11 +76,11 @@
                             colSpan: 6,
                             dataField: "customerId",
                             label: { text: "mã khách hàng" },
-                            lookup: {
-                                dataSource: customStore_CustomerInfo,
-                                valueExpr: "id",
-                                displayExpr: getDisplayExpr,
-                            },
+                            //lookup: {
+                            //    dataSource: customStore_CustomerInfo,
+                            //    valueExpr: "id",
+                            //    displayExpr: getDisplayExpr,
+                            //},
                             editorType: "dxSelectBox",
                             editorOptions: {
                                 stylingMode: "filled",
@@ -103,7 +91,7 @@
                                 placeholder: "Vui lòng nhập...",
                                 dataSource: customStore_CustomerInfo,
                                 valueExpr: "id",
-                                displayExpr: getDisplayExpr,
+                                displayExpr: "id",
                                 elementAttr: {
                                     id: "elementCustomerId",
                                 },
@@ -112,46 +100,30 @@
                         },
                         {
                             colSpan: 6,
-                            dataField: "defectiveId",
-                            label: { text: "Mã lỗi" },
-                            lookup: {
-                                dataSource: customStore_Defective,
-                                valueExpr: "id",
-                                displayExpr: "code",
-                            },
-                            editorType: "dxSelectBox",
+                            dataField: "fullName",
+                            label: { text: "Tên Khách Hàng" },
+                            //lookup: {
+                            //    dataSource: customStore_CustomerInfo,
+                            //    valueExpr: "id",
+                            //    displayExpr: getDisplayExpr,
+                            //},
+                            editorType: "dxTextBox",
                             editorOptions: {
                                 stylingMode: "filled",
-                                //value: formData["documentTypeId"],
-                                dataSource: customStore_Defective,
-                                searchEnabled: true,
-                                searchMode: "contains",
-                                showClearButton: true,
-                                valueExpr: "id",
-                                displayExpr: "name",
+                                //searchEnabled: true,
+                                //searchMode: "contains",
+                                //searchExpr: ['firstName', 'lastName'],
+                                //showClearButton: true,
+                                //placeholder: "Vui lòng nhập...",
+                                //dataSource: customStore_CustomerInfo,
+                                //valueExpr: "id",
+                                //displayExpr: getDisplayExpr,
                                 elementAttr: {
-                                    id: "elementDefectiveId",
-                                },
-                                itemTemplate: function (data) {
-                                    return $("<div>").append($("<b>").append(data.code).addClass("mr-1"), $("<em>").append(data.name));
+                                    id: "elementCustomerFullName",
                                 },
                             },
                             validationRules: [{ type: "required" }],
                         },
-                        //{
-                        //    colSpan: 6,
-                        //    dataField: "fullName",
-                        //    label: { text: "Họ tên khách hàng" },
-                        //    editorType: "dxTextBox",
-                        //    editorOptions: {
-                        //        elementAttr: {
-                        //            id: "elementFullNameId",
-                        //        },
-                        //        stylingMode: "filled",
-                        //        placeholder: "Vui lòng nhập...",
-                        //        value: formData["description"],
-                        //    },
-                        //},
                         {
                             colSpan: 6,
                             dataField: "phone",
@@ -166,6 +138,39 @@
                                 value: formData["description"],
                             },
                         },
+                        {
+                            colSpan: 12,
+                            //dataField: "defectiveId",
+                            label: { text: "Mã lỗi" },
+                            lookup: {
+                                dataSource: customStore_Defective,
+                                valueExpr: "id",
+                                displayExpr: "code",
+                            },
+                            editorType: "dxTagBox",
+                            editorOptions: {
+                                stylingMode: "filled",
+                                //value: formData["documentTypeId"],
+                                dataSource: customStore_Defective,
+                                //dataSource: new DevExpress.data.ArrayStore({
+                                //    data: customStore_Defective,
+                                //    key: "id"
+                                //}),
+                                searchEnabled: true,
+                                searchMode: "contains",
+                                showClearButton: true,
+                                valueExpr: "id",
+                                displayExpr: "name",
+                                elementAttr: {
+                                    id: "elementDefectiveId",
+                                },
+                                itemTemplate: function (data) {
+                                    return $("<div>").append($("<b>").append(data.code).addClass("mr-1"), $("<em>").append(data.name));
+                                },
+                            },
+                            validationRules: [{ type: "required" }],
+                        },
+                      
                         {
                             colSpan: 12,
                             dataField: "note",
@@ -202,88 +207,98 @@
             }
         }).dxForm("instance");
         fileUploader();
-    });
-    $(document).on('click', '#submit', '#form-regist', function (e) {
-        //$(this).prop("disabled", true);
-        e.preventDefault();
-        var fileWrappers = fileUploader()._files;
-        var resValid = true
-        for (var i = 0; i < fileWrappers.length; i++) {
-            if (fileWrappers[i].isValid() === false) {
-                resValid = false;
-            }
-        }
-        if (!resValid) {
-            DevExpress.ui.notify("Vui lòng kiểm tra lại file đính kèm!", "error", 3000);
-        }
-        else {
-            loadingPanel.show();
-            var fdata = new FormData();
-            var i = 10;
-            $.each(formData, function (key, value) {
-                if (key === 'calendar') {
-                    fdata.append(key, moment(value).format('YYYY-MM-DD HH:mm:ss'));
-                }
-                else {
-                    fdata.append(key, value);
-                }
-            });
-            //fdata.append('projectId', PROJECTID);
-            //fdata.append('token', UserCurrentInfo.accessToken);
-            var files = $("#file-uploader").dxFileUploader("instance").option("value");
-            if (files.length > 0) {
-                $.each(files, function (key, value) {
-                    fdata.append(files[key].name, files[key]);
-                });
-            }
-            fdata.append('ConstructionItemsId', ITEMSID);
-            fdata.append('token', UserCurrentInfo.accessToken);
-            //else {
-            //    DevExpress.ui.notify("Vui lòng chọn file đính kèm", "error", 3000);
-            //    e.preventDefault();
-            //    return false;
+        $("#form-regist").on("submit", function (e) {
+            e.preventDefault();
+            var formdata = $('#form-regist').dxForm("instance").option('formData');
+          
+            var tagDefectiveData = $('#elementDefectiveId').dxTagBox("instance").option('selectedItems');
+            //var DefectiveIds = new int[];
+            var tagDefectiveIds = tagDefectiveData.map(x => x.id).toString();
+
+       
+            //var fileWrappers = $('#form-regist').dxForm("instance").option('formData');._files;
+            var resValid = true
+            //for (var i = 0; i < fileWrappers.length; i++) {
+            //    if (fileWrappers[i].isValid() === false) {
+            //        resValid = false;
+            //    }
             //};
-            //for (var pair of fdata.entries()) {
-            //    console.log(pair[0] + ', ' + pair[1]);
-            //}
-            //var values = JSON.stringify(fdata);
-            var deferred = $.Deferred();
-            $.ajax({
-                type: "POST",
-                enctype: 'multipart/form-data',
-                url: "/VanHanh/BaoHanh/YeuCauCreate",
-                data: fdata,
-                processData: false,
-                contentType: false,
-                cache: false,
-                success: function (rs) {
-                    deferred.resolve(true);
-                    loadingPanel.hide();
-                    DevExpress.ui.notify(rs.result, rs.status, 3000);
-                    if (rs.status == "success") {
-                        $("#popup-register").dxPopup('instance').hide();
+            if (!resValid) {
+                DevExpress.ui.notify("Vui lòng kiểm tra lại file đính kèm!", "error", 3000);
+            }
+            else {
+                loadingPanel.show();
+                var fdata = new FormData();
+                var i = 10;
+                $.each(formData, function (key, value) {
+                    if (key === 'calendar') {
+                        fdata.append(key, moment(value).format('YYYY-MM-DD HH:mm:ss'));
                     }
-                },
-                error: function (xhr, textStatus, errorThrown) {
-                    loadingPanel.hide();
-                    DevExpress.ui.notify("Có lỗi xảy ra: " + errorThrown, "error", 3000);
+                    else {
+                        fdata.append(key, value);
+                    }
+                });
+                //fdata.append('projectId', PROJECTID);
+                //fdata.append('token', UserCurrentInfo.accessToken);
+                var files = $("#file-uploader").dxFileUploader("instance").option("value");
+                if (files.length > 0) {
+                    $.each(files, function (key, value) {
+                        fdata.append(files[key].name, files[key]);
+                    });
                 }
-            });
-            //e.preventDefault();
-            return deferred.promise();
+                fdata.append('DefectiveIds', tagDefectiveIds);
+                fdata.append('ConstructionItemsId', ITEMSID);
+                fdata.append('token', UserCurrentInfo.accessToken);
+                //fdata.push(DefectiveIds);
+                //else {
+                //    DevExpress.ui.notify("Vui lòng chọn file đính kèm", "error", 3000);
+                //    e.preventDefault();
+                //    return false;
+                //};
+                for (var pair of fdata.entries()) {
+                    console.log(pair[0] + ', ' + pair[1]);
+                }
+                //var values = JSON.stringify(fdata);
+                var deferred = $.Deferred();
+                $.ajax({
+                    type: "POST",
+                    enctype: 'multipart/form-data',
+                    url: "/VanHanh/BaoHanh/YeuCauCreate",
+                    data: fdata,
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    success: function (rs) {
+                        deferred.resolve(true);
+                        loadingPanel.hide();
+                        DevExpress.ui.notify(rs.result, rs.status, 3000);
+                        if (rs.status == "success") {
+                            $("#popup-main").dxPopup('instance').hide();
+                        }
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        loadingPanel.hide();
+                        DevExpress.ui.notify("Có lỗi xảy ra: " + errorThrown, "error", 3000);
+                    }
+                });
+                e.preventDefault();
+                return deferred.promise();
+            }
+        });
+        function fileUploader() {
+            $("#file-uploader").dxFileUploader({
+                selectButtonText: "Chọn tập tin...",
+                labelText: "Hoặc kéo thả vào đây",
+                showFileList: true,
+                multiple: true,
+                uploadMode: "useForm",
+                accept: ".jpg,.jpeg,.gif,.png,.pdf",
+                allowedFileExtensions: [".jpg", ".jpeg", ".png", ".pdf"],
+                maxFileSize: 52428800,
+            }).dxFileUploader("instance");
         }
-
-
     });
-    var fileUploader = () => $("#file-uploader").dxFileUploader({
-        selectButtonText: "Chọn tập tin...",
-        labelText: "Hoặc kéo thả vào đây",
-        showFileList: true,
-        multiple: true,
-        uploadMode: "useForm",
-        accept: ".jpg,.jpeg,.gif,.png,.pdf",
-        allowedFileExtensions: [".jpg", ".jpeg", ".png", ".pdf"],
-        maxFileSize: 52428800,
-    }).dxFileUploader("instance");
+
+
 
 </script>

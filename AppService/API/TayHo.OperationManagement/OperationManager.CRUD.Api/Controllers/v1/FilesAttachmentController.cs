@@ -12,6 +12,8 @@ using Services.Common.DomainObjects.Exceptions;
 using OperationManager.CRUD.DAL.DTO;
 using OperationManager.CRUD.BLL.IRepositories.BaseClasses;
 using OperationManager.CRUD.Common;
+using System.IO;
+using Services.Common.Media;
 
 namespace OperationManager.CRUD.Api.Controllers.v1
 {
@@ -19,6 +21,7 @@ namespace OperationManager.CRUD.Api.Controllers.v1
     {
         const string VALIDATION_ERROR = "The request failed due to a validation error";
         const string Get = nameof(Get);
+        private const string DownLoadFile = nameof(DownLoadFile);
         public string nameEF = OperationManagerConstants.FilesAttachment_TABLENAME;
         protected readonly IQuanLyVanHanhRepository<FilesAttachment> _quanLyVanHanhRepository;
         public FilesAttachmentController(IMapper mapper, IHttpContextAccessor httpContextAccessor, IQuanLyVanHanhRepository<FilesAttachment> quanLyVanHanhRepository) : base(mapper, httpContextAccessor)
@@ -102,6 +105,64 @@ namespace OperationManager.CRUD.Api.Controllers.v1
             }
 
         }
+        /// <summary>
+        /// DownLoad FilesAttachment.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [Route(DownLoadFile)]
+        [HttpGet]
+        [ProducesResponseType(typeof(MethodResult<dynamic>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(VoidMethodResult), (int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> DownFilesAttachmentAsync(int id)
+        {
+            var methodResult = new MethodResult<dynamic>();
+            ErrorResult err = new ErrorResult();
+            err.ErrorCode = "101";
+            err.ErrorMessage = "File không tồn tại";
+            var memoryStream = new MemoryStream();
 
+            //try
+            //{
+            //    RequestBaseFilterParam requestFilter = new RequestBaseFilterParam();
+            //    requestFilter.FindId = id.ToString();
+            //    requestFilter.TableName = QuanLyDuAnConstants.FilesAttachment_TABLENAME;
+            //    var queryResult = await _dOBaseRepository.GetWithPaggingAsync(requestFilter).ConfigureAwait(false);
+
+            //    if (queryResult.Items.ToList().Count > 0)
+            //    {
+            //        FilesAttachmentDTO oldFile = queryResult.Items.ToList()[0];
+            //        var files = Path.GetFileName(oldFile.Direct.ToString()).ToList();
+            //        string filename = oldFile.DisplayName.ToString();
+
+
+            //        if (string.IsNullOrEmpty(filename))
+            //            filename = string.IsNullOrEmpty(oldFile.FileName.ToString()) ? "" : oldFile.FileName.ToString();
+
+
+            //        using (var stream = new FileStream(oldFile.Direct.ToString(), FileMode.Open))
+            //        {
+            //            await stream.CopyToAsync(memoryStream);
+            //        }
+            //        memoryStream.Position = 0;
+            //        string ext = Path.GetExtension(oldFile.Direct.ToString()).ToLowerInvariant();
+            //        return File(memoryStream, FileHelpers.GetMimeTypes()[ext], filename);
+
+            //    }
+            //    else
+            //    {
+            //        methodResult.AddErrorMessage(err);
+            //        //if (!methodResult.IsOk) throw new CommandHandlerException(methodResult.ErrorMessages);
+            //        return File(memoryStream, "");
+            //    }
+            //}
+            //catch
+            //{
+            //    methodResult.AddErrorMessage(err);
+            //    //if (!methodResult.IsOk) throw new CommandHandlerException(methodResult.ErrorMessages);
+                return File(memoryStream, "");
+            //return BadRequest(ErrorResult);
+            //}
+        }
     }
 }
