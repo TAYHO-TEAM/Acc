@@ -53,8 +53,8 @@
             loadData(customStore);
         });
 
-        let loadData = (dataSource) => $("#container").dxDataGrid({
-            height: heightScreen,
+        var loadData = (dataSource) => $("#container").dxDataGrid({
+            height: heightScreen - ,
             dataSource: customStore,
             repaintChangesOnly: true,
             remoteOperations: {

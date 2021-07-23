@@ -85,7 +85,7 @@
             showRowLines: true, columnAutoWidth: true, wordWrapEnabled: true, rowAlternationEnabled: true,
             columns: [
                 {
-                    dataField: "soHopDong", caption: "Số HĐ/PLHĐ", dataType: "string", width: 200,
+                    dataField: "soHopDong", caption: "Số HĐ/PLHĐ", dataType: "string", 
                     // cellTemplate: (c, o) => $("<div>").addClass("font-weight-bold").append(o.value).appendTo(c),
                     cellTemplate: (c, o) => {
                         $("<div/>").addClass("font-weight-bold").append(o.value).appendTo(c);
@@ -99,10 +99,7 @@
                 },//soHopDong
                 {
                     dataField: "projectId", caption: "Dự án", visible: false,
-                    lookup: {
-                        dataSource: customStore_Projects,
-                        valueExpr: "id", displayExpr: "name",
-                    },
+                    lookup: { dataSource: customStore_Projects, valueExpr: "id", displayExpr: "name", },
                     editorType: "dxSelectBox",
                     editorOptions: {
                         disabled: true,
@@ -117,7 +114,7 @@
                     validationRules: [{ type: "required" }]
                 },//contractorInfoId
                 {
-                    dataField: "contractorInfoId", caption: "Nhà thầu", alignment: "left", width: $("#container").width() < 1450 ? 250 : null,
+                    dataField: "contractorInfoId", caption: "Nhà thầu", alignment: "left", width: 200,
                     lookup: {
                         dataSource: customStore_ContractorInfo,
                         valueExpr: "id", displayExpr: "name",
@@ -417,7 +414,7 @@
             onContentReady: (e) => {
 
                 $("#action-add").dxSpeedDialAction({
-                    index: 1, icon: "fas fa-plus", label: "Thêm hợp đồng",
+                    index: 1, icon: "fas fa-plus", label: "Thêm HĐ",
                     visible: PermitInAction["insert"],
                     onClick: () => e.component.addRow()
                 }).dxSpeedDialAction("instance");
@@ -445,7 +442,7 @@
                     var data = e.component.getRowIndexByKey(selectedRowKey);
 
                     $("#action-add").dxSpeedDialAction({
-                        index: 2, icon: "fas fa-plus", label: "Thêm phụ lục hợp đồng",
+                        index: 2, icon: "fas fa-plus", label: "Thêm phụ lục HĐ",
                         visible: (PermitInAction["insert"] && selectedRowData.parentId==0),
                         onClick: () => e.component.addRow(data)
                     }).dxSpeedDialAction("instance");

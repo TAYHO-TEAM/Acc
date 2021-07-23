@@ -23,21 +23,11 @@
                 items: [
                     {
                         colSpan: 12,
-                        label: { text: "Tên đăng nhập", visible: false },
+                        label: { text: "Tên đăng nhập" },
                         dataField: "userName",
                         editorType: "dxTextBox",
                         editorOptions: {
-                            placeholder: "Tên đăng nhập ...",
-                            buttons: [
-                                {
-                                    location: "before",
-                                    name: "icon-username",
-                                    options: {
-                                        stylingMode: "text",
-                                        icon: "ti ti-user",
-                                    }
-                                }
-                            ],
+                            placeholder: "Tên đăng nhập ...", 
                         },
                         validationRules: [
                             {
@@ -48,7 +38,7 @@
                     },
                     {
                         colSpan: 12,
-                        label: { text: "Mật khẩu", visible: false },
+                        label: { text: "Và mật khẩu" },
                         dataField: "password",
                         editorType: "dxTextBox",
                         editorOptions: {
@@ -68,15 +58,7 @@
                                             input_pass.option("mode", input_pass.option("mode") === "text" ? "password" : "text");
                                         }
                                     }
-                                },
-                                {
-                                    location: "before",
-                                    name: "icon-password",
-                                    options: {
-                                        stylingMode: "text",
-                                        icon: "ti ti-lock",
-                                    }
-                                }
+                                }, 
                             ],
                         },
                         validationRules: [
