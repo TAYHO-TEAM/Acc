@@ -58,21 +58,6 @@ namespace QuanLyDuAn.Areas.VanHanh.Controllers
             requestOBJ.Status = 10;
             requestOBJ.Key = null;
             var values = new JavaScriptSerializer().Serialize(requestOBJ);
-
-            //var temp = JArray.Parse(values);
-            //temp.Descendants()
-            //    .OfType<JProperty>()
-            //    .Where(attr => attr.Name.StartsWith("Id"))
-            //    .ToList() // you should call ToList because you're about to changing the result, which is not possible if it is IEnumerable
-            //    .ForEach(attr => attr.Remove()); // removing unwanted attributes
-            //values = temp.ToString();
-            //if (requestOBJ.RealEstateId.HasValue) mFormData.Add(new StringContent(((int)requestOBJ.RealEstateId).ToString()), nameof(requestOBJ.RealEstateId));
-            //if (requestOBJ.DefectiveId.HasValue) mFormData.Add(new StringContent(((int)requestOBJ.DefectiveId).ToString()), nameof(requestOBJ.DefectiveId));
-            //if (requestOBJ.CustomerId.HasValue) mFormData.Add(new StringContent(((int)requestOBJ.CustomerId).ToString()), nameof(requestOBJ.CustomerId));
-            //if (!string.IsNullOrEmpty(requestOBJ.Note)) mFormData.Add(new StringContent(requestOBJ.Note), nameof(requestOBJ.Note));
-            //if (!string.IsNullOrEmpty(requestOBJ.FullName)) mFormData.Add(new StringContent(requestOBJ.FullName), nameof(requestOBJ.FullName));
-            //if (!string.IsNullOrEmpty(requestOBJ.Phone)) mFormData.Add(new StringContent(requestOBJ.Phone), nameof(requestOBJ.Phone));
-
             if (!string.IsNullOrEmpty(values)) mFormData.Add(new StringContent(values), nameof(values));
             if (listFile.Count > 0)
             {
@@ -359,6 +344,55 @@ namespace QuanLyDuAn.Areas.VanHanh.Controllers
                     {
                         var err = response.Content.ReadAsStringAsync().Result;
                         return Json(new { status = "error", result = err });
+                    }
+                }
+            }
+            return Json(new { status = "success", result = "Đã lưu thông tin yêu cầu thành công" });
+        }
+        [HttpPost, ValidateInput(false)]
+        public JsonResult DefectDetailCreate(DefectFeedBackDetailOBJ requestOBJ)
+        {
+            MultipartFormDataContent mFormData = new MultipartFormDataContent();
+            HttpFileCollectionBase listFile = HttpContext.Request.Files;
+            string token = requestOBJ.token;
+            requestOBJ.Status = 0;
+            requestOBJ.Key = null;
+            var values = new JavaScriptSerializer().Serialize(requestOBJ);
+            if (!string.IsNullOrEmpty(values)) mFormData.Add(new StringContent(values), nameof(values));
+            if (listFile.Count > 0)
+            {
+                int i = 1;
+                foreach (string file in listFile)
+                {
+                    HttpPostedFileBase fileBase = Request.Files[file];
+                    byte[] fileData = null;
+                    using (var binaryReader = new BinaryReader(fileBase.InputStream))
+                    {
+                        fileData = binaryReader.ReadBytes(fileBase.ContentLength);
+                    }
+                    ByteArrayContent b = new ByteArrayContent(fileData);
+                    b.Headers.ContentType = MediaTypeHeaderValue.Parse("multipart/form-data");
+                    mFormData.Add(b, nameof(file) + i++.ToString(), fileBase.FileName);
+                }
+
+            }
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(ConfigurationSettings.AppSettings["omCRUD"].ToString());//http://localhost:50999/,https://api-pm-cmd.tayho.com.vn/
+                client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                int id = 0;
+                using (HttpResponseMessage response = client.PostAsync("api/v1/DefectFeedbackDetail/", mFormData).Result)
+                {
+                    if (response.StatusCode != HttpStatusCode.OK)
+                    {
+                        var err = response.Content.ReadAsStringAsync().Result;
+                        return Json(new { status = "error", result = err });
+                    }
+                    else
+                    {
+                        var json = new JavaScriptSerializer().Deserialize<dynamic>(response.Content.ReadAsStringAsync().Result.ToString());
+                        id = Convert.ToInt32(json["result"]["id"].ToString());
                     }
                 }
             }

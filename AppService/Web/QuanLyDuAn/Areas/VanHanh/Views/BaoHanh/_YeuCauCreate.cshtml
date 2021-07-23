@@ -1,7 +1,7 @@
 ﻿<form id="form-regist" action="#" method="POST" enctype="multipart/form-data">
 </form>
-<div id="container-defect-detail" class="elevation-2 list-defect-detail" disabled></div>
-<form id="form-defect-detail"  class="list-defect-detail" action="#" method="POST" enctype="multipart/form-data" disabled>
+<div id="container-defect-detail" class="elevation-2 list-defect-detail" ></div>
+<form id="form-defect-detail" class="list-defect-detail" action="#" method="POST" enctype="multipart/form-data" >
 </form>
 
 <script>
@@ -250,10 +250,10 @@
                 var newFormData = e.component.option("formData");
             }
         }).dxForm("instance");
-        function loadData_DefectDetail(DefectID) {
-            $("#container_defect_detail").dxDataGrid({
+        function loadData_DefectDetail(DefectId) {
+            $("#container-defect-detail").dxDataGrid({
                 height: 300,
-                dataSource: customStore_DefectFeedbackDetail(DefectID),
+                dataSource: customStore_DefectFeedbackDetail(DefectId),
                 repaintChangesOnly: true,
                 remoteOperations: true,
                 scrolling: { mode: "standard" },
@@ -285,17 +285,6 @@
                 onInitNewRow: (e) => {
                     e.data.isActive = true;
                     e.data.isVisible = true;
-                },
-                onRowUpdating: (e) => {
-                    e.newData['isVisible'] = e.newData['pmIsVisible'];
-                    e.newData['id'] = e.oldData['id'];
-                },
-                onCellPrepared: (e) => {
-                    if (e.rowType == "data" && e.columnIndex == 1)
-                        e.cellElement.find('.dx-treelist-empty-space').toggleClass("dx-treelist-collapsed", e.data.chilCount > 0)
-                },
-                onRowDblClick: function (e) {
-                    var container = e.component;
                 },
                 selection: {
                     mode: "single"
@@ -340,6 +329,7 @@
                     },
                 ],
                 editing: {
+                    allowDeleting: true,
                     mode: "batch",
                     useIcons: true,
                     confirmDelete: true,
@@ -352,7 +342,7 @@
                         showCloseButton: true,
                     },
                 },
-            });
+            }).dxDataGrid("instance");
         };
         fileUploader();
         $("#form-regist").on("submit", function (e) {
@@ -372,7 +362,8 @@
                     if (rs.isOk) {
                         console.log(rs.result.id)
                         $('#elementDefectFeedbackId').dxTextBox('instance')
-                            .option('value', rs.result.id== null ? 0 : rs.result.id);
+                            .option('value', rs.result.id == null ? 0 : rs.result.id);
+                        $defectDetailId = rs.result.id;
                         document.getElementById('container-defect-detail').style.display = 'block';
                         document.getElementById('form-defect-detail').style.display = 'block';
                         document.getElementById('submit').style.pointerEvents = 'none';
@@ -389,27 +380,74 @@
         });
         $("#form-defect-detail").on("submit", function (e) {
             e.preventDefault();
+            var fdata = new FormData();
             var formdata = $('#form-defect-detail').dxForm("instance").option('formData');
+            //var fileWrappers = fileUploader()._files;
             var resValid = true
+            //for (var i = 0; i < fileWrappers.length; i++) {
+            //    if (fileWrappers[i].isValid() === false) {
+            //        resValid = false;
+            //    }
+            //}
             if (!resValid) {
                 DevExpress.ui.notify("Vui lòng kiểm tra lại file đính kèm!", "error", 3000);
             }
             else {
                 loadingPanel.show();
-                formdata['ConstructionItemsId'] = ITEMSID;
-                formdata['Status'] = 10;
-                var deferred = $.Deferred();
-                customStore_DefectFeedbackDetail(0).store().insert(formdata).done((rsDetailDefect) => {
-                    loadingPanel.hide();
-                    if (rsDetailDefect.isOk) {
-                        DevExpress.ui.notify("Cập nhật thành công", "success", 3000);
-                        deferred.resolve(rsDetailDefect);
+                console.log(formdata);
+                formdata['status'] = 0;
+                fdata.append('token', UserCurrentInfo.accessToken);
+                $.each(formdata, function (key, value) {
+                    if (key === 'startDate' || key === 'endDate' || key === 'deadline' || key === 'fixedDate') {
+                        fdata.append(key, moment(value).format('YYYY-MM-DD'));
                     }
                     else {
-                        DevExpress.ui.notify("Có lỗi xảy ra", "error", 3000);
-                        deferred.resolve(false);
+                        fdata.append(key, value);
                     }
-                }, deferred.reject);
+                });
+                var files = $("#file-uploader").dxFileUploader("instance").option("value");
+                if (files.length > 0) {
+                    $.each(files, function (key, value) {
+                        fdata.append(files[key].name, files[key]);
+                        //formdata[key] = files[key];
+                    });
+                }
+                var deferred = $.Deferred();
+                $.ajax({
+                    type: "POST",
+                    enctype: 'multipart/form-data',
+                    url: "/VanHanh/BaoHanh/DefectDetailCreate",
+                    data: fdata,
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    success: function (rs) {
+                        deferred.resolve(true);
+                        loadData_DefectDetail($defectDetailId);
+                        loadingPanel.hide();
+                        DevExpress.ui.notify(rs.result, rs.status, 3000);
+                        e.component.refresh();
+                        if (rs.status == "success") {
+                            DevExpress.ui.notify("Cập nhật thành công", "success", 3000);
+                            deferred.resolve(rs);
+                        }
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        loadingPanel.hide();
+                        DevExpress.ui.notify("Có lỗi xảy ra: " + errorThrown, "error", 3000);
+                    }
+                });
+                //customStore_DefectFeedbackDetail(0).store().insert(formdata).done((rsDetailDefect) => {
+                //    loadingPanel.hide();
+                //    if (rsDetailDefect.isOk) {
+                //        DevExpress.ui.notify("Cập nhật thành công", "success", 3000);
+                //        deferred.resolve(rsDetailDefect);
+                //    }
+                //    else {
+                //        DevExpress.ui.notify("Có lỗi xảy ra", "error", 3000);
+                //        deferred.resolve(false);
+                //    }
+                //}, deferred.reject);
                 return deferred.promise();
             }
         });
@@ -418,7 +456,7 @@
                 selectButtonText: "Chọn tập tin...",
                 labelText: "Hoặc kéo thả vào đây",
                 showFileList: true,
-                multiple: true,
+                multiple: false,
                 uploadMode: "useForm",
                 accept: ".jpg,.jpeg,.gif,.png,.pdf",
                 allowedFileExtensions: [".jpg", ".jpeg", ".png", ".pdf"],
