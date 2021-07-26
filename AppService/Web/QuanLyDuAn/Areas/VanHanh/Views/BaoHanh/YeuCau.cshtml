@@ -7,8 +7,8 @@
         .list-defect-detail {
             display: none;
         }
-        #container-defect-detail{
-            margin-bottom : 5px;
+        #container-defect-detail, #container-defect-detail-update {
+            margin-bottom: 5px;
         }
     </style>
 }
@@ -335,7 +335,7 @@
                         var data = e.component.getRowIndexByKey(selectedRowData.paId);
                         $("#action-update").dxSpeedDialAction({
                             index: 2, icon: "fas fa-edit",
-                            label: "Cập nhật thông tin",
+                            label: "Cập nhật yêu cầu" ,//selectedRowData.status < 11? "Cập nhật yêu cầu":"Xem yêu cầu",
                             visible: PermitInAction["update"],
                             onClick: () => {
 

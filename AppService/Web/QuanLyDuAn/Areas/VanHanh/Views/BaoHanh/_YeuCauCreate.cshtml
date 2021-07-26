@@ -66,7 +66,6 @@
                                 },
                                 onValueChanged: function (data) {
                                     if (data.value != null) {
-
                                         customStore_CustomerRealEstate(data.value).load().done((rs) => {
                                             if (rs != null && rs.length > 0) {
                                                 customStore_CustomerInfoById(rs[0].customerInfoId).load().done((rsCI) => {
@@ -135,17 +134,17 @@
                                 value: formData["description"],
                             },
                         },
-                        {
-                            colSpan: 12,
-                            dataField: "note",
-                            label: { text: "Mô tả chung" },
-                            editorType: "dxTextArea",
-                            editorOptions: {
-                                stylingMode: "filled",
-                                placeholder: "Vui lòng nhập...",
-                                value: formData["description"],
-                            },
-                        },
+                        //{
+                        //    colSpan: 12,
+                        //    dataField: "note",
+                        //    label: { text: "Mô tả chung" },
+                        //    editorType: "dxTextArea",
+                        //    editorOptions: {
+                        //        stylingMode: "filled",
+                        //        placeholder: "Vui lòng nhập...",
+                        //        value: formData["description"],
+                        //    },
+                        //},
                     ]
                 },
                 {
@@ -429,13 +428,7 @@
             e.preventDefault();
             var fdata = new FormData();
             var formdata = $('#form-defect-detail').dxForm("instance").option('formData');
-            //var fileWrappers = fileUploader()._files;
             var resValid = true
-            //for (var i = 0; i < fileWrappers.length; i++) {
-            //    if (fileWrappers[i].isValid() === false) {
-            //        resValid = false;
-            //    }
-            //}
             if (!resValid) {
                 DevExpress.ui.notify("Vui lòng kiểm tra lại file đính kèm!", "error", 3000);
             }
@@ -457,7 +450,6 @@
                     if (files.length > 0) {
                         $.each(files, function (key, value) {
                             fdata.append(files[key].name, files[key]);
-                            //formdata[key] = files[key];
                         });
                     }
                 }
@@ -465,7 +457,6 @@
                 {
 
                 }
-
                 var deferred = $.Deferred();
                 $.ajax({
                     type: "POST",
@@ -489,6 +480,7 @@
                         }
                         $("#elementDefectiveId").dxSelectBox("instance").option("value", 0);
                         $("#elementDefectNote").dxTextArea("instance").option("value", '');
+                        fdata = new FormData();
                         if (rs.status == "success") {
                             DevExpress.ui.notify("Cập nhật thành công", "success", 3000);
                             deferred.resolve(rs);
@@ -529,7 +521,4 @@
             }).dxFileUploader("instance");
         }
     });
-
-
-
 </script>
