@@ -26,7 +26,7 @@
         , "note": ""
         , "noAttachment": ""
     };
-    var fdata = new FormData();
+
     var $key = 0;
     var $isDelete = false;
     $(document).ready(function () {
@@ -60,7 +60,7 @@
                                             displayExpr: "address",
                                             searchEnabled: true,
                                             searchMode: "contains",
-                                            readonly: true,
+                                            readOnly: true,
                                             showClearButton: true,
                                             elementAttr: {
                                                 id: "elementRealEstateId",
@@ -109,7 +109,7 @@
                                             placeholder: "Vui lòng nhập...",
                                             dataSource: customStore_CustomerInfo,
                                             valueExpr: "id",
-                                            readonly: true,
+                                            readOnly: true,
                                             displayExpr: getDisplayExpr,
                                             elementAttr: {
                                                 id: "elementCustomerId",
@@ -124,7 +124,7 @@
                                         label: { text: "Họ tên khách hàng" },
                                         editorType: "dxTextBox",
                                         editorOptions: {
-                                            readonly: true,
+                                            readOnly: true,
                                             stylingMode: "filled",
                                             placeholder: "Vui lòng nhập...",
                                             value: formData["fullName"],
@@ -140,7 +140,7 @@
                                         editorType: "dxTextBox",
                                         editorOptions: {
                                             stylingMode: "filled",
-                                            readonly:true,
+                                            readOnly:true,
                                             placeholder: "Vui lòng nhập...",
                                             value: formData["phone"],
                                             elementAttr: {
@@ -512,10 +512,9 @@
                             displayExpr: "fileName",
                         },
                         cellTemplate: (c, o) => {
-                            customStore_Attachment_All('DefectFeedbackDetail').load().then((rs) => {
-                                var item = rs.filter(x => x.id == o.value).shift();
+                            customStore_Attachment(o.value,'DefectFeedbackDetail').load().then((rsFile) => {
+                                var item = rsFile.filter(x => x.ownerById == o.value).shift();
                                 if (typeof item !== "undefined") {
-                                    console.log(item);
                                     $("<img />").
                                         attr({ "src": (item.host + item.url + "/" + item.fileName), onerror: ImgError(this), "style": "max-height: 50px; height : auto ;width : auto ;margin: auto;" }).
                                         appendTo(c);
@@ -611,65 +610,66 @@
                 return deferred.promise();
             }
         });
-        $(document).on('click', '#update', function (e) {
-            e.preventDefault();
-            var formdata = $('#form-DefectDetail').dxForm("instance").option('formData');
-            var fileWrappers = fileUploader()._files;
-            var resValid = true
-            for (var i = 0; i < fileWrappers.length; i++) {
-                if (fileWrappers[i].isValid() === false) {
-                    resValid = false;
-                }
-            }
-            if (!resValid) {
-                DevExpress.ui.notify("Vui lòng kiểm tra lại file đính kèm!", "error", 3000);
-            }
-            else {
-                loadingPanel.show();
-                var fdata = new FormData();
-                var i = 10;
-                $.each(formdata, function (key, value) {
-                    if (value !== null) {
-                        fdata.append(key, value);
-                    }
-                    else {
-                        fdata.append(key, ' ');
-                    }
-                });
-                fdata.append('key',$model);
-                fdata.append('token', UserCurrentInfo.accessToken);
-                var files = $("#file-uploader").dxFileUploader("instance").option("value");
-                if (files.length > 0) {
-                    $.each(files, function (key, value) {
-                        fdata.append(files[key].name, files[key]);
-                    });
-                }
-                var deferred = $.Deferred();
-                $.ajax({
-                    type: "POST",
-                    enctype: 'multipart/form-data',
-                    url: "/VanHanh/BaoHanh/YeuCauUpdate",
-                    data: fdata,
-                    processData: false,
-                    contentType: false,
-                    cache: false,
-                    success: function (rs) {
-                        deferred.resolve(true);
-                        loadingPanel.hide();
-                        DevExpress.ui.notify(rs.result, rs.status, 3000);
-                        if (rs.status == "success") {
-                            $("#popup-main").dxPopup('instance').hide();
-                        }
-                    },
-                    error: function (xhr, textStatus, errorThrown) {
-                        loadingPanel.hide();
-                        DevExpress.ui.notify("Có lỗi xảy ra: " + errorThrown, "error", 3000);
-                    }
-                });
-                return deferred.promise();
-            }
-        });
+        //$(document).on('click', '#update', function (e) {
+        //    e.preventDefault();
+        //    var formdata = $('#form-DefectDetail').dxForm("instance").option('formData');
+        //    var fileWrappers = fileUploader()._files;
+        //    var resValid = true
+        //    for (var i = 0; i < fileWrappers.length; i++) {
+        //        if (fileWrappers[i].isValid() === false) {
+        //            resValid = false;
+        //        }
+        //    }
+        //    if (!resValid) {
+        //        DevExpress.ui.notify("Vui lòng kiểm tra lại file đính kèm!", "error", 3000);
+        //    }
+        //    else {
+        //        loadingPanel.show();
+        //        var fdata = new FormData();
+        //        var i = 10;
+        //        $.each(formdata, function (key, value) {
+        //            if (value !== null) {
+        //                fdata.append(key, value);
+        //            }
+        //            else {
+        //                fdata.append(key, ' ');
+        //            }
+        //        });
+        //        fdata.append('key',$model);
+        //        fdata.append('token', UserCurrentInfo.accessToken);
+        //        var files = $("#file-uploader").dxFileUploader("instance").option("value");
+        //        if (files.length > 0) {
+        //            $.each(files, function (key, value) {
+        //                fdata.append(files[key].name, files[key]);
+        //            });
+        //        }
+        //        var deferred = $.Deferred();
+        //        $.ajax({
+        //            type: "POST",
+        //            enctype: 'multipart/form-data',
+        //            url: "/VanHanh/BaoHanh/YeuCauUpdate",
+        //            data: fdata,
+        //            processData: false,
+        //            contentType: false,
+        //            cache: false,
+        //            success: function (rs) {
+        //                deferred.resolve(true);
+        //                loadingPanel.hide();
+        //                DevExpress.ui.notify(rs.result, rs.status, 3000);
+        //                if (rs.status == "success") {
+        //                    $("#popup-main").dxPopup('instance').hide();
+        //                }
+        //            },
+        //            error: function (xhr, textStatus, errorThrown) {
+        //                loadingPanel.hide();
+        //                DevExpress.ui.notify("Có lỗi xảy ra: " + errorThrown, "error", 3000);
+        //            }
+        //        });
+        //        return deferred.promise();
+        //    }
+        //});
         $(document).on('click', '#accept', '#form-defect-detail-update', function (e) {
+
             var formdata = $('#form-DefectDetail').dxForm("instance").option('formData');
             var fileWrappers = fileUploader()._files;
             var resValid = true

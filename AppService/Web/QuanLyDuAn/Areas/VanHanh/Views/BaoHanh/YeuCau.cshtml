@@ -7,6 +7,7 @@
         .list-defect-detail {
             display: none;
         }
+
         #container-defect-detail, #container-defect-detail-update {
             margin-bottom: 5px;
         }
@@ -335,10 +336,9 @@
                         var data = e.component.getRowIndexByKey(selectedRowData.paId);
                         $("#action-update").dxSpeedDialAction({
                             index: 2, icon: "fas fa-edit",
-                            label: "Cập nhật yêu cầu" ,//selectedRowData.status < 11? "Cập nhật yêu cầu":"Xem yêu cầu",
+                            label: selectedRowData.status <11 ? "Cập nhật yêu cầu" :"Xem yêu cầu",
                             visible: PermitInAction["update"],
                             onClick: () => {
-
                                 CALLPOPUP(
                                     "Chi tiết yêu cầu bảo hành",
                                     "/VanHanh/BaoHanh/_YeuCauDetail?id=" + selectedRowKey,

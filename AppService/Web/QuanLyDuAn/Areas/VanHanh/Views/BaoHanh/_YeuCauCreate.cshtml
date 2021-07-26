@@ -362,12 +362,13 @@
                             displayExpr: "fileName",
                         },
                         cellTemplate: (c, o) => {
-                            customStore_Attachment_All('DefectFeedbackDetail').load().then((rs) => {
-                                var item = rs.filter(x => x.id == o.value).shift();
-                                console.log(item);
-                                $("<img />").
-                                    attr({ "src": (item.host + item.url + "/" + item.fileName), onerror: ImgError(this), "style": "max-height: 50px; height : auto ;width : auto ;margin: auto;" }).
-                                    appendTo(c);
+                            customStore_Attachment(o.value, 'DefectFeedbackDetail').load().then((rsFile) => {
+                                var item = rsFile.filter(x => x.ownerById == o.value).shift();
+                                if (typeof item !== "undefined") {
+                                    $("<img />").
+                                        attr({ "src": (item.host + item.url + "/" + item.fileName), onerror: ImgError(this), "style": "max-height: 50px; height : auto ;width : auto ;margin: auto;" }).
+                                        appendTo(c);
+                                }
                             });
                         },
                     },

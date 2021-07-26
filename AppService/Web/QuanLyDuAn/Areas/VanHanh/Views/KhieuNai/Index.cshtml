@@ -117,6 +117,7 @@
             $issetRS = false;
             $keyRS = 0;
             dataGrid.clearSelection();
+            $('#elementCompaintDate').dxDateBox('instance').option('value', new Date());
             loadData_Complaint(0);
             loadData_Resolve(0);
         }
@@ -240,7 +241,7 @@
                                     },
                                     {
                                         colSpan: 4,
-                                        dataField: "compaintDate",
+                                        dataField: "complaintDate",
                                         label: { text: "Ngày khiếu nại" },
                                         type: "string",
                                         editorType: "dxDateBox",
@@ -430,19 +431,20 @@
             else {
                 loadingPanel.show();
                 var deferred = $.Deferred();
+                console.log($issetCP);
                 if (!$issetCP) {
                     formdata.status = 1;
+                    console.log($('#elementCompaintDate').dxDateBox('instance').option('value'));
+                    formdata['complaintDate'] = formdata['complaintDate'] ?? new Date();
                     customStore().store().insert(formdata).done((rs) => {
                         loadingPanel.hide();
                         $keyCP = rs.result.id;
+                        $issetCP = true;
                         loadData_Resolve($keyCP);
                         if (rs.isOk) {
                             deferred.resolve(rs);
                             var cptId = $('#elementComplaintTypeId').dxTagBox('instance').option('value');
-                            //var myArr = JSON.parse(rs);
-                            //console.log(myArr);
-                            console.log(rs);
-                            console.log(rs.result.id);
+                            $('#schedule').dxButton('instance').option('text', 'Cập nhật');
                             cptId.forEach(element => {
                                 var object = {};
                                 object['complaintId'] = rs.result.id;
@@ -681,6 +683,7 @@
                         loadingPanel.hide();
                         console.log(rs);
                         if (rs.isOk) {
+                            
                             deferred.resolve(rs);
                             DevExpress.ui.notify("Cập nhật thành công", "success", 3000);
                         }
@@ -854,7 +857,7 @@
                     //    },
                     //},// address
                     {
-                        dataField: "createDate",
+                        dataField: "complaintDate",
                         allowFiltering: false,
                         caption: "Ngày KN",
                         dataType: "date",
