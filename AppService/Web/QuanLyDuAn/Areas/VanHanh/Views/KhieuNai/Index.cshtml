@@ -472,8 +472,8 @@
                         }
                     }, deferred.reject)
                 }
-                loadData();
                 return deferred.promise();
+                loadData();
             }
         });
 
@@ -812,10 +812,10 @@
                     {
                         dataField: "realEstateId",
                         allowFiltering: true,
-                        caption: "Mã KN",
+                        caption: "Mã căn",
                         dataType: "string",
                         alignment: "center",
-                        readOnly: true,
+                        //readOnly: true,
                         allowEditing: false,
                         editorType: "dxLookup",
                         lookup: {

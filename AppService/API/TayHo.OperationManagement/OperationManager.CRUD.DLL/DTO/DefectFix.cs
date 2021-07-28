@@ -7,7 +7,13 @@ namespace OperationManager.CRUD.DAL.DTO
 {
     public class DefectFix : DOBase
     {
+        public string Code { get; set; }
+        public string Barcode { get; set; }
         public int? DefectFeedbackId { get; set; }
+        public int? Times { get; set; }
+        public int? ParentId { get; set; }
+        public int? MaintenanceSupplierInfoId { get; set; }
+        public int? MaintenancerInfoId { get; set; }
         public string Fixer { get; set; }
         public string FixerPhone { get; set; }
         public DateTime? StartDate { get; set; }

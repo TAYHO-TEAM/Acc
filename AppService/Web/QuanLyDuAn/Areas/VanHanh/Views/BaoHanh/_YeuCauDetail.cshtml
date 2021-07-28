@@ -308,6 +308,7 @@
                             items: [
                                 {
                                     itemType: "group",
+                                    caption: "Thêm Defect",
                                     colCount: 12,
                                     items: [
                                         {
@@ -388,7 +389,7 @@
                                                 text: "Thêm defect",
                                                 icon: "fa fa-plus",
                                                 type: "success",
-                                                useSubmitBehavior: false,
+                                                useSubmitBehavior: true,
                                                 elementAttr: {
                                                     id: "addDefect",
                                                 },
@@ -539,7 +540,8 @@
                 },
             }).dxDataGrid("instance");
         };
-        $(document).on('click', '#addDefect', '#form-defect-detail-update', function (e) {
+        $("#form-defect-detail-update").on("submit", function (e) {
+        //$(document).on('click', '#addDefect', '#form-defect-detail-update', function (e) {
             e.preventDefault();
             var fdata = new FormData();
             var formdata = $('#form-defect-detail-update').dxForm("instance").option('formData');
@@ -608,6 +610,9 @@
                 });
 
                 return deferred.promise();
+                if (window.history.replaceState) {
+                    window.history.replaceState(null, null, window.location.href);
+                }
             }
         });
         //$(document).on('click', '#update', function (e) {
@@ -669,8 +674,8 @@
         //    }
         //});
         $(document).on('click', '#accept', '#form-defect-detail-update', function (e) {
-
-            var formdata = $('#form-DefectDetail').dxForm("instance").option('formData');
+            e.preventDefault();
+            var formdata = $('#form-defect-detail-update').dxForm("instance").option('formData');
             var fileWrappers = fileUploader()._files;
             var resValid = true
             for (var i = 0; i < fileWrappers.length; i++) {
@@ -717,6 +722,7 @@
                         loadingPanel.hide();
                         DevExpress.ui.notify(rs.result, rs.status, 3000);
                         if (rs.status == "success") {
+                            alert(1);
                             $("#popup-main").dxPopup('instance').hide();
                         }
                     },
@@ -727,7 +733,7 @@
                 });
                 return deferred.promise();
             }
-        });
+        }).click();
 
         var fileUploader = () => $("#file-uploader").dxFileUploader({
             selectButtonText: "Chọn tập tin...",

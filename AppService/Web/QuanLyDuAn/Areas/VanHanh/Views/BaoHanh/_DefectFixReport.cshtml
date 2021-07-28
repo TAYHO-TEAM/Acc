@@ -136,87 +136,168 @@
                                     .appendTo($itemElement)
                                     .dxDataGrid({
                                         stylingMode: "filled",
-                                        dataSource: customStore_Attachment(rs[0].id, "DefectFix"),
+                                        dataSource: customStore_DefectFeedbackDetail($model),
                                         columns: [
                                             {
-                                                dataField: "displayName",
-                                                caption: "Tên File ",
+                                                dataField: "defectiveId",
+                                                allowFiltering: true,
+                                                allowEdit: false,
+                                                caption: "Lỗi",
                                                 dataType: "string",
+                                                alignment: "center",
+                                                visible: true,
+                                                editorType: "dxLookup",
+                                                lookup: {
+                                                    dataSource: customStore_Defective,
+                                                    valueExpr: "id",
+                                                    displayExpr: "name",
+                                                },
+                                                editorOptions: {
+                                                    stylingMode: "filled",
+                                                    readOnly: true,
+                                                },
+                                            },// realEstateId
+                                            {
+                                                dataField: "note",
+                                                allowFiltering: true,
+                                                allowEdit: false,
+                                                caption: "Ghi chú",
+                                                dataType: "string",
+                                                alignment: "center",
+                                                visible: true,
+                                                editorType: "dxTextBox",
+                                                editorOptions: {
+                                                    stylingMode: "filled",
+                                                    readOnly: true,
+                                                },
                                             },
                                             {
-                                                dataField: "createDate",
-                                                caption: "Ngày tạo",
-                                                dataType: "date",
+                                                dataField: "id",
+                                                allowFiltering: false,
+                                                allowEdit: false,
+                                                caption: "Ảnh",
+                                                dataType: "string",
+                                                alignment: "center",
+                                                visible: true,
+                                                editorType: "dxTextBox",
+                                                lookup: {
+                                                    dataSource: customStore_Attachment_All('DefectFeedbackDetail').store(),
+                                                    valueExpr: "ownerById",
+                                                    displayExpr: "fileName",
+                                                },
+                                                cellTemplate: (c, o) => {
+                                                    customStore_Attachment(o.value, 'DefectFeedbackDetail').load().then((rsFile) => {
+                                                        var item = rsFile.filter(x => x.ownerById == o.value).shift();
+                                                        if (typeof item !== "undefined") {
+                                                            $("<img />").
+                                                                attr({ "src": (item.host + item.url + "/" + item.fileName), onerror: ImgError(this), "style": "max-height: 50px; height : auto ;width : auto ;margin: auto;" }).
+                                                                appendTo(c);
+                                                        }
+                                                    });
+                                                },
+                                                editorOptions: {
+                                                    stylingMode: "filled",
+                                                    readOnly: true,
+                                                },
+                                            },
+                                            {
+                                                dataField: "startDate",
+                                                allowFiltering: true,
+                                                allowEdit: true,
+                                                caption: "Bắt đầu",
+                                                alignment: "center",
+                                                visible: true,
+                                                editorType: "dxDateBox",
+                                                editorOptions: {
+                                                    stylingMode: "filled",
+                                                },
+                                            },
+                                            {
+                                                dataField: "finishDate",
+                                                allowFiltering: true,
+                                                allowEdit: true,
+                                                caption: "Kết thúc",
+                                                alignment: "center",
+                                                visible: true,
+                                                editorType: "dxDateBox",
+                                                editorOptions: {
+                                                    stylingMode: "filled",
+                                                },
                                             },
                                         ],
                                         editing: {
-                                            allowAdding: false,
-                                            allowDeleting: false,
-                                            allowUpdating: false,
-                                            mode: "row",
+                                            allowUpdating: true,
+                                            mode: "batch",
                                             useIcons: true,
                                             confirmDelete: true,
-                                            popup: null,
+                                            popup: {
+                                                width: "50%",
+                                                height: "50%",
+                                                showTitle: true,
+                                                title: "kế hoạch công việc",
+                                                closeOnOutsideClick: false,
+                                                showCloseButton: true,
+                                            },
                                         },
                                     });
                             }
                         },
-                        {
-                            itemType: "simple",
-                            name: "Image",
-                            editorType: 'dxGallery',
-                            editorOptions: {
-                                stylingMode: "filled",
-                                dataSource: customStore_Attachment(rs[0].id, "DefectFix"),
-                                height: 100,
-                                width: 'auto',
-                                slideshowDelay: 1500,
-                                itemTemplate: function (data) {
-                                    return $("<img />").attr({ "src": (data.host + data.url + "/" + data.fileName), onerror: ImgError(this), "style": "max-height: 200px; height : auto ;width : fit-content ;margin: auto;" });
-                                },
-                                onItemClick: function (value) {
-                                }
-                            },
+                        //{
+                        //    itemType: "simple",
+                        //    name: "Image",
+                        //    editorType: 'dxGallery',
+                        //    editorOptions: {
+                        //        stylingMode: "filled",
+                        //        dataSource: customStore_Attachment(rs[0].id, "DefectFix"),
+                        //        height: 100,
+                        //        width: 'auto',
+                        //        slideshowDelay: 1500,
+                        //        itemTemplate: function (data) {
+                        //            return $("<img />").attr({ "src": (data.host + data.url + "/" + data.fileName), onerror: ImgError(this), "style": "max-height: 200px; height : auto ;width : fit-content ;margin: auto;" });
+                        //        },
+                        //        onItemClick: function (value) {
+                        //        }
+                        //    },
 
-                        },
-                        {
-                            colSpan: 12,
-                            template: '<span class="dx-field-item-label-text font-bold">Các tập tin đính kèm</span><div class="file-uploader" id="file-uploader"></div>',
-                            visible: rs[0].status < 21 ? true : false,
-                            editorOptions: {
-                                stylingMode: "filled",
+                        //},
+                        //{
+                        //    colSpan: 12,
+                        //    template: '<span class="dx-field-item-label-text font-bold">Các tập tin đính kèm</span><div class="file-uploader" id="file-uploader"></div>',
+                        //    visible: rs[0].status < 21 ? true : false,
+                        //    editorOptions: {
+                        //        stylingMode: "filled",
 
-                            }
-                        },
-                        {
-                            itemType: "group",
-                            name: "button-action",
-                            colCount: 12,
-                            items: [
-                                {
-                                    colSpan: 12,
-                                    itemType: "button",
-                                    horizontalAlignment: "center",
-                                    visible: (rs[0].status < 21) ? true : false,
-                                    buttonOptions: {
-                                        text: (rs[0].status === 20) ? "Bắt đầu" : "",//(rs[0].status === 21) ? "Hoàn thành"  : ""),
-                                        icon: "fa fa-save",
-                                        type: "success",
-                                        //useSubmitBehavior: false,
-                                        elementAttr: {
-                                            id: "schedule",
-                                        },
-                                        editorOptions: {
-                                            stylingMode: "filled",
+                        //    }
+                        //},
+                        //{
+                        //    itemType: "group",
+                        //    name: "button-action",
+                        //    colCount: 12,
+                        //    items: [
+                        //        {
+                        //            colSpan: 12,
+                        //            itemType: "button",
+                        //            horizontalAlignment: "center",
+                        //            visible: (rs[0].status < 21) ? true : false,
+                        //            buttonOptions: {
+                        //                text: (rs[0].status === 20) ? "Bắt đầu" : "",//(rs[0].status === 21) ? "Hoàn thành"  : ""),
+                        //                icon: "fa fa-save",
+                        //                type: "success",
+                        //                //useSubmitBehavior: false,
+                        //                elementAttr: {
+                        //                    id: "schedule",
+                        //                },
+                        //                editorOptions: {
+                        //                    stylingMode: "filled",
 
-                                        }
-                                    }
-                                },
-                            ],
-                        },
+                        //                }
+                        //            }
+                        //        },
+                        //    ],
+                        //},
                     ],
                 }).dxForm("instance");
-                (rs.length == 0 && rs[0].status < 21) ? null : fileUploader();
+                //(rs.length == 0 && rs[0].status < 21) ? null : fileUploader();
                 if (rs[0].status >= 21) {
                     document.getElementById("header-DefectFix").style.display = "block"; 
                     customStore_DefectAcceptance($defectFixId).load()
@@ -323,23 +404,6 @@
                                                     }
                                                 }
                                             },
-                                            //{
-                                            //    colSpan: 6,
-                                            //    itemType: "button",
-                                            //    horizontalAlignment: "left",
-                                            //    buttonOptions: {
-                                            //        text: "Từ chôi nghiệm thu",
-                                            //        icon: "fas fa-check-circle",
-                                            //        type: "default",
-                                            //        useSubmitBehavior: true,
-                                            //        elementAttr: {
-                                            //            id: "rejectFix",
-                                            //        },
-                                            //        editorOptions: {
-                                            //            stylingMode: "filled",
-                                            //        }
-                                            //    }
-                                            //}
                                         ],
                                     },
                                 ],

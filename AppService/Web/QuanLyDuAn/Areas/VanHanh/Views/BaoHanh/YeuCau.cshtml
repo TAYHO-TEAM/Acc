@@ -9,7 +9,7 @@
         }
 
         #container-defect-detail, #container-defect-detail-update {
-            margin-bottom: 5px;
+            margin-bottom: 30px;
         }
     </style>
 }
@@ -369,12 +369,12 @@
                             index: 4,
                             visible: false,
                         }).dxSpeedDialAction("instance");
-                        if (selectedRowData.status < 20 && selectedRowData.status > 10) {
+                        if (selectedRowData.status <= 20 && selectedRowData.status > 10) {
                             $("#action-log").dxSpeedDialAction({
                                 index: 4,
                                 icon: "fas fa-tools",
                                 label: "Kế hoạch sửa chữa",
-                                visible: selectedRowData.status < 20 && selectedRowData.status > 10 && PermitInAction["update"],
+                                visible: selectedRowData.status <= 20 && selectedRowData.status > 10 && PermitInAction["update"],
                                 onClick: () => {
 
                                     CALLPOPUP(
@@ -386,12 +386,12 @@
                                 }
                             }).dxSpeedDialAction("instance");
                         }
-                        else if (selectedRowData.status >= 20) {
+                        else if (selectedRowData.status > 20) {
                             $("#action-log").dxSpeedDialAction({
                                 index: 4,
                                 icon: "fas fa-tools",
                                 label: "Tiến độ sửa chữa",
-                                visible: selectedRowData.status >= 20 && PermitInAction["update"],
+                                visible: selectedRowData.status > 20 && PermitInAction["update"],
                                 onClick: () => {
                                     CALLPOPUP(
                                         "Báo cáo sửa chữa",
