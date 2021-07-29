@@ -13,6 +13,8 @@ namespace OperationManager.CRUD.DAL.DTO
         public string Barcode { get; set; }
         public string Note { get; set; }
         public int? NoAttachment { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? FinishDate { get; set; }
 
     }
 }

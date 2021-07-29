@@ -16,6 +16,8 @@ namespace OperationManager.CRUD.DAL.EFConfig
             builder.Property(x => x.Barcode).HasColumnName("Barcode").HasMaxLength(256).UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.Note).HasColumnName("Note").UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.NoAttachment).HasColumnName("NoAttachment").UsePropertyAccessMode(PropertyAccessMode.Field);
+            builder.Property(x => x.StartDate).HasColumnName("StartDate").UsePropertyAccessMode(PropertyAccessMode.Field);
+            builder.Property(x => x.FinishDate).HasColumnName("FinishDate").UsePropertyAccessMode(PropertyAccessMode.Field);
 
         }
     }
