@@ -78,13 +78,13 @@ namespace Services.Common.APIs.Cmd.EF.Extensions
                     await command.Connection.OpenAsync();
                 try
                 {
-                    DataTable dataTable = new DataTable();
                     using (IDataReader reader = command.ExecuteReader())
                     {
+                        DataTable dataTable = new DataTable();
                         dataTable.Load(reader);
+                        dataTables.Add(dataTable);
                         reader.NextResult();
                     }
-                    dataTables.Add(dataTable);
                     return dataTables;
                 }
                 finally
@@ -112,34 +112,6 @@ namespace Services.Common.APIs.Cmd.EF.Extensions
                 }
             }
         }
-        //public static async Task<List<IEnumerable>> ExecuteStoredProcedureAsync(this DbContext context, DbCommand command) 
-        //{
-        //    List<Func<IObjectContextAdapter, DbDataReader, IEnumerable>> _resultSets = new List<Func<IObjectContextAdapter, DbDataReader, IEnumerable>>();
-        //    var results = new List<IEnumerable>();
-        //    using (command)
-        //    {
-        //        if (command.Connection.State == ConnectionState.Closed)
-        //            await command.Connection.OpenAsync();
-        //        try
-        //        {
-
-        //            using (var reader = command.ExecuteReader())
-        //            {
-        //                var adapter = ((IObjectContextAdapter)context);
-        //                foreach (var resultSet in _resultSets)
-        //                {
-        //                    results.Add(resultSet(adapter, reader));
-        //                    reader.NextResult();
-        //                }
-        //            }
-        //            return results;
-        //        }
-        //        finally
-        //        {
-        //            command.Connection.Close();
-        //        }
-        //    }
-        //}
         public static async Task<object> ExecuteScalarStoredProcedureAsync(this DbCommand command)
         {
             using (command)
@@ -204,11 +176,11 @@ namespace Services.Common.APIs.Cmd.EF.Extensions
             //var props = typeof(T).GetRuntimeProperties();
             var colMapping = dr.GetColumnSchema()
                             .ToDictionary(key => key.ColumnName.ToLower());
-            foreach(var col in colMapping)
+            foreach (var col in colMapping)
             {
                 objTable.Columns.Add(col.Key);
                 objTable.Columns[col.Key].DataType = col.Value.DataType;
-            }    
+            }
             if (dr.HasRows)
             {
                 while (dr.Read())
@@ -216,11 +188,17 @@ namespace Services.Common.APIs.Cmd.EF.Extensions
                     DataRow row = objTable.NewRow();
                     foreach (DataColumn colName in objTable.Columns)
                     {
-                        row[colName.ColumnName] =(dr.GetValue(colName.ColumnName));
+                        row[colName.ColumnName] = (dr.GetValue(colName.ColumnName));
                     }
                     objTable.Rows.Add(row);
                 }
             }
+            return objTable;
+        }
+        private static DataTable MapToTable(this DbDataReader dr)
+        {
+            DataTable objTable = new DataTable();
+            objTable.Load(dr);
             return objTable;
         }
     }

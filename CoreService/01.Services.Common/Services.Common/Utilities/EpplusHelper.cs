@@ -8,6 +8,8 @@ using System.Data;
 using Newtonsoft.Json;
 using System.Reflection;
 using System.Linq;
+using System.Drawing;
+using OfficeOpenXml.Drawing;
 
 namespace Services.Common.Utilities
 {
@@ -200,6 +202,191 @@ namespace Services.Common.Utilities
                         else
                         {
                             cell.Value = value == null ? "" : value.ToString();
+                        }
+                        workSheet.Cells[curRowIndex, j + curColIndex].Value = row[column].ToString();
+                    }
+                    curRowIndex++;
+                }
+                workSheet.Cells[workSheet.Dimension.Address].Style.Font.Name = "Song Ti";
+                workSheet.Cells[workSheet.Dimension.Address].AutoFitColumns();//Auto fill
+                for (var i = curColIndex; i <= workSheet.Dimension.End.Column; i++) { workSheet.Column(i).Width = workSheet.Column(i).Width + 2; }//Add 2 to the filling
+                MemoryStream ms = new MemoryStream(package.GetAsByteArray());
+                return ms;
+            }
+        }
+        /// <summary>
+        /// Generate excel
+        /// </summary>
+        ///  /// <param name="template">template</param>
+        /// <param name="dtSource">Data source</param>
+        /// <param name="title">title (Sheet name)</param>
+        /// <param name="showTitle">whether to show</param>
+        /// <param name="curColIndex">Current Colum Index </param>
+        /// <param name="curRowIndex">Current Rown Index</param>
+        /// <param name="isMergeCell">Merge </param>
+        /// <param name="isGenImage"> isGenImage </param>
+        /// <param name="colImage">colImage </param>
+        /// <returns></returns>
+        public static MemoryStream Export(DataTable dtSource, string title, GenImage genImage, bool showTitle = false, string template = "", int curColIndex = 1, int curRowIndex = 0, bool isHeader = false, bool isMergeCell = false)
+        {
+            FileInfo templateFile = null;
+            try
+            {
+                templateFile = new FileInfo(template);
+            }
+            catch
+            {
+                templateFile = null;
+            }
+
+            using (ExcelPackage package = (templateFile == null ? new ExcelPackage() : new ExcelPackage(templateFile)))
+            {
+                ExcelWorksheet workSheet = null;
+                try
+                {
+                    if (templateFile == null)
+                        workSheet = package.Workbook.Worksheets.Add(title);
+                    else
+                        workSheet = package.Workbook.Worksheets[0];
+                }
+                catch
+                {
+                    workSheet = package.Workbook.Worksheets.Add("sheet1");
+                }
+
+                int maxColumnCount = dtSource.Columns.Count;
+
+                if (showTitle)
+                {
+                    //theme
+                    workSheet.Cells[curRowIndex, curColIndex, curRowIndex, maxColumnCount].Merge = true;
+                    workSheet.Cells[curRowIndex, curColIndex].Value = title;
+                    var headerStyle = workSheet.Workbook.Styles.CreateNamedStyle("headerStyle");
+                    headerStyle.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    headerStyle.Style.Font.Bold = true;
+                    headerStyle.Style.Font.Size = 20;
+                    workSheet.Cells[curRowIndex, curColIndex].StyleName = "headerStyle";
+                    curRowIndex++;
+                    //Export time bar
+                    workSheet.Cells[curRowIndex, curColIndex, curRowIndex, maxColumnCount].Merge = true;
+                    workSheet.Cells[curRowIndex, curColIndex].Value = "Export time:" + DateTime.Now.ToString("yyyy-MM-dd HH:mm");
+                    workSheet.Cells[curRowIndex, curColIndex].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                    curRowIndex++;
+                }
+                if (isHeader)
+                {
+
+                    var titleStyle = workSheet.Workbook.Styles.CreateNamedStyle("titleStyle");
+                    titleStyle.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    titleStyle.Style.Font.Bold = true;
+                    //title
+                    for (var i = 0; i < maxColumnCount; i++)
+                    {
+                        DataColumn column = dtSource.Columns[i];
+                        workSheet.Cells[curRowIndex, i + curColIndex].Value = column.ColumnName;
+                        workSheet.Cells[curRowIndex, i + curColIndex].StyleName = "titleStyle";
+                    }
+                    workSheet.View.FreezePanes(curRowIndex, curColIndex);//Freeze the title row
+                    curRowIndex++;
+                }
+
+                //content
+                for (var i = 0; i < dtSource.Rows.Count; i++)
+                {
+                    for (var j = 0; j < maxColumnCount; j++)
+                    {
+                        DataColumn column = dtSource.Columns[j];
+                        var row = dtSource.Rows[i];
+                        object value = row[column];
+                        var cell = workSheet.Cells[curRowIndex, j + curColIndex];
+                        var pType = column.DataType;
+                        pType = pType.Name == "Nullable`1" ? Nullable.GetUnderlyingType(pType) : pType;
+                        if (pType == typeof(DateTime))
+                        {
+                            cell.Style.Numberformat.Format = "yyyy-MM-dd hh:mm";
+                            if (value != null && value.ToString() != "") cell.Value = Convert.ToDateTime(value);
+                        }
+                        else if (pType == typeof(int))
+                        {
+                            cell.Value = Convert.ToInt32(value ?? 0);
+                        }
+                        else if (pType == typeof(double) || pType == typeof(decimal))
+                        {
+                            cell.Value = Convert.ToDouble(value ?? 0);
+                        }
+                        else
+                        {
+
+                            if (!(value == null))
+                            {
+                                if (isMergeCell)
+                                {
+                                    if (cell.Value == workSheet.Cells[curRowIndex, (j + curColIndex) - 1].Value)
+                                    {
+                                        workSheet.Cells[curRowIndex, j + curColIndex - 1, curRowIndex, (j + curColIndex)].Merge = true;
+                                    }
+                                }
+                                if (genImage.IsGenIamge)
+                                {
+                                    if (genImage.ColImage == "")
+                                    {
+                                        if (column.ColumnName == "Image" || column.ColumnName == "Ảnh")
+                                        {
+                                            try
+                                            {
+                                                using (Image img = Image.FromFile(@"" + value))
+                                                {
+                                                    if (img != null)
+                                                    {
+                                                        var hpw = img.Height / img.Width;
+                                                        if (genImage.IsAutoCrop  && genImage.Width ==0)
+                                                        {
+                                                            genImage.Width = genImage.GetWidth(genImage.Height, hpw);
+                                                        }
+                                                        //set row height to accommodate the picture
+                                                        workSheet.Row(curRowIndex).Height = genImage.Height;
+
+                                                        //add picture to cell
+                                                        ExcelPicture pic = workSheet.Drawings.AddPicture((column.ColumnName + curRowIndex.ToString()), img);
+                                                        //position picture on desired column
+                                                        pic.From.Column = curRowIndex - 1;
+                                                        pic.From.Row = j + curColIndex - 1;
+                                                        //pic.From.ColumnOff = ExcelHelper.Pixel2MTU(1);
+                                                        //pic.From.RowOff = ExcelHelper.Pixel2MTU(1);
+                                                        //set picture size to fit inside the cell
+                                                        pic.SetSize((int)Math.Ceiling(genImage.Width), (int)Math.Ceiling(genImage.Height));
+                                                        workSheet.Protection.IsProtected = true;
+                                                        workSheet.Protection.AllowSelectLockedCells = true;
+                                                    }
+                                                }
+                                                //ExcelPicture pic = workSheet.Drawings.AddPicture((column.ColumnName + curRowIndex.ToString()), img);
+                                                //pic.SetPosition(curRowIndex, curRowIndex, j + curColIndex, j + curColIndex);
+                                                //pic.SetSize(genImage.Height, genImage.Width);
+                                                //workSheet.Protection.IsProtected = true;
+                                                //workSheet.Protection.AllowSelectLockedCells = true;
+                                            }
+                                            catch
+                                            {
+
+                                            }
+
+                                        }
+                                    }
+                                    else if (genImage.ColImage.Contains(column.ColumnName))
+                                    {
+                                        Image img = Image.FromFile(@"" + value);
+                                        ExcelPicture pic = workSheet.Drawings.AddPicture((column.ColumnName + curRowIndex.ToString()), img);
+                                        pic.SetPosition(curRowIndex, curRowIndex, j + curColIndex, j + curColIndex);
+                                        pic.SetSize(genImage.Height, genImage.Width);
+                                        workSheet.Protection.IsProtected = true;
+                                        workSheet.Protection.AllowSelectLockedCells = true;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                cell.Value = value == null ? "" : value.ToString();
+                            }
                         }
                         workSheet.Cells[curRowIndex, j + curColIndex].Value = row[column].ToString();
                     }
@@ -573,5 +760,45 @@ namespace Services.Common.Utilities
         /// </summary>
         [JsonProperty("rowSpan")]
         public int RowSpan { get; set; }
+    }
+    //GenImage excel 
+    public class GenImage
+    {
+        public bool IsGenIamge { get; set; }
+        public float Height { get; set; }
+        public float Width { get; set; }
+        public string ColImage { get; set; }
+        public bool IsAutoCrop { get; set; }
+        public GenImage()
+        {
+            IsGenIamge = false;
+            IsAutoCrop = false;
+            Height = 30;
+            Width = 40;
+            ColImage = "Image,image,Ảnh,ảnh";
+        }
+        public GenImage(bool isGenIamge , float height =0 , float width =0, string colImage= "Image,image,Ảnh,ảnh", bool isAutoCrop= true, float hpw =1 )
+        {
+            IsGenIamge = isGenIamge;
+            IsAutoCrop = isAutoCrop;
+            Height = height;
+            Width = width;
+            if(isAutoCrop)
+            {
+                if(height==0)
+                    Height = width * hpw;
+                if (width==0)
+                    Width = height / hpw;
+            }    
+            ColImage = colImage;
+        }
+        public float GetWidth(float height , float hpw)
+        {
+            return height / hpw;
+        }
+        public float GetHeight(float width, float hpw)
+        {
+            return width * hpw;
+        }
     }
 }

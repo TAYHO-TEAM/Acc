@@ -1,11 +1,9 @@
-﻿
-
-@model int
+﻿@model int
 <div>
     <div class="dx-datagrid-headers"><h4>Phần báo cáo</h4></div>
     <form id="form-DefectFix" action="#" method="POST" enctype="application/json">
     </form>
-    <div class="dx-datagrid-headers" id="header-DefectFix" style="display:none"><h4>Phần phản hồi </h4></div>
+    <div class="dx-datagrid-headers" id="header-DefectFix" style="display:none"><h4>Phần nghiệm thu </h4></div>
     <form id="form-DefectAcceptence">
     </form>
 </div>
@@ -31,7 +29,8 @@
         , "status": 20
     };
     var $defectFixId = 0;
-    var $defectfeeedBackId = 0;
+    var $defectfeedBackId = 0;
+    var $defectfeedBackDetailId = 0;
     var fdata = new FormData();
     var $model = @Model;
     var $status = 20;
@@ -39,9 +38,8 @@
     $(document).ready(function (){
         customStore_DefectFix($model).load()
             .done((rs) => {
-                console.log(rs[0].status);
                 $defectFixId = rs[0].id;
-                $defectfeeedBackId = rs[0].defectFeedbackId;
+                $defectfeedBackId = rs[0].defectFeedbackId;
                 $status = rs[0].status;
                 rs.length == 0 ? null : $("#form-DefectFix").dxForm({
                     formData: rs[0],
@@ -87,17 +85,6 @@
                                     },
                                     validationRules: [{ type: "required" }],
                                 },
-                                //{
-                                //    colSpan: 6,
-                                //    dataField: "fullName",
-                                //    label: { text: "Họ tên khách hàng" },
-                                //    editorType: "dxTextBox",
-                                //    editorOptions: {
-                                //        stylingMode: "filled",
-                                //        placeholder: "Vui lòng nhập...",
-                                //        value: formData["description"],
-                                //    },
-                                //},
                                 {
                                     colSpan: 3,
                                     dataField: "fixerPhone",
@@ -135,8 +122,37 @@
                                 $("<div id='dataGrid'>")
                                     .appendTo($itemElement)
                                     .dxDataGrid({
-                                        stylingMode: "filled",
                                         dataSource: customStore_DefectFeedbackDetail($model),
+                                        repaintChangesOnly: true,
+                                        remoteOperations: true,
+                                        scrolling: { mode: "standard" },
+                                        showBorders: false,
+                                        showColumnHeaders: true,
+                                        showColumnLines: false,
+                                        showRowLines: true,
+                                        columnAutoWidth: true,
+                                        wordWrapEnabled: true,
+                                        rowAlternationEnabled: true,
+                                        summary: {
+                                            groupItems: [{
+                                                column: "id",
+                                                summaryType: "count"
+                                            },
+                                            ]
+                                        },
+                                        selection: {
+                                            mode: "single"
+                                        },
+                                        onContentReady: (e) => {
+                                            var container = e.component;
+                                        },
+                                        onSelectionChanged: function (eDefectDetail) {
+                                            console.log(eDefectDetail);
+                                            var container = eDefectDetail.component;
+                                            var selectedRowData = eDefectDetail.selectedRowsData[0];
+                                            var selectedRowKey = eDefectDetail.selectedRowKeys[0];
+                                            loadData_DefectAcceptance(selectedRowKey, $status<200);
+                                        },
                                         columns: [
                                             {
                                                 dataField: "defectiveId",
@@ -188,10 +204,9 @@
                                                 cellTemplate: (c, o) => {
                                                     customStore_Attachment(o.value, 'DefectFeedbackDetail').load().then((rsFile) => {
                                                         var item = rsFile.filter(x => x.ownerById == o.value).shift();
+                                                        var $link = (item.host + item.url + "/" + item.fileName);
                                                         if (typeof item !== "undefined") {
-                                                            $("<img />").
-                                                                attr({ "src": (item.host + item.url + "/" + item.fileName), onerror: ImgError(this), "style": "max-height: 50px; height : auto ;width : auto ;margin: auto;" }).
-                                                                appendTo(c);
+                                                            $("<a/>").attr("href", $link).attr("target", "_blank").append($("<img />").attr({ "src": $link, onerror: ImgError(this), "style": "max-height: 30px; height : auto ;width : auto ;margin: auto;" })).appendTo(c);
                                                         }
                                                     });
                                                 },
@@ -226,264 +241,156 @@
                                             },
                                         ],
                                         editing: {
-                                            allowUpdating: true,
-                                            mode: "batch",
+                                            allowUpdating: $status <200? true:false,
+                                            mode: "rown",
                                             useIcons: true,
-                                            confirmDelete: true,
-                                            popup: {
-                                                width: "50%",
-                                                height: "50%",
-                                                showTitle: true,
-                                                title: "kế hoạch công việc",
-                                                closeOnOutsideClick: false,
-                                                showCloseButton: true,
-                                            },
                                         },
-                                    });
+                                    })
+                                    .dxDataGrid('instance');
                             }
                         },
-                        //{
-                        //    itemType: "simple",
-                        //    name: "Image",
-                        //    editorType: 'dxGallery',
-                        //    editorOptions: {
-                        //        stylingMode: "filled",
-                        //        dataSource: customStore_Attachment(rs[0].id, "DefectFix"),
-                        //        height: 100,
-                        //        width: 'auto',
-                        //        slideshowDelay: 1500,
-                        //        itemTemplate: function (data) {
-                        //            return $("<img />").attr({ "src": (data.host + data.url + "/" + data.fileName), onerror: ImgError(this), "style": "max-height: 200px; height : auto ;width : fit-content ;margin: auto;" });
-                        //        },
-                        //        onItemClick: function (value) {
-                        //        }
-                        //    },
-
-                        //},
-                        //{
-                        //    colSpan: 12,
-                        //    template: '<span class="dx-field-item-label-text font-bold">Các tập tin đính kèm</span><div class="file-uploader" id="file-uploader"></div>',
-                        //    visible: rs[0].status < 21 ? true : false,
-                        //    editorOptions: {
-                        //        stylingMode: "filled",
-
-                        //    }
-                        //},
-                        //{
-                        //    itemType: "group",
-                        //    name: "button-action",
-                        //    colCount: 12,
-                        //    items: [
-                        //        {
-                        //            colSpan: 12,
-                        //            itemType: "button",
-                        //            horizontalAlignment: "center",
-                        //            visible: (rs[0].status < 21) ? true : false,
-                        //            buttonOptions: {
-                        //                text: (rs[0].status === 20) ? "Bắt đầu" : "",//(rs[0].status === 21) ? "Hoàn thành"  : ""),
-                        //                icon: "fa fa-save",
-                        //                type: "success",
-                        //                //useSubmitBehavior: false,
-                        //                elementAttr: {
-                        //                    id: "schedule",
-                        //                },
-                        //                editorOptions: {
-                        //                    stylingMode: "filled",
-
-                        //                }
-                        //            }
-                        //        },
-                        //    ],
-                        //},
                     ],
                 }).dxForm("instance");
-                //(rs.length == 0 && rs[0].status < 21) ? null : fileUploader();
-                if (rs[0].status >= 21) {
-                    document.getElementById("header-DefectFix").style.display = "block"; 
-                    customStore_DefectAcceptance($defectFixId).load()
-                        .done((rsSub) => {
-                            $key = rsSub[0].id;
-                            console.log($key);
-                            rsSub.length == 0 ? null : $("#form-DefectAcceptence").dxForm({
-                                formData: rsSub[0],
-                                labelLocation: "top",
+            });
+        var loadData_DefectAcceptance = (defectDetailId,isAccept) => {
+            document.getElementById("header-DefectFix").style.display = "block";
+            $defectfeedBackDetailId = defectDetailId;
+            customStore_DefectAcceptance(defectDetailId).load()
+                .done((rsSub) => {
+                    console.log(rsSub);
+                    var $issetRSSUB = (rsSub.length > 0);
+                    if ($issetRSSUB) {
+                        $key = rsSub[0].id ?? 0;
+                    };
+                    $("#form-DefectAcceptence").dxForm({
+                        formData: rsSub[0],
+                        labelLocation: "top",
+                        items: [
+                            {
+                                itemType: "group",
+                                colCount: 12,
                                 items: [
                                     {
-                                        itemType: "group",
-                                        colCount: 12,
-                                        items: [
-                                            {
-                                                colSpan: 12,
-                                                dataField: "note",
-                                                label: { text: "Mô tả" },
-                                                editorType: "dxTextArea",
-                                                editorOptions: {
-                                                    stylingMode: "filled",
-                                                    placeholder: "Vui lòng nhập...",
-                                                    value: formData["description"],
-                                                },
-                                            },
-
-                                        ]
+                                        colSpan: 12,
+                                        dataField: "note",
+                                        label: { text: "Mô tả" },
+                                        editorType: "dxTextArea",
+                                        editorOptions: {
+                                            readOnly: !isAccept,
+                                            stylingMode: "filled",
+                                            placeholder: "Vui lòng nhập...",
+                                            value: formData["description"],
+                                        },
                                     },
-                                    {
-                                        name: "order",
-                                        visible: true,
-                                        template: function (data, $itemElement) {
-                                            $("<div id='dataGrid'>")
-                                                .appendTo($itemElement)
-                                                .dxDataGrid({
-                                                    dataSource: customStore_Attachment(rs[0].id, "DefectAcceptance"),
-                                                    columns: [
-                                                        {
-                                                            dataField: "displayName",
-                                                            caption: "Tên File ",
-                                                            dataType: "string",
-                                                        },
-                                                        {
-                                                            dataField: "createDate",
-                                                            caption: "Ngày tạo",
-                                                            dataType: "date",
-                                                        },
-                                                    ],
-                                                    editing: {
-                                                        allowAdding: false,
-                                                        allowDeleting: true,
-                                                        allowUpdating: false,
-                                                        mode: "row",
-                                                        useIcons: true,
-                                                        confirmDelete: true,
-                                                        popup: null,
+
+                                ]
+                            },
+                            {
+                                name: "order",
+                                visible: true,
+                                template: function (data, $itemElement) {
+                                    if ($issetRSSUB) {
+                                        $("<div id='dataGrid'>")
+                                            .appendTo($itemElement)
+                                            .dxDataGrid({
+                                                dataSource: customStore_Attachment(rsSub[0].id, "DefectAcceptance"),
+                                                columns: [
+                                                    {
+                                                        dataField: "displayName",
+                                                        caption: "Tên File ",
+                                                        dataType: "string",
                                                     },
-                                                });
+                                                    {
+                                                        dataField: "createDate",
+                                                        caption: "Ngày tạo",
+                                                        dataType: "date",
+                                                    },
+                                                ],
+                                                editing: {
+                                                    allowAdding: false,
+                                                    allowDeleting: isAccept,
+                                                    allowUpdating: false,
+                                                    mode: "row",
+                                                    useIcons: true,
+                                                    confirmDelete: true,
+                                                    popup: null,
+                                                },
+                                            });
+                                    }
+
+                                }
+                            },
+                            {
+                                itemType: "simple",
+                                name: "Image",
+                                editorType: 'dxGallery',
+                                editorOptions: {
+                                    stylingMode: "filled",
+                                    dataSource: customStore_Attachment($issetRSSUB? rsSub[0].id : 0, "DefectAcceptance"),
+                                    height: 100,
+                                    width: 'auto',
+                                    slideshowDelay: 1500,
+                                    itemTemplate: function (data) {
+                                        var $link = (data.host + data.url + "/" + data.fileName);
+                                        return $issetRSSUB ? $("<a/>").attr("href", $link).attr("target", "_blank").append($("<img />").attr({ "src": $link, onerror: ImgError(this), "style": "max-height: 100px; height : auto ;width : auto ;margin: auto;" })):"";
+                                    },
+                                    onItemClick: function (value) {
+                                    }
+                                },
+                            },
+                            {
+                                colSpan: 12,
+                                visible: true,//rs[0].status??0 < 200 ? true : false,
+                                template: $status < 200 ?'<span class="dx-field-item-label-text font-bold">Các tập tin đính kèm</span><div class="file-uploader" id="file-uploader"></div>':'',
+                            },
+                            {
+                                itemType: "group",
+                                name: "button-action",
+                                colCount: 12,
+                                items: [
+                                    {
+                                        colSpan: 6,
+                                        itemType: "button",
+                                        horizontalAlignment: "right",
+                                        visible: isAccept,
+                                        buttonOptions: {
+                                            text: "Cập nhật hạng mục",
+                                            icon: "fa fa-check",
+                                            type: "success",
+                                            useSubmitBehavior: false,
+                                            elementAttr: {
+                                                id: "acceptFix",
+                                            },
+                                            editorOptions: {
+                                                stylingMode: "filled",
+                                            }
                                         }
                                     },
                                     {
-                                        itemType: "simple",
-                                        name: "Image",
-                                        editorType: 'dxGallery',
-                                        editorOptions: {
-                                            stylingMode: "filled",
-                                            dataSource: customStore_Attachment(rs[0].id, "DefectAcceptance"),
-                                            height: 100,
-                                            width: 'auto',
-                                            slideshowDelay: 1500,
-                                            itemTemplate: function (data) {
-                                                return $("<img />").attr({ "src": (data.host + data.url + "/" + data.fileName), onerror: ImgError(this), "style": "max-height: 200px; height : auto ;width : fit-content ;margin: auto;" });
+                                        colSpan: 6,
+                                        itemType: "button",
+                                        horizontalAlignment: "left",
+                                        visible: isAccept,
+                                        buttonOptions: {
+                                            text: "Nghiệm thu toàn phần",
+                                            icon: "fa fa-check-double",
+                                            type: "success",
+                                            useSubmitBehavior: false,
+                                            elementAttr: {
+                                                id: "finishAcceptance",
                                             },
-                                            onItemClick: function (value) {
+                                            editorOptions: {
+                                                stylingMode: "filled",
                                             }
-                                        },
-
-                                    },
-                                    {
-                                        colSpan: 12,
-                                        visible: rs[0].status < 200? true : false,
-                                        template: '<span class="dx-field-item-label-text font-bold">Các tập tin đính kèm</span><div class="file-uploader" id="file-uploader"></div>',
-                                    },
-                                    {
-                                        itemType: "group",
-                                        name: "button-action",
-                                        colCount: 12,
-                                        items: [
-                                            {
-                                                colSpan: 12,
-                                                itemType: "button",
-                                                horizontalAlignment: "center",
-                                                visible: (rs[0].status < 22) ? true : false,
-                                                buttonOptions: {
-                                                    text: "Nghiệm thu",
-                                                    icon: "fa fa-save",
-                                                    type: "success",
-                                                    //useSubmitBehavior: true,
-                                                    elementAttr: {
-                                                        id: "acceptFix",
-                                                    },
-                                                    editorOptions: {
-                                                        stylingMode: "filled",
-                                                    }
-                                                }
-                                            },
-                                        ],
+                                        }
                                     },
                                 ],
-                            }).dxForm("instance");
-                            rsSub.length == 0 ? null : fileUploader();
-                        });
-                }
-            });
-        $(document).on('click', '#schedule', function (e) {
-            e.preventDefault();
-            var formdata = $('#form-DefectFix').dxForm("instance").option('formData');
-            var fileWrappers = fileUploader()._files;
-            var resValid = true
-            for (var i = 0; i < fileWrappers.length; i++) {
-                if (fileWrappers[i].isValid() === false) {
-                    resValid = false;
-                }
-            }
-            if (!resValid) {
-                DevExpress.ui.notify("Vui lòng kiểm tra lại file đính kèm!", "error", 3000);
-            }
-            else {
-                loadingPanel.show();
-                var fdata = new FormData();
-                var i = 10;
-                //$.each(formdata, function (key, value) {
-                //    if (key === 'startDate' || key === 'endDate' || key === 'deadline' || key === 'fixedDate') {
-                //        fdata.append(key, moment(value).format('YYYY-MM-DD'));
-                //    }
-                //    else {
-                //        fdata.append(key, value);
-                //    }
-                //});
-                fdata.append('defectFeedbackId', $defectfeeedBackId);
-                fdata.append('key', $defectFixId);
-                fdata.append('token', UserCurrentInfo.accessToken);
-                console.log($status);
-                if ($status < 22) {
-                    fdata.set('status', $status + 1);
-                }
-                else if ($status === 22) {
-                    fdata.set('status', 30);
-                }
-
-                var files = $("#file-uploader").dxFileUploader("instance").option("value");
-                if (files.length > 0) {
-                    $.each(files, function (key, value) {
-                        fdata.append(files[key].name, files[key]);
-                    });
-                }
-                for (var pair of fdata.entries()) {
-                    console.log(pair[0] + ', ' + pair[1]);
-                }
-                var deferred = $.Deferred();
-                if ($status < 22) {
-                    $.ajax({
-                        type: "POST",
-                        enctype: 'multipart/form-data',
-                        url: "/VanHanh/BaoHanh/DefectFixUpdate",
-                        data: fdata,
-                        processData: false,
-                        contentType: false,
-                        cache: false,
-                        success: function (rs) {
-                            deferred.resolve(true);
-                            loadingPanel.hide();
-                            DevExpress.ui.notify(rs.result, rs.status, 3000);
-                            if (rs.status == "success") {
-                                $("#popup-main").dxPopup('instance').hide();
-                            }
-                        },
-                        error: function (xhr, textStatus, errorThrown) {
-                            loadingPanel.hide();
-                            DevExpress.ui.notify("Có lỗi xảy ra: " + errorThrown, "error", 3000);
-                        }
-                    });
-                }
-                return deferred.promise();
-            }
-        });
+                            },
+                        ],
+                    }).dxForm("instance");
+                    isAccept? fileUploader():'';
+                });
+        };
         $(document).on('click', '#acceptFix', function (e) {
             e.preventDefault();
             var formDataAcceptance = $('#form-DefectAcceptence').dxForm("instance").option('formData');
@@ -507,6 +414,10 @@
                 console.log($key);
                 fdataDefectAccept.append('key', $key);
                 fdataDefectAccept.set('type', 1);
+                fdataDefectAccept.set('status', 200);
+                fdataDefectAccept.set('DefectFixId', $defectFixId);
+                fdataDefectAccept.set('DefectFeedbackId', $defectfeedBackId);
+                fdataDefectAccept.set('DefectFeedbackDetailId', $defectfeedBackDetailId);
                 fdataDefectAccept.append('token', UserCurrentInfo.accessToken);
                 var files = $("#file-uploader").dxFileUploader("instance").option("value");
                 if (files.length > 0) {
@@ -527,10 +438,22 @@
                     contentType: false,
                     cache: false,
                     success: function (rs) {
-                        deferred.resolve(true);
                         loadingPanel.hide();
-                        DevExpress.ui.notify(rs.result, rs.status, 3000);
                         if (rs.status == "success") {
+                            var deferredSub = $.Deferred();
+                            var object = {};
+                            object['Status'] = 200;
+                            customStore_DefectFeedbackDetail($defectfeedBackDetailId).store().update($defectfeedBackDetailId, object).done((rssbUpdate) => {
+                                if (rssbUpdate.isOk) {
+                                    deferredSub.resolve(rs);
+                                    DevExpress.ui.notify("Cập nhật thành công", "success", 3000);
+                                }
+                                else {
+                                    DevExpress.ui.notify("Có lỗi xảy ra", "error", 3000);
+                                    deferredSub.resolve(false);
+                                }
+                            }, deferredSub.reject);
+                            return deferredSub.promise();
                             $("#popup-main").dxPopup('instance').hide();
                         }
                     },
@@ -542,6 +465,23 @@
                 //   /* e.preventDefault();*/
                 return deferred.promise();
             }
+        });
+        $(document).on('click', '#finishAcceptance', function (e) {
+            var deferred = $.Deferred();
+            var object = {};
+            object['Status'] = 200;
+            customStore_DefectFix($defectFixId).store().update($defectFixId,object).done((rssbUpdate) => {
+                if (rssbUpdate.isOk) {
+                    deferred.resolve(rssbUpdate);
+                    DevExpress.ui.notify("Cập nhật thành công", "success", 3000);
+                    $("#popup-main").dxPopup('instance').hide();
+                }
+                else {
+                    DevExpress.ui.notify("Có lỗi xảy ra", "error", 3000);
+                    deferred.resolve(false);
+                }
+            }, deferred.reject);
+            return deferred.promise();
         });
     });
     var fileUploader = () => $("#file-uploader").dxFileUploader({

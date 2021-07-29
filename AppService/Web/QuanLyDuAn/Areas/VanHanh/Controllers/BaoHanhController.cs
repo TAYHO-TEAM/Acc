@@ -314,7 +314,7 @@ namespace QuanLyDuAn.Areas.VanHanh.Controllers
             if (string.IsNullOrEmpty(requestOBJ.Note) || requestOBJ.Note == "null")
                 requestOBJ.Note = "";
             var values = new JavaScriptSerializer().Serialize(requestOBJ);
-            if (!string.IsNullOrEmpty(requestOBJ.Key.ToString())) mFormData.Add(new StringContent(requestOBJ.Key.ToString()), "key");
+            
             if (!string.IsNullOrEmpty(values)) mFormData.Add(new StringContent(values), nameof(values));
             if (listFile.Count > 0)
             {
@@ -333,21 +333,44 @@ namespace QuanLyDuAn.Areas.VanHanh.Controllers
                     mFormData.Add(b, nameof(file) + i++.ToString(), fileBase.FileName);
                 }
             }
-            using (var client = new HttpClient())
+            if(requestOBJ.Key ==0 || requestOBJ.Key== null)
             {
-                client.BaseAddress = new Uri(ConfigurationSettings.AppSettings["omCRUD"].ToString());//http://localhost:50999/,https://api-pm-cmd.tayho.com.vn/
-                client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-                using (HttpResponseMessage response = client.PutAsync("api/v1/DefectAcceptance/", mFormData).Result)
+                using (var client = new HttpClient())
                 {
-                    if (response.StatusCode != HttpStatusCode.OK)
+                    client.BaseAddress = new Uri(ConfigurationSettings.AppSettings["omCRUD"].ToString());//http://localhost:50999/,https://api-pm-cmd.tayho.com.vn/
+                    client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                    using (HttpResponseMessage response = client.PostAsync("api/v1/DefectAcceptance/", mFormData).Result)
                     {
-                        var err = response.Content.ReadAsStringAsync().Result;
-                        return Json(new { status = "error", result = err });
+                        if (response.StatusCode != HttpStatusCode.OK)
+                        {
+                            var err = response.Content.ReadAsStringAsync().Result;
+                            return Json(new { status = "error", result = err });
+                        }
                     }
                 }
+                return Json(new { status = "success", result = "Đã lưu thông tin yêu cầu thành công" });
             }
-            return Json(new { status = "success", result = "Đã lưu thông tin yêu cầu thành công" });
+            else
+            {
+                if (!string.IsNullOrEmpty(requestOBJ.Key.ToString())) mFormData.Add(new StringContent(requestOBJ.Key.ToString()), "key");
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(ConfigurationSettings.AppSettings["omCRUD"].ToString());//http://localhost:50999/,https://api-pm-cmd.tayho.com.vn/
+                    client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                    using (HttpResponseMessage response = client.PutAsync("api/v1/DefectAcceptance/", mFormData).Result)
+                    {
+                        if (response.StatusCode != HttpStatusCode.OK)
+                        {
+                            var err = response.Content.ReadAsStringAsync().Result;
+                            return Json(new { status = "error", result = err });
+                        }
+                    }
+                }
+                return Json(new { status = "success", result = "Đã lưu thông tin yêu cầu thành công" });
+            }
+           
         }
         [HttpPost, ValidateInput(false)]
         public JsonResult DefectDetailCreate(DefectFeedBackDetailOBJ requestOBJ)
