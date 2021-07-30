@@ -91,6 +91,7 @@
                                 valueExpr: "id",
                                 displayExpr: "title",
                             },
+
                         },
                         {
                             dataField: "quantity",
@@ -100,15 +101,28 @@
                             alignment: "center",
                         },// address
                         {
-                            dataField: "quantity",
-                            allowFiltering: true,
-                            caption: "Số lượng",
-                            dataType: "number",
+                            dataField: "categoryGoodsId",
+                            allowFiltering: false,
+                            caption: "Đơn vị",
+                            dataType: "string",
                             alignment: "center",
+                            lookup: {
+                                dataSource: customStore_CategoryGoods,
+                                valueExpr: "id",
+                                displayExpr: "unitId",
+                            },
+                            cellTemplate: (c, o) => {
+                                customStore_CategoryUnit.load().then((rsGoods) => {
+                                    var item = rsGoods.filter(x => x.id == o.value).shift();
+                                    if (typeof item !== "undefined") {
+                                        $("<span />").append(item.title).appendTo(c);
+                                    }
+                                });
+                            },
                         },// address
                         {
                             dataField: "createDate",
-                            allowFiltering: true,
+                            allowFiltering: false,
                             caption: "Ngày tạo",
                             dataType: "datetime",
                             alignment: "center",

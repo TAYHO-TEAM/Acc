@@ -24,6 +24,7 @@
     <script src="~/Scripts/page/vanhanh.js"></script>
     <script>
         var id = 1;
+        var $WHId = 0;
         //-----------------------------READ -------------------------------------------------------------
         var ACTION_WAREHOUSEALLGOODS = "WareHouseAllGoods/";
         var ACTION_CONSTRUCTIONITEMS = "ConstructionItems/";
@@ -194,7 +195,7 @@
                     DevExpress.ui.repaintFloatingActionButton();
                 },
                 onSelectionChanged: (e) => {
-                    var $id = e.selectedRowKeys[0];
+                    var $id  = e.selectedRowKeys[0];
                     var selectedRowData = e.selectedRowsData[0];
                     var selectedRowKey = e.selectedRowKeys[0];
                

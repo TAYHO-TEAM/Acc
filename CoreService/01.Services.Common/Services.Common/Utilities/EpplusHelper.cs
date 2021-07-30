@@ -203,7 +203,7 @@ namespace Services.Common.Utilities
                         {
                             cell.Value = value == null ? "" : value.ToString();
                         }
-                        workSheet.Cells[curRowIndex, j + curColIndex].Value = row[column].ToString();
+                        //workSheet.Cells[curRowIndex, j + curColIndex].Value = row[column].ToString();
                     }
                     curRowIndex++;
                 }
@@ -275,7 +275,6 @@ namespace Services.Common.Utilities
                 }
                 if (isHeader)
                 {
-
                     var titleStyle = workSheet.Workbook.Styles.CreateNamedStyle("titleStyle");
                     titleStyle.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                     titleStyle.Style.Font.Bold = true;
@@ -304,96 +303,147 @@ namespace Services.Common.Utilities
                         if (pType == typeof(DateTime))
                         {
                             cell.Style.Numberformat.Format = "yyyy-MM-dd hh:mm";
+                            cell.AutoFitColumns();
                             if (value != null && value.ToString() != "") cell.Value = Convert.ToDateTime(value);
+                            workSheet.Cells[curRowIndex, j + curColIndex].Value = row[column].ToString();
                         }
                         else if (pType == typeof(int))
                         {
                             cell.Value = Convert.ToInt32(value ?? 0);
+                            cell.AutoFitColumns();
+                            workSheet.Cells[curRowIndex, j + curColIndex].Value = row[column].ToString();
                         }
                         else if (pType == typeof(double) || pType == typeof(decimal))
                         {
                             cell.Value = Convert.ToDouble(value ?? 0);
+                            cell.AutoFitColumns();
+                            workSheet.Cells[curRowIndex, j + curColIndex].Value = row[column].ToString();
                         }
                         else
                         {
-
                             if (!(value == null))
                             {
-                                if (isMergeCell)
-                                {
-                                    if (cell.Value == workSheet.Cells[curRowIndex, (j + curColIndex) - 1].Value)
-                                    {
-                                        workSheet.Cells[curRowIndex, j + curColIndex - 1, curRowIndex, (j + curColIndex)].Merge = true;
-                                    }
-                                }
                                 if (genImage.IsGenIamge)
                                 {
-                                    if (genImage.ColImage == "")
+                                    if (genImage.ColImage.Contains(column.ColumnName))
                                     {
-                                        if (column.ColumnName == "Image" || column.ColumnName == "Ảnh")
+                                        try
                                         {
-                                            try
+                                            Image img = Image.FromFile(value.ToString());
+                                            if (img != null)
                                             {
-                                                using (Image img = Image.FromFile(@"" + value))
+                                                float hpw = (float)img.Size.Height / (float)img.Size.Width;
+                                                if (genImage.IsAutoCrop)
                                                 {
-                                                    if (img != null)
-                                                    {
-                                                        var hpw = img.Height / img.Width;
-                                                        if (genImage.IsAutoCrop  && genImage.Width ==0)
-                                                        {
-                                                            genImage.Width = genImage.GetWidth(genImage.Height, hpw);
-                                                        }
-                                                        //set row height to accommodate the picture
-                                                        workSheet.Row(curRowIndex).Height = genImage.Height;
-
-                                                        //add picture to cell
-                                                        ExcelPicture pic = workSheet.Drawings.AddPicture((column.ColumnName + curRowIndex.ToString()), img);
-                                                        //position picture on desired column
-                                                        pic.From.Column = curRowIndex - 1;
-                                                        pic.From.Row = j + curColIndex - 1;
-                                                        //pic.From.ColumnOff = ExcelHelper.Pixel2MTU(1);
-                                                        //pic.From.RowOff = ExcelHelper.Pixel2MTU(1);
-                                                        //set picture size to fit inside the cell
-                                                        pic.SetSize((int)Math.Ceiling(genImage.Width), (int)Math.Ceiling(genImage.Height));
-                                                        workSheet.Protection.IsProtected = true;
-                                                        workSheet.Protection.AllowSelectLockedCells = true;
-                                                    }
+                                                    if( genImage.Width == 0)
+                                                        genImage.Width = genImage.GetWidth(genImage.Height, hpw);
+                                                    if (genImage.Height == 0)
+                                                        genImage.Height = genImage.GetHeight(genImage.Width, hpw);
                                                 }
-                                                //ExcelPicture pic = workSheet.Drawings.AddPicture((column.ColumnName + curRowIndex.ToString()), img);
-                                                //pic.SetPosition(curRowIndex, curRowIndex, j + curColIndex, j + curColIndex);
-                                                //pic.SetSize(genImage.Height, genImage.Width);
-                                                //workSheet.Protection.IsProtected = true;
-                                                //workSheet.Protection.AllowSelectLockedCells = true;
-                                            }
-                                            catch
-                                            {
+                                                ////set row height to accommodate the picture
+                                                //workSheet.Column(j + curColIndex).Width =EpplusHelper.Pixel2Inch((int)(genImage.Width));
+                                                //workSheet.Row(curRowIndex).Height = EpplusHelper.Pixel2Inch((int)(genImage.Height));
+                                                
+                                                cell.Style.VerticalAlignment = ExcelVerticalAlignment.Top;
+                                                cell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                                ExcelPicture pic = workSheet.Drawings.AddPicture((column.ColumnName + curRowIndex.ToString()), img);
+                                              
+                                                //pic.From.Column = j + curColIndex -1;
+                                                //pic.From.Row = curRowIndex -1;
+                                                //pic.From.Column = cell.Start.Column - 1;
+                                                //pic.From.Row = cell.Start.Row - 1;
+                                                //pic.From.ColumnOff = cell.Start.Column;// EpplusHelper.Pixel2MTU((int)genImage.Width);
+                                                //pic.From.RowOff = cell.Start.Row;// EpplusHelper.Pixel2MTU((int)genImage.Height);
+                                                //pic.To.Column = cell.End.Column;
+                                                //pic.To.Row = cell.End.Row;
 
+                                                pic.SetPosition(curRowIndex-1, 0 , j + curColIndex-1, 0);
+                                                pic.SetSize((int)Math.Ceiling(genImage.Width), (int)Math.Ceiling(genImage.Height));
+                                                workSheet.Column(j + curColIndex).Width = EpplusHelper.Pixel2ExcelW((int)(genImage.Width));
+                                                workSheet.Row(curRowIndex).Height = EpplusHelper.Pixel2ExcelH((int)(genImage.Height));
+                                              
+                                                //workSheet.Protection.IsProtected = false;
+                                                //workSheet.Protection.AllowSelectLockedCells = false;
+
+                                                ////add picture to cell
+                                                //ExcelPicture pic = workSheet.Drawings.AddPicture((column.ColumnName + curRowIndex.ToString()), img);
+                                                ////position picture on desired column
+                                                //pic.SetPosition(curRowIndex, curRowIndex, j + curColIndex, j + curColIndex);
+                                                ////pic.From.Column = curRowIndex ;
+                                                ////pic.From.Row = j + curColIndex ;
+                                                ////pic.From.ColumnOff = curRowIndex;
+                                                ////pic.From.RowOff = j + curColIndex;
+                                                ////set picture size to fit inside the cell
+                                                //pic.SetSize((int)Math.Ceiling(genImage.Width), (int)Math.Ceiling(genImage.Height));
+                                                ////workSheet.Protection.IsProtected = true;
+                                                ////workSheet.Protection.AllowSelectLockedCells = true;
                                             }
+                                        }
+                                        catch
+                                        {
 
                                         }
                                     }
-                                    else if (genImage.ColImage.Contains(column.ColumnName))
+                                    //else if (isMergeCell)
+                                    //{
+                                    //    if (value.ToString() == workSheet.Cells[curRowIndex - 1, (j + curColIndex)].Value.ToString())
+                                    //    {
+                                    //        int pointCStart = workSheet.Cells[curRowIndex - 1, (j + curColIndex)].Start.Column;
+                                    //        int pointCEnd = workSheet.Cells[curRowIndex - 1, (j + curColIndex)].End.Column;
+                                    //        int pointRStart = workSheet.Cells[curRowIndex - 1, (j + curColIndex)].Start.Row;
+                                    //        int pointREnd = workSheet.Cells[curRowIndex - 1, (j + curColIndex)].End.Row;
+                                    //        string contentMerge = value.ToString();
+
+                                    //        if (pointRStart < pointREnd)
+                                    //        {
+                                    //            contentMerge = workSheet.Cells[pointRStart, pointCStart, pointREnd, pointCEnd].First().Value.ToString();
+                                    //            workSheet.Cells[pointRStart, pointCStart, pointREnd, pointCEnd].Merge = false;
+                                    //        }
+                                    //        workSheet.Cells[pointRStart, pointCStart, curRowIndex, pointCEnd].Merge = true;
+                                    //        workSheet.Cells[pointRStart, pointCStart, curRowIndex, pointCEnd].Value = contentMerge;
+                                    //    }
+                                    //}
+                                    else
                                     {
-                                        Image img = Image.FromFile(@"" + value);
-                                        ExcelPicture pic = workSheet.Drawings.AddPicture((column.ColumnName + curRowIndex.ToString()), img);
-                                        pic.SetPosition(curRowIndex, curRowIndex, j + curColIndex, j + curColIndex);
-                                        pic.SetSize(genImage.Height, genImage.Width);
-                                        workSheet.Protection.IsProtected = true;
-                                        workSheet.Protection.AllowSelectLockedCells = true;
-                                    }
+                                        cell.Value = value == null ? "" : value.ToString();
+                                        workSheet.Cells[curRowIndex, j + curColIndex].Value = row[column].ToString();
+                                    }    
+                                }
+                                //else if (isMergeCell)
+                                //{
+                                //    if (value.ToString() == workSheet.Cells[curRowIndex - 1, (j + curColIndex)].Value.ToString())
+                                //    {
+                                //        int pointCStart = workSheet.Cells[curRowIndex - 1, (j + curColIndex)].Start.Column;
+                                //        int pointCEnd = workSheet.Cells[curRowIndex - 1, (j + curColIndex)].End.Column;
+                                //        int pointRStart = workSheet.Cells[curRowIndex - 1, (j + curColIndex)].Start.Row;
+                                //        int pointREnd = workSheet.Cells[curRowIndex - 1, (j + curColIndex)].End.Row;
+                                //        string contentMerge = value.ToString();
+                                //        if (pointRStart < pointREnd)
+                                //        {
+                                //            contentMerge = workSheet.Cells[pointRStart, pointCStart, pointREnd, pointCEnd].First().Value.ToString();
+                                //            workSheet.Cells[pointRStart, pointCStart, pointREnd, pointCEnd].Merge = false;
+                                //        }
+                                //        workSheet.Cells[pointRStart, pointCStart, curRowIndex, pointCEnd].Merge = true;
+                                //        workSheet.Cells[pointRStart, pointCStart, curRowIndex, pointCEnd].Value = contentMerge;
+                                //    }
+                                //}
+                                else
+                                {
+                                    cell.Value = value.ToString();
+                                    workSheet.Cells[curRowIndex, j + curColIndex].Value = row[column].ToString();
                                 }
                             }
                             else
                             {
                                 cell.Value = value == null ? "" : value.ToString();
+                                workSheet.Cells[curRowIndex, j + curColIndex].Value = row[column].ToString();
                             }
                         }
-                        workSheet.Cells[curRowIndex, j + curColIndex].Value = row[column].ToString();
                     }
                     curRowIndex++;
                 }
                 workSheet.Cells[workSheet.Dimension.Address].Style.Font.Name = "Song Ti";
-                workSheet.Cells[workSheet.Dimension.Address].AutoFitColumns();//Auto fill
+                //workSheet.Cells[workSheet.Dimension.Address].AutoFitColumns();
                 for (var i = curColIndex; i <= workSheet.Dimension.End.Column; i++) { workSheet.Column(i).Width = workSheet.Column(i).Width + 2; }//Add 2 to the filling
                 MemoryStream ms = new MemoryStream(package.GetAsByteArray());
                 return ms;
@@ -515,6 +565,7 @@ namespace Services.Common.Utilities
                         cell.Value = value == null ? "" : value.ToString();
                     }
                     workSheet.Cells[curRowIndex, j + curColIndex].Value = row[column].ToString();
+                    //workSheet.Cells[curRowIndex, j + curColIndex].Value = cell.Value;
                 }
             }
             workSheet.Cells[workSheet.Dimension.Address].Style.Font.Name = "Song Ti";
@@ -692,6 +743,31 @@ namespace Services.Common.Utilities
             }
             return false;
         }
+        public static double Pixel2ExcelW(int pixels)
+        {
+            double W = pixels * 0.14214;
+            return W;
+        }
+        public static double Pixel2ExcelH(int pixels)
+        {
+            double H = pixels * 0.75;
+            return H;
+        }
+        public static int Pixel2MTU(int pixels)
+        {
+            int mtus = pixels * 9525;
+            return mtus;
+        }
+        public static int MTU2Pixel(int mtu)
+        {
+            int pixels = mtu / 9525;
+            return pixels;
+        }
+        public static double Pixel2Inch(int pixels)
+        {
+            double mtus = (pixels - 12 + 5) / 7d + 1;
+            return mtus;
+        }
         //Export the set of fields and headers that need to be mapped
         public class ExportColumnCollective
         {
@@ -777,22 +853,22 @@ namespace Services.Common.Utilities
             Width = 40;
             ColImage = "Image,image,Ảnh,ảnh";
         }
-        public GenImage(bool isGenIamge , float height =0 , float width =0, string colImage= "Image,image,Ảnh,ảnh", bool isAutoCrop= true, float hpw =1 )
+        public GenImage(bool isGenIamge, float height = 0, float width = 0, string colImage = "Image,image,Ảnh,ảnh", bool isAutoCrop = true, float hpw = 1)
         {
             IsGenIamge = isGenIamge;
             IsAutoCrop = isAutoCrop;
             Height = height;
             Width = width;
-            if(isAutoCrop)
+            if (isAutoCrop)
             {
-                if(height==0)
+                if (height == 0)
                     Height = width * hpw;
-                if (width==0)
+                if (width == 0)
                     Width = height / hpw;
-            }    
+            }
             ColImage = colImage;
         }
-        public float GetWidth(float height , float hpw)
+        public float GetWidth(float height, float hpw)
         {
             return height / hpw;
         }
@@ -801,4 +877,5 @@ namespace Services.Common.Utilities
             return width * hpw;
         }
     }
+
 }

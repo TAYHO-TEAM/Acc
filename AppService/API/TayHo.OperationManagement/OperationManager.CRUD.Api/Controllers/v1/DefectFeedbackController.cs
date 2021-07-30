@@ -126,7 +126,7 @@ namespace OperationManager.CRUD.Api.Controllers.v1
             err.ErrorCode = "101";
             err.ErrorMessage = "File không tồn tại";
             var memoryStream = new MemoryStream();
-            string _template = @"D:\duan\Content\Template\OperationManagement\Report0002_DefectFeedback.xlsx";
+            string _template = @"D:\duan\Content\Template\OperationManagement\Report0002_DefectFeedback.xlsx";// @"F:\TayHo\SystemCore\AppService\Web\QuanLyDuAn\Content\Template\OperationManagement\Report0002_DefectFeedback.xlsx";// ;//F:\TayHo\SystemCore\AppService\Web\QuanLyDuAn\Content\Template\OperationManagement 
             try
             {
 
@@ -140,11 +140,12 @@ namespace OperationManager.CRUD.Api.Controllers.v1
 
                     dataTables = await _quanLyVanHanhRepository.ExecuteStoredProcedure("sp_Report0002_DefectFeedback", parameter);
                     GenImage genImage = new GenImage();
-                    genImage.Height = 30;
+                    genImage.Height = 200;
                     genImage.Width = 0;
+                    genImage.IsAutoCrop = true;
                     genImage.IsGenIamge = true;
-                    genImage.ColImage = "Image,image";
-                    memoryStream = EpplusHelper.Export(dataTables[0], "R001", genImage, false, _template, 1, 3, false);
+                    genImage.ColImage = "Image,image,";
+                    memoryStream = EpplusHelper.Export(dataTables[0], "R001", genImage, false, _template, 1, 4, false,false);
                     memoryStream.Position = 0;
                     return File(memoryStream, FileHelpers.GetMimeTypes()[ext], Path.GetFileNameWithoutExtension(_template) + DateTime.Now.ToString("yyyyMMdd") + ext);
                 }

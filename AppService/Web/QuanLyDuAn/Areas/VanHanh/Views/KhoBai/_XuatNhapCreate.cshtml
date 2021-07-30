@@ -127,7 +127,7 @@
                                             console.log($categoryGoodsId);
                                             var quantity = rs.find(x => x.id == $categoryGoodsId).quantity;
                                             if (quantity > 0)
-                                                d.resolve(quantity > params.value);
+                                                d.resolve(quantity >= params.value);
                                             else
                                                 d.resolve(false);
                                         });
@@ -289,6 +289,9 @@
                         loadingPanel.hide();
                         DevExpress.ui.notify(rs.result, rs.status, 3000);
                         if (rs.status == "success") {
+                            var dataGrid = $("#container").dxDataGrid("instance");
+                            var selectedRowsData = dataGrid.getSelectedRowsData();
+                            loadData_Detail(selectedRowsData);
                             $("#popup-main").dxPopup('instance').hide();
                         }
                     },
