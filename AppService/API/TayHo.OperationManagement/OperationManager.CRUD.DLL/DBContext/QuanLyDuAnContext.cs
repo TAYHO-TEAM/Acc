@@ -12,10 +12,22 @@ namespace OperationManager.CRUD.DAL.DBContext
         {
         }
        
+      
+        public DbSet<FilesAttachment> FilesAttachment { get; set; }
+        public DbSet<SysAutoSendMail> SysAutoSendMail { get; set; }
+        public DbSet<SysJob> SysJob { get; set; }
+        public DbSet<SysJobColum> SysJobColum { get; set; }
+        public DbSet<SysJobGroups> SysJobGroups { get; set; }
+        public DbSet<SysJobParameter> SysJobParameter { get; set; }
+        public DbSet<SysJobTable> SysJobTable { get; set; }
+        public DbSet<SysMailAccount> SysMailAccount { get; set; }
+        public DbSet<SysSetting> SysSetting { get; set; }
+        public DbSet<SysTableManager> SysTableManager { get; set; }
+        public DbSet<SysTemplateReport> SysTemplateReport { get; set; }
+
         /// <summary>
         /// View Table
         /// </summary>
-        public DbSet<FilesAttachment> FilesAttachment { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

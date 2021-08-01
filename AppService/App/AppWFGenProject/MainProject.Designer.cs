@@ -1584,10 +1584,10 @@ namespace AppWFGenProject
             // MainProject
             // 
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(1847, 659);
+            this.ClientSize = new System.Drawing.Size(1847, 693);
+            this.Controls.Add(this.gbAutoSendMail);
             this.Controls.Add(this.gbGenCode);
             this.Controls.Add(this.tspNavigator);
-            this.Controls.Add(this.gbAutoSendMail);
             this.Controls.Add(this.gbLDAP);
             this.Controls.Add(this.menuMain);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
