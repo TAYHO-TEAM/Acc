@@ -378,7 +378,36 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
                 case nameof(_dbContext.FilesAttachment):
                     orders = _dbContext.FilesAttachment;
                     break;
-
+                case nameof(_dbContext.SysAutoSendMail):
+                    orders = _dbContext.SysAutoSendMail;
+                    break;
+                case nameof(_dbContext.SysJob):
+                    orders = _dbContext.SysJob;
+                    break;
+                case nameof(_dbContext.SysJobColum):
+                    orders = _dbContext.SysJobColum;
+                    break;
+                case nameof(_dbContext.SysJobGroups):
+                    orders = _dbContext.SysJobGroups;
+                    break;
+                case nameof(_dbContext.SysJobParameter):
+                    orders = _dbContext.SysJobParameter;
+                    break;
+                case nameof(_dbContext.SysJobTable):
+                    orders = _dbContext.SysJobTable;
+                    break;
+                case nameof(_dbContext.SysMailAccount):
+                    orders = _dbContext.SysMailAccount;
+                    break;
+                case nameof(_dbContext.SysSetting):
+                    orders = _dbContext.SysSetting;
+                    break;
+                case nameof(_dbContext.SysTableManager):
+                    orders = _dbContext.SysTableManager;
+                    break;
+                case nameof(_dbContext.SysTemplateReport):
+                    orders = _dbContext.SysTemplateReport;
+                    break;
                 default:
                     orders = null;
                     break;

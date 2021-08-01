@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System;
 using Services.Common.DomainObjects.Exceptions;
-using OperationManager.CRUD.DAL.DTO;
+using OperationManager.CRUD.DAL.DTO.ProjectManagerDTO;
 using OperationManager.CRUD.BLL.IRepositories.BaseClasses;
 using OperationManager.CRUD.Common;
 
@@ -18,11 +18,11 @@ namespace OperationManager.CRUD.Api.Controllers.v1
     public class SysJobGroupsController : APIControllerBase
     {
         const string VALIDATION_ERROR = "The request failed due to a validation error";
-        public string nameEF = OperationManagerConstants.SysJobGroups_TABLENAME;
-        protected readonly IQuanLyVanHanhRepository<SysJobGroups> _quanLyVanHanhRepository;
-        public SysJobGroupsController(IMapper mapper, IHttpContextAccessor httpContextAccessor, IQuanLyVanHanhRepository<SysJobGroups> quanLyVanHanhRepository) : base(mapper, httpContextAccessor)
+        public string nameEF = ProjectManagerConstants.SysJobGroups_TABLENAME;
+        protected readonly IQuanLyDuAnRepository<SysJobGroups> _quanLyDuAnRepository;
+        public SysJobGroupsController(IMapper mapper, IHttpContextAccessor httpContextAccessor, IQuanLyDuAnRepository<SysJobGroups> quanLyDuAnRepository) : base(mapper, httpContextAccessor)
         {
-            _quanLyVanHanhRepository = quanLyVanHanhRepository;
+            _quanLyDuAnRepository = quanLyDuAnRepository;
         }
         /// <summary>
         /// Get List of SysJobGroups.
@@ -33,7 +33,7 @@ namespace OperationManager.CRUD.Api.Controllers.v1
         [ProducesResponseType(typeof(VoidMethodResult), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> GetAll([FromQuery] DataLoadOptionsHelper loadOptions)
         {
-            return Ok(await _quanLyVanHanhRepository.GetAll(_user, nameEF, loadOptions));
+            return Ok(await _quanLyDuAnRepository.GetAll(_user, nameEF, loadOptions));
         }
         /// <summary>
         /// Create  of SysJobGroups.
@@ -53,7 +53,7 @@ namespace OperationManager.CRUD.Api.Controllers.v1
                 if (!string.IsNullOrEmpty(values))
                     JsonConvert.PopulateObject(values, model);
                 IFormFileCollection files = Request.Form.Files;
-                return Ok(await _quanLyVanHanhRepository.Insert(_user, nameEF, model, files));
+                return Ok(await _quanLyDuAnRepository.Insert(_user, nameEF, model, files));
             }
             catch (Exception ex)
             {
@@ -76,7 +76,7 @@ namespace OperationManager.CRUD.Api.Controllers.v1
                     JsonConvert.PopulateObject(values, model);
                 IFormFileCollection files = Request.Form.Files;
                 model.Id = key;
-                return Ok(await _quanLyVanHanhRepository.Update(_user, nameEF, model, files));
+                return Ok(await _quanLyDuAnRepository.Update(_user, nameEF, model, files));
             }
             catch (Exception ex)
             {
@@ -95,7 +95,7 @@ namespace OperationManager.CRUD.Api.Controllers.v1
         {
             try
             {
-                return Ok(await _quanLyVanHanhRepository.Delete(_user, nameEF, key));
+                return Ok(await _quanLyDuAnRepository.Delete(_user, nameEF, key));
             }
             catch (Exception ex)
             {

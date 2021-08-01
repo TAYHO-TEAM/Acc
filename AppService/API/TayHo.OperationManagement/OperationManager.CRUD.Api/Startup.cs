@@ -24,6 +24,7 @@ namespace OperationManager.CRUD.Api
             services.AddDbContext<QuanLyVanHanhContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("TayHoOMConnection")));
             services.AddDbContext<QuanLyDuAnContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("TayHoPMConnection")));
             services.AddOperationManagerServices(Configuration);
+            services.AddProjectManagerServices(Configuration);
             #endregion Custom DbContext
 
             #region Custom Swagger
