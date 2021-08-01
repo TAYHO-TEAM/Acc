@@ -6,7 +6,7 @@ using OperationManager.CRUD.BLL.IRepositories;
 using OperationManager.CRUD.BLL.IRepositories.BaseClasses;
 using OperationManager.CRUD.BLL.Repositories;
 using OperationManager.CRUD.BLL.Repositories.BaseClasses;
-using OperationManager.CRUD.DAL.DTO;
+using OperationManager.CRUD.DAL.DTO.OperationManagerDTO;
 
 namespace OperationManager.CRUD.BLL.Extensions
 {

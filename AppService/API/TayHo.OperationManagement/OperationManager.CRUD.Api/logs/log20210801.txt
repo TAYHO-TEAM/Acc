@@ -1,0 +1,23 @@
+2021-08-01 13:47:02.986 +07:00 [INF] Application Starting.
+2021-08-01 13:47:06.201 +07:00 [INF] User profile is available. Using 'C:\Users\poka\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2021-08-01 13:47:06.604 +07:00 [INF] Now listening on: http://localhost:54323
+2021-08-01 13:47:06.605 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2021-08-01 13:47:06.606 +07:00 [INF] Hosting environment: Development
+2021-08-01 13:47:06.607 +07:00 [INF] Content root path: F:\TayHo\SystemCore\AppService\API\TayHo.OperationManagement\OperationManager.CRUD.Api
+2021-08-01 13:47:07.326 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:54323/swagger/index.html  
+2021-08-01 13:47:07.545 +07:00 [INF] Request finished in 222.2531ms 200 text/html;charset=utf-8
+2021-08-01 13:47:07.830 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:54323/swagger/v1/swagger.json  
+2021-08-01 13:47:08.260 +07:00 [INF] Request finished in 430.6631ms 200 application/json;charset=utf-8
+2021-08-01 13:47:20.815 +07:00 [INF] Request starting HTTP/1.1 GET http://localhost:54323/api/v1/CategoryGoods  
+2021-08-01 13:47:20.852 +07:00 [INF] Executing endpoint 'OperationManager.CRUD.Api.Controllers.v1.CategoryGoodsController.GetAll (OperationManager.CRUD.Api)'
+2021-08-01 13:47:20.902 +07:00 [INF] Route matched with {action = "GetAll", controller = "CategoryGoods"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll(Services.Common.DevExpress.DataLoadOptionsHelper) on controller OperationManager.CRUD.Api.Controllers.v1.CategoryGoodsController (OperationManager.CRUD.Api).
+2021-08-01 13:47:27.600 +07:00 [INF] Entity Framework Core 3.1.8 initialized 'QuanLyVanHanhContext' using provider 'Microsoft.EntityFrameworkCore.SqlServer' with options: None
+2021-08-01 13:47:28.319 +07:00 [INF] Executed DbCommand (48ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[Barcode], [c].[Code], [c].[CreateBy], [c].[CreateDate], [c].[CreateDateUTC], [c].[Depth], [c].[Description], [c].[Hight], [c].[IsActive], [c].[IsDelete], [c].[IsModify], [c].[IsVisible], [c].[ModifyBy], [c].[ParentId], [c].[Priority], [c].[Status], [c].[Title], [c].[Type], [c].[UnitId], [c].[UnitMeasureId], [c].[UnitWeightId], [c].[UpdateDate], [c].[UpdateDateUTC], [c].[Weight], [c].[WeightUp], [c].[Width]
+FROM [CategoryGoods] AS [c]
+WHERE [c].[IsDelete] = CAST(0 AS bit)
+2021-08-01 13:47:30.255 +07:00 [INF] Executing ObjectResult, writing value of type 'DevExtreme.AspNet.Data.ResponseModel.LoadResult'.
+2021-08-01 13:47:30.284 +07:00 [INF] Executed action OperationManager.CRUD.Api.Controllers.v1.CategoryGoodsController.GetAll (OperationManager.CRUD.Api) in 9374.2278ms
+2021-08-01 13:47:30.286 +07:00 [INF] Executed endpoint 'OperationManager.CRUD.Api.Controllers.v1.CategoryGoodsController.GetAll (OperationManager.CRUD.Api)'
+2021-08-01 13:47:30.293 +07:00 [INF] Request finished in 9478.8371ms 200 application/json; charset=utf-8
+2021-08-01 13:49:25.789 +07:00 [INF] Application is shutting down...

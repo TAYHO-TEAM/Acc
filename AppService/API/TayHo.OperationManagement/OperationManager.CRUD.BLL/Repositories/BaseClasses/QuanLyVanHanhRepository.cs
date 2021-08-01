@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 using OperationManager.CRUD.BLL.Extensions;
 using OperationManager.CRUD.BLL.IRepositories.BaseClasses;
 using OperationManager.CRUD.DAL.DBContext;
-using OperationManager.CRUD.DAL.DTO;
+using OperationManager.CRUD.DAL.DTO.OperationManagerDTO;
 using OperationManager.CRUD.DAL.DTO.BaseClasses;
 using Services.Common.APIs.Cmd.EF;
 using Services.Common.APIs.Cmd.EF.Extensions;

@@ -21,7 +21,8 @@ namespace OperationManager.CRUD.Api
         public override void ConfigureServices(IServiceCollection services)
         {
             #region Custom DbContext
-            services.AddDbContext<QuanLyVanHanhContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("TayHoConnection")));
+            services.AddDbContext<QuanLyVanHanhContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("TayHoOMConnection")));
+            services.AddDbContext<QuanLyDuAnContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("TayHoPMConnection")));
             services.AddOperationManagerServices(Configuration);
             #endregion Custom DbContext
 

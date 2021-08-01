@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System;
 using Services.Common.DomainObjects.Exceptions;
-using OperationManager.CRUD.DAL.DTO;
+using OperationManager.CRUD.DAL.DTO.OperationManagerDTO;
 using OperationManager.CRUD.BLL.IRepositories.BaseClasses;
 using OperationManager.CRUD.Common;
 using Services.Common.Utilities;

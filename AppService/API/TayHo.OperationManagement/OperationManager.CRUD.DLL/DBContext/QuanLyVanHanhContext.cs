@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using OperationManager.CRUD.DAL.DTO;
+using OperationManager.CRUD.DAL.DTO.OperationManagerDTO;
 using Services.Common.APIs.Cmd.EF;
 using System.Reflection;
 
@@ -43,7 +43,6 @@ namespace OperationManager.CRUD.DAL.DBContext
         public DbSet<DefectFeedbackDetail> DefectFeedbackDetail { get; set; }
         public DbSet<WarehouseReleased> WarehouseReleased { get; set; }
         public DbSet<WarehouseReleasedDetail> WarehouseReleasedDetail { get; set; }
-
 
         /// <summary>
         /// View Table

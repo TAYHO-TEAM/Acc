@@ -1,0 +1,21 @@
+using Microsoft.AspNetCore.Http;
+using OperationManager.CRUD.DAL.DTO.BaseClasses;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace OperationManager.CRUD.DAL.DTO.OperationManagerDTO
+{
+    public class DefectFeedback : DOBase
+    {
+        public int? ConstructionItemsId { get; set; }
+        public int? RealEstateId { get; set; }
+        public int? CustomerId { get; set; }
+        public int? DefectiveId { get; set; }
+        public string FullName { get; set; }
+        public string Phone { get; set; }
+        public string Note { get; set; }
+        public int? NoAttachment { get; set; }
+     
+    }
+}
