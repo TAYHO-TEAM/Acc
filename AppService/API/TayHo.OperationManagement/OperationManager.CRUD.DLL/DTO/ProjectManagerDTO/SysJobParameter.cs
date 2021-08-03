@@ -9,7 +9,7 @@ namespace OperationManager.CRUD.DAL.DTO.ProjectManagerDTO
     {
         public string Code { get; set; }
         public string Barcode { get; set; }
-        public string SysJobId { get; set; }
+        public int SysJobId { get; set; }
         public string Name { get; set; }
         public string DisplayName { get; set; }
         public string DataTypeSQL { get; set; }

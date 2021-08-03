@@ -195,6 +195,7 @@
     <Compile Include="Areas\ThongTin\Controllers\ThongBaoController.cs" />
     <Compile Include="Areas\ThongTin\Controllers\VanBanMauController.cs" />
     <Compile Include="Areas\ThongTin\ThongTinAreaRegistration.cs" />
+    <Compile Include="Areas\VanHanh\Controllers\BaoCaoController.cs" />
     <Compile Include="Areas\VanHanh\Controllers\BaoHanhController.cs" />
     <Compile Include="Areas\VanHanh\Controllers\BaoTriController.cs" />
     <Compile Include="Areas\VanHanh\Controllers\HomeController.cs" />
@@ -2555,6 +2556,7 @@
     <Content Include="Content\Template\OperationManagement\Report0001_Complaint.xlsx" />
     <Content Include="Content\Template\OperationManagement\Report0003_WarehouseGoodsLog.xlsx" />
     <Content Include="Content\Template\OperationManagement\Report0002_DefectFeedback.xlsx" />
+    <Content Include="Areas\VanHanh\Views\BaoCao\Index.cshtml" />
     <None Include="packages.config" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Home\About.cshtml" />

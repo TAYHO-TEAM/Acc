@@ -120,7 +120,6 @@ namespace Services.Common.APIs.Cmd.EF.Extensions
                     await command.Connection.OpenAsync();
                 try
                 {
-
                     using (var reader = command.ExecuteScalarAsync())
                     {
                         return await reader;

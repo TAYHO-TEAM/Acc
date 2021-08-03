@@ -12,7 +12,7 @@ namespace OperationManager.CRUD.DAL.EFConfig
             builder.ToTable(ProjectManagerConstants.SysJobParameter_TABLENAME);
             builder.Property(x => x.Code).HasColumnName("Code").HasMaxLength(128).UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.Barcode).HasColumnName("Barcode").HasMaxLength(256).UsePropertyAccessMode(PropertyAccessMode.Field);
-            builder.Property(x => x.SysJobId).HasColumnName("SysJobId").HasMaxLength(10).UsePropertyAccessMode(PropertyAccessMode.Field);
+            builder.Property(x => x.SysJobId).HasColumnName("SysJobId").UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.Name).HasColumnName("Name").HasMaxLength(256).UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.DisplayName).HasColumnName("DisplayName").HasMaxLength(512).UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.DataTypeSQL).HasColumnName("DataTypeSQL").HasMaxLength(256).UsePropertyAccessMode(PropertyAccessMode.Field);

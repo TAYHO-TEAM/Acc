@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -19,6 +20,54 @@ namespace Services.Common.Utilities
                 return 0;
             }
              
+        }
+        public static dynamic ConvertJProperty(JProperty input)
+        {
+            if(input.Value.Type.ToString() == "Integer")
+            {
+                try
+                {
+                    return Convert.ToInt32(input.Value);
+                }
+                catch
+                {
+                    return 0;
+                }
+            }
+            else if (input.Value.Type.ToString() == "Boolean")
+            {
+                try
+                {
+                    return Convert.ToBoolean(input.Value);
+                }
+                catch
+                {
+                    return null;
+                }
+            }
+            else if (input.Value.Type.ToString() == "Date")
+            {
+                try
+                {
+                    return Convert.ToDateTime(input.Value);
+                }
+                catch
+                {
+                    return null;
+                }
+            }
+            else
+            {
+                try
+                {
+                    return Convert.ToString(input.Value);
+                }
+                catch
+                {
+                    return null;
+                }
+            }
+
         }
         public static void CopyNonNullProperties(object source, object target)
         {

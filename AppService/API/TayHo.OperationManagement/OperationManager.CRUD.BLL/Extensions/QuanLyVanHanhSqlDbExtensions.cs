@@ -6,6 +6,7 @@ using OperationManager.CRUD.BLL.IRepositories;
 using OperationManager.CRUD.BLL.IRepositories.BaseClasses;
 using OperationManager.CRUD.BLL.Repositories;
 using OperationManager.CRUD.BLL.Repositories.BaseClasses;
+using OperationManager.CRUD.DAL.DTO.BaseClasses;
 using OperationManager.CRUD.DAL.DTO.OperationManagerDTO;
 
 namespace OperationManager.CRUD.BLL.Extensions
@@ -60,6 +61,8 @@ namespace OperationManager.CRUD.BLL.Extensions
             services.AddScoped<IQuanLyVanHanhRepository<DefectFeedbackDetail>, QuanLyVanHanhRepository<DefectFeedbackDetail>>();
             services.AddScoped<IQuanLyVanHanhRepository<WarehouseReleased>, QuanLyVanHanhRepository<WarehouseReleased>>();
             services.AddScoped<IQuanLyVanHanhRepository<WarehouseReleasedDetail>, QuanLyVanHanhRepository<WarehouseReleasedDetail>>();
+            services.AddScoped<IQuanLyVanHanhRepository<DOBase>, QuanLyVanHanhRepository<DOBase>>();
+            services.AddScoped<IReportRepository,ReportRepository>();
 
             services.AddScoped<IComplaintRepository<Complaint>, ComplaintRepository<Complaint>>();
             return services;

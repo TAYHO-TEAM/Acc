@@ -1,0 +1,776 @@
+﻿@{
+    ViewBag.Title = "Báo Cáo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section style{   }
+<div class="row">
+    <div class="col-4">
+        <div class="card card-warning">
+            <div id="container-SysJob" class="elevation-2"></div>
+        </div>
+    </div>
+    <div class="col-8">
+        <div id="container" class="elevation-2 card-body">
+            <form id="form-Report" action="#" method="POST" enctype="multipart/form-data">
+            </form>
+        </div>
+    </div>
+</div>
+@section script{
+    <script src="~/Scripts/page/vanhanh.js"></script>
+    <script>
+        var KEY = "id";
+        var $keyRS=0;
+        var WIDTH_CONTAINER = $("#container-SysJob").width();
+        var WIDTH_CONTAINER = $("#form-Report").width();
+        var ACTION_SYSJOB = "SysJob/";
+        var ACTION_SYSJOBPARAMETER = "SysJobParameter/";
+        var ACTION_REPORT = "Report/";
+        var customStore = () => new DevExpress.data.DataSource({
+            store: $DATASOURCEGET(ACTION_SYSJOB, KEY)
+        });
+        var customStore_SysJobParameter = (id) => new DevExpress.data.DataSource({
+            store: $DATASOURCEGET(ACTION_SYSJOBPARAMETER, KEY),
+            filter: ["sysJobId", "=", id]
+        });
+        var customStore_Report = (id) => new DevExpress.data.DataSource({
+            store: $DATASOURCE(ACTION_REPORT, KEY)
+        });
+
+        $(document).ready(function () {
+            $(function () {
+                loadData();
+            });
+            var loadData = () => {
+                $("#container-SysJob").dxDataGrid({
+                    height: heightScreen,
+                    dataSource: customStore(),
+                    repaintChangesOnly: true,
+                    remoteOperations: true,
+                    scrolling: { mode: "standard" },
+                    showBorders: false,
+                    showColumnHeaders: true,
+                    showColumnLines: false,
+                    hoverStateEnabled: true,
+                    showRowLines: true,
+                    columnAutoWidth: true,
+                    wordWrapEnabled: true,
+                    rowAlternationEnabled: true,
+                    filterRow: { visible: true },
+                    summary: {
+                        groupItems: [{
+                            column: "status",
+                            summaryType: "count"
+                        },
+                        ]
+                    },
+                    paging: {
+                        enabled: true,
+                        pageSize: 20
+                    },
+                    pager: {
+                        showPageSizeSelector: true,
+                        allowedPageSizes: [10, 20, 40],
+                        showInfo: true,
+                    },
+                    searchPanel: {
+                        highlightCaseSensitive: true,
+                        highlightSearchText: true,
+                        searchVisibleColumnsOnly: true,
+                        visible: WIDTH_CONTAINER > 350
+                    },
+                    onToolbarPreparing: function (e) {
+                        var container = e.component;
+                        e.toolbarOptions.items.unshift(
+                            {
+                                location: "after",
+                                widget: "dxButton",
+                                options: {
+                                    icon: "refresh",
+                                    stylingMode: "filled",
+                                    type: "default",
+                                    onClick: () => container.refresh()
+                                },
+
+                            },
+
+                        )
+                    },
+                    onInitNewRow: (e) => {
+                        e.data.isActive = true;
+                        e.data.isVisible = true;
+                        e.data.constructionItemsId = CUNSTRITEMS;
+                    },
+                    onRowUpdating: (e) => {
+                    },
+                    onCellPrepared: (e) => {
+                        if (e.rowType == "data" && e.columnIndex == 1)
+                            e.cellElement.find('.dx-treelist-empty-space').toggleClass("dx-treelist-collapsed", e.data.chilCount > 0)
+                    },
+                    onRowDblClick: function (e) {
+                        var container = e.component;
+                    },
+                    selection: {
+                        mode: "single"
+                    },
+                    onContentReady: (e) => {
+                        var container = e.component;
+                    },
+                    onSelectionChanged: (e) => {
+                        var container = e.component;
+                        var selectedRowData = e.selectedRowsData[0];
+                        var selectedRowKey = e.selectedRowKeys[0];
+                        $keyRS = selectedRowKey;
+                        loadData_Report($keyRS);
+                    },
+                    columns: [
+                        {
+                            dataField: "jobName",
+                            allowFiltering: true,
+                            caption: "Báo cáo",
+                            dataType: "string",
+                            alignment: "left",
+                            allowEditing: false,
+                        },// barCode
+                    ],
+                    editing: {
+                        allowAdding: false,
+                        allowUpdating: false,
+                        allowDeleting: false,
+                        mode: "rown",
+                        useIcons: true,
+                        confirmDelete: true,
+                    },
+                });
+            };
+            function convertTypeC2TypeDx($type) {
+                if ($type === 'Date' || $type === 'Datetime' || $type === 'date' || $type === 'datetime')
+                    return 'dxDateBox';
+                else if ($type === 'bool' || $type === 'boolean' || $type === 'Boolean' )
+                    return 'dxCheckBox';
+                else if ($type === 'int' || $type === 'integer' || $type === 'Integer')
+                    return 'dxNumBox';
+                else
+                    return 'dxTextBox';
+            }
+            var loadData_Report = (id) => {
+                customStore_SysJobParameter(id).load().done((rs) => {
+                    console.log(rs);
+                    var form = $("#form-Report").dxForm({
+                        colCount: 1,
+                        formData: rs,
+                        height: "90vh",
+                        items: [
+                            {
+                                itemType: "group",
+                                name: "Input",
+                                items: getInputOptions(rs),
+                            },
+                            {
+                                itemType: "button",
+                                horizontalAlignment: "center",
+                                buttonOptions: {
+                                    text: "Tải báo cáo",
+                                    icon: "fa fa-save",
+                                    type: "success",
+                                    useSubmitBehavior: true,
+                                    elementAttr: {
+                                        id: "submit",
+                                    }
+                                }
+                            },
+                        ]
+                    }).dxForm("instance");
+                    function getGroupOptions(customFormBodyDetail) {
+                        var groups = [];
+                        for (var i = 0; i < customFormBodyDetail.length; i++) {
+                            groups.push({
+                                itemType: "group",
+                                cssClass: "dx-field-item-label-text",
+                                caption: customFormBodyDetail.displayName,
+                                name: customFormBodyDetail.displayName,
+                                items: getInputOptions(customFormBodyDetail[i], customFormBodyDetail[i].dataTypeC, 1, 1),
+                            });
+                        }
+                        return groups;
+                    }
+                    function getInputOptions(colums) {
+                        var options = [];
+                        for (var i = 0; i < colums.length; i++) {
+                            var opt = generateNewInputOptions(colums[i], i, colums[i].dataTypeC, colums[i].id, 1, 1);
+                            if (opt !== null) {
+                                options.push(opt);
+                            }
+                        }
+                        return options;
+                    };
+                    function generateNewInputOptions(object, index, type, customFromBodyId, limtCol, limitRow) {
+                        console.log(object);
+                        console.log(type);
+                        //var Id = customFromBodyId + '_' + object.id + '_' + (index + 1);
+                        var Id = object.name.replace('@@','');
+                        if (type === "String") {
+                            return {
+                                itemType: "simple",
+                                //label: { text: " " },
+                                editorType: convertTypeC2TypeDx(type),
+                                dataField: object.name,
+                                editorOptions: {
+                                    stylingMode: "filled",
+                                    placeholder: "Vui lòng điền thông tin",
+                                    elementAttr: {
+                                        id: Id,
+                                        class: "customForm_TextBox",
+                                    },
+                                }
+                            }
+                        }
+                        else if (type === "int") {
+                            return {
+                                itemType: "simple",
+                                editorType: convertTypeC2TypeDx(type),
+                                dataField: object.name,
+                                editorOptions: {
+                                    stylingMode: "filled",
+                                    elementAttr: {
+                                        id: Id,
+                                        class: "customForm_TextBox",
+                                    },
+                                }
+                            }
+                        }
+                        else if (type === "dxSelectBox") {
+                            if (object.sourceLink !== "" && object.sourceLink !== null) {
+                                return {
+                                    itemType: "simple",
+                                    editorType: type,
+                                    cssClass: "custom-textbox",
+                                    editorOptions: {
+                                        stylingMode: "filled",
+                                        searchEnabled: true,
+                                        elementAttr: {
+                                            id: Id,
+                                            class: "customForm_SelectBox",
+                                        },
+                                        dataSource: customStore_SELECT(object.sourceLink),
+                                        displayExpr: object.sourceValue,
+                                        valueExpr: object.sourceValue,
+                                    }
+                                };
+                            }
+                            else if (object.sourceValue !== "" && object.sourceValue !== null) {
+                                var listOBJ = object.sourceValue.split(";");
+                                return {
+                                    itemType: "simple",
+                                    dataField: object.name,
+                                    editorType: type,
+                                    cssClass: "custom-textbox",
+                                    editorOptions: {
+                                        stylingMode: "filled",
+                                        searchEnabled: true,
+                                        elementAttr: {
+                                            id: Id,
+                                            class: "customForm_SelectBox",
+                                        },
+                                        dataSource: listOBJ,
+                                    }
+                                };
+                            }
+                            else {
+                                //return {
+                                //    itemType: "simple",
+                                //    label: { text: " " },
+                                //    editorType: type,
+                                //    cssClass: "custom-textbox",
+                                //    editorOptions: {
+                                //        placeholder: "Vui lòng điền thông tin",
+                                //        value: (object.customCellContentDTOs.length > 0 && typeof object.customCellContentDTOs[0].contents !== 'undefined') ? object.customCellContentDTOs[0].contents : '',
+                                //        elementAttr: {
+                                //            id: Id,
+                                //            class: "customForm_TextBox",
+                                //        },
+                                //    }
+                                //};
+                            }
+
+                        }
+                        else if (type === "dxRadioGroup") {
+                            if (object.sourceLink !== "" && object.sourceLink !== null) {
+                                return {
+                                    itemType: "simple",
+                                    editorType: type,
+                                    dataField: object.name,
+                                    cssClass: "custom-textbox",
+                                    editorOptions: {
+                                        stylingMode: "filled",
+                                        searchEnabled: true,
+                                        value: (object.customCellContentDTOs.length > 0 && typeof object.customCellContentDTOs[0].contents !== 'undefined') ? object.customCellContentDTOs[0].contents : '',
+                                        elementAttr: {
+                                            id: Id,
+                                            class: "customForm_RadioGroup",
+                                        },
+                                        dataSource: customStore_SELECT(object.sourceLink),
+                                        displayExpr: object.sourceValue,
+                                        valueExpr: object.sourceValue,
+                                    }
+                                };
+                            }
+                            else if (object.sourceValue !== "" && object.sourceValue !== null) {
+                                var listOBJ = object.sourceValue.split(";");
+                                return {
+                                    itemType: "simple",
+                                    editorType: type,
+                                    dataField: object.name,
+                                    cssClass: "custom-textbox",
+                                    editorOptions: {
+                                        stylingMode: "filled",
+                                        value: (object.customCellContentDTOs.length > 0 && typeof object.customCellContentDTOs[0].contents !== 'undefined') ? object.customCellContentDTOs[0].contents : '',
+                                        searchEnabled: true,
+                                        elementAttr: {
+                                            id: Id,
+                                            class: "customForm_RadioGroup",
+                                        },
+                                        dataSource: listOBJ,
+                                    }
+                                };
+                            }
+                            else {
+                                //return {
+                                //    itemType: "simple",
+                                //    label: { text: " " },
+                                //    editorType: type,
+                                //    cssClass: "custom-textbox",
+                                //    editorOptions: {
+                                //        placeholder: "Vui lòng điền thông tin",
+                                //        value: (object.customCellContentDTOs.length > 0 && typeof object.customCellContentDTOs[0].contents !== 'undefined') ? object.customCellContentDTOs[0].contents : '',
+                                //        elementAttr: {
+                                //            id: Id,
+                                //            class: "customForm_TextBox",
+                                //        },
+                                //    }
+                                //};
+                            }
+                        }
+                        else if (type === "Date") {
+                            return {
+                                //dataField: customFromBodyId + '_' + object.id + '_' + index,
+                                itemType: "simple",
+                                label: { text: object.displayName },
+                                dataField: object.name,
+                                editorType: convertTypeC2TypeDx(type),
+                                cssClass: "custom-textbox",
+                                editorOptions: {
+                                    dropDownOptions: {
+                                        buttons: [
+                                            {
+                                                name: 'customButtonName1',
+                                                location: 'after',
+                                                options: { icon: 'event' }
+                                            }],
+                                    },
+                                    width: "100%",
+                                    stylingMode: "filled",
+                                    pickerType: "calendar",
+                                    showClearButton: true,
+                                    useMaskBehavior: true,
+                                    type: "date",
+                                    value: new Date(),
+                                    elementAttr: {
+                                        id: Id,
+                                        class: "customForm_DateBox",
+                                    },
+                                }
+                            };
+                        }
+                        else if (type === "bool") {
+                            return {
+                                //dataField: customFromBodyId + '_' + object.id + '_' + index,
+                                itemType: "simple",
+                                dataField: object.name,
+                                editorType: convertTypeC2TypeDx(type),
+                                cssClass: "custom-textbox",
+                                editorOptions: {
+                                    stylingMode: "filled",
+                                    text: object.sourceValue,
+                                    value: true,
+                                    elementAttr: {
+                                        id: Id,
+                                        class: "customForm_CheckBox",
+                                    },
+                                }
+                            };
+                        }
+                        else {
+                            return null;
+                        }
+                    }
+                });
+            };
+            $("#form-Report").on("submit", function (e) {
+                e.preventDefault();
+                loadingPanel.show();
+                var fdata = new FormData();
+                var formdata = $('#form-Report').dxForm("instance").option('formData');
+                var obj = {};
+
+                //fdata.append("customformContentId", @Model);
+                //fdata.append("token", UserCurrentInfo.accessToken);
+                //Get and Append CustomCellContent of TextBox
+                var textBox = document.getElementsByClassName("customForm_TextBox");
+                for (var j = 0; j < textBox.length; j++) {
+                    console.log(textBox);
+                    //fdata.append(textBox[j].id, $("#" + textBox[j].id).dxTextBox('instance').option('value'));
+                    //obj[]
+                }
+                ////Get and Append CustomCellContent of SelectBox
+                //var selectBox = document.getElementsByClassName("customForm_SelectBox");
+                //for (var j = 0; j < selectBox.length; j++) {
+                //    fdata.append(selectBox[j].id, $("#" + selectBox[j].id).dxSelectBox('instance').option('value'));
+                //}
+                ////Get and Append CustomCellContent of RadioGroup
+                //var radioGroupBox = document.getElementsByClassName("customForm_RadioGroup");
+                //for (var j = 0; j < radioGroupBox.length; j++) {
+                //    fdata.append(radioGroupBox[j].id, $("#" + radioGroupBox[j].id).dxRadioGroup('instance').option('value'));
+                //}
+                //Get and Append CustomCellContent of DateBox
+                var dateBox = document.getElementsByClassName("customForm_DateBox");
+                for (var j = 0; j < dateBox.length; j++) {
+                    obj[("@@"+dateBox[j].id)]=moment($("#" + dateBox[j].id).dxDateBox('instance').option('value')).format('YYYY-MM-DD HH:mm:ss');
+                    //console.log(dateBox[j].id, moment($("#" + dateBox[j].id).dxDateBox('instance').option('value')).format('YYYY-MM-DD HH:mm:ss'));
+                    //fdata.append(("@@" + dateBox[j].id), moment($("#" + dateBox[j].id).dxDateBox('instance').option('value')).format('YYYY-MM-DD HH:mm:ss'));
+                }
+                ////Get and Append CustomCellContent of CheckBox
+                //var checkBox = document.getElementsByClassName("customForm_CheckBox");
+                //for (var j = 0; j < checkBox.length; j++) {
+                //    fdata.append(checkBox[j].id, $("#" + checkBox[j].id).dxCheckBox('instance').option('value'));
+                //    console.log($("#" + checkBox[j].id).dxCheckBox('instance').option('value'));
+                //}
+
+                //Get and Append CustomCellContent of Uploader
+                //var uploader = document.getElementsByClassName("customForm_Uploader");
+                //for (var j = 0; j < uploader.length; j++) {
+                //    var res = (uploader[j].id).split("_");
+                //    console.log(res);
+                //    var files = $("#" + uploader[j].id).dxFileUploader('instance').option('value');
+                //    if (files.length > 0) {
+                //        $.each(files, function (key, value) {
+                //            fdata.append((res[0] + '_' + res[1] + '_' + ((1)*res[2] + key) ), files[key]);
+                //        });
+                //    }
+
+                //}
+                var person = new Object();
+                person.key = $keyRS;
+                person.values = JSON.stringify(obj);
+                fdata.append("key", $keyRS);
+                fdata.append("values", JSON.stringify(obj));
+                console.log(fdata);
+                for (var pair of fdata.entries()) {
+                    console.log(pair[0] + ', ' + pair[1]);
+                }
+                var deferred = $.Deferred();
+                var $header = {
+                    'Accept': '*/*',
+                    //'X-Requested-With': 'XMLHttpRequest',
+                    //'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                    //'Access-Control-Expose-Headers': 'x-dl-units-left',
+                    'Access-Control-Expose-Headers': '*',
+                    'Access-Control-Allow-Origin': '*', 
+                    //'Access-Control-Request-Headers': '*',
+                    //'Content-Disposition':'*',
+                    //'Content-Type': '*/*',
+                    'Authorization': 'Bearer ' + UserCurrentInfo.accessToken,
+                };
+                downloadFromAjaxPost("https://api-om-crud.tayho.com.vn/api/v1/Report", fdata, $header);
+                //var settings = {
+                //    "async": false,
+                //    "crossDomain": true,
+                //    "url": "https://api-om-crud.tayho.com.vn/api/v1/Report",
+                //    "method": "PUT",
+                //    "dataType": "json",
+                //    "enctype": 'multipart/form-data',
+                //    "data": fdata,
+                //};
+                //$.ajax(settings).done(function (response) {
+                //    console.log(response);
+                //});
+                //$.ajaxPrefilter(function (options, original_Options, xhr) {
+                //    options.async = true;
+                //});
+                //$.ajax({
+                //    headers: $header,
+                //    type: "POST",
+                //    url: "https://api-om-crud.tayho.com.vn/api/v1/Report",
+                //    dataType: "text",
+                //    enctype: 'multipart/form-data',
+                //    data: fdata,
+                //    async: true,
+                //    cache: false,
+                //    contentType: false,
+                //    processData: false,
+                //    cache: false,
+                //    timeout: 600000,
+                //    success: function (response, status, xhr) {
+                     
+                //        console.log(status);
+                //        // check for a filename
+                //        console.log(xhr);
+                //        console.log(xhr.getResponseHeader('content-disposition'));
+                //        var filename = "";
+                //        var disposition = xhr.getResponseHeader('content-disposition');
+                //        if (disposition && disposition.indexOf('attachment') !== -1) {
+                //            var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                //            var matches = filenameRegex.exec(disposition);
+                //            if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+                //        }
+
+                //        var type = xhr.getResponseHeader('Content-Type');
+                //        var blob = new Blob([response], { type: type });
+                //        if (typeof window.navigator.msSaveBlob !== 'undefined') {
+                //            // IE workaround for "HTML7007: One or more blob URLs were revoked by closing the blob for which they were created. These URLs will no longer resolve as the data backing the URL has been freed."
+                //            window.navigator.msSaveBlob(blob, filename);
+                //        } else {
+                //            var URL = window.URL || window.webkitURL;
+                //            var downloadUrl = URL.createObjectURL(blob);
+
+                //            if (filename) {
+                //                // use HTML5 a[download] attribute to specify filename
+                //                var a = document.createElement("a");
+                //                // safari doesn't support this yet
+                //                if (typeof a.download === 'undefined') {
+                //                    window.location = downloadUrl;
+                //                } else {
+                //                    a.href = downloadUrl;
+                //                    a.download = filename;
+                //                    document.body.appendChild(a);
+                //                    a.click();
+                //                }
+                //            } else {
+                //                window.location = downloadUrl;
+                //            }
+
+                //            setTimeout(function () { URL.revokeObjectURL(downloadUrl); }, 100); // cleanup
+                //        }
+                //    }
+                //});
+                //$.ajax({
+                //    headers: $header,
+                //    url: 'https://api-om-crud.tayho.com.vn/api/v1/Report',
+                //    type: 'PUT',
+                //    dataType: "text",
+                //    enctype: 'multipart/form-data',
+                //    data: fdata,
+                //    async: true,
+                //    cache: false,
+                //    contentType: false,
+                //    processData: false,
+                //    cache: false,
+                //    timeout: 600000,
+                //    //beforeSend: function (xhr) {
+                //    //    xhr.setRequestHeader('Authorization', 'Bearer ' + UserCurrentInfo.accessToken);
+                //    //},
+                //    //xhr: function() {// Seems like the only way to get access to the xhr object
+                //    //    var xhr = new XMLHttpRequest();
+                //    //    xhr.responseType = 'blob'
+                //    //    return xhr;
+                //    //},
+                //    //xhrFields: {
+                //    //    responseType: 'blob',
+                //    //},
+                //    success: function (data, status, xhr) {
+                //        var header = xhr.getResponseHeader('Content-Disposition');
+                //        console.log(header);
+                //        loadingPanel.hide();
+                //        console.log(xhr);
+                //        console.log(status);
+                //        getResponseHeaders(xhr);
+                //    },
+                //    error: function (e) {
+                //        console.log("ERROR : ", e);
+                //    }
+                //})
+                //.done (function (data, status, xhr) {
+                //    //console.log(xhr.headers["content-disposition"]);
+                //    console.log(status);
+                //        ////const blob = new Blob([rs], { type: 'application/vnd.ms-excel' });
+                //        ////const url = window.URL.createObjectURL(blob);
+                //        ////window.open(url);
+                //        ////get the file
+                //        var octetStreamMime = 'application/octet-stream';
+                //        ////get the headers' content disposition
+                //        //var cd = xhr.headers["Content-Disposition"];
+                //        //console.log(cd);
+                //        ////get the file name with regex
+                //        //var regex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                //        //var match = regex.exec(cd);
+
+                //        ////is there a fiel name?
+                //        //var fileName = match[1] || "myDefaultFileName.csv";
+
+                //        ////replace leading and trailing slashes that C# added to your file name
+                //        //fileName = fileName.replace(/\"/g, "");
+
+                //        ////determine the content type from the header or default to octect stream
+                //        //var contentType = rs.headers["content-type"] || octetStreamMime;
+
+                //        ////finally, download it
+                //        //try {
+                //        //    var blob = new Blob([data.data], { type: contentType });
+
+                //        //    //downloading the file depends on the browser
+                //        //    //IE handles it differently than chrome/webkit
+                //        //    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+                //        //        window.navigator.msSaveOrOpenBlob(blob, fileName);
+                //        //    } else {
+                //        //        var objectUrl = URL.createObjectURL(blob);
+                //        //        window.open(objectUrl);
+                //        //    }
+                //        //} catch (exc) {
+                //        //    console.log("Save Blob method failed with the following exception.");
+                //        //    console.log(exc);
+                //        //}
+                //        //console.log(xhr.getAllResponseHeaders());
+                //});
+                //customStore_Report(0).store().update($keyRS, obj).then(function (rs, status, xhr) {
+                //    console.log(xhr);
+                //    loadingPanel.hide();
+
+                //    console.log(rs);
+                //    console.log(rs.headers)
+                //    //const blob = new Blob([rs], { type: 'application/vnd.ms-excel' });
+                //    //const url = window.URL.createObjectURL(blob);
+                //    //window.open(url);
+                //    //get the file
+                //    var octetStreamMime = 'application/octet-stream';
+                //    ;
+                //    //get the headers' content disposition
+                //    var cd = rs.headers["Content-Disposition"];
+
+                //    //get the file name with regex
+                //    var regex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                //    var match = regex.exec(cd);
+
+                //    //is there a fiel name?
+                //    var fileName = match[1] || "myDefaultFileName.csv";
+
+                //    //replace leading and trailing slashes that C# added to your file name
+                //    fileName = fileName.replace(/\"/g, "");
+
+                //    //determine the content type from the header or default to octect stream
+                //    var contentType = rs.headers["content-type"] || octetStreamMime;
+
+                //    //finally, download it
+                //    try {
+                //        var blob = new Blob([rs.data], { type: contentType });
+
+                //        //downloading the file depends on the browser
+                //        //IE handles it differently than chrome/webkit
+                //        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+                //            window.navigator.msSaveOrOpenBlob(blob, fileName);
+                //        } else {
+                //            var objectUrl = URL.createObjectURL(blob);
+                //            window.open(objectUrl);
+                //        }
+                //    } catch (exc) {
+                //        console.log("Save Blob method failed with the following exception.");
+                //        console.log(exc);
+                //    }
+                //    deferred.resolve(rs);
+                //}, deferred.reject);
+                //$.ajaxPrefilter(function (options, originalOptions, jqXHR) {
+                //    jqXHR.done(function (results, responseText, jqXHR) {
+                //        getResponseHeaders(jqXHR);
+                //    })
+                //}
+                function getResponseHeaders(jqXHR) {
+                    jqXHR.responseHeaders = {};
+                    var headers = jqXHR.getAllResponseHeaders();
+                    headers = headers.split("\n");
+                    headers.forEach(function (header) {
+                        header = header.split(": ");
+                        var key = header.shift();
+                        if (key.length == 0) return
+                        // chrome60+ force lowercase, other browsers can be different
+                        key = key.toLowerCase();
+                        jqXHR.responseHeaders[key] = header.join(": ");
+
+                    });
+                    console.log(jqXHR);
+                }
+                return deferred.promise;
+            });
+            function downloadFromAjaxPost(url, params, headers, callback) {
+                var xhr = new XMLHttpRequest();
+                xhr.open('PUT', url,true);
+                xhr.responseType = 'blob';
+                xhr.onload = function () {
+                    if (this.status === 200) {
+                        console.log(xhr.response);
+                        //var contentDisposition = xhr.get('content-disposition');
+                        //console.log(contentDisposition);
+                        console.log(xhr);
+                        var filename = "";
+                        var disposition = xhr.getResponseHeader('content-disposition');
+                        console.log(xhr.getResponseHeader('content-disposition')); //attachment=>inline  
+                        if (disposition && disposition.indexOf('attachment') !== -1) {
+                            var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                            var matches = filenameRegex.exec(disposition);
+                            if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+                        }
+                        var type = xhr.getResponseHeader('Content-Type');
+
+                        var blob = new Blob([this.response], { type: type });
+                        if (typeof window.navigator.msSaveBlob !== 'undefined') {
+                            // IE workaround for "HTML7007: One or more blob URLs were revoked by closing the blob for which they were created. These URLs will no longer resolve as the data backing the URL has been freed."
+                            window.navigator.msSaveBlob(blob, filename);
+                        } else {
+                            var URL = window.URL || window.webkitURL;
+                            var downloadUrl = URL.createObjectURL(blob);
+
+                            if (filename) {
+                                // use HTML5 a[download] attribute to specify filename
+                                var a = document.createElement("a");
+                                // safari doesn't support this yet
+                                if (typeof a.download === 'undefined') {
+                                    window.location = downloadUrl;
+                                } else {
+                                    a.href = downloadUrl;
+                                    a.download = filename;
+                                    document.body.appendChild(a);
+                                    a.click();
+                                }
+                            } else {
+                                window.location = downloadUrl;
+                            }
+
+                            setTimeout(function () { URL.revokeObjectURL(downloadUrl); }, 100); // cleanup
+                        }
+                    }
+                    if (callback) {
+                        callback();
+                    }
+                };
+                //xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                $.each(headers, function (key, value) {
+                    xhr.setRequestHeader(key, value);
+                });
+               
+                xhr.send(params);
+                //xhr.send($.param(params));
+            }
+          
+            function download(blob, filename) {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                // the filename you want
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            }
+        });
+    </script>
+}
