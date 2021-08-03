@@ -196,11 +196,41 @@
                 },
                 onContentReady: (e) => {
                     var container = e.component;
+                    DevExpress.config({
+                        floatingActionButtonConfig: {
+                            icon: "rowfield",
+                            label: "Tác vụ",
+                            shading: true,
+                            position: {
+                                of: e.element,
+                                my: "right bottom",
+                                at: "right bottom",
+                                offset: e.component.pageCount() > 1 ? "-15 -60" : "-15 -15"
+                            }
+                        }
+                    });
+                    DevExpress.ui.repaintFloatingActionButton();
                 },
                 onSelectionChanged: (e) => {
                     var container = e.component;
                     var selectedRowData = e.selectedRowsData[0];
                     var selectedRowKey = e.selectedRowKeys[0];
+                    if (selectedRowData != null && selectedRowKey != null) {
+                        var data = e.component.getRowIndexByKey(selectedRowData.paId);
+                        $("#action-update").dxSpeedDialAction({
+                            index: 2, icon: "fas fa-edit",
+                            label: "Tạo phiếu hẹn",
+                            visible: PermitInAction["update"],
+                            onClick: () => {
+                                CALLPOPUP(
+                                    "Phiếu bảo trì",
+                                    "/VanHanh/BaoTri/_PhieuHenBaoTriCreate?id=" + selectedRowKey,
+                                    ($(window).width() > 767 ? "50%" : "80%"),
+                                    container
+                                );
+                            }
+                        }).dxSpeedDialAction("instance");
+                    }
                     loadData_MaintenanceLog(selectedRowKey);
                 },
                 onContextMenuPreparing: function (e) {

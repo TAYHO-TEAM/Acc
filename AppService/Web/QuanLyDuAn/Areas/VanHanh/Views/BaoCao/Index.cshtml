@@ -705,6 +705,7 @@
                 xhr.responseType = 'blob';
                 xhr.onload = function () {
                     if (this.status === 200) {
+                        loadingPanel.hide();
                         console.log(xhr.response);
                         //var contentDisposition = xhr.get('content-disposition');
                         //console.log(contentDisposition);

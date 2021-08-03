@@ -69,7 +69,7 @@ namespace OperationManager.CRUD.BLL.Repositories
                     genImage.IsAutoCrop = true;
                     genImage.IsGenIamge = true;
                     genImage.ColImage = "Image,image,";
-                    memoryStream = EpplusHelper.Export(result, sysJobTable != null ? sysJobTable.SheetName : "", genImage, sysJobTable.IsShowTitle ?? false, _template, sysJobTable.BeginCol ?? 1, sysJobTable.BeginRow ?? 1, sysJobTable.IsHeader ?? false, false);
+                    memoryStream = EpplusHelper.Export(result, sysJobTable != null ? sysJobTable.SheetName : "", genImage, sysJobTable.IsShowTitle ?? false, _dirTemplate, sysJobTable.BeginCol ?? 1, sysJobTable.BeginRow ?? 1, sysJobTable.IsHeader ?? false, false);
                     memoryStream.Position = 0;
                     Tuple<MemoryStream, string, string> _result = new Tuple<MemoryStream, string, string>(memoryStream, FileHelpers.GetMimeTypes()[ext], Path.GetFileNameWithoutExtension(_template) + DateTime.Now.ToString("yyyyMMdd") + ext);
                     return _result;
