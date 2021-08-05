@@ -62,6 +62,7 @@
     <script>
         //------------------- Parameter ------------------------
         var NAMEREGIST = "RequestRegist";
+        var isOpenDetail = false;
         var code = "";
         var typeRes = 0;
         var noteRes = '';
@@ -244,7 +245,6 @@
                             },
                         },
                         cellTemplate: (c, o) => {
-                            console.log(o);
                             $("<img />")
                                 .attr('id', "popover-target-" + o.key)
                                 .attr("src", "data:image/png;base64," + o.text)
@@ -597,6 +597,22 @@
                 //        e.rowElement.attr("style", "font-weight:bold !important; background-color: rgba(158, 158, 158,.2) !important;")
                 //    }
                 //},
+                onContentReady: (e) => {
+                    const queryString = window.location.search;
+                    //console.log(queryString);  
+                    const urlParams = new URLSearchParams(queryString);
+                    const id = urlParams.get('id')
+                    if (id > 0) {
+                        customStore(PROJECTID).store().load().done((rs) => {
+                            var item = rs.filter(x => x.id == id).shift();
+                            if (item != null && !isOpenDetail) {
+                                isOpenDetail = true;
+                                loadDetail(item);
+                            }
+                        });
+                      
+                    }
+                },
             });
         }
         let loadDetail = (item) => $("#popup-main").dxPopup({
