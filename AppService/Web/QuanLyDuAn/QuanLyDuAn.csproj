@@ -2267,6 +2267,11 @@
     <Content Include="Content\plugins\toastr\toastr.min.css" />
     <Content Include="Content\plugins\toastr\toastr.min.js" />
     <Content Include="Content\Site.css" />
+    <Content Include="Content\Template\OperationManagement\Report00005_Warehouse.xlsx" />
+    <Content Include="Content\Template\OperationManagement\Report00006_Warehouse.xlsx" />
+    <Content Include="Content\Template\OperationManagement\Report0001_Complaint.xlsx" />
+    <Content Include="Content\Template\OperationManagement\Report0002_DefectFeedback.xlsx" />
+    <Content Include="Content\Template\OperationManagement\Report0003_WarehouseGoodsLog.xlsx" />
     <Content Include="Content\Template\PlanRegister\Temp_PlanRegister_001.xlsm" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
@@ -2553,9 +2558,6 @@
     <Content Include="Areas\VanHanh\Views\BaoTri\BaoTriDinhKy.cshtml" />
     <Content Include="Areas\VanHanh\Views\BaoTri\_PhieuHenBaoTriCreate.cshtml" />
     <Content Include="Areas\VanHanh\Views\BaoTri\_BaoTriHistory.cshtml" />
-    <Content Include="Content\Template\OperationManagement\Report0001_Complaint.xlsx" />
-    <Content Include="Content\Template\OperationManagement\Report0003_WarehouseGoodsLog.xlsx" />
-    <Content Include="Content\Template\OperationManagement\Report0002_DefectFeedback.xlsx" />
     <Content Include="Areas\VanHanh\Views\BaoCao\Index.cshtml" />
     <None Include="packages.config" />
     <Content Include="Views\Account\Login.cshtml" />
