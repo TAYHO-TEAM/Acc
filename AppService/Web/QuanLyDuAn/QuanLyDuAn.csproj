@@ -2335,6 +2335,7 @@
     <Content Include="Scripts\page\ngansach.js" />
     <Content Include="Scripts\page\main.js" />
     <Content Include="Scripts\page\account.js" />
+    <Content Include="Scripts\page\VanHanh\KhieuNai\KN_Index.js" />
     <Content Include="Scripts\vectormap-data\africa.js" />
     <Content Include="Scripts\vectormap-data\canada.js" />
     <Content Include="Scripts\vectormap-data\eurasia.js" />

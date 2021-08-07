@@ -255,7 +255,7 @@ namespace Services.Common.Utilities
                 }
 
                 int maxColumnCount = dtSource.Columns.Count;
-
+                /// show title
                 if (showTitle)
                 {
                     //theme
@@ -273,6 +273,7 @@ namespace Services.Common.Utilities
                     workSheet.Cells[curRowIndex, curColIndex].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                     curRowIndex++;
                 }
+                /// show headert
                 if (isHeader)
                 {
                     var titleStyle = workSheet.Workbook.Styles.CreateNamedStyle("titleStyle");
@@ -285,6 +286,7 @@ namespace Services.Common.Utilities
                         workSheet.Cells[curRowIndex, i + curColIndex].Value = column.ColumnName;
                         workSheet.Cells[curRowIndex, i + curColIndex].StyleName = "titleStyle";
                     }
+                    
                     workSheet.View.FreezePanes(curRowIndex, curColIndex);//Freeze the title row
                     curRowIndex++;
                 }
@@ -340,6 +342,7 @@ namespace Services.Common.Utilities
                                                     if (genImage.Height == 0)
                                                         genImage.Height = genImage.GetHeight(genImage.Width, hpw);
                                                 }
+
                                                 ////set row height to accommodate the picture
                                                 //workSheet.Column(j + curColIndex).Width =EpplusHelper.Pixel2Inch((int)(genImage.Width));
                                                 //workSheet.Row(curRowIndex).Height = EpplusHelper.Pixel2Inch((int)(genImage.Height));
@@ -384,25 +387,6 @@ namespace Services.Common.Utilities
 
                                         }
                                     }
-                                    //else if (isMergeCell)
-                                    //{
-                                    //    if (value.ToString() == workSheet.Cells[curRowIndex - 1, (j + curColIndex)].Value.ToString())
-                                    //    {
-                                    //        int pointCStart = workSheet.Cells[curRowIndex - 1, (j + curColIndex)].Start.Column;
-                                    //        int pointCEnd = workSheet.Cells[curRowIndex - 1, (j + curColIndex)].End.Column;
-                                    //        int pointRStart = workSheet.Cells[curRowIndex - 1, (j + curColIndex)].Start.Row;
-                                    //        int pointREnd = workSheet.Cells[curRowIndex - 1, (j + curColIndex)].End.Row;
-                                    //        string contentMerge = value.ToString();
-
-                                    //        if (pointRStart < pointREnd)
-                                    //        {
-                                    //            contentMerge = workSheet.Cells[pointRStart, pointCStart, pointREnd, pointCEnd].First().Value.ToString();
-                                    //            workSheet.Cells[pointRStart, pointCStart, pointREnd, pointCEnd].Merge = false;
-                                    //        }
-                                    //        workSheet.Cells[pointRStart, pointCStart, curRowIndex, pointCEnd].Merge = true;
-                                    //        workSheet.Cells[pointRStart, pointCStart, curRowIndex, pointCEnd].Value = contentMerge;
-                                    //    }
-                                    //}
                                     else
                                     {
                                         cell.Value = value == null ? "" : value.ToString();
