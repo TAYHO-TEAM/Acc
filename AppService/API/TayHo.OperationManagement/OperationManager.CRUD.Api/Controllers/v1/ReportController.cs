@@ -130,5 +130,49 @@ namespace OperationManager.CRUD.Api.Controllers.v1
                 return BadRequest(methodResult);
             }
         }
+        /// <summary>
+        /// DownLoad FilesAttachment.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [ProducesResponseType(typeof(MethodResult<dynamic>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(VoidMethodResult), (int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> PostReportAsync([FromForm] int key, [FromForm] string values)
+        {
+            var methodResult = new MethodResult<dynamic>();
+            ErrorResult err = new ErrorResult();
+            err.ErrorCode = "101";
+            err.ErrorMessage = "File không tồn tại";
+
+            try
+            {
+
+                (string, object)[] parameter = { };/// new (string, object)[] { ("@RecordId", id) };
+                JObject obj = JObject.Parse(values);
+                int i = 0;
+                foreach (JProperty item in obj.Children())
+                {
+                    Array.Resize(ref parameter, parameter.Length + 1);
+                    parameter[i] = (item.Name, ConvertHelper.ConvertJProperty(item));
+                    i++;
+                }
+                var FileResult = await _reportRepository.ReportSheetGet(key, parameter);
+                if (FileResult.Item1 == null || FileResult.Item2 == null || FileResult.Item3 == null)
+                {
+                    methodResult.AddErrorMessage(err);
+                    return BadRequest(methodResult);
+                }
+                else
+                {
+                    return File(FileResult.Item1, FileResult.Item2, FileResult.Item3);
+                }
+            }
+            catch (Exception ex)
+            {
+                methodResult.AddErrorMessage(err);
+                return BadRequest(methodResult);
+            }
+        }
     }
 }
