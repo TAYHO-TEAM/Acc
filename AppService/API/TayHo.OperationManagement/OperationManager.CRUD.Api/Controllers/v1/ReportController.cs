@@ -121,6 +121,7 @@ namespace OperationManager.CRUD.Api.Controllers.v1
                 }
                 else
                 {
+                    Response.Headers.Add("X-File-Name", FileResult.Item3);
                     return File(FileResult.Item1, FileResult.Item2, FileResult.Item3);
                 }
             }
@@ -165,6 +166,7 @@ namespace OperationManager.CRUD.Api.Controllers.v1
                 }
                 else
                 {
+                    Response.Headers.Add("X-File-Name", FileResult.Item3);
                     return File(FileResult.Item1, FileResult.Item2, FileResult.Item3);
                 }
             }

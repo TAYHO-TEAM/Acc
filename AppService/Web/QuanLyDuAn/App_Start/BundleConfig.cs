@@ -26,7 +26,10 @@ namespace QuanLyDuAn
                 "~/Content/dx.material.orange.light.compact.css");
 
             scriptBundle.Include(
-                "~/Content/plugins/jquery/jquery.js",
+                //"~/Content/plugins/jquery/jquery.js",
+                //"~/Content/plugins/jquery/jquery.min.js",
+                //"~/Content/plugins/jquery/jquery.min.js",
+                "~/Content/plugins/jquery/jquery-3.6.0.min.js",
                 "~/Content/plugins/bootstrap/js/bootstrap.bundle.min.js",
                 "~/Content/plugins/jquery-ui/jquery-ui.min.js",
                 "~/Content/plugins/moment/moment.min.js",

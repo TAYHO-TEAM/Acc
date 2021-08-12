@@ -13,7 +13,7 @@ var customStore_SysJobParameter = (id) => new DevExpress.data.DataSource({
     filter: ["sysJobId", "=", id]
 });
 var customStore_Report = (id) => new DevExpress.data.DataSource({
-    store: $DATASOURCE(ACTION_REPORT, KEY)
+    store: $DATASOURCEGET(ACTION_REPORT, KEY)
 });
 
 $(document).ready(function () {
