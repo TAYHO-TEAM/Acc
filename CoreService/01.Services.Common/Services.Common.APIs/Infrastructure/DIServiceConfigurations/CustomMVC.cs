@@ -84,8 +84,8 @@ namespace Services.Common.APIs.Infrastructure.DIServiceConfigurations
                 {
                     builder.AllowAnyOrigin()
                         .AllowAnyHeader()
-                        .AllowAnyMethod();
-                        //.WithExposedHeaders("Content-Disposition");
+                        .AllowAnyMethod()//;
+                        .WithExposedHeaders("Content-Disposition");
                 });
             });
             return services;
