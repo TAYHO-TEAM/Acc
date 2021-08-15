@@ -12,7 +12,7 @@ namespace OperationManager.CRUD.DAL.DTO.OperationManagerDTO
         public int? CategoryGoodsId { get; set; }
         public string Code { get; set; }
         public string Barcode { get; set; }
-        public int? Quantity { get; set; }
+        public decimal? Quantity { get; set; }
         public string Description { get; set; }
         public int? Priority { get; set; }
 

@@ -16,7 +16,7 @@
     "transporter": "",
     "phoneContact": ""
 };
-var $WarehouseReleasedId = 0;
+var $WarehouseReleasedId = parseInt(0);
 var fdata = new FormData();
 $(document).ready(function () {
     var formInstance = $("#form-warehousereleased").dxForm({
@@ -139,7 +139,6 @@ $(document).ready(function () {
     }).dxForm("instance");
     $("#form-warehousereleased").on("submit", function (e) {
         e.preventDefault();
-        var formdata = $('#form-warehousereleased').dxForm("instance").option('formData');
         var resValid = true
         if (!resValid) {
             DevExpress.ui.notify("Vui lòng kiểm tra lại file đính kèm!", "error", 3000);
@@ -151,10 +150,9 @@ $(document).ready(function () {
             var deferred = $.Deferred();
             customStore_WarehouseReleased(0).store().insert(formdata).done((rs) => {
                 loadingPanel.hide();
-                console.log(rs);
                 if (rs.isOk) {
                     console.log(rs.result.id)
-                    $WarehouseReleasedId = rs.result.id;
+                    $WarehouseReleasedId = parseInt(rs.result.id);
                     deferred.resolve(rs);
                     document.getElementById('elementwarehouseStorageId').style.display = 'block';
                     document.getElementById('elementTransporterWHR').style.display = 'block';
@@ -324,6 +322,7 @@ $(document).ready(function () {
                                                 .option('value', item == null ? "" : (item.title));
                                         });
                                     });
+                                    console.log($WarehouseStorageID);
                                     customStore($WarehouseStorageID).load().then((rsInventory) => {
                                         console.log($WarehouseStorageID);
                                         var item = rsInventory.filter(x => x.categoryGoodsId === data.value).shift();
@@ -359,27 +358,25 @@ $(document).ready(function () {
                                     var $categoryGoodsId = $('#elementcategoryGoodsId').dxSelectBox("instance").option('value');
                                     console.log($categoryGoodsId);
                                     var d = $.Deferred();
-                                    if ($isIn === true)
-                                        d.resolve(true);
-                                    else {
-                                        customStore($model).load().done((rs) => {
-                                            var _item = rs.find(x => x.id == $categoryGoodsId);
-                                            if (typeof _item !== 'undefined') {
-                                                console.log(_item);
-                                                var quantity = _item.quantity;
-                                                console.log(quantity);
-                                                if (quantity > 0) {
-                                                    d.resolve(quantity >= params.value);
-                                                }
-                                                else {
-                                                    d.resolve(false);
-                                                }
+
+                                    customStore($WarehouseStorageID).load().then((rsInventory) => {
+                                        var _item = rsInventory.find(x => x.categoryGoodsId == $categoryGoodsId);
+                                        if (typeof _item !== 'undefined') {
+                                            console.log(_item);
+                                            var quantity = _item.quantity;
+                                            console.log(quantity);
+                                            if (quantity > 0) {
+                                                d.resolve(quantity >= params.value);
                                             }
                                             else {
                                                 d.resolve(false);
                                             }
-                                        });
-                                    }
+                                        }
+                                        else {
+                                            d.resolve(false);
+                                        }
+                                    });
+
                                     return d.promise();
                                 }
                             }],
@@ -411,21 +408,49 @@ $(document).ready(function () {
                             },
                         },
                         {
-                            colSpan: 12,
-                            itemType: "button",
-                            horizontalAlignment: "center",
-                            buttonOptions: {
-                                text: $isIn ? "Tạo phiếu nhập" : "Tạo phiếu xuất",
-                                icon: "fa fa-save",
-                                type: "success",
-                                useSubmitBehavior: true,
-                                elementAttr: {
-                                    id: "addItem",
+                            itemType: "group",
+                            name: "button-action",
+                            colCount: 12,
+                            items: [
+                                {
+                                    colSpan: 6,
+                                    itemType: "button",
+                                    horizontalAlignment: "right",
+                                    disabled: id == 0,
+                                    buttonOptions: {
+                                        text: "Thêm sản phẩm",
+                                        icon: "fa fa-save",
+                                        type: "success",
+                                        useSubmitBehavior: true,
+                                        elementAttr: {
+                                            id: "addItem",
+                                        },
+                                        editorOptions: {
+                                            stylingMode: "filled",
+                                        }
+                                    }
                                 },
-                                editorOptions: {
-                                    stylingMode: "filled",
-                                }
-                            }
+                                {
+                                    colSpan: 6,
+                                    itemType: "button",
+                                    horizontalAlignment: "left",
+                                    disabled: id == 0,
+                                    buttonOptions: {
+                                        text: "Hoàn tất",
+                                        icon: "fa fa-clipboard",
+                                        type: "default",
+                                        useSubmitBehavior: false,
+                                        elementAttr: {
+                                            id: "resolveDelay",
+                                        },
+                                        editorOptions: {
+                                            stylingMode: "contained",
+                                            cssClass: "bg-info",
+                                        }
+                                    }
+                                },
+                            ],
+
                         },
                     ]
                 },
@@ -433,16 +458,15 @@ $(document).ready(function () {
             ],
         }).dxForm("instance");
     };
-    $("#form-warehousereleased").on("submit", function (e) {
+    $("#form-warehousereleaseddetail").on("submit", function (e) {
         e.preventDefault();
-        var formdata = $('#form-warehousereleased').dxForm("instance").option('formData');
+        var formdata = $('#form-warehousereleaseddetail').dxForm("instance").option('formData');
         var resValid = true
         if (!resValid) {
             DevExpress.ui.notify("Vui lòng kiểm tra lại file đính kèm!", "error", 3000);
         }
         else {
             loadingPanel.show();
-            var formdata = $('#form-warehousereleaseddetail').dxForm("instance").option('formData');
             formdata["WarehouseStorageId"] = $WarehouseStorageID;
             formdata["WarehouseReleasedId"] = $WarehouseReleasedId;
             var deferred = $.Deferred();
@@ -451,7 +475,7 @@ $(document).ready(function () {
                 console.log(rs);
                 if (rs.isOk) {
                     deferred.resolve(rs);
-                    //$("#container-warehousereleaseddetail").dxDataGrid("instance").refresh();  
+                    $("#container-warehousereleaseddetail").dxDataGrid("instance").refresh();
                     DevExpress.ui.notify("Cập nhật thành công", "success", 3000);
                 }
                 else {

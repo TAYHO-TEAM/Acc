@@ -12,7 +12,7 @@ namespace OperationManager.CRUD.DAL.DTO.OperationManagerDTO
         public int? WarehouseStorageId { get; set; }
         public int? ParentId { get; set; }
         public int? CategoryGoodsId { get; set; }
-        public int? Quantity { get; set; }
+        public decimal? Quantity { get; set; }
         public int? UnitId { get; set; }
 
     }
