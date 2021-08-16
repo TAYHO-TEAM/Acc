@@ -1,6 +1,7 @@
 ﻿@{
     ViewBag.Title = "XuatNhap";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var versionJS = System.Configuration.ConfigurationManager.AppSettings["webpages:VersionJS"];
 }
 @section style{   }
 <div id="popup-main"></div>
@@ -18,9 +19,9 @@
             <div id="container-goods" class="elevation-2"></div>
         </div>*@
 </div>
-
+ 
 @section script{
-    <script src="~/Scripts/page/vanhanh.js"></script>
-    <script src="~/Scripts/page/VanHanh/KhoBai/KB_XuatNhap.js"></script>
+    <script src="~/Scripts/page/vanhanh.js?v=@versionJS"></script>
+    <script src="~/Scripts/page/VanHanh/KhoBai/KB_XuatNhap.js?v=@versionJS"></script>
 }
 

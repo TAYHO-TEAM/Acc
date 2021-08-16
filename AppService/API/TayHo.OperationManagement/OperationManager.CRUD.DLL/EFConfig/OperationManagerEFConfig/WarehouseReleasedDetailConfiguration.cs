@@ -18,7 +18,6 @@ namespace OperationManager.CRUD.DAL.EFConfig.OperationManagerEFConfig
             builder.Property(x => x.Quantity).HasColumnName("Quantity").UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.Description).HasColumnName("Description").UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.Property(x => x.Priority).HasColumnName("Priority").UsePropertyAccessMode(PropertyAccessMode.Field);
-
         }
     }
 }

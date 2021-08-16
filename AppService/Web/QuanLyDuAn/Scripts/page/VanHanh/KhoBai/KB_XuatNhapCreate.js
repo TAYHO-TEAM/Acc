@@ -147,6 +147,7 @@ $(document).ready(function () {
             loadingPanel.show();
             var formdata = $('#form-warehousereleased').dxForm("instance").option('formData');
             formdata["IsInOrOut"] = $isIn;
+            formdata["Status"] = 10;
             var deferred = $.Deferred();
             customStore_WarehouseReleased(0).store().insert(formdata).done((rs) => {
                 loadingPanel.hide();
@@ -358,24 +359,28 @@ $(document).ready(function () {
                                     var $categoryGoodsId = $('#elementcategoryGoodsId').dxSelectBox("instance").option('value');
                                     console.log($categoryGoodsId);
                                     var d = $.Deferred();
-
-                                    customStore($WarehouseStorageID).load().then((rsInventory) => {
-                                        var _item = rsInventory.find(x => x.categoryGoodsId == $categoryGoodsId);
-                                        if (typeof _item !== 'undefined') {
-                                            console.log(_item);
-                                            var quantity = _item.quantity;
-                                            console.log(quantity);
-                                            if (quantity > 0) {
-                                                d.resolve(quantity >= params.value);
+                                    if (!$isIn) {
+                                        customStore($WarehouseStorageID).load().then((rsInventory) => {
+                                            var _item = rsInventory.find(x => x.categoryGoodsId == $categoryGoodsId);
+                                            if (typeof _item !== 'undefined') {
+                                                console.log(_item);
+                                                var quantity = _item.quantity;
+                                                console.log(quantity);
+                                                if (quantity > 0) {
+                                                    d.resolve(quantity >= params.value);
+                                                }
+                                                else {
+                                                    d.resolve(false);
+                                                }
                                             }
                                             else {
                                                 d.resolve(false);
                                             }
-                                        }
-                                        else {
-                                            d.resolve(false);
-                                        }
-                                    });
+                                        });
+                                    }
+                                    else {
+                                        d.resolve(true);
+                                    }
 
                                     return d.promise();
                                 }
@@ -441,7 +446,7 @@ $(document).ready(function () {
                                         type: "default",
                                         useSubmitBehavior: false,
                                         elementAttr: {
-                                            id: "resolveDelay",
+                                            id: "resolveFinish",
                                         },
                                         editorOptions: {
                                             stylingMode: "contained",
@@ -483,6 +488,34 @@ $(document).ready(function () {
                     deferred.resolve(false);
                 }
             }, deferred.reject)
+            return deferred.promise();
+        }
+    });
+    $(document).on('click', '#resolveFinish', '#form-warehousereleaseddetail', function (e) {
+        e.preventDefault();
+        var resValid = true
+        if (!resValid) {
+            DevExpress.ui.notify("Vui lòng kiểm tra lại file đính kèm!", "error", 3000);
+        }
+        else {
+            loadingPanel.show();
+            var deferred = $.Deferred();
+            var object = {};
+            object["status"] = 200;
+            if ($WarehouseReleasedId>0) {
+                customStore_WarehouseReleased(0).store().update(object).done((rs) => {
+                    console.log(rs);
+                    if (rs.isOk) {
+                        $("#popup-main").dxPopup('instance').hide();
+                        deferred.resolve(rs);
+                        DevExpress.ui.notify("Cập nhật thành công", "success", 3000);
+                    }
+                    else {
+                        DevExpress.ui.notify("Có lỗi xảy ra", "error", 3000);
+                        deferred.resolve(false);
+                    }
+                }, deferred.reject)
+            }
             return deferred.promise();
         }
     });

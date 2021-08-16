@@ -623,7 +623,6 @@ const listIcon = [
     { value: "fa-vimeo", text: "fasfa-vimeo" },
     { value: "fa-black-tie", text: "fasfa-black-tie" },
     { value: "fa-fonticons", text: "fasfa-fonticons" },
-
-
 ]; 
+
  

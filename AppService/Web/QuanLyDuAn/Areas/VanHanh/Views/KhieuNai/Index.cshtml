@@ -1,6 +1,7 @@
 ﻿@{
     ViewBag.Title = "KhieuNai";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var versionJS = System.Configuration.ConfigurationManager.AppSettings["webpages:VersionJS"];
 }
 @section style{   }
 <div id="popup-main-upload"></div>
@@ -47,7 +48,7 @@
     </div>
 </div>
 @section script{
-    <script src="~/Scripts/page/vanhanh.js"></script>
-    <script src="~/Scripts/page/VanHanh/KhieuNai/KN_Index.js"></script>
+    <script src="~/Scripts/page/vanhanh.js?v=@versionJS"></script>
+    <script src="~/Scripts/page/VanHanh/KhieuNai/KN_Index.js?v=@versionJS"></script>
 }
 
