@@ -436,6 +436,38 @@ namespace Services.Common.Utilities
         /// <summary>
         /// Generate excel
         /// </summary>
+        ///  /// <param name="tableProperties">template</param>
+        /// <param name="genImage">Data source</param>
+        /// <param name="template">title (Sheet name)</param>
+        /// <returns></returns>
+        public static MemoryStream Export(List<TableProperty> tableProperties,string template = "")
+        {
+            FileInfo templateFile = null;
+            try
+            {
+                templateFile = new FileInfo(template);
+            }
+            catch
+            {
+                templateFile = null;
+            }
+
+            using (ExcelPackage package = (templateFile == null ? new ExcelPackage() : new ExcelPackage(templateFile)))
+            {
+            
+                    foreach (var tableProperty in tableProperties)
+                    {
+                        Export(tableProperty, package);
+                    }
+                    MemoryStream ms = new MemoryStream(package.GetAsByteArray());
+                    return ms;
+             
+
+            }
+        }
+        /// <summary>
+        /// Generate excel
+        /// </summary>
         ///  /// <param name="template">template</param>
         /// <param name="dtSource">Data source</param>
         /// <param name="tableProp">tableProp</param>
@@ -443,7 +475,7 @@ namespace Services.Common.Utilities
         /// <param name="curColIndex">Current Colum Index </param>
         /// <param name="curRowIndex">Current Rown Index</param>
         /// <returns></returns>
-        public static void Export(TableProperties tableProp, ExcelPackage package)
+        public static void Export(TableProperty tableProp,ExcelPackage package)
         {
             DataTable dtSource = new DataTable();
             int curColIndex = 0;
@@ -453,6 +485,7 @@ namespace Services.Common.Utilities
             bool isFreezeHeader = true;
             string title = "";
             int positionSheet = 0;
+            string font = "Song Ti";
 
             try
             {
@@ -463,6 +496,7 @@ namespace Services.Common.Utilities
                 isHeader = tableProp.IsHeader ?? false;
                 title = tableProp.Title;
                 positionSheet = tableProp.SheetIndex ?? 0;
+                //font = tableProp.FontStyleId;
             }
             catch
             {
@@ -555,38 +589,6 @@ namespace Services.Common.Utilities
             workSheet.Cells[workSheet.Dimension.Address].Style.Font.Name = "Song Ti";
             workSheet.Cells[workSheet.Dimension.Address].AutoFitColumns();//Auto fill
             for (var i = curColIndex; i <= workSheet.Dimension.End.Column; i++) { workSheet.Column(i).Width = workSheet.Column(i).Width + 2; }//Add 2 to the filling
-        }
-        /// <summary>
-        /// Generate excel
-        /// </summary>
-        ///  /// <param name="template">template</param>
-        /// <param name="dtSource">Data source</param>
-        /// <param name="tableProp">tableProp</param>
-        /// <param name="showTitle">whether to show</param>
-        /// <param name="curColIndex">Current Colum Index </param>
-        /// <param name="curRowIndex">Current Rown Index</param>
-        /// <returns></returns>
-        public static MemoryStream Export(List<TableProperties> tablePros, string template = "")
-        {
-            FileInfo templateFile = null;
-            try
-            {
-                templateFile = new FileInfo(template);
-            }
-            catch
-            {
-                templateFile = null;
-            }
-            using (ExcelPackage package = (templateFile == null ? new ExcelPackage() : new ExcelPackage(templateFile)))
-            {
-                foreach (var tablePro in tablePros)
-                {
-                    Export(tablePro, package);
-                }
-                MemoryStream ms = new MemoryStream(package.GetAsByteArray());
-                return ms;
-            }
-
         }
         /// <summary>
         /// Generate excel
@@ -767,28 +769,37 @@ namespace Services.Common.Utilities
 
     }
     //Table properties
-    public class TableProperties
+    public class TableProperty
     {
         public DataTable DataSource { get; set; }
+        public GenImage GenImage { get; set; }
+        public string Code { get; set; }
+        public string Barcode { get; set; }
         public int? SysJobId { get; set; }
         public int? No { get; set; }
         public string SheetName { get; set; }
         public int? SheetIndex { get; set; }
         public int? TableIndex { get; set; }
         public string Title { get; set; }
+        public int? TitleFontSize { get; set; }
         public bool? IsShowTitle { get; set; }
+        public bool? IsShowTotal { get; set; }
         public bool? IsHeader { get; set; }
         public bool? IsFreezeHeader { get; set; }
-        public bool? IsShowTotal { get; set; }
-        public bool? IsAutoFit { get; set; }
         public string HeaderColor { get; set; }
         public string HeaderBackGroundColor { get; set; }
+        public int? HeaderBackGroundStyleId { get; set; }
+        public int? HeaderFontSize { get; set; }
+        public bool? IsAutoFit { get; set; }
         public int? Border { get; set; }
-        public string Color { get; set; }
+        public int? BorderStyleId { get; set; }
         public string BackGroundColor { get; set; }
         public int? BeginRow { get; set; }
         public int? BeginCol { get; set; }
         public string Style { get; set; }
+        public int? FontStyleId { get; set; }
+        public int? FontSize { get; set; }
+        public string Color { get; set; }
         public int? Priority { get; set; }
     }
     //Mapping excel entity
