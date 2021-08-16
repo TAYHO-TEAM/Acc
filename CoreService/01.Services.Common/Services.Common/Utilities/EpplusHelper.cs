@@ -253,7 +253,6 @@ namespace Services.Common.Utilities
                 {
                     workSheet = package.Workbook.Worksheets.Add("sheet1");
                 }
-
                 int maxColumnCount = dtSource.Columns.Count;
                 /// show title
                 if (showTitle)
@@ -286,11 +285,10 @@ namespace Services.Common.Utilities
                         workSheet.Cells[curRowIndex, i + curColIndex].Value = column.ColumnName;
                         workSheet.Cells[curRowIndex, i + curColIndex].StyleName = "titleStyle";
                     }
-                    
+
                     workSheet.View.FreezePanes(curRowIndex, curColIndex);//Freeze the title row
                     curRowIndex++;
                 }
-
                 //content
                 for (var i = 0; i < dtSource.Rows.Count; i++)
                 {
@@ -337,49 +335,21 @@ namespace Services.Common.Utilities
                                                 float hpw = (float)img.Size.Height / (float)img.Size.Width;
                                                 if (genImage.IsAutoCrop)
                                                 {
-                                                    if( genImage.Width == 0)
+                                                    if (genImage.Width == 0)
                                                         genImage.Width = genImage.GetWidth(genImage.Height, hpw);
                                                     if (genImage.Height == 0)
                                                         genImage.Height = genImage.GetHeight(genImage.Width, hpw);
                                                 }
 
-                                                ////set row height to accommodate the picture
-                                                //workSheet.Column(j + curColIndex).Width =EpplusHelper.Pixel2Inch((int)(genImage.Width));
-                                                //workSheet.Row(curRowIndex).Height = EpplusHelper.Pixel2Inch((int)(genImage.Height));
-                                                
+
                                                 cell.Style.VerticalAlignment = ExcelVerticalAlignment.Top;
                                                 cell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
                                                 ExcelPicture pic = workSheet.Drawings.AddPicture((column.ColumnName + curRowIndex.ToString()), img);
-                                              
-                                                //pic.From.Column = j + curColIndex -1;
-                                                //pic.From.Row = curRowIndex -1;
-                                                //pic.From.Column = cell.Start.Column - 1;
-                                                //pic.From.Row = cell.Start.Row - 1;
-                                                //pic.From.ColumnOff = cell.Start.Column;// EpplusHelper.Pixel2MTU((int)genImage.Width);
-                                                //pic.From.RowOff = cell.Start.Row;// EpplusHelper.Pixel2MTU((int)genImage.Height);
-                                                //pic.To.Column = cell.End.Column;
-                                                //pic.To.Row = cell.End.Row;
 
-                                                pic.SetPosition(curRowIndex-1, 0 , j + curColIndex-1, 0);
+                                                pic.SetPosition(curRowIndex - 1, 0, j + curColIndex - 1, 0);
                                                 pic.SetSize((int)Math.Ceiling(genImage.Width), (int)Math.Ceiling(genImage.Height));
                                                 workSheet.Column(j + curColIndex).Width = EpplusHelper.Pixel2ExcelW((int)(genImage.Width));
                                                 workSheet.Row(curRowIndex).Height = EpplusHelper.Pixel2ExcelH((int)(genImage.Height));
-                                              
-                                                //workSheet.Protection.IsProtected = false;
-                                                //workSheet.Protection.AllowSelectLockedCells = false;
-
-                                                ////add picture to cell
-                                                //ExcelPicture pic = workSheet.Drawings.AddPicture((column.ColumnName + curRowIndex.ToString()), img);
-                                                ////position picture on desired column
-                                                //pic.SetPosition(curRowIndex, curRowIndex, j + curColIndex, j + curColIndex);
-                                                ////pic.From.Column = curRowIndex ;
-                                                ////pic.From.Row = j + curColIndex ;
-                                                ////pic.From.ColumnOff = curRowIndex;
-                                                ////pic.From.RowOff = j + curColIndex;
-                                                ////set picture size to fit inside the cell
-                                                //pic.SetSize((int)Math.Ceiling(genImage.Width), (int)Math.Ceiling(genImage.Height));
-                                                ////workSheet.Protection.IsProtected = true;
-                                                ////workSheet.Protection.AllowSelectLockedCells = true;
                                             }
                                         }
                                         catch
@@ -391,7 +361,7 @@ namespace Services.Common.Utilities
                                     {
                                         cell.Value = value == null ? "" : value.ToString();
                                         workSheet.Cells[curRowIndex, j + curColIndex].Value = row[column].ToString();
-                                    }    
+                                    }
                                 }
                                 //else if (isMergeCell)
                                 //{
@@ -440,7 +410,7 @@ namespace Services.Common.Utilities
         /// <param name="genImage">Data source</param>
         /// <param name="template">title (Sheet name)</param>
         /// <returns></returns>
-        public static MemoryStream Export(List<TableProperty> tableProperties,string template = "")
+        public static MemoryStream Export(List<TableProperty> tableProperties, string template = "")
         {
             FileInfo templateFile = null;
             try
@@ -454,15 +424,12 @@ namespace Services.Common.Utilities
 
             using (ExcelPackage package = (templateFile == null ? new ExcelPackage() : new ExcelPackage(templateFile)))
             {
-            
-                    foreach (var tableProperty in tableProperties)
-                    {
-                        Export(tableProperty, package);
-                    }
-                    MemoryStream ms = new MemoryStream(package.GetAsByteArray());
-                    return ms;
-             
-
+                foreach (var tableProperty in tableProperties)
+                {
+                    Export(tableProperty, package);
+                }
+                MemoryStream ms = new MemoryStream(package.GetAsByteArray());
+                return ms;
             }
         }
         /// <summary>
@@ -475,7 +442,7 @@ namespace Services.Common.Utilities
         /// <param name="curColIndex">Current Colum Index </param>
         /// <param name="curRowIndex">Current Rown Index</param>
         /// <returns></returns>
-        public static void Export(TableProperty tableProp,ExcelPackage package)
+        public static void Export(TableProperty tableProp, ExcelPackage package)
         {
             DataTable dtSource = new DataTable();
             int curColIndex = 0;
@@ -486,7 +453,7 @@ namespace Services.Common.Utilities
             string title = "";
             int positionSheet = 0;
             string font = "Song Ti";
-
+            GenImage genImage = tableProp.GenImage;
             try
             {
                 dtSource = tableProp.DataSource;
@@ -513,33 +480,31 @@ namespace Services.Common.Utilities
 
             int maxColumnCount = dtSource.Columns.Count;
 
-            if (isShowTitle == true)
+            /// show title
+            if (isShowTitle)
             {
-                // tesst lại xem có bị côt đầu là 0 hoặc 1 không
-                curRowIndex++;
                 //theme
-                workSheet.Cells[curRowIndex, curColIndex, 1, maxColumnCount].Merge = true;
+                workSheet.Cells[curRowIndex, curColIndex, curRowIndex, maxColumnCount].Merge = true;
                 workSheet.Cells[curRowIndex, curColIndex].Value = title;
                 var headerStyle = workSheet.Workbook.Styles.CreateNamedStyle("headerStyle");
                 headerStyle.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                 headerStyle.Style.Font.Bold = true;
                 headerStyle.Style.Font.Size = 20;
                 workSheet.Cells[curRowIndex, curColIndex].StyleName = "headerStyle";
-
                 curRowIndex++;
                 //Export time bar
-                workSheet.Cells[curRowIndex, curColIndex, 2, maxColumnCount].Merge = true;
+                workSheet.Cells[curRowIndex, curColIndex, curRowIndex, maxColumnCount].Merge = true;
                 workSheet.Cells[curRowIndex, curColIndex].Value = "Export time:" + DateTime.Now.ToString("yyyy-MM-dd HH:mm");
                 workSheet.Cells[curRowIndex, curColIndex].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+                curRowIndex++;
             }
-
-            curRowIndex++;
-            var titleStyle = workSheet.Workbook.Styles.CreateNamedStyle("titleStyle");
-            titleStyle.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-            titleStyle.Style.Font.Bold = true;
-            //Header colum
+            /// show headert
             if (isHeader)
             {
+                var titleStyle = workSheet.Workbook.Styles.CreateNamedStyle("titleStyle");
+                titleStyle.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                titleStyle.Style.Font.Bold = true;
+                //title
                 for (var i = 0; i < maxColumnCount; i++)
                 {
                     DataColumn column = dtSource.Columns[i];
@@ -548,15 +513,13 @@ namespace Services.Common.Utilities
                 }
                 if (isFreezeHeader)
                 {
-                    workSheet.View.FreezePanes(curRowIndex, curColIndex);//Freeze header rown
+                    workSheet.View.FreezePanes(curRowIndex, curColIndex);//Freeze the title row
                 }
+                curRowIndex++;
             }
-
-
             //content
             for (var i = 0; i < dtSource.Rows.Count; i++)
             {
-                curRowIndex++;
                 for (var j = 0; j < maxColumnCount; j++)
                 {
                     DataColumn column = dtSource.Columns[j];
@@ -567,28 +530,96 @@ namespace Services.Common.Utilities
                     pType = pType.Name == "Nullable`1" ? Nullable.GetUnderlyingType(pType) : pType;
                     if (pType == typeof(DateTime))
                     {
-                        cell.Style.Numberformat.Format = "hh:mm dd/MM/yyyy";
-                        cell.Value = Convert.ToDateTime(value);
+                        cell.Style.Numberformat.Format = "yyyy-MM-dd hh:mm";
+                        cell.AutoFitColumns();
+                        if (value != null && value.ToString() != "") cell.Value = Convert.ToDateTime(value);
+                        workSheet.Cells[curRowIndex, j + curColIndex].Value = row[column].ToString();
                     }
                     else if (pType == typeof(int))
                     {
-                        cell.Value = Convert.ToInt32(value);
+                        cell.Value = Convert.ToInt32(value ?? 0);
+                        cell.AutoFitColumns();
+                        workSheet.Cells[curRowIndex, j + curColIndex].Value = row[column].ToString();
                     }
                     else if (pType == typeof(double) || pType == typeof(decimal))
                     {
-                        cell.Value = Convert.ToDouble(value);
+                        cell.Value = Convert.ToDouble(value ?? 0);
+                        cell.AutoFitColumns();
+                        workSheet.Cells[curRowIndex, j + curColIndex].Value = row[column].ToString();
                     }
                     else
                     {
-                        cell.Value = value == null ? "" : value.ToString();
+                        if (!(value == null))
+                        {
+                            if (genImage.IsGenIamge)
+                            {
+                                if (genImage.ColImage.Contains(column.ColumnName))
+                                {
+                                    try
+                                    {
+                                        Image img = Image.FromFile(value.ToString());
+                                        if (img != null)
+                                        {
+                                            float hpw = (float)img.Size.Height / (float)img.Size.Width;
+                                            if (genImage.IsAutoCrop)
+                                            {
+                                                if (genImage.Width == 0)
+                                                    genImage.Width = genImage.GetWidth(genImage.Height, hpw);
+                                                if (genImage.Height == 0)
+                                                    genImage.Height = genImage.GetHeight(genImage.Width, hpw);
+                                            }
+
+
+                                            cell.Style.VerticalAlignment = ExcelVerticalAlignment.Top;
+                                            cell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                            ExcelPicture pic = workSheet.Drawings.AddPicture((column.ColumnName + curRowIndex.ToString()), img);
+
+                                            pic.SetPosition(curRowIndex - 1, 0, j + curColIndex - 1, 0);
+                                            pic.SetSize((int)Math.Ceiling(genImage.Width), (int)Math.Ceiling(genImage.Height));
+                                            workSheet.Column(j + curColIndex).Width = EpplusHelper.Pixel2ExcelW((int)(genImage.Width));
+                                            workSheet.Row(curRowIndex).Height = EpplusHelper.Pixel2ExcelH((int)(genImage.Height));
+                                        }
+                                    }
+                                    catch
+                                    {
+
+                                    }
+                                }
+                                else
+                                {
+                                    cell.Value = value == null ? "" : value.ToString();
+                                    workSheet.Cells[curRowIndex, j + curColIndex].Value = row[column].ToString();
+                                }
+                            }
+                            else
+                            {
+                                cell.Value = value.ToString();
+                                workSheet.Cells[curRowIndex, j + curColIndex].Value = row[column].ToString();
+                            }
+                        }
+                        else
+                        {
+                            cell.Value = value == null ? "" : value.ToString();
+                            workSheet.Cells[curRowIndex, j + curColIndex].Value = row[column].ToString();
+                        }
                     }
-                    workSheet.Cells[curRowIndex, j + curColIndex].Value = row[column].ToString();
-                    //workSheet.Cells[curRowIndex, j + curColIndex].Value = cell.Value;
                 }
+                curRowIndex++;
             }
-            workSheet.Cells[workSheet.Dimension.Address].Style.Font.Name = "Song Ti";
-            workSheet.Cells[workSheet.Dimension.Address].AutoFitColumns();//Auto fill
-            for (var i = curColIndex; i <= workSheet.Dimension.End.Column; i++) { workSheet.Column(i).Width = workSheet.Column(i).Width + 2; }//Add 2 to the filling
+
+            try
+            {
+                workSheet.Cells[workSheet.Dimension.Address].Style.Font.Name = "Song Ti";
+                workSheet.Cells[workSheet.Dimension.Address].AutoFitColumns();//Auto fill
+            }
+            catch
+            {
+            }
+            for (var i = curColIndex; i <= workSheet.Dimension.End.Column; i++)
+            {
+                workSheet.Column(i).Width = workSheet.Column(i).Width + 2;
+            }//Add 2 to the filling
+
         }
         /// <summary>
         /// Generate excel
