@@ -16,127 +16,147 @@
     "transporter": "",
     "phoneContact": ""
 };
-var $WarehouseReleasedId = parseInt(0);
+var $WarehouseReleasedId = 0;
 var fdata = new FormData();
 $(document).ready(function () {
-    var formInstance = $("#form-warehousereleased").dxForm({
-        formData: formData,
-        labelLocation: "top",
-        items: [
-            {
-                itemType: "group",
-                colCount: 12,
-                items: [
-                    {
-                        colSpan: 4,
-                        dataField: "warehouseStorageId",
-                        label: { text: "Kho" },
-                        editorType: "dxSelectBox",
-                        type: "string",
-                        lookup: {
-                            dataSource: customStore_WarehouseStorage(WarehouseStorageID),
-                            valueExpr: "id",
-                            displayExpr: "title",
-                        },
-                        editorOptions: {
-                            stylingMode: "filled",
-                            searchEnabled: true,
-                            searchMode: "contains",
-                            searchExpr: ['title', 'description'],
-                            showClearButton: true,
-                            placeholder: "Vui lòng chọn...",
-                            dataSource: customStore_WarehouseStorage(WarehouseStorageID),
-                            value: $model,
-                            valueExpr: "id",
-                            displayExpr: 'title',
-                            elementAttr: {
-                                id: "elementwarehouseStorageId",
-                            },
-                            onValueChanged: function (data) {
-                                $WarehouseStorageID = data.value;
-                            }
-                        },
-                        validationRules: [{ type: "required" }],
-                    },
-                    //{
-                    //    colSpan: 4,
-                    //    dataField: "transporterId",
-                    //    label: { text: $isIn ?  "Mã người gửi" :"Mã người nhận"},
-                    //    editorType: "dxSelectBox",
-                    //    type: "string",
-                    //    visible: true ,
-                    //    editorOptions: {
-                    //        stylingMode: "filled",
-                    //        placeholder: "Vui lòng chọn...",
-                    //    },
-                    //},
-                    {
-                        colSpan: 4,
-                        dataField: "transporter",
-                        label: { text: $isIn ? "Người gửi" : "Người nhận" },
-                        editorType: "dxTextBox",
-                        visible: true,
-                        type: "string",
-                        editorOptions: {
-                            stylingMode: "filled",
-                            placeholder: "Vui lòng nhập tên...",
-                            elementAttr: {
-                                id: "elementTransporterWHR",
-                            },
-                        },
-                        validationRules: [{ type: "required" }],
-                    },
-                    {
-                        colSpan: 4,
-                        dataField: "phoneContact",
-                        label: { text: "Số ĐT Liên Lạc" },
-                        editorType: "dxTextBox",
-                        type: "string",
-                        visible: true,
-                        editorOptions: {
-                            stylingMode: "filled",
-                            placeholder: "Vui lòng nhập số điện thoại...",
-                            elementAttr: {
-                                id: "elementPhoneContactWHR",
-                            },
-                        },
-                        validationRules: [{ type: "required" }],
-                    },
-                    {
-                        colSpan: 12,
-                        dataField: "description",
-                        label: { text: "Ghi chú" },
-                        editorType: "dxTextBox",
-                        editorOptions: {
-                            stylingMode: "filled",
-                            placeholder: "Vui lòng nhập...",
-                            elementAttr: {
-                                id: "elementDescriptionWHR",
-                            },
-                        },
-                    },
-                    {
-                        colSpan: 12,
-                        itemType: "button",
-                        horizontalAlignment: "center",
-                        buttonOptions: {
-                            text: $isIn ? "Tạo phiếu nhập" : "Tạo phiếu xuất",
-                            icon: "fa fa-save",
-                            type: "success",
-                            useSubmitBehavior: true,
-                            elementAttr: {
-                                id: "export",
+    customStore_WarehouseReleased($isIn).load().done((rs) => {
+        if (rs.length !== 0) {
+            $WarehouseReleasedId = rs[0].id;
+        }
+        $("#form-warehousereleased").dxForm({
+            formData: rs[0],
+            labelLocation: "top",
+            items: [
+                {
+                    itemType: "group",
+                    colCount: 12,
+                    items: [
+                        {
+                            colSpan: 4,
+                            dataField: "warehouseStorageId",
+                            label: { text: "Kho" },
+                            editorType: "dxSelectBox",
+                            type: "string",
+                            lookup: {
+                                dataSource: customStore_WarehouseStorage(WarehouseStorageID),
+                                valueExpr: "id",
+                                displayExpr: "title",
                             },
                             editorOptions: {
                                 stylingMode: "filled",
+                                searchEnabled: true,
+                                searchMode: "contains",
+                                searchExpr: ['title', 'description'],
+                                showClearButton: true,
+                                placeholder: "Vui lòng chọn...",
+                                dataSource: customStore_WarehouseStorage(WarehouseStorageID),
+                                value: $model,
+                                valueExpr: "id",
+                                readOnly: $WarehouseReleasedId > 0 ? true : false,
+                                displayExpr: 'title',
+                                elementAttr: {
+                                    id: "elementwarehouseStorageId",
+                                },
+                                onValueChanged: function (data) {
+                                    $WarehouseStorageID = data.value;
+                                }
+                            },
+                            validationRules: [{ type: "required" }],
+                        },
+                        //{
+                        //    colSpan: 4,
+                        //    dataField: "transporterId",
+                        //    label: { text: $isIn ?  "Mã người gửi" :"Mã người nhận"},
+                        //    editorType: "dxSelectBox",
+                        //    type: "string",
+                        //    visible: true ,
+                        //    editorOptions: {
+                        //        stylingMode: "filled",
+                        //        placeholder: "Vui lòng chọn...",
+                        //    },
+                        //},
+                        {
+                            colSpan: 4,
+                            dataField: "transporter",
+                            label: { text: $isIn ? "Người gửi" : "Người nhận" },
+                            editorType: "dxTextBox",
+                            visible: true,
+                            type: "string",
+                            editorOptions: {
+                                readOnly: $WarehouseReleasedId > 0 ? true : false,
+                                stylingMode: "filled",
+                                placeholder: "Vui lòng nhập tên...",
+                                elementAttr: {
+                                    id: "elementTransporterWHR",
+                                },
+                            },
+                            validationRules: [{ type: "required" }],
+                        },
+                        {
+                            colSpan: 4,
+                            dataField: "phoneContact",
+                            label: { text: "Số ĐT Liên Lạc" },
+                            editorType: "dxTextBox",
+                            type: "string",
+                            visible: true,
+                            editorOptions: {
+                                readOnly: $WarehouseReleasedId > 0 ? true : false,
+                                stylingMode: "filled",
+                                placeholder: "Vui lòng nhập số điện thoại...",
+                                elementAttr: {
+                                    id: "elementPhoneContactWHR",
+                                },
+                            },
+                            validationRules: [{ type: "required" }],
+                        },
+                        {
+                            colSpan: 12,
+                            dataField: "description",
+                            label: { text: "Ghi chú" },
+                            editorType: "dxTextBox",
+                            editorOptions: {
+                                readOnly: $WarehouseReleasedId > 0 ? true : false,
+                                stylingMode: "filled",
+                                placeholder: "Vui lòng nhập...",
+                                elementAttr: {
+                                    id: "elementDescriptionWHR",
+                                },
+                            },
+                        },
+                        {
+                            colSpan: 12,
+                            itemType: "button",
+                            horizontalAlignment: "center",
+                            buttonOptions: {
+                                text: $isIn ? "Tạo phiếu nhập" : "Tạo phiếu xuất",
+                                icon: "fa fa-save",
+                                type: "success",
+                                visible: $WarehouseReleasedId > 0 ? false : true,
+                                useSubmitBehavior: true,
+                                elementAttr: {
+                                    id: "export",
+                                },
+                                editorOptions: {
+                                    stylingMode: "filled",
+                                }
                             }
-                        }
-                    },
-                ]
-            },
+                        },
+                    ]
+                },
 
-        ],
-    }).dxForm("instance");
+            ],
+        }).dxForm("instance");
+        if ($WarehouseReleasedId > 0) {
+            document.getElementById('elementwarehouseStorageId').style.display = 'block';
+            document.getElementById('elementTransporterWHR').style.display = 'block';
+            document.getElementById('elementPhoneContactWHR').style.display = 'block';
+            document.getElementById('elementDescriptionWHR').style.display = 'block';
+            document.getElementById('export').style.pointerEvents = 'none';
+            document.getElementById('export').style.visibility = 'hidden';
+            load_WarehouseReleasedDetail($WarehouseReleasedId ?? 0);
+        }
+    });
+
     $("#form-warehousereleased").on("submit", function (e) {
         e.preventDefault();
         var resValid = true
@@ -247,9 +267,11 @@ $(document).ready(function () {
                     dataType: "string",
                     alignment: "center",
                     visible: true,
-                    validationRules: [{
-                        type: "numeric"
-                    }]
+                    lookup: {
+                        dataSource: customStore_CategoryGoods,
+                        valueExpr: "id",
+                        displayExpr: "title",
+                    },
                 },// code
                 {
                     dataField: "quantity",
@@ -260,12 +282,31 @@ $(document).ready(function () {
                     visible: true,
                 },// code
                 {
-                    dataField: "description",
+                    dataField: "categoryGoodsId",
                     allowFiltering: true,
-                    caption: "Mô tả",
+                    caption: "Đơn vị",
                     dataType: "string",
                     alignment: "center",
                     visible: true,
+                    //lookup: {
+                    //    dataSource: customStore_CategoryGoods,
+                    //    valueExpr: "id",
+                    //    displayExpr: "unitId",
+                    //},
+                    cellTemplate: (c, o) => {
+                        console.log(o.value);
+                        customStore_CategoryGoods_Id(o.value).load().then((rsGoods) => {
+                            var item = rsGoods[0];
+                            customStore_CategoryUnit.load().then((rsUnit) => {
+                                console.log(rsUnit);
+                                var itemUnit = rsUnit.filter(x => x.id == item.unitId).shift();
+                                console.log(rsUnit);
+                                if (typeof itemUnit !== "undefined") {
+                                    $("<span />").append(itemUnit.title).appendTo(c);
+                                }
+                            });
+                        });
+                    },
                 },// code
             ],
             editing: {
@@ -286,6 +327,7 @@ $(document).ready(function () {
             items: [
                 {
                     itemType: "group",
+                    name: "input",
                     colCount: 12,
                     items: [
                         {
@@ -412,54 +454,53 @@ $(document).ready(function () {
                                 },
                             },
                         },
-                        {
-                            itemType: "group",
-                            name: "button-action",
-                            colCount: 12,
-                            items: [
-                                {
-                                    colSpan: 6,
-                                    itemType: "button",
-                                    horizontalAlignment: "right",
-                                    disabled: id == 0,
-                                    buttonOptions: {
-                                        text: "Thêm sản phẩm",
-                                        icon: "fa fa-save",
-                                        type: "success",
-                                        useSubmitBehavior: true,
-                                        elementAttr: {
-                                            id: "addItem",
-                                        },
-                                        editorOptions: {
-                                            stylingMode: "filled",
-                                        }
-                                    }
-                                },
-                                {
-                                    colSpan: 6,
-                                    itemType: "button",
-                                    horizontalAlignment: "left",
-                                    disabled: id == 0,
-                                    buttonOptions: {
-                                        text: "Hoàn tất",
-                                        icon: "fa fa-clipboard",
-                                        type: "default",
-                                        useSubmitBehavior: false,
-                                        elementAttr: {
-                                            id: "resolveFinish",
-                                        },
-                                        editorOptions: {
-                                            stylingMode: "contained",
-                                            cssClass: "bg-info",
-                                        }
-                                    }
-                                },
-                            ],
-
-                        },
                     ]
                 },
+                {
+                    itemType: "group",
+                    name: "button-action",
+                    colCount: 12,
+                    items: [
+                        {
+                            colSpan: 6,
+                            itemType: "button",
+                            horizontalAlignment: "right",
+                            disabled: id == 0,
+                            buttonOptions: {
+                                text: "Thêm sản phẩm",
+                                icon: "fa fa-save",
+                                type: "success",
+                                useSubmitBehavior: true,
+                                elementAttr: {
+                                    id: "addItem",
+                                },
+                                editorOptions: {
+                                    stylingMode: "filled",
+                                }
+                            }
+                        },
+                        {
+                            colSpan: 6,
+                            itemType: "button",
+                            horizontalAlignment: "left",
+                            disabled: id == 0,
+                            buttonOptions: {
+                                text: $isIn? "Nhập kho": "Xuất kho",
+                                icon: "fa fa-clipboard",
+                                type: "default",
+                                useSubmitBehavior: false,
+                                elementAttr: {
+                                    id: "resolveFinish",
+                                },
+                                editorOptions: {
+                                    stylingMode: "contained",
+                                    cssClass: "bg-info",
+                                }
+                            }
+                        },
+                    ],
 
+                },
             ],
         }).dxForm("instance");
     };
@@ -474,10 +515,10 @@ $(document).ready(function () {
             loadingPanel.show();
             formdata["WarehouseStorageId"] = $WarehouseStorageID;
             formdata["WarehouseReleasedId"] = $WarehouseReleasedId;
+            formdata["status"] = 10;
             var deferred = $.Deferred();
             customStore_WarehouseReleasedDetail(0).store().insert(formdata).done((rs) => {
                 loadingPanel.hide();
-                console.log(rs);
                 if (rs.isOk) {
                     deferred.resolve(rs);
                     $("#container-warehousereleaseddetail").dxDataGrid("instance").refresh();
@@ -502,9 +543,9 @@ $(document).ready(function () {
             var deferred = $.Deferred();
             var object = {};
             object["status"] = 200;
-            if ($WarehouseReleasedId>0) {
-                customStore_WarehouseReleased(0).store().update(object).done((rs) => {
-                    console.log(rs);
+            if ($WarehouseReleasedId > 0) {
+                customStore_WarehouseReleased(0).store().update($WarehouseReleasedId, object).done((rs) => {
+                    loadingPanel.hide();
                     if (rs.isOk) {
                         $("#popup-main").dxPopup('instance').hide();
                         deferred.resolve(rs);

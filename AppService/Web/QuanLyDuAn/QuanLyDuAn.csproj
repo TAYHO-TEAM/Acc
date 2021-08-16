@@ -2339,6 +2339,7 @@
     <Content Include="Scripts\page\account.js" />
     <Content Include="Scripts\page\VanHanh\BaoCao\BC_Index.js" />
     <Content Include="Scripts\page\VanHanh\KhieuNai\KN_Index.js" />
+    <Content Include="Scripts\page\VanHanh\KhoBai\KB_NhatKyKho.js" />
     <Content Include="Scripts\page\VanHanh\KhoBai\KB_XuatNhap.js" />
     <Content Include="Scripts\page\VanHanh\KhoBai\KB_XuatNhapCreate.js" />
     <Content Include="Scripts\vectormap-data\africa.js" />

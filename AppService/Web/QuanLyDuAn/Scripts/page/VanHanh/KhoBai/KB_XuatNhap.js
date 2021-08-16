@@ -44,12 +44,20 @@ var customStore_WarehouseGoodsLog = (id) => new DevExpress.data.DataSource({
     filter: [["WarehouseStorageId", "=", id]]
 });
 var customStore_CategoryGoods = $DATASOURCEGET(ACTION_CATEGORYGOODS, KEY);
+var customStore_CategoryGoods_Id = (Id) => new DevExpress.data.DataSource({
+    store: $DATASOURCEGET(ACTION_CATEGORYGOODS, KEY),
+    filter: [["id", "=", Id]]
+});
 var customStore_CategoryUnit = $DATASOURCEGET(ACTION_CATEGORYUNIT, KEY);
 var customStore_Goods = $DATASOURCEGET(ACTION_WAREHOUSEALLGOODS, KEY);
 var customStore_WarehouseStorageList = $DATASOURCEGET(ACTION_WAREHOUSESTORAGE, KEY);
-var customStore_WarehouseReleased = (id) => new DevExpress.data.DataSource({
+var customStore_WarehouseReleased = (InOrOut) => new DevExpress.data.DataSource({
     store: $DATASOURCE(ACTION_WAREHOUSERELEASED, KEY),
-    filter: [["WarehouseStorageId", "=", id]]
+    filter: [["IsInOrOut", "=", InOrOut], "and", ["status", "<", 200], "and", ["CreateBy", "=", UserCurrentInfo.accountId]]
+});
+var customStore_WarehouseReleased_WHSId = (Id) => new DevExpress.data.DataSource({
+    store: $DATASOURCE(ACTION_WAREHOUSERELEASED, KEY),
+    filter: [["WarehouseStorageId", "=", Id]]
 });
 var customStore_WarehouseReleasedDetail = (id) => new DevExpress.data.DataSource({
     store: $DATASOURCE(ACTION_WAREHOUSERELEASEDDETAIL, KEY),
