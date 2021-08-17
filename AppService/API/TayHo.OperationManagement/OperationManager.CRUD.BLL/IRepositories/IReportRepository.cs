@@ -10,5 +10,6 @@ namespace OperationManager.CRUD.BLL.IRepositories
     public interface IReportRepository
     {
         Task<Tuple<MemoryStream, string, string>> ReportSheetGet(int RecordId, params (string, object)[] parameter);
+        Task<Tuple<MemoryStream, string, string>> ReportSheetsGet(int RecordId, params (string, object)[] parameter);
     }
 }

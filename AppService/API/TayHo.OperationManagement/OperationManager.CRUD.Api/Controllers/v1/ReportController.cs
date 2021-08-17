@@ -113,7 +113,7 @@ namespace OperationManager.CRUD.Api.Controllers.v1
                     parameter[i] = (item.Name,ConvertHelper.ConvertJProperty(item));
                     i++;
                 }
-                var FileResult = await _reportRepository.ReportSheetGet(key, parameter);
+                var FileResult = await _reportRepository.ReportSheetsGet(key, parameter);
                 if (FileResult.Item1 == null || FileResult.Item2 == null || FileResult.Item3 == null)
                 {
                     methodResult.AddErrorMessage(err);

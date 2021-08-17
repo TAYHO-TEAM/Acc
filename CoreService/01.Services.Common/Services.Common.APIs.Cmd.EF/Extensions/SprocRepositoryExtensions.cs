@@ -78,20 +78,30 @@ namespace Services.Common.APIs.Cmd.EF.Extensions
                     await command.Connection.OpenAsync();
                 try
                 {
-                    using (IDataReader reader = command.ExecuteReader())
+                    using (var reader = command.ExecuteReader())
                     {
-                        DataTable dataTable = new DataTable();
-                        dataTable.Load(reader);
-                        dataTables.Add(dataTable);
-                        reader.NextResult();
+                        do
+                        {
+                            DataTable dataTable = new DataTable();
+                            //dataTable.Load(reader);
+                            dataTable = reader.MapToList();
+                            int i = dataTable.Rows.Count;
+                            dataTables.Add(dataTable);
+                        } while (reader.NextResult());
+
+
                     }
-                    return dataTables;
                 }
-                finally
+                catch
                 {
-                    command.Connection.Close();
+
                 }
+                //finally
+                //{
+                //    command.Connection.Close();
+                //}
             }
+            return dataTables;
         }
         public static async Task<DataTable> ExecuteStoredProcedureToTableAsync(this DbCommand command)
         {
