@@ -450,19 +450,8 @@ $(document).ready(function () {
             console.log(pair[0] + ', ' + pair[1]);
         }
         var deferred = $.Deferred();
-        var $header = {
-            'Accept': '*/*',
-            //'X-Requested-With': 'XMLHttpRequest',
-            //'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-            //'Access-Control-Expose-Headers': 'x-dl-units-left',
-            'Access-Control-Expose-Headers': '*',
-            'Access-Control-Allow-Origin': '*',
-            //'Access-Control-Request-Headers': '*',
-            //'Content-Disposition':'*',
-            //'Content-Type': '*/*',
-            'Authorization': 'Bearer ' + UserCurrentInfo.accessToken,
-        };
-        downloadFromAjaxPost("https://api-om-crud.tayho.com.vn/api/v1/Report", fdata, $header);
+        
+        downloadFromAjaxPost("https://api-om-crud.tayho.com.vn/api/v1/Report", fdata);
         //var settings = {
         //    "async": false,
         //    "crossDomain": true,
@@ -663,94 +652,35 @@ $(document).ready(function () {
         //        getResponseHeaders(jqXHR);
         //    })
         //}
-        function getResponseHeaders(jqXHR) {
-            jqXHR.responseHeaders = {};
-            var headers = jqXHR.getAllResponseHeaders();
-            headers = headers.split("\n");
-            headers.forEach(function (header) {
-                header = header.split(": ");
-                var key = header.shift();
-                if (key.length == 0) return
-                // chrome60+ force lowercase, other browsers can be different
-                key = key.toLowerCase();
-                jqXHR.responseHeaders[key] = header.join(": ");
+        //function getResponseHeaders(jqXHR) {
+        //    jqXHR.responseHeaders = {};
+        //    var headers = jqXHR.getAllResponseHeaders();
+        //    headers = headers.split("\n");
+        //    headers.forEach(function (header) {
+        //        header = header.split(": ");
+        //        var key = header.shift();
+        //        if (key.length == 0) return
+        //        // chrome60+ force lowercase, other browsers can be different
+        //        key = key.toLowerCase();
+        //        jqXHR.responseHeaders[key] = header.join(": ");
 
-            });
-            console.log(jqXHR);
-        }
+        //    });
+        //    console.log(jqXHR);
+        //}
         return deferred.promise;
     });
-    function downloadFromAjaxPost(url, params, headers, callback) {
-        var xhr = new XMLHttpRequest();
-        xhr.open('PUT', url, true);
-        xhr.responseType = 'blob';
-        xhr.onload = function () {
-            if (this.status === 200) {
-                loadingPanel.hide();
-                console.log(xhr.response);
-                //var contentDisposition = xhr.get('content-disposition');
-                //console.log(contentDisposition);
-                console.log(xhr);
-                var filename = "";
-                var disposition = xhr.getResponseHeader('content-disposition');
-                console.log(xhr.getResponseHeader('content-disposition')); //attachment=>inline  
-                if (disposition && disposition.indexOf('attachment') !== -1) {
-                    var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
-                    var matches = filenameRegex.exec(disposition);
-                    if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
-                }
-                var type = xhr.getResponseHeader('Content-Type');
+  
 
-                var blob = new Blob([this.response], { type: type });
-                if (typeof window.navigator.msSaveBlob !== 'undefined') {
-                    // IE workaround for "HTML7007: One or more blob URLs were revoked by closing the blob for which they were created. These URLs will no longer resolve as the data backing the URL has been freed."
-                    window.navigator.msSaveBlob(blob, filename);
-                } else {
-                    var URL = window.URL || window.webkitURL;
-                    var downloadUrl = URL.createObjectURL(blob);
-
-                    if (filename) {
-                        // use HTML5 a[download] attribute to specify filename
-                        var a = document.createElement("a");
-                        // safari doesn't support this yet
-                        if (typeof a.download === 'undefined') {
-                            window.location = downloadUrl;
-                        } else {
-                            a.href = downloadUrl;
-                            a.download = filename;
-                            document.body.appendChild(a);
-                            a.click();
-                        }
-                    } else {
-                        window.location = downloadUrl;
-                    }
-
-                    setTimeout(function () { URL.revokeObjectURL(downloadUrl); }, 100); // cleanup
-                }
-            }
-            if (callback) {
-                callback();
-            }
-        };
-        //xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-        $.each(headers, function (key, value) {
-            xhr.setRequestHeader(key, value);
-        });
-
-        xhr.send(params);
-        //xhr.send($.param(params));
-    }
-
-    function download(blob, filename) {
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.style.display = 'none';
-        a.href = url;
-        // the filename you want
-        a.download = filename;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        window.URL.revokeObjectURL(url);
-    }
+    //function download(blob, filename) {
+    //    const url = window.URL.createObjectURL(blob);
+    //    const a = document.createElement('a');
+    //    a.style.display = 'none';
+    //    a.href = url;
+    //    // the filename you want
+    //    a.download = filename;
+    //    document.body.appendChild(a);
+    //    a.click();
+    //    document.body.removeChild(a);
+    //    window.URL.revokeObjectURL(url);
+    //}
 });

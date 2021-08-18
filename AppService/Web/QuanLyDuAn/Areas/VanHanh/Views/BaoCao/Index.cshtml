@@ -232,7 +232,7 @@
                                     stylingMode: "filled",
                                     elementAttr: {
                                         id: Id,
-                                        class: "customForm_NumBox",
+                                        class: "customForm_NumberBox",
                                     },
                                 }
                             }
@@ -469,25 +469,7 @@
                     console.log(pair[0] + ', ' + pair[1]);
                 }
                 var deferred = $.Deferred();
-               
-                var $header = {
-                    'Accept': '*',
-                    //'X-Requested-With': 'XMLHttpRequest',
-                    //'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-                    //'Access-Control-Expose-Headers': 'x-dl-units-left',
-                    'Access-Control-Allow-Methods':'Get,PUT,POST',
-                    'Access-Control-Expose-Headers': 'x-file-name', 
-                    'Access-Control-Allow-Origin': 'http://api-om-crud.tayho.com.vn/',
-                    'Access-Control-Allow-Credentials': false,
-                    //'Access-Control-Request-Headers': '*',
-                    //'Content-Disposition':'*',
-                    //'Content-Type': '*',
-                    'Authorization': 'Bearer ' + UserCurrentInfo.accessToken,
-                    //'Access-Control-Expose-Header': 'ETag',
-                    'Access-Control-Allow-Headers': '*', 
-                    //'Access-Control-Allow-Methods':'POST',
-                };
-                downloadFromAjaxPost("https://api-om-crud.tayho.com.vn/api/v1/Report", fdata, $header);
+                downloadFromAjaxPost("https://api-om-crud.tayho.com.vn/api/v1/Report", fdata);
                 function getResponseHeaders(jqXHR) {
                     jqXHR.responseHeaders = {};
                     var headers = jqXHR.getAllResponseHeaders();
@@ -504,73 +486,7 @@
                 }
                 return deferred.promise;
             });
-            function downloadFromAjaxPost(url, params, headers, callback) {
-                //var corsFilter = new CorsFilter();
-                //corsFilter.setAllowedHeaders("Content-Type, Access-Control-Allow-Headers, Access-Control-Expose-Headers, Content-Disposition, Authorization, X - Requested - With");
-                //corsFilter.setExposedHeaders("Content-Disposition");
-                var xhr = new XMLHttpRequest();
-                //xhr.onreadystatechange = hand;
-                xhr.open('POST', url, true);
-                xhr.responseType = 'arraybuffer';
-                xhr.onload = function (e) {
-                    if (this.status === 200) {
-                        loadingPanel.hide();
-                        var filename = "";
-                        var disposition = xhr.getResponseHeader('content-disposition');
-                        //var disposition = xhr.getResponseHeader('pragma');
-                        //attachment=>inline  
-                        if (disposition && disposition.indexOf('attachment') !== -1) {
-                            console.log(disposition);
-                            var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
-                            var matches = filenameRegex.exec(disposition);
-                            if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
-                        }
-
-                        var type = xhr.getResponseHeader('Content-Type');
-                        var blob = new Blob([this.response], { type: type });
-                        if (typeof window.navigator.msSaveBlob !== 'undefined') {
-                            // IE workaround for "HTML7007: One or more blob URLs were revoked by closing the blob for which they were created. These URLs will no longer resolve as the data backing the URL has been freed."
-                            window.navigator.msSaveBlob(blob, filename);
-                        } else {
-                            var URL = window.URL || window.webkitURL;
-                            var downloadUrl = URL.createObjectURL(blob);
-
-                            if (filename) {
-                                // use HTML5 a[download] attribute to specify filename
-                                var a = document.createElement("a");
-                                // safari doesn't support this yet
-                                if (typeof a.download === 'undefined') {
-                                    window.location = downloadUrl;
-                                } else {
-                                    a.href = downloadUrl;
-                                    a.download = filename;
-                                    document.body.appendChild(a);
-                                    a.click();
-                                }
-                            } else {
-                                window.location = downloadUrl;
-                            }
-
-                            setTimeout(function () { URL.revokeObjectURL(downloadUrl); }, 100); // cleanup
-                        }
-                    }
-                    if (callback) {
-                        console.log(callback);
-                        callback();
-                    }
-                };
-                //xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-                $.each(headers, function (key, value) {
-                    xhr.setRequestHeader(key, value);
-                });
-                function hand() {
-                    console.log(this.getResponseHeader('content-type'));
-                }
-             
-                xhr.send(params);
-             
-                //xhr.send($.param(params));
-            }
+       
           
             function download(blob, filename) {
                 const url = window.URL.createObjectURL(blob);

@@ -154,15 +154,20 @@ namespace OperationManager.CRUD.Api.Controllers.v1
             {
 
                 (string, object)[] parameter = { };/// new (string, object)[] { ("@RecordId", id) };
-                JObject obj = JObject.Parse(values);
-                int i = 0;
-                foreach (JProperty item in obj.Children())
+                JObject obj = null;
+                if (values != null)
                 {
-                    Array.Resize(ref parameter, parameter.Length + 1);
-                    parameter[i] = (item.Name, ConvertHelper.ConvertJProperty(item));
-                    i++;
+                    obj = JObject.Parse(values);
+                    int i = 0;
+                    foreach (JProperty item in obj.Children())
+                    {
+                        Array.Resize(ref parameter, parameter.Length + 1);
+                        parameter[i] = (item.Name, ConvertHelper.ConvertJProperty(item));
+                        i++;
+                    }
                 }
-                var FileResult = await _reportRepository.ReportSheetGet(key, parameter);
+
+                var FileResult = await _reportRepository.ReportSheetsGet(key, parameter);
                 if (FileResult.Item1 == null || FileResult.Item2 == null || FileResult.Item3 == null)
                 {
                     methodResult.AddErrorMessage(err);

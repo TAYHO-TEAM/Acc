@@ -2341,6 +2341,7 @@
     <Content Include="Scripts\page\VanHanh\KhieuNai\KN_Index.js" />
     <Content Include="Scripts\page\VanHanh\KhoBai\KB_NhatKyKho.js" />
     <Content Include="Scripts\page\VanHanh\KhoBai\KB_XuatNhap.js" />
+    <Content Include="Scripts\page\VanHanh\KhoBai\KB_XuatNhapDetail.js" />
     <Content Include="Scripts\page\VanHanh\KhoBai\KB_XuatNhapCreate.js" />
     <Content Include="Scripts\vectormap-data\africa.js" />
     <Content Include="Scripts\vectormap-data\canada.js" />
@@ -2567,6 +2568,9 @@
     <Content Include="Areas\VanHanh\Views\BaoTri\_BaoTriHistory.cshtml" />
     <Content Include="Areas\VanHanh\Views\BaoCao\Index.cshtml" />
     <Content Include="Areas\VanHanh\Views\KhoBai\_XuatNhapCreateBAk.cshtml" />
+    <Content Include="Content\Template\OperationManagement\Report00007_Maintenance.xlsx" />
+    <Content Include="Content\Template\OperationManagement\Report00008_ImExport.xlsx" />
+    <Content Include="Areas\VanHanh\Views\KhoBai\_XuatNhapDetail.cshtml" />
     <None Include="packages.config" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Home\About.cshtml" />

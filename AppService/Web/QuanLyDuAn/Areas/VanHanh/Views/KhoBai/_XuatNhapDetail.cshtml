@@ -1,0 +1,17 @@
+﻿@model Tuple<int, bool>
+@{ 
+        var versionJS = System.Configuration.ConfigurationManager.AppSettings["webpages:VersionJS"];
+}
+<form id="form-warehousereleased">
+</form>
+<div id="container-warehousereleaseddetail" class="elevation-2"></div>
+<form id="form-warehousereleaseddetail">
+</form>
+<script>
+    var $model = @Model.Item1;
+    var $isIn = @Model.Item2.ToString().ToLower();
+</script>
+<script src="~/Scripts/page/VanHanh/KhoBai/KB_XuatNhapCreate.js?v=@versionJS"></script>
+
+
+

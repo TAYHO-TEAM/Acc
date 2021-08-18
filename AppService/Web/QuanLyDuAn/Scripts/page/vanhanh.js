@@ -576,8 +576,10 @@ var dataGridOptions = {
         allowedPageSizes: [10, 20, 40, 80],
     },
     searchPanel: {
-        highlightCaseSensitive: true, highlightSearchText: true,
-        searchVisibleColumnsOnly: true, visible: true
+        highlightCaseSensitive: true,
+        highlightSearchText: true,
+        searchVisibleColumnsOnly: true,
+        visible: true
     },
     showBorders: false,
     showColumnHeaders: true,
@@ -673,6 +675,83 @@ function ConvertProjectToPlanProject(PLANPROJECT) {
         default:
             return '1';
     }
+}
+
+function downloadFromAjaxPost(url, params, callback) {
+    var $header = {
+        'Accept': '*/*',
+        //'X-Requested-With': 'XMLHttpRequest',
+        //'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+        //'Access-Control-Expose-Headers': 'x-dl-units-left',
+        'Access-Control-Expose-Headers': '*',
+        'Access-Control-Allow-Origin': '*',
+        //'Access-Control-Request-Headers': '*',
+        //'Content-Disposition':'*',
+        //'Content-Type': '*/*',
+        'Authorization': 'Bearer ' + UserCurrentInfo.accessToken,
+    };
+    var xhr = new XMLHttpRequest();
+    xhr.open('PUT', url, true);
+    xhr.responseType = 'blob';
+    xhr.onload = function () {
+        loadingPanel.hide();
+        if (this.status === 200) {
+            console.log(xhr.response);
+            //var contentDisposition = xhr.get('content-disposition');
+            //console.log(contentDisposition);
+            console.log(xhr);
+            var filename = "";
+            var disposition = xhr.getResponseHeader('content-disposition');
+            console.log(xhr.getResponseHeader('content-disposition')); //attachment=>inline  
+            if (disposition && disposition.indexOf('attachment') !== -1) {
+                var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                var matches = filenameRegex.exec(disposition);
+                if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+            }
+            var type = xhr.getResponseHeader('Content-Type');
+
+            var blob = new Blob([this.response], { type: type });
+            if (typeof window.navigator.msSaveBlob !== 'undefined') {
+                // IE workaround for "HTML7007: One or more blob URLs were revoked by closing the blob for which they were created. These URLs will no longer resolve as the data backing the URL has been freed."
+                window.navigator.msSaveBlob(blob, filename);
+            } else {
+                var URL = window.URL || window.webkitURL;
+                var downloadUrl = URL.createObjectURL(blob);
+
+                if (filename) {
+                    // use HTML5 a[download] attribute to specify filename
+                    var a = document.createElement("a");
+                    // safari doesn't support this yet
+                    if (typeof a.download === 'undefined') {
+                        window.location = downloadUrl;
+                    } else {
+                        a.href = downloadUrl;
+                        a.download = filename;
+                        document.body.appendChild(a);
+                        a.click();
+                    }
+                } else {
+                    window.location = downloadUrl;
+                }
+
+                setTimeout(function () { URL.revokeObjectURL(downloadUrl); }, 100); // cleanup
+            }
+            DevExpress.ui.notify("Tải dữ liệu thành công", "success", 3000);
+        }
+        else {
+            DevExpress.ui.notify("Lỗi sai biến truyền vào", "error", 3000);
+        }
+        if (callback) {
+            callback();
+        }
+    };
+    //xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    $.each($header, function (key, value) {
+        xhr.setRequestHeader(key, value);
+    });
+
+    xhr.send(params);
+    //xhr.send($.param(params));
 }
 
 //--------------------------Unity Function ------------------
@@ -937,6 +1016,11 @@ var listRemind = [
 var listIsInOrOutStatus = [
     { value: true, text: "Nhập kho", color: "success", icon: 'fa fa-check-circle' },
     { value: false, text: "Xuất kho", color: "danger", icon: 'fa fa-minus-circle' },
+];
+var listIsInOrOutVerify = [
+    { value: 10, text: "Đang lên đơn", color: "warning", icon: 'fa fa-check-circle' },
+    { value: 200, text: "Đã nghi nhận", color: "info", icon: 'fa fa-minus-circle' },
+    { value: 220, text: "Đã xác nhận", color: "success", icon: 'fa fa-minus-circle' },
 ];
 var complaintStatus = [
     { value: 1, text: "Chờ giải quyết", color: "warning", icon: 'fa fa-minus-circle' },

@@ -544,20 +544,20 @@ namespace Services.Common.Utilities
                     if (pType == typeof(DateTime))
                     {
                         cell.Style.Numberformat.Format = "yyyy-MM-dd hh:mm";
-                        cell.AutoFitColumns();
+                        //cell.AutoFitColumns();
                         if (value != null && value.ToString() != "") cell.Value = Convert.ToDateTime(value);
                         workSheet.Cells[curRowIndex, j + curColIndex].Value = row[column].ToString();
                     }
                     else if (pType == typeof(int))
                     {
                         cell.Value = Convert.ToInt32(value ?? 0);
-                        cell.AutoFitColumns();
+                        //cell.AutoFitColumns();
                         workSheet.Cells[curRowIndex, j + curColIndex].Value = row[column].ToString();
                     }
                     else if (pType == typeof(double) || pType == typeof(decimal))
                     {
                         cell.Value = Convert.ToDouble(value ?? 0);
-                        cell.AutoFitColumns();
+                        //cell.AutoFitColumns();
                         workSheet.Cells[curRowIndex, j + curColIndex].Value = row[column].ToString();
                     }
                     else
@@ -616,14 +616,18 @@ namespace Services.Common.Utilities
                             workSheet.Cells[curRowIndex, j + curColIndex].Value = row[column].ToString();
                         }
                     }
-
                     ///format boder cell
-                    if(tableProp.Border.HasValue && tableProp.Border >0)
+                    if (tableProp.Border.HasValue )
                     {
-                        cell.Style.Border.Top.Style = ExcelBorderStyle.Thin;
-                        cell.Style.Border.Left.Style = ExcelBorderStyle.Thin;
-                        cell.Style.Border.Right.Style = ExcelBorderStyle.Thin;
-                        cell.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                        cell.Style.Border.Top.Style = (ExcelBorderStyle)tableProp.Border;
+                        cell.Style.Border.Left.Style = (ExcelBorderStyle)tableProp.Border;
+                        cell.Style.Border.Right.Style = (ExcelBorderStyle)tableProp.Border;
+                        cell.Style.Border.Bottom.Style = (ExcelBorderStyle)tableProp.Border;
+                    }
+                    /// font size 
+                    if(tableProp.FontSize.HasValue)
+                    {
+                        cell.Style.Font.Size = tableProp.FontSize ?? 14;
                     }    
                     
                 }

@@ -232,7 +232,7 @@ var loadData = () => {
                         CALLPOPUP(
                             "Lịch sử xuất nhập",
                             "/VanHanh/KhoBai/_NhatKyKho?id=" + selectedRowKey,
-                            ($(window).width() > 767 ? "50%" : "80%"),
+                            ($(window).width() > 767 ? "70%" : "90%"),
                             containerE
                         );
                     }
