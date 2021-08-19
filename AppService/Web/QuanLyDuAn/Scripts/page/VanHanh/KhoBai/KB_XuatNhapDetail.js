@@ -136,10 +136,10 @@ $(document).ready(function () {
             document.getElementById('elementTransporterWHR').style.display = 'block';
             document.getElementById('elementPhoneContactWHR').style.display = 'block';
             document.getElementById('elementDescriptionWHR').style.display = 'block';
-            load_WarehouseReleasedDetail($WarehouseReleasedId ?? 0);
+            load_WarehouseReleasedDetail_verify($WarehouseReleasedId ?? 0);
         }
     });
-    function load_WarehouseReleasedDetail(ItemID) {
+    function load_WarehouseReleasedDetail_verify(ItemID) {
         $("#container-warehousereleaseddetail-verify").dxDataGrid({
             height: 300,
             dataSource: customStore_WarehouseReleasedDetail(ItemID),
@@ -266,6 +266,7 @@ $(document).ready(function () {
         fileUploader();
     };
     function formSubInstance() {
+        console.log($model);
         $("#form-warehousereleaseddetail-verify").dxForm({
             formData: formData,
             labelLocation: "top",
@@ -288,7 +289,7 @@ $(document).ready(function () {
                                 slideshowDelay: 1500,
                                 itemTemplate: function (data) {
                                     var $link = (data.host + data.url + "/" + data.fileName);
-                                    return $issetRSSUB ? $("<a/>").attr("href", $link).attr("target", "_blank").append($("<img />").attr({ "src": $link, onerror: ImgError(this), "style": "max-height: 100px; height : auto ;width : auto ;margin: auto;" })) : "";
+                                    return $("<a/>").attr("href", $link).attr("target", "_blank").append($("<img />").attr({ "src": $link, onerror: ImgError(this), "style": "max-height: 100px; height : auto ;width : auto ;margin: auto;" })) ;
                                 },
                                 onItemClick: function (value) {
                                 }
