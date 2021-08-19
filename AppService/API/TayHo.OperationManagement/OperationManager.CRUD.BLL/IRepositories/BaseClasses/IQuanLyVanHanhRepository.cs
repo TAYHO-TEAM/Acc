@@ -17,5 +17,6 @@ namespace OperationManager.CRUD.BLL.IRepositories.BaseClasses
         Task<MethodResult<T>> Update(int user, string nameEF, T model, IFormFileCollection formFile = null);
         Task<MethodResult<T>> Delete(int user, string nameEF, int key);
         Task<List<DataTable>> ExecuteStoredProcedure(string storeProcedure, params (string, object)[] parameter);
+        Task UploadFile(IFormFileCollection request, int ownerById , string tableName, string code , int userid );
     }
 }

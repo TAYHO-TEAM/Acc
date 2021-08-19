@@ -56,8 +56,11 @@ namespace OperationManager.CRUD.Api.Controllers.v1
             {
                 if (!ModelState.IsValid) throw new CommandHandlerException(new ErrorResult());
                 var model = new FilesAttachment();
-                JsonConvert.PopulateObject(values, model);
-                return Ok(await _quanLyVanHanhRepository.Insert(_user, nameEF, model));
+                if (!string.IsNullOrEmpty(values))
+                    JsonConvert.PopulateObject(values, model);
+                IFormFileCollection files = Request.Form.Files;
+                await _quanLyVanHanhRepository.UploadFile(files, model.Id, model.OwnerByTable, "", _user);
+                return Ok();
             }
             catch (Exception ex)
             {

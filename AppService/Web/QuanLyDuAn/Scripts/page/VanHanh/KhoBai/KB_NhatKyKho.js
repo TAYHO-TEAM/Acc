@@ -146,11 +146,18 @@
                     buttons: [
                         {
                             icon: "info",
-                            visible: function (e) {
-                                return true;
-                            },
+                            visible: true,
                             onClick: function (e) {
-                              
+                                var containerE = e.component;
+                                console.log(e);
+                                //CALLPOPUPMULTI(title, url, width, container, popupId);
+                                CALLPOPUPMULTI(
+                                    e.row.data.isInOrOut === 1 ? "Phiếu nhập kho" : "Phiếu xuất kho",
+                                    "/VanHanh/KhoBai/_XuatNhapDetail?id=" + e.row.data.id,
+                                    ($(window).width() > 767 ? "50%" : "80%"),
+                                    containerE,
+                                    "popup-sub"
+                                );
                             }
                         },
                         {
@@ -159,14 +166,11 @@
                                 return true;
                             },
                             onClick: function (e) {
-                                var containerE = e.component;
-                                console.log(e);
                                 var fdata = new FormData();
                                 var obj = {};
                                 obj[("@Id")] = e.row.data.id;
                                 fdata.append("key", 6);
                                 fdata.append("values", JSON.stringify(obj));
-
                                 downloadFromAjaxPost("https://api-om-crud.tayho.com.vn/api/v1/Report", fdata);
                             }
                         },

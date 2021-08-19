@@ -1,6 +1,7 @@
 ﻿var id = 1;
 var $WHId = 0;
 //-----------------------------READ -------------------------------------------------------------
+var ACTION_FILESATTACHMENT = "FilesAttachment/";
 var ACTION_WAREHOUSEALLGOODS = "WareHouseAllGoods/";
 var ACTION_CONSTRUCTIONITEMS = "ConstructionItems/";
 var ACTION_REALESTATE = "RealEstate/";
@@ -19,6 +20,14 @@ var $realEstateId = 0;
 var $WarehouseStorageID = 0;
 
 //..........................Get data -------------------------------------------------------------
+var customStore_Attachment = (id, owner) => new DevExpress.data.DataSource({
+    store: $DATASOURCE(ACTION_FILESATTACHMENT, KEY),
+    filter: [["ownerById", "=", id], "and", ["ownerByTable", "=", owner]]
+});
+var customStore_Attachment_All = (owner) => new DevExpress.data.DataSource({
+    store: $DATASOURCE(ACTION_FILESATTACHMENT, KEY),
+    filter: ["ownerByTable", "=", owner]
+});
 var customStore = (id) => new DevExpress.data.DataSource({
     store: $DATASOURCEGET(ACTION_WAREHOUSEALLGOODS, KEY),
     filter: ["WarehouseStorageId", "=", id]
@@ -54,6 +63,10 @@ var customStore_WarehouseStorageList = $DATASOURCEGET(ACTION_WAREHOUSESTORAGE, K
 var customStore_WarehouseReleased = (InOrOut) => new DevExpress.data.DataSource({
     store: $DATASOURCE(ACTION_WAREHOUSERELEASED, KEY),
     filter: [["IsInOrOut", "=", InOrOut], "and", ["status", "<", 200], "and", ["CreateBy", "=", UserCurrentInfo.accountId]]
+});
+var customStore_WarehouseReleased_Id = (Id) => new DevExpress.data.DataSource({
+    store: $DATASOURCE(ACTION_WAREHOUSERELEASED, KEY),
+    filter: [["id", "=", Id]]
 });
 var customStore_WarehouseReleased_WHSId = (Id) => new DevExpress.data.DataSource({
     store: $DATASOURCE(ACTION_WAREHOUSERELEASED, KEY),

@@ -1,17 +1,17 @@
-﻿@model Tuple<int, bool>
-@{ 
-        var versionJS = System.Configuration.ConfigurationManager.AppSettings["webpages:VersionJS"];
+﻿@model int
+@{
+    var versionJS = System.Configuration.ConfigurationManager.AppSettings["webpages:VersionJS"];
 }
-<form id="form-warehousereleased">
+<form id="form-warehousereleased-verify">
 </form>
-<div id="container-warehousereleaseddetail" class="elevation-2"></div>
-<form id="form-warehousereleaseddetail">
+<div id="container-warehousereleaseddetail-verify" class="elevation-2"></div>
+<form id="form-warehousereleaseddetail-verify">
 </form>
 <script>
-    var $model = @Model.Item1;
-    var $isIn = @Model.Item2.ToString().ToLower();
+    var $model = @Model;
 </script>
-<script src="~/Scripts/page/VanHanh/KhoBai/KB_XuatNhapCreate.js?v=@versionJS"></script>
+<script src="~/Scripts/page/VanHanh/KhoBai/KB_XuatNhapDetail.js?v=@versionJS"></script>
+
 
 
 

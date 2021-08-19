@@ -216,6 +216,7 @@
     <Compile Include="Utilities\ContractorInfoOBJ.cs" />
     <Compile Include="Utilities\CongViecOBJ.cs" />
     <Compile Include="Utilities\DefectAcceptanceOBJ.cs" />
+    <Compile Include="Utilities\WarehouseReleasedOBJ.cs" />
     <Compile Include="Utilities\WarehouseGoodsLogOBJ.cs" />
     <Compile Include="Utilities\DefectFixOBJ.cs" />
     <Compile Include="Utilities\DefectFeedBackOBJ.cs" />

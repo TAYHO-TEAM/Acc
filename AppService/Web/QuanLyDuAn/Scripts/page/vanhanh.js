@@ -656,7 +656,6 @@ function CALLPOPUPMULTI(title, url, width, container, popupId) {
             container.refresh();
         },
         onHidden: function () {
-            loadData();
         }
     });
 }

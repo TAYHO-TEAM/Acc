@@ -518,7 +518,6 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
                     await _dbContext.SaveChangesAsync().ConfigureAwait(false);
                     //await _dbContext.SaveChangesAndDispatchEventsAsync(_cancellationToken);
                 }
-
             }
             else
             {

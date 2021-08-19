@@ -298,9 +298,7 @@ $(document).ready(function () {
                         customStore_CategoryGoods_Id(o.value).load().then((rsGoods) => {
                             var item = rsGoods[0];
                             customStore_CategoryUnit.load().then((rsUnit) => {
-                                console.log(rsUnit);
                                 var itemUnit = rsUnit.filter(x => x.id == item.unitId).shift();
-                                console.log(rsUnit);
                                 if (typeof itemUnit !== "undefined") {
                                     $("<span />").append(itemUnit.title).appendTo(c);
                                 }

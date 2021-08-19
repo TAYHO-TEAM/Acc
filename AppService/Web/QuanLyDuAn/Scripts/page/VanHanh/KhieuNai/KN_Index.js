@@ -59,6 +59,7 @@ var $defectFixId = 0;
 var fdata = new FormData();
 var $maintenanceSupplierInfoId = 0;
 var $dataSource = {};
+var $complaintstatus = 0;
 function newComplaint() {
     var dataGrid = $("#container-complaint").dxDataGrid("instance");
     $issetCP = false;
@@ -352,6 +353,7 @@ var loadData_Complaint = (id) => {
                                     text: !$issetCP ? "Gửi khiếu nại" : "Cập nhật",
                                     icon: "fa fa-save",
                                     type: "default",
+                                    disabled:  $complaintstatus >= 100,
                                     useSubmitBehavior: true,
                                     elementAttr: {
                                         id: "schedule",
@@ -533,7 +535,7 @@ var loadData_Resolve = (id) => {
                             colSpan: 6,
                             itemType: "button",
                             horizontalAlignment: "right",
-                            disabled: id == 0,
+                            disabled: id == 0 || $complaintstatus >=200,
                             buttonOptions: {
                                 text: "Đã trả lời",
                                 icon: "fa fa-check",
@@ -552,7 +554,7 @@ var loadData_Resolve = (id) => {
                             colSpan: 6,
                             itemType: "button",
                             horizontalAlignment: "left",
-                            disabled: id == 0,
+                            disabled: id == 0 || $complaintstatus >= 200,
                             buttonOptions: {
                                 text: "Hẹn hỗ trợ",
                                 icon: "fa fa-clipboard",
@@ -752,8 +754,12 @@ var loadData = () => {
             var container = e.component;
             var selectedRowData = e.selectedRowsData[0];
             var selectedRowKey = e.selectedRowKeys[0];
+            $complaintstatus = e.selectedRowsData[0].status;
             $selectionID = selectedRowKey;
             loadData_Complaint(selectedRowKey);
+            //document.getElementById("resolve").disabled = true; 
+            //document.getElementById("resolveDelay").disabled = true;
+            $('#resolve').dxButton('instance').disabled = false;
             //$('#elementComplaintId').dxTextBox('instance')
             //    .option('value', selectedRowData == null ? "" : (selectedRowData.id));
         },
@@ -835,7 +841,9 @@ var loadData = () => {
         editing: {
             allowAdding: false,
             allowUpdating: false,
-            allowDeleting: true,
+            allowDeleting: function (e) {
+                return e.row.data.status <200;
+            },
             mode: "rown",
             useIcons: true,
             confirmDelete: true,

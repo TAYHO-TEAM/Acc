@@ -16,14 +16,17 @@
     "transporter": "",
     "phoneContact": ""
 };
+var formDataVerify = {
+    "key": $model,
+};
 var $WarehouseReleasedId = 0;
 var fdata = new FormData();
 $(document).ready(function () {
-    customStore_WarehouseReleased($isIn).load().done((rs) => {
+    customStore_WarehouseReleased_Id($model).load().done((rs) => {
         if (rs.length !== 0) {
             $WarehouseReleasedId = rs[0].id;
         }
-        $("#form-warehousereleased").dxForm({
+        $("#form-warehousereleased-verify").dxForm({
             formData: rs[0],
             labelLocation: "top",
             items: [
@@ -78,7 +81,7 @@ $(document).ready(function () {
                         {
                             colSpan: 4,
                             dataField: "transporter",
-                            label: { text: $isIn ? "Người gửi" : "Người nhận" },
+                            label: { text: "Người nhận" },
                             editorType: "dxTextBox",
                             visible: true,
                             type: "string",
@@ -123,24 +126,6 @@ $(document).ready(function () {
                                 },
                             },
                         },
-                        {
-                            colSpan: 12,
-                            itemType: "button",
-                            horizontalAlignment: "center",
-                            buttonOptions: {
-                                text: $isIn ? "Tạo phiếu nhập" : "Tạo phiếu xuất",
-                                icon: "fa fa-save",
-                                type: "success",
-                                visible: $WarehouseReleasedId > 0 ? false : true,
-                                useSubmitBehavior: true,
-                                elementAttr: {
-                                    id: "export",
-                                },
-                                editorOptions: {
-                                    stylingMode: "filled",
-                                }
-                            }
-                        },
                     ]
                 },
 
@@ -151,49 +136,11 @@ $(document).ready(function () {
             document.getElementById('elementTransporterWHR').style.display = 'block';
             document.getElementById('elementPhoneContactWHR').style.display = 'block';
             document.getElementById('elementDescriptionWHR').style.display = 'block';
-            document.getElementById('export').style.pointerEvents = 'none';
-            document.getElementById('export').style.visibility = 'hidden';
             load_WarehouseReleasedDetail($WarehouseReleasedId ?? 0);
         }
     });
-
-    $("#form-warehousereleased").on("submit", function (e) {
-        e.preventDefault();
-        var resValid = true
-        if (!resValid) {
-            DevExpress.ui.notify("Vui lòng kiểm tra lại file đính kèm!", "error", 3000);
-        }
-        else {
-            loadingPanel.show();
-            var formdata = $('#form-warehousereleased').dxForm("instance").option('formData');
-            formdata["IsInOrOut"] = $isIn;
-            formdata["Status"] = 10;
-            var deferred = $.Deferred();
-            customStore_WarehouseReleased(0).store().insert(formdata).done((rs) => {
-                loadingPanel.hide();
-                if (rs.isOk) {
-                    console.log(rs.result.id)
-                    $WarehouseReleasedId = parseInt(rs.result.id);
-                    deferred.resolve(rs);
-                    document.getElementById('elementwarehouseStorageId').style.display = 'block';
-                    document.getElementById('elementTransporterWHR').style.display = 'block';
-                    document.getElementById('elementPhoneContactWHR').style.display = 'block';
-                    document.getElementById('elementDescriptionWHR').style.display = 'block';
-                    document.getElementById('export').style.pointerEvents = 'none';
-                    document.getElementById('export').style.visibility = 'hidden';
-                    load_WarehouseReleasedDetail($WarehouseReleasedId ?? 0);
-                    DevExpress.ui.notify("Cập nhật thành công", "success", 3000);
-                }
-                else {
-                    DevExpress.ui.notify("Có lỗi xảy ra", "error", 3000);
-                    deferred.resolve(false);
-                }
-            }, deferred.reject)
-            return deferred.promise();
-        }
-    });
     function load_WarehouseReleasedDetail(ItemID) {
-        $("#container-warehousereleaseddetail").dxDataGrid({
+        $("#container-warehousereleaseddetail-verify").dxDataGrid({
             height: 300,
             dataSource: customStore_WarehouseReleasedDetail(ItemID),
             repaintChangesOnly: true,
@@ -294,13 +241,10 @@ $(document).ready(function () {
                     //    displayExpr: "unitId",
                     //},
                     cellTemplate: (c, o) => {
-                        console.log(o.value);
                         customStore_CategoryGoods_Id(o.value).load().then((rsGoods) => {
                             var item = rsGoods[0];
                             customStore_CategoryUnit.load().then((rsUnit) => {
-                                console.log(rsUnit);
                                 var itemUnit = rsUnit.filter(x => x.id == item.unitId).shift();
-                                console.log(rsUnit);
                                 if (typeof itemUnit !== "undefined") {
                                     $("<span />").append(itemUnit.title).appendTo(c);
                                 }
@@ -310,18 +254,19 @@ $(document).ready(function () {
                 },// code
             ],
             editing: {
-                //allowAdding: true,
-                //allowUpdating: true,
-                allowDeleting: true,
+                allowAdding: false,
+                allowUpdating: false,
+                allowDeleting: false,
                 mode: "batch",
                 useIcons: true,
                 confirmDelete: true,
             },
         }).dxDataGrid("instance");
         formSubInstance();
+        fileUploader();
     };
     function formSubInstance() {
-        $("#form-warehousereleaseddetail").dxForm({
+        $("#form-warehousereleaseddetail-verify").dxForm({
             formData: formData,
             labelLocation: "top",
             items: [
@@ -331,233 +276,106 @@ $(document).ready(function () {
                     colCount: 12,
                     items: [
                         {
-                            colSpan: 4,
-                            dataField: "categoryGoodsId",
-                            label: { text: "Loại hàng" },
-                            type: "string",
-                            editorType: "dxSelectBox",
-                            lookup: {
-                                dataSource: customStore_CategoryGoods,
-                                valueExpr: "id",
-                                displayExpr: "title",
-                            },
+                            colSpan: 12,
+                            itemType: "simple",
+                            name: "Image",
+                            editorType: 'dxGallery',
                             editorOptions: {
                                 stylingMode: "filled",
-                                searchEnabled: true,
-                                searchMode: "contains",
-                                searchExpr: ['title', 'description'],
-                                showClearButton: true,
-                                placeholder: "Vui lòng chọn...",
-                                dataSource: customStore_CategoryGoods,
-                                valueExpr: "id",
-                                displayExpr: 'title',
-                                elementAttr: {
-                                    id: "elementcategoryGoodsId",
+                                dataSource: customStore_Attachment($model,"WarehouseReleased"),
+                                height: 100,
+                                width: 'auto',
+                                slideshowDelay: 1500,
+                                itemTemplate: function (data) {
+                                    var $link = (data.host + data.url + "/" + data.fileName);
+                                    return $issetRSSUB ? $("<a/>").attr("href", $link).attr("target", "_blank").append($("<img />").attr({ "src": $link, onerror: ImgError(this), "style": "max-height: 100px; height : auto ;width : auto ;margin: auto;" })) : "";
                                 },
-                                onValueChanged: function (data) {
-                                    console.log(data);
-                                    $('#elementQuantity').dxNumberBox('instance').option('value', 0);
-                                    customStore_CategoryGoods.load().then((rs) => {
-                                        var goods = rs.filter(x => x.id === data.value).shift();
-                                        customStore_CategoryUnit.load().then((rsUnit) => {
-                                            var item = rsUnit.filter(x => x.id === goods.unitId).shift();
-                                            $('#elementUnitItem').dxTextBox('instance')
-                                                .option('value', item == null ? "" : (item.title));
-                                        });
-                                    });
-                                    console.log($WarehouseStorageID);
-                                    customStore($WarehouseStorageID).load().then((rsInventory) => {
-                                        console.log($WarehouseStorageID);
-                                        var item = rsInventory.filter(x => x.categoryGoodsId === data.value).shift();
-                                        console.log(rsInventory);
-                                        $('#elementInventory').dxTextBox('instance')
-                                            .option('value', item == null ? 0 : (item.quantity));
-
-                                    });
-                                },
-                            },
-                            validationRules: [{ type: "required" }],
-                        },
-                        {
-                            colSpan: 3,
-                            dataField: "quantity",
-                            label: { text: "Số lượng" },
-                            editorType: "dxNumberBox",
-                            type: "number",
-                            editorOptions: {
-                                elementAttr: {
-                                    id: "elementQuantity",
-                                },
-                                stylingMode: "filled",
-                                placeholder: "Vui lòng nhập số lượng...",
-                            },
-                            validationRules: [{
-                                type: "required",
-                            },
-                            {
-                                type: "async",
-                                message: "Email is already registered",
-                                validationCallback: function (params) {
-                                    var $categoryGoodsId = $('#elementcategoryGoodsId').dxSelectBox("instance").option('value');
-                                    console.log($categoryGoodsId);
-                                    var d = $.Deferred();
-                                    if (!$isIn) {
-                                        customStore($WarehouseStorageID).load().then((rsInventory) => {
-                                            var _item = rsInventory.find(x => x.categoryGoodsId == $categoryGoodsId);
-                                            if (typeof _item !== 'undefined') {
-                                                console.log(_item);
-                                                var quantity = _item.quantity;
-                                                console.log(quantity);
-                                                if (quantity > 0) {
-                                                    d.resolve(quantity >= params.value);
-                                                }
-                                                else {
-                                                    d.resolve(false);
-                                                }
-                                            }
-                                            else {
-                                                d.resolve(false);
-                                            }
-                                        });
-                                    }
-                                    else {
-                                        d.resolve(true);
-                                    }
-
-                                    return d.promise();
+                                onItemClick: function (value) {
                                 }
-                            }],
-                        },
-                        {
-                            colSpan: 3,
-                            label: { text: "Đơn vị" },
-                            editorType: "dxTextBox",
-                            type: "string",
-                            editorOptions: {
-                                stylingMode: "filled",
-                                readOnly: true,
-                                elementAttr: {
-                                    id: "elementUnitItem",
-                                },
                             },
                         },
                         {
-                            colSpan: 2,
-                            label: { text: "Tồn kho" },
-                            editorType: "dxTextBox",
-                            type: "string",
-                            editorOptions: {
-                                stylingMode: "filled",
-                                readOnly: true,
-                                elementAttr: {
-                                    id: "elementInventory",
-                                },
-                            },
+                            colSpan: 12,
+                            visible: true,//rs[0].status??0 < 200 ? true : false,
+                            template: '<span class="dx-field-item-label-text font-bold">Các tập tin đính kèm</span><div class="file-uploader" id="file-uploader"></div>' ,
                         },
-                    ]
-                },
-                {
-                    itemType: "group",
-                    name: "button-action",
-                    colCount: 12,
-                    items: [
                         {
-                            colSpan: 6,
+                            colSpan: 12,
                             itemType: "button",
-                            horizontalAlignment: "right",
-                            disabled: id == 0,
+                            horizontalAlignment: "center",
                             buttonOptions: {
-                                text: "Thêm sản phẩm",
+                                text:"Xác nhận hình ảnh",
                                 icon: "fa fa-save",
                                 type: "success",
+                                visible:  true,
                                 useSubmitBehavior: true,
                                 elementAttr: {
-                                    id: "addItem",
+                                    id: "verify",
                                 },
                                 editorOptions: {
                                     stylingMode: "filled",
                                 }
                             }
                         },
-                        {
-                            colSpan: 6,
-                            itemType: "button",
-                            horizontalAlignment: "left",
-                            disabled: id == 0,
-                            buttonOptions: {
-                                text: $isIn? "Nhập kho": "Xuất kho",
-                                icon: "fa fa-clipboard",
-                                type: "default",
-                                useSubmitBehavior: false,
-                                elementAttr: {
-                                    id: "resolveFinish",
-                                },
-                                editorOptions: {
-                                    stylingMode: "contained",
-                                    cssClass: "bg-info",
-                                }
-                            }
-                        },
-                    ],
-
+                    ]
                 },
+
             ],
         }).dxForm("instance");
     };
-    $("#form-warehousereleaseddetail").on("submit", function (e) {
+    $("#form-warehousereleaseddetail-verify").on("submit", function (e) {
         e.preventDefault();
-        var formdata = $('#form-warehousereleaseddetail').dxForm("instance").option('formData');
+        var fData = new FormData();
         var resValid = true
-        if (!resValid) {
-            DevExpress.ui.notify("Vui lòng kiểm tra lại file đính kèm!", "error", 3000);
+        var files = $("#file-uploader").dxFileUploader("instance").option("value");
+        fData.append('key', $model);
+        fData.append('token', UserCurrentInfo.accessToken);
+        if (files.length > 0) {
+            $.each(files, function (key, value) {
+                fData.append(files[key].name, files[key]);
+            });
         }
         else {
-            loadingPanel.show();
-            formdata["WarehouseStorageId"] = $WarehouseStorageID;
-            formdata["WarehouseReleasedId"] = $WarehouseReleasedId;
-            formdata["status"] = 10;
-            var deferred = $.Deferred();
-            customStore_WarehouseReleasedDetail(0).store().insert(formdata).done((rs) => {
-                loadingPanel.hide();
-                if (rs.isOk) {
-                    deferred.resolve(rs);
-                    $("#container-warehousereleaseddetail").dxDataGrid("instance").refresh();
-                    DevExpress.ui.notify("Cập nhật thành công", "success", 3000);
-                }
-                else {
-                    DevExpress.ui.notify("Có lỗi xảy ra", "error", 3000);
-                    deferred.resolve(false);
-                }
-            }, deferred.reject)
-            return deferred.promise();
+            resValid = false;
         }
-    });
-    $(document).on('click', '#resolveFinish', '#form-warehousereleaseddetail', function (e) {
-        e.preventDefault();
-        var resValid = true
         if (!resValid) {
             DevExpress.ui.notify("Vui lòng kiểm tra lại file đính kèm!", "error", 3000);
         }
         else {
             loadingPanel.show();
             var deferred = $.Deferred();
-            var object = {};
-            object["status"] = 200;
-            if ($WarehouseReleasedId > 0) {
-                customStore_WarehouseReleased(0).store().update($WarehouseReleasedId, object).done((rs) => {
+            $.ajax({
+                type: "POST",
+                enctype: 'multipart/form-data',
+                url: "/VanHanh/KhoBai/_XuatNhapVerify",
+                data: fData,
+                processData: false,
+                contentType: false,
+                cache: false,
+                timeout: 600000,
+                success: function (rs) {
                     loadingPanel.hide();
-                    if (rs.isOk) {
-                        $("#popup-main").dxPopup('instance').hide();
-                        deferred.resolve(rs);
-                        DevExpress.ui.notify("Cập nhật thành công", "success", 3000);
-                    }
-                    else {
-                        DevExpress.ui.notify("Có lỗi xảy ra", "error", 3000);
-                        deferred.resolve(false);
-                    }
-                }, deferred.reject)
-            }
+                    DevExpress.ui.notify(rs.result, rs.status, 3000);
+                    $("#popup-sub").dxPopup("hide");
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    loadingPanel.hide();
+                    DevExpress.ui.notify("Vui lòng chọn File!", "error", 3000);
+
+                }
+            });
             return deferred.promise();
         }
     });
+
+    var fileUploader = () => $("#file-uploader").dxFileUploader({
+        selectButtonText: "Chọn tập tin...",
+        labelText: "Hoặc kéo thả vào đây",
+        showFileList: true,
+        multiple: true,
+        uploadMode: "useForm",
+        accept: ".jpg,.jpeg,.gif,.png,.pdf",
+        allowedFileExtensions: [".jpg", ".jpeg", ".png", ".pdf"],
+        maxFileSize: 52428800,
+    }).dxFileUploader("instance");
 });
