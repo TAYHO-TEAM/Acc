@@ -1,6 +1,7 @@
 ﻿@{
     ViewBag.Title = "Báo Cáo";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var versionJS = System.Configuration.ConfigurationManager.AppSettings["webpages:VersionJS"];
 }
 @section style{   }
 <div class="row">
@@ -18,12 +19,14 @@
 </div>
 @section script{
     <script src="~/Scripts/page/vanhanh.js"></script>
+   @* <script src="~/Scripts/page/VanHanh/BaoCao/BC_Index.js?v=@versionJS"></script>*@
     <script type="text/javascript">
         var KEY = "id";
         var $keyRS=0;
         var WIDTH_CONTAINER = $("#container-SysJob").width();
         var WIDTH_CONTAINER = $("#form-Report").width();
-        var ACTION_SYSJOB = "SysJob/";
+        var ACTION_SYSJOB = "SysJobWithAccount/";
+        var ACTION_SysJobGroups = "SysJobGroups/";
         var ACTION_SYSJOBPARAMETER = "SysJobParameter/";
         var ACTION_REPORT = "Report/";
         var customStore = () => new DevExpress.data.DataSource({

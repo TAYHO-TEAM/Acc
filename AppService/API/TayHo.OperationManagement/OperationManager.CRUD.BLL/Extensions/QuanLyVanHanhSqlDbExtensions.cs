@@ -63,6 +63,7 @@ namespace OperationManager.CRUD.BLL.Extensions
             services.AddScoped<IQuanLyVanHanhRepository<WarehouseReleasedDetail>, QuanLyVanHanhRepository<WarehouseReleasedDetail>>();
             services.AddScoped<IQuanLyVanHanhRepository<DOBase>, QuanLyVanHanhRepository<DOBase>>();
             services.AddScoped<IReportRepository,ReportRepository>();
+            services.AddScoped<ISysJobWithAccountRepository, SysJobWithAccountRepository>();
 
             services.AddScoped<IComplaintRepository<Complaint>, ComplaintRepository<Complaint>>();
             return services;

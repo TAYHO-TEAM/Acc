@@ -228,6 +228,7 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
                 objEF.Add(Model);
                 //var a =_dbContext.Add(Model).Entity;
                 await _dbContext.SaveChangesAndDispatchEventsAsync(_cancellationToken).ConfigureAwait(false);
+                await LogEventSQL(user, nameEF, "Insert", JsonConvert.SerializeObject(Model).ToString()).ConfigureAwait(false);
                 if (formFiles != null)
                 {
                     if (formFiles.Count > 0)
@@ -242,6 +243,7 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
             }
             if (!methodResult.IsOk) throw new CommandHandlerException(methodResult.ErrorMessages);
             methodResult.Result = Model;
+         
             return methodResult;
         }
         public async Task<MethodResult<T>> Update(int user, string nameEF, T model, IFormFileCollection formFiles = null)
@@ -266,6 +268,7 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
                 existsModel.UpdateDateUTC = DateTime.UtcNow;
                 objEF.Update(existsModel);
                 await _dbContext.SaveChangesAndDispatchEventsAsync(_cancellationToken).ConfigureAwait(false);
+                await LogEventSQL(user, nameEF, "Update", JsonConvert.SerializeObject(model).ToString()).ConfigureAwait(false);
                 if (formFiles != null)
                 {
                     if (formFiles.Count > 0)
@@ -307,6 +310,7 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
                 objEF.Update(model);
                 await _dbContext.SaveChangesAsync();
                 methodResult.Result = model;
+                await LogEventSQL(user, nameEF, "Delete", JsonConvert.SerializeObject(model).ToString()).ConfigureAwait(false);
             }
             else
             {

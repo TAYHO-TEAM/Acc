@@ -297,7 +297,6 @@ namespace Services.Common.APIs.Cmd.EF
         #endregion Any
 
         #region Helpers
-
         protected virtual void TryAttach(T entity)
         {
             try

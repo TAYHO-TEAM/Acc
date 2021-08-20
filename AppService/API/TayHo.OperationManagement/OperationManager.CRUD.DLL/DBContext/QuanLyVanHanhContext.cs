@@ -43,6 +43,7 @@ namespace OperationManager.CRUD.DAL.DBContext
         public DbSet<DefectFeedbackDetail> DefectFeedbackDetail { get; set; }
         public DbSet<WarehouseReleased> WarehouseReleased { get; set; }
         public DbSet<WarehouseReleasedDetail> WarehouseReleasedDetail { get; set; }
+        public DbSet<SysJobWithAccount> SysJobWithAccount { get; set; }
 
         /// <summary>
         /// View Table

@@ -13,7 +13,7 @@ var customStore_SysJobParameter = (id) => new DevExpress.data.DataSource({
     filter: ["sysJobId", "=", id]
 });
 var customStore_Report = (id) => new DevExpress.data.DataSource({
-    store: $DATASOURCEGET(ACTION_REPORT, KEY)
+    store: $DATASOURCE(ACTION_REPORT, KEY)
 });
 
 $(document).ready(function () {
@@ -134,7 +134,6 @@ $(document).ready(function () {
     }
     var loadData_Report = (id) => {
         customStore_SysJobParameter(id).load().done((rs) => {
-            console.log(rs);
             var form = $("#form-Report").dxForm({
                 colCount: 1,
                 formData: rs,
@@ -152,7 +151,7 @@ $(document).ready(function () {
                             text: "Tải báo cáo",
                             icon: "fa fa-save",
                             type: "success",
-                            useSubmitBehavior: true,
+                            useSubmitBehavior: false,
                             elementAttr: {
                                 id: "submit",
                             }
@@ -184,8 +183,6 @@ $(document).ready(function () {
                 return options;
             };
             function generateNewInputOptions(object, index, type, customFromBodyId, limtCol, limitRow) {
-                console.log(object);
-                console.log(type);
                 //var Id = customFromBodyId + '_' + object.id + '_' + (index + 1);
                 var Id = object.name.replace('@@', '');
                 if (type === "String") {
@@ -214,7 +211,7 @@ $(document).ready(function () {
                             stylingMode: "filled",
                             elementAttr: {
                                 id: Id,
-                                class: "customForm_NumBox",
+                                class: "customForm_NumberBox",
                             },
                         }
                     }
@@ -386,7 +383,8 @@ $(document).ready(function () {
             }
         });
     };
-    $("#form-Report").on("submit", function (e) {
+    $(document).on('click', '#submit', '#form-Report', function (e) {
+        //$("#form-Report").on("submit", function (e) {
         e.preventDefault();
         loadingPanel.show();
         var fdata = new FormData();
@@ -450,237 +448,35 @@ $(document).ready(function () {
             console.log(pair[0] + ', ' + pair[1]);
         }
         var deferred = $.Deferred();
-        
         downloadFromAjaxPost("https://api-om-crud.tayho.com.vn/api/v1/Report", fdata);
-        //var settings = {
-        //    "async": false,
-        //    "crossDomain": true,
-        //    "url": "https://api-om-crud.tayho.com.vn/api/v1/Report",
-        //    "method": "PUT",
-        //    "dataType": "json",
-        //    "enctype": 'multipart/form-data',
-        //    "data": fdata,
-        //};
-        //$.ajax(settings).done(function (response) {
-        //    console.log(response);
-        //});
-        //$.ajaxPrefilter(function (options, original_Options, xhr) {
-        //    options.async = true;
-        //});
-        //$.ajax({
-        //    headers: $header,
-        //    type: "POST",
-        //    url: "https://api-om-crud.tayho.com.vn/api/v1/Report",
-        //    dataType: "text",
-        //    enctype: 'multipart/form-data',
-        //    data: fdata,
-        //    async: true,
-        //    cache: false,
-        //    contentType: false,
-        //    processData: false,
-        //    cache: false,
-        //    timeout: 600000,
-        //    success: function (response, status, xhr) {
+        function getResponseHeaders(jqXHR) {
+            jqXHR.responseHeaders = {};
+            var headers = jqXHR.getAllResponseHeaders();
+            headers = headers.split("\n");
+            headers.forEach(function (header) {
+                header = header.split(": ");
+                var key = header.shift();
+                if (key.length == 0) return
+                // chrome60+ force lowercase, other browsers can be different
+                key = key.toLowerCase();
+                jqXHR.responseHeaders[key] = header.join(": ");
 
-        //        console.log(status);
-        //        // check for a filename
-        //        console.log(xhr);
-        //        console.log(xhr.getResponseHeader('content-disposition'));
-        //        var filename = "";
-        //        var disposition = xhr.getResponseHeader('content-disposition');
-        //        if (disposition && disposition.indexOf('attachment') !== -1) {
-        //            var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
-        //            var matches = filenameRegex.exec(disposition);
-        //            if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
-        //        }
-
-        //        var type = xhr.getResponseHeader('Content-Type');
-        //        var blob = new Blob([response], { type: type });
-        //        if (typeof window.navigator.msSaveBlob !== 'undefined') {
-        //            // IE workaround for "HTML7007: One or more blob URLs were revoked by closing the blob for which they were created. These URLs will no longer resolve as the data backing the URL has been freed."
-        //            window.navigator.msSaveBlob(blob, filename);
-        //        } else {
-        //            var URL = window.URL || window.webkitURL;
-        //            var downloadUrl = URL.createObjectURL(blob);
-
-        //            if (filename) {
-        //                // use HTML5 a[download] attribute to specify filename
-        //                var a = document.createElement("a");
-        //                // safari doesn't support this yet
-        //                if (typeof a.download === 'undefined') {
-        //                    window.location = downloadUrl;
-        //                } else {
-        //                    a.href = downloadUrl;
-        //                    a.download = filename;
-        //                    document.body.appendChild(a);
-        //                    a.click();
-        //                }
-        //            } else {
-        //                window.location = downloadUrl;
-        //            }
-
-        //            setTimeout(function () { URL.revokeObjectURL(downloadUrl); }, 100); // cleanup
-        //        }
-        //    }
-        //});
-        //$.ajax({
-        //    headers: $header,
-        //    url: 'https://api-om-crud.tayho.com.vn/api/v1/Report',
-        //    type: 'PUT',
-        //    dataType: "text",
-        //    enctype: 'multipart/form-data',
-        //    data: fdata,
-        //    async: true,
-        //    cache: false,
-        //    contentType: false,
-        //    processData: false,
-        //    cache: false,
-        //    timeout: 600000,
-        //    //beforeSend: function (xhr) {
-        //    //    xhr.setRequestHeader('Authorization', 'Bearer ' + UserCurrentInfo.accessToken);
-        //    //},
-        //    //xhr: function() {// Seems like the only way to get access to the xhr object
-        //    //    var xhr = new XMLHttpRequest();
-        //    //    xhr.responseType = 'blob'
-        //    //    return xhr;
-        //    //},
-        //    //xhrFields: {
-        //    //    responseType: 'blob',
-        //    //},
-        //    success: function (data, status, xhr) {
-        //        var header = xhr.getResponseHeader('Content-Disposition');
-        //        console.log(header);
-        //        loadingPanel.hide();
-        //        console.log(xhr);
-        //        console.log(status);
-        //        getResponseHeaders(xhr);
-        //    },
-        //    error: function (e) {
-        //        console.log("ERROR : ", e);
-        //    }
-        //})
-        //.done (function (data, status, xhr) {
-        //    //console.log(xhr.headers["content-disposition"]);
-        //    console.log(status);
-        //        ////const blob = new Blob([rs], { type: 'application/vnd.ms-excel' });
-        //        ////const url = window.URL.createObjectURL(blob);
-        //        ////window.open(url);
-        //        ////get the file
-        //        var octetStreamMime = 'application/octet-stream';
-        //        ////get the headers' content disposition
-        //        //var cd = xhr.headers["Content-Disposition"];
-        //        //console.log(cd);
-        //        ////get the file name with regex
-        //        //var regex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
-        //        //var match = regex.exec(cd);
-
-        //        ////is there a fiel name?
-        //        //var fileName = match[1] || "myDefaultFileName.csv";
-
-        //        ////replace leading and trailing slashes that C# added to your file name
-        //        //fileName = fileName.replace(/\"/g, "");
-
-        //        ////determine the content type from the header or default to octect stream
-        //        //var contentType = rs.headers["content-type"] || octetStreamMime;
-
-        //        ////finally, download it
-        //        //try {
-        //        //    var blob = new Blob([data.data], { type: contentType });
-
-        //        //    //downloading the file depends on the browser
-        //        //    //IE handles it differently than chrome/webkit
-        //        //    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-        //        //        window.navigator.msSaveOrOpenBlob(blob, fileName);
-        //        //    } else {
-        //        //        var objectUrl = URL.createObjectURL(blob);
-        //        //        window.open(objectUrl);
-        //        //    }
-        //        //} catch (exc) {
-        //        //    console.log("Save Blob method failed with the following exception.");
-        //        //    console.log(exc);
-        //        //}
-        //        //console.log(xhr.getAllResponseHeaders());
-        //});
-        //customStore_Report(0).store().update($keyRS, obj).then(function (rs, status, xhr) {
-        //    console.log(xhr);
-        //    loadingPanel.hide();
-
-        //    console.log(rs);
-        //    console.log(rs.headers)
-        //    //const blob = new Blob([rs], { type: 'application/vnd.ms-excel' });
-        //    //const url = window.URL.createObjectURL(blob);
-        //    //window.open(url);
-        //    //get the file
-        //    var octetStreamMime = 'application/octet-stream';
-        //    ;
-        //    //get the headers' content disposition
-        //    var cd = rs.headers["Content-Disposition"];
-
-        //    //get the file name with regex
-        //    var regex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
-        //    var match = regex.exec(cd);
-
-        //    //is there a fiel name?
-        //    var fileName = match[1] || "myDefaultFileName.csv";
-
-        //    //replace leading and trailing slashes that C# added to your file name
-        //    fileName = fileName.replace(/\"/g, "");
-
-        //    //determine the content type from the header or default to octect stream
-        //    var contentType = rs.headers["content-type"] || octetStreamMime;
-
-        //    //finally, download it
-        //    try {
-        //        var blob = new Blob([rs.data], { type: contentType });
-
-        //        //downloading the file depends on the browser
-        //        //IE handles it differently than chrome/webkit
-        //        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-        //            window.navigator.msSaveOrOpenBlob(blob, fileName);
-        //        } else {
-        //            var objectUrl = URL.createObjectURL(blob);
-        //            window.open(objectUrl);
-        //        }
-        //    } catch (exc) {
-        //        console.log("Save Blob method failed with the following exception.");
-        //        console.log(exc);
-        //    }
-        //    deferred.resolve(rs);
-        //}, deferred.reject);
-        //$.ajaxPrefilter(function (options, originalOptions, jqXHR) {
-        //    jqXHR.done(function (results, responseText, jqXHR) {
-        //        getResponseHeaders(jqXHR);
-        //    })
-        //}
-        //function getResponseHeaders(jqXHR) {
-        //    jqXHR.responseHeaders = {};
-        //    var headers = jqXHR.getAllResponseHeaders();
-        //    headers = headers.split("\n");
-        //    headers.forEach(function (header) {
-        //        header = header.split(": ");
-        //        var key = header.shift();
-        //        if (key.length == 0) return
-        //        // chrome60+ force lowercase, other browsers can be different
-        //        key = key.toLowerCase();
-        //        jqXHR.responseHeaders[key] = header.join(": ");
-
-        //    });
-        //    console.log(jqXHR);
-        //}
+            });
+        }
         return deferred.promise;
     });
-  
 
-    //function download(blob, filename) {
-    //    const url = window.URL.createObjectURL(blob);
-    //    const a = document.createElement('a');
-    //    a.style.display = 'none';
-    //    a.href = url;
-    //    // the filename you want
-    //    a.download = filename;
-    //    document.body.appendChild(a);
-    //    a.click();
-    //    document.body.removeChild(a);
-    //    window.URL.revokeObjectURL(url);
-    //}
+
+    function download(blob, filename) {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        // the filename you want
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+    }
 });

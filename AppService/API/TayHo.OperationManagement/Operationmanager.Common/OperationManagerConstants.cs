@@ -37,7 +37,7 @@
         public const string WarehouseReleasedDetail_TABLENAME = "WarehouseReleasedDetail";
         public const string WarehouseReleased_TABLENAME = "WarehouseReleased";
         public const string DefectFeedbackDetail_TABLENAME = "DefectFeedbackDetail";
-        
+        public const string SysJobWithAccount_TABLENAME = "SysJobWithAccount";
 
     }
 }

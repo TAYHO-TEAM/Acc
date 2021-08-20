@@ -54,7 +54,7 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
 
             var loadOptions = DevexpressHelperFunction.ConvertFromDataLoadOptionsHelper(dataSourceLoadOptionsBase);
 
-            bool checkPermit = true;// _dbContext.GroupAccount
+            bool checkPermit = true;/// CheckPermission(0,user,1, nameEF,1);//_dbContext.GroupAccount
                                     //.Join(_dbContext.GroupActionPermistion, x => x.GroupId, y => y.GroupId, (y, x) => new { y, x })
                                     //.Any(c => c.y.AccountId == user
                                     //    && c.x.PermistionId == 6
@@ -233,6 +233,7 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
                         await UploadFile(formFiles, Model.Id, nameEF, "", user);
                     }
                 }
+                await LogEventSQL(user, nameof(objEF), "Insert", JsonConvert.SerializeObject(Model).ToString()).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -269,6 +270,7 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
                     if (formFiles.Count > 0)
                     {
                         await UploadFile(formFiles, existsModel.Id, nameEF, "", user);
+                        await LogEventSQL(user, nameof(objEF),"Update",JsonConvert.SerializeObject(model).ToString()).ConfigureAwait(false);
                     }
                 }
                 methodResult.Result = existsModel;
@@ -305,6 +307,7 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
                 objEF.Update(model);
                 await _dbContext.SaveChangesAsync();
                 methodResult.Result = model;
+                await LogEventSQL(user, nameof(objEF), "Delete", JsonConvert.SerializeObject(model).ToString()).ConfigureAwait(false);
             }
             else
             {
@@ -315,9 +318,32 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
             }
             return methodResult;
         }
-        private async Task<bool> CheckPermission(int user, int action)
+        //private async Task<bool> CheckPermission(int user, int action)
+        //{
+        //    return true;
+        //}
+        public async Task<bool> CheckPermission(int RecordId =0,int AccountId = 0, int Action = 0, string TableName = "", int FunctionCUD = 0)
         {
-            return true;
+            bool resultCheck = false;
+            try
+            {
+                (string, object)[] parameter = new (string, object)[] { ("@RecordId", RecordId),("@AccountId", AccountId), ("@Action", Action), ("@TableName", TableName), ("@FunctionCUD", FunctionCUD) };
+                SprocRepository _sprocRepository = new SprocRepository(_dbContext);
+                IList<ResultCheck> result = await _sprocRepository.GetStoredProcedure("sp_DataBase_Check_CUD")
+                            .WithSqlParams(parameter)
+                            .ExecuteStoredProcedureAsync<ResultCheck>();
+                if(result.Count>0)
+                {
+                    if (result[0].resultCheck > 0)
+                        resultCheck = true;
+                }    
+            
+            }
+            catch
+            {
+                resultCheck = false;
+            }
+            return resultCheck;
         }
         public async Task LogEventSQL(int AccountId = 0, string Action = "", string Event = "", string Infomation = "")
         {
