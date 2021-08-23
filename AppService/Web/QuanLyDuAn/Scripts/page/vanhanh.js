@@ -695,13 +695,11 @@ function downloadFromAjaxPost(url, params, callback) {
     xhr.onload = function () {
         loadingPanel.hide();
         if (this.status === 200) {
-            console.log(xhr.response);
             //var contentDisposition = xhr.get('content-disposition');
             //console.log(contentDisposition);
-            console.log(xhr);
             var filename = "";
             var disposition = xhr.getResponseHeader('content-disposition');
-            console.log(xhr.getResponseHeader('content-disposition')); //attachment=>inline  
+            //attachment=>inline  
             if (disposition && disposition.indexOf('attachment') !== -1) {
                 var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
                 var matches = filenameRegex.exec(disposition);

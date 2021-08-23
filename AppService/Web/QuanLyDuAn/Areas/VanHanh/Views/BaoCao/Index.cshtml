@@ -467,10 +467,9 @@
                 person.values = JSON.stringify(obj);
                 fdata.append("key", $keyRS);
                 fdata.append("values", JSON.stringify(obj));
-                console.log(fdata);
-                for (var pair of fdata.entries()) {
-                    console.log(pair[0] + ', ' + pair[1]);
-                }
+                //for (var pair of fdata.entries()) {
+                //    console.log(pair[0] + ', ' + pair[1]);
+                //}
                 var deferred = $.Deferred();
                 downloadFromAjaxPost("https://api-om-crud.tayho.com.vn/api/v1/Report", fdata);
                 function getResponseHeaders(jqXHR) {
