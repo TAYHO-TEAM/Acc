@@ -1,0 +1,18 @@
+﻿
+@{
+    ViewBag.Title = "Bàn giao";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var versionJS = System.Configuration.ConfigurationManager.AppSettings["webpages:VersionJS"];
+}
+<div class="row">
+    <div class="col-md-4 col-sm-12">
+        <div id="container" class="elevation-2"></div>
+    </div>
+    <div class="col-md-8 col-sm-12">
+        <div id="container-detail" class="elevation-2"></div>
+    </div>
+</div>
+@section script{
+    <script src="~/Scripts/page/vanhanh.js?v=@versionJS"></script>
+    <script src="~/Scripts/page/VanHanh/KhoBai/BG_Index.js?v=@versionJS"></script>
+}

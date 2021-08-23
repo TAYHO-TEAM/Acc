@@ -62,10 +62,15 @@ namespace OperationManager.CRUD.BLL.Extensions
             services.AddScoped<IQuanLyVanHanhRepository<WarehouseReleased>, QuanLyVanHanhRepository<WarehouseReleased>>();
             services.AddScoped<IQuanLyVanHanhRepository<WarehouseReleasedDetail>, QuanLyVanHanhRepository<WarehouseReleasedDetail>>();
             services.AddScoped<IQuanLyVanHanhRepository<DOBase>, QuanLyVanHanhRepository<DOBase>>();
+            services.AddScoped<IQuanLyVanHanhRepository<HandOverItem>, QuanLyVanHanhRepository<HandOverItem>>();
+            services.AddScoped<IQuanLyVanHanhRepository<HandOverItemSpecifications>, QuanLyVanHanhRepository<HandOverItemSpecifications>>();
+            services.AddScoped<IQuanLyVanHanhRepository<HandOverReceipt>, QuanLyVanHanhRepository<HandOverReceipt>>();
+            services.AddScoped<IQuanLyVanHanhRepository<HandOverReceiptDetail>, QuanLyVanHanhRepository<HandOverReceiptDetail>>();
+
             services.AddScoped<IReportRepository,ReportRepository>();
             services.AddScoped<ISysJobWithAccountRepository, SysJobWithAccountRepository>();
-
             services.AddScoped<IComplaintRepository<Complaint>, ComplaintRepository<Complaint>>();
+
             return services;
         }
         #endregion private functions

@@ -44,6 +44,10 @@ namespace OperationManager.CRUD.DAL.DBContext
         public DbSet<WarehouseReleased> WarehouseReleased { get; set; }
         public DbSet<WarehouseReleasedDetail> WarehouseReleasedDetail { get; set; }
         public DbSet<SysJobWithAccount> SysJobWithAccount { get; set; }
+        public DbSet<HandOverItem> HandOverItem { get; set; }
+        public DbSet<HandOverItemSpecifications> HandOverItemSpecifications { get; set; }
+        public DbSet<HandOverReceipt> HandOverReceipt { get; set; }
+        public DbSet<HandOverReceiptDetail> HandOverReceiptDetail { get; set; }
 
         /// <summary>
         /// View Table

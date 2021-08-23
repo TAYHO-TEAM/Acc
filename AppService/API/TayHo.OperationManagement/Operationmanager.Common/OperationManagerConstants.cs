@@ -38,6 +38,10 @@
         public const string WarehouseReleased_TABLENAME = "WarehouseReleased";
         public const string DefectFeedbackDetail_TABLENAME = "DefectFeedbackDetail";
         public const string SysJobWithAccount_TABLENAME = "SysJobWithAccount";
+        public const string HandOverReceiptDetail_TABLENAME = "HandOverReceiptDetail";
+        public const string HandOverReceipt_TABLENAME = "HandOverReceipt";
+        public const string HandOverItemSpecifications_TABLENAME = "HandOverItemSpecifications";
+        public const string HandOverItem_TABLENAME = "HandOverItem";
 
     }
 }
