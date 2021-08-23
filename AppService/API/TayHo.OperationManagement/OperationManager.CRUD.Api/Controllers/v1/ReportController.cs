@@ -20,6 +20,7 @@ using Services.Common.Media;
 using System.Data;
 using Newtonsoft.Json.Linq;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 
 namespace OperationManager.CRUD.Api.Controllers.v1
 {

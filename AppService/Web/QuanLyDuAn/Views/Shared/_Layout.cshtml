@@ -14,9 +14,14 @@
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 
     @Scripts.Render("~/ScriptsBundle?v=" + version)
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/devextreme-quill/0.10.2/dx-quill.min.js"></script>
-    <script src="https://cdn3.devexpress.com/jslib/20.2.4/js/dx.all.js"></script>
-    <script src="https://cdn3.devexpress.com/jslib/20.2.4/js/dx.aspnet.mvc.js"></script>
+    @*<script src="https://cdnjs.cloudflare.com/ajax/libs/devextreme-quill/0.10.2/dx-quill.min.js"></script>
+        <script src="https://cdn3.devexpress.com/jslib/20.2.4/js/dx.all.js"></script>
+        <script src="https://cdn3.devexpress.com/jslib/20.2.4/js/dx.aspnet.mvc.js"></script>*@
+    @*<script src="~/Scripts/dx/dx-quill.min.js"></script>
+        <script src="~/Scripts/dx/dx.all.js"></script>
+        <script src="~/Scripts/dx/dx.aspnet.mvc.js"></script>
+        <script src="~/Scripts/dx/dx.aspnet.data.js"></script>*@
+    @Scripts.Render("~/ScriptBundlePlugin?v=" + version)
     @Scripts.Render("~/ScriptsBundleDx?v=" + version)
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">

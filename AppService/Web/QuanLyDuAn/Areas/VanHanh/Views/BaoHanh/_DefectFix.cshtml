@@ -250,6 +250,7 @@
                                         icon: "fa fa-save",
                                         type: "success",
                                         useSubmitBehavior: true,
+                                        disabled: !PermitInAction.assign,
                                         elementAttr: {
                                             id: "schedule",
                                         },
@@ -266,6 +267,7 @@
                                         text: "Bắt đầu",
                                         icon: "fas fa-check-circle",
                                         type: "default",
+                                        disabled: !PermitInAction.assign,
                                         useSubmitBehavior: false,
                                         elementAttr: {
                                             id: "jobBegin",

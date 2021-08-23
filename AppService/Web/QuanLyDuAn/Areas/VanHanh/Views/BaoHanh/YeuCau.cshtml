@@ -537,14 +537,11 @@
             $("#Defect").removeClass("text-muted");
             $("#Defect-FeedBack-Logo").addClass("bg-blue");
             $("#Defect-FeedBack-Text").removeClass("text-muted");
-            
             customStore_DefectFeedbackDetail(content.id).load().then((rs) => {
                 var note = rs.filter(x => x.note !== '' && x.note !== null).map(x => x.note + (x.status >= 200 ? " - (Đã BH)":"")).join("</p><p> - ") ;
                 $("#Defect-FeedBack-Content").append("<p> - "  + note + "</p>");
             });
             $("#Defect-FeedBack-Time").append(moment(content.createDate).locale("vi").fromNow());
-
-
             if (content.status < 11) {
                 $("#Defect-Approve-Text").empty();
                 $("#Defect-Approve-Text").append("Chờ xác nhận");

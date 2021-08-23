@@ -402,7 +402,7 @@
                                         {
                                             colSpan: 6,
                                             itemType: "button",
-                                            visible: (rs[0].status > 10) ? false : true,
+                                            visible: (rs[0].status > 10 && PermitInAction.approve) ? false : true,
                                             horizontalAlignment: "left",
                                             buttonOptions: {
                                                 text: "Xác nhận lỗi",
@@ -721,7 +721,6 @@
                         loadingPanel.hide();
                         DevExpress.ui.notify(rs.result, rs.status, 3000);
                         if (rs.status == "success") {
-                            alert(1);
                             $("#popup-main").dxPopup('instance').hide();
                         }
                     },

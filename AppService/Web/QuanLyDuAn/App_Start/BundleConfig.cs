@@ -14,6 +14,8 @@ namespace QuanLyDuAn
             var scriptBundleDX = new ScriptBundle("~/ScriptsBundleDx");
             var styleBundleDX = new StyleBundle("~/StyleBundleDx");
 
+            var scriptBundlePlugin = new ScriptBundle("~/ScriptBundlePlugin");
+
             styleBundle.Include(
                 "~/Content/plugins/fontawesome-free/css/all.min.css",
                 "~/Content/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css",
@@ -38,19 +40,26 @@ namespace QuanLyDuAn
                 "~/Content/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js",
                 "~/Content/js/adminlte.js");
 
-            scriptBundleDX.Include(
+            scriptBundlePlugin.Include(
                 //"~/Scripts/jszip.js",
                 //"~/Scripts/dx.all.js",
-                "~/Scripts/localization/dx.messages.vi.js",
+                
                 "~/Scripts/exceljs.min.js",
-                "~/Scripts/fileSaver.min.js",
-            //"~/Scripts/aspnet/dx.aspnet.mvc.js",
-            "~/Scripts/aspnet/dx.aspnet.data.js");
+                "~/Scripts/fileSaver.min.js"
+            );
+            scriptBundleDX.Include(
+                "~/Scripts/dx/dx.all.js",
+                "~/Scripts/localization/dx.messages.vi.js",
+                "~/Scripts/dx/dx-quill.min.js",
+                "~/Scripts/dx/dx.aspnet.data.js",
+                "~/Scripts/dx/dx.aspnet.mvc.js"
+            );
 
             bundles.Add(scriptBundle);
             bundles.Add(styleBundle);
             bundles.Add(scriptBundleDX);
             bundles.Add(styleBundleDX);
+            bundles.Add(scriptBundlePlugin);
 
             BundleTable.EnableOptimizations = true;
         }
