@@ -66,6 +66,8 @@ namespace OperationManager.CRUD.BLL.Extensions
             services.AddScoped<IQuanLyVanHanhRepository<HandOverItemSpecifications>, QuanLyVanHanhRepository<HandOverItemSpecifications>>();
             services.AddScoped<IQuanLyVanHanhRepository<HandOverReceipt>, QuanLyVanHanhRepository<HandOverReceipt>>();
             services.AddScoped<IQuanLyVanHanhRepository<HandOverReceiptDetail>, QuanLyVanHanhRepository<HandOverReceiptDetail>>();
+            services.AddScoped<IQuanLyVanHanhRepository<HandOverDelegate>, QuanLyVanHanhRepository<HandOverDelegate>>();
+            services.AddScoped<IQuanLyVanHanhRepository<ListOfLocation>, QuanLyVanHanhRepository<ListOfLocation>>();
 
             services.AddScoped<IReportRepository,ReportRepository>();
             services.AddScoped<ISysJobWithAccountRepository, SysJobWithAccountRepository>();

@@ -14,7 +14,6 @@ var WIDTH_CONTAINER = $("#container").width();
 //----------------------------------- Get data ----------------------------------------------------
 var customStore = () => new DevExpress.data.DataSource({
     store: $DATASOURCEGET(ACTION_WAREHOUSEALLGOODS, KEY),
-    filter: ["WarehouseStorageId", "=", id]
 });
 
 var customStore_CategoryUnit = $DATASOURCEGET(ACTION_CATEGORYUNIT, KEY);
@@ -56,45 +55,6 @@ var loadData = () => {
         onToolbarPreparing: function (e) {
             var container = e.component;
             e.toolbarOptions.items.unshift(
-                {
-                    location: "before",
-                    widget: "dxSelectBox",
-                    options: {
-                        dataSource: customStore_WareHouse,
-                        valueExpr: "id",
-                        displayExpr: "title",
-                        width: "150",
-                        searchEnabled: true,
-                        searchMode: "contains",
-                        showClearButton: false,
-                        stylingMode: "filled",
-                        value: WareHouseID,
-                        onValueChanged: function (data) {
-                            WareHouseID = data.value;
-                            localStorage.setItem('WareHouseCurrent', data.value);
-                        },
-                    },
-                },
-                {
-                    location: "before",
-                    widget: "dxSelectBox",
-                    options: {
-                        dataSource: customStore_RealEstate(WareHouseID),
-                        valueExpr: "id",
-                        displayExpr: "address",
-                        width: "150",
-                        searchEnabled: true,
-                        searchMode: "contains",
-                        showClearButton: false,
-                        stylingMode: "filled",
-                        value: WarehouseStorageID,
-                        onValueChanged: function (data) {
-                            WarehouseStorageID = data.value;
-                            localStorage.setItem('WarehouseStorageCurrent', data.value);
-                            loadData();
-                        },
-                    },
-                },
                 {
                     location: "after",
                     widget: "dxButton",
@@ -200,7 +160,7 @@ var loadData = () => {
                 dataField: "title",
                 dataType: "string",
                 alignment: "left",
-                caption: "Tên",
+                caption: "Tiêu đề",
             },
         ],
         editing: {
@@ -210,33 +170,6 @@ var loadData = () => {
             mode: "popup",
             useIcons: true,
             confirmDelete: true,
-            popup: {
-                width: "60%",
-                height: "60%",
-                showTitle: true,
-                title: "Thêm hạng mục vận hành",
-                closeOnOutsideClick: false,
-                showCloseButton: true,
-            },
-            form: {
-                labelLocation: "left",
-                itemType: "group",
-                colCount: 12,
-                showRequiredMark: true,
-                requiredMark: "(*)",
-                items: [
-                    {
-                        colSpan: 4,
-                        dataField: "title",
-                        label: { text: "Tên" },
-                        editorOptions: {
-                            stylingMode: "filled",
-                            placeholder: "Vui lòng nhập...",
-                        },
-                        validationRules: [{ type: "required" }],
-                    },
-                ],
-            },
         },
     })
 };

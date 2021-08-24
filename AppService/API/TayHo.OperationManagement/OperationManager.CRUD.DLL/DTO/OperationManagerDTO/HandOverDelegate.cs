@@ -5,18 +5,17 @@ using System.Text;
 
 namespace OperationManager.CRUD.DAL.DTO.OperationManagerDTO
 {
-    public class HandOverReceiptDetail : DOBase
+    public class HandOverDelegate : DOBase
     {
         public string Code { get; set; }
         public string Barcode { get; set; }
         public int? HandOverReceiptId { get; set; }
-        public int? FromHandOverReceiptId { get; set; }
-        public int? HandOverItemId { get; set; }
-        public int? CategoryUnitId { get; set; }
-        public decimal? Quantity { get; set; }
+        public string FullName { get; set; }
         public string Description { get; set; }
+        public string PhoneContact { get; set; }
+        public bool? IsSenderOrReceiver { get; set; }
         public int? Priority { get; set; }
-        
+        public int? NoAttachment { get; set; }
 
     }
 }

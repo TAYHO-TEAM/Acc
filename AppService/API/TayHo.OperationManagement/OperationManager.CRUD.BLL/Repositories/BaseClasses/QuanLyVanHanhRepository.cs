@@ -489,6 +489,12 @@ namespace OperationManager.CRUD.BLL.Repositories.BaseClasses
                 case nameof(_dbContext.HandOverReceiptDetail):
                     orders = _dbContext.HandOverReceiptDetail;
                     break;
+                case nameof(_dbContext.HandOverDelegate):
+                    orders = _dbContext.HandOverDelegate;
+                    break;
+                case nameof(_dbContext.ListOfLocation):
+                    orders = _dbContext.ListOfLocation;
+                    break;
                 default:
                     orders = null;
                     break;

@@ -42,6 +42,7 @@
         public const string HandOverReceipt_TABLENAME = "HandOverReceipt";
         public const string HandOverItemSpecifications_TABLENAME = "HandOverItemSpecifications";
         public const string HandOverItem_TABLENAME = "HandOverItem";
-
+        public const string HandOverDelegate_TABLENAME = "HandOverDelegate";
+        public const string ListOfLocation_TABLENAME = "ListOfLocation";
     }
 }

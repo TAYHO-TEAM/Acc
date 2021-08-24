@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace OperationManager.CRUD.DAL.DBContext
 {
-    public class QuanLyVanHanhContext: BaseDbContext
+    public class QuanLyVanHanhContext : BaseDbContext
     {
         public QuanLyVanHanhContext(DbContextOptions<QuanLyVanHanhContext> options, IMediator mediator) : base(options, mediator)
         {
@@ -48,6 +48,8 @@ namespace OperationManager.CRUD.DAL.DBContext
         public DbSet<HandOverItemSpecifications> HandOverItemSpecifications { get; set; }
         public DbSet<HandOverReceipt> HandOverReceipt { get; set; }
         public DbSet<HandOverReceiptDetail> HandOverReceiptDetail { get; set; }
+        public DbSet<HandOverDelegate> HandOverDelegate { get; set; }
+        public DbSet<ListOfLocation> ListOfLocation { get; set; }
 
         /// <summary>
         /// View Table

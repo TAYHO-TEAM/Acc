@@ -5,18 +5,18 @@ using System.Text;
 
 namespace OperationManager.CRUD.DAL.DTO.OperationManagerDTO
 {
-    public class HandOverReceiptDetail : DOBase
+    public class ListOfLocation : DOBase
     {
+        public int? ParentId { get; set; }
         public string Code { get; set; }
         public string Barcode { get; set; }
-        public int? HandOverReceiptId { get; set; }
-        public int? FromHandOverReceiptId { get; set; }
-        public int? HandOverItemId { get; set; }
-        public int? CategoryUnitId { get; set; }
-        public decimal? Quantity { get; set; }
+        public int? CodeLocation { get; set; }
+        public string Title { get; set; }
         public string Description { get; set; }
+        public string Type { get; set; }
+        public int? TypeId { get; set; }
         public int? Priority { get; set; }
-        
+        public int? Level { get; set; }
 
     }
 }

@@ -11,6 +11,7 @@ namespace OperationManager.CRUD.DAL.DTO.OperationManagerDTO
         public string Barcode { get; set; }
         public int? HandOverItemId { get; set; }
         public int? Parentid { get; set; }
+        public string Title { get; set; }
         public int? CategoryUnitId { get; set; }
         public decimal? Quantity { get; set; }
         public string Description { get; set; }
