@@ -1,5 +1,27 @@
 ﻿var id = 1;
 var $WHId = 0;
+var formData = {
+    "title": ""
+    , "description": ""
+    , "note": ""
+    , "warehouseStorageId": 0
+    , "sendAddress": ""
+    , "sendStreet": ""
+    , "sendDistrict": ""
+    , "sendWard": ""
+    , "sendCity": ""
+    , "sendCountry": ""
+    , "receiveAddress": ""
+    , "receiveStreet": ""
+    , "receiveDistrict": ""
+    , "receiveWard": ""
+    , "receiveCity": ""
+    , "receiveCountry": ""
+    , "isInOrOut": true
+    , "priority": 0
+    , "noAttachment":0
+    , "type": 0
+};
 //----------------------------- READ -------------------------------------------------------------
 
 var ACTION_HANDOVERRECEIPT = "HandOverReceipt/";
