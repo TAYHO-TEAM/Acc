@@ -1,6 +1,6 @@
 ﻿$(document).ready(function () {
-    load_form();
-    function load_form() {
+    load_form_HandOverReceiptDetail();
+    function load_form_HandOverReceiptDetail() {
         $("#form-HandOverReceiptDetail").dxForm({
             //formData: formdata,
             labelLocation: "top",
@@ -60,7 +60,7 @@
                             lookup: {
                                 dataSource: customStore_HandOverItem_All(),
                                 valueExpr: "id",
-                                displayExpr: "code",
+                                displayExpr: "title",
                             },
                             editorOptions: {
                                 stylingMode: "filled",
@@ -72,7 +72,7 @@
                                 dataSource: customStore_HandOverItem_All(),
                                 valueExpr: "id",
                                 readOnly: false,
-                                displayExpr: 'code',
+                                displayExpr: 'title',
                                 elementAttr: {
                                     id: "elementHandOverItemId",
                                 },
@@ -110,7 +110,15 @@
                                     stylingMode: "contained",
                                     cssClass: "bg-info",
                                 },
-                                onClick: function () {
+                                onClick: function (e) {
+                                    var containerE = e.component;
+                                    CALLPOPUPMULTI(
+                                        "Phiếu xuất kho",
+                                        "/VanHanh/BanGiao/_HRItemCreate",
+                                        ($(window).width() > 767 ? "50%" : "80%"),
+                                        containerE,
+                                        "popup-sub"
+                                    );
                                 },
                             }
                         },

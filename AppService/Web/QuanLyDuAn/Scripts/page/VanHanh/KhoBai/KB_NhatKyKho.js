@@ -149,7 +149,6 @@
                             visible: true,
                             onClick: function (e) {
                                 var containerE = e.component;
-                                console.log(e);
                                 //CALLPOPUPMULTI(title, url, width, container, popupId);
                                 CALLPOPUPMULTI(
                                     e.row.data.isInOrOut === 1 ? "Phiếu nhập kho" : "Phiếu xuất kho",

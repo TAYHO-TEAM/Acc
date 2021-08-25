@@ -851,14 +851,14 @@ var loadData_Form = (Id) => {
                                             template: function (container, options) {
                                                 $("<div>")
                                                     .dxTreeList({
-                                                        dataSource: customStore_HandOverItemSpecifications(options.data),
+                                                        dataSource: customStore_HandOverItemSpecifications(options.data.id),
                                                         remoteOperations: true,
                                                         height: $hieghtSub,
                                                         rootValue: 0,
                                                         parentIdExpr: "parentId",
                                                         keyExpr: "id",
                                                         showBorders: false,
-                                                        showColumnHeaders: false,
+                                                        showColumnHeaders: true,
                                                         showColumnLines: false,
                                                         hoverStateEnabled: true,
                                                         showRowLines: true,
