@@ -353,7 +353,6 @@ $(document).ready(function () {
                                     id: "elementcategoryGoodsId",
                                 },
                                 onValueChanged: function (data) {
-                                    console.log(data);
                                     $('#elementQuantity').dxNumberBox('instance').option('value', 0);
                                     customStore_CategoryGoods.load().then((rs) => {
                                         var goods = rs.filter(x => x.id === data.value).shift();
@@ -363,7 +362,6 @@ $(document).ready(function () {
                                                 .option('value', item == null ? "" : (item.title));
                                         });
                                     });
-                                    console.log($WarehouseStorageID);
                                     customStore($WarehouseStorageID).load().then((rsInventory) => {
                                         console.log($WarehouseStorageID);
                                         var item = rsInventory.filter(x => x.categoryGoodsId === data.value).shift();
