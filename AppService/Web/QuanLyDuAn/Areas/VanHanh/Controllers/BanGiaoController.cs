@@ -13,5 +13,9 @@ namespace QuanLyDuAn.Areas.VanHanh.Controllers
         {
             return View();
         }
+        public ActionResult _HOItemCreate(int id)
+        {
+            return PartialView(id);
+        }
     }
 }

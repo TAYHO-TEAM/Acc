@@ -2,12 +2,13 @@
 var $WHId = 0;
 var $issetHOR = false;
 var $keyHOR = 0;
-var $isUpdateHOR = false;
-var $isInsertHOR = false;
-var $isDeleteHOR = false;
+var $isUpdateHOR = true;
+var $isInsertHOR = true;
+var $isDeleteHOR = true;
 var $proviceId = 13;
 var $districtId = 76;
 var $wardId = 783;
+var $hieghtSub = 300;
 var formData = {
     "title": ""
     , "description": ""
@@ -27,7 +28,7 @@ var formData = {
     , "receiveCountry": ""
     , "isInOrOut": true
     , "priority": 0
-    , "noAttachment":0
+    , "noAttachment": 0
     , "type": 0
 };
 //----------------------------- READ -------------------------------------------------------------
@@ -39,38 +40,64 @@ var ACTION_HANDOVERITEMSPECIFICATIONS = "HandOverItemSpecifications/";
 var ACTION_HANDOVERDELEGATE = "HandOverDelegate";
 var ACTION_LISTOFLOCATION = "ListOfLocation/";
 var ACTION_CATEGORYGOODS = "CategoryGoods/";
+var ACTION_CATEGORYUNIT = "CategoryUnit/";
 var ACTION_FILESATTACHMENT = "FilesAttachment/";
 var KEY = "id";
 var WIDTH_CONTAINER = $("#container").width();
 
 //----------------------------------- Get data ----------------------------------------------------
 var customStore = () => new DevExpress.data.DataSource({
-    store: $DATASOURCEGET(ACTION_HANDOVERRECEIPT, KEY),
+    store: $DATASOURCE(ACTION_HANDOVERRECEIPT, KEY),
+});
+var customStore_Receiver = () => new DevExpress.data.DataSource({
+    store: $DATASOURCE(ACTION_HANDOVERRECEIPT, KEY),
+    filter: [["isInOrOut", "=", 1]]
+});
+var customStore_Insert = (InOrOut) => new DevExpress.data.DataSource({
+    store: $DATASOURCE(ACTION_HANDOVERRECEIPT, KEY),
+    filter: [["isInOrOut", "=", InOrOut], "and", ["status", "<", 200], "and", ["createBy", "=", UserCurrentInfo.accountId]]
 });
 var customStore_ById = (Id) => new DevExpress.data.DataSource({
     store: $DATASOURCE(ACTION_HANDOVERRECEIPT, KEY),
-    filter: [["id", "=", id]]
+    filter: [["id", "=", Id]]
 });
-var customStore_HandOverDelegate = (Id) => new DevExpress.data.DataSource({
-    store: $DATASOURCE(ACTION_HANDOVERRECEIPT, KEY),
-    filter: [["HandOverReceiptId", "=", id]]
+var customStore_HandOverDelegate = (Id, IsSend) => new DevExpress.data.DataSource({
+    store: $DATASOURCE(ACTION_HANDOVERDELEGATE, KEY),
+    filter: [["handOverReceiptId", "=", Id], "and", ["isSenderOrReceiver", "=", IsSend]]
 });
+var customStore_HandOverReceiptDetail = (Id) => new DevExpress.data.DataSource({
+    store: $DATASOURCE(ACTION_HANDOVERRECEIPTDETAIL, KEY),
+    filter: [["handOverReceiptId", "=", Id]]
+});
+var customStore_HandOverItem = (Id) => new DevExpress.data.DataSource({
+    store: $DATASOURCE(ACTION_HANDOVERITEM, KEY),
+    filter: [["id", "=", Id], "or", [0, "=", Id]]
+});
+var customStore_HandOverItem_All = () => new DevExpress.data.DataSource({
+    store: $DATASOURCE(ACTION_HANDOVERITEM, KEY)
+});
+var customStore_HandOverItemSpecifications = (Id) => new DevExpress.data.DataSource({
+    store: $DATASOURCE(ACTION_HANDOVERITEMSPECIFICATIONS, KEY),
+    filter: [["handOverItemId", "=", Id]]
+});
+
+
 var customStore_ListOfLocation_ProvinceAll = () => new DevExpress.data.DataSource({
     store: $DATASOURCEGET(ACTION_LISTOFLOCATION, KEY),
     filter: [["type", "=", "Province"]]
 });
 var customStore_ListOfLocation_ByParentId = (Id) => new DevExpress.data.DataSource({
     store: $DATASOURCEGET(ACTION_LISTOFLOCATION, KEY),
-    filter: [["parentId", "=", id === 0 ? 1 : id ]]
+    filter: [["parentId", "=", Id]]
 });
 var customStore_CategoryUnit = $DATASOURCEGET(ACTION_CATEGORYUNIT, KEY);
-var customStore_Attachment = (id, owner) => new DevExpress.data.DataSource({
+var customStore_Attachment = (Id, owner) => new DevExpress.data.DataSource({
     store: $DATASOURCE(ACTION_FILESATTACHMENT, KEY),
-    filter: [["ownerById", "=", id], "and", ["ownerByTable", "=", owner]]
+    filter: [["ownerById", "=", Id], "and", ["ownerByTable", "=", owner]]
 });
-var customStore_Attachment_All = (owner) => new DevExpress.data.DataSource({
+var customStore_Attachment_All = (Owner) => new DevExpress.data.DataSource({
     store: $DATASOURCE(ACTION_FILESATTACHMENT, KEY),
-    filter: ["ownerByTable", "=", owner]
+    filter: ["ownerByTable", "=", Owner]
 });
 //----------------------------------- Function ------------------------------------------------------
 $(function () {
@@ -114,6 +141,23 @@ var loadData = () => {
         },
         onContentReady: (e) => {
             var container = e.component;
+            var container = e.component;
+            $("#action-add").dxSpeedDialAction({
+                index: 1, icon: "fas fa-file-import",
+                label: "Tiếp nhận",
+                visible: PermitInAction["insert"],
+                onClick: () => {
+                    createHOR(true);
+                }
+            }).dxSpeedDialAction("instance");
+            $("#action-update").dxSpeedDialAction({
+                index: 2, icon: "fas fa-file-export",
+                label: "Bàn giao",
+                visible: PermitInAction["update"],
+                onClick: () => {
+                    createHOR(false);
+                }
+            }).dxSpeedDialAction("instance");
             DevExpress.config({
                 floatingActionButtonConfig: {
                     icon: "rowfield",
@@ -137,20 +181,7 @@ var loadData = () => {
 
             if (selectedRowData != null && selectedRowKey != null) {
                 var data = e.component.getRowIndexByKey(selectedRowData.paId);
-                $("#action-update").dxSpeedDialAction({
-                    index: 2, icon: "fas fa-file-import",
-                    label: "Nhập kho",
-                    visible: PermitInAction["update"],
-                    onClick: () => {
-                        var containerE = e.component;
-                        CALLPOPUP(
-                            "Phiếu nhập kho",
-                            "/VanHanh/KhoBai/_XuatNhapCreate?id=" + selectedRowKey + "&isIn=true",
-                            ($(window).width() > 767 ? "50%" : "80%"),
-                            containerE
-                        );
-                    }
-                }).dxSpeedDialAction("instance");
+
                 $("#action-delete").dxSpeedDialAction({
                     index: 3,
                     icon: "fas fa-file-export",
@@ -182,7 +213,7 @@ var loadData = () => {
                     }
                 }).dxSpeedDialAction("instance");
             }
-            loadData_Detail($id);
+            loadData_Form(selectedRowKey);
         },
         selection: {
             mode: "single"
@@ -195,7 +226,7 @@ var loadData = () => {
                 width: "250",
                 dataType: "string",
                 alignment: "center",
-                readOnly: true,
+                readOnly: !$isUpdateHOR,
                 allowEditing: false,
             },// code
             {
@@ -214,34 +245,70 @@ var loadData = () => {
             confirmDelete: true,
         },
     }).dxDataGrid('instance');
+    var elmnt = document.getElementById("container");
+    document.getElementById("form-container").style.height = elmnt.offsetHeight + 'px';
 };
-var loadData_Form = (id) => {
-    customStore_ById(id).load().done((rs) => {
+var loadData_Form = (Id) => {
+    var elmnt = document.getElementById("container");
+    var $heightContaint = elmnt.offsetHeight - 80;
+    customStore_ById(Id).store().load().done((rs) => {
         $issetHOR = (rs.length > 0);
         if ($issetHOR) {
             $keyHOR = rs[0].id;
         }
         $("#form-HandOverReceiptFull").dxForm({
             formData: rs[0],
+            colCount: 12,
             labelLocation: "top",
-            height: heightScreen,
+            "scrolling": {
+                "columnRenderingMode": "standard",
+                "mode": "standard",
+                "rowRenderingMode": "virtual",
+                "useNative": true
+            },
+            height: $heightContaint,
             items: [
                 {
                     itemType: "group",
+                    colSpan: 12,
+                    colCount: 12,
+                    cssClass: "addressA-group",
+                    caption: "Tiếu đề",
+                    items: [
+                        {
+                            colSpan: 12,
+                            dataField: "title",
+                            label: { text: "Nội dung tiêu đề" },
+                            editorType: "dxTextBox",
+                            editorOptions: {
+                                stylingMode: "filled",
+                                //allowEditing: false,
+                                readOnly: !$isUpdateHOR,
+                                elementAttr: {
+                                    id: "elementTitleId",
+                                },
+                            },
+                        },
+                    ]
+                },
+                {
+                    itemType: "group",
+                    colSpan: 12,
                     colCount: 12,
                     cssClass: "delegateA-group",
-                    caption: "Bên Giao",
+                    caption: "Đại diện bên Giao",
                     items: [
                         {
                             name: "order",
-                            visible: isOrderShown,
+                            visible: true,
+                            colSpan: 12,
                             template: function (data, $itemElement) {
                                 $("<div id='delegateA'>")
                                     .appendTo($itemElement)
                                     .dxDataGrid({
-                                        dataSource: customStore(),
+                                        dataSource: customStore_HandOverDelegate($keyHOR, true),
                                         remoteOperations: true,
-                                        height: heightScreen,
+                                        height: $hieghtSub,
                                         repaintChangesOnly: true,
                                         remoteOperations: true,
                                         scrolling: { mode: "standard" },
@@ -257,6 +324,448 @@ var loadData_Form = (id) => {
                                         onToolbarPreparing: function (e) {
                                             var container = e.component;
                                             e.toolbarOptions.items.unshift(
+                                                {
+                                                    location: "after",
+                                                    widget: "dxButton",
+                                                    options: {
+                                                        icon: "refresh",
+                                                        type: "default",
+                                                        onClick: () => container.refresh()
+                                                    }
+                                                })
+                                        },
+                                        onInitNewRow: (e) => {
+                                            e.data.isActive = true;
+                                            e.data.isVisible = true;
+                                            e.data.HandOverReceiptId = Id;
+                                            e.data.isSenderOrReceiver = true;
+                                        },
+                                        onContentReady: (e) => {
+                                            var container = e.component;
+                                        },
+                                        onSelectionChanged: (e) => {
+                                            var $id = e.selectedRowKeys[0];
+                                            var selectedRowData = e.selectedRowsData[0];
+                                            var selectedRowKey = e.selectedRowKeys[0];
+                                        },
+                                        selection: {
+                                            mode: "single"
+                                        },
+                                        columns: [
+                                            {
+                                                dataField: "fullName",
+                                                dataType: "string",
+                                                caption: "Họ tên",
+                                                alignment: "center",
+                                                readOnly: false,
+                                                allowEditing: true,
+                                            },
+                                            {
+                                                dataField: "phoneContact",
+                                                dataType: "string",
+                                                caption: "Số Điện Thoại",
+                                                alignment: "center",
+                                                readOnly: false,
+                                                allowEditing: true,
+                                            },
+                                            {
+                                                dataField: "description",
+                                                dataType: "string",
+                                                caption: "Chức vụ",
+                                                alignment: "center",
+                                                readOnly: false,
+                                                allowEditing: true,
+                                            },
+
+                                        ],
+                                        editing: {
+                                            allowAdding: $isInsertHOR,
+                                            allowUpdating: $isUpdateHOR,
+                                            allowDeleting: $isDeleteHOR,
+                                            mode: "batch",
+                                            useIcons: true,
+                                            confirmDelete: true,
+                                        },
+                                    });
+                            }
+                        }
+                    ]
+                },
+                {
+                    itemType: "group",
+                    colSpan: 12,
+                    colCount: 12,
+                    cssClass: "addressA-group",
+                    caption: "Thông tin bên giao",
+                    items: [
+                        {
+                            colSpan: 12,
+                            dataField: "sendAddress",
+                            label: { text: "Địa chỉ" },
+                            editorType: "dxTextBox",
+                            editorOptions: {
+                                stylingMode: "filled",
+                                //allowEditing: false,
+                                readOnly: !$isUpdateHOR,
+                                elementAttr: {
+                                    id: "elementSendAddressId",
+                                },
+                            },
+                        },
+                        {
+                            colSpan: 4,
+                            dataField: "sendCityId",
+                            label: { text: "Tỉnh/Thành" },
+                            editorType: "dxSelectBox",
+                            editorOptions: {
+                                searchEnabled: true,
+                                searchMode: "contains",
+                                searchExpr: ['title'],
+                                showClearButton: true,
+                                placeholder: "Vui lòng chọn...",
+                                dataSource: customStore_ListOfLocation_ProvinceAll(),
+                                stylingMode: "filled",
+                                //allowEditing: false,
+                                valueExpr: "id",
+                                readOnly: !$isUpdateHOR,
+                                displayExpr: "title",
+                                onValueChanged: function (e) {
+                                    var selTarget = $('#elementSendDistrictId').dxSelectBox('instance');
+                                    selTarget.option('value', null);
+                                    console.log(e);
+                                    if (e.value > 0) {
+                                        console.log(e.value);
+                                        selTarget.option("dataSource", customStore_ListOfLocation_ByParentId(e.value));
+                                    }
+                                    else {
+                                        selTarget.option("dataSource", customStore_ListOfLocation_ByParentId($proviceId));
+                                    }
+                                },
+                                elementAttr: {
+                                    id: "elementSendCityId",
+                                },
+                            },
+                        },
+                        {
+                            colSpan: 4,
+                            dataField: "sendDistrictId",
+                            label: { text: "Quận/huyện" },
+                            editorType: "dxSelectBox",
+                            editorOptions: {
+                                searchEnabled: true,
+                                searchMode: "contains",
+                                searchExpr: ['title'],
+                                showClearButton: true,
+                                placeholder: "Vui lòng chọn...",
+                                dataSource: customStore_ListOfLocation_ByParentId(0),
+                                stylingMode: "filled",
+                                //allowEditing: false,
+                                valueExpr: "id",
+                                readOnly: !$isUpdateHOR,
+                                displayExpr: "title",
+                                onValueChanged: function (e) {
+                                    console.log(e);
+                                    var selTarget = $('#elementSendWardId').dxSelectBox('instance');
+                                    selTarget.option('value', null);
+                                    if (e.value > 0) {
+                                        console.log(e.value);
+                                        selTarget.option("dataSource", customStore_ListOfLocation_ByParentId(e.value));
+                                    }
+                                    else {
+                                        selTarget.option("dataSource", customStore_ListOfLocation_ByParentId(0));
+                                    }
+                                },
+                                elementAttr: {
+                                    id: "elementSendDistrictId",
+                                },
+                            },
+                           
+                        },
+                        {
+                            colSpan: 4,
+                            dataField: "sendWardId",
+                            label: { text: "Phố/Phường" },
+                            editorType: "dxSelectBox",
+                            editorOptions: {
+                                searchEnabled: true,
+                                searchMode: "contains",
+                                searchExpr: ['title'],
+                                showClearButton: true,
+                                placeholder: "Vui lòng chọn...",
+                                dataSource: customStore_ListOfLocation_ByParentId(0),
+                                stylingMode: "filled",
+                                //allowEditing: false,
+                                valueExpr: "id",
+                                readOnly: !$isUpdateHOR,
+                                displayExpr: "title",
+                                elementAttr: {
+                                    id: "elementSendWardId",
+                                },
+                            },
+                        },
+                    ]
+                },
+                {
+                    itemType: "group",
+                    colSpan: 12,
+                    colCount: 12,
+                    cssClass: "delegateB-group",
+                    caption: "Đại diện bên Nhận",
+                    items: [
+                        {
+                            name: "order",
+                            visible: true,
+                            colSpan: 12,
+                            template: function (data, $itemElement) {
+                                $("<div id='delegateB'>")
+                                    .appendTo($itemElement)
+                                    .dxDataGrid({
+                                        dataSource: customStore_HandOverDelegate($keyHOR, false),
+                                        remoteOperations: true,
+                                        height: $hieghtSub,
+                                        repaintChangesOnly: true,
+                                        remoteOperations: true,
+                                        scrolling: { mode: "standard" },
+                                        showBorders: false,
+                                        showColumnHeaders: true,
+                                        showColumnLines: false,
+                                        hoverStateEnabled: true,
+                                        showRowLines: true,
+                                        columnAutoWidth: true,
+                                        wordWrapEnabled: true,
+                                        rowAlternationEnabled: true,
+                                        filterRow: { visible: true },
+                                        onToolbarPreparing: function (e) {
+                                            var container = e.component;
+                                            e.toolbarOptions.items.unshift(
+                                                {
+                                                    location: "after",
+                                                    widget: "dxButton",
+                                                    options: {
+                                                        icon: "refresh",
+                                                        type: "default",
+                                                        onClick: () => container.refresh()
+                                                    }
+                                                })
+                                        },
+                                        onInitNewRow: (e) => {
+                                            e.data.isActive = true;
+                                            e.data.isVisible = true;
+                                            e.data.HandOverReceiptId = Id;
+                                            e.data.isSenderOrReceiver = false;
+                                        },
+                                        onContentReady: (e) => {
+                                            var container = e.component;
+                                        },
+                                        onSelectionChanged: (e) => {
+                                            var $id = e.selectedRowKeys[0];
+                                            var selectedRowData = e.selectedRowsData[0];
+                                            var selectedRowKey = e.selectedRowKeys[0];
+                                        },
+                                        selection: {
+                                            mode: "single"
+                                        },
+                                        columns: [
+                                            {
+                                                dataField: "fullName",
+                                                dataType: "string",
+                                                caption: "Họ tên",
+                                                alignment: "center",
+                                                readOnly: false,
+                                                allowEditing: true,
+                                            },
+                                            {
+                                                dataField: "phoneContact",
+                                                dataType: "string",
+                                                caption: "Số Điện Thoại",
+                                                alignment: "center",
+                                                readOnly: false,
+                                                allowEditing: true,
+                                            },
+                                            {
+                                                dataField: "description",
+                                                dataType: "string",
+                                                caption: "Chức vụ",
+                                                alignment: "center",
+                                                readOnly: false,
+                                                allowEditing: true,
+                                            },
+
+                                        ],
+                                        editing: {
+                                            allowAdding: $isInsertHOR,
+                                            allowUpdating: $isUpdateHOR,
+                                            allowDeleting: $isDeleteHOR,
+                                            mode: "batch",
+                                            useIcons: true,
+                                            confirmDelete: true,
+                                        },
+                                    });
+                            }
+                        }
+                    ]
+                },
+                {
+                    itemType: "group",
+                    colSpan: 12,
+                    colCount: 12,
+                    cssClass: "addressb-group",
+                    caption: "Thông tin bên nhận",
+                    items: [
+                        {
+                            colSpan: 12,
+                            dataField: "receiveAddress",
+                            label: { text: "Địa chỉ" },
+                            editorType: "dxTextBox",
+                            editorOptions: {
+                                stylingMode: "filled",
+                                //allowEditing: false,
+                                readOnly: !$isUpdateHOR,
+                                elementAttr: {
+                                    id: "elementRceiveAddressId",
+                                },
+                            },
+                        },
+                        {
+                            colSpan: 4,
+                            dataField: "receiveCityId",
+                            label: { text: "Tỉnh/Thành" },
+                            editorType: "dxSelectBox",
+                            editorOptions: {
+                                searchEnabled: true,
+                                searchMode: "contains",
+                                searchExpr: ['title'],
+                                showClearButton: true,
+                                placeholder: "Vui lòng chọn...",
+                                dataSource: customStore_ListOfLocation_ProvinceAll(),
+                                stylingMode: "filled",
+                                //allowEditing: false,
+                                valueExpr: "id",
+                                readOnly: !$isUpdateHOR,
+                                displayExpr: "title",
+                                onValueChanged: function (e) {
+                                    var selTarget = $('#elementReceiveDistrictId').dxSelectBox('instance');
+                                    selTarget.option('value', null);
+                                    if (e.value > 0) {
+                                        selTarget.option("dataSource", customStore_ListOfLocation_ByParentId(e.value));
+                                    }
+                                    else {
+                                        selTarget.option("dataSource", customStore_ListOfLocation_ByParentId(0));
+                                    }
+                                },
+                                elementAttr: {
+                                    id: "elementReceiveCityId",
+                                },
+                            },
+                        },
+                        {
+                            colSpan: 4,
+                            dataField: "receiveDistrictId",
+                            label: { text: "Quận/huyện" },
+                            editorType: "dxSelectBox",
+                            editorOptions: {
+                                searchEnabled: true,
+                                searchMode: "contains",
+                                searchExpr: ['title'],
+                                showClearButton: true,
+                                placeholder: "Vui lòng chọn...",
+                                dataSource: customStore_ListOfLocation_ByParentId($proviceId),
+                                stylingMode: "filled",
+                                //allowEditing: false,
+                                valueExpr: "id",
+                                readOnly: !$isUpdateHOR,
+                                displayExpr: "title",
+                                onValueChanged: function (e) {
+                                    var selTarget = $('#elementReceiveWardId').dxSelectBox('instance');
+                                    selTarget.option('value', null);
+                                    if (e.value > 0) {
+                                        selTarget.option("dataSource", customStore_ListOfLocation_ByParentId(e.value));
+                                    }
+                                    else {
+                                        selTarget.option("dataSource", customStore_ListOfLocation_ByParentId(0));
+                                    }
+                                },
+                                elementAttr: {
+                                    id: "elementReceiveDistrictId",
+                                },
+                            },
+                            
+                        },
+                        {
+                            colSpan: 4,
+                            dataField: "receiveWardId",
+                            label: { text: "Phố/Phường" },
+                            editorType: "dxSelectBox",
+                            editorOptions: {
+                                searchEnabled: true,
+                                searchMode: "contains",
+                                searchExpr: ['title'],
+                                showClearButton: true,
+                                placeholder: "Vui lòng chọn...",
+                                dataSource: customStore_ListOfLocation_ByParentId(0),
+                                stylingMode: "filled",
+                                //allowEditing: false,
+                                valueExpr: "id",
+                                readOnly: !$isUpdateHOR,
+                                displayExpr: "title",
+                                elementAttr: {
+                                    id: "elementReceiveWardId",
+                                },
+                            },
+                        },
+                    ]
+                },
+                {
+                    itemType: "group",
+                    colSpan: 12,
+                    colCount: 12,
+                    cssClass: "Item-group",
+                    caption: "Nội dung bàn giao",
+                    items: [
+                        {
+                            name: "order",
+                            visible: true,
+                            colSpan: 12,
+                            template: function (data, $itemElement) {
+                                $("<div id='HandOverReceiptDetail'>")
+                                    .appendTo($itemElement)
+                                    .dxDataGrid({
+                                        dataSource: customStore_HandOverReceiptDetail($keyHOR),
+                                        remoteOperations: true,
+                                        height: $hieghtSub,
+                                        repaintChangesOnly: true,
+                                        remoteOperations: true,
+                                        scrolling: { mode: "standard" },
+                                        showBorders: false,
+                                        showColumnHeaders: true,
+                                        showColumnLines: false,
+                                        hoverStateEnabled: true,
+                                        showRowLines: true,
+                                        columnAutoWidth: true,
+                                        wordWrapEnabled: true,
+                                        rowAlternationEnabled: true,
+                                        filterRow: { visible: true },
+                                        onToolbarPreparing: function (e) {
+                                            var container = e.component;
+                                            e.toolbarOptions.items.unshift(
+                                                {
+                                                    location: "after",
+                                                    widget: "dxButton",
+                                                    options: {
+                                                        text: "Thêm mới",
+                                                        visible: PermitInAction.insert,
+                                                        stylingMode: "filled",
+                                                        //icon: "add",
+                                                        onClick: function () {
+                                                            CALLPOPUP(
+                                                                "THÊM MỚI HẠNG MỤC BÀN GIAO",
+                                                                "/VanHanh/BanGiao/_HOItemCreate?id=" + $keyHOR,
+                                                                ($(window).width() > 767 ? "50%" : "80%"),
+                                                                container
+                                                            );
+                                                        }
+                                                    }
+                                                },
                                                 {
                                                     location: "after",
                                                     widget: "dxButton",
@@ -285,19 +794,33 @@ var loadData_Form = (id) => {
                                         },
                                         columns: [
                                             {
-                                                dataField: "fullName",
+                                                dataField: "fromHandOverReceiptId",
                                                 dataType: "string",
                                                 alignment: "left",
-                                                caption: "Họ tên",
+                                                caption: "Từ đơn tiếp nhận",
+                                                readOnly: false,
+                                                allowEditing: true,
+                                            },
+                                            {
+                                                dataField: "handOverItemId",
+                                                dataType: "string",
+                                                caption: "tên",
                                                 alignment: "center",
                                                 readOnly: false,
                                                 allowEditing: true,
                                             },
                                             {
-                                                dataField: "phoneContact",
+                                                dataField: "quantity",
                                                 dataType: "string",
-                                                alignment: "left",
-                                                caption: "Số Điện Thoại",
+                                                caption: "Số lượng",
+                                                alignment: "center",
+                                                readOnly: false,
+                                                allowEditing: true,
+                                            },
+                                            {
+                                                dataField: "categoryUnitId",
+                                                dataType: "string",
+                                                caption: "Đơn vị",
                                                 alignment: "center",
                                                 readOnly: false,
                                                 allowEditing: true,
@@ -306,12 +829,11 @@ var loadData_Form = (id) => {
                                                 dataField: "description",
                                                 dataType: "string",
                                                 alignment: "left",
-                                                caption: "Chức vụ",
+                                                caption: "Mô tả",
                                                 alignment: "center",
                                                 readOnly: false,
                                                 allowEditing: true,
                                             },
-                                          
                                         ],
                                         editing: {
                                             allowAdding: $isInsertHOR,
@@ -321,6 +843,105 @@ var loadData_Form = (id) => {
                                             useIcons: true,
                                             confirmDelete: true,
                                         },
+                                        masterDetail: {
+                                            autoExpandAll: false,
+                                            component: null,
+                                            enabled: true,
+                                            render: null,
+                                            template: function (container, options) {
+                                                $("<div>")
+                                                    .dxTreeList({
+                                                        dataSource: customStore_HandOverItemSpecifications(options.data),
+                                                        remoteOperations: true,
+                                                        height: $hieghtSub,
+                                                        rootValue: 0,
+                                                        parentIdExpr: "parentId",
+                                                        keyExpr: "id",
+                                                        showBorders: false,
+                                                        showColumnHeaders: false,
+                                                        showColumnLines: false,
+                                                        hoverStateEnabled: true,
+                                                        showRowLines: true,
+                                                        columnAutoWidth: true,
+                                                        wordWrapEnabled: true,
+                                                        rowAlternationEnabled: true,
+                                                        autoExpandAll: false,
+                                                        onToolbarPreparing: function (e) {
+                                                            var container = e.component;
+                                                            e.toolbarOptions.items.unshift(
+                                                                {
+                                                                    location: "after",
+                                                                    widget: "dxButton",
+                                                                    options: {
+                                                                        icon: "refresh",
+                                                                        type: "default",
+                                                                        onClick: () => container.refresh()
+                                                                    }
+                                                                })
+                                                        },
+                                                        onInitNewRow: (e) => {
+                                                            e.data.isActive = true;
+                                                            e.data.isVisible = true;
+                                                            e.data.isSenderOrReceiver = true;
+                                                        },
+                                                        onContentReady: (e) => {
+                                                            var container = e.component;
+                                                        },
+                                                        onSelectionChanged: (e) => {
+                                                            var $id = e.selectedRowKeys[0];
+                                                            var selectedRowData = e.selectedRowsData[0];
+                                                            var selectedRowKey = e.selectedRowKeys[0];
+                                                        },
+                                                        selection: {
+                                                            mode: "single"
+                                                        },
+                                                        columns: [
+                                                            {
+                                                                dataField: "title",
+                                                                dataType: "string",
+                                                                alignment: "left",
+                                                                caption: "Tên",
+                                                                readOnly: false,
+                                                                allowEditing: true,
+                                                            },
+                                                            {
+                                                                dataField: "description",
+                                                                dataType: "string",
+                                                                caption: "Mô tả",
+                                                                alignment: "center",
+                                                                readOnly: false,
+                                                                allowEditing: true,
+                                                            },
+                                                            {
+                                                                dataField: "quantity",
+                                                                dataType: "string",
+                                                                caption: "Số lượng",
+                                                                alignment: "center",
+                                                                readOnly: false,
+                                                                allowEditing: true,
+                                                            },
+                                                            {
+                                                                dataField: "categoryUnitId",
+                                                                dataType: "string",
+                                                                caption: "Đơn vị",
+                                                                alignment: "center",
+                                                                readOnly: false,
+                                                                allowEditing: true,
+                                                            },
+                                                        ],
+                                                        editing: {
+                                                            allowAdding: false,
+                                                            allowUpdating: false,
+                                                            allowDeleting: false,
+                                                            mode: "batch",
+                                                            useIcons: true,
+                                                            confirmDelete: true,
+                                                        },
+                                                    })
+                                                    .attr("style", "margin:auto; width:90%")
+                                                    .appendTo(container);;
+                                            }
+                                        },
                                     });
                             }
                         }
@@ -328,75 +949,23 @@ var loadData_Form = (id) => {
                 },
                 {
                     itemType: "group",
+                    colSpan: 12,
                     colCount: 12,
-                    cssClass: "addressA-group",
-                    caption: "Thông tin bên giao",
+                    cssClass: "description-group",
+                    caption: "Phụ lục",
                     items: [
                         {
                             colSpan: 12,
-                            dataField: "sendAddress",
-                            label: { text: "Địa chỉ" },
-                            editorType: "dxTextBox",
+                            dataField: "description",
+                            label: { text: "Nội dung phụ lục" },
+                            editorType: "dxTextArea",
                             editorOptions: {
                                 stylingMode: "filled",
+                                height: 90,
                                 //allowEditing: false,
-                                readOnly: true,
+                                readOnly: !$isUpdateHOR,
                                 elementAttr: {
-                                    id: "elementSendAddressId",
-                                },
-                            },
-                        },
-                        {
-                            colSpan: 3,
-                            dataField: "sendCity",
-                            label: { text: "Tỉnh/Thành" },
-                            editorType: "dxSelectBox",
-                            editorOptions: {
-                                dataSource: customStore_ListOfLocation_ProvinceAll(),
-                                stylingMode: "filled",
-                                //allowEditing: false,
-                                valueExpr: "id",
-                                readOnly: true,
-                                displayExpr: "code",
-                                value: id,
-                                elementAttr: {
-                                    id: "elementSendCityId",
-                                },
-                            },
-                        },
-                        {
-                            colSpan: 3,
-                            dataField: "sendDistrict",
-                            label: { text: "Quận/huyện" },
-                            editorType: "dxSelectBox",
-                            editorOptions: {
-                                dataSource: customStore_ListOfLocation_ByParentId($proviceId),
-                                stylingMode: "filled",
-                                //allowEditing: false,
-                                valueExpr: "id",
-                                readOnly: true,
-                                displayExpr: "code",
-                                value: id,
-                                elementAttr: {
-                                    id: "elementSendDistrictId",
-                                },
-                            },
-                        },
-                        {
-                            colSpan: 3,
-                            dataField: "sendWard",
-                            label: { text: "Phố/Phường" },
-                            editorType: "dxSelectBox",
-                            editorOptions: {
-                                dataSource: customStore_ListOfLocation_ByParentId($districtId),
-                                stylingMode: "filled",
-                                //allowEditing: false,
-                                valueExpr: "id",
-                                readOnly: true,
-                                displayExpr: "code",
-                                value: id,
-                                elementAttr: {
-                                    id: "elementSendWardId",
+                                    id: "elementDescriptionId",
                                 },
                             },
                         },
@@ -404,111 +973,56 @@ var loadData_Form = (id) => {
                 },
                 {
                     itemType: "group",
+                    colSpan: 12,
                     colCount: 12,
-                    cssClass: "delegateB-group",
-                    caption: "Bên Nhận",
+                    cssClass: "note-group",
+                    caption: "Nghi chú",
                     items: [
                         {
-                            name: "order",
-                            visible: isOrderShown,
-                            template: function (data, $itemElement) {
-                                $("<div id='delegateB'>")
-                                    .appendTo($itemElement)
-                                    .dxDataGrid({
-                                        dataSource: customStore(),
-                                        remoteOperations: true,
-                                        height: heightScreen,
-                                        repaintChangesOnly: true,
-                                        remoteOperations: true,
-                                        scrolling: { mode: "standard" },
-                                        showBorders: false,
-                                        showColumnHeaders: true,
-                                        showColumnLines: false,
-                                        hoverStateEnabled: true,
-                                        showRowLines: true,
-                                        columnAutoWidth: true,
-                                        wordWrapEnabled: true,
-                                        rowAlternationEnabled: true,
-                                        filterRow: { visible: true },
-                                        onToolbarPreparing: function (e) {
-                                            var container = e.component;
-                                            e.toolbarOptions.items.unshift(
-                                                {
-                                                    location: "after",
-                                                    widget: "dxButton",
-                                                    options: {
-                                                        icon: "refresh",
-                                                        type: "default",
-                                                        onClick: () => container.refresh()
-                                                    }
-                                                })
-                                        },
-                                        onInitNewRow: (e) => {
-                                            e.data.isActive = true;
-                                            e.data.isVisible = true;
-                                            e.data.isSenderOrReceiver = false;
-                                        },
-                                        onContentReady: (e) => {
-                                            var container = e.component;
-                                        },
-                                        onSelectionChanged: (e) => {
-                                            var $id = e.selectedRowKeys[0];
-                                            var selectedRowData = e.selectedRowsData[0];
-                                            var selectedRowKey = e.selectedRowKeys[0];
-                                        },
-                                        selection: {
-                                            mode: "single"
-                                        },
-                                        columns: [
-                                            {
-                                                dataField: "fullName",
-                                                dataType: "string",
-                                                alignment: "left",
-                                                caption: "Họ tên",
-                                                alignment: "center",
-                                                readOnly: false,
-                                                allowEditing: true,
-                                            },
-                                            {
-                                                dataField: "phoneContact",
-                                                dataType: "string",
-                                                alignment: "left",
-                                                caption: "Số Điện Thoại",
-                                                alignment: "center",
-                                                readOnly: false,
-                                                allowEditing: true,
-                                            },
-                                            {
-                                                dataField: "description",
-                                                dataType: "string",
-                                                alignment: "left",
-                                                caption: "Chức vụ",
-                                                alignment: "center",
-                                                readOnly: false,
-                                                allowEditing: true,
-                                            },
-
-                                        ],
-                                        editing: {
-                                            allowAdding: $isInsertHOR,
-                                            allowUpdating: $isUpdateHOR,
-                                            allowDeleting: $isDeleteHOR,
-                                            mode: "batch",
-                                            useIcons: true,
-                                            confirmDelete: true,
-                                        },
-                                    });
-                            }
-                        }
+                            colSpan: 12,
+                            dataField: "note",
+                            label: { text: "Nội dung phụ lục" },
+                            editorType: "dxTextArea",
+                            editorOptions: {
+                                stylingMode: "filled",
+                                height: 90,
+                                //allowEditing: false,
+                                readOnly: !$isUpdateHOR,
+                                elementAttr: {
+                                    id: "elementNoteId",
+                                },
+                            },
+                        },
                     ]
                 },
-                {
-                    itemType: "group",
-                    colCount: 12,
-                    cssClass: "addressb-group",
-                    caption: "Thông tin bên nhận",
-                },
             ]
-        });
+        }).dxForm('instance');
+    });
+};
+function createHOR(IsInOrOut) {
+    loadingPanel.show();
+    customStore_Insert(IsInOrOut).store().load().done((rs) => {
+        console.log(rs.length);
+        if (rs.length < 1) {
+            loadingPanel.hide();
+            var obj = {};
+            obj["isInOrOut"] = IsInOrOut;
+            obj["status"] = 10;
+            obj["isDelete"] = false;
+            obj["isActive"] = true;
+            obj["isVisible"] = true;
+            obj["title"] = 'Phiếu giao nhận';
+            customStore_Insert().store().insert(obj).done((rsSub) => {
+                loadingPanel.hide();
+                $keyHOR = rsSub.result.id;
+                loadData_Form($keyHOR);
+            });
+        }
+        else {
+            console.log(rs);
+            loadingPanel.hide();
+            $keyHOR = rs[0].id;
+            loadData_Form($keyHOR);
+        }
     });
 };

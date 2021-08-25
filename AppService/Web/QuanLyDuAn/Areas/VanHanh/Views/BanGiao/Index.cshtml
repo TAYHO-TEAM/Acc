@@ -9,12 +9,28 @@
         <div id="container" class="elevation-2"></div>
     </div>
     <div class="col-md-8 col-sm-12">
+        <div class="card card-info" id="form-container">
+            <div class="card-header ui-sortable-handle" style="cursor: move;">
+                <h3 class="card-title">Chi tiết giao nhận</h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" id="new-Complaint" onclick="newComplaint()">
+                        <i class="fas fa-file"></i>
+                    </button>
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <div id="container" class="elevation-2 card-body">
+                <form id="form-HandOverReceiptFull" action="#" method="POST" enctype="multipart/form-data" style="overflow: auto;">
+                </form>
+            </div>
+        </div>
         @*<div id="container-detail" class="elevation-2"></div>*@
-        <form id="form-HandOverReceiptFull" action="#" method="POST" enctype="multipart/form-data">
-        </form>
+       
     </div>
 </div>
 @section script{
     <script src="~/Scripts/page/vanhanh.js?v=@versionJS"></script>
-    <script src="~/Scripts/page/VanHanh/KhoBai/BG_Index.js?v=@versionJS"></script>
+    <script src="~/Scripts/page/VanHanh/BanGiao/BG_Index.js?v=@versionJS"></script>
 }

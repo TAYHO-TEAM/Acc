@@ -62,7 +62,7 @@ var customStore_Goods = $DATASOURCEGET(ACTION_WAREHOUSEALLGOODS, KEY);
 var customStore_WarehouseStorageList = $DATASOURCEGET(ACTION_WAREHOUSESTORAGE, KEY);
 var customStore_WarehouseReleased = (InOrOut) => new DevExpress.data.DataSource({
     store: $DATASOURCE(ACTION_WAREHOUSERELEASED, KEY),
-    filter: [["IsInOrOut", "=", InOrOut], "and", ["status", "<", 200], "and", ["CreateBy", "=", UserCurrentInfo.accountId]]
+    filter: [["isInOrOut", "=", InOrOut], "and", ["status", "<", 200], "and", ["createBy", "=", UserCurrentInfo.accountId]]
 });
 var customStore_WarehouseReleased_Id = (Id) => new DevExpress.data.DataSource({
     store: $DATASOURCE(ACTION_WAREHOUSERELEASED, KEY),

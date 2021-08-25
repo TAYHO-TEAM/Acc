@@ -2344,6 +2344,7 @@
     <Content Include="Scripts\page\ngansach.js" />
     <Content Include="Scripts\page\main.js" />
     <Content Include="Scripts\page\account.js" />
+    <Content Include="Scripts\page\VanHanh\BanGiao\BG_HOItemCreate.js" />
     <Content Include="Scripts\page\VanHanh\BanGiao\BG_Index.js" />
     <Content Include="Scripts\page\VanHanh\BaoCao\BC_Index.js" />
     <Content Include="Scripts\page\VanHanh\KhieuNai\KN_Index.js" />
@@ -2580,6 +2581,7 @@
     <Content Include="Content\Template\OperationManagement\Report00008_ImExport.xlsx" />
     <Content Include="Areas\VanHanh\Views\KhoBai\_XuatNhapDetail.cshtml" />
     <Content Include="Areas\VanHanh\Views\BanGiao\Index.cshtml" />
+    <Content Include="Areas\VanHanh\Views\BanGiao\_HOItemCreate.cshtml" />
     <None Include="packages.config" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
