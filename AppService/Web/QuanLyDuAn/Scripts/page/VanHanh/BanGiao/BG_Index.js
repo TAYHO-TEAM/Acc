@@ -759,7 +759,7 @@ var loadData_Form = (Id) => {
                                                         onClick: function () {
                                                             CALLPOPUP(
                                                                 "THÊM MỚI HẠNG MỤC BÀN GIAO",
-                                                                "/VanHanh/BanGiao/_HOItemCreate?id=" + $keyHOR,
+                                                                "/VanHanh/BanGiao/_HRDCreate?id=" + $keyHOR,
                                                                 ($(window).width() > 767 ? "50%" : "80%"),
                                                                 container
                                                             );

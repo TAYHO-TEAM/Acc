@@ -1,8 +1,7 @@
-﻿
-$(document).ready(function () {
+﻿$(document).ready(function () {
     load_form();
     function load_form() {
-        $("#form-HandOverItem").dxForm({
+        $("#form-HandOverReceiptDetail").dxForm({
             //formData: formdata,
             labelLocation: "top",
             items: [
@@ -25,7 +24,7 @@ $(document).ready(function () {
                                 placeholder: "Vui lòng chọn...",
                                 dataSource: customStore_Receiver(),
                                 valueExpr: "id",
-                                readOnly:false,
+                                readOnly: false,
                                 displayExpr: 'code',
                                 elementAttr: {
                                     id: "elementFromHandOverReceiptId",
@@ -43,7 +42,7 @@ $(document).ready(function () {
                                                 selTarget.option("dataSource", customStore_ById(e.value));
                                             }
                                         });
-                                       
+
                                     }
                                     else {
                                         selTarget.option("dataSource", customStore_HandOverItem_All());
@@ -53,7 +52,7 @@ $(document).ready(function () {
                             validationRules: [{ type: "required" }],
                         },
                         {
-                            colSpan: 3,
+                            colSpan: 4,
                             dataField: "handOverItemId",
                             label: { text: "Tên hàng hóa" },
                             editorType: "dxSelectBox",
@@ -78,7 +77,7 @@ $(document).ready(function () {
                                     id: "elementHandOverItemId",
                                 },
                                 onValueChanged: function (data) {
-                                    $WarehouseStorageID = data.value;
+
                                 }
                             },
                             cellTemplate: (c, o) => {
@@ -96,7 +95,37 @@ $(document).ready(function () {
                             validationRules: [{ type: "required" }],
                         },
                         {
-                            colSpan: 3,
+                            colSpan: 1,
+                            itemType: "button",
+                            horizontalAlignment: "left",
+                            disabled: false,
+                            buttonOptions: {
+                                icon: "fa fa-plus",
+                                type: "default",
+                                useSubmitBehavior: false,
+                                elementAttr: {
+                                    id: "addHOItem",
+                                },
+                                editorOptions: {
+                                    stylingMode: "contained",
+                                    cssClass: "bg-info",
+                                },
+                                onClick: function () {
+                                },
+                            }
+                        },
+                        {
+                            colSpan: 2,
+                            dataField: "quantity",
+                            label: { text: "Số lượng" },
+                            editorType: "dxNumberBox",
+                            type: "number",
+                            editorOptions: {
+                                stylingMode: "filled",
+                            },
+                        },
+                        {
+                            colSpan: 2,
                             label: { text: "Tồn" },
                             editorType: "dxTextBox",
                             type: "string",
@@ -107,23 +136,13 @@ $(document).ready(function () {
                             },
                             editorOptions: {
                                 stylingMode: "filled",
-                                readOnly:true,
+                                readOnly: true,
                                 elementAttr: {
                                     id: "elementTotalItemId",
                                 },
                                 onValueChanged: function (data) {
                                     $WarehouseStorageID = data.value;
                                 }
-                            },
-                        },
-                        {
-                            colSpan: 3,
-                            dataField: "quantity",
-                            label: { text: "Số lượng" },
-                            editorType: "dxNumberBox",
-                            type: "number",
-                            editorOptions: {
-                                stylingMode: "filled",
                             },
                         },
                         {
@@ -138,22 +157,31 @@ $(document).ready(function () {
                             type: "string",
                         },
                         {
+                            itemType: "group",
+                            name: "button-action",
+                            colCount: 12,
                             colSpan: 12,
-                            itemType: "button",
-                            horizontalAlignment: "center",
-                            disabled: id == 0,
-                            buttonOptions: {
-                                text: "Thêm hàng hóa",
-                                icon: "fa fa-save",
-                                type: "success",
-                                useSubmitBehavior: true,
-                                elementAttr: {
-                                    id: "addHRD",
+                            items: [
+                                {
+                                    colSpan: 12,
+                                    itemType: "button",
+                                    horizontalAlignment: "center",
+                                    disabled: id == 0,
+                                    buttonOptions: {
+                                        text: "Thêm hàng hóa",
+                                        icon: "fa fa-save",
+                                        type: "success",
+                                        useSubmitBehavior: true,
+                                        elementAttr: {
+                                            id: "addHRD",
+                                        },
+                                        editorOptions: {
+                                            stylingMode: "filled",
+                                        }
+                                    }
                                 },
-                                editorOptions: {
-                                    stylingMode: "filled",
-                                }
-                            }
+                            ],
+
                         },
                     ]
                 },
@@ -161,19 +189,19 @@ $(document).ready(function () {
             ],
         }).dxForm("instance");
     }
-    $("#form-HandOverItem").on("submit", function (e) {
+    $("#form-HandOverReceiptDetail").on("submit", function (e) {
         e.preventDefault();
-        var formdata = $('#form-HandOverItem').dxForm("instance").option('formData');
+        var formdata = $('#form-HandOverReceiptDetail').dxForm("instance").option('formData');
         var resValid = true
         if (!resValid) {
             DevExpress.ui.notify("Vui lòng kiểm tra lại file đính kèm!", "error", 3000);
         }
         else {
             loadingPanel.show();
-            formdata["HandOverReceiptId"] = $model;
+            formdata["handOverReceiptId"] = $model;
             formdata["status"] = 1;
             var deferred = $.Deferred();
-            customStore_WarehouseReleasedDetail(0).store().insert(formdata).done((rs) => {
+            customStore_HandOverReceiptDetail(0).store().insert(formdata).done((rs) => {
                 loadingPanel.hide();
                 if (rs.isOk) {
                     deferred.resolve(rs);
@@ -187,5 +215,8 @@ $(document).ready(function () {
             }, deferred.reject)
             return deferred.promise();
         }
+    });
+    $(document).on('click', '#addHOItem', '#form-HandOverReceiptDetail', function (e) {
+
     });
 });

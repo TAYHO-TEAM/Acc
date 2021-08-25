@@ -13,7 +13,11 @@ namespace QuanLyDuAn.Areas.VanHanh.Controllers
         {
             return View();
         }
-        public ActionResult _HOItemCreate(int id)
+        public ActionResult _HRDCreate(int id)
+        {
+            return PartialView(id);
+        }
+        public ActionResult _HRItemCreate(int id)
         {
             return PartialView(id);
         }
