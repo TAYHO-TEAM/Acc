@@ -92,7 +92,7 @@
                 update: (key, values) => ajax_update(URL_API_PM_CMD + ACTION_CMD_REQUESTREGIST, key, values),
                 remove: (key) => ajax_delete(URL_API_PM_CMD + ACTION_CMD_REQUESTREGIST, key),
             }),
-            filter: ["projectId", "=", PROJECT],
+            filter: [["projectId", "=", PROJECT], "and", [["isDelete", "=", null], "or", ["isDelete","=",false]]],
             sort: [
                 "LastName",
                 { selector: "createDate", desc: true }
