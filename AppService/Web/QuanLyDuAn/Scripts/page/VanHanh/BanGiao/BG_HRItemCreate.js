@@ -94,6 +94,12 @@
                     caption: "Đơn vị",
                     dataType: "string",
                     alignment: "center",
+                    lookup: {
+                        dataSource: customStore_CategoryUnit,
+                        valueExpr: "id",
+                        displayExpr: "title",
+                    },
+                    editorType: "dxSelectBox",
                 },// LastName
             ],
             editing: {
@@ -118,14 +124,13 @@
                 enabled: true,
                 render: null,
                 template: function (container, options) {
-                    console.log(options);
                     $("<div>")
                         .dxTreeList({
                             dataSource: customStore_HandOverItemSpecifications(options.data.id),
                             remoteOperations: true,
                             height: $hieghtSub,
                             rootValue: 0,
-                            parentIdExpr: "parentId",
+                            parentIdExpr: "parentid",
                             keyExpr: "id",
                             showBorders: false,
                             showColumnHeaders: true,
@@ -153,7 +158,8 @@
                             onInitNewRow: (e) => {
                                 e.data.isActive = true;
                                 e.data.isVisible = true;
-                                e.data.handOverItemId = options.data;
+                                e.data.handOverItemId = options.data.id;
+                                console.log(options.data.id);
                             },
                             onContentReady: (e) => {
                                 var container = e.component;
@@ -198,6 +204,30 @@
                                     alignment: "center",
                                     readOnly: false,
                                     allowEditing: true,
+                                    lookup: {
+                                        dataSource: customStore_CategoryUnit,
+                                        valueExpr: "id",
+                                        displayExpr: "title",
+                                    },
+                                    editorType: "dxSelectBox",
+                                    //editorOptions: {
+                                    //    stylingMode: "filled",
+                                    //    searchEnabled: true,
+                                    //    searchMode: "contains",
+                                    //    searchExpr: ['title', 'code'],
+                                    //    showClearButton: true,
+                                    //    placeholder: "Vui lòng chọn...",
+                                    //    dataSource: customStore_CategoryUnit(),
+                                    //    valueExpr: "id",
+                                    //    readOnly: false,
+                                    //    displayExpr: 'title',
+                                    //    elementAttr: {
+                                    //        id: "elementHOItemCategoryUnitIdId",
+                                    //    },
+                                    //    onValueChanged: function (data) {
+
+                                    //    }
+                                    //},
                                 },
                             ],
                             editing: {

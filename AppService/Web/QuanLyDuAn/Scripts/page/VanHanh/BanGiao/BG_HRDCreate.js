@@ -49,7 +49,6 @@
                                     }
                                 }
                             },
-                            validationRules: [{ type: "required" }],
                         },
                         {
                             colSpan: 4,
@@ -111,9 +110,9 @@
                                     cssClass: "bg-info",
                                 },
                                 onClick: function (e) {
-                                    var containerE = e.component;
+                                    var containerE = $("#elementHandOverItemId").dxSelectBox("getDataSource"); 
                                     CALLPOPUPMULTI(
-                                        "Phiếu xuất kho",
+                                        "Thêm thiết bị, hàng hóa",
                                         "/VanHanh/BanGiao/_HRItemCreate",
                                         ($(window).width() > 767 ? "50%" : "80%"),
                                         containerE,

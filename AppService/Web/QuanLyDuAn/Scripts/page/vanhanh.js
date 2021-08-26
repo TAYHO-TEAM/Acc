@@ -653,7 +653,14 @@ function CALLPOPUPMULTI(title, url, width, container, popupId) {
             return container;
         },
         onHiding: function () {
-            container.refresh();
+            try {
+                container.refresh();
+            }
+            catch (exception_var) {
+                container.reload();
+            }
+            finally {
+            }
         },
         onHidden: function () {
         }
@@ -1014,8 +1021,13 @@ var listIsInOrOutStatus = [
     { value: true, text: "Nhập kho", color: "success", icon: 'fa fa-check-circle' },
     { value: false, text: "Xuất kho", color: "danger", icon: 'fa fa-minus-circle' },
 ];
+var listIsInOrOutHORStatus = [
+    { value: true, text: "Tiếp nhận", color: "success", icon: 'fa fa-check-circle' },
+    { value: false, text: "Bàn giao", color: "danger", icon: 'fa fa-minus-circle' },
+];
 var listIsInOrOutVerify = [
     { value: 10, text: "Đang lên đơn", color: "warning", icon: 'fa fa-check-circle' },
+    { value: 100, text: "Đang cập nhật", color: "primary", icon: 'fa fa-minus-circle' },
     { value: 200, text: "Đã nghi nhận", color: "info", icon: 'fa fa-minus-circle' },
     { value: 220, text: "Đã xác nhận", color: "success", icon: 'fa fa-minus-circle' },
 ];
