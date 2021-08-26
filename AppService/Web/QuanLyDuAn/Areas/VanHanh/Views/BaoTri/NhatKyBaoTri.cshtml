@@ -215,6 +215,11 @@
                     var container = e.component;
                     var selectedRowData = e.selectedRowsData[0];
                     var selectedRowKey = e.selectedRowKeys[0];
+                    $currentConstructionItemsId = e.selectedRowsData[0].constructionItemsId;
+                    $currentMaintenanceSupplierInfoId = e.selectedRowsData[0].maintenanceSupplierInfoId;
+                    $currentMaintenancerInfoId = e.selectedRowsData[0].maintenancerInfoId;
+                    $currentMaintenanceLogStatus = e.selectedRowsData[0].status;
+                    $currentTimes = e.selectedRowsData[0].times;
                     if (selectedRowData != null && selectedRowKey != null) {
                         var data = e.component.getRowIndexByKey(selectedRowData.paId);
                         $("#action-update").dxSpeedDialAction({
@@ -235,11 +240,10 @@
                 },
                 onContextMenuPreparing: function (e) {
                     var container = e.component;
-                    console.log(e.component);
                     $currentConstructionItemsId = e.row.data.constructionItemsId;
                     $currentMaintenanceSupplierInfoId = e.row.data.maintenanceSupplierInfoId;
                     $currentMaintenancerInfoId = e.row.data.maintenancerInfoId;
-                    $currentMaintenanceLogStatus = e.row.data.status; 
+                    $currentMaintenanceLogStatus = e.row.data.status;
                     $currentTimes = e.row.data.times;
                     if (!e.items) e.items = [];
                     if (e.target == "content" && e.rowIndex >= 0) {

@@ -76,21 +76,37 @@
                                     id: "elementHandOverItemId",
                                 },
                                 onValueChanged: function (data) {
+                                    var selTarget = $('#elementTotalItemId').dxTextBox('instance');
+                                    selTarget.option('value', null);
+                                    if (e.value > 0) {
+                                        customStore_ById(e.value).store().load().done((rs) => {
+                                            console.log(rs);
+                                            if (rs.leght > 0) {
+                                                rs.each(function (item) {
+                                                    console.log(item);
+                                                });
+                                                selTarget.option("dataSource", customStore_ById(e.value));
+                                            }
+                                        });
 
+                                    }
+                                    else {
+                                        selTarget.option("dataSource", customStore_HandOverItem_All());
+                                    }
                                 }
                             },
-                            cellTemplate: (c, o) => {
-                                console.log(o.value);
-                                customStore_CategoryGoods_Id(o.value).load().then((rsGoods) => {
-                                    var item = rsGoods[0];
-                                    customStore_CategoryUnit.load().then((rsUnit) => {
-                                        var itemUnit = rsUnit.filter(x => x.id == item.unitId).shift();
-                                        if (typeof itemUnit !== "undefined") {
-                                            $("<span />").append(itemUnit.title).appendTo(c);
-                                        }
-                                    });
-                                });
-                            },
+                            //cellTemplate: (c, o) => {
+                            //    console.log(o.value);
+                            //    customStore_CategoryGoods_Id(o.value).load().then((rsGoods) => {
+                            //        var item = rsGoods[0];
+                            //        customStore_CategoryUnit.load().then((rsUnit) => {
+                            //            var itemUnit = rsUnit.filter(x => x.id == item.unitId).shift();
+                            //            if (typeof itemUnit !== "undefined") {
+                            //                $("<span />").append(itemUnit.title).appendTo(c);
+                            //            }
+                            //        });
+                            //    });
+                            //},
                             validationRules: [{ type: "required" }],
                         },
                         {
