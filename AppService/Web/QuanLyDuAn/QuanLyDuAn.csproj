@@ -212,6 +212,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\ConversationOBJ.cs" />
+    <Compile Include="Utilities\HandOverReceiptOBJ.cs" />
     <Compile Include="Utilities\DefectFeedBackDetailOBJ.cs" />
     <Compile Include="Utilities\MaintenanceLogOBJ.cs" />
     <Compile Include="Utilities\ContractorInfoOBJ.cs" />

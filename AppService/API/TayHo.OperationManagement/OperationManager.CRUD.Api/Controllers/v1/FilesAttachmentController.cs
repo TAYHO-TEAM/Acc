@@ -59,7 +59,7 @@ namespace OperationManager.CRUD.Api.Controllers.v1
                 if (!string.IsNullOrEmpty(values))
                     JsonConvert.PopulateObject(values, model);
                 IFormFileCollection files = Request.Form.Files;
-                await _quanLyVanHanhRepository.UploadFile(files, model.Id, model.OwnerByTable, "", _user);
+                await _quanLyVanHanhRepository.UploadFile(files, model.Id, model.OwnerByTable, model.Code, _user);
                 return Ok();
             }
             catch (Exception ex)

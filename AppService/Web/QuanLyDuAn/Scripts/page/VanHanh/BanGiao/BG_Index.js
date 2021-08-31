@@ -302,7 +302,6 @@ $(document).ready(function () {
                 }
 
             }
-
             $("#form-HandOverReceiptFull").dxForm({
                 formData: rsFilterId[0],
                 colCount: 12,
@@ -912,9 +911,14 @@ $(document).ready(function () {
                                                 enabled: true,
                                                 render: null,
                                                 template: function (container, options) {
+                                                    container.attr("style", "background-color: rgba(248,141,43,0.5) !important; padding: 10px !important;");
+                                                    //$("<div>")
+                                                    //    .addClass("master-detail-caption")
+                                                    //    .text(" Thông tin chi tiết:")
+                                                    //    .appendTo(container);
                                                     $("<div>")
                                                         .dxTreeList({
-                                                            dataSource: customStore_HandOverItemSpecifications(options.data.id),
+                                                            dataSource: customStore_HandOverItemSpecifications(options.data.handOverItemId),
                                                             remoteOperations: true,
                                                             height: $hieghtSub,
                                                             rootValue: 0,
@@ -929,19 +933,19 @@ $(document).ready(function () {
                                                             wordWrapEnabled: true,
                                                             rowAlternationEnabled: true,
                                                             autoExpandAll: false,
-                                                            onToolbarPreparing: function (e) {
-                                                                var container = e.component;
-                                                                e.toolbarOptions.items.unshift(
-                                                                    {
-                                                                        location: "after",
-                                                                        widget: "dxButton",
-                                                                        options: {
-                                                                            icon: "refresh",
-                                                                            type: "default",
-                                                                            onClick: () => container.refresh()
-                                                                        }
-                                                                    })
-                                                            },
+                                                            //onToolbarPreparing: function (e) {
+                                                            //    var container = e.component;
+                                                            //    e.toolbarOptions.items.unshift(
+                                                            //        {
+                                                            //            location: "after",
+                                                            //            widget: "dxButton",
+                                                            //            options: {
+                                                            //                icon: "refresh",
+                                                            //                type: "default",
+                                                            //                onClick: () => container.refresh()
+                                                            //            }
+                                                            //        })
+                                                            //},
                                                             onInitNewRow: (e) => {
                                                                 e.data.isActive = true;
                                                                 e.data.isVisible = true;
@@ -1006,7 +1010,7 @@ $(document).ready(function () {
                                                                 confirmDelete: true,
                                                             },
                                                         })
-                                                        .attr("style", "margin:auto; width:90%")
+                                                        .attr("style", "margin:auto; width:96%")
                                                         .appendTo(container);;
                                                 }
                                             },
@@ -1064,6 +1068,88 @@ $(document).ready(function () {
                         ]
                     },
                     {
+                        colSpan: 12,
+                        itemType: "simple",
+                        name: "Image",
+                        editorType: 'dxGallery',
+                        editorOptions: {
+                            stylingMode: "filled",
+                            dataSource: customStore_Attachment($keyHOR, "HandOverReceipt"),
+                            height: 100,
+                            width: 'auto',
+                            slideshowDelay: 1500,
+                            itemTemplate: function (data) {
+                                var $link = (data.host + data.url + "/" + data.fileName);
+                                return $("<a/>").attr("href", $link).attr("target", "_blank").append($("<img />").attr({ "src": $link, onerror: ImgError(this), "style": "max-height: 100px; height : auto ;width : auto ;margin: auto;" }));
+                            },
+                            onItemClick: function (value) {
+                            }
+                        },
+                    },
+                    {
+                        colSpan: 12,
+                        visible: $isUpdateHOR,//rs[0].status??0 < 200 ? true : false,
+                        template: '<span class="dx-field-item-label-text font-bold">Các tập tin đính kèm</span><div class="file-uploader" id="file-uploader"></div>',
+                    },
+                    {
+                        itemType: "group",
+                        name: "button-action",
+                        colCount: 12,
+                        colSpan: 12,
+                        items: [
+                            {
+                                colSpan: 12,
+                                itemType: "button",
+                                horizontalAlignment: "center",
+                                disabled: !$isUpdateHOR,
+                                buttonOptions: {
+                                    text: "Cập nhật hình ảnh",
+                                    icon: "fa fa-image",
+                                    type: "default",
+                                    useSubmitBehavior: false,
+                                    elementAttr: {
+                                        id: "uploadImage",
+                                    },
+                                    editorOptions: {
+                                        stylingMode: "filled",
+                                    },
+                                    onClick: function (e) {
+                                        var deferred = $.Deferred();
+                                        var formData = new FormData();
+                                        formData.append("key", $keyHOR);
+                                        formData.append('token', UserCurrentInfo.accessToken);
+                                        var files = $("#file-uploader").dxFileUploader("instance").option("value");
+                                        if (files.length > 0) {
+                                            $.each(files, function (key, value) {
+                                                formData.append(files[key].name, files[key]);
+                                            });
+                                        }
+                                        $.ajax({
+                                            type: "POST",
+                                            enctype: 'multipart/form-data',
+                                            url: "/VanHanh/BanGiao/UploadImages",
+                                            data: formData,
+                                            processData: false,
+                                            contentType: false,
+                                            cache: false,
+                                            timeout: 600000,
+                                            success: function (rs) {
+                                                loadingPanel.hide();
+                                                DevExpress.ui.notify(rs.result, rs.status, 3000);
+                                            },
+                                            error: function (xhr, textStatus, errorThrown) {
+                                                loadingPanel.hide();
+                                                DevExpress.ui.notify("Vui lòng chọn File!", "error", 3000);
+
+                                            }
+                                        });
+                                        return deferred.promise();
+                                    }
+                                }
+                            },
+                        ],
+                    },
+                    {
                         itemType: "group",
                         name: "button-action",
                         colCount: 12,
@@ -1110,6 +1196,7 @@ $(document).ready(function () {
                     },
                 ]
             }).dxForm('instance');
+            fileUploader();
         });
     };
     function createHOR(IsInOrOut) {
@@ -1206,10 +1293,19 @@ $(document).ready(function () {
                     DevExpress.ui.notify("Có lỗi xảy ra", "error", 3000);
                     deferred.resolve(false);
                 }
-            }, deferred.reject)
+            }, deferred.reject);
             return deferred.promise();
         }
     });
-
+    var fileUploader = () => $("#file-uploader").dxFileUploader({
+        selectButtonText: "Chọn tập tin...",
+        labelText: "Hoặc kéo thả vào đây",
+        showFileList: true,
+        multiple: true,
+        uploadMode: "useForm",
+        accept: ".jpg,.jpeg,.gif,.png,.pdf",
+        allowedFileExtensions: [".jpg", ".jpeg", ".png", ".pdf"],
+        maxFileSize: 52428800,
+    }).dxFileUploader("instance");
 
 });
