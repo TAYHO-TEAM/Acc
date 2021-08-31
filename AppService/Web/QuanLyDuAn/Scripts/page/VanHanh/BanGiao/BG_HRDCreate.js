@@ -33,16 +33,20 @@
                                     var selTarget = $('#elementHandOverItemId').dxSelectBox('instance');
                                     selTarget.option('value', null);
                                     if (e.value > 0) {
-                                        customStore_ById(e.value).store().load().done((rs) => {
-                                            console.log(rs);
-                                            if (rs.leght > 0) {
-                                                rs.each(function (item) {
-                                                    console.log(item);
+                                        customStore_HandOverReceiptDetail(e.value).load().done((rs) => {
+                                            if (rs.length > 0) {
+                                                var listItem = rs.map(a => a.handOverItemId);
+                                                var listItemDetail = [];
+                                                listItem.forEach(element => {
+                                                    customStore_HandOverItem(element).load().done((rsItemDetail) => {
+                                                        rsItemDetail.forEach(elementsub => {
+                                                            listItemDetail.push(elementsub);
+                                                        });
+                                                    });
                                                 });
-                                                selTarget.option("dataSource", customStore_ById(e.value));
+                                                selTarget.option("dataSource", listItemDetail);
                                             }
                                         });
-
                                     }
                                     else {
                                         selTarget.option("dataSource", customStore_HandOverItem_All());
@@ -75,7 +79,7 @@
                                 elementAttr: {
                                     id: "elementHandOverItemId",
                                 },
-                                onValueChanged: function (data) {
+                                onValueChanged: function (e) {
                                     var selTarget = $('#elementTotalItemId').dxTextBox('instance');
                                     selTarget.option('value', null);
                                     if (e.value > 0) {

@@ -72,7 +72,7 @@ var customStore_HandOverReceiptDetail = (Id) => new DevExpress.data.DataSource({
 });
 var customStore_HandOverItem = (Id) => new DevExpress.data.DataSource({
     store: $DATASOURCE(ACTION_HANDOVERITEM, KEY),
-    filter: [["id", "=", Id], "or", [0, "=", Id]]
+    filter: [["id", "=", Id]]
 });
 var customStore_HandOverItem_All = () => new DevExpress.data.DataSource({
     store: $DATASOURCE(ACTION_HANDOVERITEM, KEY)
@@ -1084,6 +1084,9 @@ $(document).ready(function () {
                             },
                             onItemClick: function (value) {
                             }
+                        },
+                        elementAttr: {
+                            id: "elementGalleryId",
                         },
                     },
                     {
