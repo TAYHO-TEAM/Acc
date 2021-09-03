@@ -32,24 +32,29 @@
                                 onValueChanged: function (e) {
                                     var selTarget = $('#elementHandOverItemId').dxSelectBox('instance');
                                     selTarget.option('value', null);
+                                    selTarget.option('dataSource', null);
                                     if (e.value > 0) {
-                                        customStore_HandOverReceiptDetail(e.value).load().done((rs) => {
+                                        customStore_HandOverReceiptDetail(e.value).store().load({ filter: [["handOverReceiptId", "=", e.value]] }).done((rs) => {
                                             if (rs.length > 0) {
                                                 var listItem = rs.map(a => a.handOverItemId);
                                                 var listItemDetail = [];
                                                 listItem.forEach(element => {
-                                                    customStore_HandOverItem(element).load().done((rsItemDetail) => {
+                                                    customStore_HandOverItem(element).store().load({ filter:[["id", "=", element]]}).done((rsItemDetail) => {
                                                         rsItemDetail.forEach(elementsub => {
                                                             listItemDetail.push(elementsub);
                                                         });
                                                     });
                                                 });
-                                                selTarget.option("dataSource", listItemDetail);
                                             }
+                                            console.log(listItemDetail);
+                                            selTarget.option("dataSource", listItemDetail);
                                         });
                                     }
                                     else {
-                                        selTarget.option("dataSource", customStore_HandOverItem_All());
+                                        customStore_HandOverItem_All().store().load().done((rsItemDetail) => {
+                                            selTarget.option("dataSource", rsItemDetail);
+                                        });
+
                                     }
                                 }
                             },
@@ -81,21 +86,34 @@
                                 },
                                 onValueChanged: function (e) {
                                     var selTarget = $('#elementTotalItemId').dxTextBox('instance');
+                                    var receiptId = $('#elementFromHandOverReceiptId').dxSelectBox('instance').option('value');
                                     selTarget.option('value', null);
-                                    if (e.value > 0) {
-                                        customStore_ById(e.value).store().load().done((rs) => {
-                                            console.log(rs);
-                                            if (rs.leght > 0) {
-                                                rs.each(function (item) {
-                                                    console.log(item);
+                                    if (receiptId > 0) {
+                                        if (e.value > 0) {
+                                            var $total = 0;
+                                            customStore_HandOverReceiptDetail_ReceiptItem(receiptId, e.value).load().done((rs) => {
+                                                rs.forEach(element => {
+                                                    $total += element.quantity;
+                                                    console.log($total);
                                                 });
-                                                selTarget.option("dataSource", customStore_ById(e.value));
-                                            }
-                                        });
+                                                console.log($total);
+                                                customStore_HandOverReceiptDetail_FormReceiptItem(receiptId, e.value).load().done((rsSub) => {
+                                                    rsSub.forEach(element => {
+                                                        console.log(element);
+                                                        console.log($total);
+                                                        console.log(element.quantity);
+                                                        $total = $total - element.quantity;
+                                                        console.log($total);
+                                                    });
+                                                    console.log($total);
+                                                    selTarget.option("value", $total);
+                                                });
 
-                                    }
-                                    else {
-                                        selTarget.option("dataSource", customStore_HandOverItem_All());
+                                            });
+                                        }
+                                        else {
+                                            selTarget.option("dataSource", customStore_HandOverItem_All());
+                                        }
                                     }
                                 }
                             },
@@ -130,7 +148,7 @@
                                     cssClass: "bg-info",
                                 },
                                 onClick: function (e) {
-                                    var containerE = $("#elementHandOverItemId").dxSelectBox("getDataSource"); 
+                                    var containerE = $("#elementHandOverItemId").dxSelectBox("getDataSource");
                                     CALLPOPUPMULTI(
                                         "Thêm thiết bị, hàng hóa",
                                         "/VanHanh/BanGiao/_HRItemCreate",
@@ -150,6 +168,27 @@
                             editorOptions: {
                                 stylingMode: "filled",
                             },
+                            validationRules: [{
+                                type: "required",
+                            },
+                            {
+                                type: "async",
+                                message: "Số lượng vượt tồn kho",
+                                validationCallback: function (params) {
+
+                                    var selTarget = $('#elementTotalItemId').dxTextBox('instance').option('value');
+
+                                    var d = $.Deferred();
+                                    if (selTarget > 0 && selTarget < params.value) {
+                                        d.resolve(false);
+                                    }
+                                    else {
+                                        d.resolve(true);
+                                    }
+
+                                    return d.promise();
+                                }
+                            }],
                         },
                         {
                             colSpan: 2,

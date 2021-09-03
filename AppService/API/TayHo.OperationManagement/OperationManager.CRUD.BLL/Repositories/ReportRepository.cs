@@ -139,6 +139,11 @@ namespace OperationManager.CRUD.BLL.Repositories
                     {
                         tableprop.DataSource = results[(tableprop.TableIndex ?? 1) - 1];
                         tableprop.GenImage = new GenImage();
+                        tableprop.GenImage.Height = 200;
+                        tableprop.GenImage.Width = 0;
+                        tableprop.GenImage.IsAutoCrop = true;
+                        tableprop.GenImage.IsGenIamge = true;
+                        tableprop.GenImage.ColImage = "Image,image,";
                     }
                 }    
                

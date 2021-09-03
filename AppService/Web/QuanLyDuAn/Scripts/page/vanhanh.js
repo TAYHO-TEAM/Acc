@@ -30,7 +30,8 @@ var $DATASOURCE = (link, key) => {
                 'Authorization': 'Bearer ' + UserCurrentInfo.accessToken,
             };
         },
-        reshapeOnPush :true
+        pageSize: 5,
+        reshapeOnPush: true,
     });
 };
 var $DATASOURCEGET = (link, key) => {
@@ -44,7 +45,8 @@ var $DATASOURCEGET = (link, key) => {
                 'Authorization': 'Bearer ' + UserCurrentInfo.accessToken,
             };
         },
-        reshapeOnPush : true
+        pageSize: 5,
+        reshapeOnPush: true,
     });
 };
 ////---------------------------CMD--------------------------- 
@@ -569,10 +571,12 @@ let customStore_READ_FILTER_KEYWORD = (READ, KEYWORD) => new DevExpress.data.Cus
 var dataGridOptions = {
     height: heightScreen,
     paging: {
-        enabled: true, pageSize: 20
+        enabled: true,
+        pageSize: 20
     },
     pager: {
-        showPageSizeSelector: true, showInfo: true,
+        showPageSizeSelector: true,
+        showInfo: true,
         allowedPageSizes: [10, 20, 40, 80],
     },
     searchPanel: {

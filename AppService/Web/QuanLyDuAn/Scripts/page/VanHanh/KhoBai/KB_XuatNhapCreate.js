@@ -392,7 +392,7 @@ $(document).ready(function () {
                             },
                             {
                                 type: "async",
-                                message: "Email is already registered",
+                                message: "Số lượng vượt tồn kho",
                                 validationCallback: function (params) {
                                     var $categoryGoodsId = $('#elementcategoryGoodsId').dxSelectBox("instance").option('value');
                                     console.log($categoryGoodsId);

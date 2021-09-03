@@ -70,6 +70,18 @@ var customStore_HandOverReceiptDetail = (Id) => new DevExpress.data.DataSource({
     store: $DATASOURCE(ACTION_HANDOVERRECEIPTDETAIL, KEY),
     filter: [["handOverReceiptId", "=", Id]]
 });
+var customStore_HandOverReceiptDetail_FormReceipt = (Id) => new DevExpress.data.DataSource({
+    store: $DATASOURCEGET(ACTION_HANDOVERRECEIPTDETAIL, KEY),
+    filter: [["fromHandOverReceiptId", "=", Id]]
+});
+var customStore_HandOverReceiptDetail_FormReceiptItem = (ReceiptId,ItemId) => new DevExpress.data.DataSource({
+    store: $DATASOURCEGET(ACTION_HANDOVERRECEIPTDETAIL, KEY),
+    filter: [["fromHandOverReceiptId", "=", ReceiptId], 'and', ["handOverItemId", "=", ItemId]]
+});
+var customStore_HandOverReceiptDetail_ReceiptItem = (ReceiptId, ItemId) => new DevExpress.data.DataSource({
+    store: $DATASOURCEGET(ACTION_HANDOVERRECEIPTDETAIL, KEY),
+    filter: [["handOverReceiptId", "=", ReceiptId], 'and', ["handOverItemId", "=", ItemId]]
+});
 var customStore_HandOverItem = (Id) => new DevExpress.data.DataSource({
     store: $DATASOURCE(ACTION_HANDOVERITEM, KEY),
     filter: [["id", "=", Id]]
