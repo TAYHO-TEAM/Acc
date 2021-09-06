@@ -142,6 +142,7 @@
                                 useSubmitBehavior: false,
                                 elementAttr: {
                                     id: "addHOItem",
+                                    class: "add-items",
                                 },
                                 editorOptions: {
                                     stylingMode: "contained",

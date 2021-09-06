@@ -297,10 +297,12 @@ $(document).ready(function () {
         var $heightContaint = elmnt.offsetHeight - 80;
         customStore_ById(Id).store().load().done((rs) => {
             var rsFilterId = rs.filter(x => x.id === Id);
+            var $statusHOR = 0;
             $issetHOR = (rsFilterId.length > 0);
             if ($issetHOR) {
                 $keyHOR = rsFilterId[0].id;
-                if (rsFilterId[0].status < 200) {
+                $statusHOR = rsFilterId[0].status;
+                if (rsFilterId[0].status <= 200) {
                     $isFinish = false;
                     $isUpdateHOR = true;
                     $isInsertHOR = true;
@@ -1103,7 +1105,7 @@ $(document).ready(function () {
                     },
                     {
                         colSpan: 12,
-                        visible: $isUpdateHOR,//rs[0].status??0 < 200 ? true : false,
+                        visible: $statusHOR >= 200,//rs[0].status??0 < 200 ? true : false,
                         template: '<span class="dx-field-item-label-text font-bold">Các tập tin đính kèm</span><div class="file-uploader" id="file-uploader"></div>',
                     },
                     {
@@ -1121,6 +1123,7 @@ $(document).ready(function () {
                                     text: "Cập nhật hình ảnh",
                                     icon: "fa fa-image",
                                     type: "default",
+                                    visible: $statusHOR >= 200,
                                     useSubmitBehavior: false,
                                     elementAttr: {
                                         id: "uploadImage",
@@ -1174,6 +1177,7 @@ $(document).ready(function () {
                                 colSpan: 6,
                                 itemType: "button",
                                 horizontalAlignment: "right",
+                                visible: $isUpdateHOR && $statusHOR <100,
                                 disabled: !$isUpdateHOR,
                                 buttonOptions: {
                                     text: "Cập nhật biên bản",
@@ -1191,11 +1195,39 @@ $(document).ready(function () {
                             {
                                 colSpan: 6,
                                 itemType: "button",
+                                horizontalAlignment: "right",
+                                visible: $isUpdateHOR && $statusHOR >= 100,
+                                disabled: !$isUpdateHOR,
+                                buttonOptions: {
+                                    text: "Tải biên bản",
+                                    icon: "fa fa-download",
+                                    type: "default",
+                                    useSubmitBehavior: false,
+                                    elementAttr: {
+                                        id: "downHOR",
+                                    },
+                                    editorOptions: {
+                                        stylingMode: "filled",
+                                    },
+                                    onClick: function (e) {
+                                        var fdata = new FormData();
+                                        var obj = {};
+                                        obj[("@Id")] = $keyHOR;
+                                        fdata.append("key", 8);
+                                        fdata.append("values", JSON.stringify(obj));
+                                        downloadFromAjaxPost("https://api-om-crud.tayho.com.vn/api/v1/Report", fdata);
+                                    }
+                                }
+                            },
+                            {
+                                colSpan: 6,
+                                itemType: "button",
                                 horizontalAlignment: "left",
+                                visible: $isUpdateHOR && $statusHOR < 100,
                                 disabled: !$isUpdateHOR,
                                 buttonOptions: {
                                     text: "Hoàn tất biên bản",
-                                    icon: "fa fa-save",
+                                    icon: "fa fa-check-double",
                                     type: "success",
                                     useSubmitBehavior: true,
                                     elementAttr: {
@@ -1203,7 +1235,26 @@ $(document).ready(function () {
                                     },
                                     editorOptions: {
                                         stylingMode: "filled",
-                                    }
+                                    },
+                                }
+                            },
+                            {
+                                colSpan: 6,
+                                itemType: "button",
+                                horizontalAlignment: "left",
+                                visible: $isUpdateHOR && $statusHOR >= 100,
+                                disabled: !$isUpdateHOR,
+                                buttonOptions: {
+                                    text: "Xác nhận biên bản",
+                                    icon: "fa fa-vote-yea",
+                                    type: "success",
+                                    useSubmitBehavior: true,
+                                    elementAttr: {
+                                        id: "verifyHOR",
+                                    },
+                                    editorOptions: {
+                                        stylingMode: "filled",
+                                    },
                                 }
                             },
                         ],
@@ -1297,6 +1348,34 @@ $(document).ready(function () {
             formdata["status"] = 100;
             var deferred = $.Deferred();
             customStore(0).store().update($keyHOR, formdata).done((rs) => {
+                loadingPanel.hide();
+                if (rs.isOk) {
+                    deferred.resolve(rs);
+                    $("#container").dxDataGrid("instance").refresh();
+                    $("#form-HandOverReceiptFull").dxForm("instance").repaint();
+                    DevExpress.ui.notify("Cập nhật thành công", "success", 3000);
+                }
+                else {
+                    DevExpress.ui.notify("Có lỗi xảy ra", "error", 3000);
+                    deferred.resolve(false);
+                }
+            }, deferred.reject);
+            return deferred.promise();
+        }
+    });
+    $(document).on('click', '#verifyHOR', '#form-HandOverReceiptDetail', function (e) {
+        e.preventDefault();
+        var formdata = $('#form-HandOverReceiptFull').dxForm("instance").option('formData');
+        var resValid = true
+        if (!resValid) {
+            DevExpress.ui.notify("Vui lòng kiểm tra lại file đính kèm!", "error", 3000);
+        }
+        else {
+            loadingPanel.show();
+            var object = {};
+            object["status"] = 100;
+            var deferred = $.Deferred();
+            customStore(0).store().update($keyHOR, object ).done((rs) => {
                 loadingPanel.hide();
                 if (rs.isOk) {
                     deferred.resolve(rs);
