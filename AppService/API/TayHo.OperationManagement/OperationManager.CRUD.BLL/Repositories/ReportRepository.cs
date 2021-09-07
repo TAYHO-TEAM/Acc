@@ -53,7 +53,7 @@ namespace OperationManager.CRUD.BLL.Repositories
                                                               .WithSqlParams(paramSysJobTable)
                                                               .ExecuteStoredProcedureAsync<SysJobTable>();
                 SysJobTable sysJobTable = resultSysJobTables.Count > 0 ? resultSysJobTables[0] : null;
-                
+
 
                 var _template = Path.GetFileNameWithoutExtension(_dirTemplate);
                 string ext = Path.GetExtension(_dirTemplate).ToLowerInvariant();
@@ -107,54 +107,63 @@ namespace OperationManager.CRUD.BLL.Repositories
                 IList<SysTemplateReport> resultSysTemplates = await _sprocRepository.GetStoredProcedure("sp_Report_GetSysTemplate")
                                                               .WithSqlParams(paramSysTemplateReport)
                                                               .ExecuteStoredProcedureAsync<SysTemplateReport>();
+
                 _dirTemplate = (resultSysTemplates.Count > 0 && !string.IsNullOrEmpty(resultSysTemplates[0].Direct)) ? resultSysTemplates[0].Direct : "";
 
                 (string, object)[] paramSysJobTable = new (string, object)[] { ("@RecordId", sysJob.Id) };
                 IList<SysJobTable> resultSysJobTables = await _sprocRepository.GetStoredProcedure("sp_Report_GetSysJobTable")
                                                               .WithSqlParams(paramSysJobTable)
                                                               .ExecuteStoredProcedureAsync<SysJobTable>();
+                IList<SysJobTableFormatView> resultSysJobTableFormatViews = await _sprocRepository.GetStoredProcedure("sp_Report_GetSysJobTableView")
+                                                              .WithSqlParams(paramSysJobTable)
+                                                              .ExecuteStoredProcedureAsync<SysJobTableFormatView>();
+
                 SysJobTable sysJobTable = resultSysJobTables.Count > 0 ? resultSysJobTables[0] : null;
 
+                //var config = new MapperConfiguration(cfg =>
+                //    cfg.CreateMap<SysJobTable, TableProperty>()
+                //);
+                //var mapper = new Mapper(config);
+                //var tableProperties = mapper.Map<IList<SysJobTable>, IList<TableProperty>>(resultSysJobTables.ToList());
+
                 var config = new MapperConfiguration(cfg =>
-                    cfg.CreateMap<SysJobTable, TableProperty>()
+                  cfg.CreateMap<SysJobTableFormatView, TableProperty>()
                 );
                 var mapper = new Mapper(config);
-                var tableProperties = mapper.Map<IList<SysJobTable>, IList<TableProperty>>(resultSysJobTables.ToList());
+                var tableProperties = mapper.Map<IList<SysJobTableFormatView>, IList<TableProperty>>(resultSysJobTableFormatViews.ToList());
 
 
                 var _template = Path.GetFileNameWithoutExtension(_dirTemplate);
                 string ext = Path.GetExtension(_dirTemplate).ToLowerInvariant();
                 ext = string.IsNullOrEmpty(ext) ? ".xlsx" : ext;
 
-               
+
                 DataTable result = await _sprocRepository.GetStoredProcedure(sysJob.NameStoreProce)
                      .WithSqlParams(parameter)
                      .ExecuteStoredProcedureToTableAsync();
                 List<DataTable> results = await _sprocRepository.GetStoredProcedure(sysJob.NameStoreProce)
                       .WithSqlParams(parameter)
                       .ExecuteStoredProcedureAsync();
-                foreach ( var tableprop in  tableProperties)
+
+                foreach (var tableprop in tableProperties)
                 {
-                    if (results.ElementAtOrDefault((tableprop.TableIndex??1) -1 ) != null)
+                    if (results.ElementAtOrDefault((tableprop.TableIndex ?? 1) - 1) != null)
                     {
                         tableprop.DataSource = results[(tableprop.TableIndex ?? 1) - 1];
-                        tableprop.GenImage = new GenImage();
-                        tableprop.GenImage.Height = 200;
-                        tableprop.GenImage.Width = 0;
-                        tableprop.GenImage.IsAutoCrop = true;
-                        tableprop.GenImage.IsGenIamge = true;
-                        tableprop.GenImage.ColImage = "Image,image,";
+                        if (tableprop.IsGenIamge??false == true)
+                        {
+                            tableprop.HeightImage = tableprop.HeightImage??200;
+                            tableprop.WidthImage = tableprop.WidthImage?? 0; ;
+                            tableprop.IsAutoCropImage = tableprop.IsAutoCropImage?? true;
+                            tableprop.IsGenIamge = true;
+                            tableprop.ColsImage = string.IsNullOrEmpty(tableprop.ColsImage)?"Image,image,": tableprop.ColsImage;
+                        }
+
                     }
-                }    
-               
-                if (tableProperties.Count >0 )
+                }
+
+                if (tableProperties.Count > 0)
                 {
-                    //GenImage genImage = new GenImage();
-                    //genImage.Height = 200;
-                    //genImage.Width = 0;
-                    //genImage.IsAutoCrop = true;
-                    //genImage.IsGenIamge = true;
-                    //genImage.ColImage = "Image,image,";
                     memoryStream = EpplusHelper.Export(tableProperties, _dirTemplate);
                     memoryStream.Position = 0;
                     Tuple<MemoryStream, string, string> _result = new Tuple<MemoryStream, string, string>(memoryStream, FileHelpers.GetMimeTypes()[ext], Path.GetFileNameWithoutExtension(_template) + DateTime.Now.ToString("yyyyMMdd") + ext);

@@ -424,12 +424,9 @@ namespace Services.Common.Utilities
 
             using (ExcelPackage package = (templateFile == null ? new ExcelPackage() : new ExcelPackage(templateFile)))
             {
-                int i = 1;
                 foreach (var tableProperty in tableProperties)
                 {
                     Export(tableProperty, package);
-                    //if(i==1)
-                    //    break;
                 }
                 MemoryStream ms = new MemoryStream(package.GetAsByteArray());
                 return ms;
@@ -456,7 +453,6 @@ namespace Services.Common.Utilities
             string title = "";
             int positionSheet = 0;
             string font = "Song Ti";
-            GenImage genImage = tableProp.GenImage;
             try
             {
                 dtSource = tableProp.DataSource;
@@ -564,9 +560,9 @@ namespace Services.Common.Utilities
                     {
                         if (!(value == null))
                         {
-                            if (genImage.IsGenIamge)
+                            if (tableProp.IsGenIamge??false)
                             {
-                                if (genImage.ColImage.Contains(column.ColumnName))
+                                if (tableProp.ColsImage.Contains(column.ColumnName))
                                 {
                                     try
                                     {
@@ -574,23 +570,22 @@ namespace Services.Common.Utilities
                                         if (img != null)
                                         {
                                             float hpw = (float)img.Size.Height / (float)img.Size.Width;
-                                            if (genImage.IsAutoCrop)
+                                            if (tableProp.IsAutoCropImage??false == true)
                                             {
-                                                if (genImage.Width == 0)
-                                                    genImage.Width = genImage.GetWidth(genImage.Height, hpw);
-                                                if (genImage.Height == 0)
-                                                    genImage.Height = genImage.GetHeight(genImage.Width, hpw);
+                                                if (tableProp.WidthImage == 0)
+                                                    tableProp.WidthImage = tableProp.GetWidth(tableProp.HeightImage??0, hpw);
+                                                if (tableProp.HeightImage == 0)
+                                                    tableProp.HeightImage = tableProp.GetHeight(tableProp.WidthImage??0, hpw);
                                             }
-
 
                                             cell.Style.VerticalAlignment = ExcelVerticalAlignment.Top;
                                             cell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
                                             ExcelPicture pic = workSheet.Drawings.AddPicture((column.ColumnName + curRowIndex.ToString()), img);
 
                                             pic.SetPosition(curRowIndex - 1, 0, j + curColIndex - 1, 0);
-                                            pic.SetSize((int)Math.Ceiling(genImage.Width), (int)Math.Ceiling(genImage.Height));
-                                            workSheet.Column(j + curColIndex).Width = EpplusHelper.Pixel2ExcelW((int)(genImage.Width));
-                                            workSheet.Row(curRowIndex).Height = EpplusHelper.Pixel2ExcelH((int)(genImage.Height));
+                                            pic.SetSize((int)Math.Ceiling(tableProp.WidthImage??0), (int)Math.Ceiling(tableProp.HeightImage??0));
+                                            workSheet.Column(j + curColIndex).Width = EpplusHelper.Pixel2ExcelW((int)(tableProp.WidthImage??0));
+                                            workSheet.Row(curRowIndex).Height = EpplusHelper.Pixel2ExcelH((int)(tableProp.HeightImage??0));
                                         }
                                     }
                                     catch
@@ -824,6 +819,24 @@ namespace Services.Common.Utilities
             double mtus = (pixels - 12 + 5) / 7d + 1;
             return mtus;
         }
+        private static bool CheckFontExists(string fontName)
+        {
+            using (Font fontTester = new Font(fontName,
+                                               12,
+                                               FontStyle.Regular,
+                                               GraphicsUnit.Pixel))
+            {
+                if (fontTester.Name == fontName)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            
+        }
         //Export the set of fields and headers that need to be mapped
         public class ExportColumnCollective
         {
@@ -842,7 +855,35 @@ namespace Services.Common.Utilities
     public class TableProperty
     {
         public DataTable DataSource { get; set; }
-        public GenImage GenImage { get; set; }
+        //public GenImage GenImage { get; set; }
+        //public string Code { get; set; }
+        //public string Barcode { get; set; }
+        //public int? SysJobId { get; set; }
+        //public int? No { get; set; }
+        //public string SheetName { get; set; }
+        //public int? SheetIndex { get; set; }
+        //public int? TableIndex { get; set; }
+        //public string Title { get; set; }
+        //public int? TitleFontSize { get; set; }
+        //public bool? IsShowTitle { get; set; }
+        //public bool? IsShowTotal { get; set; }
+        //public bool? IsHeader { get; set; }
+        //public bool? IsFreezeHeader { get; set; }
+        //public string HeaderColor { get; set; }
+        //public string HeaderBackGroundColor { get; set; }
+        //public int? HeaderBackGroundStyleId { get; set; }
+        //public int? HeaderFontSize { get; set; }
+        //public bool? IsAutoFit { get; set; }
+        //public int? Border { get; set; }
+        //public int? BorderStyleId { get; set; }
+        //public string BackGroundColor { get; set; }
+        //public int? BeginRow { get; set; }
+        //public int? BeginCol { get; set; }
+        //public string Style { get; set; }
+        //public int? FontStyleId { get; set; }
+        //public int? FontSize { get; set; }
+        //public string Color { get; set; }
+        //public int? Priority { get; set; }
         public string Code { get; set; }
         public string Barcode { get; set; }
         public int? SysJobId { get; set; }
@@ -851,26 +892,47 @@ namespace Services.Common.Utilities
         public int? SheetIndex { get; set; }
         public int? TableIndex { get; set; }
         public string Title { get; set; }
-        public int? TitleFontSize { get; set; }
-        public bool? IsShowTitle { get; set; }
-        public bool? IsShowTotal { get; set; }
-        public bool? IsHeader { get; set; }
-        public bool? IsFreezeHeader { get; set; }
-        public string HeaderColor { get; set; }
-        public string HeaderBackGroundColor { get; set; }
-        public int? HeaderBackGroundStyleId { get; set; }
-        public int? HeaderFontSize { get; set; }
-        public bool? IsAutoFit { get; set; }
+        public int? Priority { get; set; }
         public int? Border { get; set; }
         public int? BorderStyleId { get; set; }
-        public string BackGroundColor { get; set; }
-        public int? BeginRow { get; set; }
-        public int? BeginCol { get; set; }
-        public string Style { get; set; }
         public int? FontStyleId { get; set; }
+        public string FontStyle { get; set; }
         public int? FontSize { get; set; }
         public string Color { get; set; }
-        public int? Priority { get; set; }
+        public bool? IsGenIamge { get; set; }
+        public double? HeightImage { get; set; }
+        public double? WidthImage { get; set; }
+        public string ColsImage { get; set; }
+        public bool? IsAutoCropImage { get; set; }
+        public bool? IsAutoFit { get; set; }
+        public bool? IsFreezeHeader { get; set; }
+        public int? HeaderFontSize { get; set; }
+        public int? HeaderBackGroundStyleId { get; set; }
+        public string HeaderBackGroundStyle { get; set; }
+        public int? HeaderBackGroundColorId { get; set; }
+        public int? HeaderColorId { get; set; }
+        public bool? IsShowTotal { get; set; }
+        public string ColsTotal { get; set; }
+        public bool? IsShowTitle { get; set; }
+        public int? TitleFontSize { get; set; }
+        public int? TitleFontId { get; set; }
+        public string TitleFont { get; set; }
+        public bool? IsMergeCol { get; set; }
+        public int? ColFirstMerge { get; set; }
+        public int? ColEndMerge { get; set; }
+        public bool? IsMergeRow { get; set; }
+        public string ColsMerge { get; set; }
+        public bool? IsHeader { get; set; }
+        public int? BeginRow { get; set; }
+        public int? BeginCol { get; set; }
+        public double GetWidth(double height, double hpw)
+        {
+            return height / hpw;
+        }
+        public double GetHeight(double width, double hpw)
+        {
+            return width * hpw;
+        }
     }
     //Mapping excel entity
     public class ExportColumn
@@ -942,5 +1004,5 @@ namespace Services.Common.Utilities
             return width * hpw;
         }
     }
-
+     
 }

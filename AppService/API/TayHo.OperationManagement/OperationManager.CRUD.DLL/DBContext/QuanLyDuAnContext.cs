@@ -28,6 +28,8 @@ namespace OperationManager.CRUD.DAL.DBContext
         /// <summary>
         /// View Table
         /// </summary>
+        public DbSet<SysJobTableFormatView> SysJobTableFormatView { get; set; }
+        public DbSet<SysJobColumView> SysJobColumView { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
