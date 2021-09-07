@@ -112,6 +112,7 @@ var customStore_Attachment_All = (Owner) => new DevExpress.data.DataSource({
 });
 //----------------------------------- Function ------------------------------------------------------
 $(document).ready(function () {
+
     $(function () {
         loadData();
     });
@@ -302,11 +303,18 @@ $(document).ready(function () {
             if ($issetHOR) {
                 $keyHOR = rsFilterId[0].id;
                 $statusHOR = rsFilterId[0].status;
-                if (rsFilterId[0].status <= 200) {
+                if (rsFilterId[0].status < 200) {
                     $isFinish = false;
                     $isUpdateHOR = true;
                     $isInsertHOR = true;
                     $isDeleteHOR = true;
+                }
+                else if (rsFilterId[0].status = 200)
+                {
+                    $isFinish = false;
+                    $isUpdateHOR = true;
+                    $isInsertHOR = false;
+                    $isDeleteHOR = false;
                 }
                 else {
                     $isFinish = true;
@@ -1105,7 +1113,7 @@ $(document).ready(function () {
                     },
                     {
                         colSpan: 12,
-                        visible: $statusHOR >= 200,//rs[0].status??0 < 200 ? true : false,
+                        visible: $statusHOR >= 200 && $statusHOR < 220,//rs[0].status??0 < 200 ? true : false,
                         template: '<span class="dx-field-item-label-text font-bold">Các tập tin đính kèm</span><div class="file-uploader" id="file-uploader"></div>',
                     },
                     {
@@ -1123,7 +1131,7 @@ $(document).ready(function () {
                                     text: "Cập nhật hình ảnh",
                                     icon: "fa fa-image",
                                     type: "default",
-                                    visible: $statusHOR >= 200,
+                                    visible: $statusHOR >= 200 && $statusHOR < 220,
                                     useSubmitBehavior: false,
                                     elementAttr: {
                                         id: "uploadImage",
@@ -1243,12 +1251,12 @@ $(document).ready(function () {
                                 itemType: "button",
                                 horizontalAlignment: "left",
                                 visible: $isUpdateHOR && $statusHOR >= 100,
-                                disabled: !$isUpdateHOR,
+                                disabled: $statusHOR >= 220,
                                 buttonOptions: {
                                     text: "Xác nhận biên bản",
                                     icon: "fa fa-vote-yea",
                                     type: "success",
-                                    useSubmitBehavior: true,
+                                    useSubmitBehavior: false,
                                     elementAttr: {
                                         id: "verifyHOR",
                                     },
@@ -1373,7 +1381,7 @@ $(document).ready(function () {
         else {
             loadingPanel.show();
             var object = {};
-            object["status"] = 100;
+            object["status"] = 220;
             var deferred = $.Deferred();
             customStore(0).store().update($keyHOR, object ).done((rs) => {
                 loadingPanel.hide();
@@ -1401,5 +1409,4 @@ $(document).ready(function () {
         allowedFileExtensions: [".jpg", ".jpeg", ".png", ".pdf"],
         maxFileSize: 52428800,
     }).dxFileUploader("instance");
-
 });
