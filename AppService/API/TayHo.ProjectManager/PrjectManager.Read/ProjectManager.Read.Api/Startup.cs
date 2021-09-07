@@ -21,6 +21,7 @@ namespace ProjectManager.Read.Api
         public override void ConfigureServices(IServiceCollection services)
         {
             #region Register repositories
+            services.AddDbContext<ProjectManagerBaseContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("TayHoConnection")));
             services.AddDbContext<QuanLyDuAnContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("TayHoConnection")));
             services.AddQuanLyDuAnServices(Configuration);
 
