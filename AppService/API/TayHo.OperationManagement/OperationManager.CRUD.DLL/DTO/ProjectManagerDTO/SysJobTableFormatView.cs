@@ -48,6 +48,14 @@ namespace OperationManager.CRUD.DAL.DTO.ProjectManagerDTO
         public bool? IsHeader { get; set; }
         public int? BeginRow { get; set; }
         public int? BeginCol { get; set; }
+        public int? VerticalAlignment { get; set; }
+        public int? HorizontalAlignment { get; set; }
+        public int? FontId { get; set; }
+        public string Font { get; set; }
+        public int? HeaderFontId { get; set; }
+        public int? HeaderFontStyleId { get; set; }
+        public string HeaderFont { get; set; }
+        public string HeaderFontStyle { get; set; }
 
     }
 }

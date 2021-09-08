@@ -19,11 +19,11 @@ namespace Services.Common.Utilities
             {
                 return 0;
             }
-             
+
         }
         public static dynamic ConvertJProperty(JProperty input)
         {
-            if(input.Value.Type.ToString() == "Integer")
+            if (input.Value.Type.ToString() == "Integer")
             {
                 try
                 {
@@ -100,9 +100,26 @@ namespace Services.Common.Utilities
                 var value = prop.GetValue(source, null);
                 if (value != null)
                 {
-                  
+
                 }
             }
+        }
+        public static List<int> SplitString2Int(string input, string charSplit)
+        {
+            string[] words = input.Split(charSplit);
+            List<int> output = new List<int>();
+            foreach (var item in words)
+            {
+                try
+                {
+                    output.Add(Convert.ToInt32(item));
+                }
+                catch
+                {
+
+                }
+            }
+            return output;
         }
     }
 }

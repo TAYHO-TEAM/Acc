@@ -126,12 +126,24 @@ namespace OperationManager.CRUD.BLL.Repositories
                 //var mapper = new Mapper(config);
                 //var tableProperties = mapper.Map<IList<SysJobTable>, IList<TableProperty>>(resultSysJobTables.ToList());
 
-                var config = new MapperConfiguration(cfg =>
-                  cfg.CreateMap<SysJobTableFormatView, TableProperty>()
-                );
+                var config = new MapperConfiguration(cfg =>cfg.CreateMap<SysJobTableFormatView, TableProperty>());
                 var mapper = new Mapper(config);
                 var tableProperties = mapper.Map<IList<SysJobTableFormatView>, IList<TableProperty>>(resultSysJobTableFormatViews.ToList());
 
+                foreach (var tableProperty in tableProperties)
+                {
+                    (string, object)[] paramSysJobColum = new (string, object)[] { ("@RecordId", tableProperty.Id) };
+                    IList<SysJobColumView> resultSysJobColumViews = await _sprocRepository.GetStoredProcedure("sp_Report_GetSysJobColumView")
+                                                              .WithSqlParams(paramSysJobColum)
+                                                              .ExecuteStoredProcedureAsync<SysJobColumView>();
+                    if(resultSysJobColumViews.Count> 0 && resultSysJobColumViews != null)
+                    {
+                        var configCol = new MapperConfiguration(cfg => cfg.CreateMap<SysJobColumView, ColumProperty>());
+                        var mapperCol = new Mapper(configCol);
+                        var columProperty = mapperCol.Map<IList<SysJobColumView>, IList<ColumProperty>>(resultSysJobColumViews.ToList());
+                        tableProperty.ColumProperties = columProperty.ToList();
+                    }    
+                }
 
                 var _template = Path.GetFileNameWithoutExtension(_dirTemplate);
                 string ext = Path.GetExtension(_dirTemplate).ToLowerInvariant();
@@ -150,13 +162,13 @@ namespace OperationManager.CRUD.BLL.Repositories
                     if (results.ElementAtOrDefault((tableprop.TableIndex ?? 1) - 1) != null)
                     {
                         tableprop.DataSource = results[(tableprop.TableIndex ?? 1) - 1];
-                        if (tableprop.IsGenIamge??false == true)
+                        if (tableprop.IsGenIamge ?? false == true)
                         {
-                            tableprop.HeightImage = tableprop.HeightImage??200;
-                            tableprop.WidthImage = tableprop.WidthImage?? 0; ;
-                            tableprop.IsAutoCropImage = tableprop.IsAutoCropImage?? true;
+                            tableprop.HeightImage = tableprop.HeightImage ?? 200;
+                            tableprop.WidthImage = tableprop.WidthImage ?? 0; ;
+                            tableprop.IsAutoCropImage = tableprop.IsAutoCropImage ?? true;
                             tableprop.IsGenIamge = true;
-                            tableprop.ColsImage = string.IsNullOrEmpty(tableprop.ColsImage)?"Image,image,": tableprop.ColsImage;
+                            tableprop.ColsImage = string.IsNullOrEmpty(tableprop.ColsImage) ? "Image,image," : tableprop.ColsImage;
                         }
 
                     }

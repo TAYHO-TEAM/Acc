@@ -445,6 +445,10 @@ namespace Services.Common.Utilities
         public static void Export(TableProperty tableProp, ExcelPackage package)
         {
             DataTable dtSource = new DataTable();
+            int startR = 0;
+            int endR = 0;
+            int startC = 0;
+            int endC = 0;
             int curColIndex = 0;
             int curRowIndex = 0;
             bool isShowTitle = true;
@@ -497,8 +501,24 @@ namespace Services.Common.Utilities
                 workSheet.Cells[curRowIndex, curColIndex].Value = title;
                 var headerStyle = workSheet.Workbook.Styles.CreateNamedStyle("headerStyle");
                 headerStyle.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                headerStyle.Style.Font.Bold = true;
-                headerStyle.Style.Font.Size = 20;
+                if (tableProp.FontStyle == "0")
+                {
+                    headerStyle.Style.Font.Bold = true;
+                }
+                else if (tableProp.FontStyle == "1")
+                {
+                    headerStyle.Style.Font.Italic = true;
+                }
+                else if (tableProp.FontStyle == "2")
+                {
+                    headerStyle.Style.Font.Strike = true;
+                }
+                else if (tableProp.FontStyle == "3")
+                {
+                    headerStyle.Style.Font.UnderLine = true;
+                }
+                headerStyle.Style.Font.Size = tableProp.HeaderFontSize ?? 20; 
+                headerStyle.Style.Font.Color.SetColor(Color.Black);
                 workSheet.Cells[curRowIndex, curColIndex].StyleName = "headerStyle";
                 curRowIndex++;
                 //Export time bar
@@ -507,7 +527,7 @@ namespace Services.Common.Utilities
                 workSheet.Cells[curRowIndex, curColIndex].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                 curRowIndex++;
             }
-            /// show headert
+            /// show header
             if (isHeader)
             {
                 var titleStyle = workSheet.Workbook.Styles.CreateNamedStyle("titleStyle");
@@ -527,6 +547,14 @@ namespace Services.Common.Utilities
                 curRowIndex++;
             }
             //content
+            //set start end 
+            startR = curRowIndex;
+            startC = curColIndex;
+            if (dtSource.Rows.Count > 0)
+                endR = startR + dtSource.Rows.Count -1;
+            if (maxColumnCount > 0)
+                endC = startC + maxColumnCount -1;
+
             for (var i = 0; i < dtSource.Rows.Count; i++)
             {
                 for (var j = 0; j < maxColumnCount; j++)
@@ -560,7 +588,7 @@ namespace Services.Common.Utilities
                     {
                         if (!(value == null))
                         {
-                            if (tableProp.IsGenIamge??false)
+                            if (tableProp.IsGenIamge ?? false)
                             {
                                 if (tableProp.ColsImage.Contains(column.ColumnName))
                                 {
@@ -569,23 +597,27 @@ namespace Services.Common.Utilities
                                         Image img = Image.FromFile(value.ToString());
                                         if (img != null)
                                         {
-                                            float hpw = (float)img.Size.Height / (float)img.Size.Width;
-                                            if (tableProp.IsAutoCropImage??false == true)
+                                            double hpw = (double)img.Size.Height / (double)img.Size.Width;
+                                            if (tableProp.IsAutoCropImage ?? false == true)
                                             {
-                                                if (tableProp.WidthImage == 0)
-                                                    tableProp.WidthImage = tableProp.GetWidth(tableProp.HeightImage??0, hpw);
-                                                if (tableProp.HeightImage == 0)
-                                                    tableProp.HeightImage = tableProp.GetHeight(tableProp.WidthImage??0, hpw);
+                                                if ((tableProp.WidthImage == 0 || !tableProp.WidthImage.HasValue) && (tableProp.HeightImage == 0 || !tableProp.HeightImage.HasValue))
+                                                {
+                                                    tableProp.HeightImage = 200;
+                                                }
+                                                if (tableProp.WidthImage == 0 || !tableProp.WidthImage.HasValue)
+                                                    tableProp.WidthImage = tableProp.GetWidth(tableProp.HeightImage ?? 0, hpw);
+                                                if (tableProp.HeightImage == 0 || !tableProp.HeightImage.HasValue)
+                                                    tableProp.HeightImage = tableProp.GetHeight(tableProp.WidthImage ?? 0, hpw);
                                             }
-
+                                            ///format alignment
                                             cell.Style.VerticalAlignment = ExcelVerticalAlignment.Top;
                                             cell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                                            ///add image
                                             ExcelPicture pic = workSheet.Drawings.AddPicture((column.ColumnName + curRowIndex.ToString()), img);
-
                                             pic.SetPosition(curRowIndex - 1, 0, j + curColIndex - 1, 0);
-                                            pic.SetSize((int)Math.Ceiling(tableProp.WidthImage??0), (int)Math.Ceiling(tableProp.HeightImage??0));
-                                            workSheet.Column(j + curColIndex).Width = EpplusHelper.Pixel2ExcelW((int)(tableProp.WidthImage??0));
-                                            workSheet.Row(curRowIndex).Height = EpplusHelper.Pixel2ExcelH((int)(tableProp.HeightImage??0));
+                                            pic.SetSize((int)Math.Ceiling(tableProp.WidthImage ?? 0), (int)Math.Ceiling(tableProp.HeightImage ?? 0));
+                                            workSheet.Column(j + curColIndex).Width = EpplusHelper.Pixel2ExcelW((int)(tableProp.WidthImage ?? 0));
+                                            workSheet.Row(curRowIndex).Height = EpplusHelper.Pixel2ExcelH((int)(tableProp.HeightImage ?? 0));
                                         }
                                     }
                                     catch
@@ -597,6 +629,9 @@ namespace Services.Common.Utilities
                                 {
                                     cell.Value = value == null ? "" : value.ToString();
                                     workSheet.Cells[curRowIndex, j + curColIndex].Value = row[column].ToString();
+                                    ///format alignment
+                                    cell.Style.VerticalAlignment = (ExcelVerticalAlignment)(tableProp.VerticalAlignment ?? 0);
+                                    cell.Style.HorizontalAlignment = (ExcelHorizontalAlignment)(tableProp.HorizontalAlignment ?? 0);
                                 }
                             }
                             else
@@ -612,7 +647,7 @@ namespace Services.Common.Utilities
                         }
                     }
                     ///format boder cell
-                    if (tableProp.Border.HasValue )
+                    if (tableProp.Border.HasValue)
                     {
                         cell.Style.Border.Top.Style = (ExcelBorderStyle)tableProp.Border;
                         cell.Style.Border.Left.Style = (ExcelBorderStyle)tableProp.Border;
@@ -620,23 +655,101 @@ namespace Services.Common.Utilities
                         cell.Style.Border.Bottom.Style = (ExcelBorderStyle)tableProp.Border;
                     }
                     /// font size 
-                    if(tableProp.FontSize.HasValue)
+                    if (tableProp.FontSize.HasValue)
                     {
                         cell.Style.Font.Size = tableProp.FontSize ?? 14;
-                    }    
-                    
+                    }
+
                 }
                 curRowIndex++;
             }
+            ///format table
+            ///---Marge colums
+            if (tableProp.IsMergeCol??false)
+            {
+                try
+                {
+                    List<int> cols = ConvertHelper.SplitString2Int(tableProp.ColsMerge, ",");
+                    foreach (var _item in cols)
+                    {
+                        int _indexColumn = _item + startC -1;
+                        string _value = "";
+                        int _mergeStartR = 0;
+                        for (int i = startR; i <= endR; i++)
+                        {
+                            if (_value == "")
+                            {
+                                _mergeStartR = i;
+                                _value = workSheet.Cells[i, _indexColumn].Value.ToString();
+                            }
+                            else if (_value != workSheet.Cells[i, _indexColumn].Value.ToString())
+                            {
+                                workSheet.Cells[_mergeStartR,_indexColumn, i - 1,_indexColumn].Merge = true;
+                                _mergeStartR = i;
+                                _value = workSheet.Cells[i, _indexColumn].Value.ToString();
+                            }
+                            if(i == endR)
+                            {
+                                workSheet.Cells[_mergeStartR, _indexColumn, i - 1, _indexColumn].Merge = true;
+                            }    
 
+                        }
+                    }
+                }
+                catch
+                {
+
+                }
+              
+            }
+
+
+
+
+            //format colum
+            
+            if (tableProp.ColumProperties != null)
+            {
+                try
+                {
+                    List<int> cols = ConvertHelper.SplitString2Int(tableProp.ColsMerge, ",");
+                    foreach (var _item in tableProp.ColumProperties)
+                    {
+                        int _indexColumn = _item.NoCol??1 + startC - 1;
+                        ///---waptext
+                        workSheet.Cells[startR, _indexColumn, endR, _indexColumn].Style.WrapText = true;
+                        ///---width 
+                        workSheet.Column(_indexColumn).Width = _item.Width??100;
+                        ///---Autofill
+                        if(_item.IsAutoFit?? false)
+                        {
+                            workSheet.Column(_indexColumn).AutoFit();
+                        }    
+                     
+
+                    }
+                }
+                catch
+                {
+
+                }
+
+            }
             try
             {
-                //workSheet.Cells[workSheet.Dimension.Address].Style.Font.Name = "Song Ti";
-                //workSheet.Cells[workSheet.Dimension.Address].AutoFitColumns();//Auto fill
+
             }
             catch
             {
             }
+            //try
+            //{
+            //    workSheet.Cells[1,1,1,1].Style.WrapText = true;
+            //}
+            //catch
+            //{
+            //}
+
             int endCol = 0;
             try
             {
@@ -647,7 +760,7 @@ namespace Services.Common.Utilities
 
             }
 
-            for (var i = curColIndex; i <= endCol ; i++)
+            for (var i = curColIndex; i <= endCol; i++)
             {
                 workSheet.Column(i).Width = workSheet.Column(i).Width + 2;
             }//Add 2 to the filling
@@ -835,7 +948,7 @@ namespace Services.Common.Utilities
                     return false;
                 }
             }
-            
+
         }
         //Export the set of fields and headers that need to be mapped
         public class ExportColumnCollective
@@ -855,6 +968,7 @@ namespace Services.Common.Utilities
     public class TableProperty
     {
         public DataTable DataSource { get; set; }
+        public List<ColumProperty> ColumProperties { get; set; }
         //public GenImage GenImage { get; set; }
         //public string Code { get; set; }
         //public string Barcode { get; set; }
@@ -884,6 +998,7 @@ namespace Services.Common.Utilities
         //public int? FontSize { get; set; }
         //public string Color { get; set; }
         //public int? Priority { get; set; }
+        public int Id { get; set; }
         public string Code { get; set; }
         public string Barcode { get; set; }
         public int? SysJobId { get; set; }
@@ -925,6 +1040,14 @@ namespace Services.Common.Utilities
         public bool? IsHeader { get; set; }
         public int? BeginRow { get; set; }
         public int? BeginCol { get; set; }
+        public int? VerticalAlignment { get; set; }
+        public int? HorizontalAlignment { get; set; }
+        public int? FontId { get; set; }
+        public string Font { get; set; }
+        public int? HeaderFontId { get; set; }
+        public int? HeaderFontStyleId { get; set; }
+        public string HeaderFont { get; set; }
+        public string HeaderFontStyle { get; set; }
         public double GetWidth(double height, double hpw)
         {
             return height / hpw;
@@ -933,6 +1056,32 @@ namespace Services.Common.Utilities
         {
             return width * hpw;
         }
+    }
+    public class ColumProperty
+    {
+        public string Code { get; set; }
+        public string Barcode { get; set; }
+        public int? SysJobTableId { get; set; }
+        public bool? IsAutoFit { get; set; }
+        public int? NoCol { get; set; }
+        public string Style { get; set; }
+        public string Formulas { get; set; }
+        public string Functions { get; set; }
+        public int? Border { get; set; }
+        public string Color { get; set; }
+        public int? FontStyleId { get; set; }
+        public int? FontId { get; set; }
+        public int? FontSize { get; set; }
+        public int? BackGroundStyleId { get; set; }
+        public int? BackGroundColorId { get; set; }
+        public int? VerticalAlignment { get; set; }
+        public int? HorizontalAlignment { get; set; }
+        public bool? IsWrapText { get; set; }
+        public int? Width { get; set; }
+        public int? Height { get; set; }
+        public string FontStyle { get; set; }
+        public string BackGroundStyle { get; set; }
+        public string Font { get; set; }
     }
     //Mapping excel entity
     public class ExportColumn
@@ -1004,5 +1153,5 @@ namespace Services.Common.Utilities
             return width * hpw;
         }
     }
-     
+
 }
