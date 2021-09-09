@@ -1,6 +1,6 @@
 ﻿@model int
 <div>
-    <form id="form-DefectFix" action="#" method="POST">
+    <form id="form-DefectFix-Acceptance" action="#" method="POST">
     </form>
     <div class="dx-datagrid-headers"><h4>Phần phản hồi </h4></div>
     <form id="form-DefectAcceptence" >
@@ -22,7 +22,7 @@
         customStore_DefectFix($model).load()
             .done((rs) => {
                 $defectFixId = rs[0].id;
-                rs.length == 0 ? null : $("#form-DefectFix").dxForm({
+                rs.length == 0 ? null : $("#form-DefectFix-Acceptance").dxForm({
                     formData: rs[0],
                     labelLocation: "top",
                     items: [

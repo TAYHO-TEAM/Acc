@@ -702,12 +702,7 @@ namespace Services.Common.Utilities
                 }
               
             }
-
-
-
-
             //format colum
-            
             if (tableProp.ColumProperties != null)
             {
                 try
@@ -719,14 +714,12 @@ namespace Services.Common.Utilities
                         ///---waptext
                         workSheet.Cells[startR, _indexColumn, endR, _indexColumn].Style.WrapText = true;
                         ///---width 
-                        workSheet.Column(_indexColumn).Width = _item.Width??100;
+                        workSheet.Column(_indexColumn).Width = _item.Width??8.5;
                         ///---Autofill
                         if(_item.IsAutoFit?? false)
                         {
                             workSheet.Column(_indexColumn).AutoFit();
-                        }    
-                     
-
+                        }  
                     }
                 }
                 catch

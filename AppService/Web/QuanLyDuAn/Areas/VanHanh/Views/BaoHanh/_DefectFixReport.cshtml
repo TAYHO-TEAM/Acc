@@ -359,7 +359,7 @@
                                             type: "success",
                                             useSubmitBehavior: false,
                                             elementAttr: {
-                                                id: "acceptFix",
+                                                id: "acceptFixReport",
                                             },
                                             editorOptions: {
                                                 stylingMode: "filled",
@@ -391,7 +391,7 @@
                     isAccept? fileUploader():'';
                 });
         };
-        $(document).on('click', '#acceptFix', function (e) {
+        $(document).on('click', '#acceptFixReport', function (e) {
             e.preventDefault();
             var formDataAcceptance = $('#form-DefectAcceptence').dxForm("instance").option('formData');
             var fileWrappers = fileUploader()._files;
