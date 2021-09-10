@@ -113,7 +113,7 @@
         var KEY = "id";
         var WIDTH_CONTAINER = $("#container").width();
 
-        var ITEMSID = isNullOrEmpty(localStorage.getItem("ItemsIdCurrent")) ? 1 : parseInt(localStorage.getItem("ItemsIdCurrent"));
+        var ITEMSID = isNullOrEmpty(localStorage.getItem("ItemsIdCurrent")) ? parseInt(localStorage.getItem("ItemsIdCurrent")) : 1;
         //..........................Get data -------------------------------------------------------------
 
         var customStore = (id) => new DevExpress.data.DataSource({
@@ -145,6 +145,10 @@
             filter: ["realEstateId", "=", id]
         });
         var customStore_Defective = $DATASOURCEGET(ACTION_DEFECTIVE, KEY);
+        var customStore_Defective_Filter = () => new DevExpress.data.DataSource({
+            store: $DATASOURCEGET(ACTION_DEFECTIVE, KEY),
+            filter: ["constructionItemsId", "=", ITEMSID],
+        });
         var customStore_RealEstate = $DATASOURCEGET(ACTION_REALESTATE, KEY);
         var customStore_CustomerInfoRealEstateById = (id) => {
             var deferred = $.Deferred();
@@ -258,7 +262,9 @@
                                 stylingMode: "filled",
                                 value: ITEMSID,
                                 onValueChanged: function (data) {
+                                    
                                     ITEMSID = data.value;
+                                    console.log(ITEMSID);
                                     localStorage.setItem('ItemsIdCurrent', ITEMSID);
                                     loadData(ITEMSID);
                                 },
@@ -334,7 +340,7 @@
                         var data = e.component.getRowIndexByKey(selectedRowData.paId);
                         $("#action-update").dxSpeedDialAction({
                             index: 2, icon: "fas fa-edit",
-                            label: selectedRowData.status <11 ? "Cập nhật yêu cầu" :"Xem yêu cầu",
+                            label: selectedRowData.status < 11 ? "Cập nhật yêu cầu" : "Xem yêu cầu",
                             visible: PermitInAction["update"],
                             onClick: () => {
                                 CALLPOPUP(
@@ -538,8 +544,8 @@
             $("#Defect-FeedBack-Logo").addClass("bg-blue");
             $("#Defect-FeedBack-Text").removeClass("text-muted");
             customStore_DefectFeedbackDetail(content.id).load().then((rs) => {
-                var note = rs.filter(x => x.note !== '' && x.note !== null).map(x => x.note + (x.status >= 200 ? " - (Đã BH)":"")).join("</p><p> - ") ;
-                $("#Defect-FeedBack-Content").append("<p> - "  + note + "</p>");
+                var note = rs.filter(x => x.note !== '' && x.note !== null).map(x => x.note + (x.status >= 200 ? " - (Đã BH)" : "")).join("</p><p> - ");
+                $("#Defect-FeedBack-Content").append("<p> - " + note + "</p>");
             });
             $("#Defect-FeedBack-Time").append(moment(content.createDate).locale("vi").fromNow());
             if (content.status < 11) {

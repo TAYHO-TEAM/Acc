@@ -301,6 +301,7 @@
                         $currentDefect["Status"] = 20;
                         customStore(0).store().update($defectFixId, $model).done();
                         deferred.resolve(rs);
+                        formdata.resetValues();
                         DevExpress.ui.notify("Cập nhật thành công", "success", 3000);
                     }
                     else {

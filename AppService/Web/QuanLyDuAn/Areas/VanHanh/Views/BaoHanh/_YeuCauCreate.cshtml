@@ -5,6 +5,7 @@
 </form>
 
 <script>
+    var ITEMSID = isNullOrEmpty(localStorage.getItem("ItemsIdCurrent")) ? parseInt(localStorage.getItem("ItemsIdCurrent")) : 1;
     var $defectDetailId = 0;
     var customStore_RealEstate_Filter = (id) => new DevExpress.data.DataSource({
         store: $DATASOURCEGET(ACTION_REALESTATE, KEY),
@@ -179,14 +180,14 @@
                             dataField: "defectiveId",
                             label: { text: "Mã lỗi" },
                             lookup: {
-                                dataSource: customStore_Defective,
+                                dataSource: customStore_Defective_Filter(),
                                 valueExpr: "id",
                                 displayExpr: "code",
                             },
                             editorType: "dxSelectBox",
                             editorOptions: {
                                 stylingMode: "filled",
-                                dataSource: customStore_Defective,
+                                dataSource: customStore_Defective_Filter(),
                                 searchEnabled: true,
                                 searchMode: "contains",
                                 showClearButton: true,

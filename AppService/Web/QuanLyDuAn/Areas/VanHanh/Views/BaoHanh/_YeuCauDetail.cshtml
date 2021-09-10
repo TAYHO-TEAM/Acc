@@ -5,6 +5,7 @@
 <form id="form-defect-detail-update" class="" action="#" method="POST" enctype="multipart/form-data">
 </form>
 <script>
+    var ITEMSID = isNullOrEmpty(localStorage.getItem("ItemsIdCurrent")) ?  parseInt(localStorage.getItem("ItemsIdCurrent")):1;
     var $owner = "DefectFeedback";
     var $model = @Model;
     var formData = {
@@ -316,14 +317,14 @@
                                             dataField: "defectiveId",
                                             label: { text: "Mã lỗi" },
                                             lookup: {
-                                                dataSource: customStore_Defective,
+                                                dataSource: customStore_Defective_Filter(),
                                                 valueExpr: "id",
                                                 displayExpr: "code",
                                             },
                                             editorType: "dxSelectBox",
                                             editorOptions: {
                                                 stylingMode: "filled",
-                                                dataSource: customStore_Defective,
+                                                dataSource: customStore_Defective_Filter(),
                                                 searchEnabled: true,
                                                 searchMode: "contains",
                                                 showClearButton: true,
@@ -588,6 +589,7 @@
                         DevExpress.ui.notify(rs.result, rs.status, 3000);
                         try {
                             $("#file-uploader").dxFileUploader("instance").option("value", []);
+                            formdata.resetValues();
                         }
                         catch
                         {

@@ -30,7 +30,6 @@ var $DATASOURCE = (link, key) => {
                 'Authorization': 'Bearer ' + UserCurrentInfo.accessToken,
             };
         },
-        pageSize: 5,
         reshapeOnPush: true,
     });
 };
@@ -45,7 +44,6 @@ var $DATASOURCEGET = (link, key) => {
                 'Authorization': 'Bearer ' + UserCurrentInfo.accessToken,
             };
         },
-        pageSize: 5,
         reshapeOnPush: true,
     });
 };
