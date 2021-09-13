@@ -17,6 +17,8 @@ namespace OperationManager.CRUD.DAL.DTO.ProjectManagerDTO
         public string Functions { get; set; }
         public int? Border { get; set; }
         public string Color { get; set; }
+        public int? ColSpan { get; set; }
+        public int? RowSpan { get; set; }
         public int? FontStyleId { get; set; }
         public int? FontId { get; set; }
         public int? FontSize { get; set; }
@@ -28,7 +30,7 @@ namespace OperationManager.CRUD.DAL.DTO.ProjectManagerDTO
         public int? Width { get; set; }
         public int? Height { get; set; }
         public string FontStyle { get; set; }
-        public string BackGroundStyle { get; set; }
         public string Font { get; set; }
+        public string BackGroundStyle { get; set; }
     }
 }

@@ -9,14 +9,26 @@ namespace OperationManager.CRUD.DAL.DTO.ProjectManagerDTO
     {
         public string Code { get; set; }
         public string Barcode { get; set; }
-        public int? NoCol { get; set; }
         public int? SysJobTableId { get; set; }
+        public bool? IsAutoFit { get; set; }
+        public int? NoCol { get; set; }
         public string Style { get; set; }
         public string Formulas { get; set; }
         public string Functions { get; set; }
         public int? Border { get; set; }
         public string Color { get; set; }
-        public string BackGroundColor { get; set; }
+        public int? ColSpan { get; set; }
+        public int? RowSpan { get; set; }
+        public int? FontStyleId { get; set; }
+        public int? FontId { get; set; }
+        public int? FontSize { get; set; }
+        public int? BackGroundStyleId { get; set; }
+        public int? BackGroundColorId { get; set; }
+        public int? VerticalAlignment { get; set; }
+        public int? HorizontalAlignment { get; set; }
+        public bool? IsWrapText { get; set; }
+        public int? Width { get; set; }
+        public int? Height { get; set; }
 
     }
 }

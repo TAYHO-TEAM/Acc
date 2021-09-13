@@ -485,6 +485,7 @@ namespace Services.Common.Utilities
                 workSheet = package.Workbook.Worksheets.Add(string.IsNullOrEmpty(tableProp.SheetName) ? "Sheet" + tableProp.TableIndex : tableProp.SheetName);
             }
             int maxColumnCount = dtSource.Columns.Count;
+           
             if (curColIndex < 0)
             {
                 curColIndex = workSheet.Dimension.End.Column - curColIndex;
@@ -517,7 +518,7 @@ namespace Services.Common.Utilities
                 {
                     headerStyle.Style.Font.UnderLine = true;
                 }
-                headerStyle.Style.Font.Size = tableProp.HeaderFontSize ?? 20; 
+                headerStyle.Style.Font.Size = tableProp.HeaderFontSize ?? 20;
                 headerStyle.Style.Font.Color.SetColor(Color.Black);
                 workSheet.Cells[curRowIndex, curColIndex].StyleName = "headerStyle";
                 curRowIndex++;
@@ -551,38 +552,64 @@ namespace Services.Common.Utilities
             startR = curRowIndex;
             startC = curColIndex;
             if (dtSource.Rows.Count > 0)
-                endR = startR + dtSource.Rows.Count -1;
+                endR = startR + dtSource.Rows.Count - 1;
             if (maxColumnCount > 0)
-                endC = startC + maxColumnCount -1;
-
+                endC = startC + maxColumnCount - 1;
+           
             for (var i = 0; i < dtSource.Rows.Count; i++)
             {
+                int colPlanPlus = 0;
+                int colPlan = 0;
                 for (var j = 0; j < maxColumnCount; j++)
                 {
+                    try
+                    {
+                        if(tableProp.ColumProperties != null)
+                        {
+                            ColumProperty columProperty = tableProp.ColumProperties.FirstOrDefault(x => x.NoCol == j + 1);
+                            if(columProperty != null)
+                            {
+                                colPlan = (columProperty.ColSpan ??1);
+                            }    
+                        }    
+                    }
+                    catch
+                    {
+
+                    }
+
                     DataColumn column = dtSource.Columns[j];
                     var row = dtSource.Rows[i];
                     object value = row[column];
-                    var cell = workSheet.Cells[curRowIndex, j + curColIndex];
+                    var cell = workSheet.Cells[curRowIndex, j + curColIndex + colPlanPlus];
                     var pType = column.DataType;
                     pType = pType.Name == "Nullable`1" ? Nullable.GetUnderlyingType(pType) : pType;
                     if (pType == typeof(DateTime))
                     {
-                        cell.Style.Numberformat.Format = "yyyy-MM-dd hh:mm";
+                        cell.Style.Numberformat.Format = "dd/MM/yyyy";
                         //cell.AutoFitColumns();
                         if (value != null && value.ToString() != "") cell.Value = Convert.ToDateTime(value);
-                        workSheet.Cells[curRowIndex, j + curColIndex].Value = row[column].ToString();
+                        //workSheet.Cells[curRowIndex, j + curColIndex + colPlanPlus].Value = row[column].ToString());
+                    }
+                    else if (pType == typeof(TimeSpan))
+                    {
+                        cell.Style.Numberformat.Format = "hh:mm:ss";
+                        //cell.AutoFitColumns();
+                        if (value != null && value.ToString() != "") cell.Value = Convert.ToDateTime(value);
+                        workSheet.Cells[curRowIndex, j + curColIndex + colPlanPlus].Value = row[column].ToString();
                     }
                     else if (pType == typeof(int))
                     {
                         cell.Value = Convert.ToInt32(value ?? 0);
                         //cell.AutoFitColumns();
-                        workSheet.Cells[curRowIndex, j + curColIndex].Value = row[column].ToString();
+                        workSheet.Cells[curRowIndex, j + curColIndex + colPlanPlus].Value = row[column].ToString();
                     }
                     else if (pType == typeof(double) || pType == typeof(decimal))
                     {
-                        cell.Value = Convert.ToDouble(value ?? 0);
+                        
+                        cell.Value = ConvertHelper.ConvertObjectToDouble(value);
                         //cell.AutoFitColumns();
-                        workSheet.Cells[curRowIndex, j + curColIndex].Value = row[column].ToString();
+                        workSheet.Cells[curRowIndex, j + curColIndex + colPlanPlus].Value = ConvertHelper.ConvertObjectToDouble(value);
                     }
                     else
                     {
@@ -614,9 +641,9 @@ namespace Services.Common.Utilities
                                             cell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
                                             ///add image
                                             ExcelPicture pic = workSheet.Drawings.AddPicture((column.ColumnName + curRowIndex.ToString()), img);
-                                            pic.SetPosition(curRowIndex - 1, 0, j + curColIndex - 1, 0);
+                                            pic.SetPosition(curRowIndex, 0, j + curColIndex + colPlanPlus - 1, 0);
                                             pic.SetSize((int)Math.Ceiling(tableProp.WidthImage ?? 0), (int)Math.Ceiling(tableProp.HeightImage ?? 0));
-                                            workSheet.Column(j + curColIndex).Width = EpplusHelper.Pixel2ExcelW((int)(tableProp.WidthImage ?? 0));
+                                            workSheet.Column(j + curColIndex + colPlanPlus).Width = EpplusHelper.Pixel2ExcelW((int)(tableProp.WidthImage ?? 0));
                                             workSheet.Row(curRowIndex).Height = EpplusHelper.Pixel2ExcelH((int)(tableProp.HeightImage ?? 0));
                                         }
                                     }
@@ -627,8 +654,19 @@ namespace Services.Common.Utilities
                                 }
                                 else
                                 {
-                                    cell.Value = value == null ? "" : value.ToString();
-                                    workSheet.Cells[curRowIndex, j + curColIndex].Value = row[column].ToString();
+                                    cell.Style.WrapText = true;
+                                    //cell.Value = value == null ? "" : value.ToString();
+                                    //workSheet.Cells[curRowIndex, j + curColIndex].Value = row[column].ToString();
+                                    var textValue = value == null ? "" : row[column].ToString().Replace("{enter}", "\r\n");
+                                    if(textValue.Contains("\r") || textValue.Contains("\n"))
+                                    {
+                                        workSheet.Cells[curRowIndex, j + curColIndex + +colPlanPlus].RichText.Add(textValue);
+                                    }
+                                    else
+                                    {
+                                        workSheet.Cells[curRowIndex, j + curColIndex + +colPlanPlus].Value = textValue;
+                                    }
+                                    cell.Style.WrapText = true;
                                     ///format alignment
                                     cell.Style.VerticalAlignment = (ExcelVerticalAlignment)(tableProp.VerticalAlignment ?? 0);
                                     cell.Style.HorizontalAlignment = (ExcelHorizontalAlignment)(tableProp.HorizontalAlignment ?? 0);
@@ -636,16 +674,43 @@ namespace Services.Common.Utilities
                             }
                             else
                             {
-                                cell.Value = value.ToString();
-                                workSheet.Cells[curRowIndex, j + curColIndex].Value = row[column].ToString();
+                                cell.Style.WrapText = true;
+                                var textValue = value == null ? "" : row[column].ToString().Replace("{enter}", "\r\n");
+                                if (textValue.Contains("\r") || textValue.Contains("\n"))
+                                {
+                                    workSheet.Cells[curRowIndex, j + curColIndex + +colPlanPlus].RichText.Add(textValue);
+                                }
+                                else
+                                {
+                                    workSheet.Cells[curRowIndex, j + curColIndex + +colPlanPlus].Value = textValue;
+                                }
+                                cell.Style.WrapText = true;
+                                ///format alignment
+                                cell.Style.VerticalAlignment = (ExcelVerticalAlignment)(tableProp.VerticalAlignment ?? 0);
+                                cell.Style.HorizontalAlignment = (ExcelHorizontalAlignment)(tableProp.HorizontalAlignment ?? 0);
                             }
                         }
                         else
                         {
                             cell.Value = value == null ? "" : value.ToString();
-                            workSheet.Cells[curRowIndex, j + curColIndex].Value = row[column].ToString();
+                            workSheet.Cells[curRowIndex, j + curColIndex + colPlanPlus].Value = "";
                         }
                     }
+
+                    ///colspan
+                    try
+                    {
+                        if(colPlan >1)
+                        {
+                            workSheet.Cells[curRowIndex, j + curColIndex + colPlanPlus, curRowIndex, j + curColIndex + colPlanPlus + (colPlan -1)].Merge = true;
+                        }
+                        colPlanPlus = colPlanPlus + (colPlan>1? colPlan - 1:0);
+                    }
+                    catch
+                    {
+
+                    }
+                    
                     ///format boder cell
                     if (tableProp.Border.HasValue)
                     {
@@ -665,14 +730,14 @@ namespace Services.Common.Utilities
             }
             ///format table
             ///---Marge colums
-            if (tableProp.IsMergeCol??false)
+            if (tableProp.IsMergeCol ?? false)
             {
                 try
                 {
                     List<int> cols = ConvertHelper.SplitString2Int(tableProp.ColsMerge, ",");
                     foreach (var _item in cols)
                     {
-                        int _indexColumn = _item + startC -1;
+                        int _indexColumn = _item + startC - 1;
                         string _value = "";
                         int _mergeStartR = 0;
                         for (int i = startR; i <= endR; i++)
@@ -684,14 +749,14 @@ namespace Services.Common.Utilities
                             }
                             else if (_value != workSheet.Cells[i, _indexColumn].Value.ToString())
                             {
-                                workSheet.Cells[_mergeStartR,_indexColumn, i - 1,_indexColumn].Merge = true;
+                                workSheet.Cells[_mergeStartR, _indexColumn, i - 1, _indexColumn].Merge = true;
                                 _mergeStartR = i;
                                 _value = workSheet.Cells[i, _indexColumn].Value.ToString();
                             }
-                            if(i == endR)
+                            if (i == endR)
                             {
                                 workSheet.Cells[_mergeStartR, _indexColumn, i - 1, _indexColumn].Merge = true;
-                            }    
+                            }
 
                         }
                     }
@@ -700,7 +765,7 @@ namespace Services.Common.Utilities
                 {
 
                 }
-              
+
             }
             //format colum
             if (tableProp.ColumProperties != null)
@@ -710,16 +775,16 @@ namespace Services.Common.Utilities
                     List<int> cols = ConvertHelper.SplitString2Int(tableProp.ColsMerge, ",");
                     foreach (var _item in tableProp.ColumProperties)
                     {
-                        int _indexColumn = _item.NoCol??1 + startC - 1;
+                        int _indexColumn = _item.NoCol ?? 1 + startC - 1;
                         ///---waptext
                         workSheet.Cells[startR, _indexColumn, endR, _indexColumn].Style.WrapText = true;
                         ///---width 
-                        workSheet.Column(_indexColumn).Width = _item.Width??8.5;
+                        workSheet.Column(_indexColumn).Width = _item.Width ?? 8.5;
                         ///---Autofill
-                        if(_item.IsAutoFit?? false)
+                        if (_item.IsAutoFit ?? false)
                         {
                             workSheet.Column(_indexColumn).AutoFit();
-                        }  
+                        }
                     }
                 }
                 catch
@@ -1062,6 +1127,8 @@ namespace Services.Common.Utilities
         public string Functions { get; set; }
         public int? Border { get; set; }
         public string Color { get; set; }
+        public int? ColSpan { get; set; }
+        public int? RowSpan { get; set; }
         public int? FontStyleId { get; set; }
         public int? FontId { get; set; }
         public int? FontSize { get; set; }

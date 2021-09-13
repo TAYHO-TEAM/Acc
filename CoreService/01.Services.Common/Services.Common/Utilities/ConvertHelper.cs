@@ -121,5 +121,17 @@ namespace Services.Common.Utilities
             }
             return output;
         }
+        public static double ConvertObjectToDouble(object input)
+        {
+            try
+            {
+                return Convert.ToDouble(input??0);
+            }
+            catch
+            {
+                return 0;
+            }
+
+        }
     }
 }
