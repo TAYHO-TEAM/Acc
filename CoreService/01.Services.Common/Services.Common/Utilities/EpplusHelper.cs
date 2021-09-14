@@ -485,7 +485,7 @@ namespace Services.Common.Utilities
                 workSheet = package.Workbook.Worksheets.Add(string.IsNullOrEmpty(tableProp.SheetName) ? "Sheet" + tableProp.TableIndex : tableProp.SheetName);
             }
             int maxColumnCount = dtSource.Columns.Count;
-           
+
             if (curColIndex < 0)
             {
                 curColIndex = workSheet.Dimension.End.Column - curColIndex;
@@ -555,7 +555,7 @@ namespace Services.Common.Utilities
                 endR = startR + dtSource.Rows.Count - 1;
             if (maxColumnCount > 0)
                 endC = startC + maxColumnCount - 1;
-           
+
             for (var i = 0; i < dtSource.Rows.Count; i++)
             {
                 int colPlanPlus = 0;
@@ -564,14 +564,14 @@ namespace Services.Common.Utilities
                 {
                     try
                     {
-                        if(tableProp.ColumProperties != null)
+                        if (tableProp.ColumProperties != null)
                         {
                             ColumProperty columProperty = tableProp.ColumProperties.FirstOrDefault(x => x.NoCol == j + 1);
-                            if(columProperty != null)
+                            if (columProperty != null)
                             {
-                                colPlan = (columProperty.ColSpan ??1);
-                            }    
-                        }    
+                                colPlan = (columProperty.ColSpan ?? 1);
+                            }
+                        }
                     }
                     catch
                     {
@@ -606,7 +606,7 @@ namespace Services.Common.Utilities
                     }
                     else if (pType == typeof(double) || pType == typeof(decimal))
                     {
-                        
+
                         cell.Value = ConvertHelper.ConvertObjectToDouble(value);
                         //cell.AutoFitColumns();
                         workSheet.Cells[curRowIndex, j + curColIndex + colPlanPlus].Value = ConvertHelper.ConvertObjectToDouble(value);
@@ -641,7 +641,7 @@ namespace Services.Common.Utilities
                                             cell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
                                             ///add image
                                             ExcelPicture pic = workSheet.Drawings.AddPicture((column.ColumnName + curRowIndex.ToString()), img);
-                                            pic.SetPosition(curRowIndex, 0, j + curColIndex + colPlanPlus - 1, 0);
+                                            pic.SetPosition(curRowIndex - 1, 0, j + curColIndex + colPlanPlus - 1, 0);
                                             pic.SetSize((int)Math.Ceiling(tableProp.WidthImage ?? 0), (int)Math.Ceiling(tableProp.HeightImage ?? 0));
                                             workSheet.Column(j + curColIndex + colPlanPlus).Width = EpplusHelper.Pixel2ExcelW((int)(tableProp.WidthImage ?? 0));
                                             workSheet.Row(curRowIndex).Height = EpplusHelper.Pixel2ExcelH((int)(tableProp.HeightImage ?? 0));
@@ -658,7 +658,7 @@ namespace Services.Common.Utilities
                                     //cell.Value = value == null ? "" : value.ToString();
                                     //workSheet.Cells[curRowIndex, j + curColIndex].Value = row[column].ToString();
                                     var textValue = value == null ? "" : row[column].ToString().Replace("{enter}", "\r\n");
-                                    if(textValue.Contains("\r") || textValue.Contains("\n"))
+                                    if (textValue.Contains("\r") || textValue.Contains("\n"))
                                     {
                                         workSheet.Cells[curRowIndex, j + curColIndex + +colPlanPlus].RichText.Add(textValue);
                                     }
@@ -700,17 +700,17 @@ namespace Services.Common.Utilities
                     ///colspan
                     try
                     {
-                        if(colPlan >1)
+                        if (colPlan > 1)
                         {
-                            workSheet.Cells[curRowIndex, j + curColIndex + colPlanPlus, curRowIndex, j + curColIndex + colPlanPlus + (colPlan -1)].Merge = true;
+                            workSheet.Cells[curRowIndex, j + curColIndex + colPlanPlus, curRowIndex, j + curColIndex + colPlanPlus + (colPlan - 1)].Merge = true;
                         }
-                        colPlanPlus = colPlanPlus + (colPlan>1? colPlan - 1:0);
+                        colPlanPlus = colPlanPlus + (colPlan > 1 ? colPlan - 1 : 0);
                     }
                     catch
                     {
 
                     }
-                    
+
                     ///format boder cell
                     if (tableProp.Border.HasValue)
                     {
