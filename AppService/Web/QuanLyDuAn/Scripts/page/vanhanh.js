@@ -620,7 +620,19 @@ function CALLPOPUP(title, url, width, container) {
             return container;
         },
         onHiding: function () {
-            container.refresh();
+            try {
+                container.refresh();
+            }
+            catch (exception_var) {
+
+            }
+            try {
+                container.reload();
+            }
+            catch (exception_var) {
+            }
+            finally {
+            }
         },
         onHidden: function () {
             //loadData(ITEMSID);
@@ -659,7 +671,12 @@ function CALLPOPUPMULTI(title, url, width, container, popupId) {
                 container.refresh();
             }
             catch (exception_var) {
+            
+            }
+            try {
                 container.reload();
+            }
+            catch (exception_var) {
             }
             finally {
             }
